@@ -1,5 +1,4 @@
 deploy_*
-deploy-pre
 dist
 lib
 lib*

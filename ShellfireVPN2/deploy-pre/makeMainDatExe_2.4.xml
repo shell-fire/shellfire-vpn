@@ -1,0 +1,34 @@
+<launch4jConfig>
+  <dontWrapJar>false</dontWrapJar>
+  <headerType>console</headerType>
+  <jar>C:\dropbox\workspace\ShellfireVPN2\deploy-pre\ShellfireVPN2Dat.jar</jar>
+  <outfile>C:\dropbox\workspace\ShellfireVPN2\deploy\ShellfireVPN2Dat.exe</outfile>
+  <errTitle>Java Main Fehler</errTitle>
+  <cmdLine></cmdLine>
+  <chdir></chdir>
+  <priority>normal</priority>
+  <downloadUrl>http://java.com/download</downloadUrl>
+  <supportUrl>http://www.shellfire.de</supportUrl>
+  <stayAlive>false</stayAlive>
+  <manifest></manifest>
+  <icon>C:\dropbox\workspace\ShellfireVPN2\deploy-pre\sfvpn2-idle.ico</icon>
+  <jre>
+    <path>jre6</path>
+    <bundledJre64Bit>false</bundledJre64Bit>
+    <minVersion></minVersion>
+    <maxVersion></maxVersion>
+    <jdkPreference>preferJre</jdkPreference>
+  </jre>
+  <versionInfo>
+    <fileVersion>2.4.0.0</fileVersion>
+    <txtFileVersion>ShellfireVPN 2.4</txtFileVersion>
+    <fileDescription>ShellfireVPN Executable </fileDescription>
+    <copyright>(c) 2014 by Shellfire GbR</copyright>
+    <productVersion>2.4.0.0</productVersion>
+    <txtProductVersion>ShellfireVPN 2.4</txtProductVersion>
+    <productName>ShellfireVPN</productName>
+    <companyName>Shellfire GbR</companyName>
+    <internalName>ShellfireVPN</internalName>
+    <originalFilename>ShellfireVPN2.exe</originalFilename>
+  </versionInfo>
+</launch4jConfig>
