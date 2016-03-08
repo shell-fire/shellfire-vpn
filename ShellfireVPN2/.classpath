@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src">
+		<attributes>
+			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="ShellfireVPN2"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/swingx-beaninfo-1.6.2.jar"/>
+	<classpathentry kind="lib" path="lib/swingx-core-1.6.2.jar" sourcepath="C:/Users/bettmenn/workspace/ShellfireVPN2/lib/swingx-core-1.6.2-2-sources.jar"/>
+	<classpathentry kind="lib" path="lib/swingx-ws-2011_01_16.jar" sourcepath="C:/Users/bettmenn/workspace/ShellfireVPN2/lib/swingx-ws-1.0-sources.jar"/>
+	<classpathentry kind="lib" path="lib/AbsoluteLayout.jar"/>
+	<classpathentry kind="lib" path="lib/appframework-1.0.3.jar"/>
+	<classpathentry kind="lib" path="lib/swing-worker-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-discovery-0.2.jar"/>
+	<classpathentry kind="lib" path="lib/org.apache.commons.logging_1.0.4.v201005080501.jar"/>
+	<classpathentry kind="lib" path="lib/javax.wsdl_1.6.2.v201005080631.jar"/>
+	<classpathentry kind="lib" path="lib/saaj.jar"/>
+	<classpathentry kind="lib" path="lib/javax.mail_1.4.0.v201005080615.jar"/>
+	<classpathentry kind="lib" path="lib/jna.jar"/>
+	<classpathentry kind="lib" path="lib/platform.jar"/>
+	<classpathentry kind="lib" path="lib/commons-validator-1.3.1.jar"/>
+	<classpathentry kind="lib" path="lib/jakarta-oro-2.0.8.jar"/>
+	<classpathentry kind="lib" path="lib/sigar.jar"/>
+	<classpathentry kind="lib" path="lib/gettext-commons-0.9.6.jar"/>
+	<classpathentry kind="lib" path="lib/js.jar"/>
+	<classpathentry kind="lib" path="lib/registry.jar"/>
+	<classpathentry kind="lib" path="lib/wrapper.jar"/>
+	<classpathentry kind="lib" path="lib/commons-lang.jar"/>
+	<classpathentry kind="lib" path="lib/commons-collections.jar"/>
+	<classpathentry kind="lib" path="lib/commons-vfs-1.0.jar"/>
+	<classpathentry kind="lib" path="lib/groovy-1.8.2.jar"/>
+	<classpathentry kind="lib" path="lib/asm-all-3.3.1.jar"/>
+	<classpathentry kind="lib" path="lib/commons-vfs2-2.0.jar"/>
+	<classpathentry kind="lib" path="lib/jaxrpc.jar"/>
+	<classpathentry kind="src" path="/SimpleTrayNotify"/>
+	<classpathentry kind="lib" path="lib/axis/bin/axis.jar" sourcepath="lib/axis/src"/>
+	<classpathentry kind="lib" path="lib/commons-configuration-1.8.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/OrangeExtensions"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

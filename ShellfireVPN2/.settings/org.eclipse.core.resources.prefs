@@ -1,0 +1,20 @@
+#Mon Sep 12 00:39:55 CEST 2011
+eclipse.preferences.version=1
+encoding//deploy-pre/nsis=ISO-8859-1
+encoding//src/de/shellfire/www/webservice/sf_soap_php/Entry.java=UTF-8
+encoding//src/de/shellfire/www/webservice/sf_soap_php/ShellfireWebServiceBindingStub.java=UTF-8
+encoding//src/de/shellfire/www/webservice/sf_soap_php/ShellfireWebServicePort.java=UTF-8
+encoding//src/de/shellfire/www/webservice/sf_soap_php/ShellfireWebServiceService.java=UTF-8
+encoding//src/de/shellfire/www/webservice/sf_soap_php/ShellfireWebServiceServiceLocator.java=UTF-8
+encoding//src/de/shellfire/www/webservice/sf_soap_php/Star.java=UTF-8
+encoding//src/de/shellfire/www/webservice/sf_soap_php/TrayMessage.java=UTF-8
+encoding//src/de/shellfire/www/webservice/sf_soap_php/VpnAttributeContainer.java=UTF-8
+encoding//src/de/shellfire/www/webservice/sf_soap_php/VpnAttributeElement.java=UTF-8
+encoding//src/de/shellfire/www/webservice/sf_soap_php/VpnAttributeList.java=UTF-8
+encoding//src/de/shellfire/www/webservice/sf_soap_php/WsFile.java=UTF-8
+encoding//src/de/shellfire/www/webservice/sf_soap_php/WsGeoPosition.java=UTF-8
+encoding//src/de/shellfire/www/webservice/sf_soap_php/WsLoginResult.java=UTF-8
+encoding//src/de/shellfire/www/webservice/sf_soap_php/WsRegistrationResult.java=UTF-8
+encoding//src/de/shellfire/www/webservice/sf_soap_php/WsServer.java=UTF-8
+encoding//src/de/shellfire/www/webservice/sf_soap_php/WsUpgradeResult.java=UTF-8
+encoding//src/de/shellfire/www/webservice/sf_soap_php/WsVpn.java=UTF-8

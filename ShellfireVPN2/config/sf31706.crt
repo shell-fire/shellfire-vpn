@@ -1,0 +1,81 @@
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number: 1998 (0x7ce)
+        Signature Algorithm: sha1WithRSAEncryption
+        Issuer: C=DE, L=Frankfurt am Main, O=www.shellfire.de, CN=www.shellfire.de CA/emailAddress=hosting@shellfire.de
+        Validity
+            Not Before: Jul 19 17:28:12 2011 GMT
+            Not After : Jul 16 17:28:12 2021 GMT
+        Subject: C=DE, L=Frankfurt am Main, O=www.shellfire.de, CN=sf31706/emailAddress=hosting@shellfire.de
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+            RSA Public Key: (1024 bit)
+                Modulus (1024 bit):
+                    00:cb:c3:23:cf:ad:20:35:40:13:25:78:e2:90:08:
+                    79:28:cc:92:1a:67:79:45:9f:a7:bf:d7:f1:cc:6e:
+                    ca:52:3c:f4:aa:58:06:6f:5c:1f:ce:eb:22:82:54:
+                    22:2d:ba:ca:cf:ab:d8:22:fc:74:ba:43:90:97:45:
+                    eb:df:3a:4b:64:00:73:a0:4f:5d:29:54:28:bf:bf:
+                    a1:c3:fb:92:e7:80:01:11:de:62:07:72:57:a4:0a:
+                    f4:08:be:68:38:1d:ca:69:ad:f7:97:be:5d:c5:63:
+                    31:17:87:fa:62:d7:69:a6:bc:2b:70:6c:74:10:56:
+                    78:30:81:00:30:1f:f6:78:bf
+                Exponent: 65537 (0x10001)
+        X509v3 extensions:
+            X509v3 Basic Constraints: 
+                CA:FALSE
+            Netscape Comment: 
+                Easy-RSA Generated Certificate
+            X509v3 Subject Key Identifier: 
+                0C:E0:05:C4:4C:24:90:CD:B9:93:A1:A9:E0:81:C0:86:CA:7B:55:B6
+            X509v3 Authority Key Identifier: 
+                keyid:1A:29:40:57:E8:65:84:7A:37:0A:72:80:60:10:D8:79:6A:BC:F3:C6
+                DirName:/C=DE/L=Frankfurt am Main/O=www.shellfire.de/CN=www.shellfire.de CA/emailAddress=hosting@shellfire.de
+                serial:96:D6:D1:35:71:59:0F:F4
+
+            X509v3 Extended Key Usage: 
+                TLS Web Client Authentication
+            X509v3 Key Usage: 
+                Digital Signature
+    Signature Algorithm: sha1WithRSAEncryption
+        10:19:cc:0b:ac:a1:0a:cd:89:ad:ba:3e:f1:33:4b:9b:99:41:
+        06:cb:79:59:23:2e:52:cd:27:78:3d:15:c7:b6:17:b6:6c:1f:
+        dc:4d:fd:17:bd:d9:7b:f5:b4:a3:98:c9:9d:cf:f0:71:56:6e:
+        c1:42:de:ff:57:01:c0:9b:c8:9f:d0:f4:ea:40:f7:80:24:b2:
+        12:b3:d0:ac:71:09:87:2d:31:20:03:44:7f:ed:bc:e4:9e:e3:
+        69:3e:16:f0:7d:f8:4e:50:80:7d:71:57:02:d2:e9:41:1e:fa:
+        fd:51:96:da:8f:fe:27:2c:a5:c9:66:c9:07:ab:28:09:39:af:
+        6c:6b:37:ca:22:72:f2:40:d0:45:b4:ee:58:b6:5e:be:78:ff:
+        86:e7:82:05:36:d5:4f:c7:92:09:52:9c:71:29:75:f4:92:27:
+        ff:03:22:53:4b:31:8f:b5:ff:f0:31:fa:cf:8c:69:23:02:ad:
+        6c:c5:8c:e4:e9:dc:d6:4c:cb:4a:85:a1:59:4a:54:84:d0:9b:
+        ab:d1:a0:b4:23:42:69:78:fb:0f:ff:59:cb:dc:12:1c:4d:11:
+        0a:d3:a0:b0:9d:82:bc:d6:0a:d6:d3:62:ac:56:fd:c5:be:9c:
+        29:5c:01:69:25:f4:65:24:ae:5b:e6:1f:e8:85:f0:ff:78:02:
+        70:51:a0:bf
+-----BEGIN CERTIFICATE-----
+MIIEOzCCAyOgAwIBAgICB84wDQYJKoZIhvcNAQEFBQAwgYcxCzAJBgNVBAYTAkRF
+MRowGAYDVQQHExFGcmFua2Z1cnQgYW0gTWFpbjEZMBcGA1UEChMQd3d3LnNoZWxs
+ZmlyZS5kZTEcMBoGA1UEAxMTd3d3LnNoZWxsZmlyZS5kZSBDQTEjMCEGCSqGSIb3
+DQEJARYUaG9zdGluZ0BzaGVsbGZpcmUuZGUwHhcNMTEwNzE5MTcyODEyWhcNMjEw
+NzE2MTcyODEyWjB7MQswCQYDVQQGEwJERTEaMBgGA1UEBxMRRnJhbmtmdXJ0IGFt
+IE1haW4xGTAXBgNVBAoTEHd3dy5zaGVsbGZpcmUuZGUxEDAOBgNVBAMTB3NmMzE3
+MDYxIzAhBgkqhkiG9w0BCQEWFGhvc3RpbmdAc2hlbGxmaXJlLmRlMIGfMA0GCSqG
+SIb3DQEBAQUAA4GNADCBiQKBgQDLwyPPrSA1QBMleOKQCHkozJIaZ3lFn6e/1/HM
+bspSPPSqWAZvXB/O6yKCVCItusrPq9gi/HS6Q5CXRevfOktkAHOgT10pVCi/v6HD
++5LngAER3mIHclekCvQIvmg4HcpprfeXvl3FYzEXh/pi12mmvCtwbHQQVngwgQAw
+H/Z4vwIDAQABo4IBPjCCATowCQYDVR0TBAIwADAtBglghkgBhvhCAQ0EIBYeRWFz
+eS1SU0EgR2VuZXJhdGVkIENlcnRpZmljYXRlMB0GA1UdDgQWBBQM4AXETCSQzbmT
+oanggcCGyntVtjCBvAYDVR0jBIG0MIGxgBQaKUBX6GWEejcKcoBgENh5arzzxqGB
+jaSBijCBhzELMAkGA1UEBhMCREUxGjAYBgNVBAcTEUZyYW5rZnVydCBhbSBNYWlu
+MRkwFwYDVQQKExB3d3cuc2hlbGxmaXJlLmRlMRwwGgYDVQQDExN3d3cuc2hlbGxm
+aXJlLmRlIENBMSMwIQYJKoZIhvcNAQkBFhRob3N0aW5nQHNoZWxsZmlyZS5kZYIJ
+AJbW0TVxWQ/0MBMGA1UdJQQMMAoGCCsGAQUFBwMCMAsGA1UdDwQEAwIHgDANBgkq
+hkiG9w0BAQUFAAOCAQEAEBnMC6yhCs2Jrbo+8TNLm5lBBst5WSMuUs0neD0Vx7YX
+tmwf3E39F73Ze/W0o5jJnc/wcVZuwULe/1cBwJvIn9D06kD3gCSyErPQrHEJhy0x
+IANEf+285J7jaT4W8H34TlCAfXFXAtLpQR76/VGW2o/+JyylyWbJB6soCTmvbGs3
+yiJy8kDQRbTuWLZevnj/hueCBTbVT8eSCVKccSl19JIn/wMiU0sxj7X/8DH6z4xp
+IwKtbMWM5Onc1kzLSoWhWUpUhNCbq9GgtCNCaXj7D/9Zy9wSHE0RCtOgsJ2CvNYK
+1tNirFb9xb6cKVwBaSX0ZSSuW+Yf6IXw/3gCcFGgvw==
+-----END CERTIFICATE-----

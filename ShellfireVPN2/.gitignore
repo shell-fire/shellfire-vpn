@@ -1,0 +1,14 @@
+deploy_*
+deploy-pre
+dist
+lib
+lib*
+nbproject
+ShellfireVPN2NEW*
+hs_err_pid*
+*.dat
+*.ant
+*.wsdl
+commands.txt
+build.xml
+build
