@@ -1,0 +1,17 @@
+eclipse.preferences.version=1
+encoding//src/main/java/de/shellfire/vpn/webservice/ShellfireWebServicePort.java=UTF-8
+encoding//src/main/java/de/shellfire/vpn/webservice/model/BlankRequest.java=UTF-8
+encoding//src/main/java/de/shellfire/vpn/webservice/model/Entry.java=UTF-8
+encoding//src/main/java/de/shellfire/vpn/webservice/model/LoginResponse.java=UTF-8
+encoding//src/main/java/de/shellfire/vpn/webservice/model/Star.java=UTF-8
+encoding//src/main/java/de/shellfire/vpn/webservice/model/TrayMessage.java=UTF-8
+encoding//src/main/java/de/shellfire/vpn/webservice/model/VpnAttributeContainer.java=UTF-8
+encoding//src/main/java/de/shellfire/vpn/webservice/model/VpnAttributeElement.java=UTF-8
+encoding//src/main/java/de/shellfire/vpn/webservice/model/VpnAttributeList.java=UTF-8
+encoding//src/main/java/de/shellfire/vpn/webservice/model/WsFile.java=UTF-8
+encoding//src/main/java/de/shellfire/vpn/webservice/model/WsGeoPosition.java=UTF-8
+encoding//src/main/java/de/shellfire/vpn/webservice/model/WsLoginRequest.java=UTF-8
+encoding//src/main/java/de/shellfire/vpn/webservice/model/WsRegistrationResult.java=UTF-8
+encoding//src/main/java/de/shellfire/vpn/webservice/model/WsServer.java=UTF-8
+encoding//src/main/java/de/shellfire/vpn/webservice/model/WsUpgradeResult.java=UTF-8
+encoding//src/main/java/de/shellfire/vpn/webservice/model/WsVpn.java=UTF-8
