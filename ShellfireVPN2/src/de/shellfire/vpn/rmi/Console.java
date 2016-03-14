@@ -1,6 +1,9 @@
 package de.shellfire.vpn.rmi;
 
+import java.util.logging.Logger;
+
 import de.shellfire.vpn.gui.IConsole;
+import de.shellfire.vpn.gui.Util;
 
 
 /**
@@ -12,6 +15,7 @@ public class Console implements IConsole {
     private static Console instance;
     private StringBuffer content = new StringBuffer();
     private StringBuffer history = new StringBuffer();
+    private static Logger log = Util.getLogger(Console.class);
     
     private Console() {
     }
@@ -24,7 +28,8 @@ public class Console implements IConsole {
     }
 
     public void append(String lastLine) {
-    	System.out.println(lastLine);
+      
+    	log.info(lastLine);
     	this.content.append(lastLine+"\n");
     }
     

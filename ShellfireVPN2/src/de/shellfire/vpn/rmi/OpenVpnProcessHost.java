@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import com.apple.eawt.AppEvent.SystemSleepEvent;
 import com.apple.eawt.Application;
@@ -27,6 +29,8 @@ import de.shellfire.vpn.gui.Util;
 import de.shellfire.vpn.rmi.IVpnRegistry;
 
 public class OpenVpnProcessHost extends UnicastRemoteObject implements IOpenVpnProcessHost {
+  static Logger log = Util.getLogger(OpenVpnProcessHost.class);
+  
 	private static final long serialVersionUID = -8843768672588937918L;
 	public static boolean IS_SERVICE = false;
   private static IVpnRegistry registry;
@@ -50,59 +54,65 @@ public class OpenVpnProcessHost extends UnicastRemoteObject implements IOpenVpnP
   
 	protected OpenVpnProcessHost() throws RemoteException {
 		super();
+		log.info("OpenVpnProcessHost() - start");
 		initAppleEventHandlers();
 
+		log.info("OpenVpnProcessHost() - finish");
 	}
 
 	public static void main(String[] args) {
+	  log.info("OpenVpnProcessHost starting up");
 		OpenVpnProcessHost.IS_SERVICE  = true;
-		System.out.println("OpenVpnProcessHost starting up");
+		log = Util.getLogger(OpenVpnProcessHost.class);
 		
 		if (args.length > 0 && args[0].equals("stop")) {
-			System.out.println("called with stop command - running mainstop");
+		  log.info("called with stop command - running mainstop");
 			
 			mainstop(args);
+			log.info("finished with mainstop() - returning");
 			return;
 		}
 		Registry registry = null;
-		System.out.println("creating Registry");
+		log.info("creating Registry");
 		try {
 			registry = LocateRegistry.createRegistry(SHELLFIRE_REGISTRY_PORT);
 		}
-
 		catch (RemoteException ex) {
-			System.out.println(ex.getMessage());
-			System.out.println("Could not create registry, shutting down");
+		  log.info("Could not create registry, shutting down");
+			log.log(Level.SEVERE, ex.toString(), ex );
+			
 			return; // terminate on exception
 		}
+		log.info("registry created");
 		try {
-			System.out.println("Creating new ProcessHost");
+			log.info("Creating new ProcessHost");
 			OpenVpnProcessHost host = new OpenVpnProcessHost();
-			System.out.println("binding the processhost using Naming.rebind()");
+			log.info("binding the processhost using Naming.rebind()");
 		
 			registry.rebind(SHELLFIRE_OPEN_VPN_PROCESS_HOST, host);
 		}  catch (RemoteException ex) {
-			System.out.println(ex.getMessage());
+		  log.log(Level.SEVERE, ex.toString(), ex );
 		}
-		System.out.println("done");
+		log.info("new processhost created. main(args) - finished");
 		
 	}
 
 	public static void mainstop(String[] args) {
 		try {
-			System.out.println("mainstop called - getting openvpnprocess host via Naming.lookup");
+			log.info("mainstop called - getting openvpnprocess host via Naming.lookup");
 			IOpenVpnProcessHost o = (IOpenVpnProcessHost) Naming.lookup(OpenVpnProcessHost.SHELLFIRE_OPEN_VPN_PROCESS_HOST);
 
-			
-			System.out.println("disconnecting from vpn service");
+			log.info("disconnecting from vpn service");
 			// make sure openvpn is disconnected, routes are being removed
 			o.disconnect(Reason.ServiceStopped);
-
+			log.info("disconnected");
 			
 			// make sure RMI runtime is shut down gracefully
+			log.info("invoking o.exit()");
 			o.exit();
+			log.info("finished exiting - returning");
 		} catch (Exception e) {
-			e.printStackTrace();
+		  log.log(Level.SEVERE, e.toString(), e );
 		}
 	}
 
@@ -118,6 +128,7 @@ public class OpenVpnProcessHost extends UnicastRemoteObject implements IOpenVpnP
 			try {
 				Thread.sleep(250);
 			} catch (InterruptedException e) {
+			  log.log(Level.SEVERE, e.toString(), e );
 				throw new RemoteException("InterruptedException at OpenVpnProcessHost.disconnect()", e);
 			}
 			kernel32.PulseEvent(result);
@@ -128,6 +139,7 @@ public class OpenVpnProcessHost extends UnicastRemoteObject implements IOpenVpnP
 					openVpnManagementClient.disconnect();
 
 			} catch (IOException e) {
+			  log.log(Level.SEVERE, e.toString(), e);
 				throw new RemoteException("IOException at OpenVpnProcessHost.disconnect()", e);
 			}
 			
@@ -141,6 +153,7 @@ public class OpenVpnProcessHost extends UnicastRemoteObject implements IOpenVpnP
 				Process kextUnload = new ProcessBuilder(kextUnloadCmds).start();			
 				this.bindConsole(kextUnload);
 			} catch (IOException e) {
+			  log.log(Level.SEVERE, e.toString(), e);
 				appendConsole("Unloading tun.kext did not work - ignoring");
 			}		
 			
@@ -148,15 +161,18 @@ public class OpenVpnProcessHost extends UnicastRemoteObject implements IOpenVpnP
 
 		this.setConnectionState(ConnectionState.Disconnected, reason);
 		fixTapDevices();
+		appendConsole("disconnect(Reason="+reason+") - finished");
 	}
 
 	@Override
 	public ConnectionState getConnectionState() throws RemoteException {
+	  appendConsole("getConnectionState()");
 		return this.connectionState;
 	}
 
 	@Override
 	public void setParametersForOpenVpn(String params) throws RemoteException {
+	  appendConsole("setParametersForOpenVpn()");
 		this.parametersForOpenVpn = params;
 
 	}
@@ -173,17 +189,18 @@ public class OpenVpnProcessHost extends UnicastRemoteObject implements IOpenVpnP
 		} else {
 			stopConnectionMonitoring();
 		}
-		
+		appendConsole("setConnectionState() - finished");
 	}
 
 
 	private void stopConnectionMonitoring() {
+	  appendConsole("stopConnectionMonitoring() - start");
 		// if connection monitoring is already active stop it
-		appendConsole("stopping connection monitoring");
 		if (connectionMonitor != null) {
 			connectionMonitor.cancel();
 			connectionMonitor = null;
 		}
+		appendConsole("stopConnectionMonitoring() - finished");
 	}
 	
 	// auto re-connect on Timeout!
@@ -228,6 +245,7 @@ public class OpenVpnProcessHost extends UnicastRemoteObject implements IOpenVpnP
 						
 						
 					} catch (Exception e) {
+					  log.log(Level.SEVERE, e.toString(), e);
 						appendConsole("Error in connection monitoring");
 						appendConsole(e.toString());
 						e.printStackTrace();
@@ -236,10 +254,11 @@ public class OpenVpnProcessHost extends UnicastRemoteObject implements IOpenVpnP
 				}}, 5000, 20000);
 		}
 		
-		
+		appendConsole("connection monitoring started");
 	}
 
 	public boolean getConnectionStateChanged() throws RemoteException {
+	  appendConsole("getConnectionStateChanged()");
 		if (this.connectionStateChanged) {
 			this.connectionStateChanged = false;
 			return true;
@@ -250,21 +269,26 @@ public class OpenVpnProcessHost extends UnicastRemoteObject implements IOpenVpnP
 
 	@Override
 	public Reason getReasonForStateChange() throws RemoteException {
+	  appendConsole("getReasonForStateChange()");
 		return this.reasonForStateChange;
 	}
 
 	@Override
 	public void connect() throws RemoteException {
+	  appendConsole("connect() - start");
 		this.connect(this.reasonForStateChange);
+		appendConsole("connect() - finished");
 	}
 
 	private void connect(Reason reason) throws RemoteException {
 		try {
-			appendConsole("connect(Reason="+reason+")");
+			appendConsole("connect(Reason="+reason+") - start");
 			fixTapDevices();
 
+			appendConsole("getting getOpenVpnStartString");
 			String openVpnStartString = this.getOpenVpnStartString();
-
+			appendConsole("getOpenVpnStartString retrieved: " + openVpnStartString);
+			
 			if (parametersForOpenVpn == null) {
 				this.setConnectionState(ConnectionState.Disconnected, Reason.NoOpenVpnParameters);
 				return;
@@ -276,6 +300,7 @@ public class OpenVpnProcessHost extends UnicastRemoteObject implements IOpenVpnP
 				return;
 			}
 
+			appendConsole("getting RunTime");
 			Runtime runtime = Runtime.getRuntime();
 
 			if (this.getConnectionState() == ConnectionState.Disconnected) {
@@ -283,7 +308,7 @@ public class OpenVpnProcessHost extends UnicastRemoteObject implements IOpenVpnP
 				this.setConnectionState(ConnectionState.Connecting, reason);
 			}
 				
-
+			appendConsole("Entering main connection loop");
 			Process p = null;
 			if (Util.isWindows()) {
 				String search = "%APPDATA%\\ShellfireVPN";
@@ -293,12 +318,14 @@ public class OpenVpnProcessHost extends UnicastRemoteObject implements IOpenVpnP
 				parametersForOpenVpn = parametersForOpenVpn.replace(search, replace);
         
         if (Util.isWin8OrWin10()) {
+          appendConsole("Adding block-outside-dns on win8 or win10");
           String blockDns = " --block-outside-dns";
           if (parametersForOpenVpn != null && !parametersForOpenVpn.contains(blockDns)) {
             parametersForOpenVpn += blockDns;  
           }
         }
 				
+        appendConsole("Starting openvpn:");
 				p = runtime.exec(openVpnStartString + " " + this.parametersForOpenVpn, null, new File("."));
 				appendConsole(openVpnStartString + " " + parametersForOpenVpn);
 			} else {
@@ -318,9 +345,11 @@ public class OpenVpnProcessHost extends UnicastRemoteObject implements IOpenVpnP
 					cmds.add(cmd);
 				}
 
+				appendConsole("Starting openVpnManagementClient");
 				this.openVpnManagementClient = new OpenVpnManagementClient(console, this);
 				new Thread(openVpnManagementClient).start();
 
+				appendConsole("Finalizing parameters");
 				String vpnDir = getOpenVpnDir();
 				String vpnDirForConfig = vpnDir.replace(" ", "\\ ");
 				cmds.add("--verb");
@@ -347,10 +376,11 @@ public class OpenVpnProcessHost extends UnicastRemoteObject implements IOpenVpnP
 				this.bindConsole(kextLoad);
 				
 				appendConsole("Starting openvpn with command: " +  Util.listToString(cmds));
-				
+
 				p = new ProcessBuilder(cmds).start();
 			}
 
+			appendConsole("Bindin process to console");
 			this.bindConsole(p);
 			if (Util.isWindows()) {
 				appendConsole(openVpnStartString);
@@ -360,19 +390,26 @@ public class OpenVpnProcessHost extends UnicastRemoteObject implements IOpenVpnP
 			}
 
 		} catch (IOException ex) {
+		  log.log(Level.SEVERE, ex.toString(), ex);
 			appendConsole("Error occured during connect. Exception details:");
-			ex.printStackTrace();
+
 			appendConsole(Util.getStackTrace(ex));
 			this.setConnectionState(ConnectionState.Disconnected, Reason.OpenVpnNotFound);
 
 		}
+		
+		appendConsole("connect(Reason="+reason+") - start");
 	}
 	
 	private String getOpenVpnDir() {
-		return System.getProperty("user.dir") + "/openvpn/";
+	  String result = System.getProperty("user.dir") + "/openvpn/";;
+	  appendConsole("getOpenVpnDir() - returning: " + result);
+		return result;
 	}
 
 	private String getOpenVpnStartString() {
+	  appendConsole("getOpenVpnStartString() - start");
+	  
 		Map<String, String> envs = System.getenv();
 		String programFiles = envs.get("ProgramFiles");
 		String programFiles86 = envs.get("ProgramFiles(x86)");
@@ -381,10 +418,13 @@ public class OpenVpnProcessHost extends UnicastRemoteObject implements IOpenVpnP
 
 		for (String possibleLocaion : possibleOpenVpnExeLocations) {
 			File f = new File(possibleLocaion);
-			if (f.exists())
-				return possibleLocaion;
+			if (f.exists()) {
+			  appendConsole("getOpenVpnStartString() - returning " + possibleLocaion);
+			  return possibleLocaion;
+			}
+				
 		}
-
+		appendConsole("getOpenVpnStartString() - returning null: OPENVPN NOT FOUND!");
 		return null;
 	}
 
@@ -412,16 +452,19 @@ public class OpenVpnProcessHost extends UnicastRemoteObject implements IOpenVpnP
 	@Override
 	public void exit() throws RemoteException {
 		try {
-			appendConsole("OpenVPNProcessHost exiting.");
+			appendConsole("OpenVPNProcessHost exiting. Naming.unbind(...)");
 			Naming.unbind(OpenVpnProcessHost.SHELLFIRE_OPEN_VPN_PROCESS_HOST);
 		
+			appendConsole("UnicastRemoteObject.unexportObject(this, true)");
 			UnicastRemoteObject.unexportObject(this, true);
 
-			
-			Thread.sleep(2000);
+			appendConsole("Sleeping 500 msec");
+			Thread.sleep(500);
+			appendConsole("Exit(0)");
 			System.exit(0);
 			
 		} catch (Exception e) {
+		  log.log(Level.SEVERE, e.toString(), e);
 		}
 	}
 
@@ -438,6 +481,7 @@ public class OpenVpnProcessHost extends UnicastRemoteObject implements IOpenVpnP
 	}
 	
 	private void appendConsole(String s) {
+	  log.info(s);
 		if (this.console != null)
 			this.console.append(s.trim());
 	}
@@ -460,6 +504,7 @@ public class OpenVpnProcessHost extends UnicastRemoteObject implements IOpenVpnP
 									try {
 										disconnect(Reason.SystemSleepInduced);
 									} catch (RemoteException e) {
+									  log.log(Level.SEVERE, e.toString(), e);
 										appendConsole(e.getLocalizedMessage());
 										appendConsole(Util.getStackTrace(e));
 									}
@@ -570,7 +615,7 @@ public class OpenVpnProcessHost extends UnicastRemoteObject implements IOpenVpnP
         try {
           registry = new WinRegistry();  
         } catch (Exception e) {
-          e.printStackTrace();
+          log.log(Level.SEVERE, e.toString(), e);
           throw new RemoteException(e.getMessage());
         }
         

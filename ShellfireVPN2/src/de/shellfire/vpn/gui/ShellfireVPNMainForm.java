@@ -45,6 +45,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 
 import javax.swing.BorderFactory;
@@ -86,6 +87,8 @@ import de.shellfire.vpn.Storage;
 import de.shellfire.vpn.TitiliumFont;
 import de.shellfire.vpn.Vpn;
 import de.shellfire.vpn.proxy.ProxyConfig;
+import de.shellfire.vpn.rmi.Console;
+import de.shellfire.vpn.rmi.OpenVpnProcessHost;
 import de.shellfire.vpn.rmi.ServiceTools;
 import de.shellfire.www.webservice.sf_soap_php.TrayMessage;
 import de.shellfire.www.webservice.sf_soap_php.WsGeoPosition;
@@ -95,7 +98,7 @@ import de.shellfire.www.webservice.sf_soap_php.WsGeoPosition;
  * @author bettmenn
  */
 public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleChangeListener, ConnectionStateListener {
-
+  private static Logger log = Util.getLogger(ShellfireVPNMainForm.class);
 	private ContentPaneList content;
 	private ShellfireService shellfireService;
 	private ServerList serverList;
@@ -143,6 +146,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 		}
 
 		this.getConsole();
+		
 		vpnConsole.append("ShellfireVPNMainForm starting up");
 		if (Util.isWindows()) {
 		  vpnConsole.append("Running on Windows " + Util.getOsVersion());
