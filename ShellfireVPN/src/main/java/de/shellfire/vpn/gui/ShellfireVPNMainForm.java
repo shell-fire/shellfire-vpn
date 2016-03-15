@@ -65,6 +65,8 @@ import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumnModel;
 
 import org.jdesktop.application.Action;
+import org.jdesktop.application.Application;
+import org.jdesktop.application.ResourceMap;
 import org.jdesktop.swingx.mapviewer.GeoPosition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -308,9 +310,9 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
         jScrollBar1.setName("jScrollBar1"); // NOI18N
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("ShellfireVPNMainForm"); // NOI18N
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("de/shellfire/vpn/gui/resources/ShellfireVPNMainForm"); // NOI18N
         setTitle(bundle.getString("title")); // NOI18N
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance().getContext().getResourceMap(ShellfireVPNMainForm.class);
+        ResourceMap resourceMap = Application.getInstance().getContext().getResourceMap(ShellfireVPNMainForm.class);
         setBackground(resourceMap.getColor("Form.background")); // NOI18N
         setName("Form"); // NOI18N
 

@@ -18,9 +18,6 @@ import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
-import com.google.gson.reflect.TypeToken;
 
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.exception.VpnException;
@@ -43,9 +40,7 @@ import de.shellfire.vpn.webservice.model.GetUrlSuccesfulConnectRequest;
 import de.shellfire.vpn.webservice.model.RegisterRequest;
 import de.shellfire.vpn.webservice.model.SetProtocolToRequest;
 import de.shellfire.vpn.webservice.model.SetServerToRequest;
-import de.shellfire.vpn.webservice.model.VpnAttributeList;
 import de.shellfire.vpn.webservice.model.WsLoginRequest;
-import de.shellfire.vpn.webservice.model.WsVpn;
 
 @SuppressWarnings("rawtypes")
 class JsonHttpRequest<RequestType, ResponseType> {
@@ -54,7 +49,8 @@ class JsonHttpRequest<RequestType, ResponseType> {
   private String function;
   CloseableHttpClient httpClient = HttpClients.createDefault();
   final String endPoint = "http://dev.shellfire.local.de:808/webservice/json.php?action=";
-  Gson gson = new GsonBuilder().setPrettyPrinting().create();
+  //Gson gson = new GsonBuilder().setPrettyPrinting().create();
+  Gson gson = new GsonBuilder().create();
 
   static final Map<Class, String> functionMap;
 
@@ -109,10 +105,11 @@ class JsonHttpRequest<RequestType, ResponseType> {
     
     
     // TODO: REMOVE after testing
+    /*
     JsonParser jp = new JsonParser();
     JsonElement je = jp.parse(jsonResult);
     jsonResult = gson.toJson(je);
-    
+    */
     
     log.debug("jsonResult of response: {}", jsonResult);
 
