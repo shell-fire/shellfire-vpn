@@ -1,7 +1,5 @@
 package de.shellfire.vpn.service;
 
-import java.util.List;
-
 import de.shellfire.vpn.client.ConnectionState;
 import de.shellfire.vpn.client.ConnectionStateListener;
 import de.shellfire.vpn.types.Reason;

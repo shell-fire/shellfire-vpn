@@ -1,15 +1,13 @@
 package de.shellfire.vpn.webservice;
 
-import java.util.List;
-
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import de.shellfire.vpn.Util;
 import de.shellfire.vpn.exception.VpnException;
 
 public class Response<ResponseType> {
   
-  private static Logger log = LoggerFactory.getLogger(Response.class.getCanonicalName());
+  private static Logger log = Util.getLogger(Response.class.getCanonicalName());
   public static final String STATUS_SUCCESS = "success";
   public static final String STATUS_ERROR = "error";
 

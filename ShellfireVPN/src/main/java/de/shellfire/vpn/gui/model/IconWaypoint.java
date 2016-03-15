@@ -4,7 +4,7 @@
  */
 package de.shellfire.vpn.gui.model;
 
-import java.awt.Image;
+import java.awt.image.BufferedImage;
 
 import org.jdesktop.swingx.mapviewer.DefaultWaypoint;
 
@@ -15,9 +15,9 @@ import de.shellfire.vpn.types.LocatableIcon;
  * @author bettmenn
  */
 public class IconWaypoint extends DefaultWaypoint {
-    private final Image icon;
+    private final BufferedImage icon;
 
-    public Image getIcon() {
+    public BufferedImage getIcon() {
         return icon;
     }
     

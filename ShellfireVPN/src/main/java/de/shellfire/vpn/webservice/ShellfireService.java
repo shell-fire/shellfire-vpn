@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package de.shellfire.vpn.webservice;
 
 import java.io.BufferedWriter;
@@ -9,18 +5,17 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.rmi.RemoteException;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.xnap.commons.i18n.I18n;
 
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.Util.ExceptionThrowingReturningRunnable;
 import de.shellfire.vpn.exception.VpnException;
 import de.shellfire.vpn.i18n.VpnI18N;
+import de.shellfire.vpn.messaging.UserType;
 import de.shellfire.vpn.proxy.ProxyConfig;
 import de.shellfire.vpn.types.Protocol;
 import de.shellfire.vpn.types.Server;
@@ -29,9 +24,7 @@ import de.shellfire.vpn.webservice.model.TrayMessage;
 import de.shellfire.vpn.webservice.model.VpnAttributeList;
 import de.shellfire.vpn.webservice.model.WsFile;
 import de.shellfire.vpn.webservice.model.WsGeoPosition;
-import de.shellfire.vpn.webservice.model.WsRegistrationResult;
 import de.shellfire.vpn.webservice.model.WsServer;
-import de.shellfire.vpn.webservice.model.WsUpgradeResult;
 import de.shellfire.vpn.webservice.model.WsVpn;
 
 /**
@@ -41,7 +34,7 @@ import de.shellfire.vpn.webservice.model.WsVpn;
 public class ShellfireService {
 
   public static final String CONFIG_DIR = Util.getConfigDir();
-  private static Logger log = LoggerFactory.getLogger(ShellfireService.class.getCanonicalName());
+  private static Logger log = Util.getLogger(ShellfireService.class.getCanonicalName());
 
   private String user;
   private String pass;
@@ -491,5 +484,36 @@ public class ShellfireService {
 
     return urlPasswordLost;
 
+  }
+
+  public boolean sendLogToShellfire() {
+    String serviceLog = Util.getLogFilePath(UserType.Service);
+    String serviceLogString = "";
+    try {
+      serviceLogString = Util.fileToString(serviceLog);
+    } catch (IOException e) {
+      log.error("Could not read serviceLog", e);
+    }
+
+    String clientLog = Util.getLogFilePath(UserType.Client);
+    String clientLogString = "";
+    try {
+      clientLogString = Util.fileToString(clientLog);
+    } catch (IOException e) {
+      log.error("Could not read clientLog", e);
+    }
+    
+    final String finalService = serviceLogString;
+    final String finalClient = clientLogString;
+    
+    Boolean result = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<Boolean>() {
+      public Boolean run() throws Exception {
+        boolean result = shellfire.sendLogToShellfire(finalService, finalClient);;
+        
+        return result;
+      }
+    }, 10, 50);
+  
+    return result;
   }
 }

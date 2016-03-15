@@ -12,6 +12,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 
+import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
 
 import de.shellfire.vpn.Util;
@@ -21,6 +22,7 @@ import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.webservice.ShellfireService;
 
 public class ServiceTools {
+  private static Logger log = Util.getLogger(ServiceTools.class.getCanonicalName());
 	private static I18n i18n = VpnI18N.getI18n();
 	private static String nl = "\r\n";
 	private static ProgressDialog loginProgressDialog;
@@ -30,15 +32,15 @@ public class ServiceTools {
 	}
 	
 	public void ensureServiceEnvironment(LoginForm form) throws RemoteException {
-		System.out.println("checking if service is running");
+		log.debug("checking if service is running");
 		if (!serviceIsRunning()) {
 			if (!Util.isWindows()) {
-				System.out.println("Service not running, trying request on port 60313 to have launchd start it!");
+				log.debug("Service not running, trying request on port 60313 to have launchd start it!");
 				tryStartViaPortRequestInSeparateThread();
 			}
 			
 			if (!serviceIsRunning()) {
-				System.out.println("service not running - installEelevated()");
+				log.debug("service not running - installEelevated()");
 				JOptionPane.showMessageDialog(null, i18n.tr("Der Shellfire VPN Service wird jetzt installiert. Gib dazu bitte im nachfolgenden Fenster dein Admin-Passwort ein."));
 	            
 				form.initDialog.dispose();
@@ -61,13 +63,13 @@ public class ServiceTools {
 				WaitForServiceTask task = new WaitForServiceTask(form);
 				task.execute();				
 			} else {
-				System.out.println("serivce has been started");
+				log.debug("serivce has been started");
 				form.afterServiceEnvironmentEnsured();
 			}
 			
 			
 		} else {
-			System.out.println("serivce is running - good to go, no action required");
+			log.debug("serivce is running - good to go, no action required");
 			form.afterServiceEnvironmentEnsured();
 		}
 
@@ -122,7 +124,7 @@ public class ServiceTools {
 				// restart elevated
 				command += "\"" + instdir + "elevate.exe\" -wait jre8\\bin\\javaw -jar ShellfireVPN2.exe installservice";
 
-				System.out.println("Command: " + command);
+				log.debug("Command: " + command);
 				Process p;
 				try {
 					p = Runtime.getRuntime().exec(command, null, new File(instdir));
@@ -146,7 +148,7 @@ public class ServiceTools {
 			try {
 				
 				String installerPath = com.apple.eio.FileManager.getPathToApplicationBundle() + "/Contents/Java/ShellfireVPN2.app";
-				System.out.println("Opening installer using /usr/bin/open(): " +  installerPath);
+				log.debug("Opening installer using /usr/bin/open(): " +  installerPath);
 
 				List<String> cmds = new LinkedList<String>();
 				cmds.add("/usr/bin/open");
@@ -154,7 +156,7 @@ public class ServiceTools {
 				//cmds.add("-jar");
 				//cmds.add("ShellfireVPN2.jar");
 				//cmds.add("installservice");
-				//System.out.println("sudo launch of Updater with installservice, cmds: " + Util.listToString(cmds));
+				//log.debug("sudo launch of Updater with installservice, cmds: " + Util.listToString(cmds));
 				Process p = new ProcessBuilder(cmds).directory(new File(com.apple.eio.FileManager.getPathToApplicationBundle() + "/Contents/Java/")).start();
 
 				Util.digestProcess(p);
@@ -197,17 +199,17 @@ public class ServiceTools {
 
 	// test if port 1099 on localhost is open, if not return false
 	private static boolean serviceIsRunning() {
-		System.out.println("serviceIsRunning()");
+		log.debug("serviceIsRunning()");
 		Socket s = null;
 		/*
 		try {
 			s = new Socket("localhost", OpenVpnProcessHost.SHELLFIRE_REGISTRY_PORT);
 			
 		} catch (UnknownHostException e) {
-			System.out.println("Service not running");
+			log.debug("Service not running");
 			return false;
 		} catch (IOException e) {
-			System.out.println("Service not running");
+			log.debug("Service not running");
 			return false;
 		}
 */
@@ -218,7 +220,7 @@ public class ServiceTools {
 			}
 		}
 
-		System.out.println("Service running");
+		log.debug("Service running");
 		return true;
 	}
 	
@@ -247,12 +249,12 @@ public class ServiceTools {
 		}
 		
 		if (pr.result == true) {
-			System.out.println("result: true");
+			log.debug("result: true");
 			return true;
 			
 		}
 					
-		System.out.println("result: false");
+		log.debug("result: false");
 		
 		return false;
 	}
@@ -264,7 +266,7 @@ public class ServiceTools {
 			Socket s = null;
 			try {
 				s = new Socket("localhost", 60313);
-				System.out.println("socket opened - yeah!");
+				log.debug("socket opened - yeah!");
 			} catch (UnknownHostException e) {
 				this.result = false;
 				return;
@@ -275,7 +277,7 @@ public class ServiceTools {
 
 			if (s != null) {
 				try {
-					System.out.println("closing socket");
+					log.debug("closing socket");
 					s.close();
 				} catch (IOException e) {
 				}
@@ -287,12 +289,12 @@ public class ServiceTools {
 /*
 	public static WrappedService initService(String instDir) {
 		if (service == null) {
-			System.out.println("initService()");
+			log.debug("initService()");
 			if (Util.isWindows())
 				ShellfireService.createConfigDirIfNotExists();
 			
 
-			System.out.println("instDIr: " + instDir);
+			log.debug("instDIr: " + instDir);
 
 			String sep = "";
 			if (Util.isWindows()) {
@@ -307,8 +309,8 @@ public class ServiceTools {
 				startConfig = "/etc/shellfirevpn.conf";
 			}
 			
-			System.out.println("startConfig=" + startConfig);
-			System.out.println("stopConfig=" + stopConfig);
+			log.debug("startConfig=" + startConfig);
+			log.debug("stopConfig=" + stopConfig);
 
 			writeConfigFiles(instDir, startConfig, stopConfig);
 
@@ -319,7 +321,7 @@ public class ServiceTools {
 			service = w;
 		}
 
-		System.out.println("initService() - return");
+		log.debug("initService() - return");
 		return service;
 	}*/
   /*
@@ -350,7 +352,7 @@ public class ServiceTools {
 				p2 = new ProcessBuilder(params).start();			
 				p2.waitFor();
 				
-				System.out.println("sleeping for 3 seconds to let the task stop");
+				log.debug("sleeping for 3 seconds to let the task stop");
 				Thread.sleep(3000);
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -422,7 +424,7 @@ public class ServiceTools {
 					+ "wrapper.app.parameter.1=stop" + nl 
 					+ "include=start.conf";
 
-			System.out.println("Stop Config: ");
+			log.debug("Stop Config: ");
 			
 			Util.stringToFile(stop, stopConfigFile, true);			
 			
@@ -435,8 +437,8 @@ public class ServiceTools {
 			start = start.replace(" ", "\\ ");
 			
 		}
-		System.out.println("Start Config:");
-		System.out.println(start);
+		log.debug("Start Config:");
+		log.debug(start);
 		Util.stringToFile(start, startConfigFile, true);
 
 
@@ -447,7 +449,7 @@ public class ServiceTools {
 		Process p2;
 
 		params = new String[] { "/usr/sbin/chown", "-R", "root:wheel", instDir + "/openvpn/tun.kext" };
-		System.out.println("setting permissions " + params[2] + " on " + params[3]);
+		log.debug("setting permissions " + params[2] + " on " + params[3]);
 		try {
 			p2 = new ProcessBuilder(params).start();
 			Util.digestProcess(p2);
@@ -460,7 +462,7 @@ public class ServiceTools {
 		}
 
 		params = new String[] { "/bin/chmod", "-R", "755", instDir + "/openvpn/tun.kext/" };
-		System.out.println("setting permissions " + params[2] + " on " + params[3]);
+		log.debug("setting permissions " + params[2] + " on " + params[3]);
 		try {
 			p2 = new ProcessBuilder(params).start();
 			Util.digestProcess(p2);
@@ -473,7 +475,7 @@ public class ServiceTools {
 		}
 		
 		params = new String[] { "/bin/mkdir", "/var/log/ShellfireVPN" };
-		System.out.println("mkdir " + params[1]);
+		log.debug("mkdir " + params[1]);
 		try {
 			p2 = new ProcessBuilder(params).start();
 			Util.digestProcess(p2);
@@ -487,23 +489,23 @@ public class ServiceTools {
 	}
 /*
 	public static void install(String path) {
-		System.out.println("install("+path+", ");
+		log.debug("install("+path+", ");
 		
 		if (Util.isWindows()) {
 			path = LoginForm.getInstDir();
 			WrappedService w = initService(path);
 
-			System.out.println("installing service");
+			log.debug("installing service");
 			if (w.install()) {
-				System.out.println("service installed");
+				log.debug("service installed");
 			} else {
-				System.out.println("could not install service");
+				log.debug("could not install service");
 			}
 
 			if (w.start()) {
-				System.out.println("service started");
+				log.debug("service started");
 			} else {
-				System.out.println("could not start service");
+				log.debug("could not start service");
 			}
 	
 		} else {
@@ -537,7 +539,7 @@ public class ServiceTools {
 					p2 = new ProcessBuilder(params).start();			
 					p2.waitFor();
 					
-					System.out.println("sleeping for 3 seconds to let the task start-up");
+					log.debug("sleeping for 3 seconds to let the task start-up");
 					Thread.sleep(3000);
 				} catch (IOException e) {
 					e.printStackTrace();

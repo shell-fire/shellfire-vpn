@@ -1,7 +1,5 @@
 package de.shellfire.vpn.service.osx;
 
-import java.util.List;
-
 import de.shellfire.vpn.client.ConnectionState;
 import de.shellfire.vpn.client.ConnectionStateListener;
 import de.shellfire.vpn.service.IVpnController;

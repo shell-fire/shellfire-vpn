@@ -67,14 +67,13 @@ import javax.swing.table.TableColumnModel;
 import org.jdesktop.application.Action;
 import org.jdesktop.application.Application;
 import org.jdesktop.application.ResourceMap;
+import org.jdesktop.swingx.JXMapKit;
 import org.jdesktop.swingx.mapviewer.GeoPosition;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.LocaleChangeEvent;
 import org.xnap.commons.i18n.LocaleChangeListener;
 
-import de.shellfire.vpn.IConsole;
 import de.shellfire.vpn.Storage;
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.client.Client;
@@ -111,7 +110,7 @@ import de.shellfire.vpn.webservice.model.WsGeoPosition;
  * @author bettmenn
  */
 public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleChangeListener, ConnectionStateListener {
-  private static Logger log = LoggerFactory.getLogger(ShellfireVPNMainForm.class.getCanonicalName());
+  private static Logger log = Util.getLogger(ShellfireVPNMainForm.class.getCanonicalName());
 	private ContentPaneList content;
 	private ShellfireService shellfireService;
 	private ServerList serverList;
@@ -158,23 +157,21 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 			throw new VpnException("ShellfireVPN Main Form required a logged in service. This should not happen!");
 		}
 
-		this.getConsole();
-		
-		vpnConsole.append("ShellfireVPNMainForm starting up");
+		log.debug("ShellfireVPNMainForm starting up");
 		if (Util.isWindows()) {
-		  vpnConsole.append("Running on Windows " + Util.getOsVersion());
+		  log.debug("Running on Windows " + Util.getOsVersion());
 		  
 		  if (Util.isVistaOrLater()) {
-		    vpnConsole.append("Running on Vista Or Later Version");
+		    log.debug("Running on Vista Or Later Version");
 		  } else {
-		    vpnConsole.append("Running on XP");
+		    log.debug("Running on XP");
 		  }
 		  
 		} else {
-		  vpnConsole.append("Running on Mac OS X " + Util.getOsVersion());
+		  log.debug("Running on Mac OS X " + Util.getOsVersion());
 		}
 		
-		vpnConsole.append("System Architecture: " + Util.getArchitecture());
+		log.debug("System Architecture: " + Util.getArchitecture());
 		
 		this.shellfireService = service;
 		this.initController();
@@ -265,7 +262,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
         jConnectionStateImage = new javax.swing.JLabel();
         jMapPanel = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
-        jXMapKit1 = new org.jdesktop.swingx.JXMapKit();
+        jXMapKit1 = new JXMapKit();
         jShowOwnPosition = new javax.swing.JCheckBox();
         jGotoOwnLocation = new javax.swing.JButton();
         jUsaPanel = new javax.swing.JPanel();
@@ -648,7 +645,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
         jLabel13.setName("jLabel13"); // NOI18N
         jLabel13.setOpaque(true);
 
-        jXMapKit1.setDefaultProvider(org.jdesktop.swingx.JXMapKit.DefaultProviders.OpenStreetMaps);
+        jXMapKit1.setDefaultProvider(JXMapKit.DefaultProviders.OpenStreetMaps);
         jXMapKit1.setMiniMapVisible(false);
         jXMapKit1.setZoomButtonsVisible(false);
         jXMapKit1.setDataProviderCreditShown(true);
@@ -1708,14 +1705,14 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
     private javax.swing.JLabel jUpgradeButtonLabel;
     private javax.swing.JLabel jUpgradeButtonLabel1;
     private javax.swing.JPanel jUsaPanel;
-    private org.jdesktop.swingx.JXMapKit jXMapKit1;
+    private JXMapKit jXMapKit1;
     // End of variables declaration//GEN-END:variables
 	private Image iconIdleSmall;
 	private Image iconConnectingSmall;
 	private Image iconConnectedSmall;
 	private Image buttonDisconnect;
 	private Image buttonConnect;
-  private IConsole vpnConsole;
+  private LogViewer logViewer;
 
 	private void initContent() {
 		this.content = new ContentPaneList();
@@ -1908,7 +1905,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 		header.setOpaque(false);
 	    header.setForeground(Color.white);
 	    header.setFont(OpenSansFont.getFont());
-	    System.out.println("Setting header preferred size to: " + cm.getTotalColumnWidth());
+	    log.debug("Setting header preferred size to: " + cm.getTotalColumnWidth());
 	    header.setPreferredSize(new Dimension(cm.getTotalColumnWidth(), 25));
 	    header.setBorder(null);
 	    
@@ -1995,7 +1992,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 	public void connectionStateChanged(ConnectionStateChangedEvent e)  {
 		initController();
 		ConnectionState state = e.getConnectionState();
-		vpnConsole.append("connectionStateChanged " + state + ", reason=" + e.getReason());
+		log.debug("connectionStateChanged " + state + ", reason=" + e.getReason());
 		switch (state) {
 		case Disconnected:
 			this.setStateDisconnected();
@@ -2027,7 +2024,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
       
 	
 	private void setStateDisconnected()  {
-	  vpnConsole.append("setStateDisconnected() - start");
+	  log.debug("setStateDisconnected() - start");
 		enableSystemProxyIfProxyConfig();
 		this.hideConnectProgress();
 		this.jConnectButtonLabel.setIcon(new ImageIcon(buttonConnect));
@@ -2101,7 +2098,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 				break;
 			}
 			
-			vpnConsole.append("setStateDisconnected() - end");
+			log.debug("setStateDisconnected() - end");
 		}
 
 		if (showMessage) {
@@ -2437,12 +2434,12 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 	public Server getSelectedServer() {
 		int serverNum = this.jServerListTable.getSelectedRow();
 		Server server = this.shellfireService.getServerList().getServer(serverNum);
-		System.out.println("getSelectedServer() - returning: " + server);
+		log.debug("getSelectedServer() - returning: " + server);
 		return server;
 	}
 
 	public void setSelectedServer(Server server) {
-		System.out.println("setSelectedServer(" + server + ")");
+		log.debug("setSelectedServer(" + server + ")");
 		int num = this.shellfireService.getServerList().getServerNumberByServer(server);
 		this.jServerListTable.setRowSelectionInterval(num, num);
 
@@ -2464,7 +2461,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 		this.iconEcncryptionInactive = new ImageIcon(getClass().getResource("/icons/status-unencrypted-width736.gif")).getImage();
 		
 		String langKey = VpnI18N.getLanguage().getKey();
-		System.out.println("langKey: " + langKey);
+		log.debug("langKey: " + langKey);
 		this.buttonDisconnect = new ImageIcon(getClass().getResource("/buttons/button-disconnect-" + langKey + ".gif")).getImage();
 		this.buttonConnect = new ImageIcon(getClass().getResource("/buttons/button-connect-" + langKey + ".gif")).getImage();
 		
@@ -2760,18 +2757,14 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 	}
 
 
-  private void getConsole() {
-    this.vpnConsole = VpnConsole.getInstance();
-  }
-	
 	private void initConsole() {
-		if (Storage.get(VpnConsole.class) == null || ((VpnConsole) Storage.get(VpnConsole.class)).isVisible() == false) {
+		if (Storage.get(LogViewer.class) == null || ((LogViewer) Storage.get(LogViewer.class)).isVisible() == false) {
 			SwingUtilities.invokeLater(new Runnable() {
 
 				@Override
 				public void run() {
-					vpnConsole = VpnConsole.getInstance();
-					vpnConsole.setVisible(true);
+					logViewer = LogViewer.getInstance();
+					logViewer.setVisible(true);
 				}
 			});
 		}

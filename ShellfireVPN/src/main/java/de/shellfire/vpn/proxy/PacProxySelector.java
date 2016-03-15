@@ -40,27 +40,7 @@ import org.mozilla.javascript.WrappedException;
  * <a href="http://www.ziesemer.com.">&lt;www.ziesemer.com&gt;</a>
  */
 public class PacProxySelector extends ProxySelector{
-	
-	/**
-	 * <p>Can be used as a wrapper for another program's <code>main</code> method.
-	 * <p>It first calls {@link #setDefaultFromProperties()}.
-	 * 	It then assumes that the first argument is the name of another class
-	 * 		containing a <code>main(String[] args)</code> method, which is then
-	 * 		called with any remaining arguments.</p>
-	 */
-	public static void main(String[] args) throws Exception{
-		setDefaultFromProperties();
-		if(args.length > 0){
-			String[] newArgs = new String[args.length - 1];
-			System.arraycopy(args, 1, newArgs, 0, newArgs.length);
-			Class.forName(args[0])
-				.getMethod("main", new Class[]{String[].class})
-				.invoke(null, new Object[]{newArgs});
-		}else{
-			LOGGER.warning("No arguments specified; returning.");
-		}
-	}
-	
+
 	public static final String PAC_LOCATION_PROPERTY = "proxy.autoConfig";
 	
 	protected static final Logger LOGGER = Logger.getLogger(PacProxySelector.class.getName());

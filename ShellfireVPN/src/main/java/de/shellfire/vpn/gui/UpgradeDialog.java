@@ -12,21 +12,15 @@ package de.shellfire.vpn.gui;
 
 import java.awt.Color;
 import java.awt.event.FocusEvent;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
-import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
 import org.xnap.commons.i18n.I18n;
 
-import de.shellfire.vpn.Storage;
 import de.shellfire.vpn.gui.helper.Max2CharDocument;
 import de.shellfire.vpn.gui.helper.Max4CharDocument;
 import de.shellfire.vpn.gui.helper.MoveMouseListener;
 import de.shellfire.vpn.i18n.VpnI18N;
-import de.shellfire.vpn.webservice.ShellfireService;
-import de.shellfire.vpn.webservice.model.WsUpgradeResult;
 
 /**
  *

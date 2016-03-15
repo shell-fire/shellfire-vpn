@@ -17,27 +17,29 @@ import org.jdesktop.swingx.JXMapViewer;
 import org.jdesktop.swingx.mapviewer.GeoPosition;
 import org.jdesktop.swingx.mapviewer.Waypoint;
 import org.jdesktop.swingx.mapviewer.WaypointPainter;
+import org.jdesktop.swingx.mapviewer.WaypointRenderer;
 import org.jdesktop.swingx.painter.Painter;
+import org.slf4j.Logger;
 
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.client.Controller;
-import de.shellfire.vpn.gui.renderer.IconWaypointRenderer;
 import de.shellfire.vpn.types.Server;
 import de.shellfire.vpn.webservice.model.WsGeoPosition;
 
 /**
- *
+ *Painter<JXMapViewer>
  * @author bettmenn
- */
+ */ 
 public class VpnMapPainter implements Painter<JXMapViewer> {
+  private static Logger log = Util.getLogger(VpnMapPainter.class.getCanonicalName());
   private WsGeoPosition ownPosition;
   private Controller controller;
   private boolean showOwnPositionOnMap;
-  private WaypointPainter waypointPainter;
+  private WaypointPainter<Waypoint> waypointPainter;
 
   public VpnMapPainter(Controller controller) {
     this.controller = controller;
-    this.waypointPainter = new WaypointPainter();
+    this.waypointPainter = new WaypointPainter<Waypoint>();
   }
 
   public void setShowOwnPositionOnMap(boolean showPos) {
@@ -65,8 +67,8 @@ public class VpnMapPainter implements Painter<JXMapViewer> {
 
   private void drawConnectionRoute(Graphics2D g, JXMapViewer map) throws RemoteException {
     Server connectedTo = controller.connectedTo();
-    System.out.println("Connected to:" + connectedTo);
-    if (connectedTo != null) {
+    log.debug("Connected to:" + connectedTo);
+    if (connectedTo != null && ownPosition != null) {
       GeoPosition to = new GeoPosition(connectedTo.getLatitude(), connectedTo.getLongitude());
 
       GeoPosition from = new GeoPosition(ownPosition.getLatitude(), ownPosition.getLongitude());
@@ -91,9 +93,8 @@ public class VpnMapPainter implements Painter<JXMapViewer> {
 
   }
 
-  public void setRenderer(IconWaypointRenderer iconWaypointRenderer) {
+  public void setRenderer(WaypointRenderer<Waypoint> iconWaypointRenderer) {
     this.waypointPainter.setRenderer(iconWaypointRenderer);
-
   }
 
 }

@@ -11,12 +11,13 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;
 
+import org.apache.commons.codec.binary.Base64;
 import org.apache.http.client.ClientProtocolException;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.gson.reflect.TypeToken;
 
+import de.shellfire.vpn.Util;
 import de.shellfire.vpn.exception.VpnException;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.webservice.model.ActivationStatus;
@@ -39,6 +40,7 @@ import de.shellfire.vpn.webservice.model.LocalIPResponse;
 import de.shellfire.vpn.webservice.model.LoginResponse;
 import de.shellfire.vpn.webservice.model.OpenVpnParamResponse;
 import de.shellfire.vpn.webservice.model.RegisterRequest;
+import de.shellfire.vpn.webservice.model.SendLogToShellfireRequest;
 import de.shellfire.vpn.webservice.model.SetProtocolToRequest;
 import de.shellfire.vpn.webservice.model.SetServerToRequest;
 import de.shellfire.vpn.webservice.model.TrayMessage;
@@ -54,7 +56,7 @@ import de.shellfire.vpn.webservice.model.WsVpn;
 
 public class ShellfireWebServicePort {
   
-  private static Logger log = LoggerFactory.getLogger(ShellfireWebServicePort.class.getCanonicalName());
+  private static Logger log = Util.getLogger(ShellfireWebServicePort.class.getCanonicalName());
   
   /**
    * The token for the login session. null if logged out.
@@ -474,4 +476,23 @@ public class ShellfireWebServicePort {
   public static String getSessionToken() {
     return sessionToken;
   }
+
+  public Boolean sendLogToShellfire(String serviceLogString, String clientLogString) throws ClientProtocolException, IOException, VpnException {
+    log.debug("sendLogToShellfire() - start");
+    
+    serviceLogString = Util.encodeBase64(serviceLogString);
+    clientLogString = Util.encodeBase64(clientLogString);
+    
+    SendLogToShellfireRequest request = new SendLogToShellfireRequest(serviceLogString, clientLogString);
+    
+    Type theType = new TypeToken<Response<Void>>() {}.getType();
+    Response<Void> resp = new JsonHttpRequest<SendLogToShellfireRequest, Void>().call(request, theType);
+
+    Boolean result = resp != null && resp.isSuccess();
+
+    log.debug("setProtocolTo () - returning result: {}", result);
+    return result;    
+  }
+
+
 }

@@ -1,13 +1,15 @@
 package de.shellfire.vpn.types;
 
-import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 
-import javax.swing.ImageIcon;
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 import org.jdesktop.swingx.mapviewer.GeoPosition;
 import org.xnap.commons.i18n.I18n;
 
+import de.shellfire.vpn.Util;
 import de.shellfire.vpn.client.Controller;
 import de.shellfire.vpn.gui.ServerInMapPanel;
 import de.shellfire.vpn.i18n.VpnI18N;
@@ -23,28 +25,32 @@ public class Server implements LocatableIcon {
   private ServerType serverType;
   private double longitude;
   private double latitude;
-  private Image iconServerForMap;
+  private BufferedImage iconServerForMap;
   private Controller controller;
   private JPanel panel;
   private static I18n i18n = VpnI18N.getI18n();
 
   public Server(WsServer wss) {
     this.serverId = wss.getVpnServerId();
-    
+
     String country = wss.getCountry();
     country = country.replace(" ", "");
     try {
-      this.country = Enum.valueOf(Country.class, country);  
+      this.country = Enum.valueOf(Country.class, country);
     } catch (Exception e) {
-      this.country  = Country.Germany;
+      this.country = Country.Germany;
     }
-    
+
     this.name = wss.getName();
     this.host = wss.getHost();
     this.serverType = Enum.valueOf(ServerType.class, wss.getServertype());
     this.longitude = wss.getLongitude();
     this.latitude = wss.getLatitude();
-    this.iconServerForMap = new ImageIcon(getClass().getResource("/icons/sf-server-map-32x32.png")).getImage();
+    try {
+      this.iconServerForMap = ImageIO.read(getClass().getResourceAsStream("/icons/sf-server-map-32x32.png"));
+    } catch (IOException e) {
+      Util.handleException(e);
+    }
   }
 
   public int getServerId() {
@@ -78,7 +84,7 @@ public class Server implements LocatableIcon {
   public void setHost(String host) {
     this.host = host;
   }
-  
+
   public ServerType getServerType() {
     return serverType;
   }
@@ -95,7 +101,7 @@ public class Server implements LocatableIcon {
       return new VpnStar(3, i18n.tr("bis 10.000 kbit/sec"));
     case Free:
     default:
-      return new VpnStar(1,i18n.tr("bis 768 kbit/sec"));
+      return new VpnStar(1, i18n.tr("bis 768 kbit/sec"));
     }
   }
 
@@ -126,7 +132,7 @@ public class Server implements LocatableIcon {
   }
 
   @Override
-  public Image getIcon() {
+  public BufferedImage getIcon() {
     return this.iconServerForMap;
   }
 
@@ -170,13 +176,10 @@ public class Server implements LocatableIcon {
       return new VpnStar(2, i18n.tr("128 bit"));
     }
   }
-  
+
   public String toString() {
-	  return    "serverId= "+serverId+"\r\n"+
-				"country= "+country+"\r\n"+
-				"name= "+name+"\r\n"+
-				"host= "+host+"\r\n"+
-				"serrverType= "+serverType+"\r\n";
+    return "serverId= " + serverId + "\r\n" + "country= " + country + "\r\n" + "name= " + name + "\r\n" + "host= " + host + "\r\n"
+        + "serrverType= " + serverType + "\r\n";
   }
 
 }

@@ -28,6 +28,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import javax.swing.UIManager;
 
+import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
 
 import de.shellfire.vpn.Storage;
@@ -53,10 +54,8 @@ import de.shellfire.vpn.webservice.model.LoginResponse;
  */
 public class LoginForm extends javax.swing.JFrame {
 
-	/**
-   * 
-   */
-	private static final long serialVersionUID = 1L;
+  private static Logger log = Util.getLogger(LoginForm.class.getCanonicalName());
+  private static final long serialVersionUID = 1L;
 	public static final String REG_PASS = "pass";
 	public static final String REG_USER = "user";
 	public static final String REG_AUTOLOGIN = "autologin";
@@ -80,7 +79,7 @@ public class LoginForm extends javax.swing.JFrame {
 	public static ProgressDialog initDialog;
 	
     private boolean licenseAccepted;
-
+    
 	/** Creates new form LoginForm */
 	private LoginForm() {
 		this.setUndecorated(true);
@@ -714,8 +713,7 @@ public class LoginForm extends javax.swing.JFrame {
 	}
 
 	public static void main(String args[]) {
-   	
-    	final boolean minimize;
+    final boolean minimize;
 		if (args.length > 0) {
 			String cmd = args[0];
 
@@ -757,7 +755,7 @@ public class LoginForm extends javax.swing.JFrame {
 	        			}
 	        		}
 	        	}
-	        	System.out.println("Retrieved installation path from args parameter: " + path);
+	        	log.debug("Retrieved installation path from args parameter: " + path);
 	        	
 	        	if (cmd.equals("installservice"))
 	        		//ServiceTools.install(path); 
@@ -781,7 +779,7 @@ public class LoginForm extends javax.swing.JFrame {
 	        		}
 	        	}
 	        	
-	        	System.out.println("Retrieved installation path from args parameter: " + path);
+	        	log.debug("Retrieved installation path from args parameter: " + path);
 	        	initDialog.dispose();
         		new Updater().performUpdate(path, user);
         		
@@ -815,7 +813,7 @@ public class LoginForm extends javax.swing.JFrame {
 	        
 	        
 	        String installerPath = com.apple.eio.FileManager.getPathToApplicationBundle() + "/Contents/Java/ShellfireVPN2-Updater.app";
-	        System.out.println("Opening updater using Desktop.open(): " +  installerPath);
+	        log.debug("Opening updater using Desktop.open(): " +  installerPath);
 
 	        List<String> cmds = new LinkedList<String>();
 	        cmds.add("/usr/bin/open");
@@ -841,7 +839,7 @@ public class LoginForm extends javax.swing.JFrame {
 	      return;
 	    }
 		} else {
-		  System.out.println("No internet available, skipping update check");
+		  log.debug("No internet available, skipping update check");
 		}
 
 
@@ -1025,9 +1023,9 @@ public class LoginForm extends javax.swing.JFrame {
 		protected Response<LoginResponse> doInBackground() throws Exception {
 			String user = getUser();
 			String password = getPassword();
-			System.out.println("service.login() - start()");
+			log.debug("service.login() - start()");
 			Response<LoginResponse> loginResult = service.login(user, password);
-			System.out.println("service.login() - finished()");
+			log.debug("service.login() - finished()");
 			return loginResult;
 		}
 	}

@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.Timer;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.sun.jna.platform.win32.Kernel32;
 import com.sun.jna.platform.win32.WinNT.HANDLE;
@@ -25,7 +24,7 @@ import de.shellfire.vpn.types.Reason;
 
 public class WindowsVpnController implements IVpnController {
 
-  private static Logger log = LoggerFactory.getLogger(WindowsVpnController.class.getCanonicalName());
+  private static Logger log = Util.getLogger(WindowsVpnController.class.getCanonicalName());
   private static WindowsVpnController instance;
   private ConnectionState connectionState = ConnectionState.Disconnected;
   private Reason reasonForStateChange;
@@ -34,6 +33,8 @@ public class WindowsVpnController implements IVpnController {
   private String appData;
   private IVpnRegistry registry = new WinRegistry();
   private List<ConnectionStateListener> conectionStateListenerList = new ArrayList<ConnectionStateListener>();
+  private IPV6Manager ipv6manager = new IPV6Manager();
+  
   
   private String getOpenVpnLocation() {
     log.debug("getOpenVpnStartString() - start");
@@ -60,7 +61,13 @@ public class WindowsVpnController implements IVpnController {
   public void connect(Reason reason) {
     log.debug("connect(Reason={}", reason);
     try {
+      if (this.getConnectionState() == ConnectionState.Disconnected) {
+        log.debug("Setting connectionState to connecting");
+        this.setConnectionState(ConnectionState.Connecting, reason);
+      }
+
       fixTapDevices();
+      ipv6manager.disableIPV6OnAllDevices();
 
       log.debug("getting openVpnLocation");
       String openVpnLocation = this.getOpenVpnLocation();
@@ -79,11 +86,6 @@ public class WindowsVpnController implements IVpnController {
       }
 
       Runtime runtime = Runtime.getRuntime();
-
-      if (this.getConnectionState() == ConnectionState.Disconnected) {
-        log.debug("Setting connectionState to connecting");
-        this.setConnectionState(ConnectionState.Connecting, reason);
-      }
         
       log.debug("Entering main connection loop");
       Process p = null;
@@ -142,6 +144,7 @@ public class WindowsVpnController implements IVpnController {
     kernel32.PulseEvent(result);
     
     this.setConnectionState(ConnectionState.Disconnected, reason);
+    ipv6manager.enableIPV6OnPreviouslyDisabledDevices();
     fixTapDevices();
     log.debug("disconnect(Reason={} - finished", reason);
   }

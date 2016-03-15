@@ -8,11 +8,13 @@ import java.rmi.RemoteException;
 import java.util.Iterator;
 import java.util.List;
 
+import org.slf4j.Logger;
+
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.client.Client;
 
 public class ProxyConfig {
-
+  private static Logger log = Util.getLogger(ProxyConfig.class.getCanonicalName());
   private static String host;
   private static int port;
   private static boolean proxyEnabled;
@@ -30,7 +32,7 @@ public class ProxyConfig {
 	        System.setProperty("java.net.useSystemProxies", "false");
 	        proxyEnabled = true;
 	        
-	        System.out.println("setting proxy to: " + host + ":" + port);
+	        log.debug("setting proxy to: " + host + ":" + port);
 	        System.setProperty("http.proxyHost", host);
 	        System.setProperty("http.proxyPort", ""+port);
 	        System.setProperty("http.proxySet", "true");

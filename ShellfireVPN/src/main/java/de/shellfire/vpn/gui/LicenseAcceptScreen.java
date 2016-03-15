@@ -14,6 +14,7 @@ import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
 
 import de.shellfire.vpn.Util;
@@ -26,6 +27,7 @@ import de.shellfire.vpn.i18n.VpnI18N;
  * @author bettmenn
  */
 public class LicenseAcceptScreen extends javax.swing.JDialog {
+  private static Logger log = Util.getLogger(LicenseAcceptScreen.class.getCanonicalName());
   private final LoginForm aparent;
   private MoveMouseListener mml;
 
@@ -194,7 +196,7 @@ public class LicenseAcceptScreen extends javax.swing.JDialog {
         if (lang != null && lang.getName() != null)
             name = lang.getKey();
         
-        System.out.println("Name: " +name);
+        log.debug("Name: " +name);
         String text = "License";
         String filename = com.apple.eio.FileManager.getPathToApplicationBundle() + "/Contents/Java/openvpn/license_" + name + ".txt";
         try {

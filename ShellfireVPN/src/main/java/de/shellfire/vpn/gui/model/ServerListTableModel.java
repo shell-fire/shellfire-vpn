@@ -29,7 +29,12 @@ public class ServerListTableModel extends AbstractTableModel {
     }
     
     public int getRowCount() {
+      if (serverList == null) {
+        return 10;
+      } else {
         return serverList.getNumberOfServers();
+      }
+        
     }
 
     public int getColumnCount() {
@@ -41,6 +46,13 @@ public class ServerListTableModel extends AbstractTableModel {
     }
     
     public Object getValueAt(int rowIndex, int columnIndex) {
+      if (this.serverList == null) {
+        return null;
+      }
+      if (rowIndex > this.serverList.getNumberOfServers()) {
+        return null;
+      }
+        
         Server server = this.serverList.getServer(rowIndex);
         
         switch (columnIndex) {

@@ -5,15 +5,11 @@
 package de.shellfire.vpn.client;
 
 import java.io.IOException;
-import java.util.List;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import de.shellfire.vpn.IConsole;
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.Util.ExceptionThrowingReturningRunnable;
-import de.shellfire.vpn.gui.VpnConsole;
 import de.shellfire.vpn.messaging.Message;
 import de.shellfire.vpn.messaging.MessageBroker;
 import de.shellfire.vpn.messaging.MessageListener;
@@ -27,12 +23,11 @@ import de.shellfire.vpn.webservice.Vpn;
 @SuppressWarnings("unchecked")
 public class Client implements MessageListener<Object> {
 
-  private static Logger log = LoggerFactory.getLogger(Client.class.getCanonicalName());
+  private static Logger log = Util.getLogger(Client.class.getCanonicalName());
   private Server server;
   private final Controller controller;
   private static IVpnRegistry registry = Util.getRegistry();
 
-  private IConsole vpnConsole = VpnConsole.getInstance();
   private ConnectionState initialConnectionState;
   private MessageBroker messageBroker;
 

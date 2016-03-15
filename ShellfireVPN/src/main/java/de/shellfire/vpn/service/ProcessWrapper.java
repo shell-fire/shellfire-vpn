@@ -13,7 +13,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.client.ConnectionState;
@@ -26,7 +25,7 @@ import de.shellfire.vpn.types.Reason;
  */
 public class ProcessWrapper extends Thread {
 
-    private static Logger log = LoggerFactory.getLogger(ProcessWrapper.class.getCanonicalName());
+    private static Logger log = Util.getLogger(ProcessWrapper.class.getCanonicalName());
   
     private final InputStream inputStream;
     private boolean tapDriverReinstalledTried = false;

@@ -3,14 +3,13 @@ package de.shellfire.vpn.service;
 import java.util.TimerTask;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.types.Reason;
 
 public class ConnectionMonitor extends TimerTask {
   
-  private static Logger log = LoggerFactory.getLogger(ConnectionMonitor.class.getCanonicalName());
+  private static Logger log = Util.getLogger(ConnectionMonitor.class.getCanonicalName());
   private IVpnController vpnController;
   
   public ConnectionMonitor(IVpnController vpnController) {

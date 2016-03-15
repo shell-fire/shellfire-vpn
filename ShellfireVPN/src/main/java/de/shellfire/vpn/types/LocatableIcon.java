@@ -4,7 +4,7 @@
  */
 package de.shellfire.vpn.types;
 
-import java.awt.Image;
+import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
@@ -18,7 +18,7 @@ import de.shellfire.vpn.client.Controller;
  */
 public interface LocatableIcon {
     public GeoPosition getGeoPosition();
-    public Image getIcon();
+    public BufferedImage getIcon();
 
     public JPanel getPanel();
 

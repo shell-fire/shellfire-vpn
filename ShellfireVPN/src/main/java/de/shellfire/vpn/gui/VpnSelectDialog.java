@@ -20,6 +20,7 @@ import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.TableColumnModel;
 
+import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
 
 import de.shellfire.vpn.Util;
@@ -27,7 +28,6 @@ import de.shellfire.vpn.exception.VpnException;
 import de.shellfire.vpn.gui.helper.MoveMouseListener;
 import de.shellfire.vpn.gui.model.VpnSelectionTableModel;
 import de.shellfire.vpn.i18n.VpnI18N;
-import de.shellfire.vpn.types.ProductType;
 import de.shellfire.vpn.webservice.ShellfireService;
 import de.shellfire.vpn.webservice.Vpn;
 
@@ -36,6 +36,7 @@ import de.shellfire.vpn.webservice.Vpn;
  * @author bettmenn
  */
 public class VpnSelectDialog extends javax.swing.JFrame {
+  private static Logger log = Util.getLogger(VpnSelectDialog.class.getCanonicalName());
   private static final long serialVersionUID = 1L;
   private final LoginForm parentFrame;
   private VpnSelectionTableModel vpnSelectionTableModel;
@@ -292,11 +293,11 @@ public class VpnSelectDialog extends javax.swing.JFrame {
     if (jRememberSelection.isSelected()) {
 
       int vpnId = selectedVpn.getVpnId();
-      System.out.println("Remembering Vpn ID:" + vpnId);
+      log.debug("Remembering Vpn ID:" + vpnId);
 
       prefs.putInt(REG_REMEMBERSELECTION, vpnId);
     } else {
-      System.out.println("Forgetting vpn selections");
+      log.debug("Forgetting vpn selections");
       prefs.putInt(REG_REMEMBERSELECTION, 0);
     }
   }

@@ -9,19 +9,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import de.shellfire.vpn.Console;
-import de.shellfire.vpn.IConsole;
 import de.shellfire.vpn.Util;
 
 public class TapFixer {
   
-  private static Logger log = LoggerFactory.getLogger(TapFixer.class.getCanonicalName());
-  
-  public static void main(String[] args) {
-    restartAllTapDevices();
-  }
+  private static Logger log = Util.getLogger(TapFixer.class.getCanonicalName());
 
   private static String getTapPath() {
     log.debug("getTapPath() - start");
@@ -50,7 +43,6 @@ public class TapFixer {
   }
   
   public static void reinstallTapDriver() {
-    IConsole console = Console.getInstance();
     log.debug("reinstallTapDriver() - start");
     
     String delTapAll = getTapPath() + "\\bin\\deltapall.bat";
@@ -84,7 +76,6 @@ public class TapFixer {
       enable = getTapPath() + "\\bin\\devcon.exe enable tap0901";
     }
     
-    IConsole console = Console.getInstance();
     log.debug("TapFixer disabling tap device");
     log.debug(disable);
     String disableResult = Util.runCommandAndReturnOutput(disable);

@@ -24,6 +24,7 @@ import javax.swing.event.HyperlinkEvent;
 import javax.swing.text.html.HTMLDocument;
 
 import org.apache.commons.validator.GenericValidator;
+import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
 
 import de.shellfire.vpn.Util;
@@ -32,7 +33,6 @@ import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.webservice.Response;
 import de.shellfire.vpn.webservice.ShellfireService;
 import de.shellfire.vpn.webservice.model.LoginResponse;
-import de.shellfire.vpn.webservice.model.WsRegistrationResult;
 
 /**
  *
@@ -40,7 +40,8 @@ import de.shellfire.vpn.webservice.model.WsRegistrationResult;
  */
 public class RegisterForm extends javax.swing.JFrame {
 
-    public static final String REG_PASS = "pass";
+  private static Logger log = Util.getLogger(RegisterForm.class.getCanonicalName());
+  public static final String REG_PASS = "pass";
     public static final String REG_USER = "user";
 
     ShellfireService service;
@@ -316,7 +317,7 @@ public class RegisterForm extends javax.swing.JFrame {
 
     private void jEditorPane1HyperlinkUpdate(javax.swing.event.HyperlinkEvent evt) {//GEN-FIRST:event_jEditorPane1HyperlinkUpdate
         if (HyperlinkEvent.EventType.ACTIVATED.equals(evt.getEventType())) {  
-            System.out.println(evt.getURL());  
+            log.debug(evt.getURL().toString());  
             
             Util.openUrl(evt.getURL());
             

@@ -24,27 +24,34 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
-import org.slf4j.Logger;
+import org.apache.commons.codec.binary.Base64;
 import org.slf4j.LoggerFactory;
 import org.xnap.commons.i18n.I18n;
 
-import de.shellfire.vpn.gui.VpnConsole;
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
+import ch.qos.logback.classic.spi.ILoggingEvent;
+import ch.qos.logback.core.FileAppender;
 import de.shellfire.vpn.i18n.VpnI18N;
+import de.shellfire.vpn.messaging.UserType;
 import de.shellfire.vpn.service.IVpnRegistry;
 import de.shellfire.vpn.service.osx.MacRegistry;
 import de.shellfire.vpn.service.win.WinRegistry;
 
 public class Util {
-
-  private static I18n i18n = VpnI18N.getI18n();
+  private static final String SHELLFIRE_VPN = "shellfire-vpn" + File.separator;
   private static IVpnRegistry registry;
   public static String GOOGLE_DE = null;
   private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
   private static String isoToday = sdf.format(new Date());
   private static String Arch;
-  private static Logger log = LoggerFactory.getLogger(Util.class.getCanonicalName());
-  
+  private static boolean firstGetLoggerCall = true;
+  private static Object semaphore = new Object();
+
   static {
+    semaphore = new Object();
     Security.setProperty("networkaddress.cache.ttl", "1");
     Security.setProperty("networkaddress.cache.negative.ttl", "1");
   }
@@ -73,7 +80,7 @@ public class Util {
 
   public static void handleException(Exception ex) {
     log.error(ex.getMessage(), ex);
-    
+
     ex.printStackTrace();
     Throwable t = ex.getCause();
     String msg = "";
@@ -112,7 +119,7 @@ public class Util {
   }
 
   public static String runCommandAndReturnOutput(String command) {
-    System.out.println("Running command: " + command);
+    log.debug("Running command: " + command);
     StringBuffer result = new StringBuffer();
     try {
       Runtime rt = Runtime.getRuntime();
@@ -136,7 +143,7 @@ public class Util {
       return Util.getStackTrace(e);
     }
 
-    System.out.println("Received result:" + result);
+    log.debug("Received result:" + result);
     return result.toString();
   }
 
@@ -157,7 +164,7 @@ public class Util {
         Util.Arch = "(unknown-mac)";
       }
     }
-    
+
     return Util.Arch;
   }
 
@@ -167,9 +174,15 @@ public class Util {
     return sysDir;
   }
 
+  public static String getWmicExe() {
+    String wmic = System.getenv("SystemRoot") + "\\system32\\wbem\\wmic.exe";
+
+    return wmic;
+  }
+
   public static float getOsVersion() {
     String osVersion = System.getProperty("os.version");
-    System.out.println("os.verson=" + osVersion);
+    log.debug("os.verson=" + osVersion);
 
     if (isWindows())
       return Float.parseFloat(osVersion);
@@ -182,7 +195,7 @@ public class Util {
       return false;
 
     float version = getOsVersion();
-    System.out.println(version);
+    log.debug("{}", version);
     return isWindows() && version >= 6.0F;
   }
 
@@ -191,7 +204,7 @@ public class Util {
       return false;
 
     float version = getOsVersion();
-    System.out.println(version);
+    log.debug("{}", version);
     return isWindows() && version >= 6.20F;
 
   }
@@ -265,14 +278,9 @@ public class Util {
 
   public static List<String> getPossibleExeLocations(String programFiles, String programFiles86) {
     if (isWindows()) {
-      return Arrays.asList(
-          "openvpn\\openvpn.exe", 
-          "..\\openvpn\\openvpn.exe", 
-          programFiles + "\\ShellfireVPN\\openvpn\\openvpn.exe",
-          programFiles86 + "\\ShellfireVPN\\openvpn\\openvpn.exe", 
-          programFiles + "\\OpenVPN\\openvpn.exe",
-          programFiles86 + "\\OpenVPN\\openvpn.exe", 
-          programFiles + "\\ShellfireVPN\\bin\\openvpn.exe",
+      return Arrays.asList("openvpn\\openvpn.exe", "..\\openvpn\\openvpn.exe", programFiles + "\\ShellfireVPN\\openvpn\\openvpn.exe",
+          programFiles86 + "\\ShellfireVPN\\openvpn\\openvpn.exe", programFiles + "\\OpenVPN\\openvpn.exe",
+          programFiles86 + "\\OpenVPN\\openvpn.exe", programFiles + "\\ShellfireVPN\\bin\\openvpn.exe",
           programFiles86 + "\\ShellfireVPN\\bin\\openvpn.exe");
     } else {
       return Arrays.asList("openvpn/openvpn", com.apple.eio.FileManager.getPathToApplicationBundle() + "/Contents/Java/openvpn/openvpn");
@@ -289,7 +297,7 @@ public class Util {
 
   public static boolean isMacOs() {
     String os = System.getProperty("os.name");
-    System.out.println("os.name = " + os);
+    log.debug("os.name = " + os);
     return os.toLowerCase().contains("mac os");
   }
 
@@ -331,7 +339,7 @@ public class Util {
 
     while (numTries++ < maxTries) {
       if (numTries > 1)
-        Console.getInstance().append("runWithAutoRetry(try " + numTries + " / " + maxTries);
+        log.debug("runWithAutoRetry(try " + numTries + " / " + maxTries);
 
       try {
         result = runnable.run();
@@ -379,7 +387,7 @@ public class Util {
     while (!result && numTries++ < 5) {
       result = isReachableWithTimeout(site);
       if (!result) {
-        Console.getInstance().append("not reachable " + numTries + " / 5");
+        log.debug("not reachable " + numTries + " / 5");
         try {
           Thread.sleep(5000);
         } catch (InterruptedException e) {
@@ -412,10 +420,10 @@ public class Util {
     }
 
     if (reach.finished) {
-      Console.getInstance().append("ReachableWithTimeout has finished - returning result " + reach.result);
+      log.debug("ReachableWithTimeout has finished - returning result " + reach.result);
       return reach.result;
     } else {
-      Console.getInstance().append("ReachableWithTimeout has NOT finished - returning false");
+      log.debug("ReachableWithTimeout has NOT finished - returning false");
       reach.stop();
       return false;
     }
@@ -461,14 +469,14 @@ public class Util {
 
         for (String site : siteList) {
           if (Util.isReachableWithTimeout(site)) {
-            VpnConsole.getInstance().append("site " + site + " is reachable");
+            log.debug("site " + site + " is reachable");
             return true;
           } else {
-            VpnConsole.getInstance().append("site " + site + " NOT reachable - sleeping 3 seconds");
+            log.debug("site " + site + " NOT reachable - sleeping 3 seconds");
             Thread.sleep(3000);
           }
         }
-        VpnConsole.getInstance().append("no known site reachable - returning false");
+        log.debug("no known site reachable - returning false");
 
         return false;
 
@@ -478,11 +486,6 @@ public class Util {
     boolean result = (networkIsAvailable == null) ? false : networkIsAvailable;
 
     return result;
-  }
-
-  public static void main(String args[]) {
-    String arch = Util.getArchitecture();
-    System.out.println(arch);
   }
 
   /**
@@ -507,4 +510,81 @@ public class Util {
 
     return registry;
   }
+
+  public static Logger getLogger(String className) {
+    
+    synchronized (semaphore) {
+        if (firstGetLoggerCall) {
+          cleanUpLog();
+          firstGetLoggerCall = false;
+      }
+    }
+    
+    LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
+    PatternLayoutEncoder ple = new PatternLayoutEncoder();
+
+    ple.setPattern("%date %level [%thread] %logger{10} [%file:%line] %msg%n");
+    ple.setContext(lc);
+    ple.start();
+    FileAppender<ILoggingEvent> fileAppender = new FileAppender<ILoggingEvent>();
+
+    String file = getLogFilePath();
+    fileAppender.setFile(file);
+    fileAppender.setEncoder(ple);
+    fileAppender.setContext(lc);
+    fileAppender.start();
+
+    Logger logger = (Logger) LoggerFactory.getLogger(className);
+    logger.addAppender(fileAppender);
+    logger.setLevel(Level.DEBUG);
+    logger.setAdditive(true);
+
+    return logger;
+  }
+
+  public static synchronized void cleanUpLog() {
+    String logPath = getLogFilePath();
+    File logFile = new File(logPath);
+    logFile.delete();
+    //log.debug("cleanUpLog() - finished deleting {} - logFile.exists(): {}", logPath, logFile.exists());
+  }
+
+  public static UserType getUserType() {
+    String userTypeFromCommandLine = System.getProperty("de.shellfire.vpn.runtype");
+    UserType type = UserType.Client; 
+    if (userTypeFromCommandLine != null && userTypeFromCommandLine.length() > 0) {
+      type = UserType.valueOf(userTypeFromCommandLine);  
+    }    
+    
+    return type;
+  }
+
+  public static String getLogFilePath() {
+    return getLogFilePath(Util.getUserType());
+  } 
+  public static String getLogFilePath(UserType userType) {
+    String result = getTempDir() + userType.name() + ".log";
+    return result;
+  }
+  
+  public static String encodeBase64(String string) {
+    return new String(Base64.encodeBase64(string.getBytes() ));
+  }
+
+  public static String getTempDir() {
+    String result = "";
+    if (Util.isWindows()) {
+      // Some Windows versions have user specific temp files, so always use C:\Temp
+      result = System.getenv("SystemDrive") + "\\Temp\\" + SHELLFIRE_VPN;
+    } else {
+      result = System.getProperty("java.io.tmpdir") + "/";
+    }
+
+    return result;
+
+  }
+  
+  private static Logger log = Util.getLogger(Util.class.getCanonicalName());
+  private static I18n i18n = VpnI18N.getI18n();
+
 }

@@ -4,9 +4,9 @@
  */
 package de.shellfire.vpn.client;
 
-import java.rmi.RemoteException;
 import java.util.LinkedList;
-import java.util.List;
+
+import org.slf4j.Logger;
 
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.gui.ShellfireVPNMainForm;
@@ -21,7 +21,7 @@ import de.shellfire.vpn.webservice.Vpn;
  * @author bettmenn
  */
 public class Controller {
-
+  private static Logger log = Util.getLogger(Controller.class.getCanonicalName());
 	private static Controller instance;
 	private final ShellfireVPNMainForm view;
 	private final ShellfireService service;
@@ -52,7 +52,7 @@ public class Controller {
 
 	public void connect(Server server, Protocol protocol, Reason reason) {
 
-		System.out.println("connect(Server, Protocol, Reason) - setting connected");
+		log.debug("connect(Server, Protocol, Reason) - setting connected");
 
 		try {
 			this.client = new Client(this);
@@ -175,7 +175,7 @@ public class Controller {
 	 */
 	private boolean switchServerTo(Server server) {
 		boolean switchWorked = this.service.setServerTo(server);
-		System.out.println("Switch to server worked: " + switchWorked);
+		log.debug("Switch to server worked: " + switchWorked);
 
 		if (!switchWorked) {
 			return false;

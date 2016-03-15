@@ -3,8 +3,8 @@ package de.shellfire.vpn.service;
 import java.io.IOException;
 
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import de.shellfire.vpn.Util;
 import de.shellfire.vpn.client.ConnectionState;
 import de.shellfire.vpn.client.ConnectionStateChangedEvent;
 import de.shellfire.vpn.client.ConnectionStateListener;
@@ -17,7 +17,7 @@ import de.shellfire.vpn.types.Reason;
 @SuppressWarnings("unchecked")
 public class ServiceMessageHandler implements MessageListener<Object>, ConnectionStateListener {
 
-  private static Logger log = LoggerFactory.getLogger(ServiceMessageHandler.class.getCanonicalName());
+  private static Logger log = Util.getLogger(ServiceMessageHandler.class.getCanonicalName());
 
   private final MessageBroker messageBroker;
   private final IVpnController vpnController;

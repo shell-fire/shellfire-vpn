@@ -6,13 +6,16 @@ import java.util.prefs.Preferences;
 
 import javax.swing.JOptionPane;
 
+import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
 import org.xnap.commons.i18n.I18nManager;
 
+import de.shellfire.vpn.Util;
 import de.shellfire.vpn.gui.LoginForm;
 
 public class VpnI18N {
+  private static Logger log = Util.getLogger(VpnI18N.class.getCanonicalName());
   private static final String MESSAGE_BASE = "de.shellfire.vpn.Messages_";
   private static final String SELECTED_LANGUAGE = "InterfaceLanguage";
   private static final String DEFAULT_LANGUAGE = "en";
@@ -50,7 +53,7 @@ public class VpnI18N {
         	  try {
         		  i18n = I18nFactory.getI18n(VpnI18N.class, "de.shellfire.vpn.Messages", loc, I18nFactory.FALLBACK);	  
         	  } catch (java.util.MissingResourceException e) {
-        		  System.out.println("Missing Language Resource Files. Returning Dummy i18n");
+        		  log.debug("Missing Language Resource Files. Returning Dummy i18n");
         		  
         	  }
             
