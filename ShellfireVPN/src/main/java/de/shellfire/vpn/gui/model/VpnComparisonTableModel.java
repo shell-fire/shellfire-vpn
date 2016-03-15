@@ -10,7 +10,7 @@ import org.xnap.commons.i18n.I18n;
 
 import de.shellfire.vpn.Storage;
 import de.shellfire.vpn.i18n.VpnI18N;
-import de.shellfire.vpn.webservice.ShellfireService;
+import de.shellfire.vpn.webservice.WebService;
 
 /**
  * 
@@ -91,7 +91,7 @@ public class VpnComparisonTableModel extends AbstractTableModel {
     attributeContainer.add(i18n.tr("12 Monate (-10%)"), i18n.tr("kostenlos"), i18n.tr("70,10 Euro"));
     vpnAttributeList.add(attributeContainer);
 */
-    ShellfireService service = (ShellfireService)Storage.get(ShellfireService.class);
+    WebService service = (WebService)Storage.get(WebService.class);
     
     vpnAttributeList = new AttributeList(service.getVpnComparisonTable());
     

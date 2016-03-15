@@ -13,7 +13,7 @@ import de.shellfire.vpn.gui.ShellfireVPNMainForm;
 import de.shellfire.vpn.types.Protocol;
 import de.shellfire.vpn.types.Reason;
 import de.shellfire.vpn.types.Server;
-import de.shellfire.vpn.webservice.ShellfireService;
+import de.shellfire.vpn.webservice.WebService;
 import de.shellfire.vpn.webservice.Vpn;
 
 /**
@@ -24,7 +24,7 @@ public class Controller {
   private static Logger log = Util.getLogger(Controller.class.getCanonicalName());
 	private static Controller instance;
 	private final ShellfireVPNMainForm view;
-	private final ShellfireService service;
+	private final WebService service;
 	private Client client;
 	private LinkedList<ConnectionStateListener> connectionStateListeners = new LinkedList<ConnectionStateListener>();
 	protected boolean disconnectedDueToSleep;
@@ -32,12 +32,12 @@ public class Controller {
 	private Boolean sleepBeingHandled = false;
   private Reason reasonForStateChange = Reason.None;;
 
-	private Controller(ShellfireVPNMainForm view, ShellfireService service) {
+	private Controller(ShellfireVPNMainForm view, WebService service) {
 		this.view = view;
 		this.service = service;
 	}
 
-	public static Controller getInstance(ShellfireVPNMainForm view, ShellfireService service) {
+	public static Controller getInstance(ShellfireVPNMainForm view, WebService service) {
 		if (instance == null) {
 			instance = new Controller(view, service);
 		}
@@ -55,7 +55,8 @@ public class Controller {
 		log.debug("connect(Server, Protocol, Reason) - setting connected");
 
 		try {
-			this.client = new Client(this);
+			this.client = Client.getInstance();
+			this.client.setController(this);
 
 			class ConnectionPreparer extends Thread {
 
@@ -131,7 +132,8 @@ public class Controller {
 	public ConnectionState getCurrentConnectionState()  {
 		if (this.client == null) {
 			try {
-				this.client = new Client(this);
+				this.client = Client.getInstance();
+				client.setController(this);
 			} catch (Exception e) {
 				Util.handleException(e);
 			}

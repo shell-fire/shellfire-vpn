@@ -35,7 +35,7 @@ import de.shellfire.vpn.client.ServiceTools;
 import de.shellfire.vpn.gui.ProgressDialog;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.proxy.ProxyConfig;
-import de.shellfire.vpn.webservice.ShellfireService;
+import de.shellfire.vpn.webservice.WebService;
 
 public class Updater {
   private static Logger log = Util.getLogger(Updater.class.getCanonicalName());
@@ -43,16 +43,16 @@ public class Updater {
   private static final String UPDATER_EXE = "ShellfireVPN2.exe";
   private static I18n i18n = VpnI18N.getI18n();
 
-  private static ShellfireService service = ShellfireService.getInstance();
+  private static WebService service = WebService.getInstance();
   private static int contentLength;
 
   static {
     setLookAndFeel();
   }
 
-  private static ShellfireService getService() {
+  private static WebService getService() {
     if (service == null) {
-      service = ShellfireService.getInstance();
+      service = WebService.getInstance();
     }
     return service;
   }
@@ -71,7 +71,7 @@ public class Updater {
         cmd = args[0];
 
         if (cmd.equals("uninstallservice")) {
-          // ServiceTools.uninstall();
+          ServiceTools.getInstanceForOS().uninstall();
           return;
         } else if (cmd.equals("installservice")) {
 
@@ -520,9 +520,8 @@ public class Updater {
         // TODO Auto-generated catch block
         e.printStackTrace();
       }
-      ServiceTools.resetService();
       updateProgressDialog.setText(i18n.tr("Shellfire VPN Service installieren..."));
-      // ServiceTools.install(installPath + "/Contents/Java/");
+      ServiceTools.getInstanceForOS().install(installPath + "/Contents/Java/");
 
       List<String> restart = new ArrayList<String>();
       restart.add("/usr/bin/open");

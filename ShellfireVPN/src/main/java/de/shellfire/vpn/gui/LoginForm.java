@@ -45,7 +45,7 @@ import de.shellfire.vpn.types.Reason;
 import de.shellfire.vpn.types.ServerType;
 import de.shellfire.vpn.updater.Updater;
 import de.shellfire.vpn.webservice.Response;
-import de.shellfire.vpn.webservice.ShellfireService;
+import de.shellfire.vpn.webservice.WebService;
 import de.shellfire.vpn.webservice.model.LoginResponse;
 
 /**
@@ -66,7 +66,7 @@ public class LoginForm extends javax.swing.JFrame {
 	public static final String UPDATEALERTREQUIRED = "requireupdatealert";
 	private ShellfireVPNMainForm mainForm;
 	private static Preferences preferences;
-	ShellfireService service;
+	WebService service;
 	private ProgressDialog loginProgressDialog;
 	private LoginTask task;
 	private String username;
@@ -105,7 +105,7 @@ public class LoginForm extends javax.swing.JFrame {
 		boolean internetAvailable = Util.internetIsAvailable();
 		
 		if (internetAvailable) {
-	    new ServiceTools().ensureServiceEnvironment(this);
+	    ServiceTools.getInstanceForOS().ensureServiceEnvironment(this);
 		} else {
 			JOptionPane.showMessageDialog(this, i18n.tr("Keine Internet-Verbindung verfügbar - ShellfireVPN wird beendet."), i18n.tr("Kein Internet"), JOptionPane.ERROR_MESSAGE);
 			System.exit(0);
@@ -114,7 +114,7 @@ public class LoginForm extends javax.swing.JFrame {
 
 	public void afterServiceEnvironmentEnsured() throws RemoteException {
 
-    this.service = ShellfireService.getInstance();
+    this.service = WebService.getInstance();
     Storage.register(service);
     this.restoreCredentialsFromRegistry();
     this.restoreAutoConnectFromRegistry();
@@ -288,7 +288,7 @@ public class LoginForm extends javax.swing.JFrame {
 			if (Util.isWindows()) {
 				instDir = new File("").getAbsolutePath();
 			} else {
-				instDir = ShellfireService.macOsAppDirectory() + "/ShellfireVPN";
+				instDir = WebService.macOsAppDirectory() + "/ShellfireVPN";
 			}
 		}
 

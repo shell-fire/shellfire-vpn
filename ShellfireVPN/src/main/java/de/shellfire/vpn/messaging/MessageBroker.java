@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane.SystemMenuBar;
+
 import org.slf4j.Logger;
 
 import de.shellfire.vpn.Util;
@@ -18,21 +20,28 @@ import net.openhft.chronicle.ExcerptTailer;
 public class MessageBroker {
   
   private static Logger log = Util.getLogger(MessageBroker.class.getCanonicalName());
+  private static MessageBroker instance;
   private static final String FILE_PATH_SERVICE_TO_CLIENT = "sfvpn-chronicle-service-to-client";
   private static final String FILE_PATH_CLIENT_TO_SERVICE = "sfvpn-chronicle-client-to-service";
   ExcerptAppender writer;
   ExcerptTailer tailer;
 
-  private final UserType userType;
   private final static int MAX_MESSAGE_SIZE = 1000;
+  private static final long TIMEOUT = 1000;
 
   private Map<UUID, Message<?, ?>> receivedMessageMap = new ConcurrentHashMap<UUID, Message<?, ?>>();
   private ArrayList<MessageListener<?>> messageListeners = new ArrayList<MessageListener<?>>();
 
-  public MessageBroker(UserType userType) throws IOException {
-    this.userType = userType;
-
+  private MessageBroker() throws IOException {
     init();
+  }
+  
+  public static MessageBroker getInstance() throws IOException {
+    if (instance == null) {
+      instance = new MessageBroker();
+    }
+    
+    return instance;
   }
 
   private void deleteChronicleFiles(String path) {
@@ -53,7 +62,7 @@ public class MessageBroker {
     log.debug("getChronicleFiles({})", direction.name());
 
     String path = "";
-    switch (this.userType) {
+    switch (Util.getUserType()) {
     case Service:
       switch (direction) {
 
@@ -131,7 +140,7 @@ public class MessageBroker {
             Message<?, ?> message = (Message<?, ?>) o;
             // only handle this message if it did not
             // originate from us
-            if (message.getSender() != userType) {
+            if (message.getSender() != Util.getUserType()) {
               if (message.isResponse()) {
                 receivedMessageMap.put(message.getMessageId(), message);
               } else {
@@ -167,7 +176,7 @@ public class MessageBroker {
   }
 
   public <E, T> E sendMessage(Message<T, E> message) throws IOException {
-    message.setSender(this.userType);
+    message.setSender(Util.getUserType());
     log.debug(message.toString());
 
     writer.writeObject(message);
@@ -178,9 +187,16 @@ public class MessageBroker {
 
   public <E, T> E sendMessageWithResponse(Message<T, E> message) throws IOException {
     sendMessage(message);
+    
+    long start = System.currentTimeMillis();
+    long timePassed = 0;
+    while (!responseReceived(message) && timePassed  < TIMEOUT) {
+      timePassed = System.currentTimeMillis() - start;
+    }
+    if (timePassed >= TIMEOUT) {
+      throw new IOException("no answer received");
+    }
 
-    while (!responseReceived(message))
-      ;
     E response = getResponse(message);
 
     return response;

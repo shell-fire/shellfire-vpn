@@ -49,6 +49,7 @@ public class Util {
   private static String Arch;
   private static boolean firstGetLoggerCall = true;
   private static Object semaphore = new Object();
+  private static UserType userType = null;
 
   static {
     semaphore = new Object();
@@ -346,7 +347,6 @@ public class Util {
         e = null;
         return result;
       } catch (Exception e2) {
-        log.error(e2.getMessage(), e2);
         e = e2;
         try {
           Thread.sleep(delayMs);
@@ -370,6 +370,7 @@ public class Util {
     private String site;
 
     public ReachableWithTimeout(String site) {
+      super("ReachableWithTimeout");
       this.site = site;
     }
 
@@ -550,13 +551,16 @@ public class Util {
   }
 
   public static UserType getUserType() {
-    String userTypeFromCommandLine = System.getProperty("de.shellfire.vpn.runtype");
-    UserType type = UserType.Client; 
-    if (userTypeFromCommandLine != null && userTypeFromCommandLine.length() > 0) {
-      type = UserType.valueOf(userTypeFromCommandLine);  
-    }    
+    if (userType == null) {
+      String userTypeFromCommandLine = System.getProperty("de.shellfire.vpn.runtype");
+      userType = UserType.Client;       
+      if (userTypeFromCommandLine != null && userTypeFromCommandLine.length() > 0) {
+        userType = UserType.valueOf(userTypeFromCommandLine);  
+      }    
+      
+    }
     
-    return type;
+    return userType;
   }
 
   public static String getLogFilePath() {

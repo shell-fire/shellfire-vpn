@@ -28,7 +28,7 @@ import de.shellfire.vpn.exception.VpnException;
 import de.shellfire.vpn.gui.helper.MoveMouseListener;
 import de.shellfire.vpn.gui.model.VpnSelectionTableModel;
 import de.shellfire.vpn.i18n.VpnI18N;
-import de.shellfire.vpn.webservice.ShellfireService;
+import de.shellfire.vpn.webservice.WebService;
 import de.shellfire.vpn.webservice.Vpn;
 
 /**
@@ -40,12 +40,12 @@ public class VpnSelectDialog extends javax.swing.JFrame {
   private static final long serialVersionUID = 1L;
   private final LoginForm parentFrame;
   private VpnSelectionTableModel vpnSelectionTableModel;
-  private final ShellfireService service;
+  private final WebService service;
   private boolean autoConnect;
   public static final String REG_REMEMBERSELECTION = "SelectedVpnId";
   private static I18n i18n = VpnI18N.getI18n();
 
-  VpnSelectDialog(LoginForm parent, ShellfireService service, boolean autoConnect) {
+  VpnSelectDialog(LoginForm parent, WebService service, boolean autoConnect) {
     this.parentFrame = parent;
     this.service = service;
     this.autoConnect = autoConnect;

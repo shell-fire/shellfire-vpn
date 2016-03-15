@@ -100,7 +100,7 @@ import de.shellfire.vpn.types.Reason;
 import de.shellfire.vpn.types.Server;
 import de.shellfire.vpn.types.ServerType;
 import de.shellfire.vpn.webservice.ServerList;
-import de.shellfire.vpn.webservice.ShellfireService;
+import de.shellfire.vpn.webservice.WebService;
 import de.shellfire.vpn.webservice.Vpn;
 import de.shellfire.vpn.webservice.model.TrayMessage;
 import de.shellfire.vpn.webservice.model.WsGeoPosition;
@@ -112,7 +112,7 @@ import de.shellfire.vpn.webservice.model.WsGeoPosition;
 public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleChangeListener, ConnectionStateListener {
   private static Logger log = Util.getLogger(ShellfireVPNMainForm.class.getCanonicalName());
 	private ContentPaneList content;
-	private ShellfireService shellfireService;
+	private WebService shellfireService;
 	private ServerList serverList;
 	private ServerListTableModel serverListTableModel;
 	private Controller controller;
@@ -152,7 +152,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 	private PopupMenu popup;
 
 	/** Creates new form GizmpVPNMainForm */
-	ShellfireVPNMainForm(ShellfireService service) throws VpnException {
+	ShellfireVPNMainForm(WebService service) throws VpnException {
 		if (!service.isLoggedIn()) {
 			throw new VpnException("ShellfireVPN Main Form required a logged in service. This should not happen!");
 		}
@@ -1922,7 +1922,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 		}
 	}
 
-	ShellfireService getShellfireService() {
+	WebService getShellfireService() {
 		return this.shellfireService;
 	}
 

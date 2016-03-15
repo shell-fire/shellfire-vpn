@@ -31,7 +31,7 @@ import de.shellfire.vpn.Util;
 import de.shellfire.vpn.gui.helper.MoveMouseListener;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.webservice.Response;
-import de.shellfire.vpn.webservice.ShellfireService;
+import de.shellfire.vpn.webservice.WebService;
 import de.shellfire.vpn.webservice.model.LoginResponse;
 
 /**
@@ -44,7 +44,7 @@ public class RegisterForm extends javax.swing.JFrame {
   public static final String REG_PASS = "pass";
     public static final String REG_USER = "user";
 
-    ShellfireService service;
+    WebService service;
     private ProgressDialog progressDialog;
     private String activationToken;
     private final LoginForm parentFrame;
@@ -56,7 +56,7 @@ public class RegisterForm extends javax.swing.JFrame {
     /** Creates new form RegisterForm */
     RegisterForm(LoginForm parent) {
         this.parentFrame = parent;
-        this.service = ShellfireService.getInstance();
+        this.service = WebService.getInstance();
         this.setUndecorated(true);
         MoveMouseListener mml = new MoveMouseListener(this);
         this.addMouseListener(mml);

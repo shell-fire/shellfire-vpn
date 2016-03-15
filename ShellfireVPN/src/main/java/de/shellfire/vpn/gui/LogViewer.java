@@ -21,7 +21,7 @@ import org.apache.commons.io.input.TailerListenerAdapter;
 
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.messaging.UserType;
-import de.shellfire.vpn.webservice.ShellfireService;
+import de.shellfire.vpn.webservice.WebService;
 
 public class LogViewer extends JFrame {
 
@@ -47,7 +47,7 @@ public class LogViewer extends JFrame {
   public LogViewer() {
     setTitle("Logviewer");
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    setBounds(100, 100, 674, 496);
+    setBounds(100, 100, 1079, 636);
     contentPane = new JPanel();
     contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
     contentPane.setLayout(new BorderLayout(0, 0));
@@ -110,7 +110,7 @@ public class LogViewer extends JFrame {
   }
 
   private void sendLogToShellfire() {
-    ShellfireService service = ShellfireService.getInstance();
+    WebService service = WebService.getInstance();
     service.sendLogToShellfire();
   }
 

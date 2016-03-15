@@ -144,8 +144,8 @@ class JsonHttpRequest<RequestType, ResponseType> {
 
     request.addHeader("content-type", "application/json");
 
-    if (ShellfireWebServicePort.isLoggedIn()) {
-      request.addHeader("x-authorization-token", ShellfireWebServicePort.getSessionToken());
+    if (WebServiceBroker.isLoggedIn()) {
+      request.addHeader("x-authorization-token", WebServiceBroker.getSessionToken());
     }
 
     long version = Updater.getInstalledVersion();

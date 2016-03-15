@@ -23,7 +23,7 @@ import de.shellfire.vpn.Util;
 import de.shellfire.vpn.client.Client;
 import de.shellfire.vpn.i18n.Language;
 import de.shellfire.vpn.i18n.VpnI18N;
-import de.shellfire.vpn.webservice.ShellfireService;
+import de.shellfire.vpn.webservice.WebService;
 import de.shellfire.vpn.webservice.Vpn;
 
 /**
@@ -229,7 +229,7 @@ public class SettingsDialog extends javax.swing.JDialog {
         prefs.putBoolean(LoginForm.REG_SHOWSTATUSURL, this.jLaunchStatusWebsiteOnConnect.isSelected());
         
         if (jSaveVpnSelection.isSelected()) {
-          ShellfireService service = ShellfireService.getInstance();
+          WebService service = WebService.getInstance();
           Vpn vpn = service.getVpn();
           prefs.putInt(VpnSelectDialog.REG_REMEMBERSELECTION, vpn.getVpnId());
         }

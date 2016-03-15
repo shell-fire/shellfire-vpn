@@ -31,10 +31,10 @@ import de.shellfire.vpn.webservice.model.WsVpn;
  * 
  * @author bettmenn
  */
-public class ShellfireService {
+public class WebService {
 
   public static final String CONFIG_DIR = Util.getConfigDir();
-  private static Logger log = Util.getLogger(ShellfireService.class.getCanonicalName());
+  private static Logger log = Util.getLogger(WebService.class.getCanonicalName());
 
   private String user;
   private String pass;
@@ -50,11 +50,11 @@ public class ShellfireService {
   private String urlHelp;
   private String urlSuccesfulConnect;
   private static I18n i18n = VpnI18N.getI18n();
-  private static ShellfireService instance;
+  private static WebService instance;
 
-  ShellfireWebServicePort shellfire = new ShellfireWebServicePort();
+  WebServiceBroker shellfire = new WebServiceBroker();
 
-  private ShellfireService() {
+  private WebService() {
     // precache on load
     getVpnComparisonTable();
     getUrlHelp();
@@ -269,7 +269,7 @@ public class ShellfireService {
   }
 
   private void storeFile(String name, String content) {
-    String filePath = ShellfireService.CONFIG_DIR + Util.getSeparator() + name;
+    String filePath = WebService.CONFIG_DIR + Util.getSeparator() + name;
 
     try {
       BufferedWriter out = new BufferedWriter(new FileWriter(filePath));
@@ -330,7 +330,7 @@ public class ShellfireService {
   }
 
   public boolean isLoggedIn() {
-    return ShellfireWebServicePort.isLoggedIn();
+    return WebServiceBroker.isLoggedIn();
   }
 
   public LinkedList<Vpn> getAllVpn() {
@@ -350,8 +350,8 @@ public class ShellfireService {
 
   public boolean certificatesDownloaded() {
     int vpnId = this.getVpnId();
-    String[] filesRequired = new String[] { ShellfireService.CONFIG_DIR, ShellfireService.CONFIG_DIR + "\\sf" + vpnId + ".crt",
-        ShellfireService.CONFIG_DIR + "\\sf" + vpnId + ".key", ShellfireService.CONFIG_DIR + "\\ca.crt" };
+    String[] filesRequired = new String[] { WebService.CONFIG_DIR, WebService.CONFIG_DIR + "\\sf" + vpnId + ".crt",
+        WebService.CONFIG_DIR + "\\sf" + vpnId + ".key", WebService.CONFIG_DIR + "\\ca.crt" };
 
     for (String file : filesRequired) {
       File f = new File(file);
@@ -429,9 +429,9 @@ public class ShellfireService {
     return latestZipInstaller;
   }
 
-  public static ShellfireService getInstance() {
+  public static WebService getInstance() {
     if (instance == null)
-      instance = new ShellfireService();
+      instance = new WebService();
 
     return instance;
   }

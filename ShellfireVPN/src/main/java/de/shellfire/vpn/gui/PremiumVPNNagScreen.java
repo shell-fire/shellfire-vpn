@@ -33,7 +33,7 @@ import de.shellfire.vpn.gui.model.VpnComparisonTableModel;
 import de.shellfire.vpn.gui.renderer.BoolImageRenderer;
 import de.shellfire.vpn.gui.renderer.StarImageRenderer;
 import de.shellfire.vpn.i18n.VpnI18N;
-import de.shellfire.vpn.webservice.ShellfireService;
+import de.shellfire.vpn.webservice.WebService;
 import de.shellfire.vpn.webservice.model.VpnEntry;
 
 /**
@@ -195,7 +195,7 @@ public class PremiumVPNNagScreen extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
   private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButton2ActionPerformed
-    ShellfireService service = ShellfireService.getInstance();
+    WebService service = WebService.getInstance();
     Util.openUrl(service.getUrlPremiumInfo());
 
   }// GEN-LAST:event_jButton2ActionPerformed

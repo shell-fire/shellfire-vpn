@@ -54,9 +54,9 @@ import de.shellfire.vpn.webservice.model.WsServer;
 import de.shellfire.vpn.webservice.model.WsVpn;
 
 
-public class ShellfireWebServicePort {
+public class WebServiceBroker {
   
-  private static Logger log = Util.getLogger(ShellfireWebServicePort.class.getCanonicalName());
+  private static Logger log = Util.getLogger(WebServiceBroker.class.getCanonicalName());
   
   /**
    * The token for the login session. null if logged out.
@@ -84,7 +84,7 @@ public class ShellfireWebServicePort {
         LoginResponse token = resp.getData();
         if (token != null) {
           log.debug("login() succesful, storing sessionToken");
-          ShellfireWebServicePort.sessionToken = token.getToken();
+          WebServiceBroker.sessionToken = token.getToken();
         }
       }
     }
@@ -274,7 +274,7 @@ public class ShellfireWebServicePort {
       if (data != null) {
         log.debug("registration succesful - storing sessionToken for immediate login");
         LoginResponse token = data;
-        ShellfireWebServicePort.sessionToken = token.getToken();
+        WebServiceBroker.sessionToken = token.getToken();
       }
     }
     

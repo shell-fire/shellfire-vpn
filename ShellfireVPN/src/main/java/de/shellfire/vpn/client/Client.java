@@ -14,7 +14,6 @@ import de.shellfire.vpn.messaging.Message;
 import de.shellfire.vpn.messaging.MessageBroker;
 import de.shellfire.vpn.messaging.MessageListener;
 import de.shellfire.vpn.messaging.MessageType;
-import de.shellfire.vpn.messaging.UserType;
 import de.shellfire.vpn.service.IVpnRegistry;
 import de.shellfire.vpn.types.Reason;
 import de.shellfire.vpn.types.Server;
@@ -25,19 +24,30 @@ public class Client implements MessageListener<Object> {
 
   private static Logger log = Util.getLogger(Client.class.getCanonicalName());
   private Server server;
-  private final Controller controller;
+  private Controller controller;
   private static IVpnRegistry registry = Util.getRegistry();
 
-  private ConnectionState initialConnectionState;
   private MessageBroker messageBroker;
+  private static Client instance;
 
-  public Client(Controller controller) throws IOException {
-    this.controller = controller;
-    this.messageBroker = new MessageBroker(UserType.Client);
+  private Client() throws IOException {
+    this.messageBroker = MessageBroker.getInstance();
     messageBroker.addMessageListener(this);
     messageBroker.startReaderThread();
     
     setAppDataFolder();
+  }
+  
+  public static Client getInstance() throws IOException {
+    if (instance == null) {
+      instance = new Client();
+    }
+    
+    return instance;
+  }
+  
+  public void setController(Controller controller) {
+    this.controller = controller;
   }
 
   public void setVpn(Vpn vpn) {
@@ -68,13 +78,7 @@ public class Client implements MessageListener<Object> {
       }
     }, 10, 50);
 
-    if (initialConnectionState == null) {
-      initialConnectionState = newState;
-
-      this.controller.connectionStateChanged(newState, Reason.NoConnectionYet);
-    }
-
-    log.debug("getConnectionState() - finish");
+    log.debug("getConnectionState() - finish - returning {}", newState);
     return newState;
   }
 
@@ -171,6 +175,24 @@ public class Client implements MessageListener<Object> {
       }
     }, 10, 50);
     log.debug("connect() - finish");
+  }
+  
+  public boolean ping() {
+    log.debug("ping() - start");
+    Boolean result = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<Boolean>() {
+      public Boolean run() throws Exception {
+        Message<Void, Boolean> message = new Message<Void, Boolean>(MessageType.Ping);
+        Boolean result = messageBroker.sendMessageWithResponse(message);
+        return result;
+      }
+    }, 3, 50);
+    
+    if (result == null) {
+      result = false;
+    }
+    
+    log.debug("ping() - finished - returning {}", result);
+    return result;
   }
   
   public void setAppDataFolder() {

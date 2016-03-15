@@ -24,7 +24,7 @@ public class Service {
 
   private void run() {
     try {
-      messageBroker = new MessageBroker(UserType.Service);
+      messageBroker = MessageBroker.getInstance();
       new ServiceMessageHandler(messageBroker);
     } catch (IOException e) {
       Service.handleException(e);
