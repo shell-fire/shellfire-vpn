@@ -490,7 +490,7 @@ public class WebServiceBroker {
 
     Boolean result = resp != null && resp.isSuccess();
 
-    log.debug("setProtocolTo () - returning result: {}", result);
+    log.debug("sendLogToShellfire () - returning result: {}", result);
     return result;    
   }
 

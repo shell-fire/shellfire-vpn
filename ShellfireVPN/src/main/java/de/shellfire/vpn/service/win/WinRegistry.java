@@ -1,6 +1,7 @@
 package de.shellfire.vpn.service.win;
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -194,6 +195,7 @@ public class WinRegistry implements IVpnRegistry {
   static {
     if (Util.isWindows()) {
       log.debug("LOADING ICE JNI");
+      log.debug("Path is: {}", System.getProperty("java.library.path"));
       String jvmArch = System.getProperty("sun.arch.data.model");
       String lib = LIB_ICE_JNI_REGISTRY_X86;
       if (jvmArch.equals("32")) {

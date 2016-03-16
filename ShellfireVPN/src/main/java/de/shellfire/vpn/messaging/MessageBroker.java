@@ -7,14 +7,13 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-import javax.swing.plaf.basic.BasicInternalFrameTitlePane.SystemMenuBar;
-
 import org.slf4j.Logger;
 
 import de.shellfire.vpn.Util;
 import net.openhft.chronicle.Chronicle;
 import net.openhft.chronicle.ChronicleQueueBuilder;
 import net.openhft.chronicle.ExcerptAppender;
+import net.openhft.chronicle.ExcerptCommon;
 import net.openhft.chronicle.ExcerptTailer;
 
 public class MessageBroker {
@@ -31,6 +30,11 @@ public class MessageBroker {
 
   private Map<UUID, Message<?, ?>> receivedMessageMap = new ConcurrentHashMap<UUID, Message<?, ?>>();
   private ArrayList<MessageListener<?>> messageListeners = new ArrayList<MessageListener<?>>();
+  private ReaderThread readerThread;
+  private Chronicle chronicleReader;
+  private Chronicle chronicleWriter;
+  private String readerPath;
+  private String writerPath;
 
   private MessageBroker() throws IOException {
     init();
@@ -87,6 +91,10 @@ public class MessageBroker {
       }
 
       break;
+    case Updater:
+      break;
+    default:
+      break;
     }
 
     log.debug("path is: {}", path);
@@ -102,14 +110,14 @@ public class MessageBroker {
   }
 
   private void init() throws IOException {
-    String readerPath = getChronicleFiles(Direction.Read);
-    String writerPath = getChronicleFiles(Direction.Write);
+    readerPath = getChronicleFiles(Direction.Read);
+    writerPath = getChronicleFiles(Direction.Write);
 
     log.debug("Opening Chronicle Writer Queue at {}", writerPath);
-    Chronicle chronicleWriter = ChronicleQueueBuilder.indexed(writerPath).build();
+    chronicleWriter = ChronicleQueueBuilder.indexed(writerPath).build();
 
     log.debug("Opening Chronicle Reader Queue at {}", readerPath);
-    Chronicle chronicleReader = ChronicleQueueBuilder.indexed(readerPath).build();
+    chronicleReader = ChronicleQueueBuilder.indexed(readerPath).build();
 
     // Obtain an ExcerptAppender
     writer = chronicleWriter.createAppender();
@@ -121,38 +129,53 @@ public class MessageBroker {
     tailer = chronicleReader.createTailer();
   }
 
-  public void startReaderThread() {
-    log.debug("Starting reader thread...");
-    Runnable r = new Runnable() {
-      public void run() {
-        while (true) {
-          // While until there is a new Excerpt to read
-          while (!tailer.nextIndex())
-            ;
+  class ReaderThread extends Thread {
+    private boolean stop = false;
 
-          // Read the object
-          Object o = tailer.readObject();
+    public ReaderThread() {
+      super("ReaderThread");
+    }
 
-          // Make the reader ready for next read
-          tailer.finish();
+    public void stopRequested() {
+      this.stop = true;
+    }
 
-          if (o instanceof Message) {
-            Message<?, ?> message = (Message<?, ?>) o;
-            // only handle this message if it did not
-            // originate from us
-            if (message.getSender() != Util.getUserType()) {
-              if (message.isResponse()) {
-                receivedMessageMap.put(message.getMessageId(), message);
-              } else {
-                notifyListeners(message);
-              }
+    public void run() {
+      while (!stop) {
+        // While until there is a new Excerpt to read, or stop is requested
+        while (!stop && !tailer.nextIndex()) {
+          // 1 ms is enough to not use ANY cpu during sleep.
+          Util.sleep(1);
+        }
+
+        // Read the object
+        Object o = tailer.readObject();
+
+        // Make the reader ready for next read
+        tailer.finish();
+
+        if (o instanceof Message) {
+          Message<?, ?> message = (Message<?, ?>) o;
+          // only handle this message if it did not
+          // originate from us
+          if (message.getSender() != Util.getUserType()) {
+            if (message.isResponse()) {
+              receivedMessageMap.put(message.getMessageId(), message);
+            } else {
+              notifyListeners(message);
             }
           }
         }
+        
       }
-    };
+    }
+  }
+  
+  public void startReaderThread() {
+    log.debug("Starting reader thread...");
 
-    new Thread(r, "ReaderThread").start();
+    readerThread = new ReaderThread();
+    readerThread.start();
   }
 
   public void addMessageListener(MessageListener<?> listener) {
@@ -194,6 +217,7 @@ public class MessageBroker {
       timePassed = System.currentTimeMillis() - start;
     }
     if (timePassed >= TIMEOUT) {
+      log.warn("no answer received");
       throw new IOException("no answer received");
     }
 
@@ -215,6 +239,83 @@ public class MessageBroker {
 
   public void sendResponse(Message<?, ?> response) throws IOException {
     sendMessage(response);
+  }
+
+  public void close() {
+    log.debug("close() - start");
+    
+    closeReaderThread();
+
+    log.info("closing tailer...");
+    this.closeExcerpt(tailer);
+    log.info("closing writer...");
+    this.closeExcerpt(writer);
+    
+    log.info("closing chronicleReader");
+    closeChronicle(chronicleReader);
+    log.info("closing chronicleWriter");
+    closeChronicle(chronicleWriter);
+    
+    log.info("marking reader file to be deleted on exit");
+    
+    
+    log.info("marking readerPath to be deleted on exit");
+    deleteOnExit(readerPath);
+    log.info("marking writerPath to be deleted on exit");
+    deleteOnExit(writerPath);
+    
+    log.debug("close() - finish");
+  }
+
+  private void deleteOnExit(String path) {
+    if (path == null) {
+        log.debug("deleteOnExit() - path is null, not deleting on exit");
+    } else {
+      log.debug("deleteOnExit({})", path);
+      new File(path).deleteOnExit();  
+    }
+  }
+
+  private void closeReaderThread() {
+    log.info("closeReaderThread() - start");
+    if (readerThread == null) {
+      log.warn("readerThread is null - unable to shut down gracefully");
+    } else {
+      log.info("shutdown down readerThread...");
+      readerThread.stopRequested();      
+      log.info("...done");
+    }
+    log.info("closeReaderThread() - finish");
+  }
+
+  private void closeExcerpt(ExcerptCommon excerpt) {
+    log.debug("closeExcerpt() - start");
+    if (excerpt == null) {
+      log.warn("excerpt is null, not closing");
+    } else {
+      log.info("closing excerpt");
+      excerpt.close();
+      excerpt = null;
+    }
+    log.debug("closeExcerpt() - finish");
+  }
+
+  private void closeChronicle(Chronicle chronicle) {
+    log.debug("closeChronicle() - start");
+    try {
+      if (chronicle == null) {
+        log.warn("chronicle is null, not closing");
+      } else {
+        log.info("closing chroncile");
+        chronicle.close();
+        chronicle = null;
+      }
+      chronicleReader.close();
+    } catch (IOException e) {
+      log.error("IOException occured during chronicle.close()", e);
+    }
+    
+    log.debug("closeChronicle() - finish");
   }
 
 }

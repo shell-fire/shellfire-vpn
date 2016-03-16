@@ -184,6 +184,12 @@ public class Util {
 
     return wmic;
   }
+  
+  public static String getCscriptExe() {
+    String cscript = System.getenv("SystemRoot") + "\\system32\\cscript.exe";
+
+    return cscript;
+  }
 
   public static float getOsVersion() {
     String osVersion = System.getProperty("os.version");
@@ -605,8 +611,7 @@ public class Util {
     }
 
     String uri = context.getResource(classFileName).toString();
-    if (uri.startsWith("file:")) throw new IllegalStateException("This class has been loaded from a directory and not from a jar file.");
-    if (!uri.startsWith("jar:file:")) {
+    if (uri.startsWith("file:") || !uri.startsWith("jar:file:")) { 
       return null;
     }
 
@@ -618,11 +623,41 @@ public class Util {
     } catch (UnsupportedEncodingException e) {
         throw new InternalError("default charset doesn't exist. Your VM is borked.");
     }
-}
+  }
+  
+  public static void sleep(int i) {
+    try {
+      Thread.sleep(i);
+    } catch (InterruptedException e) {}
+  }
+  
+  public static String getJvmDll() {
+    if (jvmDll == null) {
+      String javaHome = Util.getJavaHome();
+      
+      String template = javaHome + "\\bin\\%s\\jvm.dll";
+      String clientDllPath = String.format(template, "client");
+      
+      if (new File(clientDllPath).exists()) {
+        jvmDll = clientDllPath;
+      }
+      
+      if (jvmDll == null) {
+        String serverDllPath = String.format(template, "server");
+        if (new File(serverDllPath).exists()) {
+          jvmDll = serverDllPath;
+        }
+      }
+      
+    }
+    
+    return jvmDll;
+  }
 
   // do not mix this order around, must remain in the end of class so that log file can be deleted on startup
   private static Logger log = Util.getLogger(Util.class.getCanonicalName());
   private static I18n i18n = VpnI18N.getI18n();
+  private static String jvmDll;
 
 }
 

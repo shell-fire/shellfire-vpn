@@ -737,7 +737,7 @@ public class LoginForm extends javax.swing.JFrame {
 	        String cmd = args[0];
 
 	        if (cmd.equals("uninstallservice")) {
-	          //ServiceTools.uninstall();
+	          ServiceTools.getInstanceForOS().uninstall();
 	          initDialog.dispose();
 	          return;
 	        } else if (cmd.equals("installservice")) {
@@ -745,7 +745,6 @@ public class LoginForm extends javax.swing.JFrame {
 	        	String path = "";
 	
 	        	if (args.length > 1) {
-	        		
 		        
 	        		for (int i = 1; i < args.length; i++) {
 	        			path += args[i];
@@ -755,11 +754,11 @@ public class LoginForm extends javax.swing.JFrame {
 	        			}
 	        		}
 	        	}
+	        	
 	        	log.debug("Retrieved installation path from args parameter: " + path);
 	        	
 	        	if (cmd.equals("installservice"))
-	        		//ServiceTools.install(path); 
-	        	
+	        		ServiceTools.getInstanceForOS().install(path); 
 	        	
 	        	System.exit(0);
 	          return;

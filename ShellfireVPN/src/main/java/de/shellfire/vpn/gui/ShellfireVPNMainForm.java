@@ -111,6 +111,7 @@ import de.shellfire.vpn.webservice.model.WsGeoPosition;
  */
 public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleChangeListener, ConnectionStateListener {
   private static Logger log = Util.getLogger(ShellfireVPNMainForm.class.getCanonicalName());
+  private static LogViewer logViewer = LogViewer.getInstance();
 	private ContentPaneList content;
 	private WebService shellfireService;
 	private ServerList serverList;
@@ -1712,7 +1713,6 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 	private Image iconConnectedSmall;
 	private Image buttonDisconnect;
 	private Image buttonConnect;
-  private LogViewer logViewer;
 
 	private void initContent() {
 		this.content = new ContentPaneList();
@@ -2758,16 +2758,19 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 
 
 	private void initConsole() {
-		if (Storage.get(LogViewer.class) == null || ((LogViewer) Storage.get(LogViewer.class)).isVisible() == false) {
-			SwingUtilities.invokeLater(new Runnable() {
-
-				@Override
-				public void run() {
-					logViewer = LogViewer.getInstance();
-					logViewer.setVisible(true);
-				}
-			});
-		}
+	  log.debug("showing logviewer...");
+		SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+			  try {
+	        log.debug("setting logViewer to visible");
+	        logViewer.setVisible(true);
+			    
+			  } catch (Exception e) {
+			    log.error("Erro occured while displaying logviewer", e);
+			  }
+			}
+		});
 
 	}
 

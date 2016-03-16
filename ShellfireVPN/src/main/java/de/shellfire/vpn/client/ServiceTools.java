@@ -86,14 +86,11 @@ public abstract class ServiceTools {
       log.error("error occured during serviceIsRunning() - returning false", e);
     }
 
-		result = false;
 		log.debug("serviceIsRunning - finsihed - returnung result {}", result);
 		return result;
 	}
 
   public abstract void uninstall(String path);
-	public abstract void initService(String instDir);
-  abstract protected void writeConfigFiles(String instDir, String startConfigFile, String stopConfigFile);
   public abstract void install(String path);
 
 	public void install() {

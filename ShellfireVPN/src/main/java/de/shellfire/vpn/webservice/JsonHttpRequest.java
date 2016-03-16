@@ -47,12 +47,12 @@ class JsonHttpRequest<RequestType, ResponseType> {
 
   private final static String ENDPOINT_DEV = "http://dev.shellfire.local.de:808/webservice/json.php?action=";
   private final static String ENDPOINT_UAT = "http://uat.shellfire.remote.de/webservice/json.php?action=";
-  private final static String ENDPOINT_PROD_TEST = "https://www.shellfire.de/webservice_test/json.php?action=";
+  private final static String ENDPOINT_PROD = "https://www.shellfire.de/webservice/json.php?action=";
   
   private static Logger log = Util.getLogger(JsonHttpRequest.class.getCanonicalName());
   private String function;
   CloseableHttpClient httpClient = HttpClients.createDefault();
-  final String endPoint = ENDPOINT_UAT;
+  final String endPoint = ENDPOINT_PROD;
   //Gson gson = new GsonBuilder().setPrettyPrinting().create();
   Gson gson = new GsonBuilder().create();
 

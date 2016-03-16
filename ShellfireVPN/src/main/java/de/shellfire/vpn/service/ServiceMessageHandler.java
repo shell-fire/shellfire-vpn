@@ -22,8 +22,8 @@ public class ServiceMessageHandler implements MessageListener<Object>, Connectio
   private final MessageBroker messageBroker;
   private final IVpnController vpnController;
 
-  public ServiceMessageHandler(MessageBroker messageBroker) {
-    this.messageBroker = messageBroker;
+  public ServiceMessageHandler() throws IOException {
+    this.messageBroker = MessageBroker.getInstance();
 
     this.vpnController = VpnControllerFactory.getVpnController();
     this.vpnController.addConnectionStateListener(this);
@@ -155,8 +155,8 @@ public class ServiceMessageHandler implements MessageListener<Object>, Connectio
   private void handlePing(Message<?, ?> message) throws IOException {
     log.info("handlePing() - sending pingback");
 
-    Message<Void, Void> msg = (Message<Void, Void>) message;
-    Message<Void, Void> response = msg.createResponse();
+    Message<Boolean, Void> msg = (Message<Boolean, Void>) message;
+    Message<Boolean, Void> response = msg.createResponse(true);
     messageBroker.sendResponse(response);
   }
 
@@ -180,6 +180,19 @@ public class ServiceMessageHandler implements MessageListener<Object>, Connectio
     } catch (IOException e) {
       log.error("Error occured while sending connectionStateChanged message to client: {}", e.getMessage(), e);
     }
+  }
+
+  public void close() {
+    log.debug("close() - start");
+    if (messageBroker == null) {
+      log.warn("messageBroker is null - unable to shut down gracefully");
+    } else {
+      log.info("close messageBroker...");
+      messageBroker.close();      
+      log.info("...done");
+    }
+    
+    log.debug("close() - finish");
   }
 
 

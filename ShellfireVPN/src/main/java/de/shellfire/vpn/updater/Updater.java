@@ -88,7 +88,7 @@ public class Updater {
           }
 
           log.debug("Retrieved installation path from args parameter: " + path);
-          // ServiceTools.install(path);
+          ServiceTools.getInstanceForOS().install(path);
           return;
         } else if (cmd.equals("doupdate") && updater.newVersionAvailable()) {
           // assumes we have been restarted with elevated privileges
@@ -479,7 +479,7 @@ public class Updater {
       updateProgressDialog.setIndeterminate(true);
       updateProgressDialog.setText(i18n.tr("Shellfire VPN Service deinstallieren..."));
 
-      // ServiceTools.uninstall(installPath + "/Contents/Java/");
+      ServiceTools.getInstanceForOS().uninstall(installPath + "/Contents/Java/");
 
       updateProgressDialog.setText(i18n.tr("Neue Version installieren "));
 
@@ -517,8 +517,7 @@ public class Updater {
         p.waitFor();
 
       } catch (InterruptedException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
+        log.error("Error occured during update");
       }
       updateProgressDialog.setText(i18n.tr("Shellfire VPN Service installieren..."));
       ServiceTools.getInstanceForOS().install(installPath + "/Contents/Java/");

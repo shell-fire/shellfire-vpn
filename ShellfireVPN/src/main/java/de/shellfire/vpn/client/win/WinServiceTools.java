@@ -1,9 +1,9 @@
 package de.shellfire.vpn.client.win;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.rmi.RemoteException;
-import java.util.Arrays;
 
 import javax.swing.JOptionPane;
 
@@ -15,7 +15,6 @@ import de.shellfire.vpn.client.ServiceTools;
 import de.shellfire.vpn.gui.LoginForm;
 import de.shellfire.vpn.gui.ProgressDialog;
 import de.shellfire.vpn.i18n.VpnI18N;
-import de.shellfire.vpn.webservice.WebService;
 
 public class WinServiceTools extends ServiceTools {
   private static Logger log = Util.getLogger(WinServiceTools.class.getCanonicalName());
@@ -53,135 +52,153 @@ public class WinServiceTools extends ServiceTools {
     }
   }
 
+  /**
+   * Assumes elevation
+   */
   public void install(String path) {
-    log.debug("install(" + path + ", ");
+    log.debug("install()");
+    
+    try {
+    String jarFile = Util.getPathJar();
+    String instDir = new File(jarFile).getParent() + File.separator;
 
-    path = LoginForm.getInstDir();
-    log.debug("installing service");
-    // TODO: procrun implementation
-    // SEE: https://joerglenhard.wordpress.com/2012/05/29/build-windows-service-from-java-application-with-procrun/
-    log.debug("startingservice");
-    // TODO: procrun implementation
-
+      String template = Util.fileToString(instDir + "InstallServiceTemplate.txt");
+      String procRunPath = instDir + "ShellfireVPNService.exe";
+      
+      template = template.replace("$$PROCRUNPATH$$", procRunPath);
+      template = template.replace("$$TEMP$$", Util.getTempDir());
+      template = template.replace("$$LOGFILE$$", Util.getTempDir()+File.separator + "ProcRunLog.log");
+      template = template.replace("$$JVM_DLL$$",  Util.getJvmDll());
+      
+      template = template.replace("$$SHELLFIREVPNSERVICEDAT$$", jarFile);
+      
+      String installBat = instDir + "InstallService.bat";
+      Util.stringToFile(template, installBat);
+      
+      String command = String.format("%s /C \"%s\"", Util.getCmdExe(), installBat);
+      log.debug("Running command {}", command);
+      Process p = Runtime.getRuntime().exec(command, null, new File(instDir));
+      Util.digestProcess(p);
+      p.waitFor();
+      log.debug("service installed (or not?); - exiting");
+    } catch (IOException e) {
+      Util.handleException(e);
+    } catch (InterruptedException e) {
+      Util.handleException(e);
+    }
   }
   
-  protected void writeConfigFiles(String instDir, String startConfigFile, String stopConfigFile) {
-    String libPath;
-    String binPath;
 
-    // TODO: procrun implementation
-    libPath = ".\\\\jre8\\\\bin\\\\";
-    binPath = instDir.replace("\\", "\\\\") + "jre8\\\\bin\\\\java";
-    
 
-    String start = "" + "wrapper.working.dir=" + instDir.replace("\\", "\\\\") + nl 
-        + "wrapper.java.app.jar=ShellfireVPN2Service.dat" + nl
-        + "wrapper.console.title=ShellfireVPN2Service" + nl 
-        + "wrapper.ntservice.name=ShellfireVPN2Service" + nl
-        + "wrapper.ntservice.displayname=ShellfireVPN2Service" + nl
-        + "wrapper.ntservice.description=The ShellfireVPN2Service to handle VPN connections" + nl 
-        + "wrapper.java.library.path.1=" + libPath + nl
-        + "wrapper.java.command=" + binPath + nl 
-        + "wrapper.java.classpath.1=." + nl 
-        + "wrapper.console.loglevel=DEBUG" + nl
-        + "wrapper.debug=true" + nl
-        + "wrapper.ntservice.starttype=AUTOMATIC" + nl;
-
-      start += "wrapper.launchd.dir=" + WebService.CONFIG_DIR.replace("\\", "\\\\") + nl
-          + "wrapper.stop.conf=" + stopConfigFile.replace("\\", "\\\\") + nl;
-      
-      
-      String stop = "wrapper.stopper=true" + nl 
-          + "wrapper.app.parameter.1=stop" + nl 
-          + "include=start.conf";
-
-      log.debug("Stop Config: ");
-      
-      Util.stringToFile(stop, stopConfigFile, true);      
-    
-    log.debug("Start Config:");
-    log.debug(start);
-    Util.stringToFile(start, startConfigFile, true);
-  }
+  /**
+   * assumes elevation
+   */
   public void uninstall(String path) {
-    //TODO: procrun implementation
+    log.debug("uninstall()");
+    
+    try {
+    String jarFile = Util.getPathJar();
+    String instDir = new File(jarFile).getParent() + File.separator;
 
-
-  }
-
-  public void initService(String instDir) {
-    if (!init) {
-      log.debug("initService()");
-      WebService.createConfigDirIfNotExists();
-
-      log.debug("instDIr: " + instDir);
-
-      String sep = "";
-      sep = "\\";
-
-      String startConfig = instDir + sep + "start.conf";
-      String stopConfig = instDir + sep + "stop.conf";
-
-      log.debug("startConfig=" + startConfig);
-      log.debug("stopConfig=" + stopConfig);
-
-      writeConfigFiles(instDir, startConfig, stopConfig);
-
-      System.setProperty("wrapper.config", startConfig);
-
-      init = true;
+      String template = Util.fileToString(instDir + "UninstallServiceTemplate.txt");
+      String procRunPath = instDir + "ShellfireVPNService.exe";
+      
+      template = template.replace("$$PROCRUNPATH$$", procRunPath);
+      
+      String uninstallBat = instDir + "UninstallService.bat";
+      Util.stringToFile(template, uninstallBat);
+      
+      String command = String.format("%s /C \"%s\"", Util.getCmdExe(), uninstallBat);
+      log.debug("Running command {}", command);
+      Process p = Runtime.getRuntime().exec(command, null, new File(instDir));
+      Util.digestProcess(p);
+      p.waitFor();
+      log.debug("service installed (or not?); - exiting");
+    } catch (IOException e) {
+      Util.handleException(e);
+    } catch (InterruptedException e) {
+      Util.handleException(e);
     }
 
-    log.debug("initService() - return");
   }
-  
-  public void installElevated() {
-    log.debug("installElevated()- start");
-    String instdir = LoginForm.getInstDir();
 
-    String command = "";
+  public void installElevated() {
+    log.debug("installElevated() - start");
+
     if (Util.isVistaOrLater()) {
       // restart elevated
-      String pathElevateExe = instdir+"elevate.exe";
+      
       String pathJavaw = Util.getJavaHome() + "\\bin\\javaw.exe";
       String jarFile = Util.getPathJar();
+      File instDir = new File(jarFile).getParentFile();
       String arg = "installservice";
       
+
       // Check for execution from dev environment, will fail anyway
       if (jarFile == null) {
         log.warn("Path to Jar not found - elevated Relaunch only supported from deployed jar!");
       } else {
-        command += String.format("\"%s\" -wait %s -jar %s %s", pathElevateExe, pathJavaw, jarFile, arg);
-        log.debug("Command: " + command);
-        Process p;
+        String elevateVbs = System.getProperty("java.io.tmpdir") + "/elevate.vbs";
+        
+        String exec = pathJavaw;
+        String cmds = "-jar \"\"" + jarFile + "\"\" " + arg;
+       
+        writeElevationVbsFile(elevateVbs, exec, cmds);
+        
         try {
-          p = Runtime.getRuntime().exec(command, null, new File(instdir));
+          String command = Util.getCscriptExe() + " " + elevateVbs;
+          log.debug("Calling elevateVbs with command {} in dir {}", command, instDir.getAbsolutePath());
+          Process p = Runtime.getRuntime().exec(command, null, instDir);
           Util.digestProcess(p);
-          
+
           long start = System.currentTimeMillis();
-          //while (p.() && System.currentTimeMillis() - start < 5000);
-          
-          
-        } catch (IOException e) {
+
+          // wait until process is finished or 10 seconds have passed. 10 seconds should really be enough.
+          while (!hasFinished(p) && System.currentTimeMillis() - start < 10000) {
+            Util.sleep(1);
+            ;
+          }
+
+        } catch (Exception e) {
           Util.handleException(e);
         }
-        
-      }
-      
-
-      try {
-        Thread.sleep(5000);
-      } catch (InterruptedException e) {
-        Util.handleException(e);
-        e.printStackTrace();
       }
     } else {
       log.debug("starting install without elevation on Windows XP");
       install();
     }
 
-    
     log.debug("installElevated()- finish");
   }
-  
+
+  private boolean hasFinished(Process p) {
+    try {
+      p.exitValue();
+      return true;
+    } catch (IllegalThreadStateException e) {
+      return false;
+    }
+  }
+
+
+  private void writeElevationVbsFile(String elevationVbsFile, String exe, String cmds) {
+    log.debug("creating elevationVbsFile at {}", elevationVbsFile);
+    File file = new File(elevationVbsFile);
+    file.delete();
+    //file.deleteOnExit();
+    try {
+      try (FileWriter fw = new FileWriter(file, true)) {
+        fw.write(String.format("Set objShell = CreateObject(\"Shell.Application\")\r\n"+
+               "exec = \"%s\"\r\n"+
+               "cmds = \"%s\"\r\n"+
+               "objShell.ShellExecute exec, cmds, \"\", \"runas\"", exe, cmds)); 
+
+      }
+    } catch (IOException e) {
+      log.error("Erorr occured during elevate.bat creation", e);
+    }
+
+  }
+
+
 }

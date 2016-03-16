@@ -227,54 +227,6 @@ public class OSXServiceTools extends ServiceTools {
     }
   }
   
-  protected void writeConfigFiles(String instDir, String startConfigFile, String stopConfigFile) {
-    String libPath;
-    String binPath;
-
-    
-      libPath = "/System/Library/Java/Extensions";
-      libPath = System.getProperty("java.home") + "/lib";
-      
-      binPath = System.getProperty("java.home") + "/bin/java";
-      try
-      {
-        binPath = new File(binPath).getCanonicalPath();
-      }
-      catch (IOException e)
-      {
-        e.printStackTrace();
-      }
-      protectKext(instDir);
-    
-
-    String start = "" + "wrapper.working.dir=" + instDir.replace("\\", "\\\\") + nl 
-        + "wrapper.java.app.jar=ShellfireVPN2Service.dat" + nl
-        + "wrapper.console.title=ShellfireVPN2Service" + nl 
-        + "wrapper.ntservice.name=ShellfireVPN2Service" + nl
-        + "wrapper.ntservice.displayname=ShellfireVPN2Service" + nl
-        + "wrapper.ntservice.description=The ShellfireVPN2Service to handle VPN connections" + nl 
-        + "wrapper.java.library.path.1=" + libPath + nl
-        + "wrapper.java.command=" + binPath + nl 
-        + "wrapper.java.classpath.1=." + nl 
-        + "wrapper.console.loglevel=DEBUG" + nl
-        + "wrapper.debug=true" + nl
-        + "wrapper.ntservice.starttype=AUTOMATIC" + nl;
-
-    
-      start += nl + "wrapper.launchd.dir=/Library/LaunchDaemons/" + nl
-            + "wrapper.logfile=/var/log/ShellfireVPN/ShellfireVPN.log" + nl
-            + "wrapper.java.additional.1=-Dapple.awt.UIElement=true" + nl;
-      start = start.replace(File.separatorChar + File.separator, File.separator);
-      start = start.replace(" ", "\\ ");
-      
-    
-    log.debug("Start Config:");
-    log.debug(start);
-    Util.stringToFile(start, startConfigFile, true);
-
-
-  }
-  
 
   public void uninstall(String path) {
     // we dont need no big yajsw. lets do it without!
@@ -310,33 +262,6 @@ public class OSXServiceTools extends ServiceTools {
     } catch (InterruptedException e) {
       e.printStackTrace();
     }
-  }
-
-  public void initService(String instDir) {
-    if (!init) {
-      log.debug("initService()");
-
-      log.debug("instDIr: " + instDir);
-
-      String sep = "";
-      sep = "/";
-
-      String startConfig = instDir + sep + "start.conf";
-      String stopConfig = instDir + sep + "stop.conf";
-      
-      startConfig = "/etc/shellfirevpn.conf";
-      
-      log.debug("startConfig=" + startConfig);
-      log.debug("stopConfig=" + stopConfig);
-
-      writeConfigFiles(instDir, startConfig, stopConfig);
-
-      System.setProperty("wrapper.config", startConfig);
-
-      init = true;
-    }
-
-    log.debug("initService() - return");
   }
 
   public void installElevated() {
