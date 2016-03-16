@@ -3,6 +3,7 @@ package de.shellfire.vpn.client.win;
 import java.io.File;
 import java.io.IOException;
 import java.rmi.RemoteException;
+import java.util.Arrays;
 
 import javax.swing.JOptionPane;
 
@@ -112,7 +113,6 @@ public class WinServiceTools extends ServiceTools {
     if (!init) {
       log.debug("initService()");
       WebService.createConfigDirIfNotExists();
-      
 
       log.debug("instDIr: " + instDir);
 
@@ -121,7 +121,7 @@ public class WinServiceTools extends ServiceTools {
 
       String startConfig = instDir + sep + "start.conf";
       String stopConfig = instDir + sep + "stop.conf";
-      
+
       log.debug("startConfig=" + startConfig);
       log.debug("stopConfig=" + stopConfig);
 
@@ -135,37 +135,53 @@ public class WinServiceTools extends ServiceTools {
     log.debug("initService() - return");
   }
   
-
   public void installElevated() {
+    log.debug("installElevated()- start");
     String instdir = LoginForm.getInstDir();
 
     String command = "";
-      if (Util.isVistaOrLater()) {
-        // restart elevated
-        command += "\"" + instdir + "elevate.exe\" -wait jre8\\bin\\javaw -jar ShellfireVPN2.exe installservice";
-
+    if (Util.isVistaOrLater()) {
+      // restart elevated
+      String pathElevateExe = instdir+"elevate.exe";
+      String pathJavaw = Util.getJavaHome() + "\\bin\\javaw.exe";
+      String jarFile = Util.getPathJar();
+      String arg = "installservice";
+      
+      // Check for execution from dev environment, will fail anyway
+      if (jarFile == null) {
+        log.warn("Path to Jar not found - elevated Relaunch only supported from deployed jar!");
+      } else {
+        command += String.format("\"%s\" -wait %s -jar %s %s", pathElevateExe, pathJavaw, jarFile, arg);
         log.debug("Command: " + command);
         Process p;
         try {
           p = Runtime.getRuntime().exec(command, null, new File(instdir));
           Util.digestProcess(p);
+          
+          long start = System.currentTimeMillis();
+          //while (p.() && System.currentTimeMillis() - start < 5000);
+          
+          
         } catch (IOException e) {
           Util.handleException(e);
         }
-
-        try {
-          Thread.sleep(5000);
-        } catch (InterruptedException e) {
-          Util.handleException(e);
-          e.printStackTrace();
-        }
-      } else {
-        // xp or before: just do it
-        install();
+        
       }
+      
+
+      try {
+        Thread.sleep(5000);
+      } catch (InterruptedException e) {
+        Util.handleException(e);
+        e.printStackTrace();
+      }
+    } else {
+      log.debug("starting install without elevation on Windows XP");
+      install();
+    }
 
     
+    log.debug("installElevated()- finish");
   }
-  
   
 }

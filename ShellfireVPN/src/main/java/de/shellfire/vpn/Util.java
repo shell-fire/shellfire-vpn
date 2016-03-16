@@ -10,11 +10,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.URI;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.net.UnknownHostException;
+import java.nio.charset.Charset;
 import java.security.Security;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -34,6 +37,7 @@ import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.FileAppender;
+import de.shellfire.vpn.gui.LoginForm;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.messaging.UserType;
 import de.shellfire.vpn.service.IVpnRegistry;
@@ -585,10 +589,40 @@ public class Util {
     }
 
     return result;
+  }
 
+  public static String getJavaHome() {
+    return System.getProperty("java.home");
   }
   
+  public static String getPathJar() throws IllegalStateException {
+    Class<?> context = LoginForm.class;
+    String rawName = context.getName();
+    String classFileName;
+    /* rawName is something like package.name.ContainingClass$ClassName. We need to turn this into ContainingClass$ClassName.class. */ {
+        int idx = rawName.lastIndexOf('.');
+        classFileName = (idx == -1 ? rawName : rawName.substring(idx+1)) + ".class";
+    }
+
+    String uri = context.getResource(classFileName).toString();
+    if (uri.startsWith("file:")) throw new IllegalStateException("This class has been loaded from a directory and not from a jar file.");
+    if (!uri.startsWith("jar:file:")) {
+      return null;
+    }
+
+    int idx = uri.indexOf('!');
+
+    try {
+        String fileName = URLDecoder.decode(uri.substring("jar:file:".length(), idx), Charset.defaultCharset().name());
+        return new File(fileName).getAbsolutePath();
+    } catch (UnsupportedEncodingException e) {
+        throw new InternalError("default charset doesn't exist. Your VM is borked.");
+    }
+}
+
+  // do not mix this order around, must remain in the end of class so that log file can be deleted on startup
   private static Logger log = Util.getLogger(Util.class.getCanonicalName());
   private static I18n i18n = VpnI18N.getI18n();
 
 }
+
