@@ -22,6 +22,8 @@ public class ServiceMessageHandler implements MessageListener<Object>, Connectio
   private final MessageBroker messageBroker;
   private final IVpnController vpnController;
 
+  private ConnectionState connectionState;
+
   public ServiceMessageHandler() throws IOException {
     this.messageBroker = MessageBroker.getInstance();
 
@@ -174,6 +176,7 @@ public class ServiceMessageHandler implements MessageListener<Object>, Connectio
   @Override
   public void connectionStateChanged(ConnectionStateChangedEvent event) {
     log.debug("connectionStateChanged(ConnectionStateChangedEvent={})", event.toString());
+    connectionState = event.getConnectionState();
     Message<ConnectionStateChangedEvent,Void> message = new Message<ConnectionStateChangedEvent,Void>(MessageType.ConnectionStateChanged, event);
     try {
       messageBroker.sendMessage(message);
@@ -184,6 +187,15 @@ public class ServiceMessageHandler implements MessageListener<Object>, Connectio
 
   public void close() {
     log.debug("close() - start");
+
+    if (vpnController == null) {
+      log.warn("vpnController is null - unable to shut down gracefully");
+    } else {
+      log.info("close vpnController...");
+      vpnController.close();      
+      log.info("...done");
+    }
+    
     if (messageBroker == null) {
       log.warn("messageBroker is null - unable to shut down gracefully");
     } else {
@@ -191,6 +203,7 @@ public class ServiceMessageHandler implements MessageListener<Object>, Connectio
       messageBroker.close();      
       log.info("...done");
     }
+    
     
     log.debug("close() - finish");
   }

@@ -22,5 +22,6 @@ public interface IVpnController {
   public void disableAutoStart();
   public void setConnectionState(ConnectionState connectionState, Reason reason);
   public void addConnectionStateListener(ConnectionStateListener connectionStateListener);
+  public void close();
   
 }

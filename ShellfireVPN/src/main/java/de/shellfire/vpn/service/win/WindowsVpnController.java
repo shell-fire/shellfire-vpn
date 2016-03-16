@@ -293,4 +293,16 @@ public class WindowsVpnController implements IVpnController {
     this.conectionStateListenerList.add(connectionStateListener);
   }
 
+  @Override
+  public void close() {
+    log.debug("close() - start");
+    if (connectionState != ConnectionState.Disconnected) {
+      disconnect(Reason.ServiceStopped);  
+    }
+    
+    stopConnectionMonitoring();
+    log.debug("close() - finished");
+   }
+  
+  
 }

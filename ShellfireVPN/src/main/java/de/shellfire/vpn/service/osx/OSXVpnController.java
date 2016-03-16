@@ -83,4 +83,10 @@ public class OSXVpnController implements IVpnController {
     
   }
 
+  @Override
+  public void close() {
+    // TODO Auto-generated method stub
+    
+  }
+
 }

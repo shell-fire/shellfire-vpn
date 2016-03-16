@@ -64,7 +64,7 @@ class JsonHttpRequest<RequestType, ResponseType> {
     tempMap.put(GetAllVpnDetailsRequest.class, "getAllVpnDetails");
     tempMap.put(GetServerListRequest.class, "getServerList");
     tempMap.put(SetServerToRequest.class, "setServerTo");
-    tempMap.put(SetProtocolToRequest.class, "setProtocolTo");
+    tempMap.put(SetProtocolToRequest.class, "setProtocol");
     tempMap.put(GetParametersForOpenVpnRequest.class, "getOpenVpnParams");
     tempMap.put(GetCertificatesForOpenVpnRequest.class, "getCertificates");
     tempMap.put(GetLocalIpAddressRequest.class, "getLocalIpAddress");

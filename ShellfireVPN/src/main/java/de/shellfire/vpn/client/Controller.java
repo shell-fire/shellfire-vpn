@@ -51,8 +51,8 @@ public class Controller {
 	}
 
 	public void connect(Server server, Protocol protocol, Reason reason) {
-
-		log.debug("connect(Server, Protocol, Reason) - setting connected");
+		log.debug("connect(Server, Protocol, Reason) - setting connecting");
+		connectionStateChanged(ConnectionState.Connecting, reason);
 
 		try {
 			this.client = Client.getInstance();
