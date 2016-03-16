@@ -58,6 +58,7 @@ public class WinServiceTools extends ServiceTools {
     path = LoginForm.getInstDir();
     log.debug("installing service");
     // TODO: procrun implementation
+    // SEE: https://joerglenhard.wordpress.com/2012/05/29/build-windows-service-from-java-application-with-procrun/
     log.debug("startingservice");
     // TODO: procrun implementation
 
