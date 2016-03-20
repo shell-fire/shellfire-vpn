@@ -1,11 +1,11 @@
 SetCompressor lzma
 
 !include "MUI2.nsh"
-
+!include WinVer.nsh
 !include "defs.nsi"
 !include "macros.nsh"
 
-!include WinVer.nsh
+
 
 ;--------------------------------
 ;Configuration

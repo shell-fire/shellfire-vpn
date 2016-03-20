@@ -12,7 +12,7 @@ package de.shellfire.vpn.gui;
 
 import java.rmi.RemoteException;
 import java.util.LinkedList;
-import java.util.prefs.Preferences;
+import java.util.Properties;
 
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
@@ -20,11 +20,12 @@ import javax.swing.JOptionPane;
 import org.xnap.commons.i18n.I18n;
 
 import de.shellfire.vpn.Util;
+import de.shellfire.vpn.VpnProperties;
 import de.shellfire.vpn.client.Client;
 import de.shellfire.vpn.i18n.Language;
 import de.shellfire.vpn.i18n.VpnI18N;
-import de.shellfire.vpn.webservice.WebService;
 import de.shellfire.vpn.webservice.Vpn;
+import de.shellfire.vpn.webservice.WebService;
 
 /**
  *
@@ -208,30 +209,28 @@ public class SettingsDialog extends javax.swing.JDialog {
     }
 
     private void save() throws RemoteException {
-        Preferences prefs = LoginForm.getPreferences();
+      VpnProperties props = VpnProperties.getInstance();
 
         if (this.jAutoLogin.isEnabled()) {
-            prefs.putBoolean(LoginForm.REG_AUTOLOGIN, this.jAutoLogin.isSelected());
+          props.setBoolean(LoginForm.REG_AUTOLOGIN, this.jAutoLogin.isSelected());
         }
 
         if (this.jRememberLoginData.isEnabled() && this.jRememberLoginData.isSelected() == false) {
-            prefs.remove(LoginForm.REG_USER);
-            prefs.remove(LoginForm.REG_PASS);
+          props.remove(LoginForm.REG_USER);
+          props.remove(LoginForm.REG_PASS);
         }
 
         if (this.jSaveVpnSelection.isEnabled() && !this.jSaveVpnSelection.isSelected()) {
-            prefs.remove(VpnSelectDialog.REG_REMEMBERSELECTION);
+          props.remove(VpnSelectDialog.REG_REMEMBERSELECTION);
         }
         
-        
-        
-        prefs.putBoolean(LoginForm.REG_AUTOCONNECT, this.jAutoConnect.isSelected());
-        prefs.putBoolean(LoginForm.REG_SHOWSTATUSURL, this.jLaunchStatusWebsiteOnConnect.isSelected());
+        props.setBoolean(LoginForm.REG_AUTOCONNECT, this.jAutoConnect.isSelected());
+        props.setBoolean(LoginForm.REG_SHOWSTATUSURL, this.jLaunchStatusWebsiteOnConnect.isSelected());
         
         if (jSaveVpnSelection.isSelected()) {
           WebService service = WebService.getInstance();
           Vpn vpn = service.getVpn();
-          prefs.putInt(VpnSelectDialog.REG_REMEMBERSELECTION, vpn.getVpnId());
+          props.setInt(VpnSelectDialog.REG_REMEMBERSELECTION, vpn.getVpnId());
         }
         
         
@@ -261,33 +260,33 @@ public class SettingsDialog extends javax.swing.JDialog {
     }    
 
     private void initValues() {
-        Preferences prefs = LoginForm.getPreferences();
+      VpnProperties props = VpnProperties.getInstance();
         
-        if (prefs.get(LoginForm.REG_USER, null) != null) {
+        if (props.getProperty(LoginForm.REG_USER, null) != null) {
             this.jRememberLoginData.setSelected(true);
         } else {
             this.jRememberLoginData.setEnabled(false); // can only be enabled from login dialog
         }
         
-        if (prefs.getBoolean(LoginForm.REG_AUTOLOGIN, false)) {
+        if (props.getBoolean(LoginForm.REG_AUTOLOGIN, false)) {
           this.jAutoLogin.setSelected(true);
-        } else if (prefs.get(LoginForm.REG_USER, null) == null){
+        } else if (props.getProperty(LoginForm.REG_USER, null) == null){
             this.jAutoLogin.setEnabled(false); // disable if login data not remembered, because then it makes no sense
         }
 
-        if (prefs.getInt(VpnSelectDialog.REG_REMEMBERSELECTION, 0) != 0) {
+        if (props.getInt(VpnSelectDialog.REG_REMEMBERSELECTION, 0) != 0) {
             this.jSaveVpnSelection.setSelected(true);
-        } else if (prefs.get(LoginForm.REG_USER, null) == null){
+        } else if (props.getProperty(LoginForm.REG_USER, null) == null){
             this.jSaveVpnSelection.setEnabled(false); // disable if login data not remembered, because then it makes no sense
         }
         
-        boolean autoConnect = prefs.getBoolean(LoginForm.REG_AUTOCONNECT, false);
+        boolean autoConnect = props.getBoolean(LoginForm.REG_AUTOCONNECT, false);
         jAutoConnect.setSelected(autoConnect);
         
         boolean autoStart = Client.vpnAutoStartEnabled();
         jAutoStart.setSelected(autoStart);  
 
-        boolean showStatusUrlOnConnect = prefs.getBoolean(LoginForm.REG_SHOWSTATUSURL, false);
+        boolean showStatusUrlOnConnect = props.getBoolean(LoginForm.REG_SHOWSTATUSURL, false);
         jLaunchStatusWebsiteOnConnect.setSelected(showStatusUrlOnConnect);
 
         initLanguages();

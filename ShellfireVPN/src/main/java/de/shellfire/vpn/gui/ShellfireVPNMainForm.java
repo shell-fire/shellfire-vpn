@@ -100,8 +100,8 @@ import de.shellfire.vpn.types.Reason;
 import de.shellfire.vpn.types.Server;
 import de.shellfire.vpn.types.ServerType;
 import de.shellfire.vpn.webservice.ServerList;
-import de.shellfire.vpn.webservice.WebService;
 import de.shellfire.vpn.webservice.Vpn;
+import de.shellfire.vpn.webservice.WebService;
 import de.shellfire.vpn.webservice.model.TrayMessage;
 import de.shellfire.vpn.webservice.model.WsGeoPosition;
 

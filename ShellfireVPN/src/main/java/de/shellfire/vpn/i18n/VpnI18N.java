@@ -2,7 +2,7 @@ package de.shellfire.vpn.i18n;
 
 import java.util.LinkedList;
 import java.util.Locale;
-import java.util.prefs.Preferences;
+import java.util.Properties;
 
 import javax.swing.JOptionPane;
 
@@ -12,7 +12,7 @@ import org.xnap.commons.i18n.I18nFactory;
 import org.xnap.commons.i18n.I18nManager;
 
 import de.shellfire.vpn.Util;
-import de.shellfire.vpn.gui.LoginForm;
+import de.shellfire.vpn.VpnProperties;
 
 public class VpnI18N {
   private static Logger log = Util.getLogger(VpnI18N.class.getCanonicalName());
@@ -26,9 +26,9 @@ public class VpnI18N {
 
   public static Language getLanguage() {
     if (VpnI18N.language == null) {
-      Preferences prefs = LoginForm.getPreferences();
+      VpnProperties props = VpnProperties.getInstance();
 
-      String languageString = prefs.get(SELECTED_LANGUAGE, System.getProperty("user.language"));
+      String languageString = props.getProperty(SELECTED_LANGUAGE, System.getProperty("user.language"));
       Language language = new Language(languageString);
       Locale locale = language.getLocale();
       JOptionPane.setDefaultLocale(locale);
@@ -89,10 +89,10 @@ public class VpnI18N {
   }
 
   public static void setLanguage(Language language) {
-    Preferences prefs = LoginForm.getPreferences();
+    VpnProperties props = VpnProperties.getInstance();
 
     if (getAvailableTranslations().contains(language)) {
-      prefs.put(SELECTED_LANGUAGE, language.getKey());
+      props.setProperty(SELECTED_LANGUAGE, language.getKey());
       VpnI18N.language = language;
     }
       

@@ -20,6 +20,7 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Properties;
 import java.util.prefs.Preferences;
 
 import javax.swing.ImageIcon;
@@ -33,6 +34,7 @@ import org.xnap.commons.i18n.I18n;
 
 import de.shellfire.vpn.Storage;
 import de.shellfire.vpn.Util;
+import de.shellfire.vpn.VpnProperties;
 import de.shellfire.vpn.client.Client;
 import de.shellfire.vpn.client.Controller;
 import de.shellfire.vpn.client.ServiceTools;
@@ -63,7 +65,6 @@ public class LoginForm extends javax.swing.JFrame {
 	public static final String REG_INSTDIR = "instdir";
 	public static final String REG_SHOWSTATUSURL = "show_status_url_on_connect";
 	private static final String REG_FIRST_START = "firststart";
-	public static final String UPDATEALERTREQUIRED = "requireupdatealert";
 	private ShellfireVPNMainForm mainForm;
 	private static Preferences preferences;
 	WebService service;
@@ -155,8 +156,8 @@ public class LoginForm extends javax.swing.JFrame {
 	}
 
 	private void setFirstStart(boolean b) {
-		Preferences prefs = getPreferences();
-		prefs.putBoolean(LoginForm.REG_FIRST_START, b);
+		VpnProperties props = VpnProperties.getInstance();
+		props.setBoolean(LoginForm.REG_FIRST_START, b);
 	}
 
 	private void askForNewAccount() {
@@ -190,9 +191,9 @@ public class LoginForm extends javax.swing.JFrame {
 	}
 
 	private boolean firstStart() {
-		Preferences prefs = getPreferences();
-		boolean firstStart = prefs.getBoolean(LoginForm.REG_FIRST_START, true);
-		String autoLogin = prefs.get(LoginForm.REG_AUTOLOGIN, null);
+		VpnProperties props = VpnProperties.getInstance();
+		boolean firstStart = props.getBoolean(LoginForm.REG_FIRST_START, true);
+		String autoLogin = props.getProperty(LoginForm.REG_AUTOLOGIN, null);
 
 		return firstStart && autoLogin == null;
 	}
@@ -274,15 +275,15 @@ public class LoginForm extends javax.swing.JFrame {
 	}
 
 	private void restoreAutoConnectFromRegistry() {
-		Preferences prefs = LoginForm.getPreferences();
-		boolean autoConnect = prefs.getBoolean(REG_AUTOCONNECT, false);
+		VpnProperties props = VpnProperties.getInstance();
+		boolean autoConnect = props.getBoolean(REG_AUTOCONNECT, false);
 		this.jAutoConnect.setSelected(autoConnect);
 
 	}
 
 	public static String getInstDir() {
-		Preferences prefs = LoginForm.getPreferences();
-		String instDir = prefs.get(REG_INSTDIR, null);
+		VpnProperties props = VpnProperties.getInstance();
+		String instDir = props.getProperty(REG_INSTDIR, null);
 
 		if (instDir == null) {
 			if (Util.isWindows()) {
@@ -653,24 +654,24 @@ public class LoginForm extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
 	private void removeCredentialsFromRegistry() {
-		Preferences prefs = LoginForm.getPreferences();
-		prefs.remove(REG_USER);
-		prefs.remove(REG_PASS);
-		prefs.remove(REG_AUTOLOGIN);
+		VpnProperties props = VpnProperties.getInstance();
+		props.remove(REG_USER);
+		props.remove(REG_PASS);
+		props.remove(REG_AUTOLOGIN);
 	}
 
 	private void storeCredentialsInRegistry(String user, String password) {
-		Preferences prefs = LoginForm.getPreferences();
-		prefs.put(REG_USER, CryptFactory.encrypt(user));
-		prefs.put(REG_PASS, CryptFactory.encrypt(password));
-		prefs.putBoolean(REG_AUTOLOGIN, jAutoLogin.isSelected());
+		VpnProperties props = VpnProperties.getInstance();
+		props.setProperty(REG_USER, CryptFactory.encrypt(user));
+		props.setProperty(REG_PASS, CryptFactory.encrypt(password));
+		props.setBoolean(REG_AUTOLOGIN, jAutoLogin.isSelected());
 
 	}
 
 	private void restoreCredentialsFromRegistry() {
-		Preferences prefs = LoginForm.getPreferences();
-		String user = prefs.get(REG_USER, null);
-		String pass = prefs.get(REG_PASS, null);
+		VpnProperties props = VpnProperties.getInstance();
+		String user = props.getProperty(REG_USER, null);
+		String pass = props.getProperty(REG_PASS, null);
 
 		if (user != null && pass != null) {
 			user = CryptFactory.decrypt(user);
@@ -695,14 +696,6 @@ public class LoginForm extends javax.swing.JFrame {
 	protected void setPassword(String password) {
 		this.password = password;
 		this.setPasswordBogus();
-	}
-
-	public static Preferences getPreferences() {
-		if (preferences == null) {
-			preferences = Preferences.userNodeForPackage(LoginForm.class);
-		}
-
-		return preferences;
 	}
 
 	private static void setLookAndFeel() {
@@ -886,8 +879,8 @@ public class LoginForm extends javax.swing.JFrame {
 	}
 
 	private boolean autoLoginIfActive() {
-		Preferences prefs = LoginForm.getPreferences();
-		boolean doAutoLogin = prefs.getBoolean(REG_AUTOLOGIN, false);
+		VpnProperties props = VpnProperties.getInstance();
+		boolean doAutoLogin = props.getBoolean(REG_AUTOLOGIN, false);
 
 		if (doAutoLogin) {
 			this.jAutoLogin.setSelected(true);
@@ -897,18 +890,6 @@ public class LoginForm extends javax.swing.JFrame {
 
 		return doAutoLogin;
 
-	}
-
-	private static boolean updateAlertRequired() {
-		Preferences prefs = LoginForm.getPreferences();
-		boolean alertRequired = prefs.getBoolean(LoginForm.UPDATEALERTREQUIRED,
-				true);
-		return alertRequired;
-	}
-
-	private static void setUpdateAlertRequired(boolean bol) {
-		Preferences prefs = LoginForm.getPreferences();
-		prefs.putBoolean(LoginForm.UPDATEALERTREQUIRED, bol);
 	}
 
     void licenseAccepted() {
@@ -1013,8 +994,8 @@ public class LoginForm extends javax.swing.JFrame {
 		}
 
 		private void setAutoConnectInRegistry(boolean autoConnect) {
-			Preferences prefs = LoginForm.getPreferences();
-			prefs.putBoolean(REG_AUTOCONNECT, autoConnect);
+			VpnProperties props = VpnProperties.getInstance();
+			props.setBoolean(REG_AUTOCONNECT, autoConnect);
 
 		}
 

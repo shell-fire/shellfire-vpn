@@ -13,8 +13,8 @@ import de.shellfire.vpn.gui.ShellfireVPNMainForm;
 import de.shellfire.vpn.types.Protocol;
 import de.shellfire.vpn.types.Reason;
 import de.shellfire.vpn.types.Server;
-import de.shellfire.vpn.webservice.WebService;
 import de.shellfire.vpn.webservice.Vpn;
+import de.shellfire.vpn.webservice.WebService;
 
 /**
  * 

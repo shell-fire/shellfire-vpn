@@ -13,7 +13,6 @@ package de.shellfire.vpn.gui;
 import java.awt.Color;
 import java.awt.Image;
 import java.util.LinkedList;
-import java.util.prefs.Preferences;
 
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -24,12 +23,13 @@ import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
 
 import de.shellfire.vpn.Util;
+import de.shellfire.vpn.VpnProperties;
 import de.shellfire.vpn.exception.VpnException;
 import de.shellfire.vpn.gui.helper.MoveMouseListener;
 import de.shellfire.vpn.gui.model.VpnSelectionTableModel;
 import de.shellfire.vpn.i18n.VpnI18N;
-import de.shellfire.vpn.webservice.WebService;
 import de.shellfire.vpn.webservice.Vpn;
+import de.shellfire.vpn.webservice.WebService;
 
 /**
  *
@@ -289,22 +289,22 @@ public class VpnSelectDialog extends javax.swing.JFrame {
   }
 
   private void rememberSelectionIfDesired(Vpn selectedVpn) {
-    Preferences prefs = LoginForm.getPreferences();
+    VpnProperties props = VpnProperties.getInstance();
     if (jRememberSelection.isSelected()) {
 
       int vpnId = selectedVpn.getVpnId();
       log.debug("Remembering Vpn ID:" + vpnId);
 
-      prefs.putInt(REG_REMEMBERSELECTION, vpnId);
+      props.setInt(REG_REMEMBERSELECTION, vpnId);
     } else {
       log.debug("Forgetting vpn selections");
-      prefs.putInt(REG_REMEMBERSELECTION, 0);
+      props.setInt(REG_REMEMBERSELECTION, 0);
     }
   }
 
   public int rememberedVpnSelection() {
-    Preferences prefs = LoginForm.getPreferences();
-    int remembered = prefs.getInt(REG_REMEMBERSELECTION, 0);
+    VpnProperties props = VpnProperties.getInstance();
+    int remembered = props.getInt(REG_REMEMBERSELECTION, 0);
 
     return remembered;
   }

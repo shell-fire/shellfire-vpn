@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 
 import javax.swing.JOptionPane;
 
@@ -49,11 +50,15 @@ public class Util {
   private static IVpnRegistry registry;
   public static String GOOGLE_DE = null;
   private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-  private static String isoToday = sdf.format(new Date());
+  static String isoToday = sdf.format(new Date());
+  static SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+  
   private static String Arch;
   private static boolean firstGetLoggerCall = true;
   private static Object semaphore = new Object();
   private static UserType userType = null;
+  private static Properties properties;
+  private static String configDir;
 
   static {
     semaphore = new Object();
@@ -184,7 +189,7 @@ public class Util {
 
     return wmic;
   }
-  
+
   public static String getCscriptExe() {
     String cscript = System.getenv("SystemRoot") + "\\system32\\cscript.exe";
 
@@ -269,22 +274,27 @@ public class Util {
   }
 
   public static String getConfigDir() {
-    String result;
-    if (isWindows())
-      result = System.getenv("APPDATA") + "\\ShellfireVpn";
-    else {
-      result = System.getProperty("user.home") + File.separator + "/Library/Application Support/Shellfire VPN";
+    if (Util.configDir == null) {
+      String result;
+      if (isWindows())
+        result = System.getenv("APPDATA") + "\\ShellfireVpn\\";
+      else {
+        result = System.getProperty("user.home") + File.separator + "/Library/Application Support/Shellfire VPN/";
 
-      if (!result.startsWith("/var/root")) {
-        File f = new File(result);
-        if (!f.exists()) {
-          f.mkdirs();
+        if (!result.startsWith("/var/root")) {
+          File f = new File(result);
+          if (!f.exists()) {
+            f.mkdirs();
+          }
         }
-      }
 
+      }
+      
+      log.debug("Config dir set to: {}", result);
+      Util.configDir = result;
     }
 
-    return result;
+    return Util.configDir;
   }
 
   public static List<String> getPossibleExeLocations(String programFiles, String programFiles86) {
@@ -523,14 +533,14 @@ public class Util {
   }
 
   public static Logger getLogger(String className) {
-    
+
     synchronized (semaphore) {
-        if (firstGetLoggerCall) {
-          cleanUpLog();
-          firstGetLoggerCall = false;
+      if (firstGetLoggerCall) {
+        cleanUpLog();
+        firstGetLoggerCall = false;
       }
     }
-    
+
     LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
     PatternLayoutEncoder ple = new PatternLayoutEncoder();
 
@@ -557,32 +567,33 @@ public class Util {
     String logPath = getLogFilePath();
     File logFile = new File(logPath);
     logFile.delete();
-    //log.debug("cleanUpLog() - finished deleting {} - logFile.exists(): {}", logPath, logFile.exists());
+    // log.debug("cleanUpLog() - finished deleting {} - logFile.exists(): {}", logPath, logFile.exists());
   }
 
   public static UserType getUserType() {
     if (userType == null) {
       String userTypeFromCommandLine = System.getProperty("de.shellfire.vpn.runtype");
-      userType = UserType.Client;       
+      userType = UserType.Client;
       if (userTypeFromCommandLine != null && userTypeFromCommandLine.length() > 0) {
-        userType = UserType.valueOf(userTypeFromCommandLine);  
-      }    
-      
+        userType = UserType.valueOf(userTypeFromCommandLine);
+      }
+
     }
-    
+
     return userType;
   }
 
   public static String getLogFilePath() {
     return getLogFilePath(Util.getUserType());
-  } 
+  }
+
   public static String getLogFilePath(UserType userType) {
     String result = getTempDir() + userType.name() + ".log";
     return result;
   }
-  
+
   public static String encodeBase64(String string) {
-    return new String(Base64.encodeBase64(string.getBytes() ));
+    return new String(Base64.encodeBase64(string.getBytes()));
   }
 
   public static String getTempDir() {
@@ -600,59 +611,61 @@ public class Util {
   public static String getJavaHome() {
     return System.getProperty("java.home");
   }
-  
+
   public static String getPathJar() throws IllegalStateException {
     Class<?> context = LoginForm.class;
     String rawName = context.getName();
     String classFileName;
     /* rawName is something like package.name.ContainingClass$ClassName. We need to turn this into ContainingClass$ClassName.class. */ {
-        int idx = rawName.lastIndexOf('.');
-        classFileName = (idx == -1 ? rawName : rawName.substring(idx+1)) + ".class";
+      int idx = rawName.lastIndexOf('.');
+      classFileName = (idx == -1 ? rawName : rawName.substring(idx + 1)) + ".class";
     }
 
     String uri = context.getResource(classFileName).toString();
-    if (uri.startsWith("file:") || !uri.startsWith("jar:file:")) { 
+    if (uri.startsWith("file:") || !uri.startsWith("jar:file:")) {
       return null;
     }
 
     int idx = uri.indexOf('!');
 
     try {
-        String fileName = URLDecoder.decode(uri.substring("jar:file:".length(), idx), Charset.defaultCharset().name());
-        return new File(fileName).getAbsolutePath();
+      String fileName = URLDecoder.decode(uri.substring("jar:file:".length(), idx), Charset.defaultCharset().name());
+      return new File(fileName).getAbsolutePath();
     } catch (UnsupportedEncodingException e) {
-        throw new InternalError("default charset doesn't exist. Your VM is borked.");
+      throw new InternalError("default charset doesn't exist. Your VM is borked.");
     }
   }
-  
+
   public static void sleep(int i) {
     try {
       Thread.sleep(i);
-    } catch (InterruptedException e) {}
+    } catch (InterruptedException e) {
+    }
   }
-  
+
   public static String getJvmDll() {
     if (jvmDll == null) {
       String javaHome = Util.getJavaHome();
-      
+
       String template = javaHome + "\\bin\\%s\\jvm.dll";
       String clientDllPath = String.format(template, "client");
-      
+
       if (new File(clientDllPath).exists()) {
         jvmDll = clientDllPath;
       }
-      
+
       if (jvmDll == null) {
         String serverDllPath = String.format(template, "server");
         if (new File(serverDllPath).exists()) {
           jvmDll = serverDllPath;
         }
       }
-      
+
     }
-    
+
     return jvmDll;
   }
+
 
   // do not mix this order around, must remain in the end of class so that log file can be deleted on startup
   private static Logger log = Util.getLogger(Util.class.getCanonicalName());
@@ -660,4 +673,3 @@ public class Util {
   private static String jvmDll;
 
 }
-
