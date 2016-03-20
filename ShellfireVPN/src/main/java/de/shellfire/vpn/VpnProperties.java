@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.Properties;
 
 import ch.qos.logback.classic.Logger;
+import de.shellfire.vpn.messaging.UserType;
 
 public class VpnProperties extends Properties {
 
@@ -25,6 +26,7 @@ public class VpnProperties extends Properties {
 
       File propertiesFile = new File(propertiesFilePath);
       if (!propertiesFile.exists()) {
+        propertiesFile.getParentFile().mkdirs();
         propertiesFile.createNewFile();
       }
 

@@ -86,7 +86,7 @@ public abstract class ServiceTools {
       log.error("error occured during serviceIsRunning() - returning false", e);
     }
 
-		log.debug("serviceIsRunning - finsihed - returnung result {}", result);
+		log.debug("serviceIsRunning - finished - returnung result {}", result);
 		return result;
 	}
 
