@@ -21,6 +21,7 @@ import de.shellfire.vpn.Util;
 import de.shellfire.vpn.exception.VpnException;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.webservice.model.ActivationStatus;
+import de.shellfire.vpn.webservice.model.GeoPositionResponse;
 import de.shellfire.vpn.webservice.model.GetActivationStatusRequest;
 import de.shellfire.vpn.webservice.model.GetAllVpnDetailsRequest;
 import de.shellfire.vpn.webservice.model.GetCertificatesForOpenVpnRequest;
@@ -241,13 +242,14 @@ public class WebServiceBroker {
     log.debug("getLocalLocation () - start");
     GetLocalLocationRequest request = new GetLocalLocationRequest();
     
-    Type theType = new TypeToken<Response<WsGeoPosition>>() {}.getType();
-    Response<WsGeoPosition> resp = new JsonHttpRequest<GetLocalLocationRequest, WsGeoPosition>().call(request, theType);
+    Type theType = new TypeToken<Response<GeoPositionResponse>>() {}.getType();
+    Response<GeoPositionResponse> resp = new JsonHttpRequest<GetLocalLocationRequest, GeoPositionResponse>().call(request, theType);
     resp.validate();
     
-    WsGeoPosition result = resp.getData();
-    log.debug("getLocalLocation () - returning result: {}", result);
-    return result;
+    GeoPositionResponse result = resp.getData();
+    WsGeoPosition geoPosition = result.getLocation();
+    log.debug("getLocalLocation () - returning geoPosition: {}", geoPosition);
+    return geoPosition;
   }
 
   private String getLangKey() {

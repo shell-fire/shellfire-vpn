@@ -15,10 +15,6 @@
     !error "JRE_VERSION must be defined"
   !endif
 
-  !ifndef JRE_URL
-    !error "JRE_URL must be defined"
-  !endif
-
 
 ;;;;;;;;;;;;;;;;;;;;;
 ;  Custom panel
@@ -92,8 +88,17 @@ Function DownloadAndInstallJREIfNecessary
   strcmp $0 "OK" End downloadJRE
 
 downloadJRE:
-  DetailPrint "About to download JRE from ${JRE_URL}"
-  Inetc::get "${JRE_URL}" "$TEMP\jre_Setup.exe" /END
+	Var /GLOBAL JRE_URL
+	
+ 	${If} ${AtLeastWinVista}
+		StrCpy $JRE_URL "http://javadl.oracle.com/webapps/download/AutoDL?BundleId=116037"
+	${Else}
+  	  StrCpy $JRE_URL "https://www.shellfire.de/download/jre-7u79-windows-i586.exe"
+
+	${EndIf}
+
+  DetailPrint "About to download JRE from $JRE_URL"
+  Inetc::get "$JRE_URL" "$TEMP\jre_Setup.exe" /END
   Pop $0 # return value = exit code, "OK" if OK
   DetailPrint "Download result = $0"
 

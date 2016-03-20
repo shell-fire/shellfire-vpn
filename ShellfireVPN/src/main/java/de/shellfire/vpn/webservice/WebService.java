@@ -220,7 +220,7 @@ public class WebService {
     if (proxyCommand != null) {
       params += " " + proxyCommand;
     }
-    
+
     if (!Util.isWindows()) {
       params = params.replace("--service ShellfireVPN2ExitEvent 0 ", "");
 
@@ -233,9 +233,9 @@ public class WebService {
   }
 
   public void downloadAndStoreCertificates() {
-    List<WsFile>  files;
-    files = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<List<WsFile> >() {
-      public List<WsFile>  run() throws Exception {
+    List<WsFile> files;
+    files = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<List<WsFile>>() {
+      public List<WsFile> run() throws Exception {
 
         return shellfire.getCertificatesForOpenVpn(getVpnId());
       }
@@ -297,10 +297,11 @@ public class WebService {
   public WsGeoPosition getOwnPosition() {
     if (this.ownPosition == null) {
 
-      this.ownPosition = null; /*
-                                * Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<WsGeoPosition>() { public WsGeoPosition run()
-                                * throws Exception { return shellfire.getLocalLocation(); } }, 10, 50, AxisFault.class);
-                                */
+      this.ownPosition = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<WsGeoPosition>() {
+        public WsGeoPosition run() throws Exception {
+          return shellfire.getLocalLocation();
+        }
+      }, 10, 50);
 
     }
 
@@ -312,7 +313,7 @@ public class WebService {
     final int subscribe = subscribeNewsletter ? 1 : 0;
     Response<LoginResponse> result = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<Response<LoginResponse>>() {
       public Response<LoginResponse> run() throws Exception {
-          return shellfire.register(text, password, subscribe);
+        return shellfire.register(text, password, subscribe);
       }
     }, 10, 50);
 
@@ -390,16 +391,12 @@ public class WebService {
   }
 
   /*
-  public WsUpgradeResult upgradeVpnToPremiumWithSerial(final String productKey) {
-    WsUpgradeResult result = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<WsUpgradeResult>() {
-      public WsUpgradeResult run() throws Exception {
-        return shellfire.upgradeVpnToPremiumWithCobiCode(selectedVpn.getVpnId(), productKey);
-      }
-    }, 10, 50);
-
-    return result;
-  }
-  */
+   * public WsUpgradeResult upgradeVpnToPremiumWithSerial(final String productKey) { WsUpgradeResult result = Util.runWithAutoRetry(new
+   * ExceptionThrowingReturningRunnable<WsUpgradeResult>() { public WsUpgradeResult run() throws Exception { return
+   * shellfire.upgradeVpnToPremiumWithCobiCode(selectedVpn.getVpnId(), productKey); } }, 10, 50);
+   * 
+   * return result; }
+   */
 
   public int getLatestVersion() throws RemoteException {
     Integer latestVersion = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<Integer>() {
@@ -502,18 +499,19 @@ public class WebService {
     } catch (IOException e) {
       log.error("Could not read clientLog", e);
     }
-    
+
     final String finalService = serviceLogString;
     final String finalClient = clientLogString;
-    
+
     Boolean result = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<Boolean>() {
       public Boolean run() throws Exception {
-        boolean result = shellfire.sendLogToShellfire(finalService, finalClient);;
-        
+        boolean result = shellfire.sendLogToShellfire(finalService, finalClient);
+        ;
+
         return result;
       }
     }, 10, 50);
-  
+
     return result;
   }
 }

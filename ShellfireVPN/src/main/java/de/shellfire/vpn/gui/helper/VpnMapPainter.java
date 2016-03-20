@@ -84,7 +84,7 @@ public class VpnMapPainter implements Painter<JXMapViewer> {
       Point2D fromPt = map.getTileFactory().geoToPixel(from, map.getZoom());
       Point2D toPt = map.getTileFactory().geoToPixel(to, map.getZoom());
 
-      g.drawLine((int) fromPt.getX() + 8, (int) fromPt.getY() + 8, (int) toPt.getX() + 8, (int) toPt.getY() + 8);
+      g.drawLine((int) fromPt.getX() , (int) fromPt.getY() , (int) toPt.getX() , (int) toPt.getY() );
     }
   }
 

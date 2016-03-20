@@ -39,7 +39,13 @@
 !define TAPDRV "${TAP}.sys"
 
  !define JRE_VERSION "1.7"
- !define JRE_URL "http://javadl.oracle.com/webapps/download/AutoDL?BundleId=116037"
+ 
+
+
+
+ 
+ 
+ 
  !include "JREDyna_inetc.nsh"
  
  

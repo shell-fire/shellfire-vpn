@@ -76,7 +76,7 @@ public class Client implements MessageListener<Object> {
         log.debug("ConnectionState run() - finish");
         return result;
       }
-    }, 10, 50);
+    }, 4, 50);
 
     log.debug("getConnectionState() - finish - returning {}", newState);
     return newState;
