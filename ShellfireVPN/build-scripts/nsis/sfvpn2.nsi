@@ -233,13 +233,20 @@ procrunend:
   StrCpy $langstr "fr"
   langdone:
 
+  SetShellVarContext Current
+  CreateDirectory "$APPDATA\ShellfireVpn"
+  FileOpen $4 "$APPDATA\ShellfireVpn\ShellfireVpn.properties" w
+  FileWrite $4 "# Initial properties file written from nsis$\r$\n"
+  FileWrite $4 "InterfaceLanguage=$langstr$\r$\n"
+  FileWrite $4 "instdir=$INSTDIR$\r$\n"
+  
+  FileClose $4
+  
   WriteRegStr HKCU "Software\JavaSoft\Prefs\de\shellfire\vpn\gui" "/Interface/Language" "$langstr"
   WriteRegStr HKCU "Software\JavaSoft\Prefs\de\shellfire\vpn\gui" "instdir" "$INSTDIR\"
   
   WriteRegStr HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\ShellfireVPN2.exe" "" "$INSTDIR\ShellfireVPN2.exe"
   WriteRegStr HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\ShellfireVPN2.exe" "Path" "$INSTDIR\" 
-  
-  
   
 SectionEnd
 

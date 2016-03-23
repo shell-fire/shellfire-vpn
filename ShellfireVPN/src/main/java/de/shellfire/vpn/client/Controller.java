@@ -159,9 +159,16 @@ public class Controller {
 
 	}
 
-	public void disconnect(Reason reason)  {
+	public void disconnect(final Reason reason)  {
+	  connectionStateChanged(ConnectionState.Disconnected, reason);
+	  
 		if (this.client != null) {
-			this.client.disconnect(reason);
+		  new Thread("Disconnecter") {
+		    public void run() {
+		      client.disconnect(reason);    
+		    }
+		  }.start();
+			
 		}
 	}
 

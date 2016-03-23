@@ -22,9 +22,7 @@ import de.shellfire.vpn.service.IVpnRegistry;
 
 public class WinRegistry implements IVpnRegistry {
   private static final String ICE_JNI_REGISTRY_DLL = "ICE_JNIRegistry";
-
   private static final String LIB_ICE_JNI_REGISTRY_AMD64 = "lib/ICE_JNIRegistry_amd64.dll";
-
   private static final String LIB_ICE_JNI_REGISTRY_X86 = "lib/ICE_JNIRegistry_x86.dll";
 
   private static Logger log = Util.getLogger(WinRegistry.class.getCanonicalName());

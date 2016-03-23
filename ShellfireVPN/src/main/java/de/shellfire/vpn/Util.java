@@ -128,29 +128,32 @@ public class Util {
     return stacktrace;
   }
 
-  public static String runCommandAndReturnOutput(String command) {
+  public static String runCommandAndReturnOutput(String... command) {
     log.debug("Running command: " + command);
-    StringBuffer result = new StringBuffer();
+    final StringBuffer result = new StringBuffer();
     try {
-      Runtime rt = Runtime.getRuntime();
-      Process proc;
+      ProcessBuilder pb = new ProcessBuilder(command);
+      pb.redirectErrorStream(true);
+      Process proc = pb.start();
 
-      proc = rt.exec(command);
+      final BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
 
-      BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
-      BufferedReader stdError = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
-      String s = null;
-
-      while ((s = stdInput.readLine()) != null) {
-        result.append(s);
-        result.append("\n");
+       String newLine = "";
+       try {
+        while ((newLine = stdInput.readLine()) != null) {
+          result.append(new String(newLine));
+          result.append("\n");
+         }
+      } catch (IOException e) {
+        Util.handleException(e);
       }
-      while ((s = stdError.readLine()) != null) {
-      }
+      
+     proc.waitFor();
 
     } catch (IOException e) {
-
-      return Util.getStackTrace(e);
+      Util.handleException(e);
+    } catch (InterruptedException e) {
+      Util.handleException(e);
     }
 
     log.debug("Received result:" + result);
@@ -160,8 +163,8 @@ public class Util {
   public static String getArchitecture() {
     if (Util.Arch == null) {
       if (isWindows()) {
-        String cmd = "reg query \"HKLM\\System\\CurrentControlSet\\Control\\Session Manager\\Environment\" /v PROCESSOR_ARCHITECTURE";
-        String result = runCommandAndReturnOutput(cmd);
+        String[] cmds = new String[] {"reg", "query", "\"HKLM\\System\\CurrentControlSet\\Control\\Session Manager\\Environment\" /v PROCESSOR_ARCHITECTURE"};
+        String result = runCommandAndReturnOutput(cmds);
 
         String[] lines = result.split("\n");
         String second = lines[lines.length - 1];

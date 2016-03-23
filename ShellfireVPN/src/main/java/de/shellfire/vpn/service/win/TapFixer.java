@@ -66,18 +66,18 @@ public class TapFixer {
 
   public static void restartAllTapDevices() {
 
-    String disable = "";
-    String enable = "";
+    String[] disable;
+    String[] enable;
     if (Util.isVistaOrLater()) {
-      disable = getTapPath() + "\\bin\\tapinstall.exe disable tap0901";
-      enable = getTapPath() + "\\bin\\tapinstall.exe enable tap0901";
+      disable = new String[] {getTapPath() + "\\bin\\tapinstall.exe", "disable", "tap0901"};
+      enable = new String[] {getTapPath() + "\\bin\\tapinstall.exe", "enable", "tap0901"};
     } else {
-      disable = getTapPath() + "\\bin\\devcon.exe disable tap0901";
-      enable = getTapPath() + "\\bin\\devcon.exe enable tap0901";
+      disable = new String[] {getTapPath() + "\\bin\\devcon.exe", "disable", "tap0901"};
+      enable = new String[] {getTapPath() + "\\bin\\devcon.exe", "enable", "tap0901"};
     }
     
     log.debug("TapFixer disabling tap device");
-    log.debug(disable);
+    log.debug("{}", disable);
     String disableResult = Util.runCommandAndReturnOutput(disable);
     
     if (disableResult != null && disableResult.toLowerCase().contains("no matching devices found")) {
@@ -85,7 +85,7 @@ public class TapFixer {
     }
     log.debug(disableResult);
     log.debug("TapFixer re-enabling tap device");
-    log.debug(enable);
+    log.debug("{}", enable);
     String enableResult = Util.runCommandAndReturnOutput(enable);
     log.debug(enableResult);
   }
