@@ -1,5 +1,6 @@
 package de.shellfire.vpn.updater;
 
+import java.awt.Frame;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -32,12 +33,14 @@ import org.xnap.commons.i18n.I18n;
 import de.shellfire.vpn.LogStreamReader;
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.client.ServiceTools;
+import de.shellfire.vpn.gui.CanContinueAfterBackEndAvailable;
 import de.shellfire.vpn.gui.ProgressDialog;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.proxy.ProxyConfig;
+import de.shellfire.vpn.webservice.EndpointManager;
 import de.shellfire.vpn.webservice.WebService;
 
-public class Updater {
+public class Updater implements CanContinueAfterBackEndAvailable {
   private static Logger log = Util.getLogger(Updater.class.getCanonicalName());
   private static final String MAIN_EXE = "ShellfireVPN2.dat";
   private static final String UPDATER_EXE = "ShellfireVPN2.exe";
@@ -48,6 +51,15 @@ public class Updater {
 
   static {
     setLookAndFeel();
+  }
+
+  private String[] args;
+
+  public Updater(String[] args) {
+    this.args = args;
+  }
+
+  public Updater() {
   }
 
   private static WebService getService() {
@@ -61,10 +73,15 @@ public class Updater {
    * @param args
    */
   public static void main(String[] args) {
-    try {
-      ProxyConfig.perform();
 
-      Updater updater = new Updater();
+    ProxyConfig.perform();
+
+    Updater updater = new Updater(args);
+    updater.run();
+  }
+
+  private void run() {
+    try {
       String cmd = "";
 
       if (args.length > 0) {
@@ -90,28 +107,11 @@ public class Updater {
           log.debug("Retrieved installation path from args parameter: " + path);
           ServiceTools.getInstanceForOS().install(path);
           return;
-        } else if (cmd.equals("doupdate") && updater.newVersionAvailable()) {
-          // assumes we have been restarted with elevated privileges
-
-          updater.performUpdate(cmd, System.getProperty("user.name"));
         }
       }
-
-      if (updater.newVersionAvailable()) {
-        if (updater.askIfUpdateShouldBePerformed()) {
-          if (Util.isVistaOrLater()) {
-            updater.silentRelaunchElevated();
-          } else {
-            updater.performUpdate(cmd, System.getProperty("user.name"));
-          }
-
-        } else {
-          updater.displayError(i18n.tr("Du hast dich entschieden, das Update nicht durchzuführen. Die Anwendung wird sich beenden."));
-          System.exit(0);
-        }
-      } else {
-        updater.launchApp(cmd);
-      }
+      
+      // Everything else required the backend, so make sure we can access it.
+      EndpointManager.getInstance().ensureShellfireBackendAvailable(this);
 
     } catch (Throwable e) {
       e.printStackTrace();
@@ -119,6 +119,7 @@ public class Updater {
       if (e != null)
         e.printStackTrace();
     }
+
   }
 
   private static ProgressDialog updateProgressDialog;
@@ -524,6 +525,47 @@ public class Updater {
     // shutdown to ensure proper installation is possible
     System.exit(0);
 
+  }
+
+  @Override
+  public void continueAfterBackEndAvailabled() {
+    try {
+      String cmd = "";
+      if (args.length > 0) {
+        cmd = args[0];
+        if (cmd.equals("doupdate") && newVersionAvailable()) {
+          // assumes we have been restarted with elevated privileges
+          performUpdate(cmd, System.getProperty("user.name"));
+        }
+      }
+
+      if (newVersionAvailable()) {
+        if (askIfUpdateShouldBePerformed()) {
+          if (Util.isVistaOrLater()) {
+            silentRelaunchElevated();
+          } else {
+            performUpdate(cmd, System.getProperty("user.name"));
+          }
+
+        } else {
+          displayError(i18n.tr("Du hast dich entschieden, das Update nicht durchzuführen. Die Anwendung wird sich beenden."));
+          System.exit(0);
+        }
+      } else {
+        launchApp(cmd);
+      }
+
+    } catch (Throwable e) {
+      e.printStackTrace();
+      e = e.getCause();
+      if (e != null)
+        e.printStackTrace();
+    }
+  }
+
+  @Override
+  public ProgressDialog getDialog() {
+    return null;
   }
 
 }

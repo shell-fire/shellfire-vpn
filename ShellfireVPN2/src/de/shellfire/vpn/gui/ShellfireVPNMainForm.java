@@ -77,7 +77,7 @@ import de.shellfire.vpn.ConnectionState;
 import de.shellfire.vpn.Controller;
 import de.shellfire.vpn.OpenSansFont;
 import de.shellfire.vpn.OxygenFont;
-import de.shellfire.vpn.Protocol;
+import de.shellfire.vpn.VpnProtocol;
 import de.shellfire.vpn.Reason;
 import de.shellfire.vpn.Server;
 import de.shellfire.vpn.ServerList;
@@ -1956,9 +1956,9 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 		return this.shellfireService;
 	}
 
-	public void setSelectedProtocol(Protocol protocol) {
+	public void setSelectedProtocol(VpnProtocol protocol) {
 		if (protocol == null)
-			protocol = Protocol.UDP;
+			protocol = VpnProtocol.UDP;
 
 		switch (protocol) {
 		case UDP:
@@ -1971,11 +1971,11 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 
 	}
 
-	public Protocol getSelectedProtocol() {
+	public VpnProtocol getSelectedProtocol() {
 		if (this.jRadioUdp.isSelected()) {
-			return Protocol.UDP;
+			return VpnProtocol.UDP;
 		} else if (this.jRadioTcp.isSelected()) {
-			return Protocol.TCP;
+			return VpnProtocol.TCP;
 		}
 
 		return null;
@@ -1985,10 +1985,10 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 		Vpn vpn = this.shellfireService.getVpn();
 
 		if (ProxyConfig.isProxyEnabled()) {
-			this.setSelectedProtocol(Protocol.TCP);
+			this.setSelectedProtocol(VpnProtocol.TCP);
 			this.jRadioUdp.setEnabled(false);
 		} else {
-			Protocol selectedProtocol = vpn.getProtocol();
+			VpnProtocol selectedProtocol = vpn.getProtocol();
 			this.setSelectedProtocol(selectedProtocol);
 		}
 
@@ -2731,7 +2731,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 
 	}
 
-	private void delayedConnect(Server selectedServer, Protocol protocol, Reason reason) {
+	private void delayedConnect(Server selectedServer, VpnProtocol protocol, Reason reason) {
 		popupConnectItem.setLabel(i18n.tr("Verbinde..."));
 		popupConnectItem.setEnabled(false);
 

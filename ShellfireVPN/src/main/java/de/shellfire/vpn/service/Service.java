@@ -54,8 +54,8 @@ public class Service {
 
       log.debug("Service started, waiting for stop");
       while (!stop) {
-        // 1 ms is enough to not use ANY cpu during sleep.
-        Util.sleep(1);
+        // 50 ms is enough to not use ANY cpu during sleep.
+        Util.sleep(50);
       };
 
       log.debug("Stop received, exiting");

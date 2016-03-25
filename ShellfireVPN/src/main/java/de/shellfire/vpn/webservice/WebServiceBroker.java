@@ -169,7 +169,6 @@ public class WebServiceBroker {
       stringList.add(endPoint.host + ":" + endPoint.port);
     }
     
-    
     log.debug("getWebServiceEndPointList() - finished, returning data");
     return stringList;
   }
@@ -340,8 +339,8 @@ public class WebServiceBroker {
     resp.validate();
     
     ActivationStatus status = resp.getData();
-    log.debug("ActiovationStatus = {}", status);
-    boolean response = status.equals("active");
+    log.debug("ActiovationStatus = {}", status.status);
+    boolean response = status.status.equals("active");
     log.debug("getActivationStatus () - finished, returning {}", response);
     return response;
   }
@@ -542,6 +541,9 @@ public class WebServiceBroker {
   }
   
   public String getEndPoint() {
+    if (endPoint == null) {
+      setEndPoint(EndpointManager.getInstance().getDefaultEndPoint());
+    }
     return this.endPoint;
   }
 }

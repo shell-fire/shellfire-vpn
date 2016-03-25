@@ -234,17 +234,24 @@ procrunend:
   langdone:
 
   SetShellVarContext Current
+  IfFileExists "$APPDATA\ShellfireVpn\ShellfireVpn.properties" 0 doConfig
+
+  Push "$APPDATA\ShellfireVpn\ShellfireVpn.properties"
+  Call FileSizeNew
+  Pop $0
+  StrCmp $0 "0" 0 afterConfig
+  
+  doConfig:
   CreateDirectory "$APPDATA\ShellfireVpn"
   FileOpen $4 "$APPDATA\ShellfireVpn\ShellfireVpn.properties" w
   FileWrite $4 "# Initial properties file written from nsis$\r$\n"
   FileWrite $4 "InterfaceLanguage=$langstr$\r$\n"
-  FileWrite $4 "instdir=$INSTDIR$\r$\n"
   
+  ${StrReplace} "instdir=$INSTDIR$\r$\n" "\" "\\"
+  FileWrite $4 $0
   FileClose $4
   
-  WriteRegStr HKCU "Software\JavaSoft\Prefs\de\shellfire\vpn\gui" "/Interface/Language" "$langstr"
-  WriteRegStr HKCU "Software\JavaSoft\Prefs\de\shellfire\vpn\gui" "instdir" "$INSTDIR\"
-  
+  afterConfig:
   WriteRegStr HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\ShellfireVPN2.exe" "" "$INSTDIR\ShellfireVPN2.exe"
   WriteRegStr HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\ShellfireVPN2.exe" "Path" "$INSTDIR\" 
   

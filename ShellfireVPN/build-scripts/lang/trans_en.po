@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ShellfireVPN2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-03-16 18:05+0100\n"
+"POT-Creation-Date: 2016-03-25 22:21+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Florian Gattung <fgattung@gmail.com>\n"
 "Language-Team: Shellfire Team <hosting@shellfire.de>\n"
@@ -17,14 +17,14 @@ msgstr ""
 "X-Poedit-KeywordsList: i18n.tr\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: main/java/de/shellfire/vpn/Util.java:103
+#: main/java/de/shellfire/vpn/Util.java:108
 msgid "Vorgang konnte nicht ausgeführt werden, da ein Fehler aufgetreten ist:"
 msgstr "Action could not be completed, an error occured:"
 
-#: main/java/de/shellfire/vpn/Util.java:104
-#: main/java/de/shellfire/vpn/gui/LoginForm.java:1008
-#: main/java/de/shellfire/vpn/gui/RegisterForm.java:420
-#: main/java/de/shellfire/vpn/gui/RegisterForm.java:453
+#: main/java/de/shellfire/vpn/Util.java:109
+#: main/java/de/shellfire/vpn/gui/LoginForm.java:985
+#: main/java/de/shellfire/vpn/gui/RegisterForm.java:431
+#: main/java/de/shellfire/vpn/gui/RegisterForm.java:464
 msgid "Fehler"
 msgstr "Error"
 
@@ -44,9 +44,9 @@ msgstr "Installing Service..."
 
 #: main/java/de/shellfire/vpn/client/osx/OSXServiceTools.java:43
 #: main/java/de/shellfire/vpn/client/win/WinServiceTools.java:35
-#: main/java/de/shellfire/vpn/gui/LogViewer.java:126
+#: main/java/de/shellfire/vpn/gui/LogViewer.java:124
 #: main/java/de/shellfire/vpn/gui/ShellfireVPNMainForm.java:1515
-#: main/java/de/shellfire/vpn/updater/Updater.java:232
+#: main/java/de/shellfire/vpn/updater/Updater.java:233
 msgid "abbrechen"
 msgstr "cancel"
 
@@ -73,31 +73,35 @@ msgstr "Accept"
 msgid "Lizenz akzeptieren"
 msgstr "Accept licence"
 
-#: main/java/de/shellfire/vpn/gui/LogViewer.java:125
+#: main/java/de/shellfire/vpn/gui/LogViewer.java:123
 msgid "Log hochladen.."
 msgstr "Upload log.."
 
-#: main/java/de/shellfire/vpn/gui/LogViewer.java:134
+#: main/java/de/shellfire/vpn/gui/LogViewer.java:132
 msgid "Log-Upload abgebrochen."
 msgstr "Log upload cancelled."
 
-#: main/java/de/shellfire/vpn/gui/LogViewer.java:174
+#: main/java/de/shellfire/vpn/gui/LogViewer.java:172
 msgid "Log wurde gesendet."
 msgstr "Log sent."
 
 #: main/java/de/shellfire/vpn/gui/LoginForm.java:110
+msgid "Initialisiere ShellfireVPNService..."
+msgstr "Initializing ShellfireVPNService..."
+
+#: main/java/de/shellfire/vpn/gui/LoginForm.java:113
 msgid "Keine Internet-Verbindung verfügbar - ShellfireVPN wird beendet."
 msgstr "No internet connection available - ShellfireVPN is being closed."
 
-#: main/java/de/shellfire/vpn/gui/LoginForm.java:110
+#: main/java/de/shellfire/vpn/gui/LoginForm.java:113
 msgid "Kein Internet"
 msgstr "No internet"
 
-#: main/java/de/shellfire/vpn/gui/LoginForm.java:146
+#: main/java/de/shellfire/vpn/gui/LoginForm.java:156
 msgid "Lizenz nicht akzeptiert - Shellfire VPN wird jetzt beendet."
 msgstr "Licence not accepted - Shellfire VPN is now exiting."
 
-#: main/java/de/shellfire/vpn/gui/LoginForm.java:166
+#: main/java/de/shellfire/vpn/gui/LoginForm.java:176
 msgid ""
 "Dies ist dein erster Start von Shellfire VPN. Neuen Shellfire VPN Account "
 "anlegen?"
@@ -105,65 +109,65 @@ msgstr ""
 "This is the first time you start ShellfireV PN. Create a new Shellfire VPN "
 "account?"
 
-#: main/java/de/shellfire/vpn/gui/LoginForm.java:167
+#: main/java/de/shellfire/vpn/gui/LoginForm.java:177
 msgid "Willkommen: Erster Start"
 msgstr "Welcome: First Start"
 
-#: main/java/de/shellfire/vpn/gui/LoginForm.java:179
+#: main/java/de/shellfire/vpn/gui/LoginForm.java:189
 msgid "Shellfire VPN beim Hochfahren starten und automatisch verbinden?"
 msgstr "Start Shellfire VPN on boot and connect automatically?"
 
-#: main/java/de/shellfire/vpn/gui/LoginForm.java:180
+#: main/java/de/shellfire/vpn/gui/LoginForm.java:190
 msgid "Autostart"
 msgstr "Startup"
 
-#: main/java/de/shellfire/vpn/gui/LoginForm.java:353
+#: main/java/de/shellfire/vpn/gui/LoginForm.java:356
 msgid "login"
 msgstr "login"
 
-#: main/java/de/shellfire/vpn/gui/LoginForm.java:356
+#: main/java/de/shellfire/vpn/gui/LoginForm.java:359
 msgid "Login"
 msgstr "Login"
 
-#: main/java/de/shellfire/vpn/gui/LoginForm.java:378
+#: main/java/de/shellfire/vpn/gui/LoginForm.java:381
 msgid "Email / Benutzername:"
 msgstr "Email / Username:"
 
-#: main/java/de/shellfire/vpn/gui/LoginForm.java:383
-#: main/java/de/shellfire/vpn/gui/RegisterForm.java:181
+#: main/java/de/shellfire/vpn/gui/LoginForm.java:386
+#: main/java/de/shellfire/vpn/gui/RegisterForm.java:192
 msgid "Passwort:"
 msgstr "Password:"
 
-#: main/java/de/shellfire/vpn/gui/LoginForm.java:401
+#: main/java/de/shellfire/vpn/gui/LoginForm.java:404
 #: main/java/de/shellfire/vpn/gui/SettingsDialog.java:87
 msgid "Automatisch einloggen"
 msgstr "Login automatically"
 
-#: main/java/de/shellfire/vpn/gui/LoginForm.java:409
+#: main/java/de/shellfire/vpn/gui/LoginForm.java:412
 msgid "Keine Zugangsdaten?"
 msgstr "No user credentials?"
 
-#: main/java/de/shellfire/vpn/gui/LoginForm.java:417
-#: main/java/de/shellfire/vpn/gui/LoginForm.java:418
+#: main/java/de/shellfire/vpn/gui/LoginForm.java:420
+#: main/java/de/shellfire/vpn/gui/LoginForm.java:421
 msgid "Zugangsdaten verloren?"
 msgstr "User credentials lost?"
 
-#: main/java/de/shellfire/vpn/gui/LoginForm.java:426
+#: main/java/de/shellfire/vpn/gui/LoginForm.java:429
 #: main/java/de/shellfire/vpn/gui/SettingsDialog.java:78
 msgid "Logindaten speichern"
 msgstr "Save login data"
 
-#: main/java/de/shellfire/vpn/gui/LoginForm.java:435
+#: main/java/de/shellfire/vpn/gui/LoginForm.java:438
 #: main/java/de/shellfire/vpn/gui/SettingsDialog.java:135
 msgid "Beim Hochfahren starten"
 msgstr "Start on boot"
 
-#: main/java/de/shellfire/vpn/gui/LoginForm.java:444
+#: main/java/de/shellfire/vpn/gui/LoginForm.java:447
 #: main/java/de/shellfire/vpn/gui/SettingsDialog.java:139
 msgid "Automatisch verbinden"
 msgstr "Connect  automatically"
 
-#: main/java/de/shellfire/vpn/gui/LoginForm.java:803
+#: main/java/de/shellfire/vpn/gui/LoginForm.java:798
 msgid ""
 "Es ist eine neue Version von Shellfire VPN verfügbar. Ein Update ist "
 "zwingend erforderlich. Möchtest du jetzt updaten?"
@@ -171,11 +175,11 @@ msgstr ""
 "A new version of Shellfire VPN is available. An update is mandatory. Would "
 "you like to update now?"
 
-#: main/java/de/shellfire/vpn/gui/LoginForm.java:804
+#: main/java/de/shellfire/vpn/gui/LoginForm.java:799
 msgid "Neue Version"
 msgstr "New Version"
 
-#: main/java/de/shellfire/vpn/gui/LoginForm.java:810
+#: main/java/de/shellfire/vpn/gui/LoginForm.java:805
 msgid ""
 "Du hast dich entschieden, zu updaten. Shellfire VPN wird jetzt mit Admin-"
 "Privilegien neugestartet um das Update durchzuführen."
@@ -183,24 +187,24 @@ msgstr ""
 "You decided, to update. Shellfire VPN is now being restarted with super user "
 "privileges to perform the update."
 
-#: main/java/de/shellfire/vpn/gui/LoginForm.java:811
+#: main/java/de/shellfire/vpn/gui/LoginForm.java:806
 msgid "Update wird durchgeführt"
 msgstr "Update is being performed"
 
-#: main/java/de/shellfire/vpn/gui/LoginForm.java:833
+#: main/java/de/shellfire/vpn/gui/LoginForm.java:828
 msgid ""
 "Du hast dich entschieden, nicht zu updaten. Shellfire VPN wird jetzt beendet."
 msgstr "You decided not to update - Shellfire VPN is now exiting."
 
-#: main/java/de/shellfire/vpn/gui/LoginForm.java:834
+#: main/java/de/shellfire/vpn/gui/LoginForm.java:829
 msgid "Update abgelehnt"
 msgstr "Update rejected"
 
-#: main/java/de/shellfire/vpn/gui/LoginForm.java:854
+#: main/java/de/shellfire/vpn/gui/LoginForm.java:843
 msgid "Einloggen..."
 msgstr "Logging in..."
 
-#: main/java/de/shellfire/vpn/gui/LoginForm.java:1006
+#: main/java/de/shellfire/vpn/gui/LoginForm.java:983
 msgid "Login fehlgeschlagen: "
 msgstr "Login error:"
 
@@ -237,33 +241,33 @@ msgstr "Upgrade to Shellfire VPN premium now"
 msgid "Einloggen...."
 msgstr "Logging in..."
 
-#: main/java/de/shellfire/vpn/gui/RegisterForm.java:114
+#: main/java/de/shellfire/vpn/gui/RegisterForm.java:125
 #: main/java/de/shellfire/vpn/gui/UpgradeDialog.java:159
 #: main/java/de/shellfire/vpn/gui/VpnSelectDialog.java:98
 msgid "zurück"
 msgstr "back"
 
-#: main/java/de/shellfire/vpn/gui/RegisterForm.java:142
+#: main/java/de/shellfire/vpn/gui/RegisterForm.java:153
 msgid "registrierung"
 msgstr "registration"
 
-#: main/java/de/shellfire/vpn/gui/RegisterForm.java:146
+#: main/java/de/shellfire/vpn/gui/RegisterForm.java:157
 msgid "Jetzt Registrieren"
 msgstr "Register now"
 
-#: main/java/de/shellfire/vpn/gui/RegisterForm.java:170
+#: main/java/de/shellfire/vpn/gui/RegisterForm.java:181
 msgid "Email-Adresse:"
 msgstr "Email address:"
 
-#: main/java/de/shellfire/vpn/gui/RegisterForm.java:175
+#: main/java/de/shellfire/vpn/gui/RegisterForm.java:186
 msgid "Ich abonniere den Newsletter"
 msgstr "I subscribe to the newsletter"
 
-#: main/java/de/shellfire/vpn/gui/RegisterForm.java:187
+#: main/java/de/shellfire/vpn/gui/RegisterForm.java:198
 msgid "Passwort-Check:"
 msgstr "Password check:"
 
-#: main/java/de/shellfire/vpn/gui/RegisterForm.java:228
+#: main/java/de/shellfire/vpn/gui/RegisterForm.java:239
 msgid ""
 "Ich akzeptiere die <a target='_agb' href='https://www.shellfire.de/"
 "agb/'>AGB</a> und habe die <a target='_datenschutzerklaerung' href='https://"
@@ -278,24 +282,24 @@ msgstr ""
 "target='_widerrufsrecht' href='https://www.shellfire.net/"
 "widerrufsrecht/'>right of withdrawal</a>"
 
-#: main/java/de/shellfire/vpn/gui/RegisterForm.java:350
+#: main/java/de/shellfire/vpn/gui/RegisterForm.java:361
 msgid "Fordere Aktivierungsschlüssel an..."
 msgstr "Requesting activation key..."
 
-#: main/java/de/shellfire/vpn/gui/RegisterForm.java:382
-#: main/java/de/shellfire/vpn/i18n/VpnI18N.java:86
+#: main/java/de/shellfire/vpn/gui/RegisterForm.java:393
+#: main/java/de/shellfire/vpn/i18n/VpnI18N.java:85
 msgid "Bitte gib eine gültige Email-Adresse ein."
 msgstr "Please enter a valid email address."
 
-#: main/java/de/shellfire/vpn/gui/RegisterForm.java:390
+#: main/java/de/shellfire/vpn/gui/RegisterForm.java:401
 msgid "Bitte gib ein Passwort ein."
 msgstr "Please enter a password."
 
-#: main/java/de/shellfire/vpn/gui/RegisterForm.java:396
+#: main/java/de/shellfire/vpn/gui/RegisterForm.java:407
 msgid "Dein Passwort muss mindestens 5 Zeichen lang sein."
 msgstr "Your password must contain at least 5 characters."
 
-#: main/java/de/shellfire/vpn/gui/RegisterForm.java:402
+#: main/java/de/shellfire/vpn/gui/RegisterForm.java:413
 msgid ""
 "Bitte gib dein Passwort zur Sicherheit noch einmal im Feld Passwort-Check "
 "ein."
@@ -303,11 +307,11 @@ msgstr ""
 "Please enter the password again into the password check field for your "
 "safety."
 
-#: main/java/de/shellfire/vpn/gui/RegisterForm.java:408
+#: main/java/de/shellfire/vpn/gui/RegisterForm.java:419
 msgid "Passwort und Passwort-Check stimmen nicht überein."
 msgstr "Password and password check do not match."
 
-#: main/java/de/shellfire/vpn/gui/RegisterForm.java:414
+#: main/java/de/shellfire/vpn/gui/RegisterForm.java:425
 msgid ""
 "Die AGB, Datenschutzerklärung und Widerrufstrecht müssen akzeptiert werden, "
 "um die Registrierung abzuschließen."
@@ -315,11 +319,11 @@ msgstr ""
 "You must accept the terms and conditions, privacy policy and right of "
 "withdrawal to complete your registration."
 
-#: main/java/de/shellfire/vpn/gui/RegisterForm.java:453
+#: main/java/de/shellfire/vpn/gui/RegisterForm.java:464
 msgid "Fehler bei Registrierung:"
 msgstr "Error registering:"
 
-#: main/java/de/shellfire/vpn/gui/RegisterForm.java:461
+#: main/java/de/shellfire/vpn/gui/RegisterForm.java:472
 msgid ""
 "Das Shellfire VPN System hat dir soeben eine Email geschickt, bitte folge "
 "den Anweisungen dort."
@@ -327,31 +331,31 @@ msgstr ""
 "You have just received an email from the Shellfire VPN system, please follow "
 "the instructions in this email."
 
-#: main/java/de/shellfire/vpn/gui/RegisterForm.java:462
+#: main/java/de/shellfire/vpn/gui/RegisterForm.java:473
 msgid "Warte auf Aktivierung des Accounts..."
 msgstr "Waiting for account activation..."
 
-#: main/java/de/shellfire/vpn/gui/RegisterForm.java:463
+#: main/java/de/shellfire/vpn/gui/RegisterForm.java:474
 msgid "Keine Email erhalten?"
 msgstr "No email received?"
 
-#: main/java/de/shellfire/vpn/gui/RegisterForm.java:464
+#: main/java/de/shellfire/vpn/gui/RegisterForm.java:475
 msgid "Email neu anfordern"
 msgstr "Request new email"
 
-#: main/java/de/shellfire/vpn/gui/RegisterForm.java:465
+#: main/java/de/shellfire/vpn/gui/RegisterForm.java:476
 msgid "Emailadresse ändern"
 msgstr "Change email address"
 
-#: main/java/de/shellfire/vpn/gui/RegisterForm.java:480
+#: main/java/de/shellfire/vpn/gui/RegisterForm.java:491
 msgid "Bitte wähle nun eine andere Email-Adresse und versuche es erneut."
 msgstr "Please select a different email address and try again."
 
-#: main/java/de/shellfire/vpn/gui/RegisterForm.java:480
+#: main/java/de/shellfire/vpn/gui/RegisterForm.java:491
 msgid "Email-Adresse ändern"
 msgstr "Change email address"
 
-#: main/java/de/shellfire/vpn/gui/RegisterForm.java:493
+#: main/java/de/shellfire/vpn/gui/RegisterForm.java:504
 msgid ""
 "Dein Shellfire Account wurde soeben erfolgreich aktiviert. Logge dich jetzt "
 "mit Email-Adresse und Passwort ein, um Shellfire VPN zu starten."
@@ -359,7 +363,7 @@ msgstr ""
 "Your Shellfire account has been successfully activated. Please log in with "
 "your email address and password to start Shellfire VPN."
 
-#: main/java/de/shellfire/vpn/gui/RegisterForm.java:493
+#: main/java/de/shellfire/vpn/gui/RegisterForm.java:504
 msgid "Registrierung erfolgreich."
 msgstr "Registration successful."
 
@@ -414,7 +418,7 @@ msgstr "Save settings"
 msgid "Zeige Status-Seite nach Verbindungsaufbau"
 msgstr "Show status site after connection has been established"
 
-#: main/java/de/shellfire/vpn/gui/SettingsDialog.java:249
+#: main/java/de/shellfire/vpn/gui/SettingsDialog.java:243
 msgid ""
 "Die Änderung der Sprache wird erst nach einem Neustart von Shellfire VPN "
 "aktiv. Jetzt neu starten?"
@@ -422,7 +426,7 @@ msgstr ""
 "Changed language settings require a restart of Shellfire VPN to take effect. "
 "Restart now?"
 
-#: main/java/de/shellfire/vpn/gui/SettingsDialog.java:249
+#: main/java/de/shellfire/vpn/gui/SettingsDialog.java:243
 msgid "Geänderte Sprache erst nach Neustart wirksam"
 msgstr ""
 "Changed language settings require a restart of ShellfireVPN to take effect."
@@ -956,23 +960,23 @@ msgstr "type"
 msgid "Account Art"
 msgstr "account type"
 
-#: main/java/de/shellfire/vpn/i18n/VpnI18N.java:81
+#: main/java/de/shellfire/vpn/i18n/VpnI18N.java:80
 msgid "Deutsch"
 msgstr "German"
 
-#: main/java/de/shellfire/vpn/i18n/VpnI18N.java:82
+#: main/java/de/shellfire/vpn/i18n/VpnI18N.java:81
 msgid "Englisch"
 msgstr "English"
 
-#: main/java/de/shellfire/vpn/i18n/VpnI18N.java:83
+#: main/java/de/shellfire/vpn/i18n/VpnI18N.java:82
 msgid "Französisch"
 msgstr "French"
 
-#: main/java/de/shellfire/vpn/i18n/VpnI18N.java:84
+#: main/java/de/shellfire/vpn/i18n/VpnI18N.java:83
 msgid "Bitte gib einen Benutzernamen und ein Passwort ein."
 msgstr "Please enter username and password."
 
-#: main/java/de/shellfire/vpn/i18n/VpnI18N.java:85
+#: main/java/de/shellfire/vpn/i18n/VpnI18N.java:84
 msgid ""
 "Login fehlgeschlagen. Bitte mit Shellfire Kundennummer (K400...), "
 "Emailadresse oder VPN Benutzernamen (sf...) einloggen."
@@ -980,7 +984,7 @@ msgstr ""
 "Login failed. Please log in using your Shellfire customer Id (K400...), "
 "email address or VPN username (sf...)."
 
-#: main/java/de/shellfire/vpn/i18n/VpnI18N.java:86
+#: main/java/de/shellfire/vpn/i18n/VpnI18N.java:85
 msgid "Ein Account mit dieser Email-Adresse existiert bereits."
 msgstr "An account is already registered for this email address."
 
@@ -1012,35 +1016,33 @@ msgstr "128 bit"
 msgid "Downloading Update..."
 msgstr "Downloading update..."
 
-#: main/java/de/shellfire/vpn/updater/Updater.java:109
-msgid ""
-"Du hast dich entschieden, das Update nicht durchzuführen. Die Anwendung wird "
-"sich beenden."
-msgstr "You chose not to update. The application will now shut down."
-
-#: main/java/de/shellfire/vpn/updater/Updater.java:162
+#: main/java/de/shellfire/vpn/updater/Updater.java:163
 msgid "Update konnte nicht durchgeführt werden. Launcher wird beendet."
 msgstr "Update could not be processed. Launcher is being shut down."
 
-#: main/java/de/shellfire/vpn/updater/Updater.java:179
+#: main/java/de/shellfire/vpn/updater/Updater.java:180
 msgid "Hauptanwendung konnte nicht gestartet werden. Launcher wird beendet."
 msgstr ""
 "Main application could not be started. The launcher will now shut down."
 
-#: main/java/de/shellfire/vpn/updater/Updater.java:214
-#: main/java/de/shellfire/vpn/updater/Updater.java:254
+#: main/java/de/shellfire/vpn/updater/Updater.java:215
 msgid "I/O Fehler während des Downloades der neuen Version. Abbruch."
 msgstr "I/O error during download of the newest version. Aborting"
 
-#: main/java/de/shellfire/vpn/updater/Updater.java:230
+#: main/java/de/shellfire/vpn/updater/Updater.java:231
 msgid "Downloade neue Version..."
 msgstr "Downloading update..."
 
-#: main/java/de/shellfire/vpn/updater/Updater.java:238
+#: main/java/de/shellfire/vpn/updater/Updater.java:239
 msgid "Update abgebrochen. Anwendung wird beendet."
 msgstr "Update aborted, shutting down application."
 
-#: main/java/de/shellfire/vpn/updater/Updater.java:297
+#: main/java/de/shellfire/vpn/updater/Updater.java:255
+#: main/java/de/shellfire/vpn/updater/Updater.java:259
+msgid "Fehler während des Downloades der neuen Version. Abbruch."
+msgstr "Error while downloading new version. Aborting."
+
+#: main/java/de/shellfire/vpn/updater/Updater.java:296
 msgid ""
 "Update verfügbar. Ohne Durchführung des Updates ist der weitere Betrieb von "
 "Shellfire VPN leider nicht möglich.\n"
@@ -1052,36 +1054,61 @@ msgstr ""
 "\n"
 "Update now?"
 
-#: main/java/de/shellfire/vpn/updater/Updater.java:298
+#: main/java/de/shellfire/vpn/updater/Updater.java:297
 msgid "Update verfügbar"
 msgstr "Update available"
 
-#: main/java/de/shellfire/vpn/updater/Updater.java:322
-msgid ""
-"I/O Fehler beim Abruf der Online Versionsinformation. Anwendung wird beendet."
-msgstr ""
-"I/O error while accessing online version information. Shutting down "
-"application."
-
-#: main/java/de/shellfire/vpn/updater/Updater.java:480
+#: main/java/de/shellfire/vpn/updater/Updater.java:473
 msgid "Shellfire VPN Service deinstallieren..."
 msgstr "Uninstalling Shellfire VPN Service"
 
-#: main/java/de/shellfire/vpn/updater/Updater.java:484
+#: main/java/de/shellfire/vpn/updater/Updater.java:477
 msgid "Neue Version installieren "
 msgstr "Install new version"
 
-#: main/java/de/shellfire/vpn/updater/Updater.java:522
+#: main/java/de/shellfire/vpn/updater/Updater.java:515
 msgid "Shellfire VPN Service installieren..."
 msgstr "Installing Shellfire VPN Service"
 
-#: main/java/de/shellfire/vpn/webservice/WebService.java:93
+#: main/java/de/shellfire/vpn/updater/Updater.java:551
+msgid ""
+"Du hast dich entschieden, das Update nicht durchzuführen. Die Anwendung wird "
+"sich beenden."
+msgstr "You chose not to update. The application will now shut down."
+
+#: main/java/de/shellfire/vpn/webservice/EndpointManager.java:124
+msgid ""
+"Konnte keine Verbindung zum Shellfire Backend herstellen - Shellfire VPN "
+"wird jetzt beendet"
+msgstr ""
+"Could not connect to the Shellfire backend - Shellfire VPN is shutting down"
+
+#: main/java/de/shellfire/vpn/webservice/EndpointManager.java:141
+msgid "Teste zuvor funktionierenden Endpunkt..."
+msgstr "Testing endpoint that worked before..."
+
+#: main/java/de/shellfire/vpn/webservice/EndpointManager.java:154
+msgid "Suche Verbindung zu Shellfire Backend... "
+msgstr "Searching for backend connection..."
+
+#: main/java/de/shellfire/vpn/webservice/EndpointManager.java:167
+msgid "Suche Verbindung zu Shellfire Backend..."
+msgstr "Searching for backend connection..."
+
+#: main/java/de/shellfire/vpn/webservice/WebService.java:99
 msgid "VPN-Daten konnten nicht geladen werden."
 msgstr "VPN data could not be loaded."
 
-#: main/java/de/shellfire/vpn/webservice/WebService.java:292
+#: main/java/de/shellfire/vpn/webservice/WebService.java:308
 msgid "unbekannt"
 msgstr "unknown"
+
+#~ msgid ""
+#~ "I/O Fehler beim Abruf der Online Versionsinformation. Anwendung wird "
+#~ "beendet."
+#~ msgstr ""
+#~ "I/O error while accessing online version information. Shutting down "
+#~ "application."
 
 #~ msgid "Fehler beim laden der VPN-Daten"
 #~ msgstr "Error while loading VPN data"

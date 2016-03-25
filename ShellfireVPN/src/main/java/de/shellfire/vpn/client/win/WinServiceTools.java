@@ -155,7 +155,7 @@ public class WinServiceTools extends ServiceTools {
 
           // wait until process is finished or 10 seconds have passed. 10 seconds should really be enough.
           while (!hasFinished(p) && System.currentTimeMillis() - start < 10000) {
-            Util.sleep(1);
+            Util.sleep(50);
             ;
           }
 

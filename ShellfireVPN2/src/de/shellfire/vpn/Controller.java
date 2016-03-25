@@ -49,12 +49,12 @@ public class Controller {
 	}
 	
 	public void connect(Server server, Reason reason) {
-		Protocol procotol = this.view.getSelectedProtocol();
+		VpnProtocol procotol = this.view.getSelectedProtocol();
 
 		this.connect(server, procotol, reason);
 	}
 
-	public void connect(Server server, Protocol protocol, Reason reason) {
+	public void connect(Server server, VpnProtocol protocol, Reason reason) {
 
 		System.out.println("connect(Server, Protocol, Reason) - setting connected");
 
@@ -66,10 +66,10 @@ public class Controller {
 			class ConnectionPreparer extends Thread {
 
 				private Server server;
-				private Protocol protocol;
+				private VpnProtocol protocol;
 				private Reason reason;
 
-				public ConnectionPreparer(Server server, Protocol protocol, Reason reason) {
+				public ConnectionPreparer(Server server, VpnProtocol protocol, Reason reason) {
 					this.server = server;
 					this.protocol = protocol;
 					this.reason = reason;
@@ -218,7 +218,7 @@ public class Controller {
 	 * @return returns true if switch okay, false if not allowed to or other
 	 *         error
 	 */
-	private boolean switchProtocolTo(Protocol protocol) {
+	private boolean switchProtocolTo(VpnProtocol protocol) {
 		boolean switchWorked = this.service.setProtocolTo(protocol);
 
 		return switchWorked;

@@ -85,16 +85,27 @@ public class RegisterForm extends javax.swing.JFrame {
         jPanel7 = new javax.swing.JPanel();
         jLoginPanel = new javax.swing.JPanel();
         jLabel16 = new javax.swing.JLabel();
+        jLabel16.setBounds(20, 20, 330, 33);
         jButtonRequestRegKey = new javax.swing.JButton();
+        jButtonRequestRegKey.setBounds(126, 268, 203, 23);
         jEmailAddress = new javax.swing.JTextField();
+        jEmailAddress.setBounds(126, 61, 207, 20);
         jLabelEmailAddress = new javax.swing.JLabel();
+        jLabelEmailAddress.setBounds(20, 64, 94, 14);
         jNewsletterCheckbox = new javax.swing.JCheckBox();
+        jNewsletterCheckbox.setBounds(99, 247, 230, 15);
         jLabelEmailAddress1 = new javax.swing.JLabel();
+        jLabelEmailAddress1.setBounds(20, 100, 94, 14);
         jLabelEmailAddress2 = new javax.swing.JLabel();
+        jLabelEmailAddress2.setBounds(20, 136, 94, 14);
         jPassword = new javax.swing.JPasswordField();
+        jPassword.setBounds(126, 97, 207, 20);
         jPasswordCheck = new javax.swing.JPasswordField();
+        jPasswordCheck.setBounds(126, 133, 207, 20);
         jAGBCheckbox = new javax.swing.JCheckBox();
+        jAGBCheckbox.setBounds(99, 175, 21, 15);
         jScrollPane1 = new javax.swing.JScrollPane();
+        jScrollPane1.setBounds(129, 175, 200, 62);
         jEditorPane1 = new javax.swing.JEditorPane();
         jHeaderPanel = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
@@ -110,7 +121,7 @@ public class RegisterForm extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(77, 77, 77));
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/de/shellfire/vpn/gui/resources/exit.png"))); // NOI18N
+        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/exit.png"))); // NOI18N
         jLabel6.setText(i18n.tr("zurück"));
         jLabel6.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel6.setName("jLabel6"); // NOI18N
@@ -134,14 +145,14 @@ public class RegisterForm extends javax.swing.JFrame {
         jPanel7.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLoginPanel.setBackground(new java.awt.Color(244, 244, 244));
-        jLoginPanel.setName("jLoginPanel"); // NOI18N
-        jLoginPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jLoginPanel.setName("jLoginPanel");
+        jLoginPanel.setLayout(null);
 
         jLabel16.setFont(new java.awt.Font("Arial", 1, 24));
         jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel16.setText(i18n.tr("registrierung"));
         jLabel16.setName("jLabel16"); // NOI18N
-        jLoginPanel.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 330, 33));
+        jLoginPanel.add(jLabel16);
 
         jButtonRequestRegKey.setText(i18n.tr("Jetzt Registrieren"));
         jButtonRequestRegKey.setName("jButtonRequestRegKey"); // NOI18N
@@ -150,7 +161,7 @@ public class RegisterForm extends javax.swing.JFrame {
                 jButtonRequestRegKeyActionPerformed(evt);
             }
         });
-        jLoginPanel.add(jButtonRequestRegKey, new org.netbeans.lib.awtextra.AbsoluteConstraints(126, 268, 203, -1));
+        jLoginPanel.add(jButtonRequestRegKey);
 
         jEmailAddress.setName("jEmailAddress"); // NOI18N
         jEmailAddress.addActionListener(new java.awt.event.ActionListener() {
@@ -163,30 +174,30 @@ public class RegisterForm extends javax.swing.JFrame {
                 jEmailAddressKeyPressed(evt);
             }
         });
-        jLoginPanel.add(jEmailAddress, new org.netbeans.lib.awtextra.AbsoluteConstraints(126, 61, 207, -1));
+        jLoginPanel.add(jEmailAddress);
 
         jLabelEmailAddress.setFont(new java.awt.Font("Arial", 0, 11));
         jLabelEmailAddress.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabelEmailAddress.setText(i18n.tr("Email-Adresse:"));
         jLabelEmailAddress.setName("jLabelEmailAddress"); // NOI18N
-        jLoginPanel.add(jLabelEmailAddress, new org.netbeans.lib.awtextra.AbsoluteConstraints(24, 70, 94, -1));
+        jLoginPanel.add(jLabelEmailAddress);
 
         jNewsletterCheckbox.setSelected(true);
         jNewsletterCheckbox.setText(i18n.tr("Ich abonniere den Newsletter"));
         jNewsletterCheckbox.setName("jNewsletterCheckbox"); // NOI18N
-        jLoginPanel.add(jNewsletterCheckbox, new org.netbeans.lib.awtextra.AbsoluteConstraints(99, 247, 230, 15));
+        jLoginPanel.add(jNewsletterCheckbox);
 
         jLabelEmailAddress1.setFont(new java.awt.Font("Arial", 0, 11));
         jLabelEmailAddress1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabelEmailAddress1.setText(i18n.tr("Passwort:"));
         jLabelEmailAddress1.setName("jLabelEmailAddress1"); // NOI18N
-        jLoginPanel.add(jLabelEmailAddress1, new org.netbeans.lib.awtextra.AbsoluteConstraints(24, 106, 94, -1));
+        jLoginPanel.add(jLabelEmailAddress1);
 
         jLabelEmailAddress2.setFont(new java.awt.Font("Arial", 0, 11));
         jLabelEmailAddress2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabelEmailAddress2.setText(i18n.tr("Passwort-Check:"));
         jLabelEmailAddress2.setName("jLabelEmailAddress2"); // NOI18N
-        jLoginPanel.add(jLabelEmailAddress2, new org.netbeans.lib.awtextra.AbsoluteConstraints(24, 142, 94, -1));
+        jLoginPanel.add(jLabelEmailAddress2);
 
         jPassword.setName("jPassword"); // NOI18N
         jPassword.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -194,7 +205,7 @@ public class RegisterForm extends javax.swing.JFrame {
                 jPasswordKeyPressed(evt);
             }
         });
-        jLoginPanel.add(jPassword, new org.netbeans.lib.awtextra.AbsoluteConstraints(126, 97, 207, -1));
+        jLoginPanel.add(jPassword);
 
         jPasswordCheck.setName("jPasswordCheck"); // NOI18N
         jPasswordCheck.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -202,7 +213,7 @@ public class RegisterForm extends javax.swing.JFrame {
                 jPasswordCheckKeyPressed(evt);
             }
         });
-        jLoginPanel.add(jPasswordCheck, new org.netbeans.lib.awtextra.AbsoluteConstraints(126, 133, 207, -1));
+        jLoginPanel.add(jPasswordCheck);
 
         jAGBCheckbox.setName("jAGBCheckbox"); // NOI18N
         jAGBCheckbox.addActionListener(new java.awt.event.ActionListener() {
@@ -210,7 +221,7 @@ public class RegisterForm extends javax.swing.JFrame {
                 jAGBCheckboxActionPerformed(evt);
             }
         });
-        jLoginPanel.add(jAGBCheckbox, new org.netbeans.lib.awtextra.AbsoluteConstraints(99, 175, -1, 15));
+        jLoginPanel.add(jAGBCheckbox);
 
         jScrollPane1.setBackground(new java.awt.Color(238, 238, 238));
         jScrollPane1.setBorder(null);
@@ -242,7 +253,7 @@ public class RegisterForm extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(jEditorPane1);
 
-        jLoginPanel.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(129, 175, 200, 62));
+        jLoginPanel.add(jScrollPane1);
 
         jPanel7.add(jLoginPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 350, 300));
 
@@ -358,7 +369,7 @@ public class RegisterForm extends javax.swing.JFrame {
     }
 
     private void loadIcon() {
-        ImageIcon icon = new ImageIcon(getClass().getResource("/de/shellfire/vpn/gui/resources/sfvpn2-idle.png"));
+        ImageIcon icon = new ImageIcon(getClass().getResource("/icons/sfvpn2-idle.png"));
         Image img = icon.getImage();
 
         setIconImage(img);

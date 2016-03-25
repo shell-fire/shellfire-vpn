@@ -1,26 +1,37 @@
 package de.shellfire.vpn.webservice;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.security.KeyManagementException;
 import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.UnrecoverableKeyException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.KeyManager;
+import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509KeyManager;
+import javax.net.ssl.X509TrustManager;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.ssl.SSLContexts;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 
@@ -29,6 +40,8 @@ import com.google.gson.GsonBuilder;
 
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.exception.VpnException;
+import de.shellfire.vpn.messaging.CompositeX509KeyManager;
+import de.shellfire.vpn.messaging.CompositeX509TrustManager;
 import de.shellfire.vpn.updater.Updater;
 import de.shellfire.vpn.webservice.model.GetActivationStatusRequest;
 import de.shellfire.vpn.webservice.model.GetAllVpnDetailsRequest;
@@ -102,34 +115,66 @@ class JsonHttpRequest<RequestType, ResponseType> {
     functionMap = Collections.unmodifiableMap(tempMap);
   }
 
+
+  
+  private X509KeyManager getKeyManager(String algorithm, KeyStore keystore, char[] password) throws NoSuchAlgorithmException, UnrecoverableKeyException, KeyStoreException {
+    KeyManagerFactory factory = KeyManagerFactory.getInstance(algorithm);
+    factory.init(keystore, password);
+    
+    for (KeyManager keyManager : factory.getKeyManagers()) {
+      if (keyManager instanceof X509KeyManager) {
+        return (X509KeyManager) keyManager;
+      }
+    }
+    return null;
+  }
+  
+  private X509TrustManager getTrustManager(String algorithm, KeyStore keystore) throws NoSuchAlgorithmException, KeyStoreException {
+    TrustManagerFactory factory = TrustManagerFactory.getInstance(algorithm);
+    factory.init(keystore);
+    
+    for (TrustManager trustManager : factory.getTrustManagers()) {
+      if (trustManager instanceof X509TrustManager) {
+        return (X509TrustManager) trustManager;
+      }
+    }
+    return null;
+  }
+  
+  SSLContext provideSSLContext(KeyStore keystore, char[] password) throws UnrecoverableKeyException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
+    String defaultAlgorithm = KeyManagerFactory.getDefaultAlgorithm();
+    X509KeyManager customKeyManager = getKeyManager("SunX509", keystore, password);
+    X509KeyManager jvmKeyManager = getKeyManager(defaultAlgorithm, null, null);
+    X509TrustManager customTrustManager = getTrustManager("SunX509", keystore);
+    X509TrustManager jvmTrustManager = getTrustManager(defaultAlgorithm, null);
+    
+    KeyManager[] keyManagers = { new CompositeX509KeyManager(Arrays.asList(new X509KeyManager[] {jvmKeyManager, customKeyManager})) };
+    TrustManager[] trustManagers = { new CompositeX509TrustManager(Arrays.asList(new X509TrustManager[] {jvmTrustManager, customTrustManager})) };
+
+    SSLContext context = SSLContext.getInstance("SSL");
+    context.init(keyManagers, trustManagers, null);
+    return context;
+  }
+
   private void setupKeyStore() { 
     try
     {
-      TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+      
       KeyStore ks = KeyStore.getInstance("JKS");
       FileInputStream fis = new FileInputStream("shellfire.keystore");
-      ks.load(fis, "blubber".toCharArray());
+      char[] pass = "blubber".toCharArray();
+      ks.load(fis, pass);
       fis.close();
-
-      tmf.init(ks);
-
-      SSLContext sslContext = SSLContext.getInstance("TLS");
-      sslContext.init(null, tmf.getTrustManagers(), null);
       
-      HostnameVerifier verifier = new HostnameVerifier(){
-        public boolean verify(String hostname, SSLSession session) {
-          return true;
-        }
-      };
+      SSLContext sslcontext = provideSSLContext(ks, pass);
       
       SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
-          sslContext,
+          sslcontext,
           new String[] { "TLSv1" },
           null,
-          verifier);
+          SSLConnectionSocketFactory.getDefaultHostnameVerifier());
       
       httpClient = HttpClients.custom()
-          .setSSLHostnameVerifier(verifier)
           .setSSLSocketFactory(sslsf)
           .setDefaultRequestConfig(defaultRequestConfig)
           .build();
@@ -165,11 +210,21 @@ class JsonHttpRequest<RequestType, ResponseType> {
     request.setEntity(body);
 
     log.debug("executing http request");
-    HttpResponse result = httpClient.execute(request);
+    HttpResponse result = null;
+    try {
+      result = httpClient.execute(request);  
+    } catch (Exception e) {
+      log.error("validator error", e);
+    }
+    
     log.debug("response received");
     
-    log.debug(result.getStatusLine().toString());
-    String jsonResult = EntityUtils.toString(result.getEntity(), "UTF-8");
+    String jsonResult = null;
+    if (result != null) {
+      log.debug(result.getStatusLine().toString());
+      jsonResult = EntityUtils.toString(result.getEntity(), "UTF-8");
+    }
+    
     request.releaseConnection();
     
     // TODO: REMOVE after testing
@@ -223,7 +278,10 @@ class JsonHttpRequest<RequestType, ResponseType> {
   }
 
   private String getUrl() {
-    String url = broker .getEndPoint() + function;
+    String endPoint = broker.getEndPoint();
+
+    
+    String url = endPoint + function;
     log.debug("getUrl() - returning {}", url);
     return url;
   }

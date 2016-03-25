@@ -144,8 +144,8 @@ public class MessageBroker {
       while (!stop) {
         // While until there is a new Excerpt to read, or stop is requested
         while (!stop && !tailer.nextIndex()) {
-          // 1 ms is enough to not use ANY cpu during sleep.
-          Util.sleep(1);
+          // 10 ms is enough to not use ANY cpu during sleep.
+          Util.sleep(50);
         }
 
         // Read the object

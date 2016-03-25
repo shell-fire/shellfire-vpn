@@ -11,7 +11,7 @@ public class Vpn {
     private int serverId;
     private ServerType accountType;
     private String listenHost;
-    private Protocol protocol;
+    private VpnProtocol protocol;
     private Server server;
     private ProductType productType;
     private final Date premiumUntil;
@@ -30,7 +30,7 @@ public class Vpn {
         this.accountType = Enum.valueOf(ServerType.class, vpn.getEAccountType());
         this.listenHost = vpn.getSListenHost();
         if (vpn.getEProtocol() != null && vpn.getEProtocol().length() > 0)
-        	this.protocol = Enum.valueOf(Protocol.class, vpn.getEProtocol());
+        	this.protocol = Enum.valueOf(VpnProtocol.class, vpn.getEProtocol());
 
         ProductType[] vals = ProductType.values();
         this.productType = vals[vpn.getIProductTypeId()-1];
@@ -70,11 +70,11 @@ public class Vpn {
         this.listenHost = listenHost;
     }
 
-    public Protocol getProtocol() {
+    public VpnProtocol getProtocol() {
         return protocol;
     }
 
-    public void setProtocol(Protocol protocol) {
+    public void setProtocol(VpnProtocol protocol) {
         this.protocol = protocol;
     }
 

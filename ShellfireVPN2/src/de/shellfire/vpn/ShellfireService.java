@@ -267,7 +267,7 @@ public class ShellfireService {
     return false;
   }
 
-  public boolean setProtocolTo(final Protocol protocol) {
+  public boolean setProtocolTo(final VpnProtocol protocol) {
       Integer res = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<Integer>() {
 		public Integer run() throws Exception {
 			

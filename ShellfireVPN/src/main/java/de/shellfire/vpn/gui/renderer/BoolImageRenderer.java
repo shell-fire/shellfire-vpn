@@ -20,8 +20,8 @@ import de.shellfire.vpn.webservice.model.VpnEntry;
 public class BoolImageRenderer extends DefaultTableCellRenderer {
 
     JLabel lbl = new JLabel();
-    ImageIcon iconTrue = new ImageIcon(getClass().getResource("yes.png"));
-    ImageIcon iconFalse = new ImageIcon(getClass().getResource("no.png"));
+    ImageIcon iconTrue = new ImageIcon(getClass().getResource("/icons/yes.png"));
+    ImageIcon iconFalse = new ImageIcon(getClass().getResource("/icons/no.png"));
     
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {

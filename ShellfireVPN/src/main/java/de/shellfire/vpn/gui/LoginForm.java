@@ -12,6 +12,7 @@ package de.shellfire.vpn.gui;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.io.File;
@@ -54,7 +55,7 @@ import de.shellfire.vpn.webservice.model.LoginResponse;
  * 
  * @author bettmenn
  */
-public class LoginForm extends javax.swing.JFrame {
+public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBackEndAvailable {
 
   private static Logger log = Util.getLogger(LoginForm.class.getCanonicalName());
   private static final long serialVersionUID = 1L;
@@ -121,7 +122,7 @@ public class LoginForm extends javax.swing.JFrame {
 	}
 	
 	 
-  public void afterWebServiceConnectivityEnsured() {
+  public void continueAfterBackEndAvailabled() {
     this.service = WebService.getInstance();
     Storage.register(service);
     this.restoreCredentialsFromRegistry();
@@ -299,13 +300,6 @@ public class LoginForm extends javax.swing.JFrame {
 			} else {
 				instDir = WebService.macOsAppDirectory() + "/ShellfireVPN";
 			}
-		}
-
-		if (Util.isWindows()) {
-			instDir = instDir.replace("/", "\\");
-
-			if (!instDir.endsWith("\\"))
-				instDir += "\\";
 		}
 
 		return instDir;
@@ -1011,4 +1005,10 @@ public class LoginForm extends javax.swing.JFrame {
 			return loginResult;
 		}
 	}
+
+  @Override
+  public ProgressDialog getDialog() {
+    return initDialog;
+  }
+
 }

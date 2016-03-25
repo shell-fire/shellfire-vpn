@@ -63,13 +63,6 @@ public class WebService {
   private void init() {
     if (!initialized) {
       initialized = true;
-      log.debug("Not yet initialized - intiializing - start");
-      // precache on load
-      getVpnComparisonTable();
-      getUrlHelp();
-      getUrlPasswordLost();
-      getUrlPremiumInfo();
-      getUrlSuccesfulConnect();
       updateWebServiceEndPointList();
       
       log.debug("Not yet initialized - intiializing - finished");

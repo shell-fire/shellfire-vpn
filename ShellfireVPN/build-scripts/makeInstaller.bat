@@ -33,6 +33,7 @@ echo "copying tools"
 xcopy tools %folder%\tools\ /S /E
 xcopy InstallServiceTemplate.txt %folder%\
 xcopy UninstallServiceTemplate.txt %folder%\
+xcopy shellfire.keystore %folder%\
 
 echo creating installer...
 "c:\Program Files (x86)\NSIS\makensis.exe" /DVERSION=%version% nsis/sfvpn2.nsi 
