@@ -45,6 +45,7 @@ import de.shellfire.vpn.webservice.model.GetUrlHelpRequest;
 import de.shellfire.vpn.webservice.model.GetUrlPasswordLostRequest;
 import de.shellfire.vpn.webservice.model.GetUrlPremiumInfoRequest;
 import de.shellfire.vpn.webservice.model.GetUrlSuccesfulConnectRequest;
+import de.shellfire.vpn.webservice.model.GetWebServiceEndPointList;
 import de.shellfire.vpn.webservice.model.RegisterRequest;
 import de.shellfire.vpn.webservice.model.SendLogToShellfireRequest;
 import de.shellfire.vpn.webservice.model.SetProtocolToRequest;
@@ -96,6 +97,8 @@ class JsonHttpRequest<RequestType, ResponseType> {
     tempMap.put(GetUrlPremiumInfoRequest.class, "getUrlPremiumInfo");
     tempMap.put(GetUrlPasswordLostRequest.class, "getUrlPasswordLost");
     tempMap.put(SendLogToShellfireRequest.class, "sendLog");
+    tempMap.put(GetWebServiceEndPointList.class, "getWebServiceAliasList");
+    
     functionMap = Collections.unmodifiableMap(tempMap);
   }
 
@@ -228,5 +231,6 @@ class JsonHttpRequest<RequestType, ResponseType> {
   public Response<ResponseType> call(Type theType) throws ClientProtocolException, IOException, VpnException {
     return call(null, theType);
   }
+
 
 }

@@ -19,6 +19,7 @@ import de.shellfire.vpn.messaging.UserType;
 import de.shellfire.vpn.proxy.ProxyConfig;
 import de.shellfire.vpn.types.VpnProtocol;
 import de.shellfire.vpn.types.Server;
+import de.shellfire.vpn.webservice.model.EndPoint;
 import de.shellfire.vpn.webservice.model.LoginResponse;
 import de.shellfire.vpn.webservice.model.TrayMessage;
 import de.shellfire.vpn.webservice.model.VpnAttributeList;
@@ -69,10 +70,12 @@ public class WebService {
       getUrlPasswordLost();
       getUrlPremiumInfo();
       getUrlSuccesfulConnect();
+      updateWebServiceEndPointList();
       
       log.debug("Not yet initialized - intiializing - finished");
     }
   }
+
 
   /**
    * performs a log in with the specified account data. if no vpn exists yet for this account, it will be created automatically.
@@ -84,8 +87,8 @@ public class WebService {
    * @return the number of vpns in this account. 0 if login failed.
    */
   public Response<LoginResponse> login(final String user, final String pass) {
-
     log.debug("starting login request");
+    init();
     Response<LoginResponse> result = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<Response<LoginResponse>>() {
       public Response<LoginResponse> run() throws Exception {
         return shellfire.login(user, pass);
@@ -108,7 +111,7 @@ public class WebService {
   }
 
   private void loadVpnDetails() throws VpnException {
-
+    init();
     List<WsVpn> wsVpns = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<List<WsVpn>>() {
       public List<WsVpn> run() throws Exception {
 
@@ -154,6 +157,7 @@ public class WebService {
   }
 
   public ServerList getServerList() {
+    init();
     if (this.servers == null || this.servers.getNumberOfServers() == 0) {
       List<WsServer> list = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<List<WsServer>>() {
         public List<WsServer> run() throws Exception {
@@ -168,7 +172,7 @@ public class WebService {
   }
 
   public Vpn getVpn() {
-    if (this.selectedVpn == null && shellfire.isLoggedIn()) {
+    if (this.selectedVpn == null && WebServiceBroker.isLoggedIn()) {
       try {
         this.loadVpnDetails();
       } catch (VpnException ex) {
@@ -187,6 +191,8 @@ public class WebService {
   }
 
   public boolean setServerTo(final Server server) {
+    init();
+
     Boolean result = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<Boolean>() {
       public Boolean run() throws Exception {
 
@@ -203,6 +209,8 @@ public class WebService {
   }
 
   public boolean setProtocolTo(final VpnProtocol protocol) {
+    init();
+
     Boolean res = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<Boolean>() {
       public Boolean run() throws Exception {
 
@@ -218,6 +226,7 @@ public class WebService {
   }
 
   public String getParametersForOpenVpn() {
+    init();
 
     String params = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<String>() {
       public String run() throws Exception {
@@ -243,6 +252,8 @@ public class WebService {
   }
 
   public void downloadAndStoreCertificates() {
+    init();
+
     List<WsFile> files;
     files = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<List<WsFile>>() {
       public List<WsFile> run() throws Exception {
@@ -292,6 +303,8 @@ public class WebService {
   }
 
   public String getLocalIpAddress() {
+    init();
+
     String ip = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<String>() {
       public String run() throws Exception {
         return shellfire.getLocalIpAddress();
@@ -305,6 +318,8 @@ public class WebService {
   }
 
   public WsGeoPosition getOwnPosition() {
+    init();
+
     if (this.ownPosition == null) {
 
       this.ownPosition = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<WsGeoPosition>() {
@@ -319,6 +334,7 @@ public class WebService {
   }
 
   public Response<LoginResponse> registerNewFreeAccount(final String text, final String password, boolean subscribeNewsletter) {
+    init();
 
     final int subscribe = subscribeNewsletter ? 1 : 0;
     Response<LoginResponse> result = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<Response<LoginResponse>>() {
@@ -331,6 +347,8 @@ public class WebService {
   }
 
   public boolean accountActive() {
+    init();
+
     Boolean accountActive = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<Boolean>() {
       public Boolean run() throws Exception {
         return shellfire.getIsActive();
@@ -374,6 +392,8 @@ public class WebService {
   }
 
   public VpnAttributeList getVpnComparisonTable() {
+    init();
+
     if (this.vpnAttributeList == null) {
       vpnAttributeList = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<VpnAttributeList>() {
         public VpnAttributeList run() throws Exception {
@@ -386,6 +406,8 @@ public class WebService {
   }
 
   public List<TrayMessage> getTrayMessages() {
+    init();
+
     if (this.trayMessages == null) {
 
       List<TrayMessage> messageList = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<List<TrayMessage>>() {
@@ -409,6 +431,8 @@ public class WebService {
    */
 
   public int getLatestVersion() {
+    init();
+
     Integer latestVersion = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<Integer>() {
       public Integer run() throws Exception {
         return shellfire.getLatestVersion();
@@ -422,6 +446,8 @@ public class WebService {
   }
 
   public String getLatestInstaller() {
+    init();
+
     String latestZipInstaller;
 
     latestZipInstaller = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<String>() {
@@ -444,6 +470,8 @@ public class WebService {
   }
 
   public String getUrlSuccesfulConnect() {
+    init();
+
     if (urlSuccesfulConnect == null) {
       urlSuccesfulConnect = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<String>() {
         public String run() throws Exception {
@@ -455,8 +483,27 @@ public class WebService {
 
     return urlSuccesfulConnect;
   }
+  
+
+  private void updateWebServiceEndPointList() {
+    init();
+
+    List<String> endPointList = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<List<String>>() {
+      public List<String> run() throws Exception {
+        return shellfire.getWebServiceEndPointList();
+      }
+    }, 10, 50);
+    
+    
+    
+    
+    EndpointManager.getInstance().setEndPointList(endPointList);
+    
+  }
 
   public String getUrlHelp() {
+    init();
+
     if (urlHelp == null) {
       urlHelp = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<String>() {
         public String run() throws Exception {
@@ -469,6 +516,8 @@ public class WebService {
   }
 
   public String getUrlPremiumInfo() {
+    init();
+
     if (urlPremiumInfo == null) {
       urlPremiumInfo = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<String>() {
         public String run() throws Exception {
@@ -481,6 +530,8 @@ public class WebService {
   }
 
   public String getUrlPasswordLost() {
+    init();
+
     if (urlPasswordLost == null) {
       urlPasswordLost = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<String>() {
         public String run() throws Exception {
@@ -494,6 +545,8 @@ public class WebService {
   }
 
   public boolean sendLogToShellfire() {
+    init();
+
     String serviceLog = Util.getLogFilePath(UserType.Service);
     String serviceLogString = "";
     try {

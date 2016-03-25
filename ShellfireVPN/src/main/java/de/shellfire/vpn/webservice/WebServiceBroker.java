@@ -9,6 +9,7 @@ package de.shellfire.vpn.webservice;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.http.client.ClientProtocolException;
@@ -20,6 +21,7 @@ import de.shellfire.vpn.Util;
 import de.shellfire.vpn.exception.VpnException;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.webservice.model.ActivationStatus;
+import de.shellfire.vpn.webservice.model.EndPoint;
 import de.shellfire.vpn.webservice.model.GeoPositionResponse;
 import de.shellfire.vpn.webservice.model.GetActivationStatusRequest;
 import de.shellfire.vpn.webservice.model.GetAllVpnDetailsRequest;
@@ -36,6 +38,8 @@ import de.shellfire.vpn.webservice.model.GetUrlHelpRequest;
 import de.shellfire.vpn.webservice.model.GetUrlPasswordLostRequest;
 import de.shellfire.vpn.webservice.model.GetUrlPremiumInfoRequest;
 import de.shellfire.vpn.webservice.model.GetUrlSuccesfulConnectRequest;
+import de.shellfire.vpn.webservice.model.GetWebServiceEndPointList;
+import de.shellfire.vpn.webservice.model.GetWebServiceEndPointListResponse;
 import de.shellfire.vpn.webservice.model.InstallerResponse;
 import de.shellfire.vpn.webservice.model.LocalIPResponse;
 import de.shellfire.vpn.webservice.model.LoginResponse;
@@ -149,6 +153,28 @@ public class WebServiceBroker {
     return resp.getData();
   }
 
+  
+  public List<String> getWebServiceEndPointList() throws ClientProtocolException, IOException, VpnException {
+    log.debug("getWebServiceEndPointList() - start");
+    GetWebServiceEndPointList request = new GetWebServiceEndPointList();
+    
+    Type theType = new TypeToken<Response<GetWebServiceEndPointListResponse>>() {}.getType();
+    Response<GetWebServiceEndPointListResponse> resp = new JsonHttpRequest<GetWebServiceEndPointList, GetWebServiceEndPointListResponse>().call(request, theType);
+    
+    // ensure no errors occured and data is available. throws VPNException otherwise
+    resp.validate();
+    
+    List<String> stringList = new LinkedList<String>();
+    for (EndPoint endPoint : resp.getData().aliaslist) {
+      stringList.add(endPoint.host + ":" + endPoint.port);
+    }
+    
+    
+    log.debug("getWebServiceEndPointList() - finished, returning data");
+    return stringList;
+  }
+
+  
   /**
    * function used to set the server of the vpn
    * @throws IOException 
