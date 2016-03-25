@@ -10,7 +10,6 @@ import java.util.Date;
 import java.util.Properties;
 
 import ch.qos.logback.classic.Logger;
-import de.shellfire.vpn.messaging.UserType;
 
 public class VpnProperties extends Properties {
 

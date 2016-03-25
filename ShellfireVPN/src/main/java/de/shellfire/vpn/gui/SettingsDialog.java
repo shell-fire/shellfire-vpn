@@ -12,7 +12,6 @@ package de.shellfire.vpn.gui;
 
 import java.rmi.RemoteException;
 import java.util.LinkedList;
-import java.util.Properties;
 
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;

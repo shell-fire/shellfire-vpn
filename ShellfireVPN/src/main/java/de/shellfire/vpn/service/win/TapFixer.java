@@ -2,6 +2,7 @@ package de.shellfire.vpn.service.win;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.MatchResult;
@@ -45,12 +46,21 @@ public class TapFixer {
   public static void reinstallTapDriver() {
     log.debug("reinstallTapDriver() - start");
     
-    String delTapAll = getTapPath() + "\\bin\\deltapall.bat";
-    String addTap = getTapPath() + "\\bin\\addtap.bat";
+    List<String> delTapAll = new LinkedList<String>();
+    delTapAll.add(getTapPath());
+    delTapAll.add(getTapPath()+ "\\bin\\deltapall.bat");
+
+    List<String> addTap = new LinkedList<String>();
+    addTap.add(getTapPath());
+    addTap.add(getTapPath()+ "\\bin\\addtap.bat");
+
 
     if (!Util.isVistaOrLater()) {
-      delTapAll = Util.getCmdExe() + " /C " + delTapAll;
-      addTap = Util.getCmdExe() + " /C " + addTap;
+      delTapAll.add(0, Util.getCmdExe());
+      delTapAll.add(1, "/C");
+      
+      addTap.add(0, Util.getCmdExe());
+      addTap.add(1, "/C");
     }
     
     log.debug("delTapAll: " + delTapAll);

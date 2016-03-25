@@ -7,25 +7,23 @@ import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.jnetpcap.Pcap;
-import org.jnetpcap.PcapIf;
 import org.slf4j.Logger;
 
 import de.shellfire.vpn.Util;
 
 public class IPV6Manager {
   
-  private static final String LIB_PCAP_REGISTRY_DLL = "jnetpcap";
-  private static final String LIB_PCAP_JNI_REGISTRY_AMD64 = "lib/jnetpcap_amd64.dll";
-  private static final String LIB_PCAP_JNI_REGISTRY_X86 = "lib/jnetpcap_x68.dll";
+  private static final String LIB_PREFIX = "lib/";
+  private static final String LIB_SUFFIX_X86 = "_x86.dll";
+  private static final String LIB_SUFFIX_AMD64 = "_amd64.dll";
+  private final static String[] GET_ADAPTER_LIST = new String[] {Util.getWmicExe(), "nic", "get", "NetConnectionID"};
+  
   Pattern p = Pattern.compile(".*\\{(.*)\\}");
 
   private static Logger log = Util.getLogger(IPV6Manager.class.getCanonicalName());
@@ -35,42 +33,48 @@ public class IPV6Manager {
   
   private final static String SUCCESS = "finished (0)";
 
-  static {
-    if (Util.isWindows()) {
-      log.debug("LOADING LIBPCAP JNI");
-      log.debug("Path is: {}", System.getProperty("java.library.path"));
-      String jvmArch = System.getProperty("sun.arch.data.model");
-      String lib = LIB_PCAP_REGISTRY_DLL;
-      if (jvmArch.equals("32")) {
-        lib = LIB_PCAP_JNI_REGISTRY_X86;
-        
-      } else if (jvmArch.equals("64")) {
-        lib = LIB_PCAP_JNI_REGISTRY_AMD64;
-      } else {
-        log.warn("Could not determin architecture of jvm - trying to load 32 bit LIBPCAP JNI");
-      }
-      Path libPath = FileSystems.getDefault().getPath(lib);
-      Path libPathDest = FileSystems.getDefault().getPath(LIB_PCAP_REGISTRY_DLL+".DLL");
-      try {
-        Files.copy(libPath, libPathDest, REPLACE_EXISTING);
-      } catch (IOException e) {
-        // Util.handleException(e);
-      }
-      
+  static void loadLibSpecial(String libName, boolean doLoad) {
+    log.debug("loadLibSpecial {} - start", libName);
+    String jvmArch = System.getProperty("sun.arch.data.model");
 
-      log.debug("Loading: {}", LIB_PCAP_REGISTRY_DLL);
-      System.loadLibrary(LIB_PCAP_REGISTRY_DLL);  
-      
-      log.debug("DONE LOADING LIBPCAP JNI");
+    String x86lib = LIB_PREFIX + libName + LIB_SUFFIX_X86;
+    String amd64lib = LIB_PREFIX + libName + LIB_SUFFIX_AMD64;
+    String lib = null;
+    
+    if (jvmArch.equals("32")) {
+      lib = x86lib;
+    } else if (jvmArch.equals("64")) {
+      lib = amd64lib;
     } else {
-      log.debug("NOT WINDOWS - NOT LOADING LIBPCAP JNI");
+      lib = x86lib;
+      log.warn("Could not determin architecture of jvm - trying to load 32 bit version");
     }
+    
+    Path libPath = FileSystems.getDefault().getPath(lib);
+    Path libPathDest = FileSystems.getDefault().getPath(libName+".dll");
+    try {
+      log.info("copying {} to {}", libPath, libPathDest);
+      Files.copy(libPath, libPathDest, REPLACE_EXISTING);
+    } catch (IOException e) {
+      Util.handleException(e);
+    }
+    if (doLoad) {
+      log.debug("Now loading library {}", libName);
+      System.loadLibrary(libName);  
+    }
+      
+    log.debug("loadLibSpecial {} - finished", libName);
   }
 
   
   public void enableIPV6OnPreviouslyDisabledDevices() {
     log.debug("enableIPV6OnPreviouslyDisabledDevices() - start");
 
+    if (!Util.isVistaOrLater()) {
+      log.warn("Not performing IPV6 fix on Windows XP");
+      return;
+    }
+    
     String nvspbind = getNvspBindLocation();
     if (nvspbind == null) {
       log.warn("nvspbind not found - did not enable ipv6 on any devices");
@@ -115,6 +119,11 @@ public class IPV6Manager {
   public void disableIPV6OnAllDevices() {
     log.debug("disableIPV6() - start");
 
+    if (!Util.isVistaOrLater()) {
+      log.warn("Not performing IPV6 fix on Windows XP");
+      return;
+    }
+    
     String nvspbind = getNvspBindLocation();
     if (nvspbind != null) {
       List<String> adapterList = getAdapterList();
@@ -138,40 +147,22 @@ public class IPV6Manager {
   private List<String> getAdapterList() {
     log.debug("getAdapterList() - start");
     
-    List<PcapIf> alldevs = new ArrayList<PcapIf>(); // Will be filled with NICs  
-    StringBuilder errbuf = new StringBuilder(); // For any error msgs  
-
-    int r = Pcap.findAllDevs(alldevs, errbuf);  
-    if (r == Pcap.NOT_OK || alldevs.isEmpty()) {  
-      log.error("Can't read list of devices, error is {}", errbuf.toString());  
-     
-    }
+    String output = Util.runCommandAndReturnOutput( GET_ADAPTER_LIST);
     
     List<String> result = new LinkedList<String>();
-    for (PcapIf device : alldevs) {
-      String name = device.getName();
-      String guid = "{" + this.extractGUID(name) + "}";
-      
-      result.add(guid);
-    }
-      
+    String[] lines = output.split("\\n");
+    for (String line : lines) {
+      line = line.trim();
 
-    log.debug("getAdapterList() - returning: {}", result);
-    return result;
-  }
-  
-  private String extractGUID(String name) {
-    Matcher m = p.matcher(name);
-
-    String result = null;
-    if (m.find()) {
-       result = m.group(1);
+      if (line.length() > 0) {
+        result.add(line);
+      }
     }
     
-    log.debug("extractGUID({}} - returning {}", name, result); 
+    log.debug("getAdapterList() - finished, returning {}", result);
     return result;
   }
-
+ 
   private String getNvspBindLocation() {
     if (nvspBindLocation == null) {
       Map<String, String> envs = System.getenv();

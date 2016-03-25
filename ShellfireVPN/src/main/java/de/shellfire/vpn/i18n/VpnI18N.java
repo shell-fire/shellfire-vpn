@@ -2,7 +2,6 @@ package de.shellfire.vpn.i18n;
 
 import java.util.LinkedList;
 import java.util.Locale;
-import java.util.Properties;
 
 import javax.swing.JOptionPane;
 

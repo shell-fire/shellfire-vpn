@@ -128,8 +128,14 @@ public class Util {
     return stacktrace;
   }
 
+  public static String runCommandAndReturnOutput(List<String> command) {
+    String[] array = new String[command.size()];
+    command.toArray(array);
+    return runCommandAndReturnOutput(array);
+  }
+  
   public static String runCommandAndReturnOutput(String... command) {
-    log.debug("Running command: " + command);
+    log.debug("Running command: {}", Arrays.asList(command));
     final StringBuffer result = new StringBuffer();
     try {
       ProcessBuilder pb = new ProcessBuilder(command);
@@ -674,5 +680,6 @@ public class Util {
   private static Logger log = Util.getLogger(Util.class.getCanonicalName());
   private static I18n i18n = VpnI18N.getI18n();
   private static String jvmDll;
+
 
 }
