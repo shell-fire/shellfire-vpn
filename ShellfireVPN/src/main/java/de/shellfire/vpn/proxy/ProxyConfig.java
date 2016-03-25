@@ -89,18 +89,18 @@ public class ProxyConfig {
     return null;
   }
 
-    private static ProxySelector getSelector() throws RemoteException {
+    private static ProxySelector getSelector(){
       if (proxyAutoConfigEnabled())
         return getPacProxySelector();
       else
         return ProxySelector.getDefault();
   }
 
-    private static boolean proxyAutoConfigEnabled() throws RemoteException {
+    private static boolean proxyAutoConfigEnabled() {
       return Client.isAutoProxyConfigEnabled();
     }
 
-    private static ProxySelector getPacProxySelector() throws RemoteException {
+    private static ProxySelector getPacProxySelector() {
       System.setProperty(PacProxySelector.PAC_LOCATION_PROPERTY, Client.getAutoProxyConfigPath());
       try {
         return PacProxySelector.configureFromProperties();

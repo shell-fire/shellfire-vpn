@@ -51,21 +51,17 @@ public class VpnMapPainter implements Painter<JXMapViewer> {
   }
 
   public void paint(Graphics2D g, JXMapViewer map, int w, int h) {
-    try {
-      drawConnectionRouteIfRequired(g, map);
-    } catch (RemoteException e) {
-      Util.handleException(e);
-    }
+    drawConnectionRouteIfRequired(g, map);
     waypointPainter.paint(g, map, w, h);
   }
 
-  private void drawConnectionRouteIfRequired(Graphics2D g, JXMapViewer map) throws RemoteException {
+  private void drawConnectionRouteIfRequired(Graphics2D g, JXMapViewer map) {
     if (this.showOwnPositionOnMap) {
       drawConnectionRoute(g, map);
     }
   }
 
-  private void drawConnectionRoute(Graphics2D g, JXMapViewer map) throws RemoteException {
+  private void drawConnectionRoute(Graphics2D g, JXMapViewer map) {
     Server connectedTo = controller.connectedTo();
     log.debug("Connected to:" + connectedTo);
     if (connectedTo != null && ownPosition != null) {

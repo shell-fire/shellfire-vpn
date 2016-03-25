@@ -45,6 +45,7 @@ import de.shellfire.vpn.service.CryptFactory;
 import de.shellfire.vpn.types.Reason;
 import de.shellfire.vpn.types.ServerType;
 import de.shellfire.vpn.updater.Updater;
+import de.shellfire.vpn.webservice.EndpointManager;
 import de.shellfire.vpn.webservice.Response;
 import de.shellfire.vpn.webservice.WebService;
 import de.shellfire.vpn.webservice.model.LoginResponse;
@@ -99,12 +100,13 @@ public class LoginForm extends javax.swing.JFrame {
 
 	}
 	
-	private void init() throws RemoteException {
+	private void init() {
 		// before doing anything else, we should test for an internet connection. without internet, we cant do anything!
 	  
 		boolean internetAvailable = Util.internetIsAvailable();
 		
 		if (internetAvailable) {
+		  initDialog.setText(i18n.tr("Initialisiere ShellfireVPNService..."));
 	    ServiceTools.getInstanceForOS().ensureServiceEnvironment(this);
 		} else {
 			JOptionPane.showMessageDialog(this, i18n.tr("Keine Internet-Verbindung verfügbar - ShellfireVPN wird beendet."), i18n.tr("Kein Internet"), JOptionPane.ERROR_MESSAGE);
@@ -112,8 +114,14 @@ public class LoginForm extends javax.swing.JFrame {
 		}
 	}
 
-	public void afterServiceEnvironmentEnsured() throws RemoteException {
+	public void afterShellfireServiceEnvironmentEnsured() {
+	  log.debug("Ensured that ShellfireVPNService is running. Trying to connect to the Shellfire webservice backend...");
 
+	  EndpointManager.getInstance().ensureShellfireBackendAvailable(this);
+	}
+	
+	 
+  public void afterWebServiceConnectivityEnsured() {
     this.service = WebService.getInstance();
     Storage.register(service);
     this.restoreCredentialsFromRegistry();
@@ -121,23 +129,24 @@ public class LoginForm extends javax.swing.JFrame {
     this.restoreAutoStartFromRegistry();
     this.licenseAccepted = false;
     
-		if (initDialog != null) {
-			initDialog.dispose();
-			instance.setEnabled(true);
-		}
-		try {
-			//Connection.initRmi();
-		} catch (Exception e) {
-			Util.handleException(e);
-		} 
-		
-		if (!this.autoLoginIfActive()) {
-			this.setVisible(true);
-			askForNewAccountAndAutoStartIfFirstStart();
-		}		
-	}
+    if (initDialog != null) {
+      initDialog.dispose();
+      instance.setEnabled(true);
+    }
+    try {
+      //Connection.initRmi();
+    } catch (Exception e) {
+      Util.handleException(e);
+    } 
+    
+    if (!this.autoLoginIfActive()) {
+      this.setVisible(true);
+      askForNewAccountAndAutoStartIfFirstStart();
+    }   
+  }
 
-	private void askForNewAccountAndAutoStartIfFirstStart() throws RemoteException {
+
+	private void askForNewAccountAndAutoStartIfFirstStart() {
 		if (firstStart()) {
 		  if (!Util.isWindows()) {
 		    askForLicense();
@@ -172,7 +181,7 @@ public class LoginForm extends javax.swing.JFrame {
 		}
 	}
 
-	private void askForAutoStart() throws RemoteException {
+	private void askForAutoStart() {
 		int answer = JOptionPane
 				.showConfirmDialog(
 						null,
@@ -302,7 +311,7 @@ public class LoginForm extends javax.swing.JFrame {
 		return instDir;
 	}
 
-	private void restoreAutoStartFromRegistry() throws RemoteException {
+	private void restoreAutoStartFromRegistry() {
 		boolean autoStart = Client.vpnAutoStartEnabled();
 		this.jAutoStart.setSelected(autoStart);
 	}
@@ -833,17 +842,11 @@ public class LoginForm extends javax.swing.JFrame {
 		  log.debug("No internet available, skipping update check");
 		}
 
-
-		try {
-      instance.init();
-    } catch (RemoteException e) {
-      Util.handleException(e);
-    }
+    instance.init();
 	}
 
 	private void showLoginProgress() {
-		this.loginProgressDialog = new ProgressDialog(this, false,
-				i18n.tr("Einloggen..."));
+		this.loginProgressDialog = new ProgressDialog(this, false, i18n.tr("Einloggen..."));
 		this.loginProgressDialog.setVisible(true);
 	}
 

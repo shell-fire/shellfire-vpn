@@ -25,7 +25,7 @@ public class OSXServiceTools extends ServiceTools {
   private static I18n i18n = VpnI18N.getI18n();
 
   @Override
-  public void ensureServiceEnvironment(LoginForm form) throws RemoteException {
+  public void ensureServiceEnvironment(LoginForm form) {
     log.debug("checking if service is running");
     if (!serviceIsRunning()) {
       log.debug("Service not running, trying request on port 60313 to have launchd start it!");
@@ -56,12 +56,12 @@ public class OSXServiceTools extends ServiceTools {
         task.execute();
       } else {
         log.debug("serivce has been started");
-        form.afterServiceEnvironmentEnsured();
+        form.afterShellfireServiceEnvironmentEnsured();
       }
 
     } else {
       log.debug("serivce is running - good to go, no action required");
-      form.afterServiceEnvironmentEnsured();
+      form.afterShellfireServiceEnvironmentEnsured();
     }
   }
 

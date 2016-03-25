@@ -1,14 +1,23 @@
 package de.shellfire.vpn.webservice;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.security.KeyStore;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManagerFactory;
+
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -45,16 +54,23 @@ import de.shellfire.vpn.webservice.model.WsLoginRequest;
 @SuppressWarnings("rawtypes")
 class JsonHttpRequest<RequestType, ResponseType> {
 
-  private final static String ENDPOINT_DEV = "http://dev.shellfire.local.de:808/webservice/json.php?action=";
-  private final static String ENDPOINT_UAT = "http://uat.shellfire.remote.de/webservice/json.php?action=";
-  private final static String ENDPOINT_PROD = "https://www.shellfire.de/webservice/json.php?action=";
+  public JsonHttpRequest() {
+    setupKeyStore();
+  }
   
   private static Logger log = Util.getLogger(JsonHttpRequest.class.getCanonicalName());
   private String function;
-  CloseableHttpClient httpClient = HttpClients.createDefault();
-  final String endPoint = ENDPOINT_PROD;
+  RequestConfig defaultRequestConfig = RequestConfig.custom()
+      .setSocketTimeout(3000)
+      .setConnectTimeout(3000)
+      .setConnectionRequestTimeout(3000)
+      .build();
+
+  
   //Gson gson = new GsonBuilder().setPrettyPrinting().create();
   Gson gson = new GsonBuilder().create();
+  private WebServiceBroker broker = WebServiceBroker.getInstance();
+  private CloseableHttpClient httpClient;
 
   static final Map<Class, String> functionMap;
 
@@ -81,6 +97,44 @@ class JsonHttpRequest<RequestType, ResponseType> {
     tempMap.put(GetUrlPasswordLostRequest.class, "getUrlPasswordLost");
     tempMap.put(SendLogToShellfireRequest.class, "sendLog");
     functionMap = Collections.unmodifiableMap(tempMap);
+  }
+
+  private void setupKeyStore() { 
+    try
+    {
+      TrustManagerFactory tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+      KeyStore ks = KeyStore.getInstance("JKS");
+      FileInputStream fis = new FileInputStream("shellfire.keystore");
+      ks.load(fis, "blubber".toCharArray());
+      fis.close();
+
+      tmf.init(ks);
+
+      SSLContext sslContext = SSLContext.getInstance("TLS");
+      sslContext.init(null, tmf.getTrustManagers(), null);
+      
+      HostnameVerifier verifier = new HostnameVerifier(){
+        public boolean verify(String hostname, SSLSession session) {
+          return true;
+        }
+      };
+      
+      SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
+          sslContext,
+          new String[] { "TLSv1" },
+          null,
+          verifier);
+      
+      httpClient = HttpClients.custom()
+          .setSSLHostnameVerifier(verifier)
+          .setSSLSocketFactory(sslsf)
+          .setDefaultRequestConfig(defaultRequestConfig)
+          .build();
+      
+    } catch (Exception e) {
+      log.error("Error occured while setting up keystore", e);
+      System.exit(0);
+    }
   }
 
   public Response<ResponseType> call(RequestType payload, Type clazz) throws ClientProtocolException, IOException, VpnException {
@@ -166,7 +220,7 @@ class JsonHttpRequest<RequestType, ResponseType> {
   }
 
   private String getUrl() {
-    String url = endPoint + function;
+    String url = broker .getEndPoint() + function;
     log.debug("getUrl() - returning {}", url);
     return url;
   }

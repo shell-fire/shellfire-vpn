@@ -1,4 +1,4 @@
-package de.shellfire.vpn.webservice;
+package de.shellfire.vpn.webservice.model;
 
 public class InstallerResponse {
   public String installer;

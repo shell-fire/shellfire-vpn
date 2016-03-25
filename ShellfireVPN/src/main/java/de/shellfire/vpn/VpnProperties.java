@@ -81,7 +81,15 @@ public class VpnProperties extends Properties {
   }
   
   public Object setProperty(String key, String value) {
-    Object res = super.setProperty(key, value);
+    Object res = null;
+    
+    if (value == null) {
+      res = super.remove(key);
+    }
+    else {
+       res = super.setProperty(key, value);  
+    }
+    
     saveProperties();
     return res;
   }

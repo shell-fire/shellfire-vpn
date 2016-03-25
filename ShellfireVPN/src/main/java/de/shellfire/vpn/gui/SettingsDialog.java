@@ -182,11 +182,7 @@ public class SettingsDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_jLanguageComboBoxActionPerformed
 
     private void jSaveSettingsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jSaveSettingsActionPerformed
-      try {
-        saveAndClose();
-      } catch (RemoteException ex) {
-        Util.handleException(ex);
-      }
+      saveAndClose();
         
 }//GEN-LAST:event_jSaveSettingsActionPerformed
 
@@ -202,12 +198,12 @@ public class SettingsDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_jSaveVpnSelectionActionPerformed
 
 
-    private void saveAndClose() throws RemoteException {
+    private void saveAndClose() {
         close();
         save();
     }
 
-    private void save() throws RemoteException {
+    private void save() {
       VpnProperties props = VpnProperties.getInstance();
 
         if (this.jAutoLogin.isEnabled()) {

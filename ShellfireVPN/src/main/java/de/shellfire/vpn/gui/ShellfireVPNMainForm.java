@@ -95,7 +95,7 @@ import de.shellfire.vpn.gui.renderer.CountryImageRenderer;
 import de.shellfire.vpn.gui.renderer.StarImageRenderer;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.proxy.ProxyConfig;
-import de.shellfire.vpn.types.Protocol;
+import de.shellfire.vpn.types.VpnProtocol;
 import de.shellfire.vpn.types.Reason;
 import de.shellfire.vpn.types.Server;
 import de.shellfire.vpn.types.ServerType;
@@ -1926,9 +1926,9 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 		return this.shellfireService;
 	}
 
-	public void setSelectedProtocol(Protocol protocol) {
+	public void setSelectedProtocol(VpnProtocol protocol) {
 		if (protocol == null)
-			protocol = Protocol.UDP;
+			protocol = VpnProtocol.UDP;
 
 		switch (protocol) {
 		case UDP:
@@ -1941,11 +1941,11 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 
 	}
 
-	public Protocol getSelectedProtocol() {
+	public VpnProtocol getSelectedProtocol() {
 		if (this.jRadioUdp.isSelected()) {
-			return Protocol.UDP;
+			return VpnProtocol.UDP;
 		} else if (this.jRadioTcp.isSelected()) {
-			return Protocol.TCP;
+			return VpnProtocol.TCP;
 		}
 
 		return null;
@@ -1955,10 +1955,10 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 		Vpn vpn = this.shellfireService.getVpn();
 
 		if (ProxyConfig.isProxyEnabled()) {
-			this.setSelectedProtocol(Protocol.TCP);
+			this.setSelectedProtocol(VpnProtocol.TCP);
 			this.jRadioUdp.setEnabled(false);
 		} else {
-			Protocol selectedProtocol = vpn.getProtocol();
+			VpnProtocol selectedProtocol = vpn.getProtocol();
 			this.setSelectedProtocol(selectedProtocol);
 		}
 
@@ -2685,7 +2685,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 
 	}
 
-	private void delayedConnect(Server selectedServer, Protocol protocol, Reason reason) {
+	private void delayedConnect(Server selectedServer, VpnProtocol protocol, Reason reason) {
 		popupConnectItem.setLabel(i18n.tr("Verbinde..."));
 		popupConnectItem.setEnabled(false);
 

@@ -169,7 +169,7 @@ public class Util {
   public static String getArchitecture() {
     if (Util.Arch == null) {
       if (isWindows()) {
-        String[] cmds = new String[] {"reg", "query", "\"HKLM\\System\\CurrentControlSet\\Control\\Session Manager\\Environment\" /v PROCESSOR_ARCHITECTURE"};
+        String[] cmds = new String[] {"reg", "query", "HKLM\\System\\CurrentControlSet\\Control\\Session Manager\\Environment",  "/v", "PROCESSOR_ARCHITECTURE"};
         String result = runCommandAndReturnOutput(cmds);
 
         String[] lines = result.split("\n");

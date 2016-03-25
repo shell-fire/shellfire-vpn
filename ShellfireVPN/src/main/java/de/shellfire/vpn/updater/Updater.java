@@ -246,19 +246,17 @@ public class Updater {
       try {
         w1.get();
       } catch (CancellationException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
+        log.error("Error while downloading, download cancelled?", e);
       }
 
-    } catch (IOException e) {
-      this.displayError(i18n.tr("I/O Fehler während des Downloades der neuen Version. Abbruch."));
-      System.exit(0);
     } catch (InterruptedException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+      log.error("Error while downloading", e);
+      this.displayError(i18n.tr("Fehler während des Downloades der neuen Version. Abbruch."));
+      System.exit(0);
     } catch (ExecutionException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+      log.error("Error while downloading", e);
+      this.displayError(i18n.tr("Fehler während des Downloades der neuen Version. Abbruch."));
+      System.exit(0);
     }
 
   }
@@ -315,13 +313,7 @@ public class Updater {
   private long getLatestAvailableVersionOnline() {
     long version = 0;
 
-    try {
-      version = getService().getLatestVersion();
-
-    } catch (IOException e) {
-      this.displayError(i18n.tr("I/O Fehler beim Abruf der Online Versionsinformation. Anwendung wird beendet."));
-      System.exit(0);
-    }
+    version = getService().getLatestVersion();
 
     return version;
   }

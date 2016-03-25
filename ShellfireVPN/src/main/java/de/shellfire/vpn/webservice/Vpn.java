@@ -3,7 +3,7 @@ package de.shellfire.vpn.webservice;
 import java.util.Date;
 
 import de.shellfire.vpn.types.ProductType;
-import de.shellfire.vpn.types.Protocol;
+import de.shellfire.vpn.types.VpnProtocol;
 import de.shellfire.vpn.types.Server;
 import de.shellfire.vpn.types.ServerType;
 import de.shellfire.vpn.webservice.model.WsVpn;
@@ -15,7 +15,7 @@ public class Vpn {
     private int serverId;
     private ServerType accountType;
     private String listenHost;
-    private Protocol protocol;
+    private VpnProtocol protocol;
     private Server server;
     private ProductType productType;
     private final Date premiumUntil;
@@ -34,7 +34,7 @@ public class Vpn {
         this.accountType = Enum.valueOf(ServerType.class, vpn.getAccountType());
         this.listenHost = vpn.getListenHost();
         if (vpn.getProtocol() != null && vpn.getProtocol().length() > 0)
-        	this.protocol = Enum.valueOf(Protocol.class, vpn.getProtocol());
+        	this.protocol = Enum.valueOf(VpnProtocol.class, vpn.getProtocol());
 
         ProductType[] vals = ProductType.values();
         this.productType = vals[vpn.getProductTypeId()-1];
@@ -74,11 +74,11 @@ public class Vpn {
         this.listenHost = listenHost;
     }
 
-    public Protocol getProtocol() {
+    public VpnProtocol getProtocol() {
         return protocol;
     }
 
-    public void setProtocol(Protocol protocol) {
+    public void setProtocol(VpnProtocol protocol) {
         this.protocol = protocol;
     }
 

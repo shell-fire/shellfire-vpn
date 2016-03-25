@@ -17,7 +17,7 @@ import de.shellfire.vpn.exception.VpnException;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.messaging.UserType;
 import de.shellfire.vpn.proxy.ProxyConfig;
-import de.shellfire.vpn.types.Protocol;
+import de.shellfire.vpn.types.VpnProtocol;
 import de.shellfire.vpn.types.Server;
 import de.shellfire.vpn.webservice.model.LoginResponse;
 import de.shellfire.vpn.webservice.model.TrayMessage;
@@ -52,16 +52,26 @@ public class WebService {
   private static I18n i18n = VpnI18N.getI18n();
   private static WebService instance;
 
-  WebServiceBroker shellfire = new WebServiceBroker();
+  WebServiceBroker shellfire = WebServiceBroker.getInstance();
+  private boolean initialized;
 
   private WebService() {
-    // precache on load
-    getVpnComparisonTable();
-    getUrlHelp();
-    getUrlPasswordLost();
-    getUrlPremiumInfo();
-    getUrlSuccesfulConnect();
 
+  }
+  
+  private void init() {
+    if (!initialized) {
+      initialized = true;
+      log.debug("Not yet initialized - intiializing - start");
+      // precache on load
+      getVpnComparisonTable();
+      getUrlHelp();
+      getUrlPasswordLost();
+      getUrlPremiumInfo();
+      getUrlSuccesfulConnect();
+      
+      log.debug("Not yet initialized - intiializing - finished");
+    }
   }
 
   /**
@@ -192,7 +202,7 @@ public class WebService {
     }
   }
 
-  public boolean setProtocolTo(final Protocol protocol) {
+  public boolean setProtocolTo(final VpnProtocol protocol) {
     Boolean res = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<Boolean>() {
       public Boolean run() throws Exception {
 
@@ -398,7 +408,7 @@ public class WebService {
    * return result; }
    */
 
-  public int getLatestVersion() throws RemoteException {
+  public int getLatestVersion() {
     Integer latestVersion = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<Integer>() {
       public Integer run() throws Exception {
         return shellfire.getLatestVersion();
@@ -411,7 +421,7 @@ public class WebService {
       return latestVersion;
   }
 
-  public String getLatestInstaller() throws RemoteException {
+  public String getLatestInstaller() {
     String latestZipInstaller;
 
     latestZipInstaller = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<String>() {

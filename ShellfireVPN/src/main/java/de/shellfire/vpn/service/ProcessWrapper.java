@@ -99,60 +99,54 @@ public class ProcessWrapper extends Thread {
      * @param line 
      */
     private void parse(String line) {
-
-        try {
-          switch (this.vpnController.getConnectionState()) {
-              case Disconnected:
-                  break;
-              case Connecting:
-                  this.checkForStateChangeWhileConnecting(line);
-                  break;
-              case Connected:
-                  this.checkForStateChangeWhileConnected(line);
-                  break;
-
-          }
-        } catch (RemoteException e) {
-          e.printStackTrace();
+         switch (this.vpnController.getConnectionState()) {
+            case Disconnected:
+                break;
+            case Connecting:
+                this.checkForStateChangeWhileConnecting(line);
+                break;
+            case Connected:
+                this.checkForStateChangeWhileConnected(line);
+                break;
         }
     }
 
-    private void checkSuccesfulConnect(String line) throws RemoteException {
+    private void checkSuccesfulConnect(String line)  {
         if (this.lineContainsAnElementOfList(line, ProcessWrapper.succesfulConnectList)) {
             log.debug("succesful connect detected from line {}", line);
             this.setStatus(ConnectionState.Connected, Reason.SuccesfulConnectDetected);
         }
     }
 
-    private void checkFailedPassphrase(String line) throws RemoteException {
+    private void checkFailedPassphrase(String line)  {
         if (this.lineContainsAnElementOfList(line, ProcessWrapper.failedPassPhraseList)) {
             log.debug("password failed detected from line {}", line);
             this.setStatus(ConnectionState.Disconnected, Reason.PasswordWrong);
         }
     }
 
-    private void checkGatewayFailed(String line) throws RemoteException {
+    private void checkGatewayFailed(String line)  {
         if (this.lineContainsAnElementOfList(line, ProcessWrapper.gatewayFailed)) {
             log.debug("could not redirect gateway  " + line);
             this.setStatus(ConnectionState.Disconnected, Reason.GatewayRedirectFailed);
         }
     }
 
-    private void checkAllTapInUse(String line) throws RemoteException {
+    private void checkAllTapInUse(String line)  {
         if (this.lineContainsAnElementOfList(line, ProcessWrapper.allTapInUseList)) {
             log.debug("all tap drivers in use detected from line {}", line);
             this.setStatus(ConnectionState.Disconnected, Reason.AllTapInUse);
         }
     }
 
-    private void checkCertificateInvalid(String line) throws RemoteException {
+    private void checkCertificateInvalid(String line)  {
         if (this.lineContainsAnElementOfList(line, ProcessWrapper.certificateInvalidList)) {
             log.debug("certificate invalid detected from line {}", line);
             this.setStatus(ConnectionState.Disconnected, Reason.CertificateFailed);
         }
     }
 
-    private void checkForStateChangeWhileConnecting(String line) throws RemoteException {
+    private void checkForStateChangeWhileConnecting(String line)  {
         this.checkSuccesfulConnect(line);
         this.checkFailedPassphrase(line);
         this.checkCertificateInvalid(line);
@@ -166,7 +160,7 @@ public class ProcessWrapper extends Thread {
 
     }
 
-    private void checkTapDriverNotFound(String line) throws RemoteException {
+    private void checkTapDriverNotFound(String line)  {
       if (this.lineContainsAnElementOfList(line, ProcessWrapper.tapDriverNotFound)) {
         log.debug("checkTapDriverNotFound() - TapDriverNotFound");
         // try automatic fix once
@@ -183,7 +177,7 @@ public class ProcessWrapper extends Thread {
       
     }
 
-    private void checkNotEnoughPrivileges(String line) throws RemoteException {
+    private void checkNotEnoughPrivileges(String line)  {
         if (this.lineContainsAnElementOfList(line, ProcessWrapper.notEnoughPrivilegesList)) {
             log.debug("not enough privileges detected from line {}", line);
             this.setStatus(ConnectionState.Disconnected, Reason.NotEnoughPrivileges);
@@ -191,26 +185,26 @@ public class ProcessWrapper extends Thread {
 
     }
     
-    private void checkGeneralError(String line) throws RemoteException {
+    private void checkGeneralError(String line)  {
       if (this.lineContainsAnElementOfList(line, ProcessWrapper.generalError)) {
           log.debug("general error detected from line {}", line);
           this.setStatus(ConnectionState.Disconnected, Reason.UnknownOpenVPNError);
       }
   }
     
-    private void checkTapDriverTooOld(String line) throws RemoteException {
+    private void checkTapDriverTooOld(String line)  {
       if (this.lineContainsAnElementOfList(line, ProcessWrapper.tapDriverTooOld)) {
           log.debug("tap driver too old detected from line {}", line);
           this.setStatus(ConnectionState.Disconnected, Reason.TapDriverTooOld);
       }
   }
 
-    private void checkForStateChangeWhileConnected(String line) throws RemoteException {
+    private void checkForStateChangeWhileConnected(String line)  {
         this.checkReconnecting(line);
         this.checkDisconnected(line);
     }
 
-    private void checkReconnecting(String line) throws RemoteException {
+    private void checkReconnecting(String line)  {
         if (this.lineContainsAnElementOfList(line, ProcessWrapper.processRestartingList)) {
             log.debug("reconnecting detected from line {}", line);
             TapFixer.restartAllTapDevices();
@@ -218,7 +212,7 @@ public class ProcessWrapper extends Thread {
         }
     }
 
-    private void checkDisconnected(String line) throws RemoteException {
+    private void checkDisconnected(String line)  {
         if (this.lineContainsAnElementOfList(line, ProcessWrapper.processDisconnectedList)) {
             log.debug("disconnect detected from line {}", line);
             this.setStatus(ConnectionState.Connecting, Reason.DisconnectDetected);
@@ -236,7 +230,7 @@ public class ProcessWrapper extends Thread {
         return false;
     }
 
-    private void setStatus(ConnectionState connectionState, Reason reason) throws RemoteException {
+    private void setStatus(ConnectionState connectionState, Reason reason)  {
         if (connectionState == ConnectionState.Disconnected)
           this.vpnController.disconnect(reason);
         else

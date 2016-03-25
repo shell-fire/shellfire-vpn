@@ -36,6 +36,7 @@ import de.shellfire.vpn.webservice.model.GetUrlHelpRequest;
 import de.shellfire.vpn.webservice.model.GetUrlPasswordLostRequest;
 import de.shellfire.vpn.webservice.model.GetUrlPremiumInfoRequest;
 import de.shellfire.vpn.webservice.model.GetUrlSuccesfulConnectRequest;
+import de.shellfire.vpn.webservice.model.InstallerResponse;
 import de.shellfire.vpn.webservice.model.LocalIPResponse;
 import de.shellfire.vpn.webservice.model.LoginResponse;
 import de.shellfire.vpn.webservice.model.OpenVpnParamResponse;
@@ -57,11 +58,26 @@ import de.shellfire.vpn.webservice.model.WsVpn;
 public class WebServiceBroker {
   
   private static Logger log = Util.getLogger(WebServiceBroker.class.getCanonicalName());
+  private final static String ENDPOINT_TEMPLATE = "https://%s/webservice/json.php?action=";
+  private String endPoint = null;
   
   /**
    * The token for the login session. null if logged out.
    */
   private static String sessionToken = null;
+
+  private static WebServiceBroker instance;
+  
+  private WebServiceBroker() {}
+  
+  public static WebServiceBroker getInstance() {
+    if (instance == null) {
+      instance = new WebServiceBroker();
+    }
+    
+    return instance;
+  }
+  
   
   /**
    * function used to login and start a session on the webservice.
@@ -494,6 +510,12 @@ public class WebServiceBroker {
     log.debug("sendLogToShellfire () - returning result: {}", result);
     return result;    
   }
-
-
+  
+  public void setEndPoint(String endpoint) {
+    this.endPoint = String.format(ENDPOINT_TEMPLATE, endpoint);
+  }
+  
+  public String getEndPoint() {
+    return this.endPoint;
+  }
 }

@@ -22,7 +22,7 @@ public abstract class ServiceTools {
   private static ServiceTools instance;
 
 	
-	public abstract void ensureServiceEnvironment(LoginForm form) throws RemoteException;
+	public abstract void ensureServiceEnvironment(LoginForm form);
 
 	
 	public class WaitForServiceTask extends SwingWorker<Void, Object> {
@@ -42,12 +42,7 @@ public abstract class ServiceTools {
 		public void done() {
 			
 			loginProgressDialog.setVisible(false);
-			try {
-        this.loginForm.afterServiceEnvironmentEnsured();
-      } catch (RemoteException e) {
-        Util.handleException(e);
-      }
-
+      this.loginForm.afterShellfireServiceEnvironmentEnsured();
 		}
 		
 		@Override
