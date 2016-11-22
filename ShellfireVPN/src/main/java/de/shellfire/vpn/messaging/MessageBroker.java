@@ -150,7 +150,11 @@ public class MessageBroker {
 
         // Read the object
         Object o = null;
-        o = tailer.readObject();
+        try {
+          o = tailer.readObject();  
+        } catch (IllegalStateException e) {
+          log.error("Tailer in invalid state, ignoring", e);
+        }
         
         // Make the reader ready for next read
         tailer.finish();

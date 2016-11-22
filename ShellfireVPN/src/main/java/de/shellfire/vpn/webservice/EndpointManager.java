@@ -60,8 +60,10 @@ public class EndpointManager {
     String preferredEndPoint = vpnProperties.getProperty(PROPERTY_PREFERRED_ENDPOINT);
     if (preferredEndPoint == null) {
       log.warn("No preferred endPoint set yet, returning default endpoint");
+      return getDefaultEndPoint();
     }
-    return getDefaultEndPoint();
+    log.debug("getPreferredEndPointFromProperties() - returning: " + preferredEndPoint);
+    return preferredEndPoint;
   }
   
   private void setPreferredEndPoint(String preferredEndPoint) {
@@ -69,8 +71,6 @@ public class EndpointManager {
     this.preferredEndPoint = preferredEndPoint;
     this.vpnProperties.setProperty(PROPERTY_PREFERRED_ENDPOINT, preferredEndPoint);
   }
-  
-  
 
   public static EndpointManager getInstance() {
     if (instance == null) {

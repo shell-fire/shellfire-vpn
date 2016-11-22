@@ -75,9 +75,9 @@ class JsonHttpRequest<RequestType, ResponseType> {
   private static Logger log = Util.getLogger(JsonHttpRequest.class.getCanonicalName());
   private String function;
   RequestConfig defaultRequestConfig = RequestConfig.custom()
-      .setSocketTimeout(3000)
-      .setConnectTimeout(3000)
-      .setConnectionRequestTimeout(3000)
+      .setSocketTimeout(5000)
+      .setConnectTimeout(5000)
+      .setConnectionRequestTimeout(5000)
       .build();
 
   

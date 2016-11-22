@@ -1614,7 +1614,9 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 			}
 
 		};
-		
+    
+    jServerListTable.setRowHeight(38);
+    
 		jServerListTable.setBorder(null);
 		jScrollPane.setBorder(null);
 		cm.getColumn(0).setCellRenderer(new CountryImageRenderer());
