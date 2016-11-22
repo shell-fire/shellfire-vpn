@@ -5,6 +5,7 @@ import java.util.EnumMap;
 
 import javax.swing.ImageIcon;
 
+import de.shellfire.vpn.Util;
 import de.shellfire.vpn.types.Country;
 
 public class CountryMap {
@@ -260,9 +261,9 @@ public class CountryMap {
       URL file = CountryMap.class.getResource("/flags/"+get(country) + ".png");
       ImageIcon icon = null;
       if (file != null) {
-        icon = new ImageIcon(file);
+        icon = Util.getImageIcon("/flags/"+get(country) + ".png");
       } else {
-        icon = new ImageIcon(CountryMap.class.getResource("/flags/de.png"));
+        icon = Util.getImageIcon("/flags/de.png");
       }
       
 

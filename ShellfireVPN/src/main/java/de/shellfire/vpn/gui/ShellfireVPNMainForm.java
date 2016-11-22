@@ -1,5 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
+/* * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
 
@@ -104,6 +103,7 @@ import de.shellfire.vpn.webservice.Vpn;
 import de.shellfire.vpn.webservice.WebService;
 import de.shellfire.vpn.webservice.model.TrayMessage;
 import de.shellfire.vpn.webservice.model.WsGeoPosition;
+import net.miginfocom.swing.MigLayout;
 
 /**
  * 
@@ -143,9 +143,9 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 	
 	private final static HashMap<String, ImageIcon> mainIconMap = new HashMap<String, ImageIcon>() {
 		{
-			put("de", new javax.swing.ImageIcon(getClass().getResource("/icons/sf.png")));
-			put("en", new javax.swing.ImageIcon(getClass().getResource("/icons/sf_en.png")));
-			put("fr", new javax.swing.ImageIcon(getClass().getResource("/icons/sf_fr.png")));
+			put("de", Util.getImageIcon("/icons/sf.png"));
+			put("en", Util.getImageIcon("/icons/sf_en.png"));
+			put("fr", Util.getImageIcon("/icons/sf_fr.png"));
 		}
 	};
 
@@ -190,7 +190,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 
 		this.initLayeredPaneSize();
 
-		this.setLocationRelativeTo(null);
+		
 		
 		this.initContent();
 		Storage.register(this);
@@ -201,6 +201,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		pack();
+		this.setLocationRelativeTo(null);
 		setVisible(true);
 
 	}
@@ -241,7 +242,6 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
         jLabel19 = new javax.swing.JLabel();
         jLabelVpnValidUntil = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        jLayeredPane1 = new javax.swing.JLayeredPane();
         jServerListPanel = new javax.swing.JPanel();
         jLabel11 = new javax.swing.JLabel();
         jScrollPane = new javax.swing.JScrollPane();
@@ -253,9 +253,6 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
         jConnectButtonLabel1 = new javax.swing.JLabel();
         jPremiumButtonLabel1 = new javax.swing.JLabel();
         jConnectPanel = new javax.swing.JPanel();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
         jUpgradeButtonLabel = new javax.swing.JLabel();
         jConnectButtonLabel = new javax.swing.JLabel();
         jPremiumButtonLabel = new javax.swing.JLabel();
@@ -302,8 +299,6 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
         jLabelHide = new javax.swing.JLabel();
         jLabelSettings = new javax.swing.JLabel();
         jLabelMinimize = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
 
         jScrollBar1.setName("jScrollBar1"); // NOI18N
 
@@ -317,7 +312,6 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
         jPanel5.setBackground(resourceMap.getColor("jPanel5.background")); // NOI18N
         jPanel5.setBorder(new javax.swing.border.LineBorder(resourceMap.getColor("jPanel5.border.lineColor"), 3, true)); // NOI18N
         jPanel5.setName("jPanel5"); // NOI18N
-        jPanel5.setPreferredSize(new java.awt.Dimension(0, 0));
 
         jContentPanel.setBackground(resourceMap.getColor("jContentPanel.background")); // NOI18N
         jContentPanel.setName("jContentPanel"); // NOI18N
@@ -326,95 +320,90 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
         jPanel2.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED, null, resourceMap.getColor("jPanel2.border.highlightInnerColor"), null, null)); // NOI18N
         jPanel2.setMinimumSize(new java.awt.Dimension(660, 101));
         jPanel2.setName("jPanel2"); // NOI18N
-        jPanel2.setPreferredSize(new java.awt.Dimension(660, 101));
-        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel2.setLayout(new MigLayout("hidemode 3", "[grow][grow][grow][grow][grow][grow][grow]", "[][]"));
 
-        jConnectionStateIcon.setIcon(resourceMap.getIcon("jConnectionStateIcon.icon")); // NOI18N
+        jConnectionStateIcon.setIcon(Util.getImageIcon("/icons/small-globe-disconnected.png")); // NOI18N
         jConnectionStateIcon.setText(resourceMap.getString("jConnectionStateIcon.text")); // NOI18N
         jConnectionStateIcon.setName("jConnectionStateIcon"); // NOI18N
-        jPanel2.add(jConnectionStateIcon, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, 60));
+        jPanel2.add(jConnectionStateIcon, "cell 0 0 1 3,alignx left,aligny top");
 
-        jLabel2.setFont(resourceMap.getFont("jLabel2.font")); // NOI18N
+        
+        jLabel2.setFont(new Font("Arial", Font.PLAIN, Util.getFontSize())); // NOI18N
         jLabel2.setForeground(resourceMap.getColor("jLabel2.foreground")); // NOI18N
         jLabel2.setText(i18n.tr("Verbindungsstatus"));
         jLabel2.setName("jLabel2"); // NOI18N
-        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 10, 210, 30));
+        jPanel2.add(jLabel2, "cell 1 0,grow,aligny top");
 
-        jLabelConnectionState.setFont(resourceMap.getFont("jLabelConnectionState.font")); // NOI18N
+        jLabelConnectionState.setFont(new Font("Arial", Font.PLAIN, Util.getFontSize())); // NOI18N
         jLabelConnectionState.setForeground(resourceMap.getColor("jLabelConnectionState.foreground")); // NOI18N
         jLabelConnectionState.setText(i18n.tr("Getrennt"));
         jLabelConnectionState.setName("jLabelConnectionState"); // NOI18N
-        jPanel2.add(jLabelConnectionState, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 40, 210, 20));
+        jPanel2.add(jLabelConnectionState, "cell 1 1,grow,aligny top");
 
-        jLabel14.setFont(resourceMap.getFont("jLabel15.font")); // NOI18N
+        jLabel14.setFont(new Font("Arial", Font.PLAIN, Util.getFontSize())); // NOI18N
         jLabel14.setForeground(resourceMap.getColor("jLabelVpnId.foreground")); // NOI18N
         jLabel14.setText(i18n.tr("Verbunden seit:"));
         jLabel14.setName("jLabel14"); // NOI18N
-        jPanel2.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 20, 100, -1));
+        jPanel2.add(jLabel14, "cell 2 0,growx,aligny top");
 
-        jLabelOnlineHost.setFont(resourceMap.getFont("jLabelVpnTyp.font")); // NOI18N
+        jLabelOnlineHost.setFont(new Font("Arial", Font.PLAIN, Util.getFontSize())); // NOI18N
         jLabelOnlineHost.setForeground(resourceMap.getColor("jLabelVpnId.foreground")); // NOI18N
         jLabelOnlineHost.setText(resourceMap.getString("jLabelOnlineHost.text")); // NOI18N
         jLabelOnlineHost.setName("jLabelOnlineHost"); // NOI18N
-        jPanel2.add(jLabelOnlineHost, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 40, 160, -1));
+        jPanel2.add(jLabelOnlineHost, "cell 3 1,growx,aligny top");
 
-        jLabel15.setFont(resourceMap.getFont("jLabel15.font")); // NOI18N
+        jLabel15.setFont(new Font("Arial", Font.PLAIN, Util.getFontSize())); // NOI18N
         jLabel15.setForeground(resourceMap.getColor("jLabelVpnId.foreground")); // NOI18N
         jLabel15.setText(i18n.tr("Online IP:"));
         jLabel15.setName("jLabel15"); // NOI18N
-        jPanel2.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 40, 100, -1));
+        jPanel2.add(jLabel15, "cell 3 0,growx,aligny top");
 
-        jConnectedSince.setFont(resourceMap.getFont("jConnectedSince.font")); // NOI18N
+        jConnectedSince.setFont(new Font("Arial", Font.PLAIN, Util.getFontSize())); // NOI18N
         jConnectedSince.setForeground(resourceMap.getColor("jLabelVpnId.foreground")); // NOI18N
         jConnectedSince.setText(i18n.tr("(nicht verbunden)"));
         jConnectedSince.setName("jConnectedSince"); // NOI18N
-        jPanel2.add(jConnectedSince, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 20, 160, -1));
+        jPanel2.add(jConnectedSince, "cell 2 1,growx,aligny top");
 
-        jLabel17.setFont(resourceMap.getFont("jLabelVpnTyp.font")); // NOI18N
+        jLabel17.setFont(new Font("Arial", Font.PLAIN, Util.getFontSize())); // NOI18N
         jLabel17.setForeground(resourceMap.getColor("jLabelVpnId.foreground")); // NOI18N
         jLabel17.setText(i18n.tr("VPN Id:"));
         jLabel17.setName("jLabel17"); // NOI18N
-        jPanel2.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 20, 90, -1));
+        jPanel2.add(jLabel17, "cell 4 0,growx,aligny top");
 
-        jLabelVpnId.setFont(resourceMap.getFont("jLabelVpnTyp.font")); // NOI18N
+        jLabelVpnId.setFont(new Font("Arial", Font.PLAIN, Util.getFontSize())); // NOI18N
         jLabelVpnId.setForeground(resourceMap.getColor("jLabelVpnId.foreground")); // NOI18N
         jLabelVpnId.setText(resourceMap.getString("jLabelVpnId.text")); // NOI18N
         jLabelVpnId.setName("jLabelVpnId"); // NOI18N
-        jPanel2.add(jLabelVpnId, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 20, 80, -1));
+        jPanel2.add(jLabelVpnId, "cell 4 1,growx,aligny top");
 
-        jLabelValidUntilDesc.setFont(resourceMap.getFont("jLabelVpnTyp.font")); // NOI18N
+        jLabelValidUntilDesc.setFont(new Font("Arial", Font.PLAIN, Util.getFontSize())); // NOI18N
         jLabelValidUntilDesc.setForeground(resourceMap.getColor("jLabelVpnId.foreground")); // NOI18N
         jLabelValidUntilDesc.setText(i18n.tr("Gültig bis:"));
         jLabelValidUntilDesc.setName("jLabelValidUntilDesc"); // NOI18N
-        jPanel2.add(jLabelValidUntilDesc, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 60, 90, -1));
+        jPanel2.add(jLabelValidUntilDesc, "cell 6 0,growx,aligny top");
 
-        jLabelVpnTyp.setFont(resourceMap.getFont("jLabelVpnTyp.font")); // NOI18N
+        jLabelVpnTyp.setFont(new Font("Arial", Font.PLAIN, Util.getFontSize())); // NOI18N
         jLabelVpnTyp.setForeground(resourceMap.getColor("jLabelVpnId.foreground")); // NOI18N
         jLabelVpnTyp.setText(resourceMap.getString("jLabelVpnTyp.text")); // NOI18N
         jLabelVpnTyp.setName("jLabelVpnTyp"); // NOI18N
-        jPanel2.add(jLabelVpnTyp, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 40, 80, -1));
+        jPanel2.add(jLabelVpnTyp, "cell 5 1,growx,aligny top");
 
-        jLabel19.setFont(resourceMap.getFont("jLabelVpnTyp.font")); // NOI18N
+        jLabel19.setFont(new Font("Arial", Font.PLAIN, Util.getFontSize())); // NOI18N
         jLabel19.setForeground(resourceMap.getColor("jLabelVpnId.foreground")); // NOI18N
         jLabel19.setText(i18n.tr("VPN Typ:"));
         jLabel19.setName("jLabel19"); // NOI18N
-        jPanel2.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 40, 90, -1));
+        jPanel2.add(jLabel19, "cell 5 0,growx,aligny top");
 
-        jLabelVpnValidUntil.setFont(resourceMap.getFont("jLabelVpnTyp.font")); // NOI18N
+        jLabelVpnValidUntil.setFont(new Font("Arial", Font.PLAIN, Util.getFontSize())); // NOI18N
         jLabelVpnValidUntil.setForeground(resourceMap.getColor("jLabelVpnId.foreground")); // NOI18N
         jLabelVpnValidUntil.setText(resourceMap.getString("jLabelVpnValidUntil.text")); // NOI18N
         jLabelVpnValidUntil.setName("jLabelVpnValidUntil"); // NOI18N
-        jPanel2.add(jLabelVpnValidUntil, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 60, 80, -1));
+        jPanel2.add(jLabelVpnValidUntil, "cell 6 1,growx,aligny top");
 
         jPanel1.setName("jPanel1"); // NOI18N
 
-        jLayeredPane1.setName("jLayeredPane1"); // NOI18N
-        jLayeredPane1.setOpaque(true);
-
-        jServerListPanel.setBackground(resourceMap.getColor("jServerListPanel.background")); // NOI18N
-        jServerListPanel.setMinimumSize(new java.awt.Dimension(310, 430));
-        jServerListPanel.setName("jServerListPanel"); // NOI18N
-        jServerListPanel.setPreferredSize(new java.awt.Dimension(313, 430));
+        jServerListPanel.setBackground(resourceMap.getColor("jServerListPanel.background"));
+        jServerListPanel.setName("jServerListPanel");
 
         jLabel11.setBackground(resourceMap.getColor("jLabel11.background")); // NOI18N
         jLabel11.setFont(OxygenFont.getFontLargeBold());
@@ -425,10 +414,8 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 
         jScrollPane.setBackground(resourceMap.getColor("jScrollPane.background")); // NOI18N
         jScrollPane.setName("jScrollPane"); // NOI18N
-        jScrollPane.setPreferredSize(new java.awt.Dimension(454, 440));
-
         jServerListTable.setBackground(resourceMap.getColor("jServerListTable.background")); // NOI18N
-        jServerListTable.setFont(resourceMap.getFont("jServerListTable.font")); // NOI18N
+        jServerListTable.setFont(new Font("Arial", Font.PLAIN, Util.getFontSize())); // NOI18N
         jServerListTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -468,7 +455,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
         jLabel12.setToolTipText(i18n.tr("<html>Wähle UDP für eine schnellere Verbindung.<br /> TCP solltest du nur wählen, wenn du Probleme hast, die Verbindung mit UDP aufzubauen.</html>"));
         jLabel12.setName("jLabel12"); // NOI18N
 
-        jUpgradeButtonLabel1.setIcon(resourceMap.getIcon("jUpgradeButtonLabel1.icon")); // NOI18N
+        jUpgradeButtonLabel1.setIcon(Util.getImageIcon("/buttons/button-serial-de.gif")); // NOI18N
         jUpgradeButtonLabel1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jUpgradeButtonLabel1.setName("jUpgradeButtonLabel1"); // NOI18N
         jUpgradeButtonLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -477,7 +464,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
             }
         });
 
-        jConnectButtonLabel1.setIcon(resourceMap.getIcon("jConnectButtonLabel1.icon")); // NOI18N
+        jConnectButtonLabel1.setIcon(Util.getImageIcon("/buttons/button-connect-de.gif")); // NOI18N
         jConnectButtonLabel1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jConnectButtonLabel1.setName("jConnectButtonLabel1"); // NOI18N
         jConnectButtonLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -486,7 +473,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
             }
         });
 
-        jPremiumButtonLabel1.setIcon(resourceMap.getIcon("jPremiumButtonLabel1.icon")); // NOI18N
+        jPremiumButtonLabel1.setIcon(Util.getImageIcon("/buttons/button-connect-de.gif")); // NOI18N
         jPremiumButtonLabel1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jPremiumButtonLabel1.setName("jPremiumButtonLabel1"); // NOI18N
         jPremiumButtonLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -495,83 +482,25 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
             }
         });
 
-        javax.swing.GroupLayout jServerListPanelLayout = new javax.swing.GroupLayout(jServerListPanel);
-        jServerListPanel.setLayout(jServerListPanelLayout);
-        jServerListPanelLayout.setHorizontalGroup(
-            jServerListPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jServerListPanelLayout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addGroup(jServerListPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jServerListPanelLayout.createSequentialGroup()
-                        .addGroup(jServerListPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 750, Short.MAX_VALUE)
-                            .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, 750, Short.MAX_VALUE))
-                        .addGap(20, 20, 20))
-                    .addGroup(jServerListPanelLayout.createSequentialGroup()
-                        .addGroup(jServerListPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 555, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jServerListPanelLayout.createSequentialGroup()
-                                .addComponent(jRadioUdp, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(7, 7, 7)
-                                .addComponent(jRadioTcp))
-                            .addGroup(jServerListPanelLayout.createSequentialGroup()
-                                .addComponent(jConnectButtonLabel1)
-                                .addGap(2, 2, 2)
-                                .addComponent(jUpgradeButtonLabel1)
-                                .addGap(2, 2, 2)
-                                .addComponent(jPremiumButtonLabel1)))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-        );
-        jServerListPanelLayout.setVerticalGroup(
-            jServerListPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jServerListPanelLayout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addComponent(jLabel11)
-                .addGap(20, 20, 20)
-                .addComponent(jScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 306, Short.MAX_VALUE)
-                .addGap(10, 10, 10)
-                .addComponent(jLabel12)
-                .addGap(1, 1, 1)
-                .addGroup(jServerListPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jRadioUdp)
-                    .addComponent(jRadioTcp))
-                .addGap(20, 20, 20)
-                .addGroup(jServerListPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jUpgradeButtonLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jConnectButtonLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPremiumButtonLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(10, 10, 10))
-        );
-
-        jServerListPanel.setBounds(0, 0, 770, 490);
-        jLayeredPane1.add(jServerListPanel, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        //jServerListPanel.setBounds(0, 0, 770, 490);
+        jPanel1.add(jServerListPanel, "grow");
+        jServerListPanel.setLayout(new MigLayout("hidemode 3", "[][][][]", "[]"));
+        jServerListPanel.add(jScrollPane, "cell 0 1 7 1,grow");
+        jServerListPanel.add(jLabel11, "cell 0 0 7 1,growx,aligny top");
+        jServerListPanel.add(jLabel12, "cell 0 2 7 1,growx,aligny top");
+        jServerListPanel.add(jRadioUdp, "cell 0 3,growx,aligny top");
+        jServerListPanel.add(jRadioTcp, "cell 2 3 5 1,alignx left,aligny top");
+        jServerListPanel.add(jConnectButtonLabel1, "cell 0 4 3 1,alignx left,aligny top");
+        jServerListPanel.add(jUpgradeButtonLabel1, "cell 4 4,alignx left,aligny top");
+        jServerListPanel.add(jPremiumButtonLabel1, "cell 6 4,alignx left,aligny top");
 
         jConnectPanel.setBackground(resourceMap.getColor("jConnectPanel.background")); // NOI18N
         jConnectPanel.setFocusable(false);
-        jConnectPanel.setName("jConnectPanel"); // NOI18N
-        jConnectPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jConnectPanel.setName("jConnectPanel");
+        jConnectPanel.setLayout(new MigLayout("hidemode 3", "[grow][grow][grow]", "[grow][]"));
 
-        jLabel8.setFont(OxygenFont.getFontLargeBold());
-        jLabel8.setForeground(resourceMap.getColor("jLabel8.foreground")); // NOI18N
-        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel8.setText(resourceMap.getString("jLabel8.text")); // NOI18N
-        jLabel8.setName("jLabel8"); // NOI18N
-        jConnectPanel.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 50, 160, 20));
-
-        jLabel4.setFont(OxygenFont.getFontLargeBold());
-        jLabel4.setForeground(resourceMap.getColor("jLabel4.foreground")); // NOI18N
-        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel4.setText(i18n.tr("Lokaler Computer"));
-        jLabel4.setName("jLabel4"); // NOI18N
-        jConnectPanel.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 300, 160, 20));
-
-        jLabel7.setFont(OxygenFont.getFontLargeBold());
-        jLabel7.setForeground(resourceMap.getColor("jLabel7.foreground")); // NOI18N
-        jLabel7.setText(i18n.tr("Internet"));
-        jLabel7.setName("jLabel7"); // NOI18N
-        jConnectPanel.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 390, -1, -1));
-
-        jUpgradeButtonLabel.setIcon(resourceMap.getIcon("jUpgradeButtonLabel.icon")); // NOI18N
+        
+        jUpgradeButtonLabel.setIcon(Util.getImageIcon("/buttons/button-serial-de.gif")); // NOI18N
         jUpgradeButtonLabel.setText(resourceMap.getString("jUpgradeButtonLabel.text")); // NOI18N
         jUpgradeButtonLabel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jUpgradeButtonLabel.setName("jUpgradeButtonLabel"); // NOI18N
@@ -580,9 +509,10 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
                 jUpgradeButtonLabelMouseClicked(evt);
             }
         });
-        jConnectPanel.add(jUpgradeButtonLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 430, 257, 50));
+        jConnectPanel.add(jUpgradeButtonLabel, "cell 1 1,alignx left,aligny top");
 
-        jConnectButtonLabel.setIcon(resourceMap.getIcon("jConnectButtonLabel.icon")); // NOI18N
+        
+        jConnectButtonLabel.setIcon(Util.getImageIcon("/buttons/button-connect-de.gif")); // NOI18N
         jConnectButtonLabel.setText(resourceMap.getString("jConnectButtonLabel.text")); // NOI18N
         jConnectButtonLabel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jConnectButtonLabel.setName("jConnectButtonLabel"); // NOI18N
@@ -591,9 +521,9 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
                 jConnectButtonLabelMouseClicked(evt);
             }
         });
-        jConnectPanel.add(jConnectButtonLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 430, 214, 50));
+        jConnectPanel.add(jConnectButtonLabel, "cell 0 1,alignx left,aligny top");
 
-        jPremiumButtonLabel.setIcon(resourceMap.getIcon("jPremiumButtonLabel.icon")); // NOI18N
+        jPremiumButtonLabel.setIcon(Util.getImageIcon("/buttons/button-premium-infos.gif")); // NOI18N
         jPremiumButtonLabel.setText(resourceMap.getString("jPremiumButtonLabel.text")); // NOI18N
         jPremiumButtonLabel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jPremiumButtonLabel.setName("jPremiumButtonLabel"); // NOI18N
@@ -602,39 +532,18 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
                 jPremiumButtonLabelMouseClicked(evt);
             }
         });
-        jConnectPanel.add(jPremiumButtonLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 430, 267, 50));
+        jConnectPanel.add(jPremiumButtonLabel, "cell 2 1,alignx left,aligny top");
 
         jPanel4.setName("jPanel4"); // NOI18N
+        jConnectionStateImage.setName("jConnectionStateImage");
 
-        jConnectionStateImage.setIcon(resourceMap.getIcon("jConnectionStateImage.icon")); // NOI18N
-        jConnectionStateImage.setText(resourceMap.getString("jConnectionStateImage.text")); // NOI18N
-        jConnectionStateImage.setName("jConnectionStateImage"); // NOI18N
+        jConnectPanel.add(jPanel4, "cell 0 0 3 1,alignx left,aligny top");
+        jPanel4.setLayout(new MigLayout("hidemode 3", "[grow]", "[grow]"));
+        jPanel4.add(jConnectionStateImage, "cell 0 0,alignx left,aligny top");
 
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 736, Short.MAX_VALUE)
-            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel4Layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jConnectionStateImage)
-                    .addGap(0, 0, Short.MAX_VALUE)))
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 404, Short.MAX_VALUE)
-            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel4Layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jConnectionStateImage)
-                    .addGap(0, 0, Short.MAX_VALUE)))
-        );
-
-        jConnectPanel.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
-
-        jConnectPanel.setBounds(0, 0, 770, 490);
-        jLayeredPane1.add(jConnectPanel, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        //jConnectPanel.setBounds(0, 0, 770, 490);
+        jPanel1.add(jConnectPanel, "cell 0 0,grow");
+        
 
         jMapPanel.setBackground(resourceMap.getColor("jMapPanel.background")); // NOI18N
         jMapPanel.setName("jMapPanel"); // NOI18N
@@ -663,7 +572,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
             }
         });
 
-        jGotoOwnLocation.setIcon(resourceMap.getIcon("jGotoOwnLocation.icon")); // NOI18N
+        jGotoOwnLocation.setIcon(Util.getImageIcon("/icons/icon-home.png")); // NOI18N
         jGotoOwnLocation.setText(i18n.tr("gehe zu eigenem Standort"));
         jGotoOwnLocation.setEnabled(false);
         jGotoOwnLocation.setName("jGotoOwnLocation"); // NOI18N
@@ -673,42 +582,14 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
             }
         });
 
-        javax.swing.GroupLayout jMapPanelLayout = new javax.swing.GroupLayout(jMapPanel);
-        jMapPanel.setLayout(jMapPanelLayout);
-        jMapPanelLayout.setHorizontalGroup(
-            jMapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jMapPanelLayout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addGroup(jMapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jMapPanelLayout.createSequentialGroup()
-                        .addGroup(jMapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jMapPanelLayout.createSequentialGroup()
-                                .addComponent(jShowOwnPosition, javax.swing.GroupLayout.DEFAULT_SIZE, 533, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jGotoOwnLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(3, 3, 3))
-                            .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 730, Short.MAX_VALUE))
-                        .addGap(20, 20, 20))
-                    .addGroup(jMapPanelLayout.createSequentialGroup()
-                        .addComponent(jXMapKit1, javax.swing.GroupLayout.DEFAULT_SIZE, 726, Short.MAX_VALUE)
-                        .addGap(24, 24, 24))))
-        );
-        jMapPanelLayout.setVerticalGroup(
-            jMapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jMapPanelLayout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addComponent(jLabel13)
-                .addGap(10, 10, 10)
-                .addGroup(jMapPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jShowOwnPosition)
-                    .addComponent(jGotoOwnLocation))
-                .addGap(10, 10, 10)
-                .addComponent(jXMapKit1, javax.swing.GroupLayout.DEFAULT_SIZE, 368, Short.MAX_VALUE)
-                .addGap(40, 40, 40))
-        );
-
-        jMapPanel.setBounds(0, 0, 770, 490);
-        jLayeredPane1.add(jMapPanel, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        //jMapPanel.setBounds(0, 0, 770, 490);
+        
+        jPanel1.add(jMapPanel, "growx");
+        jMapPanel.setLayout(new MigLayout("hidemode 3", "[grow][grow][grow]", "[][][grow]"));
+        jMapPanel.add(jShowOwnPosition, "cell 0 1,alignx left,aligny top");
+        jMapPanel.add(jGotoOwnLocation, "cell 2 1,growx,aligny top");
+        jMapPanel.add(jLabel13, "cell 0 0 3 1,growx,aligny top");
+        jMapPanel.add(jXMapKit1, "cell 0 2 3 1,grow");
 
         jUsaPanel.setBackground(resourceMap.getColor("jUsaPanel.background")); // NOI18N
         jUsaPanel.setName("jUsaPanel"); // NOI18N
@@ -721,7 +602,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
         jLabel16.setOpaque(true);
 
         jLabel10.setForeground(resourceMap.getColor("jLabel10.foreground")); // NOI18N
-        jLabel10.setText(i18n.tr("<html>Für die Verwendung dieser Streams ist in der Regel eine US-IP-Adresse nötig. Diese erhälst du, in dem du dich auf einen Shellfire VPN Server in den USA verbindest.</html>"));
+        jLabel10.setText(i18n.tr("<html>Für die Verwendung dieser Streams ist in der Regel eine US-IP-Adresse nötig.<br>Diese erhälst du, in dem du dich auf einen Shellfire VPN Server in den USA verbindest.</html>"));
         jLabel10.setName("jLabel10"); // NOI18N
 
         jPanel3.setBackground(resourceMap.getColor("jPanel3.background")); // NOI18N
@@ -846,125 +727,52 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
             }
         });
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, 730, Short.MAX_VALUE)
-            .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, 730, Short.MAX_VALUE)
-            .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, 730, Short.MAX_VALUE)
-            .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, 730, Short.MAX_VALUE)
-            .addComponent(jButton8, javax.swing.GroupLayout.DEFAULT_SIZE, 730, Short.MAX_VALUE)
-            .addComponent(jButton9, javax.swing.GroupLayout.DEFAULT_SIZE, 730, Short.MAX_VALUE)
-            .addComponent(jButton10, javax.swing.GroupLayout.DEFAULT_SIZE, 730, Short.MAX_VALUE)
-            .addComponent(jButton11, javax.swing.GroupLayout.DEFAULT_SIZE, 730, Short.MAX_VALUE)
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(jButton4)
-                .addGap(2, 2, 2)
-                .addComponent(jButton5)
-                .addGap(2, 2, 2)
-                .addComponent(jButton6)
-                .addGap(2, 2, 2)
-                .addComponent(jButton7)
-                .addGap(2, 2, 2)
-                .addComponent(jButton8)
-                .addGap(2, 2, 2)
-                .addComponent(jButton9)
-                .addGap(2, 2, 2)
-                .addComponent(jButton10)
-                .addGap(2, 2, 2)
-                .addComponent(jButton11))
-        );
-
-        javax.swing.GroupLayout jUsaPanelLayout = new javax.swing.GroupLayout(jUsaPanel);
-        jUsaPanel.setLayout(jUsaPanelLayout);
-        jUsaPanelLayout.setHorizontalGroup(
-            jUsaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jUsaPanelLayout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addGroup(jUsaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel16, javax.swing.GroupLayout.DEFAULT_SIZE, 730, Short.MAX_VALUE)
-                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, 730, Short.MAX_VALUE))
-                .addGap(20, 20, 20))
-        );
-        jUsaPanelLayout.setVerticalGroup(
-            jUsaPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jUsaPanelLayout.createSequentialGroup()
-                .addGap(18, 18, 18)
-                .addComponent(jLabel16)
-                .addGap(0, 0, 0)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(189, 189, 189))
-        );
-
-        jUsaPanel.setBounds(0, 0, 770, 490);
-        jLayeredPane1.add(jUsaPanel, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLayeredPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 771, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLayeredPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 487, javax.swing.GroupLayout.PREFERRED_SIZE)
-        );
-
-        javax.swing.GroupLayout jContentPanelLayout = new javax.swing.GroupLayout(jContentPanel);
-        jContentPanel.setLayout(jContentPanelLayout);
-        jContentPanelLayout.setHorizontalGroup(
-            jContentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jContentPanelLayout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 731, Short.MAX_VALUE)
-                .addGap(20, 20, 20))
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        jContentPanelLayout.setVerticalGroup(
-            jContentPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jContentPanelLayout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
+        //jUsaPanel.setBounds(0, 0, 770, 490);
+        jPanel1.add(jUsaPanel, "cell 0 3,grow");
+        jUsaPanel.setLayout(new MigLayout("hidemode 3", "[]", "[grow][grow][grow]"));
+        jUsaPanel.add(jPanel3, "cell 0 1,growx,aligny top");
+        jPanel3.setLayout(new MigLayout("", "[grow]", "[][][][][][][][]"));
+        jPanel3.add(jButton4, "cell 0 0,growx,aligny top");
+        jPanel3.add(jButton5, "cell 0 1,growx,aligny top");
+        jPanel3.add(jButton6, "cell 0 2,growx,aligny top");
+        jPanel3.add(jButton7, "cell 0 3,growx,aligny top");
+        jPanel3.add(jButton8, "cell 0 4,growx,aligny top");
+        jPanel3.add(jButton9, "cell 0 5,growx,aligny top");
+        jPanel3.add(jButton10, "cell 0 6,growx,aligny top");
+        jPanel3.add(jButton11, "cell 0 7,growx,aligny top");
+        jUsaPanel.add(jLabel16, "cell 0 0,alignx left,aligny top");
+        jUsaPanel.add(jLabel10, "cell 0 2,grow");
+        jPanel1.setLayout(new MigLayout("hidemode 3", "[grow]", "[grow][grow][grow][grow]"));
+        
 
         jMenuPanel.setBackground(resourceMap.getColor("jMenuPanel.background")); // NOI18N
-        jMenuPanel.setName("jMenuPanel"); // NOI18N
-        jMenuPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jMenuPanel.setName("jMenuPanel");
+        jMenuPanel.setLayout(new MigLayout("hidemode 3", "[grow]", "[][][][][][grow]"));
 
         jLabel5.setBackground(resourceMap.getColor("jLabel5.background")); // NOI18N
         jLabel5.setIcon(getLogo());
         jLabel5.setText(resourceMap.getString("jLabel5.text")); // NOI18N
         jLabel5.setAlignmentY(0.0F);
         jLabel5.setName("jLabel5"); // NOI18N
-        jMenuPanel.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 250, 60));
+        jMenuPanel.add(jLabel5, "cell 0 0,grow");
 
         jPanelConnect.setBackground(resourceMap.getColor("jPanelConnect.background")); // NOI18N
         jPanelConnect.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jPanelConnect.setMinimumSize(new java.awt.Dimension(250, 66));
         jPanelConnect.setName("jPanelConnect"); // NOI18N
-        jPanelConnect.setPreferredSize(new java.awt.Dimension(250, 66));
-        jPanelConnect.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanelConnect.setLayout(new MigLayout("", "[grow][grow]", "[grow][grow][grow]"));
 
-        jLabelConnectHeader.setFont(resourceMap.getFont("jLabelConnectHeader.font")); // NOI18N
+        jLabelConnectHeader.setFont(new Font("Arial", Font.PLAIN, Util.getFontSize())); // NOI18N
         jLabelConnectHeader.setText(i18n.tr("Verbindung"));
         jLabelConnectHeader.setName("jLabelConnectHeader"); // NOI18N
-        jPanelConnect.add(jLabelConnectHeader, new org.netbeans.lib.awtextra.AbsoluteConstraints(65, 15, 175, 20));
+        jPanelConnect.add(jLabelConnectHeader, "cell 1 0,alignx left,aligny bottom");
 
-        jLabelConnectFooter.setFont(resourceMap.getFont("jLabelConnectFooter.font")); // NOI18N
+        jLabelConnectFooter.setFont(new Font("Arial", Font.PLAIN, Util.getFontSize())); // NOI18N
         jLabelConnectFooter.setText(i18n.tr("Jetzt zu Shellfire VPN verbinden"));
         jLabelConnectFooter.setName("jLabelConnectFooter"); // NOI18N
-        jPanelConnect.add(jLabelConnectFooter, new org.netbeans.lib.awtextra.AbsoluteConstraints(65, 40, 177, 15));
+        jPanelConnect.add(jLabelConnectFooter, "cell 1 1,alignx left,aligny top");
 
-        jButtonConnect.setIcon(new javax.swing.ImageIcon(getClass().getResource("/buttons/button-connect-idle.png"))); // NOI18N
+        jButtonConnect.setIcon( Util.getImageIcon("/buttons/button-connect-idle.png")); // NOI18N
         jButtonConnect.setText(resourceMap.getString("jButtonConnect.text")); // NOI18N
         jButtonConnect.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jButtonConnect.setName("jButtonConnect"); // NOI18N
@@ -979,31 +787,29 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
                 jButtonConnectMouseEntered(evt);
             }
         });
-        jPanelConnect.add(jButtonConnect, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 250, 66));
+        jPanelConnect.add(jButtonConnect, "cell 0 0 2 2,grow");
 
-        jMenuPanel.add(jPanelConnect, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 250, 66));
+        jMenuPanel.add(jPanelConnect, "cell 0 1,growx,aligny top");
 
         jPanelServerList.setBackground(resourceMap.getColor("jPanelServerList.background")); // NOI18N
         jPanelServerList.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jPanelServerList.setMinimumSize(new java.awt.Dimension(250, 66));
         jPanelServerList.setName("jPanelServerList"); // NOI18N
-        jPanelServerList.setPreferredSize(new java.awt.Dimension(250, 66));
-        jPanelServerList.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanelServerList.setLayout(new MigLayout("hidemode 3", "[grow][grow]", "[grow][grow]"));
 
-        jLabelServerListHeader.setFont(resourceMap.getFont("jLabelServerListHeader.font")); // NOI18N
+        jLabelServerListHeader.setFont(new Font("Arial", Font.PLAIN, Util.getFontSize())); // NOI18N
         jLabelServerListHeader.setText(i18n.tr("Server Liste"));
         jLabelServerListHeader.setName("jLabelServerListHeader"); // NOI18N
-        jPanelServerList.add(jLabelServerListHeader, new org.netbeans.lib.awtextra.AbsoluteConstraints(65, 15, 175, 20));
+        jPanelServerList.add(jLabelServerListHeader, "cell 1 0,alignx left,aligny bottom");
 
-        jLabelServerListFooter.setFont(resourceMap.getFont("jLabelConnectFooter.font")); // NOI18N
+        jLabelServerListFooter.setFont(new Font("Arial", Font.PLAIN, Util.getFontSize())); // NOI18N
         jLabelServerListFooter.setText(i18n.tr("Liste aller VPN Server anzeigen"));
         jLabelServerListFooter.setName("jLabelServerListFooter"); // NOI18N
-        jPanelServerList.add(jLabelServerListFooter, new org.netbeans.lib.awtextra.AbsoluteConstraints(65, 40, 177, 15));
+        jPanelServerList.add(jLabelServerListFooter, "cell 1 1,alignx left,aligny top");
 
-        jButtonServerList.setIcon(new javax.swing.ImageIcon(getClass().getResource("/buttons/button-serverlist-idle.png"))); // NOI18N
+        jButtonServerList.setIcon(Util.getImageIcon("/buttons/button-serverlist-idle.png")); // NOI18N
         jButtonServerList.setText(resourceMap.getString("jButtonServerList.text")); // NOI18N
         jButtonServerList.setName("jButtonServerList"); // NOI18N
-        jButtonServerList.setPreferredSize(new java.awt.Dimension(250, 60));
         jButtonServerList.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jButtonServerListMouseClicked(evt);
@@ -1015,28 +821,27 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
                 jButtonServerListMouseExited(evt);
             }
         });
-        jPanelServerList.add(jButtonServerList, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 250, 66));
+        jPanelServerList.add(jButtonServerList, "cell 0 0 2 2,grow");
 
-        jMenuPanel.add(jPanelServerList, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 126, 250, 66));
+        jMenuPanel.add(jPanelServerList, "cell 0 2,aligny top,grow");
 
         jPanelMap.setBackground(resourceMap.getColor("jPanelMap.background")); // NOI18N
         jPanelMap.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jPanelMap.setMinimumSize(new java.awt.Dimension(250, 66));
         jPanelMap.setName("jPanelMap"); // NOI18N
-        jPanelMap.setPreferredSize(new java.awt.Dimension(250, 66));
-        jPanelMap.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanelMap.setLayout(new MigLayout("hidemode 3", "[grow][grow]", "[grow][grow]"));
 
-        jLabelMapHeader.setFont(resourceMap.getFont("jLabelServerListHeader.font")); // NOI18N
+        jLabelMapHeader.setFont(new Font("Arial", Font.PLAIN, Util.getFontSize())); // NOI18N
         jLabelMapHeader.setText(i18n.tr("Karte"));
         jLabelMapHeader.setName("jLabelMapHeader"); // NOI18N
-        jPanelMap.add(jLabelMapHeader, new org.netbeans.lib.awtextra.AbsoluteConstraints(65, 15, 175, 20));
+        jPanelMap.add(jLabelMapHeader, "cell 1 0,alignx left,aligny bottom");
 
-        jLabelMapFooter.setFont(resourceMap.getFont("jLabelConnectFooter.font")); // NOI18N
+        jLabelMapFooter.setFont(new Font("Arial", Font.PLAIN, Util.getFontSize())); // NOI18N
         jLabelMapFooter.setText(i18n.tr("Zeigt Verschlüsselungsroute"));
         jLabelMapFooter.setName("jLabelMapFooter"); // NOI18N
-        jPanelMap.add(jLabelMapFooter, new org.netbeans.lib.awtextra.AbsoluteConstraints(65, 40, 177, 15));
+        jPanelMap.add(jLabelMapFooter, "cell 1 1,alignx left,aligny top");
 
-        jButtonMap.setIcon(new javax.swing.ImageIcon(getClass().getResource("/buttons/button-map-idle.png"))); // NOI18N
+        jButtonMap.setIcon(Util.getImageIcon("/buttons/button-map-idle.png")); // NOI18N
         jButtonMap.setText(resourceMap.getString("jButtonMap.text")); // NOI18N
         jButtonMap.setName("jButtonMap"); // NOI18N
         jButtonMap.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -1050,28 +855,27 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
                 jButtonMapMouseExited(evt);
             }
         });
-        jPanelMap.add(jButtonMap, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 250, 66));
+        jPanelMap.add(jButtonMap, "cell 0 0 2 2,grow");
 
-        jMenuPanel.add(jPanelMap, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 192, 250, 66));
+        jMenuPanel.add(jPanelMap, "cell 0 3,growx,aligny top");
 
         jPanelUsa.setBackground(resourceMap.getColor("jPanelUsa.background")); // NOI18N
         jPanelUsa.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jPanelUsa.setMinimumSize(new java.awt.Dimension(250, 66));
         jPanelUsa.setName("jPanelUsa"); // NOI18N
-        jPanelUsa.setPreferredSize(new java.awt.Dimension(250, 66));
-        jPanelUsa.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanelUsa.setLayout(new MigLayout("hidemode 3", "[grow][grow]", "[grow][grow]"));
 
-        jLabelUsaHeader.setFont(resourceMap.getFont("jLabelServerListHeader.font")); // NOI18N
+        jLabelUsaHeader.setFont(new Font("Arial", Font.PLAIN, Util.getFontSize())); // NOI18N
         jLabelUsaHeader.setText(i18n.tr("Streams aus den USA"));
         jLabelUsaHeader.setName("jLabelUsaHeader"); // NOI18N
-        jPanelUsa.add(jLabelUsaHeader, new org.netbeans.lib.awtextra.AbsoluteConstraints(65, 15, 175, 20));
+        jPanelUsa.add(jLabelUsaHeader, "cell 1 0,alignx left,aligny bottom");
 
-        jLabelUsaFooter.setFont(resourceMap.getFont("jLabelConnectFooter.font")); // NOI18N
+        jLabelUsaFooter.setFont(new Font("Arial", Font.PLAIN, Util.getFontSize())); // NOI18N
         jLabelUsaFooter.setText(i18n.tr("Liste amerikanischer TV Streams"));
         jLabelUsaFooter.setName("jLabelUsaFooter"); // NOI18N
-        jPanelUsa.add(jLabelUsaFooter, new org.netbeans.lib.awtextra.AbsoluteConstraints(65, 40, 177, 15));
+        jPanelUsa.add(jLabelUsaFooter, "cell 1 1,alignx left,aligny top");
 
-        jButtonUsa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/buttons/button-usa-idle.png"))); // NOI18N
+        jButtonUsa.setIcon(Util.getImageIcon("/buttons/button-usa-idle.png")); // NOI18N
         jButtonUsa.setText(resourceMap.getString("jButtonUsa.text")); // NOI18N
         jButtonUsa.setName("jButtonUsa"); // NOI18N
         jButtonUsa.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -1085,16 +889,16 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
                 jButtonUsaMouseExited(evt);
             }
         });
-        jPanelUsa.add(jButtonUsa, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 250, 66));
+        jPanelUsa.add(jButtonUsa, "cell 0 0 2 2,grow");
 
-        jMenuPanel.add(jPanelUsa, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 256, 250, 66));
+        jMenuPanel.add(jPanelUsa, "cell 0 4,growx,aligny top");
 
         jHeaderPanel.setBackground(resourceMap.getColor("jHeaderPanel.background")); // NOI18N
         jHeaderPanel.setName("jHeaderPanel"); // NOI18N
 
-        jLabelHelp.setFont(resourceMap.getFont("jLabelHelp.font")); // NOI18N
+        jLabelHelp.setFont(new Font("Arial", Font.PLAIN, Util.getFontSize())); // NOI18N
         jLabelHelp.setForeground(resourceMap.getColor("jLabelHelp.foreground")); // NOI18N
-        jLabelHelp.setIcon(resourceMap.getIcon("jLabelHelp.icon")); // NOI18N
+        jLabelHelp.setIcon(Util.getImageIcon("/icons/help.png")); // NOI18N
         jLabelHelp.setText(resourceMap.getString("jLabelHelp.text")); // NOI18N
         jLabelHelp.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabelHelp.setName("jLabelHelp"); // NOI18N
@@ -1110,10 +914,10 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
             }
         });
 
-        jLabelExit.setFont(resourceMap.getFont("jLabelExit.font")); // NOI18N
+        jLabelExit.setFont(new Font("Arial", Font.PLAIN, Util.getFontSize())); // NOI18N
         jLabelExit.setForeground(resourceMap.getColor("jLabelExit.foreground")); // NOI18N
         jLabelExit.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabelExit.setIcon(resourceMap.getIcon("jLabelExit.icon")); // NOI18N
+        jLabelExit.setIcon(Util.getImageIcon("/icons/exit.png")); // NOI18N
         jLabelExit.setText(resourceMap.getString("jLabelExit.text")); // NOI18N
         jLabelExit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabelExit.setName("jLabelExit"); // NOI18N
@@ -1129,10 +933,10 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
             }
         });
 
-        jLabelHide.setFont(new java.awt.Font("Arial", 0, 14));
+        jLabelHide.setFont(new java.awt.Font("Arial", 0, Util.getFontSize()));
         jLabelHide.setForeground(resourceMap.getColor("jLabelHide.foreground")); // NOI18N
         jLabelHide.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabelHide.setIcon(resourceMap.getIcon("jLabelHide.icon")); // NOI18N
+        jLabelHide.setIcon(Util.getImageIcon("/icons/hide.png")); // NOI18N
         jLabelHide.setText(resourceMap.getString("jLabelHide.text")); // NOI18N
         jLabelHide.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabelHide.setName("jLabelHide"); // NOI18N
@@ -1151,7 +955,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
         jLabelSettings.setFont(new java.awt.Font("Arial", 0, 14));
         jLabelSettings.setForeground(resourceMap.getColor("jLabelSettings.foreground")); // NOI18N
         jLabelSettings.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabelSettings.setIcon(resourceMap.getIcon("jLabelSettings.icon")); // NOI18N
+        jLabelSettings.setIcon(Util.getImageIcon("/icons/settings.png")); // NOI18N
         jLabelSettings.setText(resourceMap.getString("jLabelSettings.text")); // NOI18N
         jLabelSettings.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabelSettings.setName("jLabelSettings"); // NOI18N
@@ -1170,7 +974,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
         jLabelMinimize.setFont(new java.awt.Font("Arial 14 14", 0, 14));
         jLabelMinimize.setForeground(resourceMap.getColor("jLabelMinimize.foreground")); // NOI18N
         jLabelMinimize.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabelMinimize.setIcon(resourceMap.getIcon("jLabelMinimize.icon")); // NOI18N
+        jLabelMinimize.setIcon(Util.getImageIcon("/icons/minimize.png")); // NOI18N
         jLabelMinimize.setText(resourceMap.getString("jLabelMinimize.text")); // NOI18N
         jLabelMinimize.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabelMinimize.setName("jLabelMinimize"); // NOI18N
@@ -1185,86 +989,23 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
                 jLabelMinimizeMouseEntered(evt);
             }
         });
-
-        jLabel1.setForeground(resourceMap.getColor("jLabel1.foreground")); // NOI18N
-        jLabel1.setText(resourceMap.getString("jLabel1.text")); // NOI18N
-        jLabel1.setName("jLabel1"); // NOI18N
-
-        jLabel6.setBackground(resourceMap.getColor("jLabel6.background")); // NOI18N
-        jLabel6.setForeground(resourceMap.getColor("jLabel6.foreground")); // NOI18N
-        jLabel6.setText(resourceMap.getString("jLabel6.text")); // NOI18N
-        jLabel6.setName("jLabel6"); // NOI18N
-
-        javax.swing.GroupLayout jHeaderPanelLayout = new javax.swing.GroupLayout(jHeaderPanel);
-        jHeaderPanel.setLayout(jHeaderPanelLayout);
-        jHeaderPanelLayout.setHorizontalGroup(
-            jHeaderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jHeaderPanelLayout.createSequentialGroup()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabelHelp)
-                .addGap(18, 18, 18)
-                .addComponent(jLabelSettings, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 495, Short.MAX_VALUE)
-                .addComponent(jLabelHide, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabelMinimize, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabelExit, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel6)
-                .addContainerGap())
-        );
-        jHeaderPanelLayout.setVerticalGroup(
-            jHeaderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jLabelHelp, javax.swing.GroupLayout.DEFAULT_SIZE, 59, Short.MAX_VALUE)
-            .addComponent(jLabelSettings, javax.swing.GroupLayout.DEFAULT_SIZE, 59, Short.MAX_VALUE)
-            .addComponent(jLabelHide, javax.swing.GroupLayout.DEFAULT_SIZE, 59, Short.MAX_VALUE)
-            .addComponent(jLabelMinimize, javax.swing.GroupLayout.DEFAULT_SIZE, 59, Short.MAX_VALUE)
-            .addComponent(jLabelExit, javax.swing.GroupLayout.DEFAULT_SIZE, 59, Short.MAX_VALUE)
-            .addGroup(jHeaderPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addContainerGap(23, Short.MAX_VALUE))
-            .addGroup(jHeaderPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel6)
-                .addContainerGap(23, Short.MAX_VALUE))
-        );
-
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addComponent(jMenuPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jContentPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jHeaderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addComponent(jHeaderPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jContentPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 579, Short.MAX_VALUE))
-                    .addComponent(jMenuPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 638, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, 1027, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 640, javax.swing.GroupLayout.PREFERRED_SIZE)
-        );
+        getContentPane().setLayout(new MigLayout("hidemode 3", "[grow]", "[grow]"));
+        getContentPane().add(jPanel5, "cell 0 0,grow");
+        jPanel5.setLayout(new MigLayout("hidemode 3", "[grow][grow]", "[][grow]"));
+        jPanel5.add(jMenuPanel, "cell 0 0 1 2,alignx left,growy");
+        jPanel5.add(jContentPanel, "cell 1 1,grow");
+        jContentPanel.setLayout(new MigLayout("hidemode 3", "[grow]", "[][grow]"));
+        jContentPanel.add(jPanel2, "cell 0 0,grow");
+        jContentPanel.add(jPanel1, "cell 0 1,grow");
+        jPanel5.add(jHeaderPanel, "cell 1 0,growx,aligny top");
+        jHeaderPanel.setLayout(new MigLayout("hidemode 3", "[][][grow][][][]", "[]"));
+        jHeaderPanel.add(jLabelHelp, "cell 0 0,alignx left,growy");
+        jHeaderPanel.add(jLabelSettings, "cell 1 0,grow");
+        jHeaderPanel.add(jLabelHide, "cell 3 0,grow");
+        jHeaderPanel.add(jLabelMinimize, "cell 4 0,grow");
+        jHeaderPanel.add(jLabelExit, "cell 5 0,alignx right,growy");
+        
+        this.jConnectionStateImage.setIcon(new ImageIcon(this.iconEcncryptionInactive));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -1435,7 +1176,10 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 
 				try {
 					ConnectionState state = get();
-
+					if (state == null) {
+					  state = ConnectionState.Disconnected;
+					}
+					
 					switch (state) {
 					case Disconnected:
 						if (isFreeAccount()) {
@@ -1646,7 +1390,6 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
     private javax.swing.JPanel jContentPanel;
     private javax.swing.JButton jGotoOwnLocation;
     private javax.swing.JPanel jHeaderPanel;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
@@ -1657,11 +1400,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabelConnectFooter;
     private javax.swing.JLabel jLabelConnectHeader;
     private javax.swing.JLabel jLabelConnectionState;
@@ -1681,7 +1420,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
     private javax.swing.JLabel jLabelVpnId;
     private javax.swing.JLabel jLabelVpnTyp;
     private javax.swing.JLabel jLabelVpnValidUntil;
-    private javax.swing.JLayeredPane jLayeredPane1;
+    
     private javax.swing.JPanel jMapPanel;
     private javax.swing.JPanel jMenuPanel;
     private javax.swing.ButtonGroup jNetworkTransportType;
@@ -1819,6 +1558,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 
 	private void updateContentPanes() {
 		this.content.updateContentPanes();
+		this.pack();
 	}
 
 	private void setActiveContentFromMouseEnteredEvent(MouseEvent evt) {
@@ -1867,7 +1607,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 				String text = (value == null) ? "" : value.toString();
 
 				lbl.setText(text);
-				lbl.setFont(lbl.getFont().deriveFont(Font.PLAIN, 11));
+				lbl.setFont(lbl.getFont().deriveFont(Font.PLAIN, Util.getFontSize()));
 				lbl.setHorizontalAlignment(JLabel.LEFT);
 				
 				return lbl;
@@ -1875,18 +1615,14 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 
 		};
 		
-		for (int row = 0; row < jServerListTable.getRowCount(); row++)
-        {
-			jServerListTable.setRowHeight(25);
-        }
 		jServerListTable.setBorder(null);
 		jScrollPane.setBorder(null);
 		cm.getColumn(0).setCellRenderer(new CountryImageRenderer());
-		cm.getColumn(0).setPreferredWidth(70);
-		cm.getColumn(1).setPreferredWidth(30);
-		cm.getColumn(2).setPreferredWidth(45);
-		cm.getColumn(3).setPreferredWidth(100);
-		cm.getColumn(4).setPreferredWidth(170);
+		cm.getColumn(0).setPreferredWidth(70*Util.getScalingFactor());
+		cm.getColumn(1).setPreferredWidth(30*Util.getScalingFactor());
+		cm.getColumn(2).setPreferredWidth(45*Util.getScalingFactor());
+		cm.getColumn(3).setPreferredWidth(100*Util.getScalingFactor());
+		cm.getColumn(4).setPreferredWidth(170*Util.getScalingFactor());
 
 		cm.getColumn(1).setCellRenderer(defaultRenderer);
 		cm.getColumn(2).setCellRenderer(defaultRenderer);
@@ -1897,7 +1633,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 
 		this.jServerListTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		jScrollPane.getViewport().setBackground(new Color(255, 255, 255));
-		jServerListTable.setRowHeight(10,30);
+		//jServerListTable.setRowHeight(10,50);
 		
 		JTableHeader header = jServerListTable.getTableHeader();
 		header.setReorderingAllowed(false);
@@ -1906,12 +1642,13 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 	    header.setForeground(Color.white);
 	    header.setFont(OpenSansFont.getFont());
 	    log.debug("Setting header preferred size to: " + cm.getTotalColumnWidth());
-	    header.setPreferredSize(new Dimension(cm.getTotalColumnWidth(), 25));
+	    header.setPreferredSize(new Dimension(cm.getTotalColumnWidth(), 25*Util.getScalingFactor()));
 	    header.setBorder(null);
 	    
 	    JPanel panel = new JPanel();
 	    panel.setBackground(ContentPane.colorDarkGrey);
 	    jScrollPane.setCorner(JScrollPane.UPPER_RIGHT_CORNER, panel);
+	    panel.setLayout(new MigLayout("hidemode 3", "[]", "[]"));
 	   
 	}
 
@@ -2426,6 +2163,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 		GeoPosition someWhereInTheAtlantic = new GeoPosition(46.352995, -36.591800);
 		jXMapKit1.setCenterPosition(someWhereInTheAtlantic);
 		jXMapKit1.setZoom(15);
+		jXMapKit1.setPreferredSize(new Dimension(800,800));
 
 		jShowOwnPosition.setSelected(showOwnPositionOnMap);
 		jShowOwnPositionActionPerformed(null);
@@ -2446,24 +2184,34 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 	}
 
 	private void loadIcons() {
-		this.iconIdleSmall = new ImageIcon(getClass().getResource("/icons/small-globe-disconnected.png")).getImage();
-		this.iconIdle = new ImageIcon(getClass().getResource("/icons/sfvpn2-idle-big.png")).getImage();
+		this.iconIdleSmall = Util.getImageIcon("/icons/small-globe-disconnected.png").getImage();
+		this.iconIdle = Util.getImageIcon("/icons/sfvpn2-idle-big.png").getImage();
 		
-		this.iconConnectingSmall = new ImageIcon(getClass().getResource("/icons/small-globe-connecting.png")).getImage();
-		this.iconConnecting = new ImageIcon(getClass().getResource("/icons/sfvpn2-connecting-big.png")).getImage();
+		this.iconConnectingSmall = Util.getImageIcon("/icons/small-globe-connecting.png").getImage();
+		this.iconConnecting = Util.getImageIcon("/icons/sfvpn2-connecting-big.png").getImage();
 		
-		this.iconConnectedSmall = new ImageIcon(getClass().getResource("/icons/small-globe-connected.png")).getImage();
-		this.iconConnected = new ImageIcon(getClass().getResource("/icons/sfvpn2-connected-big.png")).getImage();
+		this.iconConnectedSmall = Util.getImageIcon("/icons/small-globe-connected.png").getImage();
+		this.iconConnected = Util.getImageIcon("/icons/sfvpn2-connected-big.png").getImage();
 		
-		this.iconDisconnected = new ImageIcon(getClass().getResource("/icons/sfvpn2-disconnected-big.png")).getImage();
+		this.iconDisconnected = Util.getImageIcon("/icons/sfvpn2-disconnected-big.png").getImage();
 		
-		this.iconEcncryptionActive = new ImageIcon(getClass().getResource("/icons/status-encrypted-width736.gif")).getImage();
-		this.iconEcncryptionInactive = new ImageIcon(getClass().getResource("/icons/status-unencrypted-width736.gif")).getImage();
+		int scaleFactor = Util.getScalingFactor();
+		log.debug("ScalingFactor: " + scaleFactor);
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		double width = screenSize.getWidth();
+		
+		String size = "736";
+		if (width > 3000) {
+		  size = "1472";
+		}
+		
+		this.iconEcncryptionActive = new javax.swing.ImageIcon(ShellfireVPNMainForm.class.getResource("/icons/status-encrypted-width"+size+".gif")).getImage();
+		this.iconEcncryptionInactive = new javax.swing.ImageIcon(ShellfireVPNMainForm.class.getResource("/icons/status-unencrypted-width"+size+".gif")).getImage();
 		
 		String langKey = VpnI18N.getLanguage().getKey();
 		log.debug("langKey: " + langKey);
-		this.buttonDisconnect = new ImageIcon(getClass().getResource("/buttons/button-disconnect-" + langKey + ".gif")).getImage();
-		this.buttonConnect = new ImageIcon(getClass().getResource("/buttons/button-connect-" + langKey + ".gif")).getImage();
+		this.buttonDisconnect = Util.getImageIcon("/buttons/button-disconnect-" + langKey + ".gif").getImage();
+		this.buttonConnect = Util.getImageIcon("/buttons/button-connect-" + langKey + ".gif").getImage();
 		
 		mySetIconImage(iconIdle);
 	}
@@ -2742,7 +2490,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 		nagScreentimer.setRepeats(true);
 		nagScreentimer.setInitialDelay(0);
 		nagScreentimer.start();
-
+		
 	}
 
 	private void enableMouseMoveListener() {
@@ -2806,13 +2554,15 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 		if (!this.isFreeAccount()) {
 			this.jPremiumButtonLabel.setVisible(false);
 			this.jPremiumButtonLabel1.setVisible(false);
-			this.jUpgradeButtonLabel.setVisible(false);
-			this.jUpgradeButtonLabel1.setVisible(false);
 		}
+		this.jUpgradeButtonLabel.setVisible(false);
+		this.jUpgradeButtonLabel1.setVisible(false);
 	}
 
 	public static ImageIcon getLogo() {
-		return ShellfireVPNMainForm.mainIconMap.get(VpnI18N.getLanguage().getKey());
+	  ImageIcon imageIcon = ShellfireVPNMainForm.mainIconMap.get(VpnI18N.getLanguage().getKey());
+	  
+		return imageIcon;
 	}
 
 	public void mySetIconImage(Image img) {
@@ -2836,6 +2586,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 	}
 
 	private void initLayeredPaneSize() {
+	  /*
 		jLayeredPane1.addComponentListener(new ComponentAdapter() {
 			public void componentResized(ComponentEvent e) {
 				Rectangle r = jLayeredPane1.getBounds();
@@ -2847,6 +2598,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 			}
 
 		});
+		*/
 	}
 
 }

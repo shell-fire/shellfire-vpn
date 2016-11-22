@@ -111,10 +111,10 @@ downloadsuccessful:
   DetailPrint "Launching JRE setup"
   
   IfSilent doSilent
-  ExecWait '"$TEMP\jre_setup.exe" INSTALL_SILENT=Disable REBOOT=Disable AUTO_UPDATE=Enable WEB_ANALYTICS=Disable NOSTARTMENU=Enable' $0
+  ExecWait '"$TEMP\jre_setup.exe" INSTALL_SILENT=Enable REBOOT=Disable AUTO_UPDATE=Enable WEB_ANALYTICS=Disable NOSTARTMENU=Enable SPONSORS=Disable' $0
   goto jreSetupfinished
 doSilent:
-  ExecWait '"$TEMP\jre_setup.exe" INSTALL_SILENT=Disable REBOOT=Disable AUTO_UPDATE=Enable WEB_ANALYTICS=Disable NOSTARTMENU=Enable' $0
+  ExecWait '"$TEMP\jre_setup.exe" INSTALL_SILENT=Enable REBOOT=Disable AUTO_UPDATE=Enable WEB_ANALYTICS=Disable NOSTARTMENU=Enable SPONSORS=Disable' $0
   
 
 jreSetupFinished:

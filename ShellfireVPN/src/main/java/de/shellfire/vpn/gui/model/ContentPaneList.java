@@ -48,6 +48,8 @@ public class ContentPaneList {
 
         if (this.activePane != ContentPaneType.None)
             this.panes.get(this.activePane).setActiveState();
+        
+        
     }
 
     public void setHoveredPane(JLabel button) {

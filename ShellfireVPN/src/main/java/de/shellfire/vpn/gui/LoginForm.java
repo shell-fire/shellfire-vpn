@@ -12,12 +12,11 @@ package de.shellfire.vpn.gui;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Frame;
 import java.awt.Image;
+import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
-import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -50,6 +49,8 @@ import de.shellfire.vpn.webservice.EndpointManager;
 import de.shellfire.vpn.webservice.Response;
 import de.shellfire.vpn.webservice.WebService;
 import de.shellfire.vpn.webservice.model.LoginResponse;
+import net.miginfocom.swing.MigLayout;
+import javax.swing.JLabel;
 
 /**
  * 
@@ -93,11 +94,24 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
 		this.loadIcon();
 		
 		
-		this.setLocationRelativeTo(null);
+		
 		jLoginPanel.setPreferredSize(new Dimension((int) jLoginPanel.getPreferredSize().getWidth(), 200));
+		jLoginPanel.setLayout(new MigLayout("", "[][][grow]", "[][][][][][][][][][]"));
+		jLoginPanel.add(jLabel16, "flowx,cell 1 0 2 1,growx");
+		jLoginPanel.add(jLabel15, "cell 1 2,alignx right,aligny center");
+		jLoginPanel.add(jLabel7, "cell 1 1,grow");
+		jLoginPanel.add(jLostUsernamePasswordButton, "cell 2 9,growx,aligny top");
+		jLoginPanel.add(jStoreLoginData, "cell 2 3,growx,aligny top");
+		jLoginPanel.add(jPassword, "cell 2 2,growx,aligny top");
+		jLoginPanel.add(jUsername, "cell 2 1,growx,aligny top");
+		jLoginPanel.add(jAutoLogin, "cell 2 4,growx,aligny top");
+		jLoginPanel.add(jAutoStart, "cell 2 5,alignx left,aligny top");
+		jLoginPanel.add(jAutoConnect, "cell 2 6,growx,aligny top");
+		jLoginPanel.add(jButtonLogin, "cell 2 7,growx,aligny top");
+		jLoginPanel.add(jOpenRegisterFormButton, "cell 2 8,growx,aligny top");
 		//this.setSize(new Dimension((int) getSize().getWidth(), 1500));
 		this.pack();
-		
+		this.setLocationRelativeTo(null);
 
 	}
 	
@@ -320,6 +334,10 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+      int screenRes = Toolkit.getDefaultToolkit().getScreenResolution();
+      int fontSize = (int)Math.round(12.0 * screenRes / 72.0);
+
+      
         jPanel7 = new javax.swing.JPanel();
         jLoginPanel = new javax.swing.JPanel();
         jLabel16 = new javax.swing.JLabel();
@@ -342,18 +360,16 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Shellfire VPN 2 Login"); // NOI18N
         setResizable(false);
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel7.setBackground(new java.awt.Color(64, 69, 73));
-        jPanel7.setName("jPanel7"); // NOI18N
-        jPanel7.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel7.setName("jPanel7");
 
         jLoginPanel.setBackground(new java.awt.Color(244, 244, 244));
         jLoginPanel.setName("jLoginPanel"); // NOI18N
 
-        jLabel16.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
+        jLabel16.setFont(new java.awt.Font("Arial", 1, fontSize*2)); // NOI18N
         jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel16.setText(i18n.tr("login"));
+        jLabel16.setText("Login");
         jLabel16.setName("jLabel16"); // NOI18N
 
         jButtonLogin.setText(i18n.tr("Login"));
@@ -376,12 +392,12 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
             }
         });
 
-        jLabel7.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Arial", 0, fontSize)); // NOI18N
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel7.setText(i18n.tr("Email / Benutzername:"));
         jLabel7.setName("jLabel7"); // NOI18N
 
-        jLabel15.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel15.setFont(new java.awt.Font("Arial", 0, fontSize)); // NOI18N
         jLabel15.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel15.setText(i18n.tr("Passwort:"));
         jLabel15.setName("jLabel15"); // NOI18N
@@ -451,84 +467,29 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
                 jAutoConnectActionPerformed(evt);
             }
         });
+        getContentPane().setLayout(new MigLayout("", "[]", "[][grow]"));
+        jPanel7.setLayout(new MigLayout("", "[grow]", "[]"));
 
-        javax.swing.GroupLayout jLoginPanelLayout = new javax.swing.GroupLayout(jLoginPanel);
-        jLoginPanel.setLayout(jLoginPanelLayout);
-        jLoginPanelLayout.setHorizontalGroup(
-            jLoginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jLoginPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 337, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(23, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jLoginPanelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jLoginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel15)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jLoginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jLostUsernamePasswordButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jStoreLoginData, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPassword, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jUsername, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 218, Short.MAX_VALUE)
-                    .addComponent(jAutoLogin, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jAutoStart, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jAutoConnect, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButtonLogin, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 217, Short.MAX_VALUE)
-                    .addComponent(jOpenRegisterFormButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
-        );
-        jLoginPanelLayout.setVerticalGroup(
-            jLoginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jLoginPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jLoginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jUsername, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jLoginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel15)
-                    .addComponent(jPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jStoreLoginData)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jAutoLogin)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jAutoStart)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jAutoConnect)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButtonLogin)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jOpenRegisterFormButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLostUsernamePasswordButton)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        jPanel7.add(jLoginPanel, "cell 0 0,grow");
 
-        jPanel7.add(jLoginPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 380, 300));
-
-        getContentPane().add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 420, 340));
+        getContentPane().add(jPanel7, "cell 0 1,grow");
 
         jHeaderPanel.setBackground(new java.awt.Color(18, 172, 229));
-        jHeaderPanel.setName("jHeaderPanel"); // NOI18N
-        jHeaderPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jHeaderPanel.setName("jHeaderPanel");
+        jHeaderPanel.setLayout(new MigLayout("", "[grow][]", "[]"));
 
         jLabel5.setIcon(ShellfireVPNMainForm.getLogo());
         jLabel5.setAlignmentY(0.0F);
         jLabel5.setName("jLabel5"); // NOI18N
-        jHeaderPanel.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 250, 60));
+        jHeaderPanel.add(jLabel5, "cell 0 0,aligny top");
 
         jPanel6.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel6.setName("jPanel6"); // NOI18N
-        jPanel6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel6.setName("jPanel6");
 
-        jLabel6.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Arial", 0, fontSize)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/exit.png"))); // NOI18N
+        jLabel6.setIcon(Util.getImageIcon("/icons/exit.png")); // NOI18N
         jLabel6.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel6.setName("jLabel6"); // NOI18N
         jLabel6.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -542,11 +503,12 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
                 jLabel6MouseExited(evt);
             }
         });
-        jPanel6.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 30, 30));
+        jPanel6.setLayout(new MigLayout("", "", ""));
+        jPanel6.add(jLabel6, "cell 0 0,grow");
 
-        jHeaderPanel.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 0, 30, 30));
+        jHeaderPanel.add(jPanel6, "cell 1 0,alignx right,aligny top");
 
-        getContentPane().add(jHeaderPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 420, 60));
+        getContentPane().add(jHeaderPanel, "cell 0 0,growx,aligny top");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -568,6 +530,7 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
 	}
 
 	private void jButtonLoginActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jButtonLoginActionPerformed
+	  jButtonLogin.setEnabled(false);
 		this.showLoginProgress();
 
 		task = new LoginTask();
@@ -700,12 +663,16 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
 		this.setPasswordBogus();
 	}
 
-	private static void setLookAndFeel() {
-		try {
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-		} catch (Exception ex) {
-		}
-	}
+  private static void setLookAndFeel() {
+    try {
+      UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+      int screenRes = Toolkit.getDefaultToolkit().getScreenResolution();
+      int fontSize = (int)Math.round(12.0 * screenRes / 72.0);
+      Util.setDefaultSize(fontSize);
+
+    } catch (Exception ex) {
+    }
+  }
 
 	public static void main(String args[]) {
     final boolean minimize;
@@ -740,7 +707,6 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
 	        	String path = "";
 	
 	        	if (args.length > 1) {
-		        
 	        		for (int i = 1; i < args.length; i++) {
 	        			path += args[i];
 	        			
@@ -986,6 +952,7 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
 					setVisible(true);
 				}
 			}
+			jButtonLogin.setEnabled(true);
 
 		}
 

@@ -58,7 +58,7 @@ public abstract class ServiceTools {
 			return null;
 		}
 	}	
-	
+
 	public abstract void installElevated();
 
 	public static void startWithoutService() {

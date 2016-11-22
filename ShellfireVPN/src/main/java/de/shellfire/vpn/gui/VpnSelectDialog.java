@@ -30,6 +30,7 @@ import de.shellfire.vpn.gui.model.VpnSelectionTableModel;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.webservice.Vpn;
 import de.shellfire.vpn.webservice.WebService;
+import net.miginfocom.swing.MigLayout;
 
 /**
  *
@@ -88,13 +89,12 @@ public class VpnSelectDialog extends javax.swing.JFrame {
     setResizable(false);
 
     jPanel6.setBackground(new java.awt.Color(0, 0, 0));
-    jPanel6.setName("jPanel6"); // NOI18N
-    jPanel6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+    jPanel6.setName("jPanel6");
 
-    jBackLabel.setFont(new java.awt.Font("Arial", 0, 14));
+    jBackLabel.setFont(new java.awt.Font("Arial", 0, Util.getFontSize()));
     jBackLabel.setForeground(new java.awt.Color(255, 255, 255));
     jBackLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    jBackLabel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/exit.png"))); // NOI18N
+    jBackLabel.setIcon(Util.getImageIcon("/icons/exit.png")); // NOI18N
     jBackLabel.setText(i18n.tr("zurück"));
     jBackLabel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
     jBackLabel.setName("jBackLabel"); // NOI18N
@@ -111,20 +111,22 @@ public class VpnSelectDialog extends javax.swing.JFrame {
         jBackLabelMouseExited(evt);
       }
     });
-    jPanel6.add(jBackLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 100, 30));
+    jPanel6.setLayout(new MigLayout("", "[]", "[]"));
+    jPanel6.add(jBackLabel, "cell 0 0,grow");
 
     jHeaderPanel.setBackground(new java.awt.Color(18, 172, 229));
-    jHeaderPanel.setName("jHeaderPanel"); // NOI18N
-    jHeaderPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+    jHeaderPanel.setName("jHeaderPanel");
+    jHeaderPanel.setLayout(new MigLayout("", "[grow][]", "[]"));
 
     jLabel5.setIcon(ShellfireVPNMainForm.getLogo());
     jLabel5.setAlignmentY(0.0F);
     jLabel5.setName("jLabel5"); // NOI18N
-    jHeaderPanel.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 250, 100));
+    jHeaderPanel.add(jLabel5, "cell 0 0,grow");
+    jHeaderPanel.add(jPanel6, "alignx right,aligny top");
+    // jHeaderPanel.add(jLabel5, "cell 0 0,grow");
 
     jPanel7.setBackground(new java.awt.Color(64, 69, 73));
-    jPanel7.setName("jPanel7"); // NOI18N
-    jPanel7.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+    jPanel7.setName("jPanel7");
 
     jSelectVpnPanel.setName("jSelectVpnPanel"); // NOI18N
 
@@ -139,10 +141,11 @@ public class VpnSelectDialog extends javax.swing.JFrame {
         jSelectButtonActionPerformed(evt);
       }
     });
+    jPanel7.setLayout(new MigLayout("", "[]", "[]"));
 
     jScrollPane1.setName("jScrollPane1"); // NOI18N
 
-    jVpnSelectTable.setFont(new java.awt.Font("Lucida Grande", 0, 11)); // NOI18N
+    jVpnSelectTable.setFont(new java.awt.Font("Lucida Grande", 0, Util.getFontSize())); // NOI18N
     jVpnSelectTable.setModel(new javax.swing.table.DefaultTableModel(
         new Object[][] { { null, null, null, null }, { null, null, null, null }, { null, null, null, null }, { null, null, null, null } },
         new String[] { "Title 1", "Title 2", "Title 3", "Title 4" }));
@@ -156,76 +159,27 @@ public class VpnSelectDialog extends javax.swing.JFrame {
     jRememberSelection.setText(i18n.tr("Auswahl merken"));
     jRememberSelection.setName("jRememberSelection"); // NOI18N
 
-    jLabel16.setFont(new java.awt.Font("Arial", 1, 24));
+    jLabel16.setFont(new java.awt.Font("Arial", 1, Util.getFontSize() * 2));
     jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
     jLabel16.setText(i18n.tr("vpn auswahl"));
     jLabel16.setName("jLabel16"); // NOI18N
 
     jLabel3.setText(i18n.tr(
-        "<html>Hinweis: Die VPN Typen PPTP und L2TP/IPSec müssen nach der Auswahl zunächst auf OpenVPN gewechselt werden, damit sf vpn die Verbindung herstellen kann.</html>"));
-    jLabel3.setName("jLabel3"); // NOI18N
+        "<html>Hinweis: Die VPN Typen PPTP und L2TP/IPSec müssen<br> nach der Auswahl zunächst auf OpenVPN gewechselt werden,<br>damit sf vpn die Verbindung herstellen kann.</html>"));
+    jLabel3.setName("jLabel3");
 
-    javax.swing.GroupLayout jSelectVpnPanelLayout = new javax.swing.GroupLayout(jSelectVpnPanel);
-    jSelectVpnPanel.setLayout(jSelectVpnPanelLayout);
-    jSelectVpnPanelLayout.setHorizontalGroup(jSelectVpnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-        .addGroup(jSelectVpnPanelLayout.createSequentialGroup().addContainerGap()
-            .addGroup(jSelectVpnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jSelectVpnPanelLayout.createSequentialGroup()
-                    .addGroup(jSelectVpnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 330, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(jSelectVpnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE,
-                                javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jRememberSelection, javax.swing.GroupLayout.Alignment.LEADING,
-                                javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addContainerGap())
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jSelectVpnPanelLayout.createSequentialGroup()
-                    .addGroup(jSelectVpnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 335,
-                            Short.MAX_VALUE)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 335,
-                            Short.MAX_VALUE)
-                        .addComponent(jSelectButton, javax.swing.GroupLayout.DEFAULT_SIZE, 335, Short.MAX_VALUE))
-                    .addGap(15, 15, 15)))));
-    jSelectVpnPanelLayout
-        .setVerticalGroup(
-            jSelectVpnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(
-                    jSelectVpnPanelLayout.createSequentialGroup().addContainerGap()
-                        .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jRememberSelection, javax.swing.GroupLayout.PREFERRED_SIZE, 21,
-                            javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED).addComponent(jSelectButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)));
+    jPanel7.add(jSelectVpnPanel, "cell 0 0,growx,aligny top");
+    jSelectVpnPanel.setLayout(new MigLayout("", "[]", "[][][][][][]"));
+    jSelectVpnPanel.add(jLabel16, "cell 0 0,grow");
+    jSelectVpnPanel.add(jLabel1, "cell 0 1,alignx left,growy");
+    jSelectVpnPanel.add(jRememberSelection, "cell 0 3,grow");
+    jSelectVpnPanel.add(jLabel3, "cell 0 5,grow");
+    jSelectVpnPanel.add(jScrollPane1, "cell 0 2,grow");
+    jSelectVpnPanel.add(jSelectButton, "cell 0 4,growx,aligny top");
+    getContentPane().setLayout(new MigLayout("", "[][]", "[][]"));
 
-    jPanel7.add(jSelectVpnPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 350, -1));
-
-    javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-    getContentPane().setLayout(layout);
-    layout.setHorizontalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 400, Short.MAX_VALUE)
-        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGroup(layout.createSequentialGroup()
-            .addGap(0, 5, Short.MAX_VALUE).addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup().addGap(290, 290, 290).addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE,
-                    javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addComponent(jHeaderPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 390, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, 390, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGap(0, 5, Short.MAX_VALUE))));
-    layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addGap(0, 430, Short.MAX_VALUE)
-        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup().addGap(0, 0, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
-                        javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jHeaderPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))));
+    getContentPane().add(jHeaderPanel, "cell 0 0,grow");
+    getContentPane().add(jPanel7, "cell 0 1,grow");
 
     pack();
   }// </editor-fold>//GEN-END:initComponents
@@ -243,27 +197,28 @@ public class VpnSelectDialog extends javax.swing.JFrame {
     jBackLabel.setForeground(Color.white);
   }// GEN-LAST:event_jBackLabelMouseExited
 
-  private void jSelectButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jSelectButtonActionPerformed
-      try {    
-        int selected = this.jVpnSelectTable.getSelectedRow();
-          if (selected == -1) {
-              JOptionPane.showMessageDialog(null, i18n.tr("Bitte wähle einen VPN aus der Liste um fortzufahren"), i18n.tr("Kein Vpn ausgewählt"), JOptionPane.ERROR_MESSAGE);
-          } else {
-              Vpn selectedVpn = this.vpnSelectionTableModel.getVpn(selected);
-              rememberSelectionIfDesired(selectedVpn);
-              
-              this.service.selectVpn(selectedVpn);
-              this.setVisible(false);
-              ShellfireVPNMainForm mainForm = new ShellfireVPNMainForm(service);
-              mainForm.setVisible(true);
-              mainForm.afterLogin(autoConnect);
-              
-          }      
-          } catch (VpnException ex) {
-              Util.handleException(ex);
-          }
-  
-    }// GEN-LAST:event_jSelectButtonActionPerformed
+  private void jSelectButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jSelectButtonActionPerformed
+    try {
+      int selected = this.jVpnSelectTable.getSelectedRow();
+      if (selected == -1) {
+        JOptionPane.showMessageDialog(null, i18n.tr("Bitte wähle einen VPN aus der Liste um fortzufahren"), i18n.tr("Kein Vpn ausgewählt"),
+            JOptionPane.ERROR_MESSAGE);
+      } else {
+        Vpn selectedVpn = this.vpnSelectionTableModel.getVpn(selected);
+        rememberSelectionIfDesired(selectedVpn);
+
+        this.service.selectVpn(selectedVpn);
+        this.setVisible(false);
+        ShellfireVPNMainForm mainForm = new ShellfireVPNMainForm(service);
+        mainForm.setVisible(true);
+        mainForm.afterLogin(autoConnect);
+
+      }
+    } catch (VpnException ex) {
+      Util.handleException(ex);
+    }
+
+  }// GEN-LAST:event_jSelectButtonActionPerformed
 
   private void initVpnSelectTable(LinkedList<Vpn> allVpn) {
     vpnSelectionTableModel = new VpnSelectionTableModel(allVpn);
@@ -276,6 +231,11 @@ public class VpnSelectDialog extends javax.swing.JFrame {
     cm.getColumn(2).setPreferredWidth(180);
     this.jVpnSelectTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
     this.jVpnSelectTable.getTableHeader().setReorderingAllowed(false);
+
+    for (int row = 0; row < jVpnSelectTable.getRowCount(); row++) {
+      jVpnSelectTable.setRowHeight(row, 40);
+    }
+
     // jScrollPane1.getViewport().setBackground(new Color(224, 224, 226));
 
   }

@@ -13,6 +13,7 @@ package de.shellfire.vpn.gui;
 import org.xnap.commons.i18n.I18n;
 
 import de.shellfire.vpn.Storage;
+import de.shellfire.vpn.Util;
 import de.shellfire.vpn.client.ConnectionState;
 import de.shellfire.vpn.client.ConnectionStateChangedEvent;
 import de.shellfire.vpn.client.ConnectionStateListener;
@@ -21,6 +22,7 @@ import de.shellfire.vpn.gui.model.CountryMap;
 import de.shellfire.vpn.gui.renderer.CountryImageRenderer;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.types.Server;
+import net.miginfocom.swing.MigLayout;
 
 /**
  * 
@@ -58,39 +60,38 @@ public class ServerInMapPanel extends javax.swing.JPanel implements ConnectionSt
         jServerTypeLabel = new javax.swing.JLabel();
         jCountryLabel = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-
-        setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        setLayout(new MigLayout("", "", ""));
 
         jServerNameLabel.setBackground(new java.awt.Color(18, 172, 229));
-        jServerNameLabel.setFont(new java.awt.Font("Arial", 1, 14)); // NOI18N
+        jServerNameLabel.setFont(new java.awt.Font("Arial", 1, Util.getFontSize())); // NOI18N
         jServerNameLabel.setForeground(new java.awt.Color(255, 255, 255));
         jServerNameLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jServerNameLabel.setText(i18n.tr("Server 2"));
         jServerNameLabel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
         jServerNameLabel.setName("jServerNameLabel"); // NOI18N
         jServerNameLabel.setOpaque(true);
-        add(jServerNameLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 210, 30));
+        add(jServerNameLabel, "cell 0 0 2 1,grow");
 
-        jLabel2.setFont(new java.awt.Font("Lucida Grande", 0, 11)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Lucida Grande", 0, Util.getFontSize())); // NOI18N
         jLabel2.setText(i18n.tr("Host:"));
         jLabel2.setName("jLabel2"); // NOI18N
-        add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 80, -1));
+        add(jLabel2, "cell 0 2,growx,aligny top");
 
-        jHostLabel.setFont(new java.awt.Font("Lucida Grande", 0, 11)); // NOI18N
+        jHostLabel.setFont(new java.awt.Font("Lucida Grande", 0, Util.getFontSize())); // NOI18N
         jHostLabel.setText("123.999.999.999");
         jHostLabel.setName("jHostLabel"); // NOI18N
-        add(jHostLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 40, 110, -1));
+        add(jHostLabel, "cell 1 2,growx,aligny top");
         jHostLabel.getAccessibleContext().setAccessibleName("");
 
-        jLabel1.setFont(new java.awt.Font("Lucida Grande", 0, 11)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Lucida Grande", 0, Util.getFontSize())); // NOI18N
         jLabel1.setText(i18n.tr("Servertyp:"));
         jLabel1.setName("jLabel1"); // NOI18N
-        add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 80, -1));
+        add(jLabel1, "cell 0 4,growx,aligny top");
 
-        jLabel3.setFont(new java.awt.Font("Lucida Grande", 0, 11)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Lucida Grande", 0, Util.getFontSize())); // NOI18N
         jLabel3.setText(i18n.tr("Land:"));
         jLabel3.setName("jLabel3"); // NOI18N
-        add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, 80, -1));
+        add(jLabel3, "cell 0 6,growx,aligny top");
 
         jConnectButton.setText(i18n.tr("Verbinden"));
         jConnectButton.setName("jConnectButton"); // NOI18N
@@ -99,24 +100,24 @@ public class ServerInMapPanel extends javax.swing.JPanel implements ConnectionSt
                 jConnectButtonActionPerformed(evt);
             }
         });
-        add(jConnectButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 190, -1));
+        add(jConnectButton, "cell 0 8 2 1,growx,aligny top");
 
-        jServerTypeLabel.setFont(new java.awt.Font("Lucida Grande", 0, 11)); // NOI18N
+        jServerTypeLabel.setFont(new java.awt.Font("Lucida Grande", 0, Util.getFontSize())); // NOI18N
         jServerTypeLabel.setText("XXX");
         jServerTypeLabel.setName("jServerTypeLabel"); // NOI18N
-        add(jServerTypeLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 60, 110, -1));
+        add(jServerTypeLabel, "cell 1 4,growx,aligny top");
 
-        jCountryLabel.setFont(new java.awt.Font("Lucida Grande", 0, 11)); // NOI18N
+        jCountryLabel.setFont(new java.awt.Font("Lucida Grande", 0, Util.getFontSize())); // NOI18N
         jCountryLabel.setText("de");
         jCountryLabel.setName("jCountryLabel"); // NOI18N
-        add(jCountryLabel, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 80, 110, -1));
+        add(jCountryLabel, "cell 1 6,growx,aligny top");
         jCountryLabel.getAccessibleContext().setAccessibleName("");
 
         jLabel4.setBackground(new java.awt.Color(224, 224, 226));
         jLabel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
         jLabel4.setName("jLabel4"); // NOI18N
         jLabel4.setOpaque(true);
-        add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 28, 210, 110));
+        add(jLabel4, "cell 0 0 2 9,grow");
     }// </editor-fold>//GEN-END:initComponents
 
   private void jConnectButtonActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_jConnectButtonActionPerformed

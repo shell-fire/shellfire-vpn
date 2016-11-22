@@ -14,6 +14,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
@@ -35,6 +36,7 @@ import de.shellfire.vpn.gui.renderer.StarImageRenderer;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.webservice.WebService;
 import de.shellfire.vpn.webservice.model.VpnEntry;
+import net.miginfocom.swing.MigLayout;
 
 /**
  * 
@@ -88,32 +90,33 @@ public class PremiumVPNNagScreen extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Shellfire VPN 2");
         setUndecorated(true);
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jHeaderPanel.setBackground(new java.awt.Color(18, 172, 229));
-        jHeaderPanel.setName("jHeaderPanel"); // NOI18N
-        jHeaderPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jHeaderPanel.setName("jHeaderPanel");
+        jHeaderPanel.setLayout(new MigLayout("", "[grow]", "[][][]"));
 
         jLabel6.setIcon(ShellfireVPNMainForm.getLogo());
         jLabel6.setAlignmentY(0.0F);
         jLabel6.setName("jLabel6"); // NOI18N
-        jHeaderPanel.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 250, 100));
+        jHeaderPanel.add(jLabel6, "cell 0 0,grow");
 
         jContentPanel.setBackground(new java.awt.Color(64, 69, 73));
-        jContentPanel.setName("jContentPanel"); // NOI18N
-        jContentPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jContentPanel.setName("jContentPanel");
 
         jLoginPanel.setName("jLoginPanel"); // NOI18N
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 12));
+        
+
+        
+        jLabel1.setFont(new java.awt.Font("Tahoma", 0, Util.getFontSize()));
         jLabel1.setText(i18n.tr("Verbleibende Wartezeit:"));
         jLabel1.setName("jLabel1"); // NOI18N
 
-        jRemainingTime.setFont(new java.awt.Font("Tahoma", 0, 12));
+        jRemainingTime.setFont(new java.awt.Font("Tahoma", 0, Util.getFontSize()));
         jRemainingTime.setText("(remaining time)");
         jRemainingTime.setName("jRemainingTime"); // NOI18N
 
-        jButton1.setFont(new java.awt.Font("Tahoma", 0, 14));
+        jButton1.setFont(new java.awt.Font("Tahoma", 0, Util.getFontSize()));
         jButton1.setText(i18n.tr("Abbrechen"));
         jButton1.setName("jButton1"); // NOI18N
 
@@ -132,8 +135,16 @@ public class PremiumVPNNagScreen extends javax.swing.JDialog {
         jTable1.setShowHorizontalLines(false);
         jTable1.setShowVerticalLines(false);
         jScrollPane1.setViewportView(jTable1);
+        
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        int width = (int) (screenSize.getWidth() / 1.5);
+        int height = (int) (screenSize.getHeight() / 1.5);
+        
+        jScrollPane1.setPreferredSize(new Dimension(width, height));
 
-        jButton2.setFont(new java.awt.Font("Arial", 1, 18));
+        
+
+        jButton2.setFont(new java.awt.Font("Arial", 1, Util.getFontSize()));
         jButton2.setText(i18n.tr("Jetzt Premium kaufen"));
         jButton2.setName("jButton2"); // NOI18N
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -141,55 +152,26 @@ public class PremiumVPNNagScreen extends javax.swing.JDialog {
                 jButton2ActionPerformed(evt);
             }
         });
+        getContentPane().setLayout(new MigLayout("", "[]", "[]"));
+        jContentPanel.setLayout(new MigLayout("", "[grow,fill]", "[]"));
 
-        javax.swing.GroupLayout jLoginPanelLayout = new javax.swing.GroupLayout(jLoginPanel);
-        jLoginPanel.setLayout(jLoginPanelLayout);
-        jLoginPanelLayout.setHorizontalGroup(
-            jLoginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jLoginPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jLoginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 780, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 780, Short.MAX_VALUE)
-                    .addGroup(jLoginPanelLayout.createSequentialGroup()
-                        .addGap(3, 3, 3)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jRemainingTime)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 396, Short.MAX_VALUE)
-                        .addComponent(jButton1)))
-                .addContainerGap())
-        );
-        jLoginPanelLayout.setVerticalGroup(
-            jLoginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jLoginPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 349, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(7, 7, 7)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(jLoginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jLoginPanelLayout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addGroup(jLoginPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1)
-                            .addComponent(jRemainingTime)))
-                    .addGroup(jLoginPanelLayout.createSequentialGroup()
-                        .addGap(10, 10, 10)
-                        .addComponent(jButton1)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
+        jContentPanel.add(jLoginPanel, "cell 0 0,grow");
+        jLoginPanel.setLayout(new MigLayout("", "[grow][grow][grow]", "[][][]"));
+        jLoginPanel.add(jButton2, "cell 0 1 4 1,grow");
+        jLoginPanel.add(jScrollPane1, "cell 0 0 3 1,grow");
+        jLoginPanel.add(jLabel1, "cell 0 2,growx,aligny bottom");
+        jLoginPanel.add(jRemainingTime, "cell 1 2,alignx left,aligny bottom");
+        jLoginPanel.add(jButton1, "cell 2 2,alignx right,aligny top");
 
-        jContentPanel.add(jLoginPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 820, 460));
+        jHeaderPanel.add(jContentPanel, "cell 0 2 3 1,grow");
 
-        jHeaderPanel.add(jContentPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 100, 860, 500));
-
-        jLabel2.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Arial", 1, Util.getFontSize())); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setText("<html>"+i18n.tr("Jetzt Upgraden auf Shellfire VPN Premium")+"</html>");
         jLabel2.setName("jLabel2"); // NOI18N
-        jHeaderPanel.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 10, 340, 80));
+        jHeaderPanel.add(jLabel2, "cell 0 1,alignx left,growy");
 
-        getContentPane().add(jHeaderPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(3, 3, 860, -1));
+        getContentPane().add(jHeaderPanel, "cell 0 0,alignx left,aligny top");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -233,7 +215,7 @@ public class PremiumVPNNagScreen extends javax.swing.JDialog {
     }
 
     TableColumnModel cm = this.jTable1.getColumnModel();
-    cm.getColumn(0).setPreferredWidth(130);
+    cm.getColumn(0).setPreferredWidth(130*Util.getScalingFactor());
 
     cm.getColumn(0).setCellRenderer(new RowHeaderRenderer());
     
@@ -251,7 +233,7 @@ public class PremiumVPNNagScreen extends javax.swing.JDialog {
     public Component getTableCellRendererComponent(JTable table, Object value, boolean hasFocus, boolean isSelected, int row, int col) {
       setText(value.toString());
       setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
-      setFont(getFont().deriveFont(15F).deriveFont(Font.BOLD));
+      setFont(getFont().deriveFont((float) (Util.getFontSize()*1.1)).deriveFont(Font.BOLD));
       setBackground(new Color(18, 172, 229));
       setForeground(Color.white);
       setOpaque(true);
@@ -266,19 +248,20 @@ public class PremiumVPNNagScreen extends javax.swing.JDialog {
       setHorizontalAlignment(JLabel.RIGHT);
       setText(value.toString());
       setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
-      setMinimumSize(new Dimension(getMinimumSize().width, 40));
+      
 
       if (value instanceof VpnAttributeHeader) {
-        jTable1.setRowHeight(row, 20);
-        setFont(getFont().deriveFont(15F).deriveFont(Font.BOLD));
+        
+        jTable1.setRowHeight(row, 45);
+        setFont(getFont().deriveFont((float) (Util.getFontSize()*1.1)).deriveFont(Font.BOLD));
         setBackground(new Color(18, 172, 229));
         setForeground(Color.white);
 
       }
 
       else {
-        setFont(getFont().deriveFont(12F).deriveFont(Font.PLAIN));
-
+        setFont(getFont().deriveFont((float) (Util.getFontSize())).deriveFont(Font.PLAIN));
+        jTable1.setRowHeight(row, 40);
         setBackground(Color.white);
         setForeground(Color.black);
       }

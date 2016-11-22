@@ -1,6 +1,9 @@
 package de.shellfire.vpn;
 
 import java.awt.Desktop;
+import java.awt.Font;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -25,8 +28,11 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 
 import org.apache.commons.codec.binary.Base64;
 import org.slf4j.LoggerFactory;
@@ -39,6 +45,7 @@ import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.FileAppender;
 import de.shellfire.vpn.gui.LoginForm;
+import de.shellfire.vpn.gui.ShellfireVPNMainForm;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.messaging.UserType;
 import de.shellfire.vpn.service.IVpnRegistry;
@@ -52,7 +59,7 @@ public class Util {
   private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
   static String isoToday = sdf.format(new Date());
   static SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
-  
+
   private static String Arch;
   private static boolean firstGetLoggerCall = true;
   private static Object semaphore = new Object();
@@ -133,7 +140,7 @@ public class Util {
     command.toArray(array);
     return runCommandAndReturnOutput(array);
   }
-  
+
   public static String runCommandAndReturnOutput(String... command) {
     log.debug("Running command: {}", Arrays.asList(command));
     final StringBuffer result = new StringBuffer();
@@ -144,17 +151,17 @@ public class Util {
 
       final BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
 
-       String newLine = "";
-       try {
+      String newLine = "";
+      try {
         while ((newLine = stdInput.readLine()) != null) {
           result.append(new String(newLine));
           result.append("\n");
-         }
+        }
       } catch (IOException e) {
         Util.handleException(e);
       }
-      
-     proc.waitFor();
+
+      proc.waitFor();
 
     } catch (IOException e) {
       Util.handleException(e);
@@ -169,7 +176,8 @@ public class Util {
   public static String getArchitecture() {
     if (Util.Arch == null) {
       if (isWindows()) {
-        String[] cmds = new String[] {"reg", "query", "HKLM\\System\\CurrentControlSet\\Control\\Session Manager\\Environment",  "/v", "PROCESSOR_ARCHITECTURE"};
+        String[] cmds = new String[] { "reg", "query", "HKLM\\System\\CurrentControlSet\\Control\\Session Manager\\Environment", "/v",
+            "PROCESSOR_ARCHITECTURE" };
         String result = runCommandAndReturnOutput(cmds);
 
         String[] lines = result.split("\n");
@@ -298,7 +306,7 @@ public class Util {
         }
 
       }
-      
+
       log.debug("Config dir set to: {}", result);
       Util.configDir = result;
     }
@@ -675,11 +683,63 @@ public class Util {
     return jvmDll;
   }
 
+  public static void setDefaultSize(int size) {
 
+    Set<Object> keySet = UIManager.getLookAndFeelDefaults().keySet();
+    Object[] keys = keySet.toArray(new Object[keySet.size()]);
+
+    for (Object key : keys) {
+
+      if (key != null && key.toString().toLowerCase().contains("font")) {
+
+        System.out.println(key);
+        Font font = UIManager.getDefaults().getFont(key);
+        if (font != null) {
+          font = font.deriveFont((float) size);
+          UIManager.put(key, font);
+        }
+
+      }
+
+    }
+
+  }
+
+  public static int getScalingFactor() {
+    int screenRes = Toolkit.getDefaultToolkit().getScreenResolution();
+    int factor = (int)Math.round(screenRes / 72.0);
+    
+    return factor;
+  }
+
+  
+  public static ImageIcon getImageIcon(String resourceName) {
+    return getImageIcon(resourceName, 1);
+  }  
+  
+  public static ImageIcon getImageIcon(String resourceName, double d) {
+    ImageIcon imageIcon = new javax.swing.ImageIcon(ShellfireVPNMainForm.class.getResource(resourceName));
+    int factor = (int) (Util.getScalingFactor() * d);
+    int height = imageIcon.getIconHeight() * factor;
+    int width = imageIcon.getIconWidth() * factor;
+    
+    Image image = imageIcon.getImage(); // transform it
+    Image newimg = image.getScaledInstance(width, height,  java.awt.Image.SCALE_SMOOTH);
+    imageIcon = new ImageIcon(newimg);  // transform it back
+    
+    return imageIcon;
+  }
+
+  public static int getFontSize() {
+    int screenRes = Toolkit.getDefaultToolkit().getScreenResolution();
+    int fontSize = (int)Math.round(12.0 * screenRes / 72.0);
+    return fontSize;
+  }
+  
+  
   // do not mix this order around, must remain in the end of class so that log file can be deleted on startup
   private static Logger log = Util.getLogger(Util.class.getCanonicalName());
   private static I18n i18n = VpnI18N.getI18n();
   private static String jvmDll;
-
 
 }

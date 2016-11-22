@@ -28,7 +28,9 @@ set PR_JVMMS=256
 set PR_JVMMX=1024
 set PR_JVMSS=4000
 set PR_JVMOPTIONS=-Dde.shellfire.vpn.runtype=Service
- 
+
+REM Uninstall service (might fail if service not installed before)
+"%PR_INSTALL%" //DS//%SERVICE_NAME%
 REM Install service
 "%PR_INSTALL%" //IS//%SERVICE_NAME%
 REM start service

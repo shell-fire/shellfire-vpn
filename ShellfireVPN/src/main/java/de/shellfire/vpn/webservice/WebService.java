@@ -86,7 +86,7 @@ public class WebService {
       public Response<LoginResponse> run() throws Exception {
         return shellfire.login(user, pass);
       }
-    }, 10, 50);
+    }, 3, 100);
 
     log.debug("LoginResult received");
 
@@ -110,7 +110,7 @@ public class WebService {
 
         return shellfire.getAllVpnDetails();
       }
-    }, 10, 50);
+    }, 3, 100);
 
     this.vpns = new LinkedList<Vpn>();
 
@@ -157,7 +157,7 @@ public class WebService {
 
           return shellfire.getServerList();
         }
-      }, 10, 50);
+      }, 3, 100);
       servers = new ServerList(list);
     }
 
@@ -191,7 +191,7 @@ public class WebService {
 
         return shellfire.setServerTo(getVpnId(), server.getServerId());
       }
-    }, 10, 50);
+    }, 3, 100);
 
     if (result == true) {
       this.getVpn().setServer(server);
@@ -209,7 +209,7 @@ public class WebService {
 
         return shellfire.setProtocolTo(getVpnId(), protocol.toString());
       }
-    }, 10, 50);
+    }, 3, 100);
 
     if (res == true) {
       return true;
@@ -226,7 +226,7 @@ public class WebService {
 
         return shellfire.getParametersForOpenVpn(getVpnId());
       }
-    }, 10, 50);
+    }, 3, 100);
 
     String proxyCommand = ProxyConfig.getOpenVpnConfigCommand();
     if (proxyCommand != null) {
@@ -253,7 +253,7 @@ public class WebService {
 
         return shellfire.getCertificatesForOpenVpn(getVpnId());
       }
-    }, 10, 50);
+    }, 3, 100);
 
     createConfigDirIfNotExists();
     for (WsFile wsFile : files) {
@@ -302,7 +302,7 @@ public class WebService {
       public String run() throws Exception {
         return shellfire.getLocalIpAddress();
       }
-    }, 10, 50);
+    }, 3, 100);
 
     if (ip == null)
       ip = i18n.tr("unbekannt");
@@ -319,7 +319,7 @@ public class WebService {
         public WsGeoPosition run() throws Exception {
           return shellfire.getLocalLocation();
         }
-      }, 10, 50);
+      }, 3, 100);
 
     }
 
@@ -334,7 +334,7 @@ public class WebService {
       public Response<LoginResponse> run() throws Exception {
         return shellfire.register(text, password, subscribe);
       }
-    }, 10, 50);
+    }, 3, 100);
 
     return result;
   }
@@ -346,7 +346,7 @@ public class WebService {
       public Boolean run() throws Exception {
         return shellfire.getIsActive();
       }
-    }, 10, 50);
+    }, 3, 100);
 
     return accountActive;
   }
@@ -392,7 +392,7 @@ public class WebService {
         public VpnAttributeList run() throws Exception {
           return shellfire.getComparisonTableData();
         }
-      }, 10, 50);
+      }, 3, 100);
     }
 
     return this.vpnAttributeList;
@@ -407,7 +407,7 @@ public class WebService {
         public List<TrayMessage> run() throws Exception {
           return shellfire.getTrayMessages();
         }
-      }, 10, 50);
+      }, 3, 100);
 
       trayMessages = messageList;
     }
@@ -418,7 +418,7 @@ public class WebService {
   /*
    * public WsUpgradeResult upgradeVpnToPremiumWithSerial(final String productKey) { WsUpgradeResult result = Util.runWithAutoRetry(new
    * ExceptionThrowingReturningRunnable<WsUpgradeResult>() { public WsUpgradeResult run() throws Exception { return
-   * shellfire.upgradeVpnToPremiumWithCobiCode(selectedVpn.getVpnId(), productKey); } }, 10, 50);
+   * shellfire.upgradeVpnToPremiumWithCobiCode(selectedVpn.getVpnId(), productKey); } }, 3, 100);
    * 
    * return result; }
    */
@@ -430,7 +430,7 @@ public class WebService {
       public Integer run() throws Exception {
         return shellfire.getLatestVersion();
       }
-    }, 10, 50);
+    }, 3, 100);
 
     if (latestVersion == null)
       return 0;
@@ -447,7 +447,7 @@ public class WebService {
       public String run() throws Exception {
         return shellfire.getLatestInstaller();
       }
-    }, 10, 50);
+    }, 3, 100);
 
     if (latestZipInstaller == null)
       latestZipInstaller = "";
@@ -470,7 +470,7 @@ public class WebService {
         public String run() throws Exception {
           return shellfire.getUrlSuccesfulConnect();
         }
-      }, 10, 50);
+      }, 3, 100);
 
     }
 
@@ -485,7 +485,7 @@ public class WebService {
       public List<String> run() throws Exception {
         return shellfire.getWebServiceEndPointList();
       }
-    }, 10, 50);
+    }, 3, 100);
     
     
     
@@ -502,7 +502,7 @@ public class WebService {
         public String run() throws Exception {
           return shellfire.getUrlHelp();
         }
-      }, 10, 50);
+      }, 3, 100);
     }
 
     return urlHelp;
@@ -516,7 +516,7 @@ public class WebService {
         public String run() throws Exception {
           return shellfire.getUrlPremiumInfo();
         }
-      }, 10, 50);
+      }, 3, 100);
     }
 
     return urlPremiumInfo;
@@ -530,7 +530,7 @@ public class WebService {
         public String run() throws Exception {
           return shellfire.getUrlPasswordLost();
         }
-      }, 10, 50);
+      }, 3, 100);
     }
 
     return urlPasswordLost;
@@ -562,11 +562,10 @@ public class WebService {
     Boolean result = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<Boolean>() {
       public Boolean run() throws Exception {
         boolean result = shellfire.sendLogToShellfire(finalService, finalClient);
-        ;
 
         return result;
       }
-    }, 10, 50);
+    }, 3, 100);
 
     return result;
   }

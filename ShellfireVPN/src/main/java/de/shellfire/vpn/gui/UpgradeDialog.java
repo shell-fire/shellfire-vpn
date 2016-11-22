@@ -11,16 +11,20 @@
 package de.shellfire.vpn.gui;
 
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.FocusEvent;
 
 import javax.swing.JTextField;
 
 import org.xnap.commons.i18n.I18n;
 
+import de.shellfire.vpn.Util;
 import de.shellfire.vpn.gui.helper.Max2CharDocument;
 import de.shellfire.vpn.gui.helper.Max4CharDocument;
 import de.shellfire.vpn.gui.helper.MoveMouseListener;
 import de.shellfire.vpn.i18n.VpnI18N;
+import net.miginfocom.swing.MigLayout;
 
 /**
  *
@@ -34,10 +38,14 @@ public class UpgradeDialog extends javax.swing.JDialog {
     /** Creates new form UpgradeDialog */
     public UpgradeDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
+        setUndecorated(true);
         MoveMouseListener mml = new MoveMouseListener(this);
         this.addMouseListener(mml);
         this.addMouseMotionListener(mml);
         initComponents();
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        
+        setBounds(0,0,screenSize.width, screenSize.height);
         this.setLocationRelativeTo(null);
         this.pack();
         
@@ -72,29 +80,25 @@ public class UpgradeDialog extends javax.swing.JDialog {
         jLabel1.setName("jLabel1"); // NOI18N
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Shellfire VPN"); // NOI18N
-        setUndecorated(true);
-        setResizable(false);
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        setTitle("Shellfire VPN");
 
         jPanel7.setBackground(new java.awt.Color(64, 69, 73));
-        jPanel7.setName("jPanel7"); // NOI18N
-        jPanel7.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel7.setName("jPanel7");
 
-        jLoginPanel.setName("jLoginPanel"); // NOI18N
-        jLoginPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jLoginPanel.setName("jLoginPanel");
+        jLoginPanel.setLayout(new MigLayout("", "[grow][][][][grow][][][][grow]", "[][][][]"));
 
-        jLabelEmailAddress.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabelEmailAddress.setFont(new java.awt.Font("Arial", 0, Util.getFontSize())); // NOI18N
         jLabelEmailAddress.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabelEmailAddress.setText("<html>"+i18n.tr("Gib hier den bereits erworbenen Produktschlüssel ein, um das Upgrade zur Premium oder Premium-Plus Version durchzuführen.")+"</html>");
+        jLabelEmailAddress.setText("<html>"+i18n.tr("Gib hier den bereits erworbenen Produktschlüssel ein, um das<br> Upgrade zur Premium oder Premium-Plus Version durchzuführen.")+"</html>");
         jLabelEmailAddress.setName("jLabelEmailAddress"); // NOI18N
-        jLoginPanel.add(jLabelEmailAddress, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, 320, 50));
+        jLoginPanel.add(jLabelEmailAddress, "cell 0 1 9 1,grow");
 
-        jLabel16.setFont(new java.awt.Font("Arial", 1, 24)); // NOI18N
+        jLabel16.setFont(new java.awt.Font("Arial", 1, Util.getFontSize()*2)); // NOI18N
         jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel16.setText(i18n.tr("produktschlüssel eingeben"));
         jLabel16.setName("jLabel16"); // NOI18N
-        jLoginPanel.add(jLabel16, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 11, 330, 33));
+        jLoginPanel.add(jLabel16, "cell 0 0 9 1,grow");
 
         jPerformUpgradeButton.setText(i18n.tr("Jetzt Upgraden"));
         jPerformUpgradeButton.setName("jPerformUpgradeButton"); // NOI18N
@@ -103,59 +107,60 @@ public class UpgradeDialog extends javax.swing.JDialog {
                 jPerformUpgradeButtonActionPerformed(evt);
             }
         });
-        jLoginPanel.add(jPerformUpgradeButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 140, 240, -1));
+        jLoginPanel.add(jPerformUpgradeButton, "cell 0 3 9 1,alignx center,aligny top");
 
         productKey1.setDocument(new Max2CharDocument());
-        productKey1.setFont(new java.awt.Font("Courier New", 0, 16)); // NOI18N
+        productKey1.setFont(new java.awt.Font("Courier New", 0, (int) (Util.getFontSize()*1.5))); // NOI18N
         productKey1.setName("productKey1"); // NOI18N
-        jLoginPanel.add(productKey1, new org.netbeans.lib.awtextra.AbsoluteConstraints(93, 100, 40, 30));
+        jLoginPanel.add(productKey1, "cell 0 2,grow");
 
         productKey2.setDocument(new Max4CharDocument());
-        productKey2.setFont(new java.awt.Font("Courier New", 0, 16)); // NOI18N
+        productKey2.setFont(new java.awt.Font("Courier New", 0, (int) (Util.getFontSize()*1.5))); // NOI18N
         productKey2.setName("productKey2"); // NOI18N
         productKey2.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
                 productKey2FocusGained(evt);
             }
         });
-        jLoginPanel.add(productKey2, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 100, 55, 30));
+        getContentPane().setLayout(new MigLayout("", "[]", "[][]"));
+        jPanel7.setLayout(new MigLayout("", "[grow]", "[grow]"));
+        jLoginPanel.add(productKey2, "cell 4 2,grow");
 
         productKey3.setDocument(new Max4CharDocument());
-        productKey3.setFont(new java.awt.Font("Courier New", 0, 16)); // NOI18N
+        productKey3.setFont(new java.awt.Font("Courier New", 0, (int) (Util.getFontSize()*1.5))); // NOI18N
         productKey3.setName("productKey3"); // NOI18N
-        jLoginPanel.add(productKey3, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 100, 55, 30));
+        jLoginPanel.add(productKey3, "cell 8 2,grow");
 
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, (int) (Util.getFontSize()*1.6))); // NOI18N
         jLabel2.setText("-");
         jLabel2.setName("jLabel2"); // NOI18N
-        jLoginPanel.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(137, 103, 10, -1));
+        jLoginPanel.add(jLabel2, "cell 2 2,growx,aligny center");
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, (int) (Util.getFontSize()*1.6))); // NOI18N
         jLabel3.setText("-");
         jLabel3.setName("jLabel3"); // NOI18N
-        jLoginPanel.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 103, 10, -1));
+        jLoginPanel.add(jLabel3, "cell 6 2,growx,aligny center");
 
-        jPanel7.add(jLoginPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 350, 170));
+        jPanel7.add(jLoginPanel, "cell 0 0,grow");
 
-        getContentPane().add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 102, 390, 210));
+        getContentPane().add(jPanel7, "cell 0 1,growx,aligny bottom");
 
         jHeaderPanel.setBackground(new java.awt.Color(18, 172, 229));
-        jHeaderPanel.setName("jHeaderPanel"); // NOI18N
-        jHeaderPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jHeaderPanel.setName("jHeaderPanel");
+        jHeaderPanel.setLayout(new MigLayout("", "[grow][grow]", "[grow]"));
 
         jLabel5.setIcon(ShellfireVPNMainForm.getLogo());
         jLabel5.setAlignmentY(0.0F);
         jLabel5.setName("jLabel5"); // NOI18N
-        jHeaderPanel.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 250, 100));
+        jHeaderPanel.add(jLabel5, "cell 0 0,alignx left,growy");
 
         jPanel6.setBackground(new java.awt.Color(0, 0, 0));
-        jPanel6.setName("jPanel6"); // NOI18N
-        jPanel6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jPanel6.setName("jPanel6");
 
-        jLabel6.setFont(new java.awt.Font("Arial", 0, 14)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Arial", 0, Util.getFontSize())); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/exit.png"))); // NOI18N
+        jLabel6.setIcon(Util.getImageIcon("/icons/exit.png")); // NOI18N
         jLabel6.setText(i18n.tr("zurück"));
         jLabel6.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel6.setName("jLabel6"); // NOI18N
@@ -170,11 +175,12 @@ public class UpgradeDialog extends javax.swing.JDialog {
                 jLabel6MouseExited(evt);
             }
         });
-        jPanel6.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 100, 30));
+        jPanel6.setLayout(new MigLayout("", "[100px]", "[30px]"));
+        jPanel6.add(jLabel6, "cell 0 0,grow");
 
-        jHeaderPanel.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 0, 100, 30));
+        jHeaderPanel.add(jPanel6, "cell 1 0,alignx left,aligny top");
 
-        getContentPane().add(jHeaderPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 390, 108));
+        getContentPane().add(jHeaderPanel, "cell 0 0,alignx left,aligny top");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

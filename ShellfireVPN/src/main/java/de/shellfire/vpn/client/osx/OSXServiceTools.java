@@ -32,10 +32,10 @@ public class OSXServiceTools extends ServiceTools {
       tryStartViaPortRequestInSeparateThread();
 
       if (!serviceIsRunning()) {
-        log.debug("service not running - installEelevated()");
+        log.debug("service not running - installElevated()");
         JOptionPane.showMessageDialog(null,
             i18n.tr("Der Shellfire VPN Service wird jetzt installiert. Gib dazu bitte im nachfolgenden Fenster dein Admin-Passwort ein."));
-
+        
         form.initDialog.dispose();
         installElevated();
 
@@ -63,6 +63,11 @@ public class OSXServiceTools extends ServiceTools {
       log.debug("serivce is running - good to go, no action required");
       form.afterShellfireServiceEnvironmentEnsured();
     }
+  }
+
+  protected boolean serviceIsInstalled() {
+    // TODO Auto-generated method stub
+    return false;
   }
 
   private boolean tryStartViaPortRequestInSeparateThread() {

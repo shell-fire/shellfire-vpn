@@ -16,6 +16,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 import org.xnap.commons.i18n.I18n;
 
+import de.shellfire.vpn.Util;
 import de.shellfire.vpn.gui.model.ContentPane;
 import de.shellfire.vpn.gui.model.CountryMap;
 import de.shellfire.vpn.i18n.CountryI18n;
@@ -65,7 +66,7 @@ public class CountryImageRenderer extends DefaultTableCellRenderer {
 
     ImageIcon icon = CountryMap.getIcon(c);
     lbl.setIcon(icon);
-    lbl.setFont(lbl.getFont().deriveFont(Font.PLAIN, 11));
+    lbl.setFont(lbl.getFont().deriveFont(Font.PLAIN, Util.getFontSize()));
     lbl.setText(getText(c));
     lbl.setHorizontalAlignment(JLabel.LEFT);
 

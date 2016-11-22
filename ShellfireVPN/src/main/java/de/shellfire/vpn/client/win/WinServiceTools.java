@@ -3,7 +3,6 @@ package de.shellfire.vpn.client.win;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.rmi.RemoteException;
 
 import javax.swing.JOptionPane;
 
@@ -23,8 +22,9 @@ public class WinServiceTools extends ServiceTools {
   @Override
   public void ensureServiceEnvironment(LoginForm form) {
     log.debug("checking if service is running");
+    
     if (!serviceIsRunning()) {
-      log.debug("service not running - installEelevated()");
+      log.debug("service not running - installElevated()");
       JOptionPane.showMessageDialog(null,
           i18n.tr("Der Shellfire VPN Service wird jetzt installiert. Gib dazu bitte im nachfolgenden Fenster dein Admin-Passwort ein."));
 
@@ -51,7 +51,6 @@ public class WinServiceTools extends ServiceTools {
       form.afterShellfireServiceEnvironmentEnsured();
     }
   }
-
   /**
    * Assumes elevation
    */
@@ -63,12 +62,13 @@ public class WinServiceTools extends ServiceTools {
     String instDir = new File(jarFile).getParent() + File.separator;
 
       String template = Util.fileToString(instDir + "InstallServiceTemplate.txt");
-      String procRunPath = instDir + "ShellfireVPNService.exe";
+      String procRunPath = instDir + getProcrunExe(); 
       
-      template = template.replace("$$PROCRUNPATH$$", procRunPath);
+      
       template = template.replace("$$TEMP$$", Util.getTempDir());
       template = template.replace("$$LOGFILE$$", Util.getTempDir()+File.separator + "ProcRunLog.log");
       template = template.replace("$$JVM_DLL$$",  Util.getJvmDll());
+      template = template.replace("$$PROCRUNPATH$$", procRunPath);
       
       template = template.replace("$$SHELLFIREVPNSERVICEDAT$$", jarFile);
       
@@ -90,6 +90,19 @@ public class WinServiceTools extends ServiceTools {
   
 
 
+  private String getProcrunExe() {
+    String procRunExe = "";
+    
+    String jvmArch = System.getProperty("sun.arch.data.model");
+    if (jvmArch.equals("32")) {
+      procRunExe = "ShellfireVPNService32.exe";
+    } else {
+      procRunExe = "ShellfireVPNService64.exe";
+    }
+    
+    return procRunExe;
+  }
+
   /**
    * assumes elevation
    */
@@ -97,11 +110,11 @@ public class WinServiceTools extends ServiceTools {
     log.debug("uninstall()");
     
     try {
-    String jarFile = Util.getPathJar();
-    String instDir = new File(jarFile).getParent() + File.separator;
+      String jarFile = Util.getPathJar();
+      String instDir = new File(jarFile).getParent() + File.separator;
 
       String template = Util.fileToString(instDir + "UninstallServiceTemplate.txt");
-      String procRunPath = instDir + "ShellfireVPNService.exe";
+      String procRunPath = instDir + getProcrunExe(); 
       
       template = template.replace("$$PROCRUNPATH$$", procRunPath);
       
@@ -132,7 +145,6 @@ public class WinServiceTools extends ServiceTools {
       String jarFile = Util.getPathJar();
       File instDir = new File(jarFile).getParentFile();
       String arg = "installservice";
-      
 
       // Check for execution from dev environment, will fail anyway
       if (jarFile == null) {

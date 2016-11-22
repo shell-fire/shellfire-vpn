@@ -7,6 +7,8 @@ package de.shellfire.vpn.gui.helper;
 import java.awt.Font;
 import java.io.InputStream;
 
+import de.shellfire.vpn.Util;
+
 /**
  *
  * @author bettmenn
@@ -24,12 +26,12 @@ public class OpenSansFont {
             if (is == null)
                 throw new Exception("is not available");
             
-            font = Font.createFont(Font.TRUETYPE_FONT, is).deriveFont(new Float(12));
+            font = Font.createFont(Font.TRUETYPE_FONT, is).deriveFont((float)Util.getFontSize());
             
         } catch (Exception ex) {
             ex.printStackTrace();
             System.err.println(fName + " not loaded.  Using serif font.");
-            font = new Font("serif", Font.PLAIN, 24);
+            font = new Font("serif", Font.PLAIN, Util.getFontSize());
         }
         return font;
     }

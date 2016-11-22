@@ -1,7 +1,8 @@
 package de.shellfire.vpn.gui;
 
-import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -27,6 +28,7 @@ import de.shellfire.vpn.Util;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.messaging.UserType;
 import de.shellfire.vpn.webservice.WebService;
+import net.miginfocom.swing.MigLayout;
 
 public class LogViewer extends JFrame {
 
@@ -56,16 +58,22 @@ public class LogViewer extends JFrame {
     log.debug("Logviewer Constructor");
     setTitle("Logviewer");
     setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-    setBounds(100, 100, 1079, 636);
+    
+
+    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    int width = (int) (screenSize.getWidth() / 1.5);
+    int height = (int) (screenSize.getHeight() / 1.5);
+    
+    setBounds(100, 100, width, height);
     contentPane = new JPanel();
     contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-    contentPane.setLayout(new BorderLayout(0, 0));
     setContentPane(contentPane);
     this.setLocationRelativeTo(null);
+    contentPane.setLayout(new MigLayout("", "[grow]", "[grow][]"));
     JSplitPane splitPane = new JSplitPane();
     splitPane.setOrientation(JSplitPane.VERTICAL_SPLIT);
     splitPane.setResizeWeight(0.5);
-    contentPane.add(splitPane, BorderLayout.CENTER);
+    contentPane.add(splitPane, "cell 0 0,grow");
     
     JScrollPane scrollPane = new JScrollPane();
     splitPane.setLeftComponent(scrollPane);
@@ -74,8 +82,12 @@ public class LogViewer extends JFrame {
     clientLogTextArea.setEditable(false);
     scrollPane.setViewportView(clientLogTextArea);
     
+    int screenRes = Toolkit.getDefaultToolkit().getScreenResolution();
+    int fontSize = (int)Math.round(12.0 * screenRes / 72.0);
+
+    
     JLabel lblClient = new JLabel("Client Log");
-    lblClient.setFont(new Font("Arial", Font.PLAIN, 14));
+    lblClient.setFont(new Font("Arial", Font.PLAIN, fontSize));
     scrollPane.setColumnHeaderView(lblClient);
     
     JScrollPane scrollPane_1 = new JScrollPane();
@@ -86,17 +98,17 @@ public class LogViewer extends JFrame {
     scrollPane_1.setViewportView(serviceLogTextArea);
     
     JLabel lblNewLabel = new JLabel("Service Log");
-    lblNewLabel.setFont(new Font("Arial", Font.PLAIN, 14));
+    lblNewLabel.setFont(new Font("Arial", Font.PLAIN, fontSize));
     scrollPane_1.setColumnHeaderView(lblNewLabel);
     
     JButton btnSendLogTo = new JButton("Send Log to Shellfire");
-    btnSendLogTo.setFont(new Font("Arial", Font.PLAIN, 14));
+    btnSendLogTo.setFont(new Font("Arial", Font.PLAIN, fontSize));
     btnSendLogTo.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         sendLogToShellfire();
       }
     });
-    contentPane.add(btnSendLogTo, BorderLayout.SOUTH);
+    contentPane.add(btnSendLogTo, "cell 0 1,growx,aligny top");
     
     DefaultCaret caret = (DefaultCaret) clientLogTextArea.getCaret();
     caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE); 

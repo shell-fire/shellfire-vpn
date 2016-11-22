@@ -166,24 +166,8 @@ openvpn-32bit:
 openvpnend:  
 
   SetOutPath "$INSTDIR\"
+  File "..\tools\prunsrv\"
 
-  ; Check if we are running on a 64 bit system.
-  System::Call "kernel32::GetCurrentProcess() i .s"
-  System::Call "kernel32::IsWow64Process(i s, *i .r0)"
-  IntCmp $0 0 procrun-32bit
-
-; procrun-64bit:
-
-  DetailPrint "Installing 64-bit procrun"
-  File "..\tools\prunsrv\64-bit\"
-
-goto procrunend
-
-procrun-32bit:
-
-  DetailPrint "Installing 32-bit procrun"
-  File "..\tools\prunsrv\32-bit\"
-procrunend:  
 
 	SetOutPath "$INSTDIR\nvspbind\"
 

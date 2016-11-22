@@ -25,6 +25,7 @@ import de.shellfire.vpn.i18n.Language;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.webservice.Vpn;
 import de.shellfire.vpn.webservice.WebService;
+import net.miginfocom.swing.MigLayout;
 
 /**
  *
@@ -72,8 +73,7 @@ public class SettingsDialog extends javax.swing.JDialog {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle(i18n.tr("Shellfire VPN Einstellungen"));
 
-        jSettingsPanel.setName("jSettingsPanel"); // NOI18N
-        jSettingsPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jSettingsPanel.setName("jSettingsPanel");
 
         jRememberLoginData.setText(i18n.tr("Logindaten speichern"));
         jRememberLoginData.setName("jRememberLoginData"); // NOI18N
@@ -82,7 +82,8 @@ public class SettingsDialog extends javax.swing.JDialog {
                 jRememberLoginDataActionPerformed(evt);
             }
         });
-        jSettingsPanel.add(jRememberLoginData, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 17, 290, -1));
+        jSettingsPanel.setLayout(new MigLayout("", "[][][]", "[][][][][][][][]"));
+        jSettingsPanel.add(jRememberLoginData, "cell 0 0 2 1,growx,aligny top");
 
         jAutoLogin.setText(i18n.tr("Automatisch einloggen"));
         jAutoLogin.setName("jAutoLogin"); // NOI18N
@@ -91,7 +92,7 @@ public class SettingsDialog extends javax.swing.JDialog {
                 jAutoLoginActionPerformed(evt);
             }
         });
-        jSettingsPanel.add(jAutoLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 40, 290, -1));
+        jSettingsPanel.add(jAutoLogin, "cell 0 1 2 1,growx,aligny bottom");
 
         jSaveVpnSelection.setText(i18n.tr("VPN Auswahl merken"));
         jSaveVpnSelection.setName("jSaveVpnSelection"); // NOI18N
@@ -100,7 +101,7 @@ public class SettingsDialog extends javax.swing.JDialog {
                 jSaveVpnSelectionActionPerformed(evt);
             }
         });
-        jSettingsPanel.add(jSaveVpnSelection, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 63, 290, -1));
+        jSettingsPanel.add(jSaveVpnSelection, "cell 0 2 2 1,growx,aligny top");
 
         jLanguageComboBox.setName("jLanguageComboBox"); // NOI18N
         jLanguageComboBox.addActionListener(new java.awt.event.ActionListener() {
@@ -108,11 +109,11 @@ public class SettingsDialog extends javax.swing.JDialog {
                 jLanguageComboBoxActionPerformed(evt);
             }
         });
-        jSettingsPanel.add(jLanguageComboBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(115, 160, 192, -1));
+        jSettingsPanel.add(jLanguageComboBox, "cell 1 6,growx,aligny top");
 
-        jLabel2.setText(i18n.tr("Sprache"));
+        jLabel2.setText(i18n.tr("Sprache") + ":");
         jLabel2.setName("jLabel2"); // NOI18N
-        jSettingsPanel.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 164, -1, -1));
+        jSettingsPanel.add(jLabel2, "cell 0 6,alignx right,aligny bottom");
 
         jSaveSettings.setText(i18n.tr("Einstellungen Speichern"));
         jSaveSettings.setName("jSaveSettings"); // NOI18N
@@ -121,7 +122,7 @@ public class SettingsDialog extends javax.swing.JDialog {
                 jSaveSettingsActionPerformed(evt);
             }
         });
-        jSettingsPanel.add(jSaveSettings, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, 180, -1));
+        jSettingsPanel.add(jSaveSettings, "cell 0 7,alignx left,aligny top");
 
         jButton1.setText(i18n.tr("Abbrechen"));
         jButton1.setName("jButton1"); // NOI18N
@@ -130,30 +131,21 @@ public class SettingsDialog extends javax.swing.JDialog {
                 jButton1ActionPerformed(evt);
             }
         });
-        jSettingsPanel.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(197, 190, 110, -1));
+        getContentPane().setLayout(new MigLayout("", "", ""));
+        jSettingsPanel.add(jButton1, "cell 1 7,growx,aligny top");
 
         jAutoStart.setText(i18n.tr("Beim Hochfahren starten"));
         jAutoStart.setName("jAutoStart"); // NOI18N
-        jSettingsPanel.add(jAutoStart, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 86, 290, -1));
+        jSettingsPanel.add(jAutoStart, "cell 0 3 2 1,growx,aligny top");
 
         jAutoConnect.setText(i18n.tr("Automatisch verbinden"));
         jAutoConnect.setName("jAutoConnect"); // NOI18N
-        jSettingsPanel.add(jAutoConnect, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 109, 278, -1));
+        jSettingsPanel.add(jAutoConnect, "cell 0 4 2 1,growx,aligny top");
 
         jLaunchStatusWebsiteOnConnect.setText(i18n.tr("Zeige Status-Seite nach Verbindungsaufbau"));
         jLaunchStatusWebsiteOnConnect.setName("jLaunchStatusWebsiteOnConnect"); // NOI18N
-        jSettingsPanel.add(jLaunchStatusWebsiteOnConnect, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 132, 278, -1));
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSettingsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSettingsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE)
-        );
+        jSettingsPanel.add(jLaunchStatusWebsiteOnConnect, "cell 0 5 2 1,growx,aligny top");
+        getContentPane().add(jSettingsPanel, "cell 0 0,grow");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

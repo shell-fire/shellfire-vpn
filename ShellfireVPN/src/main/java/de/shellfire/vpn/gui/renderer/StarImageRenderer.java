@@ -15,6 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
+import de.shellfire.vpn.Util;
 import de.shellfire.vpn.gui.model.ContentPane;
 import de.shellfire.vpn.webservice.model.VpnEntry;
 import de.shellfire.vpn.webservice.model.VpnStar;
@@ -33,23 +34,23 @@ public class StarImageRenderer extends DefaultTableCellRenderer {
     
     private void init() {
       
-      icons.put(1, new ImageIcon(getClass().getResource("/icons/stars/1star.png")));
-      icons.put(2, new ImageIcon(getClass().getResource("/icons/stars/2star.png")));
-      icons.put(3, new ImageIcon(getClass().getResource("/icons/stars/3star.png")));
-      icons.put(4, new ImageIcon(getClass().getResource("/icons/stars/4star.png")));
-      icons.put(5, new ImageIcon(getClass().getResource("/icons/stars/5star.png")));      
+      icons.put(1, Util.getImageIcon("/icons/stars/1star.png"));
+      icons.put(2, Util.getImageIcon("/icons/stars/2star.png"));
+      icons.put(3, Util.getImageIcon("/icons/stars/3star.png"));
+      icons.put(4, Util.getImageIcon("/icons/stars/4star.png"));
+      icons.put(5, Util.getImageIcon("/icons/stars/5star.png"));      
 
-      iconsSelected.put(1, new ImageIcon(getClass().getResource("/icons/stars/1star_selected.png")));
-      iconsSelected.put(2, new ImageIcon(getClass().getResource("/icons/stars/2star_selected.png")));
-      iconsSelected.put(3, new ImageIcon(getClass().getResource("/icons/stars/3star_selected.png")));
-      iconsSelected.put(4, new ImageIcon(getClass().getResource("/icons/stars/4star_selected.png")));
-      iconsSelected.put(5, new ImageIcon(getClass().getResource("/icons/stars/5star_selected.png")));      
+      iconsSelected.put(1, Util.getImageIcon("/icons/stars/1star_selected.png"));
+      iconsSelected.put(2, Util.getImageIcon("/icons/stars/2star_selected.png"));
+      iconsSelected.put(3, Util.getImageIcon("/icons/stars/3star_selected.png"));
+      iconsSelected.put(4, Util.getImageIcon("/icons/stars/4star_selected.png"));
+      iconsSelected.put(5, Util.getImageIcon("/icons/stars/5star_selected.png"));      
 
-      iconsDisabled.put(1, new ImageIcon(getClass().getResource("/icons/stars/1star_disabled.png")));
-      iconsDisabled.put(2, new ImageIcon(getClass().getResource("/icons/stars/2star_disabled.png")));
-      iconsDisabled.put(3, new ImageIcon(getClass().getResource("/icons/stars/3star_disabled.png")));
-      iconsDisabled.put(4, new ImageIcon(getClass().getResource("/icons/stars/4star_disabled.png")));
-      iconsDisabled.put(5, new ImageIcon(getClass().getResource("/icons/stars/5star_disabled.png")));      
+      iconsDisabled.put(1, Util.getImageIcon("/icons/stars/1star_disabled.png"));
+      iconsDisabled.put(2, Util.getImageIcon("/icons/stars/2star_disabled.png"));
+      iconsDisabled.put(3, Util.getImageIcon("/icons/stars/3star_disabled.png"));
+      iconsDisabled.put(4, Util.getImageIcon("/icons/stars/4star_disabled.png"));
+      iconsDisabled.put(5, Util.getImageIcon("/icons/stars/5star_disabled.png"));      
     }
     
     @Override
@@ -57,7 +58,9 @@ public class StarImageRenderer extends DefaultTableCellRenderer {
       init();
       setEnabled(table == null || table.isEnabled());
       lbl.setOpaque(true);
-      lbl.setFont(lbl.getFont().deriveFont(Font.PLAIN, 11));
+      
+      
+      lbl.setFont(lbl.getFont().deriveFont(Font.PLAIN, Util.getFontSize()));
       
       if (isEnabled()) {
       	lbl.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, ContentPane.colorLightGray));
@@ -95,7 +98,7 @@ public class StarImageRenderer extends DefaultTableCellRenderer {
         ImageIcon icon = this.getIcon(star, isSelected);
         lbl.setText(star.getText());
         lbl.setIcon(icon);
-        lbl.setHorizontalAlignment(JLabel.LEFT);
+        lbl.setHorizontalAlignment(JLabel.CENTER);
         lbl.validate();
         
         return lbl;

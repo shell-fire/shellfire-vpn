@@ -10,6 +10,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import de.shellfire.vpn.Util;
+
 /**
  *
  * @author bettmenn
@@ -41,9 +43,9 @@ public class ContentPane {
         this.header = jHeader;
         this.footer = jFooter;
         
-        this.iconActive = new javax.swing.ImageIcon(getClass().getResource(this.getFileActive()));
-        this.iconHover = new javax.swing.ImageIcon(getClass().getResource(this.getFileHovered()));
-        this.iconIdle = new javax.swing.ImageIcon(getClass().getResource(this.getFileIdle()));
+        this.iconActive = Util.getImageIcon(this.getFileActive());
+        this.iconHover = Util.getImageIcon(this.getFileHovered());
+        this.iconIdle = Util.getImageIcon(this.getFileIdle());
     }
 
 

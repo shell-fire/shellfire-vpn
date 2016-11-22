@@ -7,6 +7,8 @@ package de.shellfire.vpn.gui.helper;
 import java.awt.Font;
 import java.io.InputStream;
 
+import de.shellfire.vpn.Util;
+
 /**
  *
  * @author bettmenn
@@ -25,7 +27,7 @@ public class OxygenFont {
                 if (is == null)
                     throw new Exception("is not available");
                 
-                regular = Font.createFont(Font.TRUETYPE_FONT, is).deriveFont(new Float(12));
+                regular = Font.createFont(Font.TRUETYPE_FONT, is).deriveFont(new Float(Util.getFontSize()));
                 
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -39,7 +41,7 @@ public class OxygenFont {
     
     public static Font getFontLargeBold() {
     	if (largeBold == null) {
-    		largeBold  = getFont().deriveFont(Font.BOLD, 16);
+    		largeBold  = getFont().deriveFont(Font.BOLD, (float) (Util.getFontSize()*1.25));
     	}
     	
         return largeBold;

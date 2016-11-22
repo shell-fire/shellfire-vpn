@@ -149,12 +149,13 @@ public class MessageBroker {
         }
 
         // Read the object
-        Object o = tailer.readObject();
-
+        Object o = null;
+        o = tailer.readObject();
+        
         // Make the reader ready for next read
         tailer.finish();
 
-        if (o instanceof Message) {
+        if (o != null && o instanceof Message) {
           Message<?, ?> message = (Message<?, ?>) o;
           // only handle this message if it did not
           // originate from us

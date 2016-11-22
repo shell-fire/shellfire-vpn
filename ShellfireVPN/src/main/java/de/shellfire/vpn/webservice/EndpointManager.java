@@ -8,6 +8,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
+import org.apache.commons.io.filefilter.PrefixFileFilter;
 import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
 
@@ -23,7 +24,7 @@ public class EndpointManager {
   private static final String DELIM = ";";
   private final static String PROPERTY_ENDPOINTS = "webserviceEndPoints";
   private final static String PROPERTY_PREFERRED_ENDPOINT = "preferredWebserviceEndPoint";
-  private final static String DEFAULT_PROPERTIES="www.shellfire.de:443;www.shellfire.net:443;www.shellfire.fr:443;158.255.212.250:380;213.239.207.251:380;213.239.207.252:380;176.10.126.15:380;176.10.126.14:380;176.57.129.88:380;192.71.249.26:380;46.246.93.202:380;37.235.48.187:380;174.34.178.140:380;174.34.178.139:380;176.9.16.216:380;176.9.16.215:380;94.76.223.69:380;94.76.223.68:380;76.73.44.164:380;76.73.44.163:380;149.210.145.204:380;149.210.145.168:380;192.95.24.110:380;94.23.27.103:380;76.73.85.27:380;76.73.85.28:380;176.57.141.68:380;176.57.141.83:380;37.235.49.49:380;158.255.208.212:380;151.236.23.76:380;151.236.18.125:380;37.235.52.74:380;37.235.55.134:380;46.108.39.238:380;213.183.56.14:380;88.82.108.63:380;162.252.172.111:380;176.57.141.162:380;50.97.229.74:380;119.81.93.2:380;168.1.6.136:380;161.202.113.21:380;185.4.134.183:380;104.152.44.66:380;176.57.141.209:380;176.10.126.18:380;176.10.126.19:380;176.57.141.93:443;76.73.44.165:443;174.34.178.141:443;";
+  private final static String DEFAULT_PROPERTIES="www.shellfire.de:443;www.shellfire.net:443;www.shellfire.fr:443;158.255.212.250:380;213.239.207.251:380;213.239.207.252:380;176.10.126.15:380;176.10.126.14:380;176.57.129.88:380;192.71.249.26:380;46.246.93.202:380;37.235.48.187:380;174.34.178.140:380;174.34.178.139:380;176.9.16.216:380;176.9.16.215:380;94.76.223.69:380;94.76.223.68:380;76.73.44.164:380;76.73.44.163:380;149.210.145.204:380;192.95.24.110:380;94.23.27.103:380;76.73.85.27:380;76.73.85.28:380;176.57.141.68:380;176.57.141.83:380;37.235.49.49:380;158.255.208.212:380;151.236.23.76:380;151.236.18.125:380;37.235.52.74:380;37.235.55.134:380;46.108.39.238:380;213.183.56.14:380;88.82.108.63:380;162.252.172.111:380;176.57.141.162:380;50.97.229.74:380;119.81.93.2:380;168.1.6.136:380;161.202.113.21:380;185.4.134.183:380;104.152.44.66:380;176.57.141.209:380;176.10.126.18:380;176.10.126.19:380;176.57.141.93:443;76.73.44.165:443;174.34.178.141:443;";
   private static I18n i18n = VpnI18N.getI18n();
   
   private static Logger log = Util.getLogger(EndpointManager.class.getCanonicalName());
@@ -55,15 +56,16 @@ public class EndpointManager {
     
   }
 
-  private String getPreferredEndPointFromProperties() {
+  public String getPreferredEndPointFromProperties() {
     String preferredEndPoint = vpnProperties.getProperty(PROPERTY_PREFERRED_ENDPOINT);
     if (preferredEndPoint == null) {
-      log.warn("No preferred endPoint set yet, returning null");
+      log.warn("No preferred endPoint set yet, returning default endpoint");
     }
-    return preferredEndPoint;
+    return getDefaultEndPoint();
   }
   
   private void setPreferredEndPoint(String preferredEndPoint) {
+    log.debug("setPreferredEndPoint("+preferredEndPoint+")");
     this.preferredEndPoint = preferredEndPoint;
     this.vpnProperties.setProperty(PROPERTY_PREFERRED_ENDPOINT, preferredEndPoint);
   }

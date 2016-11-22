@@ -10,6 +10,7 @@
  */
 package de.shellfire.vpn.gui;
 
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -20,6 +21,7 @@ import javax.swing.Timer;
 import org.xnap.commons.i18n.I18n;
 
 import de.shellfire.vpn.i18n.VpnI18N;
+import net.miginfocom.swing.MigLayout;
 
 /**
  *
@@ -38,20 +40,30 @@ public class ProgressDialog extends javax.swing.JDialog {
 
         initComponents();
         this.jLabel1.setText(text);
-        this.jAdditionalTextLabel.setVisible(false);
-        this.jOption1Button.setVisible(false);
-        this.jOption2Button.setVisible(false);
-        this.jBottomLabel.setVisible(false);
+        //this.jAdditionalTextLabel.setVisible(false);
+        //this.jOption2Button.setVisible(false);
+        //this.jBottomLabel.setVisible(false);
         this.setLocationRelativeTo(parent); 
         this.pack();
+        getContentPane().setLayout(new MigLayout("hidemode 3", "[]", "[]"));
 
         
         this.jProgressBar1.setIndeterminate(true);
+        getContentPane().add(jProgressPanel, "cell 0 0,alignx left,aligny top");
+        jProgressPanel.setLayout(new MigLayout("hidemode 3", "[grow][grow][grow]", "[][][][][][]"));
+        jProgressPanel.add(jHeaderPanel, "cell 0 0 3 1,growx,aligny top");
+        jProgressPanel.add(jAdditionalTextLabel, "cell 0 1,alignx left,aligny top");
+        jProgressPanel.add(jProgressBar1, "cell 0 3 3 1,growx,aligny top");
+        jProgressPanel.add(jLabel1, "cell 0 2 3 1,growx,aligny top");
+        jProgressPanel.add(jBottomLabel, "cell 0 4 3 1,growx,aligny top");
+        jProgressPanel.add(jOption1Button, "cell 0 5,growx,aligny top");
+        jProgressPanel.add(jOption2Button, "cell 2 5,growx,aligny top");
     }
 
     public void setText(String text) {
     	this.jLabel1.setText(text);
     	this.pack();
+    	this.setLocationRelativeTo(null);
     }
     
     public void updateProgress(float percentage) {
@@ -71,9 +83,13 @@ public class ProgressDialog extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
         jProgressBar1 = new javax.swing.JProgressBar();
         jAdditionalTextLabel = new javax.swing.JLabel();
+        jAdditionalTextLabel.setVisible(false);
         jOption2Button = new javax.swing.JButton();
+        jOption2Button.setVisible(false);
         jOption1Button = new javax.swing.JButton();
+        jOption1Button.setVisible(false);
         jBottomLabel = new javax.swing.JLabel();
+        jBottomLabel.setVisible(false);
         jHeaderPanel = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
 
@@ -111,61 +127,13 @@ public class ProgressDialog extends javax.swing.JDialog {
         jBottomLabel.setName("jBottomLabel"); // NOI18N
 
         jHeaderPanel.setBackground(new java.awt.Color(18, 172, 229));
-        jHeaderPanel.setName("jHeaderPanel"); // NOI18N
-        jHeaderPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jHeaderPanel.setName("jHeaderPanel");
+        jHeaderPanel.setLayout(new MigLayout("", "[]", "[]"));
 
         jLabel5.setIcon(ShellfireVPNMainForm.getLogo());
         jLabel5.setAlignmentY(0.0F);
         jLabel5.setName("jLabel5"); // NOI18N
-        jHeaderPanel.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 250, 60));
-
-        javax.swing.GroupLayout jProgressPanelLayout = new javax.swing.GroupLayout(jProgressPanel);
-        jProgressPanel.setLayout(jProgressPanelLayout);
-        jProgressPanelLayout.setHorizontalGroup(
-            jProgressPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jHeaderPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE)
-            .addGroup(jProgressPanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jProgressPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jAdditionalTextLabel)
-                    .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE)
-                    .addComponent(jBottomLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 370, Short.MAX_VALUE)
-                    .addGroup(jProgressPanelLayout.createSequentialGroup()
-                        .addComponent(jOption1Button, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
-                        .addComponent(jOption2Button, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
-        );
-        jProgressPanelLayout.setVerticalGroup(
-            jProgressPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jProgressPanelLayout.createSequentialGroup()
-                .addComponent(jHeaderPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jAdditionalTextLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(10, 10, 10)
-                .addComponent(jBottomLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jProgressPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jOption1Button)
-                    .addComponent(jOption2Button))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jProgressPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jProgressPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-        );
+        jHeaderPanel.add(jLabel5, "cell 0 0,grow");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -205,8 +173,6 @@ public class ProgressDialog extends javax.swing.JDialog {
         component.setVisible(true);
         this.pack();        
         this.setLocationRelativeTo(null);
-        this.pack();        
-        
     }
     void setTextAndShowComponent(JButton component, String text) {
         component.setText(text);
@@ -214,8 +180,6 @@ public class ProgressDialog extends javax.swing.JDialog {
         component.setEnabled(false);
         this.pack();        
         this.setLocationRelativeTo(null);
-        this.pack();        
-        
     }
 
 

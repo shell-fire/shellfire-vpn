@@ -542,7 +542,7 @@ public class WebServiceBroker {
   
   public String getEndPoint() {
     if (endPoint == null) {
-      setEndPoint(EndpointManager.getInstance().getDefaultEndPoint());
+      setEndPoint(EndpointManager.getInstance().getPreferredEndPointFromProperties());
     }
     return this.endPoint;
   }
