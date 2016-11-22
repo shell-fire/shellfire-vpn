@@ -467,7 +467,7 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
                 jAutoConnectActionPerformed(evt);
             }
         });
-        getContentPane().setLayout(new MigLayout("", "[]", "[][grow]"));
+        getContentPane().setLayout(new MigLayout("insets 0, gapy 0", "[]", "[][grow]"));
         jPanel7.setLayout(new MigLayout("", "[grow]", "[]"));
 
         jPanel7.add(jLoginPanel, "cell 0 0,grow");
@@ -476,7 +476,7 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
 
         jHeaderPanel.setBackground(new java.awt.Color(18, 172, 229));
         jHeaderPanel.setName("jHeaderPanel");
-        jHeaderPanel.setLayout(new MigLayout("", "[grow][]", "[]"));
+        jHeaderPanel.setLayout(new MigLayout("insets 0", "[grow][]", "[]"));
 
         jLabel5.setIcon(ShellfireVPNMainForm.getLogo());
         jLabel5.setAlignmentY(0.0F);

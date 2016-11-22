@@ -16,6 +16,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import org.xnap.commons.i18n.I18n;
@@ -31,6 +32,7 @@ public class ProgressDialog extends javax.swing.JDialog {
     private boolean option1;
     private boolean option2;
     private Runnable optionCallback;
+    private JPanel jWrapperPanel;
     private static I18n i18n = VpnI18N.getI18n();
 
     /** Creates new form LoginProgressDialog */
@@ -45,19 +47,25 @@ public class ProgressDialog extends javax.swing.JDialog {
         //this.jBottomLabel.setVisible(false);
         this.setLocationRelativeTo(parent); 
         this.pack();
-        getContentPane().setLayout(new MigLayout("hidemode 3", "[]", "[]"));
+        getContentPane().setLayout(new MigLayout("hidemode 3, insets 0", "[]", "[]"));
 
         
         this.jProgressBar1.setIndeterminate(true);
         getContentPane().add(jProgressPanel, "cell 0 0,alignx left,aligny top");
-        jProgressPanel.setLayout(new MigLayout("hidemode 3", "[grow][grow][grow]", "[][][][][][]"));
-        jProgressPanel.add(jHeaderPanel, "cell 0 0 3 1,growx,aligny top");
-        jProgressPanel.add(jAdditionalTextLabel, "cell 0 1,alignx left,aligny top");
-        jProgressPanel.add(jProgressBar1, "cell 0 3 3 1,growx,aligny top");
-        jProgressPanel.add(jLabel1, "cell 0 2 3 1,growx,aligny top");
-        jProgressPanel.add(jBottomLabel, "cell 0 4 3 1,growx,aligny top");
-        jProgressPanel.add(jOption1Button, "cell 0 5,growx,aligny top");
-        jProgressPanel.add(jOption2Button, "cell 2 5,growx,aligny top");
+        jProgressPanel.setLayout(new MigLayout("hidemode 3, insets 0, gapy 0", "[]", "[][]"));
+        
+        jProgressPanel.add(jHeaderPanel, "cell 0 0, grow");
+        jProgressPanel.add(jWrapperPanel, "cell 0 1, grow");
+        
+        jWrapperPanel.setLayout(new MigLayout("hidemode 3", "[grow][grow][grow]", "[][][][][][]"));
+        
+        
+        jWrapperPanel.add(jAdditionalTextLabel, "cell 0 1,alignx left,aligny top");
+        jWrapperPanel.add(jProgressBar1, "cell 0 3 3 1,growx,aligny top");
+        jWrapperPanel.add(jLabel1, "cell 0 2 3 1,growx,aligny top");
+        jWrapperPanel.add(jBottomLabel, "cell 0 4 3 1,growx,aligny top");
+        jWrapperPanel.add(jOption1Button, "cell 0 5,growx,aligny top");
+        jWrapperPanel.add(jOption2Button, "cell 2 5,growx,aligny top");
     }
 
     public void setText(String text) {
@@ -80,6 +88,7 @@ public class ProgressDialog extends javax.swing.JDialog {
     private void initComponents() {
 
         jProgressPanel = new javax.swing.JPanel();
+        jWrapperPanel = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jProgressBar1 = new javax.swing.JProgressBar();
         jAdditionalTextLabel = new javax.swing.JLabel();
@@ -95,9 +104,8 @@ public class ProgressDialog extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jProgressPanel.setBackground(new java.awt.Color(244, 244, 244));
-        jProgressPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
-        jProgressPanel.setName("jProgressPanel"); // NOI18N
+        jWrapperPanel.setBackground(new java.awt.Color(244, 244, 244));
+        jWrapperPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
 
         jLabel1.setText(i18n.tr("Einloggen...."));
         jLabel1.setName("jLabel1"); // NOI18N
