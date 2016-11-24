@@ -8,7 +8,6 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 
-import org.apache.commons.io.filefilter.PrefixFileFilter;
 import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
 
