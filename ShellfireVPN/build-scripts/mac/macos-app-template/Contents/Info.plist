@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleName</key>
+	<string>ShellfireVPN</string>
+	<key>CFBundleShortVersionString</key>
+	<string>2.4</string>
+	<key>CFBundleGetInfoString</key>
+	<string>Application version</string>
+	<key>CFBundleAllowMixedLocalizations</key>
+	<string>false</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleExecutable</key>
+	<string>JavaAppLauncher</string>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>German</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>2.4</string>
+	<key>CFBundleIconFile</key>
+	<string>icon.icns</string>
+	<key>CFBundleIdentifier</key>
+	<string>de.shellfire.vpn</string>
+	<key>NSHumanReadableCopyright</key>
+	<string></string>
+	<key>JVMRuntime</key>
+	<string>jre8_u25</string>
+	<key>JVMMainClassName</key>
+	<string>de.shellfire.vpn.gui.LoginForm</string>
+	<key>JVMOptions</key>
+	<array>
+		<string>-Dapple.laf.useScreenMenuBar=true</string>
+		<string>-Xmx512m</string>
+	</array>
+	<key>JVMArguments</key>
+	<array>
+		<string>-splash:$APP_ROOT/Contents/Resources/icon.png</string>
+	</array>
+	<key>JVMDebug</key>
+	<string>True</string>
+	<key>WorkingDirectory</key>
+	<string>$APP_ROOT</string>
+</dict>
+</plist>

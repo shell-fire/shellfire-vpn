@@ -1,0 +1,22 @@
+ShellfireVPN2.app
+
+tell application "Finder"
+	set pathToJar to POSIX path of (parent of (path to me) as string)
+end tell
+
+#display dialog quoted form of (pathToJar & "../PlugIns/jdk1.8.0_05.jdk/Contents/Home/jre/bin/java") & " -Dapple.awt.UIElement=true -jar " & quoted form of (pathToJar & "ShellfireVPN2.jar") & " installservice " & pathToJar
+do shell script quoted form of (pathToJar & "../PlugIns/jdk1.8.0_05.jdk/Contents/Home/jre/bin/java") & " -Dapple.awt.UIElement=true -jar " & quoted form of (pathToJar & "ShellfireVPN2.jar") & " installservice " & pathToJar with administrator privileges
+
+
+
+# ../PlugIns/jdk1.8.0_05.jdk/Contents/Home/jre/bin/java
+
+ShellfireVPN2-Updater.app
+
+tell application "Finder"
+        set pathToApp to POSIX path of (parent of parent of parent of (path to me) as string)
+        set pathToJar to POSIX path of (parent of (path to me) as string)
+        set userName to short user name of (system info)
+end tell
+#display dialog quoted form of pathToJar & "../PlugIns/jdk1.8.0_05.jdk/Contents/Home/jre/bin/java -Dapple.awt.UIElement=true -jar " & quoted form of pathToJar & "ShellfireVPN2.jar doupdate " & userName & " " & pathToApp
+do shell script quoted form of pathToJar & "../PlugIns/jdk1.8.0_05.jdk/Contents/Home/jre/bin/java -Dapple.awt.UIElement=true -jar " & quoted form of pathToJar & "ShellfireVPN2.jar doupdate " & userName & " " & pathToApp with administrator privileges

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="ShellfireVPN" default="default" basedir=".">        
+<property environment="env" />
+
+    <taskdef name="bundleapp"
+             classname="com.oracle.appbundler.AppBundlerTask"   
+             classpath="appbundler-1.0.jar" />
+
+    <target name="default">
+        <bundleapp outputdirectory="dist"
+            name="ShellfireVPN"
+            displayname="ShellfireVPN"
+            identifier="de.shellfire.vpn"
+            mainclassname="de.shellfire.vpn.gui.LoginForm">
+            	<runtime dir="${env.JAVA_HOME}" />
+		<classpath file="../../deploy-mac/ShellfireVPN2.jar" />
+		<option value="-Dapple.laf.useScreenMenuBar=true"/>
+        </bundleapp>
+    </target>
+
+</project>
