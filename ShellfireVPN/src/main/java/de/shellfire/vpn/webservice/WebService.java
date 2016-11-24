@@ -233,7 +233,9 @@ public class WebService {
       params += " " + proxyCommand;
     }
 
-    if (!Util.isWindows()) {
+    if (Util.isWindows()) {
+      params = params + " --register-dns";
+    } else {
       params = params.replace("--service ShellfireVPN2ExitEvent 0 ", "");
 
       params = params.replace("\\", "/");
