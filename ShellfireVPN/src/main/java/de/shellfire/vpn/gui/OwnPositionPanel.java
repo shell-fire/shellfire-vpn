@@ -10,10 +10,9 @@
  */
 package de.shellfire.vpn.gui;
 
-import java.awt.Toolkit;
-
 import org.xnap.commons.i18n.I18n;
 
+import de.shellfire.vpn.Util;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.types.LocatableIcon;
 import net.miginfocom.swing.MigLayout;
@@ -50,11 +49,8 @@ public class OwnPositionPanel extends javax.swing.JPanel {
         jLabel4 = new javax.swing.JLabel();
         setLayout(new MigLayout("", "[38px][32px][100px]", "[30px][10px][15px][5px][28px]"));
 
-        int screenRes = Toolkit.getDefaultToolkit().getScreenResolution();
-        int fontSize = (int)Math.round(12.0 * screenRes / 72.0);
-
         jOwnPlaceLabel.setBackground(new java.awt.Color(18, 172, 229));
-        jOwnPlaceLabel.setFont(new java.awt.Font("Arial", 1, fontSize)); // NOI18N
+        jOwnPlaceLabel.setFont(new java.awt.Font("Arial", 1, Util.getFontSize())); // NOI18N
         jOwnPlaceLabel.setForeground(new java.awt.Color(255, 255, 255));
         jOwnPlaceLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jOwnPlaceLabel.setText(i18n.tr("Eigener Standort"));
@@ -63,28 +59,28 @@ public class OwnPositionPanel extends javax.swing.JPanel {
         jOwnPlaceLabel.setOpaque(true);
         add(jOwnPlaceLabel, "cell 0 0 3 1,grow");
 
-        jLabel2.setFont(new java.awt.Font("Lucida Grande", 0, fontSize)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Lucida Grande", 0, Util.getFontSize())); // NOI18N
         jLabel2.setText(i18n.tr("Land:"));
         jLabel2.setName("jLabel2"); // NOI18N
         add(jLabel2, "cell 0 2,alignx right,aligny top");
 
-        jCountryLabel.setFont(new java.awt.Font("Lucida Grande", 0, fontSize)); // NOI18N
+        jCountryLabel.setFont(new java.awt.Font("Lucida Grande", 0, Util.getFontSize())); // NOI18N
         jCountryLabel.setText("de");
         jCountryLabel.setName("jCountryLabel"); // NOI18N
         add(jCountryLabel, "cell 2 2,alignx left,aligny top");
 
-        jLabel1.setFont(new java.awt.Font("Lucida Grande", 0, fontSize)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Lucida Grande", 0, Util.getFontSize())); // NOI18N
         jLabel1.setText(i18n.tr("Stadt:"));
         jLabel1.setName("jLabel1"); // NOI18N
         add(jLabel1, "cell 0 4,alignx right,aligny top");
 
-        jCityLabel.setFont(new java.awt.Font("Lucida Grande", 0, fontSize)); // NOI18N
+        jCityLabel.setFont(new java.awt.Font("Lucida Grande", 0, Util.getFontSize())); // NOI18N
         jCityLabel.setText("xxx");
         jCityLabel.setName("jCityLabel"); // NOI18N
         add(jCityLabel, "cell 2 4,alignx left,aligny top");
 
         jLabel4.setBackground(new java.awt.Color(224, 224, 226));
-        jLabel4.setFont(new java.awt.Font("Lucida Grande", 0, fontSize)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Lucida Grande", 0, Util.getFontSize())); // NOI18N
         jLabel4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
         jLabel4.setName("jLabel4"); // NOI18N
         jLabel4.setOpaque(true);

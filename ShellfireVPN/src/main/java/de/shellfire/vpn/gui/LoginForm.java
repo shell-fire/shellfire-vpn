@@ -334,9 +334,6 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-      int screenRes = Toolkit.getDefaultToolkit().getScreenResolution();
-      int fontSize = (int)Math.round(12.0 * screenRes / 72.0);
-
       
         jPanel7 = new javax.swing.JPanel();
         jLoginPanel = new javax.swing.JPanel();
@@ -367,7 +364,7 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
         jLoginPanel.setBackground(new java.awt.Color(244, 244, 244));
         jLoginPanel.setName("jLoginPanel"); // NOI18N
 
-        jLabel16.setFont(new java.awt.Font("Arial", 1, fontSize*2)); // NOI18N
+        jLabel16.setFont(new java.awt.Font("Arial", 1, Util.getFontSize()*2)); // NOI18N
         jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel16.setText("Login");
         jLabel16.setName("jLabel16"); // NOI18N
@@ -392,12 +389,12 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
             }
         });
 
-        jLabel7.setFont(new java.awt.Font("Arial", 0, fontSize)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("Arial", 0, Util.getFontSize())); // NOI18N
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel7.setText(i18n.tr("Email / Benutzername:"));
         jLabel7.setName("jLabel7"); // NOI18N
 
-        jLabel15.setFont(new java.awt.Font("Arial", 0, fontSize)); // NOI18N
+        jLabel15.setFont(new java.awt.Font("Arial", 0, Util.getFontSize())); // NOI18N
         jLabel15.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel15.setText(i18n.tr("Passwort:"));
         jLabel15.setName("jLabel15"); // NOI18N
@@ -486,7 +483,7 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
         jPanel6.setBackground(new java.awt.Color(255, 255, 255));
         jPanel6.setName("jPanel6");
 
-        jLabel6.setFont(new java.awt.Font("Arial", 0, fontSize)); // NOI18N
+        jLabel6.setFont(new java.awt.Font("Arial", 0, Util.getFontSize())); // NOI18N
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel6.setIcon(Util.getImageIcon("/icons/exit.png")); // NOI18N
@@ -666,9 +663,7 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
   private static void setLookAndFeel() {
     try {
       UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-      int screenRes = Toolkit.getDefaultToolkit().getScreenResolution();
-      int fontSize = (int)Math.round(12.0 * screenRes / 72.0);
-      Util.setDefaultSize(fontSize);
+      Util.setDefaultSize(Util.getFontSize());
 
     } catch (Exception ex) {
     }

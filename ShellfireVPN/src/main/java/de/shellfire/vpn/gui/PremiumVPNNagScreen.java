@@ -215,7 +215,7 @@ public class PremiumVPNNagScreen extends javax.swing.JDialog {
     }
 
     TableColumnModel cm = this.jTable1.getColumnModel();
-    cm.getColumn(0).setPreferredWidth(130*Util.getScalingFactor());
+    cm.getColumn(0).setPreferredWidth((int) (130*Util.getScalingFactor()));
 
     cm.getColumn(0).setCellRenderer(new RowHeaderRenderer());
     

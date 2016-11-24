@@ -1633,11 +1633,11 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 		jServerListTable.setBorder(null);
 		jScrollPane.setBorder(null);
 		cm.getColumn(0).setCellRenderer(new CountryImageRenderer());
-		cm.getColumn(0).setPreferredWidth(70*Util.getScalingFactor());
-		cm.getColumn(1).setPreferredWidth(30*Util.getScalingFactor());
-		cm.getColumn(2).setPreferredWidth(45*Util.getScalingFactor());
-		cm.getColumn(3).setPreferredWidth(100*Util.getScalingFactor());
-		cm.getColumn(4).setPreferredWidth(170*Util.getScalingFactor());
+		cm.getColumn(0).setPreferredWidth((int) (70*Util.getScalingFactor()));
+		cm.getColumn(1).setPreferredWidth((int) (30*Util.getScalingFactor()));
+		cm.getColumn(2).setPreferredWidth((int) (45*Util.getScalingFactor()));
+		cm.getColumn(3).setPreferredWidth((int) (100*Util.getScalingFactor()));
+		cm.getColumn(4).setPreferredWidth((int) (170*Util.getScalingFactor()));
 
 		cm.getColumn(1).setCellRenderer(defaultRenderer);
 		cm.getColumn(2).setCellRenderer(defaultRenderer);
@@ -1657,7 +1657,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 	    header.setForeground(Color.white);
 	    header.setFont(OpenSansFont.getFont());
 	    log.debug("Setting header preferred size to: " + cm.getTotalColumnWidth());
-	    header.setPreferredSize(new Dimension(cm.getTotalColumnWidth(), 25*Util.getScalingFactor()));
+	    header.setPreferredSize(new Dimension(cm.getTotalColumnWidth(), (int) (25*Util.getScalingFactor())));
 	    header.setBorder(null);
 	    
 	    JPanel panel = new JPanel();
@@ -2210,7 +2210,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 		
 		this.iconDisconnected = Util.getImageIcon("/icons/sfvpn2-disconnected-big.png").getImage();
 		
-		int scaleFactor = Util.getScalingFactor();
+		double scaleFactor = Util.getScalingFactor();
 		log.debug("ScalingFactor: " + scaleFactor);
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		double width = screenSize.getWidth();

@@ -692,7 +692,6 @@ public class Util {
 
       if (key != null && key.toString().toLowerCase().contains("font")) {
 
-        System.out.println(key);
         Font font = UIManager.getDefaults().getFont(key);
         if (font != null) {
           font = font.deriveFont((float) size);
@@ -705,12 +704,15 @@ public class Util {
 
   }
 
-  public static int getScalingFactor() {
+  public static double getScalingFactor() {
+	  if (!isWindows())  {
+		  return 1;
+	  }  
     int screenRes = Toolkit.getDefaultToolkit().getScreenResolution();
     int factor = (int)Math.round(screenRes / 72.0);
     
     return factor;
-  }
+  }  
 
   
   public static ImageIcon getImageIcon(String resourceName) {
@@ -731,8 +733,13 @@ public class Util {
   }
 
   public static int getFontSize() {
+	float baseSize = 12;
+	if (!isWindows()) {
+		return (int) baseSize;
+	}
+	
     int screenRes = Toolkit.getDefaultToolkit().getScreenResolution();
-    int fontSize = (int)Math.round(12.0 * screenRes / 72.0);
+    int fontSize = (int)Math.round(baseSize * screenRes / 72.0);
     return fontSize;
   }
   

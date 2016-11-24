@@ -82,12 +82,8 @@ public class LogViewer extends JFrame {
     clientLogTextArea.setEditable(false);
     scrollPane.setViewportView(clientLogTextArea);
     
-    int screenRes = Toolkit.getDefaultToolkit().getScreenResolution();
-    int fontSize = (int)Math.round(12.0 * screenRes / 72.0);
-
-    
     JLabel lblClient = new JLabel("Client Log");
-    lblClient.setFont(new Font("Arial", Font.PLAIN, fontSize));
+    lblClient.setFont(new Font("Arial", Font.PLAIN, Util.getFontSize()));
     scrollPane.setColumnHeaderView(lblClient);
     
     JScrollPane scrollPane_1 = new JScrollPane();
@@ -98,11 +94,11 @@ public class LogViewer extends JFrame {
     scrollPane_1.setViewportView(serviceLogTextArea);
     
     JLabel lblNewLabel = new JLabel("Service Log");
-    lblNewLabel.setFont(new Font("Arial", Font.PLAIN, fontSize));
+    lblNewLabel.setFont(new Font("Arial", Font.PLAIN, Util.getFontSize()));
     scrollPane_1.setColumnHeaderView(lblNewLabel);
     
     JButton btnSendLogTo = new JButton("Send Log to Shellfire");
-    btnSendLogTo.setFont(new Font("Arial", Font.PLAIN, fontSize));
+    btnSendLogTo.setFont(new Font("Arial", Font.PLAIN, Util.getFontSize()));
     btnSendLogTo.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         sendLogToShellfire();
