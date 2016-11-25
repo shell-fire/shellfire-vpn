@@ -10,8 +10,10 @@
     <array>
 		<string>%javaPath%</string>
     	<string>-Dapple.awt.UIElement=true</string>
+		<string>-Dde.shellfire.vpn.runtype=Service</string>
     	<string>-jar</string>
     	<string>%serviceJar%</string>
+		<string>start</string>
     </array>
   <key>RunAtLoad</key>
     <false/>

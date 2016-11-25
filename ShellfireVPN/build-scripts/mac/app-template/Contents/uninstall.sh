@@ -15,3 +15,5 @@ rm /Library/LaunchDaemons/wrapper.ShellfireVPN2Service.plist
 rm /Library/LaunchDaemons/ShellfireVPNService.plist
 rm /Library/LaunchDaemons/ShellfireVPN2Service.plist
 rm /etc/shellfirevpn.conf
+
+rm -rf /tmp/shellfire-vpn
