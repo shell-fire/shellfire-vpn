@@ -29,13 +29,12 @@ public class Client implements MessageListener<Object> {
 
   private MessageBroker messageBroker;
   private static Client instance;
+  private boolean appDataSet = false;
 
   private Client() throws IOException {
     this.messageBroker = MessageBroker.getInstance();
     messageBroker.addMessageListener(this);
     messageBroker.startReaderThread();
-    
-    setAppDataFolder();
   }
   
   public static Client getInstance() throws IOException {
@@ -189,6 +188,11 @@ public class Client implements MessageListener<Object> {
     
     if (result == null) {
       result = false;
+    } else {
+      // ping received - if first, set app data
+      if (!this.appDataSet) {
+        setAppDataFolder();
+      }
     }
     
     log.debug("ping() - finished - returning {}", result);
