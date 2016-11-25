@@ -1,21 +1,23 @@
 package de.shellfire.vpn.service.osx;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Timer;
 
 import org.slf4j.Logger;
 
-import com.sun.jna.platform.win32.Kernel32;
-import com.sun.jna.platform.win32.WinNT.HANDLE;
+import com.apple.eawt.AppEvent.SystemSleepEvent;
+import com.apple.eawt.Application;
+import com.apple.eawt.SystemSleepListener;
 
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.client.ConnectionState;
 import de.shellfire.vpn.client.ConnectionStateChangedEvent;
 import de.shellfire.vpn.client.ConnectionStateListener;
+import de.shellfire.vpn.client.ServiceTools;
+import de.shellfire.vpn.client.osx.OSXServiceTools;
 import de.shellfire.vpn.service.ConnectionMonitor;
 import de.shellfire.vpn.service.IVpnController;
 import de.shellfire.vpn.service.IVpnRegistry;
@@ -25,38 +27,40 @@ import de.shellfire.vpn.types.Reason;
 public class OSXVpnController implements IVpnController {
 
   private static Logger log = Util.getLogger(OSXVpnController.class.getCanonicalName());
-  private static WindowsVpnController instance;
+  private static OSXVpnController instance;
   private ConnectionState connectionState = ConnectionState.Disconnected;
-  private Reason reasonForStateChange;
   private Timer connectionMonitor;
   private String parametersForOpenVpn;
   private String appData;
-  private IVpnRegistry registry = new WinRegistry();
+  private IVpnRegistry registry = new MacRegistry();
   private List<ConnectionStateListener> conectionStateListenerList = new ArrayList<ConnectionStateListener>();
-  private IPV6Manager ipv6manager = new IPV6Manager();
+  private OSXServiceTools serviceTools;
+  private OpenVpnManagementClient openVpnManagementClient;
+
+  private Boolean sleepBeingHandled = false;
+  private boolean disconnectedDueToSleep;
+
   
-  
-  private String getOpenVpnLocation() {
-    log.debug("getOpenVpnStartString() - start");
+  private OSXVpnController() {
+    initAppleEventHandlers();
     
-    Map<String, String> envs = System.getenv();
-    String programFiles = envs.get("ProgramFiles");
-    String programFiles86 = envs.get("ProgramFiles(x86)");
-
-    List<String> possibleOpenVpnExeLocations = Util.getPossibleExeLocations(programFiles, programFiles86);
-
-    for (String possibleLocaion : possibleOpenVpnExeLocations) {
-      File f = new File(possibleLocaion);
-      if (f.exists()) {
-        log.debug("getOpenVpnStartString() - returning " + possibleLocaion);
-        return possibleLocaion;
-      }
-        
+    ServiceTools tools = ServiceTools.getInstanceForOS();
+    if (tools instanceof OSXServiceTools) {
+      this.serviceTools = (OSXServiceTools) tools;
     }
-    log.debug("getOpenVpnStartString() - returning null: OPENVPN NOT FOUND!");
-    return null;
+    
   }
-  
+
+  private String getOpenVpnLocation() {
+    log.debug("getOpenVpnLocation() - start");
+
+    String loc = com.apple.eio.FileManager.getPathToApplicationBundle() + "/Contents/Java/openvpn/openvpn";
+
+    log.debug("getOpenVpnLocation() - returning location: " + loc);
+
+    return loc;
+  }
+
   @Override
   public void connect(Reason reason) {
     log.debug("connect(Reason={}", reason);
@@ -66,18 +70,7 @@ public class OSXVpnController implements IVpnController {
         this.setConnectionState(ConnectionState.Connecting, reason);
       }
 
-      fixTapDevices();
-      ipv6manager.disableIPV6OnAllDevices();
-
-      log.debug("getting openVpnLocation");
       String openVpnLocation = this.getOpenVpnLocation();
-      log.debug("openVpnLocation retrieved: {}", openVpnLocation);
-
-      
-      if (parametersForOpenVpn == null) {
-        this.setConnectionState(ConnectionState.Disconnected, Reason.NoOpenVpnParameters);
-        return;
-      }
 
       if (openVpnLocation == null) {
         log.error("Aborting connect: could not retrieve openVpnLocation");
@@ -85,78 +78,115 @@ public class OSXVpnController implements IVpnController {
         return;
       }
 
-      Runtime runtime = Runtime.getRuntime();
-        
+      if (this.parametersForOpenVpn == null) {
+        this.setConnectionState(ConnectionState.Disconnected, Reason.NoOpenVpnParameters);
+        return;
+      }
+
       log.debug("Entering main connection loop");
       Process p = null;
       String search = "%APPDATA%\\ShellfireVPN";
       String replace = this.appData;
       parametersForOpenVpn = parametersForOpenVpn.replace(search, replace);
-      
-      if (Util.isWin8OrWin10()) {
-        log.debug("Adding block-outside-dns on win8 or win10");
-        String blockDns = " --block-outside-dns";
-        if (parametersForOpenVpn != null && !parametersForOpenVpn.contains(blockDns)) {
-          parametersForOpenVpn += blockDns;  
-        }
-      }
-      
-      log.debug("Starting openvpn:");
-      String command = openVpnLocation + " " + this.parametersForOpenVpn;
-      p = runtime.exec(command, null, new File("."));
-      log.debug("Executing {}", command);
 
-      log.debug("Bindin process to console");
+      // make sure kexts have the proper user rights
+      log.debug("ServiceTools.protectKext(" + System.getProperty("user.dir") + ");");
+      this.serviceTools.protectKext(System.getProperty("user.dir"));
+
+      String[] cmdList = parametersForOpenVpn.split(" ");
+
+      List<String> cmds = new LinkedList<String>();
+      cmds.add(openVpnLocation);
+      for (String cmd : cmdList) {
+        cmd = cmd.replace(search, replace).replace("\"", "");
+        cmds.add(cmd);
+      }
+
+      this.openVpnManagementClient = new OpenVpnManagementClient(this);
+      new Thread(openVpnManagementClient).start();
+
+      String vpnDir = getOpenVpnDir();
+      String vpnDirForConfig = vpnDir.replace(" ", "\\ ");
+      cmds.add("--verb");
+      cmds.add("2");
+      cmds.add("--up");
+      cmds.add(vpnDirForConfig + "client.up.sh");
+      cmds.add("--down");
+      cmds.add(vpnDirForConfig + "client.down.sh");
+      cmds.add("--script-security");
+      cmds.add("2");
+      cmds.add("--management");
+      cmds.add("localhost");
+      cmds.add("1399");
+      cmds.add("--management-client");
+      cmds.add("--management-hold");
+      // cmds.add("--daemon");
+
+      List<String> kextLoadCmds = new LinkedList<String>();
+      kextLoadCmds.add("/sbin/kextload");
+      kextLoadCmds.add(vpnDir + "tun.kext");
+      log.debug("Loading tun.kext with command: " + Util.listToString(kextLoadCmds));
+
+      Process kextLoad = new ProcessBuilder(kextLoadCmds).start();
+      this.bindConsole(kextLoad);
+
+      log.debug("Starting openvpn with command: " + Util.listToString(cmds));
+      p = new ProcessBuilder(cmds).start();
+
       this.bindConsole(p);
 
     } catch (IOException ex) {
-      log.error("Error occured during connect: {}", ex.getMessage(), ex);
+      log.error("Error occured during connect. Exception details:", ex);
       this.setConnectionState(ConnectionState.Disconnected, Reason.OpenVpnNotFound);
     }
 
     log.debug("connect(Reason={}) - finished", reason);
   }
-  
+
+  private String getOpenVpnDir() {
+    return System.getProperty("user.dir") + "/openvpn/";
+  }
+
   private void bindConsole(Process process) {
     log.debug("bindConsole() - start");
     ProcessWrapper inputStreamWorker = new ProcessWrapper(process.getInputStream(), this);
     inputStreamWorker.start();
-    
+
     log.debug("bindConsole() - started inputStreamWorker, starting errorStreamWorker");
-    
+
     ProcessWrapper errorStreamWorker = new ProcessWrapper(process.getErrorStream(), this);
     errorStreamWorker.start();
-    
+
     log.debug("bindConsole() - finished");
   }
 
   @Override
   public void disconnect(Reason reason) {
     log.debug("disconnect(Reason={})", reason);
-    Kernel32 kernel32 = Kernel32.INSTANCE;
-    HANDLE result = kernel32.CreateEvent(null, true, false, "ShellfireVPN2ExitEvent"); // request deletion
-    kernel32.SetEvent(result);
     try {
-      Thread.sleep(250);
-    } catch (InterruptedException e) {
-      log.error("", e);
+      if (openVpnManagementClient != null) {
+        openVpnManagementClient.disconnect();
+      }
+    } catch (IOException e) {
+      log.error("Could not disconnect - ignoring", e);
     }
-    kernel32.PulseEvent(result);
-    
+
+    try {
+      List<String> kextUnloadCmds = new LinkedList<String>();
+      kextUnloadCmds.add("/sbin/kextunload");
+      kextUnloadCmds.add(getOpenVpnDir() + "tun.kext");
+      log.debug("Unloading tun.kext with command: " + Util.listToString(kextUnloadCmds));
+
+      Process kextUnload = new ProcessBuilder(kextUnloadCmds).start();
+      this.bindConsole(kextUnload);
+    } catch (
+
+    IOException e) {
+      log.error("Unloading tun.kext did not work - ignoring", e);
+    }
+
     this.setConnectionState(ConnectionState.Disconnected, reason);
-    ipv6manager.enableIPV6OnPreviouslyDisabledDevices();
-    fixTapDevices();
     log.debug("disconnect(Reason={} - finished", reason);
-  }
-  
-  private void fixTapDevices() {
-    log.debug("fixTapDevices()");
-    if (Util.isVistaOrLater()) {
-      log.debug("Performing tap-fix on Windows Vista or Later");
-      TapFixer.restartAllTapDevices();
-    } else {
-      log.debug("Some Windows before Vista - not performing tap-fix");
-    }
   }
 
   private void stopConnectionMonitoring() {
@@ -168,7 +198,7 @@ public class OSXVpnController implements IVpnController {
     }
     log.debug("stopConnectionMonitoring() - finished");
   }
-  
+
   // auto re-connect on Timeout!
   private void startConnectionMonitoring() {
     log.debug("starting connection monitoring");
@@ -177,17 +207,16 @@ public class OSXVpnController implements IVpnController {
       this.connectionMonitor = new Timer();
       connectionMonitor.schedule(new ConnectionMonitor(this), 5000, 20000);
     }
-    
+
     log.debug("connection monitoring started");
-  }  
-  
+  }
+
   public void setConnectionState(ConnectionState newState, Reason reason) {
     log.debug("setConnectionState(ConnectionState newState={}, Reason reason={})", newState, reason);
     this.connectionState = newState;
-    this.reasonForStateChange = reason;
-    
+
     this.notifyConnectionStateListeners(newState, reason);
-    
+
     if (newState == ConnectionState.Connected) {
       startConnectionMonitoring();
     } else {
@@ -198,10 +227,10 @@ public class OSXVpnController implements IVpnController {
 
   private void notifyConnectionStateListeners(ConnectionState newState, Reason reason) {
     ConnectionStateChangedEvent e = new ConnectionStateChangedEvent(reason, newState);
-    
-   for (ConnectionStateListener listener : this.conectionStateListenerList) {
-     listener.connectionStateChanged(e);
-   }
+
+    for (ConnectionStateListener listener : this.conectionStateListenerList) {
+      listener.connectionStateChanged(e);
+    }
   }
 
   @Override
@@ -216,13 +245,6 @@ public class OSXVpnController implements IVpnController {
     log.debug("setParametersForOpenVpn(params={})", params);
     this.parametersForOpenVpn = params;
     log.debug("setParametersForOpenVpn(params={}) - finished", params);
-  }
-
-  @Override
-  public void reinstallTapDriver() {
-    log.debug("reinstallTapDriver()");
-    TapFixer.reinstallTapDriver();
-    log.debug("reinstallTapDriver() - finished");
   }
 
   @Override
@@ -268,7 +290,8 @@ public class OSXVpnController implements IVpnController {
 
   public boolean isAutoProxyConfigEnabled() {
     log.debug("isAutoProxyConfigEnabled()");
-    boolean result = registry.autoProxyConfigEnabled();;
+    boolean result = registry.autoProxyConfigEnabled();
+    
     log.debug("isAutoProxyConfigEnabled() - resturning {}", result);
     return result;
   }
@@ -282,7 +305,7 @@ public class OSXVpnController implements IVpnController {
 
   public static IVpnController getInstance() {
     if (instance == null) {
-      instance = new WindowsVpnController();
+      instance = new OSXVpnController();
     }
 
     return instance;
@@ -297,12 +320,84 @@ public class OSXVpnController implements IVpnController {
   public void close() {
     log.debug("close() - start");
     if (connectionState != ConnectionState.Disconnected) {
-      disconnect(Reason.ServiceStopped);  
+      disconnect(Reason.ServiceStopped);
     }
-    
+
     stopConnectionMonitoring();
     log.debug("close() - finished");
-   }
+  }
   
-  
+  private void initAppleEventHandlers() {
+    if (!Util.isWindows()) {
+      Application macApplication = Application.getApplication();
+      macApplication.addAppEventListener(new SystemSleepListener() {
+        public void systemAboutToSleep(SystemSleepEvent arg0) {
+          new Thread(new Runnable() {
+
+            public void run() {
+              synchronized (sleepBeingHandled) {
+                log.debug("System going to sleep");
+                stopConnectionMonitoring();
+                if (connectionState == ConnectionState.Connected || connectionState == ConnectionState.Connecting) {
+                  disconnectedDueToSleep = true;
+                
+                  log.debug("disconnecting");
+                  disconnect(Reason.SystemSleepInduced);
+                
+                }
+              }
+              
+            }
+          }).start();
+
+        }
+
+        public void systemAwoke(SystemSleepEvent arg0) {
+          new Thread(new Runnable() {
+            public void run() {
+              log.debug("System woke up - waiting until (potentially still running going-to-sleep-process is finished...");
+              synchronized (sleepBeingHandled) {
+                log.debug("...done. Checking for internet availability.");
+
+                boolean networkIsAvailable = Util.internetIsAvailable();
+
+                if (networkIsAvailable) {
+                  log.debug("Internet is available");
+                  
+                  if (disconnectedDueToSleep && connectionState == ConnectionState.Disconnected) {
+                    log.debug("Connection has been terminated due to sleep mode, reconnecting automatically");
+                    connect(Reason.AwokeFromSystemSleep);
+                    disconnectedDueToSleep = false;
+                  } else {
+                    log.debug("Was not connected - doing nothing :-)");
+                  }
+                  
+                } else {
+                  log.debug("No network connection after sleep");
+                } 
+              }
+              
+            }
+          }).start();
+
+        }
+
+        @Override
+        public void systemAweoke(SystemSleepEvent e) {
+          systemAwoke(e);
+          
+        }
+
+       
+
+      }); 
+    }
+  }
+
+  @Override
+  public void reinstallTapDriver() {
+    // Only required for windows
+    
+  }
+
 }

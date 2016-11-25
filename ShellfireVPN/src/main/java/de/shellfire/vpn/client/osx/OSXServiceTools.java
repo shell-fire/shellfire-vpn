@@ -188,7 +188,7 @@ public class OSXServiceTools extends ServiceTools {
     }
   }
 
-  static void protectKext(String instDir) {
+  public void protectKext(String instDir) {
     String[] params;
     Process p2;
 
