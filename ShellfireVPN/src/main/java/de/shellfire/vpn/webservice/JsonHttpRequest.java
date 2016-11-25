@@ -161,7 +161,13 @@ class JsonHttpRequest<RequestType, ResponseType> {
     {
       
       KeyStore ks = KeyStore.getInstance("JKS");
-      FileInputStream fis = new FileInputStream("shellfire.keystore");
+      String keyStorePath = "shellfire.keystore";
+      
+      if (!new File(keyStorePath).exists() && Util.isMacOs())  {
+    	  keyStorePath = com.apple.eio.FileManager.getPathToApplicationBundle() + "/Contents/Java/" + keyStorePath;
+      }
+      
+      FileInputStream fis = new FileInputStream(keyStorePath);
       char[] pass = "blubber".toCharArray();
       ks.load(fis, pass);
       fis.close();

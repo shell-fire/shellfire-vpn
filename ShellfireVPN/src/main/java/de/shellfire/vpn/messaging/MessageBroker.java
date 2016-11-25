@@ -50,6 +50,7 @@ public class MessageBroker {
 
   private void deleteChronicleFiles(String path) {
     log.debug("deleteChronicleFiles({})", path);
+
     String index = path + ".index";
     String data = path + ".data";
 
@@ -99,7 +100,10 @@ public class MessageBroker {
 
     log.debug("path is: {}", path);
     String result = Util.getTempDir() + path;
-    deleteChronicleFiles(result);
+    
+    if (Util.isWindows()) {
+    	deleteChronicleFiles(result);
+    }
 
     log.debug("getChronicleFiles() - returning", result);
     return result;
@@ -144,7 +148,7 @@ public class MessageBroker {
       while (!stop) {
         // While until there is a new Excerpt to read, or stop is requested
         while (!stop && !tailer.nextIndex()) {
-          // 10 ms is enough to not use ANY cpu during sleep.
+          // 50 ms is enough to not use ANY cpu during sleep.
           Util.sleep(50);
         }
 

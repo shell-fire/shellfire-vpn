@@ -12,13 +12,13 @@
 			<artifactId>chronicle</artifactId>
 			<version>3.6.0</version>
 			<exclusions>
-                <exclusion>
-                    <groupId>com.sun.java</groupId>
-                    <artifactId>tools</artifactId>
-                </exclusion>
-            </exclusions>
+				<exclusion>
+					<groupId>com.sun.java</groupId>
+					<artifactId>tools</artifactId>
+				</exclusion>
+			</exclusions>
 
-			
+
 		</dependency>
 
 		<dependency>
@@ -98,11 +98,14 @@
 			<artifactId>miglayout-swing</artifactId>
 			<version>5.0</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
 		<dependency>
-			<groupId>org.apache.directory.studio</groupId>
-			<artifactId>org.apache.commons.io</artifactId>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
 			<version>2.4</version>
 		</dependency>
+
+
 	</dependencies>
 
 </project>

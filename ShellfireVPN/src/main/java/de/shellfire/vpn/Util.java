@@ -619,7 +619,7 @@ public class Util {
       // Some Windows versions have user specific temp files, so always use C:\Temp
       result = System.getenv("SystemDrive") + "\\Temp\\" + SHELLFIRE_VPN;
     } else {
-      result = System.getProperty("java.io.tmpdir") + "/";
+      result = "/tmp/" + SHELLFIRE_VPN;
     }
 
     return result;
