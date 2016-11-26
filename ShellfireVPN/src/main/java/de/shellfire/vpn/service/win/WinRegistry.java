@@ -158,7 +158,7 @@ public class WinRegistry implements IVpnRegistry {
 
   public boolean autoProxyConfigEnabled() {
     try {
-      return getAutoProxyConfigPath() != null;
+      return false; // getAutoProxyConfigPath() != null;
     } catch (Exception e) {
       Util.handleException(e);
     }

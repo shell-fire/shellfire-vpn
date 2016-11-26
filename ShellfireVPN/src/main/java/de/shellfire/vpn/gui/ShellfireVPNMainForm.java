@@ -610,7 +610,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
         jLabel16.setBackground(resourceMap.getColor("jLabel16.background")); // NOI18N
         jLabel16.setFont(OxygenFont.getFontLargeBold());
         jLabel16.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel16.setText("   " + i18n.tr("Liste von TV Streams aus den USA (englischsprachig)"));
+        jLabel16.setText("     " + i18n.tr("Liste von TV Streams aus den USA (englischsprachig)"));
         jLabel16.setName("jLabel16"); // NOI18N
         jLabel16.setOpaque(true);
 
@@ -776,12 +776,12 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
         jPanelConnect.setLayout(new MigLayout("hidemode 3, insets 0, gapx 0, gapy 0", "[grow][grow]", "[grow][grow][grow]"));
 
         jLabelConnectHeader.setFont(new Font("Arial", Font.PLAIN, Util.getFontSize())); // NOI18N
-        jLabelConnectHeader.setText(i18n.tr("Verbindung"));
+        jLabelConnectHeader.setText("     " + i18n.tr("Verbindung"));
         jLabelConnectHeader.setName("jLabelConnectHeader"); // NOI18N
         jPanelConnect.add(jLabelConnectHeader, "cell 1 0,alignx left,aligny bottom");
 
         jLabelConnectFooter.setFont(new Font("Arial", Font.PLAIN, Util.getFontSize())); // NOI18N
-        jLabelConnectFooter.setText(i18n.tr("Jetzt zu Shellfire VPN verbinden"));
+        jLabelConnectFooter.setText("     " + i18n.tr("Jetzt zu Shellfire VPN verbinden"));
         jLabelConnectFooter.setName("jLabelConnectFooter"); // NOI18N
         jPanelConnect.add(jLabelConnectFooter, "cell 1 1,alignx left,aligny top");
 
@@ -811,12 +811,12 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
         jPanelServerList.setLayout(new MigLayout("hidemode 3, insets 0, gapx 0, gapy 0", "[grow][grow]", "[grow][grow]"));
 
         jLabelServerListHeader.setFont(new Font("Arial", Font.PLAIN, Util.getFontSize())); // NOI18N
-        jLabelServerListHeader.setText(i18n.tr("Server Liste"));
+        jLabelServerListHeader.setText("     " + i18n.tr("Server Liste"));
         jLabelServerListHeader.setName("jLabelServerListHeader"); // NOI18N
         jPanelServerList.add(jLabelServerListHeader, "cell 1 0,alignx left,aligny bottom");
 
         jLabelServerListFooter.setFont(new Font("Arial", Font.PLAIN, Util.getFontSize())); // NOI18N
-        jLabelServerListFooter.setText(i18n.tr("Liste aller VPN Server anzeigen"));
+        jLabelServerListFooter.setText("     " + i18n.tr("Liste aller VPN Server anzeigen"));
         jLabelServerListFooter.setName("jLabelServerListFooter"); // NOI18N
         jPanelServerList.add(jLabelServerListFooter, "cell 1 1,alignx left,aligny top");
 
@@ -845,12 +845,12 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
         jPanelMap.setLayout(new MigLayout("hidemode 3, insets 0, gapx 0, gapy 0", "[grow][grow]", "[grow][grow]"));
 
         jLabelMapHeader.setFont(new Font("Arial", Font.PLAIN, Util.getFontSize())); // NOI18N
-        jLabelMapHeader.setText(i18n.tr("Karte"));
+        jLabelMapHeader.setText("     " + i18n.tr("Karte"));
         jLabelMapHeader.setName("jLabelMapHeader"); // NOI18N
         jPanelMap.add(jLabelMapHeader, "cell 1 0,alignx left,aligny bottom");
 
         jLabelMapFooter.setFont(new Font("Arial", Font.PLAIN, Util.getFontSize())); // NOI18N
-        jLabelMapFooter.setText(i18n.tr("Zeigt Verschlüsselungsroute"));
+        jLabelMapFooter.setText("     " + i18n.tr("Zeigt Verschlüsselungsroute"));
         jLabelMapFooter.setName("jLabelMapFooter"); // NOI18N
         jPanelMap.add(jLabelMapFooter, "cell 1 1,alignx left,aligny top");
 
@@ -879,7 +879,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
         jPanelUsa.setLayout(new MigLayout("hidemode 3, insets 0, gapx 0, gapy 0", "[grow][grow]", "[grow][grow]"));
 
         jLabelUsaHeader.setFont(new Font("Arial", Font.PLAIN, Util.getFontSize())); // NOI18N
-        jLabelUsaHeader.setText(i18n.tr("Streams aus den USA"));
+        jLabelUsaHeader.setText("     " + i18n.tr("Streams aus den USA"));
         jLabelUsaHeader.setName("jLabelUsaHeader"); // NOI18N
         jPanelUsa.add(jLabelUsaHeader, "cell 1 0,alignx left,aligny bottom");
 
