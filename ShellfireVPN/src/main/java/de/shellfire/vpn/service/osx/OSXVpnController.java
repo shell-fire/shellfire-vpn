@@ -314,6 +314,8 @@ public class OSXVpnController implements IVpnController {
 
   @Override
   public void addConnectionStateListener(ConnectionStateListener connectionStateListener) {
+    log.debug("Adding new connectionStateListener! We can only have 1 at the moment, so re-initializing with empty list first");
+    this.conectionStateListenerList = new ArrayList<ConnectionStateListener>();
     this.conectionStateListenerList.add(connectionStateListener);
   }
 
