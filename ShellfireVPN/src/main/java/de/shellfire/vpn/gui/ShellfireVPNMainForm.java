@@ -884,7 +884,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
         jPanelUsa.add(jLabelUsaHeader, "cell 1 0,alignx left,aligny bottom");
 
         jLabelUsaFooter.setFont(new Font("Arial", Font.PLAIN, Util.getFontSize())); // NOI18N
-        jLabelUsaFooter.setText(i18n.tr("Liste amerikanischer TV Streams"));
+        jLabelUsaFooter.setText("     " + i18n.tr("Liste amerikanischer TV Streams"));
         jLabelUsaFooter.setName("jLabelUsaFooter"); // NOI18N
         jPanelUsa.add(jLabelUsaFooter, "cell 1 1,alignx left,aligny top");
 
