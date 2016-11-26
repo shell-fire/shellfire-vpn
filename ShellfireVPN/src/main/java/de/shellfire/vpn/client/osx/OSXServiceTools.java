@@ -179,9 +179,10 @@ public class OSXServiceTools extends ServiceTools {
         p2.waitFor();
 
       } catch (IOException e) {
-        e.printStackTrace();
+      	log.error("IOException during chmod 755 openvpn/tun.kext", e);
+        
       } catch (InterruptedException e) {
-        e.printStackTrace();
+      	log.error("InterruptedException during chmod 755 openvpn/tun.kext", e);
       }
     } catch (IOException e) {
       Util.handleException(e);
@@ -199,11 +200,11 @@ public class OSXServiceTools extends ServiceTools {
       Util.digestProcess(p2);
       p2.waitFor();
     } catch (IOException e) {
-      e.printStackTrace();
-    } catch (InterruptedException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
+    	log.error("IOException during chmod 755 openvpn/tun.kext", e);
+      
+      } catch (InterruptedException e) {
+      	log.error("InterruptedException during chmod 755 openvpn/tun.kext", e);
+      }
 
     params = new String[] { "/bin/chmod", "-R", "755", instDir + "/openvpn/tun.kext/" };
     log.debug("setting permissions " + params[2] + " on " + params[3]);
@@ -212,24 +213,12 @@ public class OSXServiceTools extends ServiceTools {
       Util.digestProcess(p2);
       p2.waitFor();
     } catch (IOException e) {
-      e.printStackTrace();
+    	log.error("IOException during chmod 755 openvpn/tun.kext", e);
+      
     } catch (InterruptedException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+    	log.error("InterruptedException during chmod 755 openvpn/tun.kext", e);
     }
     
-    params = new String[] { "/bin/mkdir", "/var/log/ShellfireVPN" };
-    log.debug("mkdir " + params[1]);
-    try {
-      p2 = new ProcessBuilder(params).start();
-      Util.digestProcess(p2);
-      p2.waitFor();
-    } catch (IOException e) {
-      e.printStackTrace();
-    } catch (InterruptedException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
   }
   
 

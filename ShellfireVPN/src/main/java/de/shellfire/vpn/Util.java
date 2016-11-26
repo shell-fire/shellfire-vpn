@@ -102,14 +102,11 @@ public class Util {
     Throwable t = ex.getCause();
     String msg = "";
     if (t != null) {
-      t.printStackTrace();
       msg = t.getClass().getSimpleName() + ": " + t.getLocalizedMessage();
-      // msg += "\n\n"+Util.getStackTrace(t);
     }
 
     else {
       msg = ex.getLocalizedMessage();
-      // msg += "\n\n"+Util.getStackTrace(ex);
     }
 
     JOptionPane.showMessageDialog(null, i18n.tr("Vorgang konnte nicht ausgeführt werden, da ein Fehler aufgetreten ist:") + "\n" + msg,
@@ -296,7 +293,7 @@ public class Util {
       if (isWindows())
         result = System.getenv("APPDATA") + "\\ShellfireVpn\\";
       else {
-        result = System.getProperty("user.home") + File.separator + "/Library/Application Support/Shellfire VPN/";
+        result = System.getProperty("user.home") + "/Library/Application Support/Shellfire VPN/";
 
         if (!result.startsWith("/var/root")) {
           File f = new File(result);
@@ -342,7 +339,7 @@ public class Util {
   public static String listToString(List<String> cmds) {
     String result = "";
     for (String cmd : cmds) {
-      result += cmd + " ";
+      result += cmd + " § ";
     }
 
     return result;

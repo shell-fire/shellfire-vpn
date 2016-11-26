@@ -1,5 +1,6 @@
 package de.shellfire.vpn.service.osx;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -51,16 +52,6 @@ public class OSXVpnController implements IVpnController {
     
   }
 
-  private String getOpenVpnLocation() {
-    log.debug("getOpenVpnLocation() - start");
-
-    String loc = com.apple.eio.FileManager.getPathToApplicationBundle() + "/Contents/Java/openvpn/openvpn";
-
-    log.debug("getOpenVpnLocation() - returning location: " + loc);
-
-    return loc;
-  }
-
   @Override
   public void connect(Reason reason) {
     log.debug("connect(Reason={}", reason);
@@ -70,33 +61,35 @@ public class OSXVpnController implements IVpnController {
         this.setConnectionState(ConnectionState.Connecting, reason);
       }
 
-      String openVpnLocation = this.getOpenVpnLocation();
-
-      if (openVpnLocation == null) {
-        log.error("Aborting connect: could not retrieve openVpnLocation");
-        this.setConnectionState(ConnectionState.Disconnected, Reason.OpenVpnNotFound);
-        return;
-      }
-
       if (this.parametersForOpenVpn == null) {
-        this.setConnectionState(ConnectionState.Disconnected, Reason.NoOpenVpnParameters);
-        return;
+    	  log.error("Did not receive openVpn parameter from client - aborting connect");
+          this.setConnectionState(ConnectionState.Disconnected, Reason.NoOpenVpnParameters);
+          return;
       }
+      
+      if (this.appData == null) {
+    	  log.error("Did not receive appData parameter from client - aborting connect");
+          this.setConnectionState(ConnectionState.Disconnected, Reason.NoOpenVpnParameters);
+          return;
+       }
 
-      log.debug("Entering main connection loop");
-      Process p = null;
-      String search = "%APPDATA%\\ShellfireVPN";
-      String replace = this.appData;
-      parametersForOpenVpn = parametersForOpenVpn.replace(search, replace);
-
-      // make sure kexts have the proper user rights
-      log.debug("ServiceTools.protectKext(" + System.getProperty("user.dir") + ");");
       this.serviceTools.protectKext(System.getProperty("user.dir"));
 
-      String[] cmdList = parametersForOpenVpn.split(" ");
+
+	  log.debug("About to launch processes - preparing commands");
 
       List<String> cmds = new LinkedList<String>();
+      Process p = null;
+      String search = "%APPDATA%/ShellfireVPN/";
+      String replace = this.appData;
+      
+      String[] cmdList = parametersForOpenVpn.split(" ");
+      
+      String vpnDir = getOpenVpnDir();
+      
+      String openVpnLocation = vpnDir + "openvpn";
       cmds.add(openVpnLocation);
+     
       for (String cmd : cmdList) {
         cmd = cmd.replace(search, replace).replace("\"", "");
         cmds.add(cmd);
@@ -105,7 +98,6 @@ public class OSXVpnController implements IVpnController {
       this.openVpnManagementClient = new OpenVpnManagementClient(this);
       new Thread(openVpnManagementClient).start();
 
-      String vpnDir = getOpenVpnDir();
       String vpnDirForConfig = vpnDir.replace(" ", "\\ ");
       cmds.add("--verb");
       cmds.add("2");
@@ -144,7 +136,16 @@ public class OSXVpnController implements IVpnController {
   }
 
   private String getOpenVpnDir() {
-    return System.getProperty("user.dir") + "/openvpn/";
+	  // when started as service, getPathToApplicationBundle() returns:
+	  // /Applications/Shellfire VPN.app/Contents/PlugIns/jre8_u25/Contents/Home/jre/bin/
+    String longForm = com.apple.eio.FileManager.getPathToApplicationBundle() + "/../../../../../../Java/openvpn/";
+   
+    File normalized = new File(longForm).toPath().normalize().toFile();
+    String resultPath = normalized.getAbsolutePath() + "/";    
+    
+    //resultPath = "/Applications/Shellfire VPN.app/Contents/Java/openvpn/";
+    
+    return resultPath;
   }
 
   private void bindConsole(Process process) {
@@ -250,7 +251,7 @@ public class OSXVpnController implements IVpnController {
   @Override
   public void setAppDataFolder(String appData) {
     log.debug("setAppDataFolder(appData={}", appData);
-    this.appData = appData;
+    this.appData = appData;//.replace(" ", "\\ ");
     log.debug("setAppDataFolder(appData={} - finished", appData);
   }
 

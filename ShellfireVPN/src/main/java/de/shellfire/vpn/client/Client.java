@@ -5,6 +5,7 @@
 package de.shellfire.vpn.client;
 
 import java.io.IOException;
+import java.io.Serializable;
 
 import org.slf4j.Logger;
 
@@ -20,7 +21,7 @@ import de.shellfire.vpn.types.Server;
 import de.shellfire.vpn.webservice.Vpn;
 
 @SuppressWarnings("unchecked")
-public class Client implements MessageListener<Object> {
+public class Client implements MessageListener<Serializable> {
 
   private static Logger log = Util.getLogger(Client.class.getCanonicalName());
   private Server server;
