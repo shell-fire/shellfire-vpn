@@ -90,6 +90,10 @@ public class Vpn {
     public ProductType getProductType() {
         return this.productType;
     }
+    
+    public void setProductType(ProductType productType) {
+      this.productType = productType;
+    }
 
     public Date getPremiumUntil() {
         return this.premiumUntil;

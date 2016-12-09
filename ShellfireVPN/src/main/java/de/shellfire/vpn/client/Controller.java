@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.gui.ShellfireVPNMainForm;
 import de.shellfire.vpn.types.VpnProtocol;
+import de.shellfire.vpn.types.ProductType;
 import de.shellfire.vpn.types.Reason;
 import de.shellfire.vpn.types.Server;
 import de.shellfire.vpn.webservice.Vpn;
@@ -87,6 +88,11 @@ public class Controller {
 						downloadAndStoreCertificates = true;
 					}
 
+					if (vpn.getProductType() != ProductType.OpenVpn) {
+					  downloadAndStoreCertificates = true;
+					  vpn.setProductType(ProductType.OpenVpn);
+					}
+					
 					if (vpn.getProtocol() != protocol) {
 						boolean switchProtocolSuccesful = switchProtocolTo(protocol);
 
