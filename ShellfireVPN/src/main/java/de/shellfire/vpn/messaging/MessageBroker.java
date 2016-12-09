@@ -66,6 +66,9 @@ public class MessageBroker {
   private String getChronicleFiles(Direction direction) {
     log.debug("getChronicleFiles({})", direction.name());
 
+    
+    boolean deleteFile = false;
+    
     String path = "";
     switch (Util.getUserType()) {
     case Service:
@@ -76,6 +79,7 @@ public class MessageBroker {
         break;
       case Write:
         path = FILE_PATH_SERVICE_TO_CLIENT;
+        deleteFile = true;
         break;
       }
 
@@ -88,6 +92,7 @@ public class MessageBroker {
         break;
       case Write:
         path = FILE_PATH_CLIENT_TO_SERVICE;
+        deleteFile = true;
         break;
       }
 
@@ -102,7 +107,11 @@ public class MessageBroker {
     String result = Util.getTempDir() + path;
     
     if (Util.isWindows()) {
-    	deleteChronicleFiles(result);
+      deleteFile = true;
+    }
+    
+    if (deleteFile) {
+      deleteChronicleFiles(result);
     }
 
     log.debug("getChronicleFiles() - returning", result);
@@ -156,6 +165,7 @@ public class MessageBroker {
         Object o = null;
         try {
           o = tailer.readObject();  
+          
         } catch (IllegalStateException e) {
           log.error("Tailer in invalid state, ignoring", e);
         }

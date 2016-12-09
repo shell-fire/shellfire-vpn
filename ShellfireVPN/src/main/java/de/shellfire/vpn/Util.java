@@ -63,7 +63,7 @@ public class Util {
   private static String Arch;
   private static boolean firstGetLoggerCall = true;
   private static Object semaphore = new Object();
-  private static UserType userType = null;
+  public static UserType userType = null;
   private static Properties properties;
   private static String configDir;
 
@@ -586,8 +586,8 @@ public class Util {
 
   public static UserType getUserType() {
     if (userType == null) {
-      String userTypeFromCommandLine = System.getProperty("de.shellfire.vpn.runtype");
       userType = UserType.Client;
+      String userTypeFromCommandLine = System.getProperty("de.shellfire.vpn.runtype");
       if (userTypeFromCommandLine != null && userTypeFromCommandLine.length() > 0) {
         userType = UserType.valueOf(userTypeFromCommandLine);
       }
