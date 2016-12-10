@@ -20,6 +20,8 @@ public class MessageBroker {
   
   private static Logger log = Util.getLogger(MessageBroker.class.getCanonicalName());
   private static MessageBroker instance;
+  
+  // TODO: add full path to chmod part
   private static final String FILE_PATH_SERVICE_TO_CLIENT = "sfvpn-chronicle-service-to-client";
   private static final String FILE_PATH_CLIENT_TO_SERVICE = "sfvpn-chronicle-client-to-service";
   ExcerptAppender writer;
@@ -79,7 +81,7 @@ public class MessageBroker {
         break;
       case Write:
         path = FILE_PATH_SERVICE_TO_CLIENT;
-        deleteFile = true;
+        
         break;
       }
 
@@ -92,7 +94,7 @@ public class MessageBroker {
         break;
       case Write:
         path = FILE_PATH_CLIENT_TO_SERVICE;
-        deleteFile = true;
+        
         break;
       }
 
@@ -140,9 +142,26 @@ public class MessageBroker {
 
     // Obtain an ExcerptTailer
     tailer = chronicleReader.createTailer();
+    
+    ensureChronicleFilesReadable();
+    
   }
 
-  class ReaderThread extends Thread {
+  private void ensureChronicleFilesReadable() {
+	  log.debug("ensureChronicleFilesReadable() - start");
+	  log.debug("UserType: " + Util.getUserType());
+	if (Util.getUserType() == UserType.Service && Util.isMacOs()) {
+		Util.makeFilePublicReadWritable(Util.getTempDir() + FILE_PATH_CLIENT_TO_SERVICE + ".index");
+		Util.makeFilePublicReadWritable(Util.getTempDir() + FILE_PATH_CLIENT_TO_SERVICE + ".data");
+		
+		Util.makeFilePublicReadWritable(Util.getTempDir() + FILE_PATH_SERVICE_TO_CLIENT + ".index");
+		Util.makeFilePublicReadWritable(Util.getTempDir() + FILE_PATH_SERVICE_TO_CLIENT + ".data");
+		
+	}
+	log.debug("ensureChronicleFilesReadable() - finish");
+}
+
+class ReaderThread extends Thread {
     private boolean stop = false;
 
     public ReaderThread() {

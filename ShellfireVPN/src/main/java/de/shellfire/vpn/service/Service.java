@@ -37,7 +37,6 @@ public class Service {
   public static void start(String[] args) {
     log.info("Service starting up");
 
-    
     service = new Service();
     service.run();
 

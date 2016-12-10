@@ -152,7 +152,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 	private MenuItem popupConnectItem;
 	private PopupMenu popup;
 
-	/** Creates new form GizmpVPNMainForm */
+	/** Creates new form */
 	ShellfireVPNMainForm(WebService service) throws VpnException {
 		if (!service.isLoggedIn()) {
 			throw new VpnException("ShellfireVPN Main Form required a logged in service. This should not happen!");
@@ -1174,6 +1174,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 	}// GEN-LAST:event_jConnectButtonActionPerformed
 
 	public void connectFromButton(final boolean failIfPremiumServerForFreeUser) {
+		log.debug("connectFromButton("+failIfPremiumServerForFreeUser+")");
 		this.setWaitCursor();
 
 		SwingWorker<ConnectionState, Void> sw = new SwingWorker<ConnectionState, Void>() {
@@ -1181,7 +1182,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 			@Override
 			protected ConnectionState doInBackground() throws Exception {
 				ConnectionState state = controller.getCurrentConnectionState();
-
+				log.debug("retrieved current connection state: " + state);
 				return state;
 			}
 
@@ -1743,6 +1744,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 	 */
 	public void connectionStateChanged(ConnectionStateChangedEvent e)  {
 		initController();
+		
 		ConnectionState state = e.getConnectionState();
 		log.debug("connectionStateChanged " + state + ", reason=" + e.getReason());
 		switch (state) {

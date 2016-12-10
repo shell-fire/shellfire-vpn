@@ -109,6 +109,7 @@ public class Util {
       msg = ex.getLocalizedMessage();
     }
 
+    
     JOptionPane.showMessageDialog(null, i18n.tr("Vorgang konnte nicht ausgeführt werden, da ein Fehler aufgetreten ist:") + "\n" + msg,
         i18n.tr("Fehler"), JOptionPane.ERROR_MESSAGE);
 
@@ -591,7 +592,7 @@ public class Util {
       if (userTypeFromCommandLine != null && userTypeFromCommandLine.length() > 0) {
         userType = UserType.valueOf(userTypeFromCommandLine);
       }
-
+      
     }
 
     return userType;
@@ -739,7 +740,32 @@ public class Util {
     int fontSize = (int)Math.round(baseSize * screenRes / 72.0);
     return fontSize;
   }
-  
+
+
+	public static void chmod(String filePath, String permissions) {
+		String[] params = new String[] { "/bin/chmod", "-R", permissions, filePath };
+		log.debug("setting permissions " + params[2] + " on " + params[3]);
+		try {
+			Process p2 = new ProcessBuilder(params).start();
+			Util.digestProcess(p2);
+			p2.waitFor();
+		} catch (IOException e) {
+			log.error("IOException during " + Util.listToString(Arrays.asList(params)), e);
+
+		} catch (InterruptedException e) {
+			log.error("InterruptedException during " + Util.listToString(Arrays.asList(params)), e);
+		}
+	}
+
+	public static void makeFilePublicReadWritable(String filePath) {
+		Util.chmod(filePath, "777");
+
+	}
+
+	public static void makeFilePublicReadable(String filePath) {
+		Util.chmod(filePath, "755");
+
+	}
   
   // do not mix this order around, must remain in the end of class so that log file can be deleted on startup
   private static Logger log = Util.getLogger(Util.class.getCanonicalName());

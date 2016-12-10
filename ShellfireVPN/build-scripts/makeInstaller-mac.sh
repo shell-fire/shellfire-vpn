@@ -35,10 +35,10 @@ ditto "../installer/Shellfire VPN.app" "../installer/Shellfire VPN.app.orig"
 
 
 echo "creating .zip for auto updater"
-#cd "../installer/Shellfire VPN.app/"
-#rm ../ShellfireVPN-2.7.osx.zip
-#zip -v -r -q ../ShellfireVPN-2.7.osx.zip *
-#cd ../../build-scripts
+cd "../installer/Shellfire VPN.app/"
+rm ../ShellfireVPN-2.7.osx.zip
+zip -v -r -q ../ShellfireVPN-2.7.osx.zip *
+cd ../../build-scripts
 
 echo "creating .dmg"
 rm ../installer/ShellfireVPN.tmp.dmg

@@ -6,6 +6,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.rmi.RemoteException;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -21,262 +22,264 @@ import de.shellfire.vpn.gui.ProgressDialog;
 import de.shellfire.vpn.i18n.VpnI18N;
 
 public class OSXServiceTools extends ServiceTools {
-  private static Logger log = Util.getLogger(OSXServiceTools.class.getCanonicalName());
-  private static I18n i18n = VpnI18N.getI18n();
+	private static Logger log = Util.getLogger(OSXServiceTools.class.getCanonicalName());
+	private static I18n i18n = VpnI18N.getI18n();
 
-  @Override
-  public void ensureServiceEnvironment(LoginForm form) {
-    log.debug("checking if service is running");
-    if (!serviceIsRunning()) {
-      log.debug("Service not running, trying request on port 60313 to have launchd start it!");
-      tryStartViaPortRequestInSeparateThread();
+	@Override
+	public void ensureServiceEnvironment(LoginForm form) {
+		log.debug("checking if service is running");
+		if (!serviceIsRunning()) {
+			log.debug("Service not running, trying request on port 60313 to have launchd start it!");
+			tryStartViaPortRequestInSeparateThread();
 
-      if (!serviceIsRunning()) {
-        log.debug("service not running - installElevated()");
-        JOptionPane.showMessageDialog(null,
-            i18n.tr("Der Shellfire VPN Service wird jetzt installiert. Gib dazu bitte im nachfolgenden Fenster dein Admin-Passwort ein."));
-        
-        form.initDialog.dispose();
-        installElevated();
+			if (!serviceIsRunning()) {
+				log.debug("service not running - installElevated()");
+				JOptionPane.showMessageDialog(null, i18n.tr(
+						"Der Shellfire VPN Service wird jetzt installiert. Gib dazu bitte im nachfolgenden Fenster dein Admin-Passwort ein."));
 
-        loginProgressDialog = new ProgressDialog(form, false, i18n.tr("Installiere Service.."));
-        loginProgressDialog.setOption(2, i18n.tr("abbrechen"));
-        loginProgressDialog.setOptionCallback(new Runnable() {
+				form.initDialog.dispose();
+				installElevated();
 
-          @Override
-          public void run() {
-            JOptionPane.showMessageDialog(null, i18n.tr("Service wurde nicht korrekt installiert - Shellfire VPN wird jetzt beendet."));
-            System.exit(0);
-          }
-        });
+				loginProgressDialog = new ProgressDialog(form, false, i18n.tr("Installiere Service.."));
+				loginProgressDialog.setOption(2, i18n.tr("abbrechen"));
+				loginProgressDialog.setOptionCallback(new Runnable() {
 
-        loginProgressDialog.setVisible(true);
+					@Override
+					public void run() {
+						JOptionPane.showMessageDialog(null,
+								i18n.tr("Service wurde nicht korrekt installiert - Shellfire VPN wird jetzt beendet."));
+						System.exit(0);
+					}
+				});
 
-        WaitForServiceTask task = new WaitForServiceTask(form);
-        task.execute();
-      } else {
-        log.debug("serivce has been started");
-        form.afterShellfireServiceEnvironmentEnsured();
-      }
+				loginProgressDialog.setVisible(true);
 
-    } else {
-      log.debug("serivce is running - good to go, no action required");
-      form.afterShellfireServiceEnvironmentEnsured();
-    }
-  }
+				WaitForServiceTask task = new WaitForServiceTask(form);
+				task.execute();
+			} else {
+				log.debug("serivce has been started");
+				form.afterShellfireServiceEnvironmentEnsured();
+			}
 
-  protected boolean serviceIsInstalled() {
-    // TODO Auto-generated method stub
-    return false;
-  }
+		} else {
+			log.debug("serivce is running - good to go, no action required");
+			form.afterShellfireServiceEnvironmentEnsured();
+		}
+	}
 
-  private boolean tryStartViaPortRequestInSeparateThread() {
+	protected boolean serviceIsInstalled() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
-    PortRequest pr = new PortRequest();
-    pr.start();
+	private boolean tryStartViaPortRequestInSeparateThread() {
 
-    int sleepTime = 0;
-    while (pr.result == null && sleepTime < 3000) {
-      try {
-        sleepTime += 50;
-        Thread.sleep(50);
-      } catch (InterruptedException e) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
-      }
-    }
+		PortRequest pr = new PortRequest();
+		pr.start();
 
-    try {
-      Thread.sleep(1000);
-    } catch (InterruptedException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
+		int sleepTime = 0;
+		while (pr.result == null && sleepTime < 3000) {
+			try {
+				sleepTime += 50;
+				Thread.sleep(50);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 
-    if (pr.result == true) {
-      log.debug("result: true");
-      return true;
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-    }
+		if (pr.result == true) {
+			log.debug("result: true");
+			return true;
 
-    log.debug("result: false");
+		}
 
-    return false;
-  }
+		log.debug("result: false");
 
-  class PortRequest extends Thread {
-    public Boolean result = null;
+		return false;
+	}
 
-    public void run() {
-      Socket s = null;
-      try {
-        s = new Socket("localhost", 60313);
-        log.debug("socket opened - yeah!");
-      } catch (UnknownHostException e) {
-        this.result = false;
-        return;
-      } catch (IOException e) {
-        this.result = false;
-        return;
-      }
+	class PortRequest extends Thread {
+		public Boolean result = null;
 
-      if (s != null) {
-        try {
-          log.debug("closing socket");
-          s.close();
-        } catch (IOException e) {
-        }
-      }
+		public void run() {
+			Socket s = null;
+			try {
+				s = new Socket("localhost", 60313);
+				log.debug("socket opened - yeah!");
+			} catch (UnknownHostException e) {
+				this.result = false;
+				return;
+			} catch (IOException e) {
+				this.result = false;
+				return;
+			}
 
-      this.result = true;
-    }
-  }
+			if (s != null) {
+				try {
+					log.debug("closing socket");
+					s.close();
+				} catch (IOException e) {
+				}
+			}
 
-  public void install(String path) {
-    log.debug("install(" + path + ", ");
+			this.result = true;
+		}
+	}
 
-    // we dont need no big yajsw. lets do it without!
-    // load plist-template
-    try {
-      // prepare and write plist
-      String plistTemplate = Util.fileToString(path + "ShellfireVPNService-template.plist");
-      String javaPath = System.getProperty("java.home") + "/bin/java";
-      try {
-        javaPath = new File(javaPath).getCanonicalPath();
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
+	public void install(String path) {
+		log.debug("install(" + path + ", ");
 
-      String serviceJar = path + "ShellfireVPN2Service.dat";
+		// we dont need no big yajsw. lets do it without!
+		// load plist-template
+		try {
+			// prepare and write plist
+			String plistTemplate = Util.fileToString(path + "ShellfireVPNService-template.plist");
+			String javaPath = System.getProperty("java.home") + "/bin/java";
+			try {
+				javaPath = new File(javaPath).getCanonicalPath();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 
-      String pListContent = plistTemplate.replace("%javaPath%", javaPath);
-      pListContent = pListContent.replace("%serviceJar%", serviceJar);
-      pListContent = pListContent.replace("%workingDirectory%", path);
-      String plistPath = "/Library/LaunchDaemons/ShellfireVPNService.plist";
-      Util.stringToFile(pListContent, plistPath);
+			String serviceJar = path + "ShellfireVPN2Service.dat";
 
-      // launchctl load
-      String[] params = new String[] { "/bin/launchctl", "load", plistPath };
-      Process p2;
-      try {
-        p2 = new ProcessBuilder(params).start();
-        p2.waitFor();
+			String pListContent = plistTemplate.replace("%javaPath%", javaPath);
+			pListContent = pListContent.replace("%serviceJar%", serviceJar);
+			pListContent = pListContent.replace("%workingDirectory%", path);
+			String plistPath = "/Library/LaunchDaemons/ShellfireVPNService.plist";
+			Util.stringToFile(pListContent, plistPath);
 
-        log.debug("sleeping for 3 seconds to let the task start-up");
-        Thread.sleep(3000);
-      } catch (IOException e) {
-        e.printStackTrace();
-      } catch (InterruptedException e) {
-        e.printStackTrace();
-      }
+			// launchctl load
+			String[] params = new String[] { "/bin/launchctl", "load", plistPath };
+			Process p2;
+			try {
+				p2 = new ProcessBuilder(params).start();
+				p2.waitFor();
 
-      protectKext(path);
+				log.debug("sleeping for 3 seconds to let the task start-up");
+				Thread.sleep(3000);
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 
-      // launchctl start
-      params = new String[] { "/bin/launchctl", "start", "ShellfireVPNService" };
-      try {
-        p2 = new ProcessBuilder(params).start();
-        p2.waitFor();
+			protectKext(path);
 
-      } catch (IOException e) {
-      	log.error("IOException during chmod 755 openvpn/tun.kext", e);
-        
-      } catch (InterruptedException e) {
-      	log.error("InterruptedException during chmod 755 openvpn/tun.kext", e);
-      }
-    } catch (IOException e) {
-      Util.handleException(e);
-    }
-  }
+			// launchctl start
+			params = new String[] { "/bin/launchctl", "start", "ShellfireVPNService" };
+			try {
+				p2 = new ProcessBuilder(params).start();
+				p2.waitFor();
 
-  public void protectKext(String instDir) {
-    String[] params;
-    Process p2;
+			} catch (IOException e) {
+				log.error("IOException during chmod 755 openvpn/tun.kext", e);
 
-    params = new String[] { "/usr/sbin/chown", "-R", "root:wheel", instDir + "/openvpn/tun.kext" };
-    log.debug("setting permissions " + params[2] + " on " + params[3]);
-    try {
-      p2 = new ProcessBuilder(params).start();
-      Util.digestProcess(p2);
-      p2.waitFor();
-    } catch (IOException e) {
-    	log.error("IOException during chmod 755 openvpn/tun.kext", e);
-      
-      } catch (InterruptedException e) {
-      	log.error("InterruptedException during chmod 755 openvpn/tun.kext", e);
-      }
+			} catch (InterruptedException e) {
+				log.error("InterruptedException during chmod 755 openvpn/tun.kext", e);
+			}
+		} catch (IOException e) {
+			Util.handleException(e);
+		}
+	}
 
-    params = new String[] { "/bin/chmod", "-R", "755", instDir + "/openvpn/tun.kext/" };
-    log.debug("setting permissions " + params[2] + " on " + params[3]);
-    try {
-      p2 = new ProcessBuilder(params).start();
-      Util.digestProcess(p2);
-      p2.waitFor();
-    } catch (IOException e) {
-    	log.error("IOException during chmod 755 openvpn/tun.kext", e);
-      
-    } catch (InterruptedException e) {
-    	log.error("InterruptedException during chmod 755 openvpn/tun.kext", e);
-    }
-    
-  }
-  
+	public void protectKext(String instDir) {
+		String[] params;
+		Process p2;
 
-  public void uninstall(String path) {
-    // we dont need no big yajsw. lets do it without!
-    // load plist-template
-    String plistPath = "/Library/LaunchDaemons/ShellfireVPNService.plist";
-    
-    // launchctl unload
-    String[] params = new String[] { "/bin/launchctl", "unload", plistPath };
-    Process p2;
-    try {
-      p2 = new ProcessBuilder(params).start();      
-      p2.waitFor();
-      
-      log.debug("sleeping for 3 seconds to let the task stop");
-      Thread.sleep(3000);
-    } catch (IOException e) {
-      e.printStackTrace();
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
+		params = new String[] { "/usr/sbin/chown", "-R", "root:wheel", instDir + "/openvpn/tun.kext" };
+		log.debug("setting permissions " + params[2] + " on " + params[3]);
+		try {
+			p2 = new ProcessBuilder(params).start();
+			Util.digestProcess(p2);
+			p2.waitFor();
+		} catch (IOException e) {
+			log.error("IOException during chmod 755 openvpn/tun.kext", e);
 
-    
-    // deletion of plist file
-    params = new String[] {"/bin/rm", plistPath};
-    Process p;
-    try {
-      p = new ProcessBuilder(params).start();     
-      p.waitFor();
-      
-      
-    } catch (IOException e) {
-      e.printStackTrace();
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    }
-  }
+		} catch (InterruptedException e) {
+			log.error("InterruptedException during chmod 755 openvpn/tun.kext", e);
+		}
 
-  public void installElevated() {
-    String instdir = LoginForm.getInstDir();
-    String command = "";
-      try {
-        String installerPath = com.apple.eio.FileManager.getPathToApplicationBundle() + "/Contents/Java/ShellfireVPN2.app";
-        log.debug("Opening installer using /usr/bin/open(): " +  installerPath);
+		params = new String[] { "/bin/chmod", "-R", "755", instDir + "/openvpn/tun.kext/" };
+		log.debug("setting permissions " + params[2] + " on " + params[3]);
+		try {
+			p2 = new ProcessBuilder(params).start();
+			Util.digestProcess(p2);
+			p2.waitFor();
+		} catch (IOException e) {
+			log.error("IOException during chmod 755 openvpn/tun.kext", e);
 
-        List<String> cmds = new LinkedList<String>();
-        cmds.add("/usr/bin/open");
-        cmds.add(installerPath);
-        Process p = new ProcessBuilder(cmds).directory(new File(com.apple.eio.FileManager.getPathToApplicationBundle() + "/Contents/Java/")).start();
+		} catch (InterruptedException e) {
+			log.error("InterruptedException during chmod 755 openvpn/tun.kext", e);
+		}
 
-        Util.digestProcess(p);
+	}
 
-      } catch (UnsupportedEncodingException e) {
-        Util.handleException(e);
-      } catch (IOException e) {
-        Util.handleException(e);
-      }
+	public void uninstall(String path) {
+		// we dont need no big yajsw. lets do it without!
+		// load plist-template
+		String plistPath = "/Library/LaunchDaemons/ShellfireVPNService.plist";
 
-  }
+		// launchctl unload
+		String[] params = new String[] { "/bin/launchctl", "unload", plistPath };
+		Process p2;
+		try {
+			p2 = new ProcessBuilder(params).start();
+			p2.waitFor();
+
+			log.debug("sleeping for 3 seconds to let the task stop");
+			Thread.sleep(3000);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+
+		// deletion of plist file
+		params = new String[] { "/bin/rm", plistPath };
+		Process p;
+		try {
+			p = new ProcessBuilder(params).start();
+			p.waitFor();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void installElevated() {
+		String instdir = LoginForm.getInstDir();
+		String command = "";
+		try {
+			String installerPath = com.apple.eio.FileManager.getPathToApplicationBundle()
+					+ "/Contents/Java/ShellfireVPN2.app";
+			log.debug("Opening installer using /usr/bin/open(): " + installerPath);
+
+			List<String> cmds = new LinkedList<String>();
+			cmds.add("/usr/bin/open");
+			cmds.add(installerPath);
+			Process p = new ProcessBuilder(cmds)
+					.directory(new File(com.apple.eio.FileManager.getPathToApplicationBundle() + "/Contents/Java/"))
+					.start();
+
+			Util.digestProcess(p);
+
+		} catch (UnsupportedEncodingException e) {
+			Util.handleException(e);
+		} catch (IOException e) {
+			Util.handleException(e);
+		}
+
+	}
+
 }
