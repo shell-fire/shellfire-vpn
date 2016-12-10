@@ -157,7 +157,9 @@ public class Client implements MessageListener<Serializable> {
     ConnectionStateChangedEvent event = msg.getPayload();
     log.info("event: {}", event);
 
-    this.controller.connectionStateChanged(event);
+    if (this.controller != null) {
+    	this.controller.connectionStateChanged(event);
+    }
   }
 
   private void handleUnknownMessageType(Message<?, ?> message) {
