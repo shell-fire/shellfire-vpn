@@ -66,7 +66,13 @@ public class WindowsVpnController implements IVpnController {
         this.setConnectionState(ConnectionState.Connecting, reason);
       }
 
-      fixTapDevices();
+      try {
+        fixTapDevices();
+      } catch (IOException e) {
+        this.setConnectionState(ConnectionState.Disconnected, Reason.TapDriverNotFound);
+        return;
+      }
+      
       ipv6manager.disableIPV6OnAllDevices();
 
       log.debug("getting openVpnLocation");
@@ -145,11 +151,15 @@ public class WindowsVpnController implements IVpnController {
     
     this.setConnectionState(ConnectionState.Disconnected, reason);
     ipv6manager.enableIPV6OnPreviouslyDisabledDevices();
-    fixTapDevices();
+    
+    try {
+      fixTapDevices();
+    } catch (IOException e) {
+    }
     log.debug("disconnect(Reason={} - finished", reason);
   }
   
-  private void fixTapDevices() {
+  private void fixTapDevices() throws IOException {
     log.debug("fixTapDevices()");
     if (Util.isVistaOrLater()) {
       log.debug("Performing tap-fix on Windows Vista or Later");
