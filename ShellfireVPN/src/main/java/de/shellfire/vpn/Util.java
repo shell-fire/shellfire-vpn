@@ -51,6 +51,9 @@ import de.shellfire.vpn.messaging.UserType;
 import de.shellfire.vpn.service.IVpnRegistry;
 import de.shellfire.vpn.service.osx.MacRegistry;
 import de.shellfire.vpn.service.win.WinRegistry;
+import javafx.scene.image.ImageView;
+
+ 
 
 public class Util {
   private static final String SHELLFIRE_VPN = "shellfire-vpn" + File.separator;
@@ -730,6 +733,18 @@ public class Util {
     return imageIcon;
   }
 
+  public static javafx.scene.image.Image getImageIconFX(String resourceName){
+	  return getImageIconFX(resourceName,1);
+  }
+  public static javafx.scene.image.Image getImageIconFX(String resourceName, double d){
+	   javafx.scene.image.Image image = new javafx.scene.image.Image("file:"+resourceName);
+	   System.out.println("Resource is found at " + resourceName);
+	   int factor = (int) (Util.getScalingFactor() * d);
+	    double height = image.getHeight() * factor;
+	    double width = image.getWidth() * factor;
+	    
+	    return scaleImageFx(image,width,height,false);
+  }
   public static int getFontSize() {
 	float baseSize = 12;
 	if (!isWindows()) {
@@ -771,5 +786,14 @@ public class Util {
   private static Logger log = Util.getLogger(Util.class.getCanonicalName());
   private static I18n i18n = VpnI18N.getI18n();
   private static String jvmDll;
+  
+  public static javafx.scene.image.Image scaleImageFx(javafx.scene.image.Image source, double targetWidth, double targetHeight, boolean preserveRatio) {
+	    ImageView imageView = new ImageView(source);
+	    imageView.setPreserveRatio(preserveRatio);
+	    imageView.setFitWidth(targetWidth);
+	    imageView.setFitHeight(targetHeight);
+	    System.out.println("Image width is " + String.valueOf(targetWidth) + " and height is " + String.valueOf(targetHeight));
+	    return imageView.snapshot(null, null);
+	}
 
 }

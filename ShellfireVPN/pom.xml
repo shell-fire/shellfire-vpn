@@ -6,7 +6,23 @@
 	<version>3.0.1-SNAPSHOT</version>
 	<name>Shellfire VPN</name>
 	<description>The Shellfire VPN Client</description>
-	<dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.6.1</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+    <dependencies>
 		<dependency>
 			<groupId>net.openhft</groupId>
 			<artifactId>chronicle</artifactId>
@@ -104,8 +120,33 @@
 			<artifactId>commons-io</artifactId>
 			<version>2.4</version>
 		</dependency>
-
-
-	</dependencies>
+        <dependency>
+            <groupId>net.java.simpletraynotify</groupId>
+            <artifactId>simpletraynotify</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hyperic</groupId>
+            <artifactId>sigar</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.netbeans</groupId>
+            <artifactId>awtertra</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.ice</groupId>
+            <artifactId>registry</artifactId>
+            <version>1.0</version>
+        </dependency>
+        <dependency>
+  <groupId>com.oracle</groupId>
+  <artifactId>javafx</artifactId>
+  <version>2</version>
+  <systemPath>${java.home}/lib/ext/jfxrt.jar</systemPath>
+  <scope>system</scope>
+</dependency>   
+    </dependencies>
 
 </project>

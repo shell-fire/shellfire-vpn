@@ -167,13 +167,13 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
 		    askForLicense();
 		    
 	      if (!this.licenseAccepted) {
-          JOptionPane.showMessageDialog(null, i18n.tr("Lizenz nicht akzeptiert - Shellfire VPN wird jetzt beendet."));
-          System.exit(0);
-        }
-  	  }
-  		askForAutoStart();
-  		askForNewAccount();
-  	}
+	          JOptionPane.showMessageDialog(null, i18n.tr("Lizenz nicht akzeptiert - Shellfire VPN wird jetzt beendet."));
+	          System.exit(0);
+	        }
+	  	  }
+	  	  askForAutoStart();
+	  	  askForNewAccount();
+		}
 
 		setFirstStart(false);
 	}
@@ -670,6 +670,9 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
   }
 
 	public static void main(String args[]) {
+            // temporarily setting java path for dll libraries
+            System.setProperty("java.library.path", "C:\\Users\\Tcheutchoua\\Documents\\NetBeansProjects\\ShellFire\\shellfire-vpn\\ShellfireVPN\\lib");
+
     final boolean minimize;
 		if (args.length > 0) {
 			String cmd = args[0];
