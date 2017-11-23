@@ -5,7 +5,6 @@
  */
 package de.shellfire.vpn.gui.controller;
 
-
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.gui.ProgressDialog;
@@ -80,7 +79,7 @@ public class RegiesterFormController extends AnchorPane implements Initializable
     private TextFlow policyTextFlow;
     @FXML
     private Label registerBackLabel;
-    
+
     private static Logger log = Util.getLogger(RegisterForm.class.getCanonicalName());
     public static final String REG_PASS = "pass";
     public static final String REG_USER = "user";
@@ -92,28 +91,22 @@ public class RegiesterFormController extends AnchorPane implements Initializable
     private boolean accountActive = false;
     //private RegisterForm.AccountActiveServicePollerTask poller;
     private static I18n i18n = VpnI18N.getI18n();
-    
 
-    
-   
-    
     public RegiesterFormController() {
     }
+
     /**
      * Constructor of RegisterFormController
-     * 
+     *
      * params: Application class , LoginForms
      */
-    
+
     public RegiesterFormController(LoginForms parentFrame) {
         this.application = parentFrame;
-        
+
         this.application.getStage().setTitle("Shellfire VPN Registrierung");
     }
-    
-    
-    
-    
+
     /**
      * Initializes the controller class.
      */
@@ -121,24 +114,23 @@ public class RegiesterFormController extends AnchorPane implements Initializable
     public void initialize(URL url, ResourceBundle rb) {
         this.service = WebService.getInstance();
         initComponents();
-        
-        
-    }    
-    
-    public void initComponents(){
+
+    }
+
+    public void initComponents() {
         this.registerHeadingLabel.setText(i18n.tr("Registrierung"));
         //this.emailTextField.setText(i18n.tr("Registrierung"));
-        
+
         this.passwordLabel.setText(i18n.tr("Passwort:"));
-        
+
         this.confirmPasswordLabel.setText(i18n.tr("Passwort-Check:"));
-        
+
         this.registerButton.setText(i18n.tr("Jetzt Registrieren"));
-        
+
         this.newsLetterCheckBox.setText(i18n.tr("Ich abonniere den Newsletter"));
-        
+
         this.registerBackLabel.setText(i18n.tr("zurÃ¼ck"));
-        
+
         // adding components of the policy and terms of agreement textflow
         //policyTextFlow
         Text t1 = new Text(i18n.tr("Ich akzeptiere die"));
@@ -150,7 +142,7 @@ public class RegiesterFormController extends AnchorPane implements Initializable
                 Util.openUrl("https://www.shellfire.de/agb/");
             }
         });
-        
+
         Text t2 = new Text(i18n.tr("und habe die"));
         Hyperlink privacyPolicy = new Hyperlink(i18n.tr("Datenschutzerklärung"));
         privacyPolicy.setOnAction(new EventHandler<ActionEvent>() {
@@ -160,7 +152,7 @@ public class RegiesterFormController extends AnchorPane implements Initializable
                 Util.openUrl("https://www.shellfire.de/datenschutzerklaerung/");
             }
         });
-        
+
         Text t3 = new Text(i18n.tr("sowie das"));
         Hyperlink rightOfWidthdrawal = new Hyperlink(i18n.tr("Widerrufsrecht"));
         rightOfWidthdrawal.setOnAction(new EventHandler<ActionEvent>() {
@@ -171,15 +163,14 @@ public class RegiesterFormController extends AnchorPane implements Initializable
             }
         });
         Text t4 = new Text(i18n.tr("zur Kenntnis genommen"));
-        
+
         // because policyTextFlow was defined in fxml , we use the add method
-        policyTextFlow.getChildren().addAll(t1,termsAndConditions,t2,privacyPolicy,t3,rightOfWidthdrawal, t4);
+        policyTextFlow.getChildren().addAll(t1, termsAndConditions, t2, privacyPolicy, t3, rightOfWidthdrawal, t4);
         //policyTextFlow = new TextFlow(t1,termsAndConditions,t2,privacyPolicy,t3,rightOfWidthdrawal, t4);
-        
-        
+
         //policyTextFlow.setVisible(true);
-       }
-    
+    }
+
     @FXML
     private void handleSelectVpnButton(ActionEvent event) {
     }
@@ -191,18 +182,18 @@ public class RegiesterFormController extends AnchorPane implements Initializable
     @FXML
     private void handleBackLabel(MouseEvent event) {
     }
-    
+
     private String getUser() {
-    return emailLabel.getText();
-  }
-    
+        return emailLabel.getText();
+    }
+
     // application has been declared final,
     // so it will be passed int he controller 
     // and will not neet to be modified latter
     public void setApp(LoginForms applic) {
-		this.application = applic;
-	}
-    
+        this.application = applic;
+    }
+
     private String getPassword() {
         return passwordField.getText();
     }
@@ -210,6 +201,7 @@ public class RegiesterFormController extends AnchorPane implements Initializable
     private String getPasswordCheck() {
         return confirmPasswordField.getText();
     }
+
     private boolean validateForm() {
         boolean error = false;
         String message = "";
@@ -262,7 +254,7 @@ public class RegiesterFormController extends AnchorPane implements Initializable
 
         return !error;
     }
-    
+
     private static class FocusRequester implements Runnable {
 
         private final TextField jumpTo;
@@ -276,12 +268,13 @@ public class RegiesterFormController extends AnchorPane implements Initializable
             jumpTo.requestFocus();
         }
     }
-    
-        private void hideProgress() {
+
+    private void hideProgress() {
         progressDialog.setVisible(false);
 
     }
-        class RequestNewAccountTask extends SwingWorker<Void, Void> {
+
+    class RequestNewAccountTask extends SwingWorker<Void, Void> {
 
         /*
      * Executed in event dispatch thread
@@ -313,11 +306,11 @@ public class RegiesterFormController extends AnchorPane implements Initializable
             return null;
         }
     }
-       
-        // needs a swing pane for successful execution. 
-   private void waitForActivation() {
-       
-    /*    this.progressDialog = new ProgressDialog(this, false,
+
+    // needs a swing pane for successful execution. 
+    private void waitForActivation() {
+
+        /*    this.progressDialog = new ProgressDialog(this, false,
                 i18n.tr("Das Shellfire VPN System hat dir soeben eine Email geschickt, bitte folge den Anweisungen dort."));
         this.progressDialog.addInfo(i18n.tr("Warte auf Aktivierung des Accounts..."));
         this.progressDialog.addBottomText(i18n.tr("Keine Email erhalten?"));
@@ -345,7 +338,7 @@ public class RegiesterFormController extends AnchorPane implements Initializable
         this.progressDialog.setVisible(true);
         poller = new RegisterForm.AccountActiveServicePollerTask();
         poller.execute();
-*/
+         */
     }
 
 }
