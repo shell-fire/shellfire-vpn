@@ -255,6 +255,12 @@ public class RegiesterFormController extends AnchorPane implements Initializable
         return !error;
     }
 
+    @FXML
+    private void handleBackLabelClicked(MouseEvent event) {
+        this.application.getLoginController();
+        this.application.getStage().show();
+    }
+
     private static class FocusRequester implements Runnable {
 
         private final TextField jumpTo;

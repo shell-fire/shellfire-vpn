@@ -43,7 +43,7 @@
                   </ImageView>
                   <Pane fx:id="backLabelPane" layoutX="460.0" layoutY="5.0" onMouseClicked="#handleBackLabel" prefHeight="51.0" prefWidth="101.0">
                      <children>
-                        <Label fx:id="registerBackLabel" alignment="CENTER_RIGHT" layoutX="1.0" layoutY="14.0" prefHeight="31.0" prefWidth="96.0" style="-fx-background-color: rgb(0,0,0);" text="zurÃ¼ck" textAlignment="RIGHT" textFill="#eee5e5" />
+                        <Label fx:id="registerBackLabel" alignment="CENTER_RIGHT" layoutX="1.0" layoutY="14.0" onMouseClicked="#handleBackLabelClicked" prefHeight="31.0" prefWidth="96.0" style="-fx-background-color: rgb(0,0,0);" text="zurÃ¼ck" textAlignment="RIGHT" textFill="#eee5e5" />
                         <ImageView fx:id="backImageVeiw" layoutX="4.0" layoutY="20.0">
                            <image>
                               <Image url="@../icons/exit.png" />
