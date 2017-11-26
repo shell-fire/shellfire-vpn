@@ -73,8 +73,9 @@ public class LoginForms extends Application {
 	}
 
 	public static void main(String[] args) {
-                        System.setProperty("java.library.path", "C:\\Users\\Tcheutchoua\\Documents\\NetBeansProjects\\ShellFire\\shellfire-vpn\\ShellfireVPN\\lib");
-
+                        //System.setProperty("java.library.path", "C:\\Users\\Tcheutchoua\\Documents\\NetBeansProjects\\ShellFire\\shellfire-vpn\\ShellfireVPN\\lib");
+                           
+                        System.setProperty("java.library.path", "./lib");
 		default_args = args ; 
 		initializations(args);
 		launch(args);
