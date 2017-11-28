@@ -11,9 +11,12 @@ import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
 
 import de.shellfire.vpn.Util;
+import de.shellfire.vpn.VpnProperties;
 import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.gui.model.VpnSelectionFModel;
 import de.shellfire.vpn.i18n.VpnI18N;
+import de.shellfire.vpn.webservice.Vpn;
+import de.shellfire.vpn.webservice.WebService;
 import javafx.event.ActionEvent;
 
 import javafx.scene.control.Label;
@@ -59,8 +62,13 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
 	@FXML
 	private ImageView headerImageView;
 
+        private  WebService service;
+  private boolean autoConnect;
+  public static final String REG_REMEMBERSELECTION = "SelectedVpnId";
+  private static I18n i18n = VpnI18N.getI18n();
+        
 	private LoginForms application;
-	private static I18n i18n = VpnI18N.getI18n();
+	private static final long serialVersionUID = 1L;
 	private static Logger log = Util.getLogger(LoginForms.class.getCanonicalName());
     @FXML
     private Pane backLabelPane;
@@ -72,7 +80,7 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
 	 * The constructor is called before the initialize() method.
 	 */
 	public VpnSelectDialogController() {
-		super();
+		
 	}
 	// Event Listener on Button[#selectVpnButton].onAction
 	@FXML
@@ -96,7 +104,9 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
 		//typeTbleColumn.setCellValueFactory(cellData -> cellData.getValue().typeProperty() );
 		//accArtTbleColumn.setCellValueFactory(cellData -> cellData.getValue().accountArtProperty() );
 		
+                this.service = WebService.getInstance();
 		initComponents();
+               
 	}
 	
 	public void initComponents(){
@@ -109,4 +119,26 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
     @FXML
     private void handleBackLabel(MouseEvent event) {
     }
+    
+      private void rememberSelectionIfDesired(Vpn selectedVpn) {
+    VpnProperties props = VpnProperties.getInstance();
+    if (fAutoconnect.isSelected()) {
+
+      int vpnId = selectedVpn.getVpnId();
+      log.debug("Remembering Vpn ID:" + vpnId);
+
+      props.setInt(REG_REMEMBERSELECTION, vpnId);
+    } else {
+      log.debug("Forgetting vpn selections");
+      props.setInt(REG_REMEMBERSELECTION, 0);
+    }
+  }
+
+  public int rememberedVpnSelection() {
+    VpnProperties props = VpnProperties.getInstance();
+    int remembered = props.getInt(REG_REMEMBERSELECTION, 0);
+
+    return remembered;
+  }
+
 }

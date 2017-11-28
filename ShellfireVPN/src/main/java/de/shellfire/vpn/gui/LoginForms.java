@@ -21,7 +21,8 @@ import de.shellfire.vpn.updater.Updater;
 import java.io.File;
 import java.io.IOException;
 import javafx.application.Application;
-
+import javafx.event.EventHandler;
+import javafx.scene.input.MouseEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
@@ -40,8 +41,11 @@ public class LoginForms extends Application {
 	public static LoginController instance ; 
 	private static I18n i18n = VpnI18N.getI18n();
 	private static AnchorPane page;
-        
         private ProgressDialog loginProgressDialog;
+        
+        // Variables to control draggin of window
+         private double xOffset = 0;
+        private double yOffset = 0;
 	public static Stage getStage() {
 		return stage;
 	}
@@ -145,7 +149,7 @@ public class LoginForms extends Application {
 		  
 	  }
 	  
-	  public static Initializable replaceSceneContent(String fxml) throws Exception {
+	  public  Initializable replaceSceneContent(String fxml) throws Exception {
 	        FXMLLoader loader = new FXMLLoader(LoginForms.class.getResource(fxml));
 	       // InputStream in = LoginForms.class.getResourceAsStream(fxml);
 	        //loader.setBuilderFactory(new JavaFXBuilderFactory());
@@ -158,9 +162,25 @@ public class LoginForms extends Application {
 	            page = (AnchorPane) loader.load();
                     System.out.println("Location of Controller is " + loader.getController());
                     
+                    
+                    
 	        } catch (Exception ex) {
 	            log.debug( " Loading fxml has error " + ex.getMessage());
 	        } 
+                 page.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                xOffset = event.getSceneX();
+                yOffset = event.getSceneY();
+            }
+        });
+        page.setOnMouseDragged(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                stage.setX(event.getScreenX() - xOffset);
+                stage.setY(event.getScreenY() - yOffset);
+            }
+        });
 	        Scene scene = new Scene(page);
 	        stage.setScene(scene);
 	        stage.sizeToScene();

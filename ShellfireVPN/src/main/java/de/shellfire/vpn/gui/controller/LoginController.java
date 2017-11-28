@@ -38,6 +38,7 @@ import javafx.scene.text.Font;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.scene.Cursor;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -190,7 +191,7 @@ public class LoginController extends AnchorPane implements Initializable {
 
 		this.fButtonLostUserCredential.setText(i18n.tr("Zugangsdaten verloren?"));
 
-		this.fButtonLogin.setText(i18n.tr("Keine Zugangsdaten?"));
+		this.fButtonLogin.setText(i18n.tr("Login"));
 
 		this.fAutoStart.setText(i18n.tr("Beim Hochfahren starten"));
 
@@ -270,11 +271,13 @@ public class LoginController extends AnchorPane implements Initializable {
     @FXML
     private void handleExitImageMouseExited(MouseEvent event) {
         //this.exitImageView.setBlendMode(BlendMode.LIGHTEN);
+        this.application.getStage().getScene().setCursor(Cursor.DEFAULT);
     }
 
     @FXML
     private void handleExitImageMouseEntered(MouseEvent event) {
         //this.exitImageView.setBlendMode(BlendMode.OVERLAY);
+        this.application.getStage().getScene().setCursor(Cursor.HAND);
     }
 
 

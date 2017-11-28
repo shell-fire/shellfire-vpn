@@ -19,6 +19,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Hyperlink;
@@ -93,6 +94,7 @@ public class RegiesterFormController extends AnchorPane implements Initializable
     private static I18n i18n = VpnI18N.getI18n();
 
     public RegiesterFormController() {
+        System.out.println("*********No arg constructor was used");
     }
 
     /**
@@ -129,7 +131,7 @@ public class RegiesterFormController extends AnchorPane implements Initializable
 
         this.newsLetterCheckBox.setText(i18n.tr("Ich abonniere den Newsletter"));
 
-        this.registerBackLabel.setText(i18n.tr("zurÃ¼ck"));
+        this.registerBackLabel.setText(i18n.tr("zurück"));
 
         // adding components of the policy and terms of agreement textflow
         //policyTextFlow
@@ -259,6 +261,16 @@ public class RegiesterFormController extends AnchorPane implements Initializable
     private void handleBackLabelClicked(MouseEvent event) {
         this.application.getLoginController();
         this.application.getStage().show();
+    }
+
+    @FXML
+    private void handleMouseExited(MouseEvent event) {
+        this.application.getStage().getScene().setCursor(Cursor.DEFAULT);
+    }
+
+    @FXML
+    private void handleMouseEntered(MouseEvent event) {
+        this.application.getStage().getScene().setCursor(Cursor.HAND);
     }
 
     private static class FocusRequester implements Runnable {
