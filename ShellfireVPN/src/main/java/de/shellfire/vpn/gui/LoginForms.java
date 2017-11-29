@@ -42,7 +42,7 @@ public class LoginForms extends Application {
 	private static I18n i18n = VpnI18N.getI18n();
 	private static AnchorPane page;
         private ProgressDialog loginProgressDialog;
-        
+        private boolean licenseAccepted;
         // Variables to control draggin of window
          private double xOffset = 0;
         private double yOffset = 0;
@@ -322,4 +322,13 @@ public class LoginForms extends Application {
 		//this.loginProgressDialog = new ProgressDialog(this, false, i18n.tr("Einloggen..."));
 		this.loginProgressDialog.setVisible(true);
 	}
+         
+         
+     public  void licenseAccepted() {
+        this.licenseAccepted = true;
+    }
+
+    public void licenseNotAccepted() {
+    	this.licenseAccepted = false;
+    }
 }

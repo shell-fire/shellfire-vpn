@@ -81,7 +81,7 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
 	private static I18n i18n = VpnI18N.getI18n();
 	public static ProgressDialog initDialog;
 	
-    private boolean licenseAccepted;
+        private boolean licenseAccepted;
     
 	/** Creates new form LoginForm */
 	private LoginForm() {
