@@ -14,7 +14,7 @@ import de.shellfire.vpn.Util;
 import de.shellfire.vpn.client.ServiceTools;
 import de.shellfire.vpn.gui.controller.LoginController;
 import de.shellfire.vpn.gui.controller.ProgressDialogController;
-import de.shellfire.vpn.gui.controller.RegiesterFormController;
+import de.shellfire.vpn.gui.controller.RegisterFormController;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.proxy.ProxyConfig;
 import de.shellfire.vpn.updater.Updater;
@@ -36,7 +36,7 @@ public class LoginForms extends Application {
 	public static Stage stage ;  
 	public static String[] default_args ;
 	public ProgressDialogController initDialog ;
-        public RegiesterFormController registerController ;
+        public RegisterFormController registerController ;
 	private boolean minimize ; 
 	public static LoginController instance ; 
 	private static I18n i18n = VpnI18N.getI18n();
@@ -68,7 +68,7 @@ public class LoginForms extends Application {
 		} catch (Exception ex) {
 			log.debug("could not start with first stage load " + ex);
 		}
-		
+	
 		try {
 			afterDialogDisplay();
 		} catch (Exception ex) {
@@ -112,7 +112,7 @@ public class LoginForms extends Application {
 	  
 	  public void gotoDialog(String[] args){
 		  try {
-			  this.initDialog = (ProgressDialogController) replaceSceneContent("ProgressDiagogV.fxml");
+			  this.initDialog = (ProgressDialogController) replaceSceneContent("ProgressDialog.fxml");
 			  //Platform.runLater(() -> progressDialog.setVisible(true));
 			  this.initDialog.setApp(this);
 
@@ -138,7 +138,7 @@ public class LoginForms extends Application {
           public void getRegisterFormController(){
 		  log.debug("In the RegisterForm controller");
 		  try {
-			  this.registerController = (RegiesterFormController) replaceSceneContent("RegisterFormFxml.fxml");
+			  this.registerController = (RegisterFormController) replaceSceneContent("RegisterFormFxml.fxml");
 			  //Platform.runLater(() -> progressDialog.setVisible(true));
 			  this.registerController.setApp(this);
 			  //this.stage.setTitle("Shellfire VPN 2 Login");

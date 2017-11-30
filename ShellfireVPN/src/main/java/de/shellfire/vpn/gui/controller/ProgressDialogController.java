@@ -17,6 +17,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import org.xnap.commons.i18n.I18n;
 
@@ -25,7 +26,7 @@ import org.xnap.commons.i18n.I18n;
  *
  * @author Tcheutchoua
  */
-public class ProgressDialogController implements Initializable {
+public class ProgressDialogController extends AnchorPane implements Initializable {
 
     @FXML
     private Pane headerPanel1;
@@ -56,7 +57,17 @@ public class ProgressDialogController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+            
+         initComponents();
+        // Binding labels and buttons to their visibilities
+        leftButton.managedProperty().bind(leftButton.visibleProperty());
+        rightButton.managedProperty().bind(rightButton.visibleProperty());
+        bottomLabel.managedProperty().bind(bottomLabel.visibleProperty());
+        additionTextLabel.managedProperty().bind(additionTextLabel.visibleProperty());
+
+
+        this.pack();
+        setIndeterminate(true);
     }
 
     @FXML
@@ -110,6 +121,7 @@ public class ProgressDialogController implements Initializable {
     }
 
     public void pack() {
+        this.application.getStage().sizeToScene();
         // TODO implement a custom version of swing pack.
     }
 

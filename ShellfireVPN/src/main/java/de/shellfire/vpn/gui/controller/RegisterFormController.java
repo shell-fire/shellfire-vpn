@@ -45,7 +45,7 @@ import org.xnap.commons.i18n.I18n;
  *
  * @author Tcheutchoua
  */
-public class RegiesterFormController extends AnchorPane implements Initializable {
+public class RegisterFormController extends AnchorPane implements Initializable {
 
     @FXML
     private Button registerButton;
@@ -93,7 +93,7 @@ public class RegiesterFormController extends AnchorPane implements Initializable
     //private RegisterForm.AccountActiveServicePollerTask poller;
     private static I18n i18n = VpnI18N.getI18n();
 
-    public RegiesterFormController() {
+    public RegisterFormController() {
         System.out.println("*********No arg constructor was used");
     }
 
@@ -103,7 +103,7 @@ public class RegiesterFormController extends AnchorPane implements Initializable
      * params: Application class , LoginForms
      */
 
-    public RegiesterFormController(LoginForms parentFrame) {
+    public RegisterFormController(LoginForms parentFrame) {
         this.application = parentFrame;
 
         this.application.getStage().setTitle("Shellfire VPN Registrierung");
@@ -168,7 +168,7 @@ public class RegiesterFormController extends AnchorPane implements Initializable
 
         // because policyTextFlow was defined in fxml , we use the add method
         policyTextFlow.getChildren().addAll(t1, termsAndConditions, t2, privacyPolicy, t3, rightOfWidthdrawal, t4);
-        //policyTextFlow = new TextFlow(t1,termsAndConditions,t2,privacyPolicy,t3,rightOfWidthdrawal, t4);
+        //policyTextFlow.getChildren().
 
         //policyTextFlow.setVisible(true);
     }
@@ -250,7 +250,7 @@ public class RegiesterFormController extends AnchorPane implements Initializable
         if (error) {
             JOptionPane.showMessageDialog(null, message, i18n.tr("Fehler"), JOptionPane.ERROR_MESSAGE);
             if (jumpTo != null) {
-                SwingUtilities.invokeLater(new RegiesterFormController.FocusRequester(jumpTo));
+                SwingUtilities.invokeLater(new RegisterFormController.FocusRequester(jumpTo));
             }
         }
 
@@ -271,6 +271,22 @@ public class RegiesterFormController extends AnchorPane implements Initializable
     @FXML
     private void handleMouseEntered(MouseEvent event) {
         this.application.getStage().getScene().setCursor(Cursor.HAND);
+    }
+
+    @FXML
+    private void handleMouseImgExited(MouseEvent event) {
+        this.application.getStage().getScene().setCursor(Cursor.DEFAULT);
+    }
+
+    @FXML
+    private void handleMouseImgEntered(MouseEvent event) {
+        this.application.getStage().getScene().setCursor(Cursor.HAND);
+    }
+
+    @FXML
+    private void handleBackLabelImgClicked(MouseEvent event) {
+        this.application.getLoginController();
+        this.application.getStage().show();
     }
 
     private static class FocusRequester implements Runnable {
