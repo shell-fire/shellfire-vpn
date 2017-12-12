@@ -12,6 +12,7 @@ import org.xnap.commons.i18n.I18n;
 
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.client.ServiceTools;
+import de.shellfire.vpn.gui.controller.LicenseAcceptanceController;
 import de.shellfire.vpn.gui.controller.LoginController;
 import de.shellfire.vpn.gui.controller.ProgressDialogController;
 import de.shellfire.vpn.gui.controller.RegisterFormController;
@@ -37,11 +38,12 @@ public class LoginForms extends Application {
 	public static String[] default_args ;
 	public ProgressDialogController initDialog ;
         public RegisterFormController registerController ;
+        public LicenseAcceptanceController licenceAcceptanceController;
 	private boolean minimize ; 
 	public static LoginController instance ; 
 	private static I18n i18n = VpnI18N.getI18n();
 	private static AnchorPane page;
-        private ProgressDialog loginProgressDialog;
+        public static ProgressDialogController progressDialog;
         private boolean licenseAccepted;
         // Variables to control draggin of window
          private double xOffset = 0;
@@ -141,6 +143,21 @@ public class LoginForms extends Application {
 			  this.registerController = (RegisterFormController) replaceSceneContent("RegisterFormFxml.fxml");
 			  //Platform.runLater(() -> progressDialog.setVisible(true));
 			  this.registerController.setApp(this);
+			  //this.stage.setTitle("Shellfire VPN 2 Login");
+
+		} catch (Exception ex) {
+			log.debug("could not load RegisterForm fxml\n" + ex.getMessage());
+		}
+		  
+	  }
+          
+          
+                    public void getLicenceAcceptanceScreenController(){
+		  log.debug("In the licence Acceptance Screen controller");
+		  try {
+			  this.licenceAcceptanceController = (LicenseAcceptanceController) replaceSceneContent("LicenseAcceptScreen.fxml");
+			  //Platform.runLater(() -> progressDialog.setVisible(true));
+			  this.licenceAcceptanceController.setApp(this);
 			  //this.stage.setTitle("Shellfire VPN 2 Login");
 
 		} catch (Exception ex) {
@@ -320,7 +337,7 @@ public class LoginForms extends Application {
          
          private void showLoginProgress() {
 		//this.loginProgressDialog = new ProgressDialog(this, false, i18n.tr("Einloggen..."));
-		this.loginProgressDialog.setVisible(true);
+		this.progressDialog.setVisible(true);
 	}
          
          
@@ -330,5 +347,13 @@ public class LoginForms extends Application {
 
     public void licenseNotAccepted() {
     	this.licenseAccepted = false;
+    }
+    
+    public boolean getLicenseAccepted(){
+        return this.licenseAccepted;
+    }
+    
+    public void setLicenseAccepted(boolean newLicence){
+        this.licenseAccepted = newLicence;
     }
 }

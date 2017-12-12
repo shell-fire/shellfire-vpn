@@ -97,4 +97,8 @@ public class LicenseAcceptanceController extends AnchorPane implements Initializ
         licenceTextArea.positionCaret(0);            
                 
     }
+    
+    public void setApp(LoginForms applic){
+		this.application = applic ; 
+	}
 }

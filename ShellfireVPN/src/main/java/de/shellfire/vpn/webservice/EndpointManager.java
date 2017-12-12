@@ -15,7 +15,9 @@ import de.shellfire.vpn.Util;
 import de.shellfire.vpn.VpnProperties;
 import de.shellfire.vpn.gui.CanContinueAfterBackEndAvailable;
 import de.shellfire.vpn.gui.LoginForm;
+import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.gui.ProgressDialog;
+import de.shellfire.vpn.gui.controller.ProgressDialogController;
 import de.shellfire.vpn.i18n.VpnI18N;
 
 public class EndpointManager {
@@ -30,6 +32,7 @@ public class EndpointManager {
   private static EndpointManager instance;
   private List<String> endPointList;
   private ProgressDialog initDialog;
+  private ProgressDialogController initDialogFX ;
   private String preferredEndPoint;
   private boolean currentlyUsingDefaultList = false;
   private VpnProperties vpnProperties;
@@ -206,6 +209,12 @@ public class EndpointManager {
     task.execute();
   }
 
+    public void ensureShellfireBackendAvailableFx(CanContinueAfterBackEndAvailable form) {
+    initDialog = LoginForm.initDialog;
+    initDialogFX = LoginForms.progressDialog ;
+    FindEndpointTask task = new FindEndpointTask(form);
+    task.execute();
+  }
 
   private boolean testEndpoint(String endPoint) {
     log.debug("testEndpoint({}) - start", endPoint);

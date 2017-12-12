@@ -1,5 +1,6 @@
 package de.shellfire.vpn.gui.controller;
 
+import de.shellfire.vpn.Storage;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -13,10 +14,14 @@ import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
 
 import de.shellfire.vpn.Util;
+import de.shellfire.vpn.VpnProperties;
+import de.shellfire.vpn.client.Client;
 import de.shellfire.vpn.gui.LoginForms;
-import de.shellfire.vpn.gui.RegisterForm;
+import static de.shellfire.vpn.gui.LoginForms.instance;
 import de.shellfire.vpn.gui.controller.ShellfireVPNMainFormFxmlController;
 import de.shellfire.vpn.i18n.VpnI18N;
+import de.shellfire.vpn.service.CryptFactory;
+import de.shellfire.vpn.webservice.EndpointManager;
 import de.shellfire.vpn.webservice.Response;
 import de.shellfire.vpn.webservice.WebService;
 import de.shellfire.vpn.webservice.model.LoginResponse;
@@ -39,7 +44,6 @@ import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Cursor;
-import javafx.scene.effect.BlendMode;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
@@ -78,6 +82,14 @@ public class LoginController extends AnchorPane implements Initializable {
     @FXML
     private ImageView exitImageView;
 
+    private static final long serialVersionUID = 1L;
+    public static final String REG_PASS = "pass";
+	public static final String REG_USER = "user";
+	public static final String REG_AUTOLOGIN = "autologin";
+	public static final String REG_AUTOCONNECT = "autoConnect";
+	public static final String REG_INSTDIR = "instdir";
+	public static final String REG_SHOWSTATUSURL = "show_status_url_on_connect";
+	private static final String REG_FIRST_START = "firststart";
     WebService service;
     private boolean minimize;
     private LoginForms application;
@@ -86,6 +98,7 @@ public class LoginController extends AnchorPane implements Initializable {
     private String username;
     private String password;
     private static boolean passwordBogus;
+    public static ProgressDialogController initProgressDialog;
 
     public LoginController() {
     }
@@ -321,4 +334,131 @@ public class LoginController extends AnchorPane implements Initializable {
         }
         return false;
     }
+    
+     public void afterShellfireServiceEnvironmentEnsured() {
+	  log.debug("Ensured that ShellfireVPNService is running. Trying to connect to the Shellfire webservice backend...");
+
+	  EndpointManager.getInstance().ensureShellfireBackendAvailableFx(this);
+	}
+	
+	 
+  public void continueAfterBackEndAvailabled() {
+    this.service = WebService.getInstance();
+    Storage.register(service);
+    this.restoreCredentialsFromRegistry();
+    this.restoreAutoConnectFromRegistry();
+    this.restoreAutoStartFromRegistry();
+    this.application.setLicenseAccepted(false);
+    
+   /* if (initProgressDialog != null) {
+      initProgressDialog.dispose();
+      instance.setEnabled(true);
+    }*/
+   
+   // TODO ensure that the login menu is currently displayed.
+    try {
+      //Connection.initRmi();
+    } catch (Exception e) {
+      Util.handleException(e);
+    } 
+    
+    if (!this.autoLoginIfActive()) {
+      this.setVisible(true);
+      askForNewAccountAndAutoStartIfFirstStart();
+    }   
+  }
+  
+  	private void restoreCredentialsFromRegistry() {
+		VpnProperties props = VpnProperties.getInstance();
+		String user = props.getProperty(REG_USER, null);
+		String pass = props.getProperty(REG_PASS, null);
+
+		if (user != null && pass != null) {
+			user = CryptFactory.decrypt(user);
+			pass = CryptFactory.decrypt(pass);
+
+			if (user != null && pass != null) { // decryption worked
+				this.setUsername(user);
+				this.setPassword(pass);
+				this.fStoreLoginData.setSelected(true);
+			} else {
+				this.removeCredentialsFromRegistry();
+			}
+
+		}
+	}
+        
+        	private void restoreAutoStartFromRegistry() {
+		boolean autoStart = Client.vpnAutoStartEnabled();
+		this.fAutoStart.setSelected(autoStart);
+	}
+
+        private void restoreAutoConnectFromRegistry() {
+		VpnProperties props = VpnProperties.getInstance();
+		boolean autoConnect = props.getBoolean(REG_AUTOCONNECT, false);
+		this.fAutoconnect.setSelected(autoConnect);
+
+	}
+        
+        private boolean autoLoginIfActive() {
+		VpnProperties props = VpnProperties.getInstance();
+		boolean doAutoLogin = props.getBoolean(REG_AUTOLOGIN, false);
+
+		if (doAutoLogin) {
+			this.fAutoLogin.setSelected(true);
+			this.setVisible(false);
+			handlefButtonLogin (null);
+		}
+
+		return doAutoLogin;
+
+	}
+        
+    	protected void setUsername(String username) {
+		this.username = username;
+		this.fUsername.setText(username);
+	}
+
+	protected void setPassword(String password) {
+		this.password = password;
+		this.setPasswordBogus();
+	}
+        
+        void setPasswordBogus() {
+		this.fPassword.setText("boguspass");
+		this.passwordBogus = true;
+	}
+        
+        private void removeCredentialsFromRegistry() {
+		VpnProperties props = VpnProperties.getInstance();
+		props.remove(REG_USER);
+		props.remove(REG_PASS);
+		props.remove(REG_AUTOLOGIN);
+	}
+        
+        
+        	private void askForNewAccountAndAutoStartIfFirstStart() {
+		if (firstStart()) {
+		  if (!Util.isWindows()) {
+		    askForLicense();
+		    
+	      if (!this.licenseAccepted) {
+	          JOptionPane.showMessageDialog(null, i18n.tr("Lizenz nicht akzeptiert - Shellfire VPN wird jetzt beendet."));
+	          System.exit(0);
+	        }
+	  	  }
+	  	  askForAutoStart();
+	  	  askForNewAccount();
+		}
+
+		setFirstStart(false);
+	}
+                
+    private boolean firstStart() {
+		VpnProperties props = VpnProperties.getInstance();
+		boolean firstStart = props.getBoolean(LoginForms.REG_FIRST_START, true);
+		String autoLogin = props.getProperty(LoginForms.REG_AUTOLOGIN, null);
+
+		return firstStart && autoLogin == null;
+	}
 }

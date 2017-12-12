@@ -7,7 +7,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="359.0" prefWidth="588.0" style="-fx-background-color: rgb(240,240,240);" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.RegiesterFormController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="359.0" prefWidth="588.0" style="-fx-background-color: rgb(240,240,240);" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.RegisterFormController">
    <children>
       <AnchorPane id="AnchorPane" layoutX="5.0" layoutY="6.0" prefHeight="344.0" prefWidth="575.0" style="-fx-background-color: rgb(64,69,73);" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="7.0">
          <children>
@@ -44,7 +44,7 @@
                   <Pane fx:id="backLabelPane" layoutX="460.0" layoutY="5.0" onMouseClicked="#handleBackLabel" prefHeight="51.0" prefWidth="101.0">
                      <children>
                         <Label fx:id="registerBackLabel" alignment="CENTER_RIGHT" layoutX="1.0" layoutY="14.0" onMouseClicked="#handleBackLabelClicked" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited" prefHeight="31.0" prefWidth="96.0" style="-fx-background-color: rgb(0,0,0);" text="zurück" textAlignment="RIGHT" textFill="#eee5e5" />
-                        <ImageView fx:id="backImageVeiw" layoutX="4.0" layoutY="20.0">
+                        <ImageView fx:id="backImageVeiw" layoutX="4.0" layoutY="20.0" onMouseClicked="#handleBackLabelImgClicked" onMouseEntered="#handleMouseImgEntered" onMouseExited="#handleMouseImgExited">
                            <image>
                               <Image url="@../icons/exit.png" />
                            </image>

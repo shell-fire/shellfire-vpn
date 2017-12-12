@@ -38,6 +38,7 @@ import de.shellfire.vpn.client.Client;
 import de.shellfire.vpn.client.Controller;
 import de.shellfire.vpn.client.ServiceTools;
 import de.shellfire.vpn.exception.VpnException;
+import de.shellfire.vpn.gui.controller.ProgressDialogController;
 import de.shellfire.vpn.gui.helper.MoveMouseListener;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.proxy.ProxyConfig;
@@ -975,5 +976,9 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
   public ProgressDialog getDialog() {
     return initDialog;
   }
-
+  
+  @Override
+    public ProgressDialogController getDialogFx() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }
