@@ -976,9 +976,4 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
   public ProgressDialog getDialog() {
     return initDialog;
   }
-  
-  @Override
-    public ProgressDialogController getDialogFx() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 }

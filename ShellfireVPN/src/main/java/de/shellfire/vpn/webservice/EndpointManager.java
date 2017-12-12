@@ -15,8 +15,8 @@ import de.shellfire.vpn.Util;
 import de.shellfire.vpn.VpnProperties;
 import de.shellfire.vpn.gui.CanContinueAfterBackEndAvailable;
 import de.shellfire.vpn.gui.LoginForm;
-import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.gui.ProgressDialog;
+import de.shellfire.vpn.gui.controller.LoginController;
 import de.shellfire.vpn.gui.controller.ProgressDialogController;
 import de.shellfire.vpn.i18n.VpnI18N;
 
@@ -211,7 +211,7 @@ public class EndpointManager {
 
     public void ensureShellfireBackendAvailableFx(CanContinueAfterBackEndAvailable form) {
     initDialog = LoginForm.initDialog;
-    initDialogFX = LoginForms.progressDialog ;
+    initDialogFX = LoginController.initProgressDialog ;
     FindEndpointTask task = new FindEndpointTask(form);
     task.execute();
   }
