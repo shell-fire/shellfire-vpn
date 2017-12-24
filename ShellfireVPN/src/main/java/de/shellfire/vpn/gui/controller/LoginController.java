@@ -16,6 +16,7 @@ import org.xnap.commons.i18n.I18n;
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.VpnProperties;
 import de.shellfire.vpn.client.Client;
+import de.shellfire.vpn.gui.CanContinueAfterBackEndAvailableFX;
 import de.shellfire.vpn.gui.LoginForms;
 import static de.shellfire.vpn.gui.LoginForms.instance;
 import de.shellfire.vpn.gui.controller.ShellfireVPNMainFormFxmlController;
@@ -51,7 +52,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
-public class LoginController extends AnchorPane implements Initializable {
+public class LoginController extends AnchorPane implements Initializable, CanContinueAfterBackEndAvailableFX {
 
     @FXML
     private Button fButtonLogin;
@@ -165,9 +166,9 @@ public class LoginController extends AnchorPane implements Initializable {
 
         requestRegistration();
     }
-    
-    public void requestRegistration(){
-        this.application.getRegisterFormController();
+
+    public void requestRegistration() {
+        this.application.loadRegisterFormController();
         this.application.getStage().show();
     }
 
@@ -296,6 +297,37 @@ public class LoginController extends AnchorPane implements Initializable {
     private void handleExitImageMouseEntered(MouseEvent event) {
         //this.exitImageView.setBlendMode(BlendMode.OVERLAY);
         this.application.getStage().getScene().setCursor(Cursor.HAND);
+    }
+
+    @Override
+    public void continueAfterBackEndAvailabledFX() {
+        this.service = WebService.getInstance();
+        Storage.register(service);
+        this.restoreCredentialsFromRegistry();
+        this.restoreAutoConnectFromRegistry();
+        this.restoreAutoStartFromRegistry();
+        this.application.setLicenseAccepted(false);
+
+        if (null != initProgressDialog) {
+            //initProgressDialog.h();
+            // TODO check if logic intention was properly converted from swing counterpart.
+            this.application.loadLoginController();
+        }
+        try {
+            //Connection.initRmi();
+        } catch (Exception e) {
+            Util.handleException(e);
+        }
+
+        if (!this.autoLoginIfActive()) {
+            this.setVisible(true);
+            askForNewAccountAndAutoStartIfFirstStart();
+        }
+    }
+
+    @Override
+    public ProgressDialogController getDialogFX() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     class LoginTAsk extends Task<Response<LoginResponse>> {
@@ -489,21 +521,21 @@ public class LoginController extends AnchorPane implements Initializable {
             fStoreLoginData.setSelected(true);
         }
     }
-    
+
     private void askForNewAccount() {
-    Alert alert = new Alert(AlertType.CONFIRMATION);
+        Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setTitle(i18n.tr("Willkommen: Erster Start"));
         alert.setContentText(i18n.tr("Dies ist dein erster Start von Shellfire VPN. Neuen Shellfire VPN Account anlegen?"));
 
         Optional<ButtonType> result = alert.showAndWait();
 
         if ((result.isPresent()) && (result.get() == ButtonType.OK)) {
-               requestRegistration();
+            requestRegistration();
         }
     }
-    
+
     private void setFirstStart(boolean b) {
-		VpnProperties props = VpnProperties.getInstance();
-		props.setBoolean(LoginController.REG_FIRST_START, b);
-	}
+        VpnProperties props = VpnProperties.getInstance();
+        props.setBoolean(LoginController.REG_FIRST_START, b);
+    }
 }
