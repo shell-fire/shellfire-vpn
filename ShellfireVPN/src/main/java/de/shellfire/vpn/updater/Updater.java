@@ -34,6 +34,7 @@ import de.shellfire.vpn.LogStreamReader;
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.client.ServiceTools;
 import de.shellfire.vpn.gui.CanContinueAfterBackEndAvailable;
+import de.shellfire.vpn.gui.CanContinueAfterBackEndAvailableFX;
 import de.shellfire.vpn.gui.ProgressDialog;
 import de.shellfire.vpn.gui.controller.ProgressDialogController;
 import de.shellfire.vpn.i18n.VpnI18N;
@@ -41,7 +42,7 @@ import de.shellfire.vpn.proxy.ProxyConfig;
 import de.shellfire.vpn.webservice.EndpointManager;
 import de.shellfire.vpn.webservice.WebService;
 
-public class Updater implements CanContinueAfterBackEndAvailable {
+public class Updater implements CanContinueAfterBackEndAvailable, CanContinueAfterBackEndAvailableFX {
   private static Logger log = Util.getLogger(Updater.class.getCanonicalName());
   private static final String MAIN_EXE = "ShellfireVPN2.dat";
   private static final String UPDATER_EXE = "ShellfireVPN2.exe";
@@ -194,7 +195,13 @@ public class Updater implements CanContinueAfterBackEndAvailable {
   }
 
     @Override
-    public ProgressDialogController getDialogFx() {
+    public ProgressDialogController getDialogFX() {
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return null;
+    }
+
+    @Override
+    public void continueAfterBackEndAvailabledFX() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
