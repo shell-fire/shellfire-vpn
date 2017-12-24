@@ -1,6 +1,6 @@
 package de.shellfire.vpn.gui;
 
-import de.shellfire.vpn.gui.controller.ProgressDialogController;
+//import de.shellfire.vpn.gui.controller.ProgressDialogController;
 import java.awt.Frame;
 
 public interface CanContinueAfterBackEndAvailable {
@@ -9,5 +9,5 @@ public interface CanContinueAfterBackEndAvailable {
 
   ProgressDialog getDialog();
   
-  ProgressDialogController getDialogFx();
+  //ProgressDialogController getDialogFx();
 }
