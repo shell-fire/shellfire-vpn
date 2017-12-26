@@ -22,7 +22,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -30,10 +29,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextFlow;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
 import org.apache.commons.validator.GenericValidator;
@@ -77,7 +75,7 @@ public class RegisterFormController extends AnchorPane implements Initializable 
     @FXML
     private PasswordField confirmPasswordField;
     @FXML
-    private TextFlow policyTextFlow;
+    private WebView policyTextFlow;
     @FXML
     private Label registerBackLabel;
 
@@ -135,7 +133,7 @@ public class RegisterFormController extends AnchorPane implements Initializable 
 
         // adding components of the policy and terms of agreement textflow
         //policyTextFlow
-        Text t1 = new Text(i18n.tr("Ich akzeptiere die"));
+        /*Text t1 = new Text(i18n.tr("Ich akzeptiere die"));
         Hyperlink termsAndConditions = new Hyperlink(i18n.tr("AGB"));
         termsAndConditions.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -169,8 +167,15 @@ public class RegisterFormController extends AnchorPane implements Initializable 
         // because policyTextFlow was defined in fxml , we use the add method
         policyTextFlow.getChildren().addAll(t1, termsAndConditions, t2, privacyPolicy, t3, rightOfWidthdrawal, t4);
         //policyTextFlow.getChildren().
-
+        */
         //policyTextFlow.setVisible(true);
+        WebEngine webEngine = policyTextFlow.getEngine();
+        String webContent = "<html>" + "  <body>"
+                + i18n
+                .tr("Ich akzeptiere die <a target='_agb' href='https://www.shellfire.de/agb/'>AGB</a> und habe die <a target='_datenschutzerklaerung' href='https://www.shellfire.de/datenschutzerklaerung/'>Datenschutzerklärung</a><br />sowie das <a target='_widerrufsrecht' href='https://www.shellfire.de/widerrufsrecht/'>Widerrufsrecht</a> zur Kenntnis genommen")
+                + "  </body>" + "</html>";
+        webEngine.loadContent(webContent);
+        //policyTextFlow.getChildren().add(webView);
     }
 
     @FXML
