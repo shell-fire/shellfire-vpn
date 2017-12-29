@@ -16,10 +16,12 @@ import de.shellfire.vpn.webservice.model.LoginResponse;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.application.HostServices;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
@@ -78,10 +80,10 @@ public class RegisterFormController extends AnchorPane implements Initializable 
     @FXML
     private PasswordField confirmPasswordField;
     @FXML
-    private WebView policyTextFlow;
-    @FXML
     private Label registerBackLabel;
-
+    @FXML
+    private WebView policyWebView;
+        
     private static Logger log = Util.getLogger(RegisterForm.class.getCanonicalName());
     public static final String REG_PASS = "pass";
     public static final String REG_USER = "user";
@@ -137,7 +139,7 @@ public class RegisterFormController extends AnchorPane implements Initializable 
         this.registerBackLabel.setText(i18n.tr("zurück"));
 
         // Load web content to webView
-        WebEngine webEngine = policyTextFlow.getEngine();
+        WebEngine webEngine = policyWebView.getEngine();
         String webContent = "<html>" + "  <body>"
                 + i18n
                 .tr("Ich akzeptiere die <a onclick='return false;' target='_agb' href='https://www.shellfire.de/agb/'>AGB</a> und habe die <a onclick='return false;' target='_datenschutzerklaerung' href='https://www.shellfire.de/datenschutzerklaerung/'>Datenschutzerklärung</a><br />sowie das <a onclick='return false;' target='_widerrufsrecht' href='https://www.shellfire.de/widerrufsrecht/'>Widerrufsrecht</a> zur Kenntnis genommen")
@@ -154,12 +156,9 @@ public class RegisterFormController extends AnchorPane implements Initializable 
 	
 	return false;
     };
-          WebViews.addHyperlinkListener(policyTextFlow, eventPrintingListener);
+          WebViews.addHyperlinkListener(policyWebView, eventPrintingListener);
     }
 
-    @FXML
-    private void handleSelectVpnButton(ActionEvent event) {
-    }
 
     @FXML
     private void handlefAutoconnect(ActionEvent event) {
@@ -273,13 +272,9 @@ public class RegisterFormController extends AnchorPane implements Initializable 
         this.application.getStage().show();
     }
 
-    @FXML
-    private void handleWebViewMouseEntered(MouseEvent event) {
-    }
 
     @FXML
-    private void handleWebViewClicked(MouseEvent mEvent) {
-        
+    private void handleRegisterButton(ActionEvent event) {
     }
 
     private static class FocusRequester implements Runnable {
@@ -326,8 +321,14 @@ public class RegisterFormController extends AnchorPane implements Initializable 
                     progressDialog.setVisible(false);
                 }
 
-                JOptionPane.showMessageDialog(null, i18n.tr("Fehler bei Registrierung:") + " " + i18n.tr(registrationResult.getMessage()),
-                        i18n.tr("Fehler"), JOptionPane.ERROR_MESSAGE);
+                //JOptionPane.showMessageDialog(null, i18n.tr("Fehler bei Registrierung:") + " " + i18n.tr(registrationResult.getMessage()),
+                      //  i18n.tr("Fehler"), JOptionPane.ERROR_MESSAGE);
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                    //alert.setTitle("Error");
+                    alert.setHeaderText(i18n.tr("Fehler"));
+                    alert.setContentText(i18n.tr("Fehler bei Registrierung:") + " " + i18n.tr(registrationResult.getMessage()));
+                    alert.showAndWait();
+                    //Platform.exit();
             }
 
             return null;

@@ -14,7 +14,7 @@
          <children>
             <AnchorPane layoutX="6.0" layoutY="129.0" prefHeight="262.0" prefWidth="561.0" style="-fx-background-color: rgb(240,240,240);" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="75.0">
                <children>
-                  <Button fx:id="registerButton" layoutX="156.0" layoutY="229.0" mnemonicParsing="false" onAction="#handleSelectVpnButton" prefHeight="25.0" prefWidth="404.0" text="Jetzt Registrieren" AnchorPane.bottomAnchor="8.0" />
+                  <Button fx:id="registerButton" layoutX="156.0" layoutY="229.0" mnemonicParsing="false" onAction="#handleRegisterButton" prefHeight="25.0" prefWidth="404.0" text="Jetzt Registrieren" AnchorPane.bottomAnchor="8.0" />
                   <Label fx:id="registerHeadingLabel" layoutX="14.0" layoutY="-3.0" minHeight="16" minWidth="69" prefHeight="42.0" prefWidth="216.0" text="Registrierung">
                      <font>
                         <Font name="Arial" size="30.0" />
@@ -28,7 +28,7 @@
                   <Label fx:id="confirmPasswordLabel" layoutX="7.0" layoutY="123.0" text="Passwort-Check:" />
                   <CheckBox fx:id="fAutoconnect1" layoutX="132.0" layoutY="156.0" mnemonicParsing="false" onAction="#handlefAutoconnect" prefHeight="34.0" prefWidth="20.0" text="&#10;&#10;" />
                   <CheckBox fx:id="newsLetterCheckBox" layoutX="132.0" layoutY="206.0" mnemonicParsing="false" onAction="#handlefAutoconnect" selected="true" text="Ich abonniere den Newsletter" AnchorPane.bottomAnchor="39.0" />
-                  <WebView fx:id="policyTextFlow" layoutX="156.0" layoutY="147.0" onMouseClicked="#handleWebViewClicked" onMouseEntered="#handleWebViewMouseEntered" prefHeight="60.0" prefWidth="429.0" AnchorPane.leftAnchor="156.0" AnchorPane.rightAnchor="10.0" />
+                  <WebView fx:id="policyWebView" layoutX="156.0" layoutY="147.0" prefHeight="60.0" prefWidth="429.0" AnchorPane.leftAnchor="156.0" AnchorPane.rightAnchor="10.0" />
                </children>
             </AnchorPane>
             <Pane fx:id="headerPanel" prefHeight="68.0" prefWidth="575.0" style="-fx-background-color: rgb(18,172,229);" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
