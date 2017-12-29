@@ -64,6 +64,7 @@ public class LoginForms extends Application {
             initializations(default_args);
             loadProgressDialog();
             stage.sizeToScene();
+            stage.getProperties().put("hostServices", this.getHostServices());
             this.stage.show();
             
         } catch (Exception ex) {

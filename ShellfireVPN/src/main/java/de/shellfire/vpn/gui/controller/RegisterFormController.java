@@ -15,8 +15,8 @@ import de.shellfire.vpn.webservice.WebService;
 import de.shellfire.vpn.webservice.model.LoginResponse;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.application.HostServices;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
@@ -34,7 +34,10 @@ import javafx.scene.web.WebView;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.SwingWorker;
+import javax.swing.event.HyperlinkEvent;
 import org.apache.commons.validator.GenericValidator;
+import org.codefx.libfx.control.webview.WebViewHyperlinkListener;
+import org.codefx.libfx.control.webview.WebViews;
 import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
 
@@ -90,6 +93,8 @@ public class RegisterFormController extends AnchorPane implements Initializable 
     private boolean accountActive = false;
     //private RegisterForm.AccountActiveServicePollerTask poller;
     private static I18n i18n = VpnI18N.getI18n();
+    
+    WebViewHyperlinkListener eventPrintingListener ;
 
     public RegisterFormController() {
         System.out.println("*********No arg constructor was used");
@@ -131,51 +136,25 @@ public class RegisterFormController extends AnchorPane implements Initializable 
 
         this.registerBackLabel.setText(i18n.tr("zurück"));
 
-        // adding components of the policy and terms of agreement textflow
-        //policyTextFlow
-        /*Text t1 = new Text(i18n.tr("Ich akzeptiere die"));
-        Hyperlink termsAndConditions = new Hyperlink(i18n.tr("AGB"));
-        termsAndConditions.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent event) {
-                Util.openUrl("https://www.shellfire.de/agb/");
-            }
-        });
-
-        Text t2 = new Text(i18n.tr("und habe die"));
-        Hyperlink privacyPolicy = new Hyperlink(i18n.tr("Datenschutzerklärung"));
-        privacyPolicy.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent event) {
-                Util.openUrl("https://www.shellfire.de/datenschutzerklaerung/");
-            }
-        });
-
-        Text t3 = new Text(i18n.tr("sowie das"));
-        Hyperlink rightOfWidthdrawal = new Hyperlink(i18n.tr("Widerrufsrecht"));
-        rightOfWidthdrawal.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent event) {
-                Util.openUrl("https://www.shellfire.de/widerrufsrecht/");
-            }
-        });
-        Text t4 = new Text(i18n.tr("zur Kenntnis genommen"));
-
-        // because policyTextFlow was defined in fxml , we use the add method
-        policyTextFlow.getChildren().addAll(t1, termsAndConditions, t2, privacyPolicy, t3, rightOfWidthdrawal, t4);
-        //policyTextFlow.getChildren().
-        */
-        //policyTextFlow.setVisible(true);
+        // Load web content to webView
         WebEngine webEngine = policyTextFlow.getEngine();
         String webContent = "<html>" + "  <body>"
                 + i18n
-                .tr("Ich akzeptiere die <a target='_agb' href='https://www.shellfire.de/agb/'>AGB</a> und habe die <a target='_datenschutzerklaerung' href='https://www.shellfire.de/datenschutzerklaerung/'>Datenschutzerklärung</a><br />sowie das <a target='_widerrufsrecht' href='https://www.shellfire.de/widerrufsrecht/'>Widerrufsrecht</a> zur Kenntnis genommen")
+                .tr("Ich akzeptiere die <a onclick='return false;' target='_agb' href='https://www.shellfire.de/agb/'>AGB</a> und habe die <a onclick='return false;' target='_datenschutzerklaerung' href='https://www.shellfire.de/datenschutzerklaerung/'>Datenschutzerklärung</a><br />sowie das <a onclick='return false;' target='_widerrufsrecht' href='https://www.shellfire.de/widerrufsrecht/'>Widerrufsrecht</a> zur Kenntnis genommen")
                 + "  </body>" + "</html>";
-        webEngine.loadContent(webContent);
-        //policyTextFlow.getChildren().add(webView);
+        webEngine.loadContent(webContent);        
+      
+         HostServices hostServices = (HostServices)this.application.getStage().getProperties().get("hostServices");        
+         
+         eventPrintingListener = event -> {
+             // Check if the link has been clicked then, open in external browser.
+             if (event.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
+             hostServices.showDocument(event.getURL().toString());
+             }
+	
+	return false;
+    };
+          WebViews.addHyperlinkListener(policyTextFlow, eventPrintingListener);
     }
 
     @FXML
@@ -292,6 +271,15 @@ public class RegisterFormController extends AnchorPane implements Initializable 
     private void handleBackLabelImgClicked(MouseEvent event) {
         this.application.loadLoginController();
         this.application.getStage().show();
+    }
+
+    @FXML
+    private void handleWebViewMouseEntered(MouseEvent event) {
+    }
+
+    @FXML
+    private void handleWebViewClicked(MouseEvent mEvent) {
+        
     }
 
     private static class FocusRequester implements Runnable {
