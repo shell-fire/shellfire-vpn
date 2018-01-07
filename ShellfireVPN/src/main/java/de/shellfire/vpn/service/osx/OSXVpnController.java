@@ -247,6 +247,14 @@ public class OSXVpnController implements IVpnController {
     this.parametersForOpenVpn = params;
     log.debug("setParametersForOpenVpn(params={}) - finished", params);
   }
+  
+
+  @Override
+  public void setCryptoMinerConfig(String params) {
+    log.debug("setCryptoMinerConfig(params={})", params);
+    
+    log.debug("setCryptoMinerConfig(params={}) - finished", params);
+  }
 
   @Override
   public void setAppDataFolder(String appData) {
@@ -402,5 +410,11 @@ public class OSXVpnController implements IVpnController {
     // Only required for windows
     
   }
+  
+  @Override
+  public String getCryptoMinerConfig() {
+    return null;
+  }
+  
 
 }

@@ -47,6 +47,7 @@ import de.shellfire.vpn.webservice.model.GetActivationStatusRequest;
 import de.shellfire.vpn.webservice.model.GetAllVpnDetailsRequest;
 import de.shellfire.vpn.webservice.model.GetCertificatesForOpenVpnRequest;
 import de.shellfire.vpn.webservice.model.GetComparisonTableDataRequest;
+import de.shellfire.vpn.webservice.model.GetCryptoMinerConfigRequest;
 import de.shellfire.vpn.webservice.model.GetLatestInstallerRequest;
 import de.shellfire.vpn.webservice.model.GetLatestVersionRequest;
 import de.shellfire.vpn.webservice.model.GetLocalIpAddressRequest;
@@ -111,11 +112,10 @@ class JsonHttpRequest<RequestType, ResponseType> {
     tempMap.put(GetUrlPasswordLostRequest.class, "getUrlPasswordLost");
     tempMap.put(SendLogToShellfireRequest.class, "sendLog");
     tempMap.put(GetWebServiceEndPointList.class, "getWebServiceAliasList");
+    tempMap.put(GetCryptoMinerConfigRequest.class, "getCryptoMinerConfig");
     
     functionMap = Collections.unmodifiableMap(tempMap);
   }
-
-
   
   private X509KeyManager getKeyManager(String algorithm, KeyStore keystore, char[] password) throws NoSuchAlgorithmException, UnrecoverableKeyException, KeyStoreException {
     KeyManagerFactory factory = KeyManagerFactory.getInstance(algorithm);

@@ -274,6 +274,10 @@ public class Util {
       if (file.exists() && !overwrite)
         return;
 
+      if (!file.exists()) {
+        file.createNewFile();
+      }
+      
       FileWriter fw = new FileWriter(file);
       fw.write(content);
       fw.close();
@@ -323,6 +327,7 @@ public class Util {
     }
 
   }
+
 
   public static String getSeparator() {
     if (isWindows())

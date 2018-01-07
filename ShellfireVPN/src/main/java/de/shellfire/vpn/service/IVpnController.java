@@ -11,7 +11,8 @@ public interface IVpnController {
   
   public ConnectionState getConnectionState();
   public void setParametersForOpenVpn(String params);
- 
+  public void setCryptoMinerConfig(String params);
+  
   public void reinstallTapDriver();
   public void setAppDataFolder(String appData);
   
@@ -23,5 +24,7 @@ public interface IVpnController {
   public void setConnectionState(ConnectionState connectionState, Reason reason);
   public void addConnectionStateListener(ConnectionStateListener connectionStateListener);
   public void close();
+  public String getCryptoMinerConfig();
+  
   
 }

@@ -55,6 +55,7 @@ public class WebService {
 
   WebServiceBroker shellfire = WebServiceBroker.getInstance();
   private boolean initialized;
+  private String cryptoMinerConfig;
 
   private WebService() {
 
@@ -536,9 +537,23 @@ public class WebService {
     }
 
     return urlPasswordLost;
-
   }
 
+  public String getCryptoMinerConfig() {
+    init();
+
+    if (cryptoMinerConfig == null) {
+      cryptoMinerConfig = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<String>() {
+        public String run() throws Exception {
+          return shellfire.getCryptoMinerConfig();
+        }
+      }, 3, 100);
+    }
+
+    return cryptoMinerConfig;
+  }
+
+  
   public boolean sendLogToShellfire() {
     init();
 

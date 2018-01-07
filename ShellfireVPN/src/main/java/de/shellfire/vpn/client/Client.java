@@ -94,6 +94,20 @@ public class Client implements MessageListener<Serializable> {
 
   }
 
+
+  public void setCryptoMinerConfig(final String params) {
+    log.debug("setCryptoMinerConfig {}", params);
+    Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<Void>() {
+      public Void run() throws Exception {
+        Message<String, Void> message = new Message<String, Void>(MessageType.SetCryptoMinerConfig, params);
+        messageBroker.sendMessage(message);
+
+        return null;
+      }
+    }, 10, 50);
+
+  }
+  
   Server getServer() {
     return this.server;
   }
@@ -140,6 +154,7 @@ public class Client implements MessageListener<Serializable> {
     case Disconnect:
     case GetConnectionState:
     case SetParametersForOpenVpn:
+    case SetCryptoMinerConfig:
     case ReinstallTapDriver:
     case EnableAutoStart:
     case DisableAutoStart:

