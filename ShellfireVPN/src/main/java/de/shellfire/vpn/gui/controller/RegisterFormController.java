@@ -159,7 +159,6 @@ public class RegisterFormController extends AnchorPane implements Initializable 
           WebViews.addHyperlinkListener(policyWebView, eventPrintingListener);
     }
 
-
     @FXML
     private void handlefAutoconnect(ActionEvent event) {
     }
@@ -272,9 +271,11 @@ public class RegisterFormController extends AnchorPane implements Initializable 
         this.application.getStage().show();
     }
 
-
     @FXML
     private void handleRegisterButton(ActionEvent event) {
+        if (validateForm()) {
+        
+        }
     }
 
     private static class FocusRequester implements Runnable {

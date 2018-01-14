@@ -21,11 +21,13 @@ import de.shellfire.vpn.updater.Updater;
 import java.io.File;
 import java.io.IOException;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -366,5 +368,24 @@ public class LoginForms extends Application {
     
     public static ProgressDialogController getInitDialog() {
         return initDialog;
+    }
+    
+        private void initConnectionTest() {
+        // before doing anything else, we should test for an internet connection. without internet, we cant do anything!
+
+        boolean internetAvailable = Util.internetIsAvailable();
+
+        if (internetAvailable) {
+            initDialog.setDialogText(i18n.tr("Initialisiere ShellfireVPNService..."));
+            ServiceTools.getInstanceForOS().ensureServiceEnvironmentFX(this);
+        } else {
+
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    //alert.setTitle("Error");
+                    alert.setHeaderText(i18n.tr("Kein Internet"));
+                    alert.setContentText(i18n.tr("Keine Internet-Verbindung verfügbar - ShellfireVPN wird beendet."));
+                    alert.showAndWait();
+                    Platform.exit();
+        }
     }
 }

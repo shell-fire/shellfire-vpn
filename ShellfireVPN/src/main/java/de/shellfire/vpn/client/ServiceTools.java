@@ -11,6 +11,7 @@ import de.shellfire.vpn.Util;
 import de.shellfire.vpn.client.osx.OSXServiceTools;
 import de.shellfire.vpn.client.win.WinServiceTools;
 import de.shellfire.vpn.gui.LoginForm;
+import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.gui.ProgressDialog;
 import de.shellfire.vpn.service.Service;
 
@@ -23,7 +24,7 @@ public abstract class ServiceTools {
 
 	
 	public abstract void ensureServiceEnvironment(LoginForm form);
-
+        public abstract void ensureServiceEnvironmentFX(LoginForms form);
 	
 	public class WaitForServiceTask extends SwingWorker<Void, Object> {
 		/*

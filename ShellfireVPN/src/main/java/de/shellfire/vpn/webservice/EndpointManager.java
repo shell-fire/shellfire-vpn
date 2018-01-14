@@ -232,6 +232,8 @@ public class EndpointManager {
 
             if (null == initDialogFX) {
                 initDialogFX = LoginForms.getInitDialog();
+                initDialogFX.setDialogText("Update Check");
+                initDialogOriginFX = true;
             }
             Platform.runLater(new Runnable() {
                 public void run() {

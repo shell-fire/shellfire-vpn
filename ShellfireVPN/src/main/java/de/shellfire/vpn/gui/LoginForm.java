@@ -38,7 +38,6 @@ import de.shellfire.vpn.client.Client;
 import de.shellfire.vpn.client.Controller;
 import de.shellfire.vpn.client.ServiceTools;
 import de.shellfire.vpn.exception.VpnException;
-import de.shellfire.vpn.gui.controller.ProgressDialogController;
 import de.shellfire.vpn.gui.helper.MoveMouseListener;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.proxy.ProxyConfig;
@@ -670,7 +669,7 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
 
     public static void main(String args[]) {
         // temporarily setting java path for dll libraries
-        System.setProperty("java.library.path", "C:\\Users\\Tcheutchoua\\Documents\\NetBeansProjects\\ShellFire\\shellfire-vpn\\ShellfireVPN\\lib");
+        System.setProperty("java.library.path", "./lib");
 
         final boolean minimize;
         if (args.length > 0) {

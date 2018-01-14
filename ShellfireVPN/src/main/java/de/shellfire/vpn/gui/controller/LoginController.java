@@ -18,7 +18,6 @@ import de.shellfire.vpn.VpnProperties;
 import de.shellfire.vpn.client.Client;
 import de.shellfire.vpn.gui.CanContinueAfterBackEndAvailableFX;
 import de.shellfire.vpn.gui.LoginForms;
-import static de.shellfire.vpn.gui.LoginForms.instance;
 import de.shellfire.vpn.gui.controller.ShellfireVPNMainFormFxmlController;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.service.CryptFactory;
@@ -27,7 +26,6 @@ import de.shellfire.vpn.webservice.Response;
 import de.shellfire.vpn.webservice.WebService;
 import de.shellfire.vpn.webservice.model.LoginResponse;
 import java.util.Optional;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 
 import javafx.scene.control.Label;
@@ -45,6 +43,7 @@ import javafx.scene.text.Font;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Task;
 import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -112,16 +111,20 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
     @FXML
     public void handlefButtonLogin(ActionEvent event) {
         //fButtonLogin.setDisable(true);
+        log.debug("Login attempt made");
         if (validate()) {
+            log.debug("Login attempt with valid user input");
             try {
-                ProgressDialogController pgressDialog = (ProgressDialogController) application
+                /*ProgressDialogController pgressDialog = (ProgressDialogController) application
                         .replaceSceneContent("ProgressDiagogV.fxml");
                 pgressDialog.setDialogText(i18n.tr("Einloggen..."));
                 this.application.getStage();
-
+                                */
+                
             } catch (Exception ex) {
                 log.debug("could not load progressDialog fxml in login window \n" + ex.getMessage());
-            }
+                }
+                
         } else {
             fUsername.requestFocus();
         }
@@ -329,27 +332,33 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
     public ProgressDialogController getDialogFX() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    class LoginTAsk extends Task<Void>{
+         
+        Response<LoginResponse> loginResult = null;
 
-    class LoginTAsk extends Task<Response<LoginResponse>> {
-
-        public void done() {
-            Response<LoginResponse> loginResult = null;
-            try {
-                loginResult = get();
-            } catch (Exception ignore) {
-                ignore.printStackTrace();
-            }
-            hideLoginProgress();
-            String user = getUser();
-            String password = getPassword();
+        public Response<LoginResponse> getLoginResult() {
+            return loginResult;
         }
 
         @Override
-        protected Response<LoginResponse> call() throws Exception {
-            // TODO Auto-generated method stub
-            return null;
-        }
+        protected Void call() throws Exception {
+                    String user = getUser();
+                    String password = getPassword();
+                    log.debug("service.login() - start()");
+                    loginResult = service.login(user, password);
+                    log.debug("service.login() - finished()");
 
+                    return null;  
+                }
+                        
+                private void setAutoConnectInRegistry(boolean autoConnect) {
+            VpnProperties props = VpnProperties.getInstance();
+            props.setBoolean(REG_AUTOCONNECT, autoConnect);
+        }
+            
+   
+       
     }
 
     public void hideLoginProgress() {
@@ -367,7 +376,8 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
     public boolean validate() {
 
         if ((fUsername.getText().trim().length() > 0) && (fPassword.getText().trim().length() > 0)) {
-            //fUsername.requestFocus();
+            // TODO implement any further validation required.
+            return true;
         }
         return false;
     }
