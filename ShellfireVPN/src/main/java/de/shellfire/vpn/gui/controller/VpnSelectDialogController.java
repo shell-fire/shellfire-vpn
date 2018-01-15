@@ -69,7 +69,7 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
 
     private LoginForms application;
     private static final long serialVersionUID = 1L;
-    private static Logger log = Util.getLogger(LoginForms.class.getCanonicalName());
+    private static Logger log = Util.getLogger(VpnSelectDialogController.class.getCanonicalName());
     @FXML
     private Pane backLabelPane;
     @FXML
@@ -224,4 +224,7 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
         return allModels;
     }
 
+        public void setApp(LoginForms applic) {
+        this.application = applic;
+    }
 }

@@ -15,6 +15,7 @@ import de.shellfire.vpn.gui.controller.LicenseAcceptanceController;
 import de.shellfire.vpn.gui.controller.LoginController;
 import de.shellfire.vpn.gui.controller.ProgressDialogController;
 import de.shellfire.vpn.gui.controller.RegisterFormController;
+import de.shellfire.vpn.gui.controller.VpnSelectDialogController;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.proxy.ProxyConfig;
 import de.shellfire.vpn.updater.Updater;
@@ -40,6 +41,7 @@ public class LoginForms extends Application {
     public static ProgressDialogController initDialog;
     public RegisterFormController registerController;
     public LicenseAcceptanceController licenceAcceptanceController;
+    public VpnSelectDialogController vpnSelectController ; 
     private boolean minimize;    
     public static LoginController instance;    
     private static I18n i18n = VpnI18N.getI18n();
@@ -154,7 +156,8 @@ public class LoginForms extends Application {
     public void loadRegisterFormController() {
         log.debug("In the RegisterForm controller");
         try {
-            this.registerController = (RegisterFormController) replaceSceneContent("RegisterFormFxml.fxml");
+            this.registerController = (RegisterFormController) replaceSceneContent("VpnSelectDialogFxml"
+                    + ".fxml");
             //Platform.runLater(() -> progressDialog.setVisible(true));
             this.registerController.setApp(this);
             //this.stage.setTitle("Shellfire VPN 2 Login");
@@ -165,6 +168,17 @@ public class LoginForms extends Application {
         
     }
     
+        public void loadVPNSelect() {
+        log.debug("In the VPN controller");
+        try {
+            this.vpnSelectController = (VpnSelectDialogController) replaceSceneContent("RegisterFormFxml.fxml");
+            this.vpnSelectController.setApp(this);
+
+        } catch (Exception ex) {
+            log.debug("could not load vpnSelect fxml\n" + ex.getMessage());
+        }
+        
+    }
     public void getLicenceAcceptanceScreenController() {
         log.debug("In the licence Acceptance Screen controller");
         try {

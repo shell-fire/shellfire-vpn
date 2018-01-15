@@ -16,11 +16,13 @@ import org.xnap.commons.i18n.I18n;
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.VpnProperties;
 import de.shellfire.vpn.client.Client;
+import de.shellfire.vpn.exception.VpnException;
 import de.shellfire.vpn.gui.CanContinueAfterBackEndAvailableFX;
 import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.gui.controller.ShellfireVPNMainFormFxmlController;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.service.CryptFactory;
+import de.shellfire.vpn.types.ServerType;
 import de.shellfire.vpn.webservice.EndpointManager;
 import de.shellfire.vpn.webservice.Response;
 import de.shellfire.vpn.webservice.WebService;
@@ -44,6 +46,7 @@ import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -103,6 +106,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
     private String password;
     private static boolean passwordBogus;
     public static ProgressDialogController initProgressDialog;
+    public ShellfireVPNMainFormFxmlController mainForm ; 
 
     public LoginController() {
     }
@@ -115,12 +119,99 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
         if (validate()) {
             log.debug("Login attempt with valid user input");
             try {
-                /*ProgressDialogController pgressDialog = (ProgressDialogController) application
-                        .replaceSceneContent("ProgressDiagogV.fxml");
-                pgressDialog.setDialogText(i18n.tr("Einloggen..."));
-                this.application.getStage();
-                                */
-                
+                LoginTAsk task = new LoginTAsk();
+                task.setOnSucceeded((WorkerStateEvent wEvent) -> {
+                   log.info("Login task completed successfully");
+                Response<LoginResponse> loginResult = null;
+                    try {
+                       loginResult = task.getValue();
+                    } catch (Exception e) {
+                        log.debug("Error while checking User registration " + e.getMessage());
+                    }
+                                if (loginResult != null) {
+                if (service.isLoggedIn()) {
+
+                    if (fStoreLoginData.isSelected()) {
+                        storeCredentialsInRegistry(username, password);
+                    } else {
+                        removeCredentialsFromRegistry();
+                    }
+                    if (fAutoStart.isSelected()) {
+                        Client.addVpnToAutoStart();
+                    } else {
+                        Client.removeVpnFromAutoStart();
+                    }
+                    if (fAutoconnect.isSelected()) {
+                        setAutoConnectInRegistry(true);
+                    } else {
+                        setAutoConnectInRegistry(false);
+                    }
+
+                    //VpnSelectDialog dia = new VpnSelectDialog(currentForm, service, fAutoconnect.isSelected());
+                    this.application.loadVPNSelect();
+                    this.application.vpnSelectController.setService(service);
+                    this.application.vpnSelectController.setAutoConnect(fAutoconnect.isSelected());
+                    this.application.getStage().show();
+                    
+                    
+                    int rememberedVpnSelection = this.application.vpnSelectController.rememberedVpnSelection();
+
+                    boolean selectionRequired = service.vpnSelectionRequired();
+
+                    if (selectionRequired && rememberedVpnSelection == 0) {
+
+                        setVisible(false);
+                        //dia.setVisible(true);
+                        this.application.vpnSelectController.setApp(application);
+                        this.application.getStage().show();
+                        
+                    } else {
+                        try {
+                            if (selectionRequired
+                                    && rememberedVpnSelection != 0) {
+                                if (!service.selectVpn(rememberedVpnSelection)) {
+                                    // remembered vpn id is invalid
+                                    //dispose();
+                                    //dia.setVisible(true);
+                                    this.application.vpnSelectController.setApp(application);
+                        this.application.getStage().show();
+                                }
+                            }
+
+                            if (!this.application.vpnSelectController.isVisible()) {
+                                //setVisible(false);
+                                //dispose();
+                                mainForm = new ShellfireVPNMainFormFxmlController(service);
+                                boolean vis = true;
+                                if (minimize
+                                        && service.getVpn().getAccountType() != ServerType.Free) {
+                                    vis = false;
+                                }
+
+                                mainForm.setVisible(vis);
+                                mainForm.afterLogin(fAutoconnect.isSelected());
+                            }
+                        } catch (VpnException ex) {
+                            Util.handleException(ex);
+                        }
+
+                    }
+
+                } else {
+                    Alert alert = new Alert(AlertType.ERROR);
+                    alert.setHeaderText(i18n.tr("Fehler"));
+                    alert.setContentText(i18n.tr("Login fehlgeschlagen: ") + loginResult.getMessage());
+                    alert.showAndWait();
+                    //Platform.exit();
+                    /*JOptionPane.showMessageDialog(
+                            null,
+                            i18n.tr("Login fehlgeschlagen: ")
+                            + loginResult.getMessage(),
+                            i18n.tr("Fehler"), JOptionPane.ERROR_MESSAGE);
+                    setVisible(true);*/
+                }
+            }
+                 });
             } catch (Exception ex) {
                 log.debug("could not load progressDialog fxml in login window \n" + ex.getMessage());
                 }
@@ -333,23 +424,19 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
-    class LoginTAsk extends Task<Void>{
+    class LoginTAsk extends Task<Response<LoginResponse>>{
          
         Response<LoginResponse> loginResult = null;
 
-        public Response<LoginResponse> getLoginResult() {
-            return loginResult;
-        }
-
         @Override
-        protected Void call() throws Exception {
+        protected Response<LoginResponse> call() throws Exception {
                     String user = getUser();
                     String password = getPassword();
                     log.debug("service.login() - start()");
                     loginResult = service.login(user, password);
                     log.debug("service.login() - finished()");
 
-                    return null;  
+                    return loginResult;  
                 }
                         
                 private void setAutoConnectInRegistry(boolean autoConnect) {
@@ -548,4 +635,18 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
         VpnProperties props = VpnProperties.getInstance();
         props.setBoolean(LoginController.REG_FIRST_START, b);
     }
+    
+        private void storeCredentialsInRegistry(String user, String password) {
+        VpnProperties props = VpnProperties.getInstance();
+        props.setProperty(REG_USER, CryptFactory.encrypt(user));
+        props.setProperty(REG_PASS, CryptFactory.encrypt(password));
+        props.setBoolean(REG_AUTOLOGIN, fAutoLogin.isSelected());
+
+    }
+        
+            private void setAutoConnectInRegistry(boolean autoConnect) {
+            VpnProperties props = VpnProperties.getInstance();
+            props.setBoolean(REG_AUTOCONNECT, autoConnect);
+
+        }
 }
