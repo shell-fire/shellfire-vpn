@@ -1,7 +1,182 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" />
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="674.0" prefWidth="1073.0" style="-fx-background-color: rgb(64,69,73);" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <AnchorPane layoutX="4.0" prefHeight="515.0" prefWidth="668.0" AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="4.0">
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <children>
+            <Pane layoutX="1.0" layoutY="1.0" prefHeight="515.0" prefWidth="248.0" style="-fx-background-color: rgb(49,57,64);" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0" AnchorPane.topAnchor="1.0">
+               <children>
+                  <ImageView fitHeight="64.0" fitWidth="248.0" layoutX="1.0" layoutY="-5.0">
+                     <image>
+                        <Image url="@../icons/sf_en.png" />
+                     </image>
+                  </ImageView>
+                  <Pane layoutY="60.0" prefHeight="68.0" prefWidth="248.0" style="-fx-background-image: ..\icons\sf_en.png; -fx-border-color: black;">
+                     <children>
+                        <ImageView blendMode="LIGHTEN" fitHeight="58.0" fitWidth="248.0" layoutY="9.0" style="--fx-border-color: yellow;">
+                           <image>
+                              <Image url="@../buttons/button-connect-idle.png" />
+                           </image>
+                        </ImageView>
+                        <Label layoutX="47.0" layoutY="9.0" prefHeight="27.0" prefWidth="188.0" style="-fx-font-style: bold;" text="Connection" textFill="#f0f0f0">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <Label graphicTextGap="2.0" layoutX="45.0" layoutY="35.0" prefHeight="27.0" prefWidth="199.0" text="Connect to ShellFire VPN now" textFill="#f0f0f0">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <padding>
+                        <Insets top="1.0" />
+                     </padding>
+                  </Pane>
+                  <Pane layoutX="1.0" layoutY="128.0" prefHeight="68.0" prefWidth="248.0" style="-fx-background-image: ..\icons\sf_en.png; -fx-border-color: black;">
+                     <children>
+                        <ImageView blendMode="LIGHTEN" fitHeight="58.0" fitWidth="248.0" layoutY="9.0">
+                           <image>
+                              <Image url="@../buttons/button-serverlist-idle.png" />
+                           </image>
+                        </ImageView>
+                        <Label layoutX="47.0" layoutY="9.0" prefHeight="27.0" prefWidth="188.0" style="-fx-font-style: bold;" text="Server list" textFill="#f0f0f0">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <Label graphicTextGap="2.0" layoutX="45.0" layoutY="36.0" prefHeight="27.0" prefWidth="199.0" text="Show list of all VPN servers" textFill="#f0f0f0">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <padding>
+                        <Insets top="1.0" />
+                     </padding>
+                  </Pane>
+                  <Pane layoutY="196.0" prefHeight="68.0" prefWidth="248.0" style="-fx-background-image: ..\icons\sf_en.png; -fx-border-color: black;">
+                     <children>
+                        <ImageView blendMode="LIGHTEN" fitHeight="58.0" fitWidth="248.0" layoutY="9.0">
+                           <image>
+                              <Image url="@../buttons/button-map-idle.png" />
+                           </image>
+                        </ImageView>
+                        <Label layoutX="47.0" layoutY="9.0" prefHeight="27.0" prefWidth="188.0" style="-fx-font-style: bold;" text="Server list" textFill="#f0f0f0">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <Label graphicTextGap="2.0" layoutX="45.0" layoutY="36.0" prefHeight="27.0" prefWidth="199.0" text="Show list of all VPN servers" textFill="#f0f0f0">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <padding>
+                        <Insets top="1.0" />
+                     </padding>
+                  </Pane>
+                  <Pane layoutY="264.0" prefHeight="68.0" prefWidth="248.0" style="-fx-background-image: ..\icons\sf_en.png; -fx-border-color: black;">
+                     <children>
+                        <ImageView blendMode="LIGHTEN" fitHeight="58.0" fitWidth="248.0" layoutY="9.0">
+                           <image>
+                              <Image url="@../buttons/button-usa-idle.png" />
+                           </image>
+                        </ImageView>
+                        <Label layoutX="47.0" layoutY="10.0" prefHeight="27.0" prefWidth="188.0" style="-fx-font-style: bold;" text="Server list" textFill="#f0f0f0">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <Label graphicTextGap="2.0" layoutX="45.0" layoutY="36.0" prefHeight="27.0" prefWidth="199.0" text="Show list of all VPN servers" textFill="#f0f0f0">
+                           <font>
+                              <Font size="15.0" />
+                           </font>
+                        </Label>
+                     </children>
+                     <padding>
+                        <Insets top="1.0" />
+                     </padding>
+                  </Pane>
+               </children>
+            </Pane>
+            <Pane layoutX="249.0" layoutY="-7.0" prefHeight="38.0" prefWidth="561.0" style="-fx-background-color: rgb(244,244,244);" AnchorPane.leftAnchor="249.0" AnchorPane.rightAnchor="-4.0" AnchorPane.topAnchor="-4.0">
+               <children>
+                  <ImageView layoutX="10.0" layoutY="7.0">
+                     <image>
+                        <Image url="@../icons/help.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView layoutX="39.0" layoutY="8.0">
+                     <image>
+                        <Image url="@../icons/settings.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView layoutX="786.0" layoutY="9.0">
+                     <image>
+                        <Image url="@../icons/exit.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView layoutX="756.0" layoutY="9.0">
+                     <image>
+                        <Image url="@../icons/minimize.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView layoutX="727.0" layoutY="9.0">
+                     <image>
+                        <Image url="@../icons/hide.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </Pane>
+            <Pane layoutX="252.0" layoutY="36.0" prefHeight="507.0" prefWidth="817.0" style="-fx-background-color: rgb(240,240,240);" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="252.0" AnchorPane.rightAnchor="-4.0">
+               <children>
+                  <ImageView fitHeight="435.0" fitWidth="800.0" layoutX="5.0" layoutY="6.0">
+                     <image>
+                        <Image url="@../icons/status-unencrypted-width736.gif" />
+                     </image>
+                  </ImageView>
+                  <Button layoutX="22.0" layoutY="452.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="205.0" text="Button" />
+                  <Button layoutX="539.0" layoutY="452.0" mnemonicParsing="false" text="Button" />
+                  <ImageView fitHeight="46.0" fitWidth="200.0" layoutX="24.0" layoutY="452.0">
+                     <image>
+                        <Image url="@../buttons/button-connect-en.gif" />
+                     </image>
+                  </ImageView>
+                  <Button layoutX="236.0" layoutY="454.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="264.0" style="-fx-background-image: url( '..\buttons\button-connect-idle.png');" text="Button" />
+               </children></Pane>
+            <Pane layoutX="252.0" layoutY="37.0" prefHeight="117.0" prefWidth="690.0" style="-fx-background-color: rgb(240,240,240);" AnchorPane.leftAnchor="252.0" AnchorPane.rightAnchor="-4.0" AnchorPane.topAnchor="37.0">
+               <children>
+                  <Label layoutX="138.0" layoutY="14.0" text="Verbindungsstatus" />
+                  <Label layoutX="138.0" layoutY="50.0" text="Getrennt" />
+                  <Label layoutX="279.0" layoutY="14.0" text="Verbunden seit:" />
+                  <Label layoutX="420.0" layoutY="14.0" text="Online IP:" />
+                  <Label layoutX="289.0" layoutY="50.0" text="(nicht verbunden)" />
+                  <Label layoutX="420.0" layoutY="50.0" text="(IP)" />
+                  <Label layoutX="517.0" layoutY="14.0" text="VPN Id:" />
+                  <Label layoutX="590.0" layoutY="14.0" text="VPN Typ:" />
+                  <Label layoutX="518.0" layoutY="50.0" text="(vpnId)" />
+                  <Label layoutX="590.0" layoutY="50.0" text="(vpnTyp)" />
+                  <Label layoutX="706.0" layoutY="14.0" text="GÃ¼ltig bis:" />
+                  <Label layoutX="706.0" layoutY="50.0" text="(vpnValidUntil)" />
+                  <ImageView layoutX="30.0" layoutY="14.0">
+                     <image>
+                        <Image url="@../icons/small-globe-disconnected.png" />
+                     </image>
+                  </ImageView>
+               </children></Pane>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
