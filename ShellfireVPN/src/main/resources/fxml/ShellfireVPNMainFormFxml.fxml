@@ -148,13 +148,13 @@
                      </image>
                   </ImageView>
                   <Button layoutX="22.0" layoutY="452.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="205.0" text="Button" />
-                  <Button layoutX="539.0" layoutY="452.0" mnemonicParsing="false" text="Button" />
                   <ImageView fitHeight="46.0" fitWidth="200.0" layoutX="24.0" layoutY="452.0">
                      <image>
                         <Image url="@../buttons/button-connect-en.gif" />
                      </image>
                   </ImageView>
-                  <Button layoutX="236.0" layoutY="454.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="264.0" style="-fx-background-image: url( '..\buttons\button-connect-idle.png');" text="Button" />
+                  <Button layoutX="236.0" layoutY="454.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="264.0" style="-fx-background-image: url(&quot;../buttons/button-serial-idle.png&quot;);" text="Button" />
+                  <Button layoutX="522.0" layoutY="454.0" mnemonicParsing="false" prefHeight="46.0" prefWidth="264.0" style="-fx-background-image: url(&quot;../buttons/button-premium-infos.gif&quot;);" text="Button" />
                </children></Pane>
             <Pane layoutX="252.0" layoutY="37.0" prefHeight="117.0" prefWidth="690.0" style="-fx-background-color: rgb(240,240,240);" AnchorPane.leftAnchor="252.0" AnchorPane.rightAnchor="-4.0" AnchorPane.topAnchor="37.0">
                <children>
