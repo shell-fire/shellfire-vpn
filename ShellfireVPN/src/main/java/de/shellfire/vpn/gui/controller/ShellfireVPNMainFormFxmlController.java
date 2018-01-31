@@ -1,5 +1,6 @@
 package de.shellfire.vpn.gui.controller;
 
+import de.shellfire.vpn.Storage;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.ResourceBundle;
@@ -15,9 +16,25 @@ import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.gui.helper.TitiliumFont;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.proxy.ProxyConfig;
+import de.shellfire.vpn.types.ServerType;
 import de.shellfire.vpn.webservice.Vpn;
 import de.shellfire.vpn.webservice.WebService;
+import java.awt.AWTEvent;
+import java.awt.AWTException;
+import java.awt.Dimension;
+import java.awt.EventQueue;
+import java.awt.MenuItem;
+import java.awt.PopupMenu;
+import java.awt.SystemTray;
+import java.awt.Toolkit;
+import java.awt.TrayIcon;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
 import java.util.logging.Level;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -41,6 +58,10 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
   private static I18n i18n = VpnI18N.getI18n();
   private Controller controller;
 private WebService shellfireService;
+private MenuItem popupConnectItem;
+	private PopupMenu popup;
+        private TrayIcon trayIcon;
+        private StringBuffer typedStrings = new StringBuffer();
     @FXML
     private Pane leftMenuPane;
     @FXML
@@ -63,8 +84,6 @@ private WebService shellfireService;
     private ImageView mapBackgroundImageView;
     @FXML
     private Label mapHeaderLabel;
-    @FXML
-    private Label mapFooterLabelPane;
     @FXML
     private Pane streamsPane;
     @FXML
@@ -119,81 +138,47 @@ private WebService shellfireService;
     private ImageView productKeyImageView;
     @FXML
     private ImageView premiumInfoImageView;
-    @FXML
     private Label vpnTypeLabel;
-    @FXML
     private Label validUntilLabel;
     @FXML
-    private Label validUntilValue;
+    private Label vpnType;
+    @FXML
+    private Label serverListFooterLabel;
+    @FXML
+    private Label mapFooterLabel;
+    @FXML
+    private ImageView statusConnectionImageView;
 
     public ShellfireVPNMainFormFxmlController() {
     }
 
-  
-    public ShellfireVPNMainFormFxmlController(WebService service) throws VpnException {
-		if (!service.isLoggedIn()) {
-			throw new VpnException("ShellfireVPN Main Form required a logged in service. This should not happen!");
-		}
-
-		/*log.debug("ShellfireVPNMainForm starting up");
-		if (Util.isWindows()) {
-		  log.debug("Running on Windows " + Util.getOsVersion());
-		  
-		  if (Util.isVistaOrLater()) {
-		    log.debug("Running on Vista Or Later Version");
-		  } else {
-		    log.debug("Running on XP");
-		  }
-		  
-		} else {
-		  log.debug("Running on Mac OS X " + Util.getOsVersion());
-		}
-		
-		log.debug("System Architecture: " + Util.getArchitecture());
-		
-		this.shellfireService = service;
-		this.initController();
-
-		this.setUndecorated(true);
-		this.enableMouseMoveListener();
-
-		CustomLayout.register();
-		this.setFont(TitiliumFont.getFont());
-		this.loadIcons();
-		this.setLookAndFeel();
-
-		initComponents();
-		this.initTray();
-
-		this.initLayeredPaneSize();
-                */
-		
-		/*
-		this.initContent();
-		Storage.register(this);
-
-		this.initShortCuts();
-		this.initPremium();
-		this.initConnection();
-		
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		pack();
-		this.setLocationRelativeTo(null);
-		setVisible(true);
-                */
-	}
-
-    
     
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+            // setting the scaling factor to adjust sizes 
+                double scaleFactor = Util.getScalingFactor();
+		log.debug("ScalingFactor: " + scaleFactor);
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		double width = screenSize.getWidth();
 		
+		String size = "736";
+		if (width > 3000) {
+		  size = "1472";
+		}
+		
+		String langKey = VpnI18N.getLanguage().getKey();
+		log.debug("langKey: " + langKey);
+		
+		mySetIconImage("/icons/sfvpn2-idle-big.png");
+                
             // initializing images of the form
+                this.statusConnectionImageView.setId("src/main/resources/icons/status-unencrypted-width"+size+".gif");
 		this.connectoinBackgroundImageView.setImage(Util.getImageIconFX("src/main/resources/buttons/button-connect-idle.png"));
                 this.serverListBackgroundImage.setImage(Util.getImageIconFX("src/main/resources/buttons/button-serverlist-idle.png"));
                 this.mapBackgroundImageView.setImage(Util.getImageIconFX("src/main/resources/buttons/button-map-idle.png"));
                 this.streamsBackgroundImageView.setImage(Util.getImageIconFX("src/main/resources/buttons/button-usa-idle.png"));
                 this.globeConnectionImageView.setImage(Util.getImageIconFX("src/main/resources/icons/small-globe-disconnected.png"));
+                this.connectImageView.setId("/buttons/button-disconnect-" + langKey + ".gif");
                 
             // initializing text of the form 
             this.connectionStatusLabel.setText(i18n.tr("Verbindungsstatus"));
@@ -206,9 +191,9 @@ private WebService shellfireService;
             this.connectionHeaderLabel.setText(i18n.tr("Verbindung"));
             this.connectionFooter.setText(i18n.tr("Jetzt zu Shellfire VPN verbinden"));
             this.serverListHeaderLabel.setText(i18n.tr("Server Liste"));
-            //this.serverListFooter.setText(i18n.tr("Liste aller VPN Server anzeigen"));
+            this.serverListFooterLabel.setText(i18n.tr("Liste aller VPN Server anzeigen"));
             this.mapHeaderLabel.setText(i18n.tr("Karte"));
-            //this.mapFooterLabel.setText(i18n.tr("Zeigt Verschlüsselungsroute"));
+            this.mapFooterLabel.setText(i18n.tr("Zeigt Verschlüsselungsroute"));
             this.streamsHeaderLabel.setText(i18n.tr("Streams aus den USA"));
             this.streamsFooterLabel.setText(i18n.tr("Liste amerikanischer TV Streams"));
             
@@ -248,31 +233,33 @@ private WebService shellfireService;
 		this.shellfireService = service;
 		this.initController();
                     
-                /*
-		CustomLayout.register();
-		this.setFont(TitiliumFont.getFont());
-		this.loadIcons();
-		this.setLookAndFeel();
+                
+                // continue here, cursor
+		//CustomLayout.register();
+		//this.setFont(TitiliumFont.getFont());
+		//this.loadIcons();
+		//this.setLookAndFeel();
 
-		initComponents();
+		//initComponents();
 		this.initTray();
-
-		this.initLayeredPaneSize();
+                
+                //TODO
+		//this.initLayeredPaneSize();
                 
 		
 		
-		this.initContent();
+		//this.initContent();
 		Storage.register(this);
 
 		this.initShortCuts();
 		this.initPremium();
 		this.initConnection();
 		
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		pack();
-		this.setLocationRelativeTo(null);
-		setVisible(true);
-                */
+		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//pack();
+		//this.setLocationRelativeTo(null);
+		//setVisible(true);
+                this.application.getStage().show();
         }
 	
 	private final static HashMap<String, Image> mainIconMap = new HashMap<String, Image>() {
@@ -539,179 +526,239 @@ private WebService shellfireService;
 			break;
 		}
     }
-    
+    	private boolean isFreeAccount() {
+		return this.shellfireService.getVpn().getAccountType() == ServerType.Free;
+	}
     	private void setStateDisconnected()  
        {
-            /*
-	  log.debug("setStateDisconnected() - start");
-		enableSystemProxyIfProxyConfig();
-		this.hideConnectProgress();
-		this.jConnectButtonLabel.setIcon(new ImageIcon(buttonConnect));
-		this.jConnectButtonLabel1.setIcon(new ImageIcon(buttonConnect));
-		
-		this.jConnectButtonLabel.setEnabled(true);
-		this.jConnectButtonLabel1.setEnabled(true);
-		this.jLabelConnectionState.setText(i18n.tr("Nicht verbunden"));
-		mySetIconImage(iconDisconnected);
-		this.jConnectionStateIcon.setIcon(new ImageIcon(this.iconIdleSmall));
-		this.jConnectionStateImage.setIcon(new ImageIcon(this.iconEcncryptionInactive));
-		
-		
-		this.jShowOwnPosition.setEnabled(true);
-
-		boolean showMessage = false;
-		String message = "";
-		if (this.controller != null) {
-			switch (this.controller.getReasonForStateChange()) {
-			case PasswordWrong:
-				showMessage = true;
-				message = i18n.tr("Passwort Falsch");
-				break;
-			case NotEnoughPrivileges:
-				showMessage = true;
-				message = i18n.tr("Prozess wird ohne Administrator-Rechte ausgeführt.");
-				break;
-			case CertificateFailed:
-				showMessage = true;
-				message = i18n.tr("Unbekannter Zertifikate-Fehler");
-				break;
-			case AllTapInUse:
-				showMessage = true;
-				message = i18n.tr("Alle Tap-Geräte in Verwendung. Bitte alle openvpn.exe Prozesse im Task Manager schließen oder PC neu starten.");
-				break;
-			case DisconnectDetected:
-				showMessage = true;
-				message = i18n.tr("Verbindung wurde unterbrochen.");
-				break;
-			case OpenVpnNotFound:
-				showMessage = true;
-				message = i18n.tr("OpenVPN Installation wurde nicht gefunden. Bitte Shellfire VPN neu installieren.");
-				break;
-			case NoOpenVpnParameters:
-				showMessage = true;
-				message = i18n.tr("OpenVPN Startparameter konnten nicht geladen werden - Bitte überprüfe deine Internet-Verbindung.");
-				break;
-			case TapDriverTooOld:
-				showMessage = true;
-				message = i18n.tr("Der installierte Tap Treiber ist zu alt. Bitte installiere Shellfire VPN neu.");
-				break;
-      case TapDriverNotFound:
-        showMessage = true;
-        message = i18n.tr("Es wurde kein Tap Treiber installiert. Bitte installiere Shellfire VPN neu.");
-        break;
-      case TapDriverNotFoundPleaseRetry:
-        connectFromButton(true);
-        break;
-			case GatewayRedirectFailed:
-				showMessage = true;
-				message = i18n
-						.tr("Das Gateway konnte nicht umgeleitet werden. Bitte bei den TCP/IP Einstellungen der aktuellen Netzwerkverbindung ein Gateway einstellen.");
-				break;
-			case UnknownOpenVPNError:
-				showMessage = true;
-				message = i18n
-						.tr("Es ist ein unbekannter Fehler mit der VPN Verbindung aufgetreten. Bitte versuche einen Reboot und/oder Shellfire VPN neu zu installieren.");
-				break;
-
-			default:
-				break;
-			}
-			
-			log.debug("setStateDisconnected() - end");
-		}
-
-		if (showMessage) {
-			JOptionPane.showMessageDialog(null, message, "Fehler: Verbindung fehlgeschlagen", JOptionPane.ERROR_MESSAGE);
-
-			if (this.trayIcon != null) {
-				this.trayIcon.setImage(this.iconDisconnected);
-			}
-		} else {
-			if (this.trayIcon != null) {
-				this.trayIcon.setImage(this.iconIdle);
-			}
-		}
-
-		this.stopConnectedSinceTimer();
-
-		this.setNormalCursor();
-		this.updateOnlineHost();
-		this.mapController.updateMap();
-		popupConnectItem.setLabel(i18n.tr("Verbinden"));
-		popupConnectItem.setEnabled(true);
-		jServerListTable.setEnabled(true);
-		if (!ProxyConfig.isProxyEnabled()) {
-			this.jRadioUdp.setEnabled(true);
-		}
-		jRadioTcp.setEnabled(true);
-
-		jScrollPane.getViewport().setBackground(Color.white);
-
-		SwingWorker<Reason, Void> worker = new SwingWorker<Reason, Void>() {
-			protected Reason doInBackground() throws Exception {
-				Reason reasonForChange = controller.getReasonForStateChange();
-				return reasonForChange;
-			}
-
-			public void done() {
-				try {
-					Reason reasonForChange = get();
-					if (reasonForChange == Reason.DisconnectButtonPressed || reasonForChange == Reason.DisconnectDetected) {
-
-						showTrayMessageWithoutCallback(i18n.tr("Verbindung getrennt"),
-								i18n.tr("Shellfire VPN Verbindung getrennt. Deine Internet-Verbindung ist nicht mehr geschützt!"));
-					}
-				} catch (Exception e) {
-					Util.handleException(e);
-				}
-
-			}
-		};
-
-		worker.execute();
-
-	}
-	private void enableSystemProxyIfProxyConfig()  {
-            /*
-		if (ProxyConfig.isProxyEnabled()) {
-		  Client.enableSystemProxy();
-		}
-*/
+           
 	}
         
-        	private void loadIcons() {
-                    /*
-		this.iconIdleSmall = Util.getImageIcon("/icons/small-globe-disconnected.png").getImage();
-		this.iconIdle = Util.getImageIcon("/icons/sfvpn2-idle-big.png").getImage();
-		
-		this.iconConnectingSmall = Util.getImageIcon("/icons/small-globe-connecting.png").getImage();
-		this.iconConnecting = Util.getImageIcon("/icons/sfvpn2-connecting-big.png").getImage();
-		
-		this.iconConnectedSmall = Util.getImageIcon("/icons/small-globe-connected.png").getImage();
-		this.iconConnected = Util.getImageIcon("/icons/sfvpn2-connected-big.png").getImage();
-		
-		this.iconDisconnected = Util.getImageIcon("/icons/sfvpn2-disconnected-big.png").getImage();
-		
-		double scaleFactor = Util.getScalingFactor();
-		log.debug("ScalingFactor: " + scaleFactor);
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		double width = screenSize.getWidth();
-		
-		String size = "736";
-		if (width > 3000) {
-		  size = "1472";
+                
+     public void mySetIconImage (String imagePath){
+         this.application.getStage().getIcons().add(new Image(imagePath));
+     }
+     
+     	private void initTray() {
+		if (!Util.isWindows()) {
+			this.hideImageView.setVisible(false);
+
 		}
-		
-		this.iconEcncryptionActive = new javax.swing.ImageIcon(ShellfireVPNMainForm.class.getResource("/icons/status-encrypted-width"+size+".gif")).getImage();
-		this.iconEcncryptionInactive = new javax.swing.ImageIcon(ShellfireVPNMainForm.class.getResource("/icons/status-unencrypted-width"+size+".gif")).getImage();
-		
-		String langKey = VpnI18N.getLanguage().getKey();
-		log.debug("langKey: " + langKey);
-		this.buttonDisconnect = Util.getImageIcon("/buttons/button-disconnect-" + langKey + ".gif").getImage();
-		this.buttonConnect = Util.getImageIcon("/buttons/button-connect-" + langKey + ".gif").getImage();
-		
-		mySetIconImage(iconIdle);
-                */
+
+		if (SystemTray.isSupported()) {
+
+			SystemTray tray = SystemTray.getSystemTray();
+			Image image2 = new Image("src/main/resources/icons/sfvpn2-idle-big.png");
+                        BufferedImage image = SwingFXUtils.fromFXImage(image2, null);
+			ActionListener exitListener = new ActionListener() {
+
+				public void actionPerformed(ActionEvent e) {
+                                    // TODO
+					//exitHandler();
+				}
+			};
+
+			popup = new PopupMenu();
+			MenuItem defaultItem = new MenuItem(i18n.tr("Beenden"));
+			defaultItem.addActionListener(exitListener);
+
+			ActionListener nagListener = new ActionListener() {
+
+				
+                            @Override
+                            public void actionPerformed(ActionEvent e) {
+                                //TODO
+                                //showNagScreenWithoutTimer();
+                            }
+			};
+
+			MenuItem nagItem = new MenuItem(i18n.tr("Shellfire VPN Premium Infos"));
+			nagItem.addActionListener(nagListener);
+
+			ActionListener helpListener = new ActionListener() {
+
+				public void actionPerformed(ActionEvent e) {
+                                    //TODO
+					//openHelp();
+				}
+			};
+
+			MenuItem helpItem = new MenuItem(i18n.tr("Hilfe"));
+			helpItem.addActionListener(helpListener);
+
+			ActionListener popupConnectListener = new ActionListener() {
+
+				public void actionPerformed(ActionEvent e) {
+                                    // TODO
+					//connectFromButton(false);
+				}
+			};
+
+			popupConnectItem = new MenuItem(i18n.tr("Verbinden"));
+			popupConnectItem.addActionListener(popupConnectListener);
+
+			ActionListener statusListener = new ActionListener() {
+
+				public void actionPerformed(ActionEvent e) {
+					Util.openUrl(shellfireService.getUrlSuccesfulConnect());
+				}
+			};
+
+			MenuItem statusItem = new MenuItem(i18n.tr("Zeige VPN Status im Browser"));
+			statusItem.addActionListener(statusListener);
+
+			ActionListener openListener = new ActionListener() {
+
+				public void actionPerformed(ActionEvent e) {
+					setVisible(true);
+					toFront();
+                                        //TODO
+					//setState(Frame.NORMAL);
+
+					if (!Util.isWindows()) {
+						com.apple.eawt.Application app = com.apple.eawt.Application.getApplication();
+						app.requestForeground(true);
+					}
+				}
+			};
+
+			MenuItem openItem = new MenuItem(i18n.tr("Shellfire VPN in den Vordergrund"));
+			openItem.addActionListener(openListener);
+			popup = new PopupMenu();
+			popup.add(openItem);
+			popup.add(popupConnectItem);
+			popup.add(statusItem);
+			popup.add(helpItem);
+			popup.add(nagItem);
+			popup.add(defaultItem);
+
+			ActionListener actionListener = new ActionListener() {
+
+				public void actionPerformed(ActionEvent e) {
+					setVisible(true);
+					toFront();
+                                        //TODO
+					//setState(Frame.NORMAL);
+				}
+			};
+
+			MouseListener mouseListener = new MouseListener() {
+				//@Override
+				public void mouseClicked(MouseEvent e) {
+					if (e.getClickCount() == 2) {
+						setVisible(true);
+						toFront();
+                                                //TODO
+						//setState(Frame.NORMAL);
+
+						if (!Util.isWindows()) {
+							com.apple.eawt.Application app = com.apple.eawt.Application.getApplication();
+							app.requestForeground(true);
+						}
+					}
+
+				}
+                                /*
+				public void mouseReleased(MouseEvent e) {
+				}
+
+				public void mouseEntered(MouseEvent e) {
+				}
+
+				public void mouseExited(MouseEvent e) {
+				}
+
+				public void mousePressed(MouseEvent e) {
+				}*/
+
+                            @Override
+                            public void mouseClicked(java.awt.event.MouseEvent e) {
+                                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                            }
+
+                            @Override
+                            public void mousePressed(java.awt.event.MouseEvent e) {
+                                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                            }
+
+                            @Override
+                            public void mouseReleased(java.awt.event.MouseEvent e) {
+                                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                            }
+
+                            @Override
+                            public void mouseEntered(java.awt.event.MouseEvent e) {
+                                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                            }
+
+                            @Override
+                            public void mouseExited(java.awt.event.MouseEvent e) {
+                                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                            }
+
+			};
+
+			trayIcon = new TrayIcon(image, "Shellfire VPN", popup);
+			trayIcon.setImageAutoSize(true);
+			trayIcon.addActionListener(actionListener);
+			trayIcon.addMouseListener(mouseListener);
+                        
+                        //TODO
+			//startNagScreenTimer();
+
+			try {
+				tray.add(trayIcon);
+			} catch (AWTException e) {
+				System.err.println("TrayIcon could not be added.");
+			}
+                        
+                        //TODO
+			//pack();
+		}
 	}
 
+	private void initShortCuts() {
+		EventQueue ev = Toolkit.getDefaultToolkit().getSystemEventQueue();
+
+		ev.push(new EventQueue() {
+
+			protected void dispatchEvent(AWTEvent event) {
+				if (event instanceof KeyEvent) {
+
+					final KeyEvent oKeyEvent = (KeyEvent) event;
+					if (oKeyEvent.getID() == KeyEvent.KEY_PRESSED) {
+						final int iKeyCode = oKeyEvent.getKeyCode();
+						appendKey((char) iKeyCode);
+					}
+				}
+
+				super.dispatchEvent(event);
+			}
+		});
+
+	}
+        	private void appendKey(char c) {
+		this.typedStrings.append(c);
+		if (typedStrings.toString().toLowerCase().endsWith("showconsole")) {
+                    //TODO
+			//this.initConsole();
+		}
+	}
+                
+                	private void initPremium() {
+		if (!this.isFreeAccount()) {
+			this.premiumInfoImageView.setVisible(false);
+			this.connectImageView.setVisible(false);
+		}
+		this.productKeyImageView.setVisible(false);
+		this.productKeyImageView.setVisible(false);
+	}
+                        
+      private void initConnection() {
+		new Thread() {
+			public void run() {
+          controller.getCurrentConnectionState();
+			}
+		}.start();
+	}
 }
