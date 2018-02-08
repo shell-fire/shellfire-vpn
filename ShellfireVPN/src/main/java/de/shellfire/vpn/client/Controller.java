@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.gui.ShellfireVPNMainForm;
+import de.shellfire.vpn.gui.controller.ShellfireVPNMainFormFxmlController;
 import de.shellfire.vpn.types.VpnProtocol;
 import de.shellfire.vpn.types.ProductType;
 import de.shellfire.vpn.types.Reason;
@@ -25,6 +26,7 @@ public class Controller {
   private static Logger log = Util.getLogger(Controller.class.getCanonicalName());
 	private static Controller instance;
 	private final ShellfireVPNMainForm view;
+        private final ShellfireVPNMainFormFxmlController viewFX;
 	private final WebService service;
 	private Client client;
 	private LinkedList<ConnectionStateListener> connectionStateListeners = new LinkedList<ConnectionStateListener>();
@@ -36,21 +38,43 @@ public class Controller {
 	private Controller(ShellfireVPNMainForm view, WebService service) {
 		this.view = view;
 		this.service = service;
+                // If this is loaded, we are using Swing and hence FX controller is not needed
+                this.viewFX = null;
 	}
 
+    private Controller(ShellfireVPNMainFormFxmlController viewFX, WebService service) {
+        // If this is loaded, we are using JavaFx and hence Swing is not needed
+        this.view = null;
+        this.viewFX = viewFX;
+        this.service = service;
+    }
+
+        
 	public static Controller getInstance(ShellfireVPNMainForm view, WebService service) {
 		if (instance == null) {
 			instance = new Controller(view, service);
 		}
 		return instance;
 	}
-	
+	public static Controller getInstanceFX(ShellfireVPNMainFormFxmlController viewFX, WebService service) {
+		if (instance == null) {
+			instance = new Controller(viewFX, service);
+		}
+		return instance;
+	}
 	public void connect(Server server, Reason reason) {
 		VpnProtocol procotol = this.view.getSelectedProtocol();
 
 		this.connect(server, procotol, reason);
 	}
+        
+        public void connectFX(Server server, Reason reason) {
+            // Continue from here after MainForm UI Modelling
+		//VpnProtocol procotol = this.viewFX.getSelectedProtocol();
 
+		//this.connect(server, procotol, reason);
+	}
+        
 	public void connect(Server server, VpnProtocol protocol, Reason reason) {
 		log.debug("connect(Server, Protocol, Reason) - setting connecting");
 		connectionStateChanged(ConnectionState.Connecting, reason);

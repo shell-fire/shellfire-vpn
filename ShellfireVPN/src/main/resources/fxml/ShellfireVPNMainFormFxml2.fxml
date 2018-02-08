@@ -7,7 +7,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane  maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="674.0" prefWidth="1073.0" style="-fx-background-color: rgb(64,69,73);" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.ShellfireVPNMainFormFxmlController">
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="674.0" prefWidth="1073.0" style="-fx-background-color: rgb(64,69,73);" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.ShellfireVPNMainFormFxmlController">
    <children>
       <AnchorPane layoutX="4.0" prefHeight="515.0" prefWidth="668.0" AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="4.0">
          <opaqueInsets>
@@ -50,7 +50,7 @@
                               <Font size="16.0" />
                            </font>
                         </Label>
-                        <Label fx:id="serverListFooterLabel" graphicTextGap="2.0" layoutX="45.0" layoutY="36.0" prefHeight="27.0" prefWidth="199.0" text="Show list of all VPN servers" textFill="#f0f0f0">
+                        <Label graphicTextGap="2.0" layoutX="45.0" layoutY="36.0" prefHeight="27.0" prefWidth="199.0" text="Show list of all VPN servers" textFill="#f0f0f0">
                            <font>
                               <Font size="15.0" />
                            </font>
@@ -72,7 +72,7 @@
                               <Font size="16.0" />
                            </font>
                         </Label>
-                        <Label fx:id="mapFooterLabel" graphicTextGap="2.0" layoutX="45.0" layoutY="36.0" prefHeight="27.0" prefWidth="199.0" text="Show encryption route" textFill="#f0f0f0">
+                        <Label fx:id="mapFooterLabelPane" graphicTextGap="2.0" layoutX="45.0" layoutY="36.0" prefHeight="27.0" prefWidth="199.0" text="Show encryption route" textFill="#f0f0f0">
                            <font>
                               <Font size="15.0" />
                            </font>
@@ -153,21 +153,23 @@
                               <Image url="@../icons/small-globe-disconnected.png" />
                            </image>
                         </ImageView>
-                        <Label fx:id="connectionStatusLabel" layoutX="138.0" layoutY="14.0" text="Verbindungsstatus" />
+                        <Label fx:id="connectionStatusLabel" layoutX="120.0" layoutY="14.0" text="Verbindungsstatus" />
                         <Label fx:id="connectionStatusValue" layoutX="138.0" layoutY="50.0" text="Getrennt" />
-                        <Label fx:id="connectedSinceLabel" layoutX="279.0" layoutY="14.0" text="Verbunden seit:" />
-                        <Label fx:id="onlineIpLabel" layoutX="420.0" layoutY="14.0" text="Online IP:" />
-                        <Label fx:id="connectedSinceValue" layoutX="289.0" layoutY="50.0" text="(nicht verbunden)" />
-                        <Label fx:id="onlineIpValue" layoutX="420.0" layoutY="50.0" text="(IP)" />
-                        <Label fx:id="vpnIdLabel" layoutX="517.0" layoutY="14.0" text="VPN Id:" />
-                        <Label fx:id="vpnType" layoutX="590.0" layoutY="14.0" text="VPN Typ:" />
-                        <Label fx:id="vpnIdValue" layoutX="518.0" layoutY="50.0" text="(vpnId)" />
-                        <Label fx:id="vpnTypeValue" layoutX="590.0" layoutY="50.0" text="(vpnTyp)" />
+                        <Label fx:id="connectedSinceLabel" layoutX="259.0" layoutY="14.0" text="Verbunden seit:" />
+                        <Label fx:id="onlineIpLabel" layoutX="383.0" layoutY="14.0" text="Online IP:" />
+                        <Label fx:id="connectedSinceValue" layoutX="253.0" layoutY="50.0" text="(nicht verbunden)" />
+                        <Label fx:id="onlineIpValue" layoutX="400.0" layoutY="50.0" text="(IP)" />
+                        <Label fx:id="vpnIdLabel" layoutX="478.0" layoutY="14.0" text="VPN Id:" />
+                        <Label fx:id="vpnTypeLabel" layoutX="566.0" layoutY="14.0" text="VPN Typ:" />
+                        <Label fx:id="vpnIdValue" layoutX="479.0" layoutY="50.0" text="(vpnId)" />
+                        <Label fx:id="vpnTypeValue" layoutX="567.0" layoutY="50.0" text="(vpnTyp)" />
+                        <Label fx:id="validUntilLabel" ellipsisString="Valid Until" layoutX="660.0" layoutY="14.0" prefHeight="17.0" prefWidth="121.0" text="Gültig bis:" />
+                        <Label fx:id="validUntilValue" ellipsisString="Valid Unti value" layoutX="660.0" layoutY="50.0" prefHeight="17.0" prefWidth="121.0" text="(vpnValidUntil)" />
                      </children>
                   </Pane>
                   <Pane fx:id="contentDetailsPane" layoutX="2.0" layoutY="112.0" prefHeight="518.0" prefWidth="817.0" style="-fx-background-color: rgb(240,240,240);" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="1.0">
                      <children>
-                        <ImageView fx:id="statusConnectionImageView" fitHeight="435.0" fitWidth="800.0" layoutX="5.0" layoutY="6.0">
+                        <ImageView fitHeight="435.0" fitWidth="800.0" layoutX="5.0" layoutY="6.0">
                            <image>
                               <Image url="@../icons/status-unencrypted-width736.gif" />
                            </image>

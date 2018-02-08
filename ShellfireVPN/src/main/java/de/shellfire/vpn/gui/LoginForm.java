@@ -921,6 +921,7 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
                             if (!dia.isVisible()) {
                                 //setVisible(false);
                                 dispose();
+                                //cursor here
                                 mainForm = new ShellfireVPNMainForm(service);
                                 boolean vis = true;
                                 if (minimize
