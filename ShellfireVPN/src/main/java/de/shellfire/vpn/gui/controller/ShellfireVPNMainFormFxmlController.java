@@ -167,19 +167,19 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
         String langKey = VpnI18N.getLanguage().getKey();
         log.debug("langKey: " + langKey);
-        /*
-        mySetIconImage("/icons/sfvpn2-idle-big.png");
-
-        // initializing images of the form
-        this.statusConnectionImageView.setId("/icons/status-unencrypted-width" + size + ".gif");
-        this.connectoinBackgroundImageView.setImage(Util.getImageIconFX("/buttons/button-connect-idle.png"));
-        this.serverListBackgroundImage.setImage(Util.getImageIconFX("/buttons/button-serverlist-idle.png"));
-        this.mapBackgroundImageView.setImage(Util.getImageIconFX("/buttons/button-map-idle.png"));
-        this.streamsBackgroundImageView.setImage(Util.getImageIconFX("/buttons/button-usa-idle.png"));
-        this.globeConnectionImageView.setImage(Util.getImageIconFX("/icons/small-globe-disconnected.png"));
-        this.connectImageView.setId("/buttons/button-disconnect-" + langKey + ".gif");
         
-         */
+        mySetIconImage("/icons/sfvpn2-idle-big.png");
+        String baseImageUrl = "src/main/resources";
+        // initializing images of the form
+        this.statusConnectionImageView.setId(baseImageUrl + "/icons/status-unencrypted-width" + size + ".gif");
+        this.connectoinBackgroundImageView.setImage(Util.getImageIconFX(baseImageUrl + "/buttons/button-connect-idle.png"));
+        this.serverListBackgroundImage.setImage(Util.getImageIconFX(baseImageUrl + "/buttons/button-serverlist-idle.png"));
+        this.mapBackgroundImageView.setImage(Util.getImageIconFX(baseImageUrl + "/buttons/button-map-idle.png"));
+        this.streamsBackgroundImageView.setImage(Util.getImageIconFX(baseImageUrl + "/buttons/button-usa-idle.png"));
+        this.globeConnectionImageView.setImage(Util.getImageIconFX(baseImageUrl + "/icons/small-globe-disconnected.png"));
+        this.connectImageView.setId(baseImageUrl + "/buttons/button-disconnect-" + langKey + ".gif");
+        
+         
         // initializing text of the form 
         this.connectionStatusLabel.setText(i18n.tr("Verbindungsstatus"));
         this.connectedSinceLabel.setText(i18n.tr("Verbunden seit:"));
@@ -233,7 +233,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
         this.shellfireService = service;
         this.initController();
-        this.application.getStage().show();
+        //this.application.getStage().show();
         /*
         // continue here, cursor
         //CustomLayout.register();
@@ -241,6 +241,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         //this.loadIcons();
         //this.setLookAndFeel();
         //initComponents();
+        */
         this.initTray();
 
         //TODO
@@ -256,7 +257,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         //pack();
         //this.setLocationRelativeTo(null);
         //setVisible(true);
-        this.application.getStage().show(); */
+        this.application.getStage().show(); 
     }
 
     private final static HashMap<String, Image> mainIconMap = new HashMap<String, Image>() {
@@ -546,7 +547,8 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         if (SystemTray.isSupported()) {
 
             SystemTray tray = SystemTray.getSystemTray();
-            Image image2 = new Image("src/main/resources/icons/sfvpn2-idle-big.png");
+           // Image image2 = new Image("src/main/resources/icons/sfvpn2-idle-big.png");
+           Image image2 = new Image("/icons/sfvpn2-idle-big.png");
             BufferedImage image = SwingFXUtils.fromFXImage(image2, null);
             ActionListener exitListener = new ActionListener() {
 
