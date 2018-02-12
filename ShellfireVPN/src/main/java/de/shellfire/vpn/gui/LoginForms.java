@@ -11,7 +11,6 @@ import org.xnap.commons.i18n.I18n;
 
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.client.ServiceTools;
-import de.shellfire.vpn.exception.VpnException;
 import de.shellfire.vpn.gui.controller.LicenseAcceptanceController;
 import de.shellfire.vpn.gui.controller.LoginController;
 import de.shellfire.vpn.gui.controller.ProgressDialogController;
@@ -21,17 +20,14 @@ import de.shellfire.vpn.gui.controller.VpnSelectDialogController;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.proxy.ProxyConfig;
 import de.shellfire.vpn.updater.Updater;
-import de.shellfire.vpn.webservice.WebService;
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.AnchorPane;
@@ -47,7 +43,7 @@ public class LoginForms extends Application {
     public RegisterFormController registerController;
     public LicenseAcceptanceController licenceAcceptanceController;
     public static VpnSelectDialogController vpnSelectController;
-    public static ShellfireVPNMainFormFxmlController shellFireMainController;
+    public ShellfireVPNMainFormFxmlController shellFireMainController;
     private boolean minimize;
     public static LoginController instance;
     private static I18n i18n = VpnI18N.getI18n();
@@ -183,12 +179,12 @@ public class LoginForms extends Application {
         } catch (Exception ex) {
             log.debug("could not load vpnSelect fxml\n" + ex.getMessage());
         }
-        
+
     }
 
     public void loadShellFireMainController() {
         log.debug("In the ShellFire Main controller");
-                try {
+        try {
             this.shellFireMainController = (ShellfireVPNMainFormFxmlController) replaceSceneContent("ShellfireVPNMainFormFxml.fxml");
             this.shellFireMainController.setApp(this);
 
@@ -242,13 +238,12 @@ public class LoginForms extends Application {
             }
         });
         Scene scene = new Scene(page);
-        stage.setScene(null);
         stage.setScene(scene);
         stage.sizeToScene();
         return (Initializable) loader.getController();
     }
-    
-        public Initializable replaceSceneContentWithSameRoot (String fxml) throws Exception {
+
+    public Initializable replaceSceneContentWithSameRoot(String fxml) throws Exception {
         FXMLLoader loader = new FXMLLoader(LoginForms.class.getClassLoader().getResource(fxml));
         // InputStream in = LoginForms.class.getResourceAsStream(fxml);
         //loader.setBuilderFactory(new JavaFXBuilderFactory());
@@ -256,9 +251,9 @@ public class LoginForms extends Application {
         System.out.println("Loacation of loader is " + loader.getLocation());
         try {
             System.out.println("trying to load anchor pane for " + fxml);
-           //Parent root = (Parent) loader.load();
-           loader.setController(shellFireMainController);
-           loader.setRoot(loader);
+            //Parent root = (Parent) loader.load();
+            loader.setController(shellFireMainController);
+            loader.setRoot(loader);
             System.out.println("Location of Controller is " + loader.getController());
 
         } catch (Exception ex) {

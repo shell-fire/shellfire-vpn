@@ -25,11 +25,7 @@ import java.util.LinkedList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -42,7 +38,6 @@ import javafx.scene.layout.Pane;
 
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import javafx.stage.Stage;
 
 public class VpnSelectDialogController extends AnchorPane implements Initializable {
 
@@ -130,21 +125,22 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
         rememberSelectionIfDesired(selectedItem.getVpn());
 
         this.shellfireService.selectVpn(selectedItem.getVpn());
-        //this.setVisible(false);
-        //this.application.getStage().hide();
-        
-        Parent mainFormParent = FXMLLoader.load(getClass().getResource("/fxml/ShellfireVPNMainFormFxml.fxml"));
+       /* FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ShellfireVPNMainFormFxml.fxml"));
+        log.debug("Resource is found in: " +loader.getLocation());
+        Parent mainFormParent = (Parent)loader.load();
+        ShellfireVPNMainFormFxmlController mainFormController = loader.<ShellfireVPNMainFormFxmlController>getController();
+        mainFormController.echoMessage();
         Scene mainFormScene = new Scene(mainFormParent);
         Stage mainFormStage = (Stage)((Node)event.getSource()).getScene().getWindow();
-       // this.application.shellFireMainController = mainFormParent.getC
+       this.application.shellFireMainController = mainFormController;
         mainFormStage.setScene(mainFormScene);
-        this.application.setStage(mainFormStage);
+        mainFormStage.show();
+        */
+        this.application.loadShellFireMainController();
+        
         this.application.getStage().show();
-        //this.application.loadShellFireMainController();
         log.debug("Testing APP mainForm " + this.application.shellFireMainController.getId());
-        this.application.getStage().show();
-        //this.application.shellFireMainController.setSerciceAndInitialize(this.shellfireService);
-        //mainForm.setVisible(true);
+        this.application.shellFireMainController.setSerciceAndInitialize(this.shellfireService);
         
         //mainForm.afterLogin(autoConnect);
         

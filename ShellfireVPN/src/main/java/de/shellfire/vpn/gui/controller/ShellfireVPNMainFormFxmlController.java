@@ -179,7 +179,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         this.globeConnectionImageView.setImage(Util.getImageIconFX("/icons/small-globe-disconnected.png"));
         this.connectImageView.setId("/buttons/button-disconnect-" + langKey + ".gif");
         
-        */
+         */
         // initializing text of the form 
         this.connectionStatusLabel.setText(i18n.tr("Verbindungsstatus"));
         this.connectedSinceLabel.setText(i18n.tr("Verbunden seit:"));
@@ -668,7 +668,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
 				public void mousePressed(MouseEvent e) {
 				}*/
-
                 @Override
                 public void mouseClicked(java.awt.event.MouseEvent e) {
                     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -759,8 +758,5 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
             }
         }.start();
     }
-    
-    public static void loadController(){
-        
-    }
+
 }

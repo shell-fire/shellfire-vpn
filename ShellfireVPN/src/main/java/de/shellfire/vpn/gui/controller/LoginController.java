@@ -16,10 +16,8 @@ import org.xnap.commons.i18n.I18n;
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.VpnProperties;
 import de.shellfire.vpn.client.Client;
-import de.shellfire.vpn.exception.VpnException;
 import de.shellfire.vpn.gui.CanContinueAfterBackEndAvailableFX;
 import de.shellfire.vpn.gui.LoginForms;
-import de.shellfire.vpn.gui.controller.ShellfireVPNMainFormFxmlController;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.service.CryptFactory;
 import de.shellfire.vpn.types.ServerType;
@@ -153,7 +151,28 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
                             this.application.vpnSelectController.setService(this.service);
                             this.application.vpnSelectController.setAutoConnect(fAutoconnect.isSelected());
                             int rememberedVpnSelection = this.application.vpnSelectController.rememberedVpnSelection();
+                           /* FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/VpnSelectDialog.fxml"));
+                        log.debug("Resource is found in: " +loader.getLocation());
+                        //ShellfireVPNMainFormFxmlController mainFormController = new ShellfireVPNMainFormFxmlController();
+                        //loader.setController(mainFormController);
+                       
+                        Parent mainFormParent;
+                            try {
+                                mainFormParent = (Parent)loader.load();
+                                Scene mainFormScene = new Scene(mainFormParent);
+                                 VpnSelectDialogController vpnController = loader.<VpnSelectDialogController>getController();
+                        vpnController.setService(this.service);
+                         vpnController.setAutoConnect(fAutoconnect.isSelected());
+                        vpnController.echoMessage("VPN Controller instace successfully created");
+                        Stage mainFormStage = (Stage)((Node)event.getSource()).getScene().getWindow();
 
+                        mainFormStage.setScene(mainFormScene);
+                        mainFormStage.show();
+                            } catch (IOException ex) {
+                                log.debug("LoginController Message: " + ex.getMessage());
+                            }
+                        
+                           int rememberedVpnSelection = 0;*/
                             boolean selectionRequired = service.vpnSelectionRequired();
 
                             if (selectionRequired && rememberedVpnSelection == 0) {
