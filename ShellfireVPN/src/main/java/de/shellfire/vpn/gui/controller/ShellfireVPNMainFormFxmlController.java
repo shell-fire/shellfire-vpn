@@ -36,6 +36,7 @@ import java.awt.image.BufferedImage;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.image.Image;
@@ -305,10 +306,12 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
     @FXML
     private void handleConnectionPaneMouseExited(MouseEvent event) {
+        this.application.getStage().getScene().setCursor(Cursor.DEFAULT);
     }
 
     @FXML
     private void handleConnectionPaneMouseEntered(MouseEvent event) {
+        this.application.getStage().getScene().setCursor(Cursor.HAND);
     }
 
     @FXML
@@ -321,10 +324,12 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
     @FXML
     private void handleServerListPaneMouseExited(MouseEvent event) {
+        this.application.getStage().getScene().setCursor(Cursor.DEFAULT);
     }
 
     @FXML
     private void handleServerListPaneMouseEntered(MouseEvent event) {
+        this.application.getStage().getScene().setCursor(Cursor.HAND);
     }
 
     @FXML
