@@ -6,7 +6,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="serverListAnchorPane" prefHeight="564.0" prefWidth="635.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:id="serverListAnchorPane" prefHeight="564.0" prefWidth="635.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.ServerListSubviewController">
    <children>
       <TableView fx:id="serverListTableView" layoutX="3.0" layoutY="50.0" prefHeight="382.0" prefWidth="629.0" AnchorPane.leftAnchor="1.0" AnchorPane.topAnchor="50.0">
         <columns>

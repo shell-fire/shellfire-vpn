@@ -7,7 +7,7 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane  maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="674.0" prefWidth="1073.0" style="-fx-background-color: rgb(64,69,73);" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.ShellfireVPNMainFormFxmlController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="674.0" prefWidth="1073.0" style="-fx-background-color: rgb(64,69,73);" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.ShellfireVPNMainFormFxmlController">
    <children>
       <AnchorPane layoutX="4.0" prefHeight="515.0" prefWidth="668.0" AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="4.0">
          <opaqueInsets>
@@ -165,29 +165,8 @@
                         <Label fx:id="vpnTypeValue" layoutX="590.0" layoutY="50.0" text="(vpnTyp)" />
                      </children>
                   </Pane>
-                  <Pane fx:id="contentDetailsPane" layoutX="2.0" layoutY="112.0" prefHeight="518.0" prefWidth="817.0" style="-fx-background-color: rgb(240,240,240);" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="1.0">
-                     <children>
-                        <ImageView fx:id="statusConnectionImageView" fitHeight="435.0" fitWidth="800.0" layoutX="5.0" layoutY="6.0">
-                           <image>
-                              <Image url="@../icons/status-unencrypted-width736.gif" />
-                           </image>
-                        </ImageView>
-                        <ImageView fx:id="connectImageView" fitHeight="46.0" fitWidth="200.0" layoutX="24.0" layoutY="452.0" onContextMenuRequested="#handleConnectImageViewContext" onMouseClicked="#handleConnectImageViewClicked" onMouseEntered="#handleConnectImageViewMouseEntered" onMouseExited="#handleConnectImageViewMouseExited">
-                           <image>
-                              <Image url="@../buttons/button-connect-en.gif" />
-                           </image>
-                        </ImageView>
-                        <ImageView fx:id="productKeyImageView" fitHeight="46.0" fitWidth="248.0" layoutX="249.0" layoutY="454.0" onContextMenuRequested="#handleProductKeyImageViewContext" onMouseClicked="#handleProductKeyImageViewClicked" onMouseEntered="#handleProductKeyImageViewMouseEntered" onMouseExited="#handleProductKeyImageViewMouseExited">
-                           <image>
-                              <Image url="@../buttons/button-serial-en.gif" />
-                           </image>
-                        </ImageView>
-                        <ImageView fx:id="premiumInfoImageView" fitHeight="46.0" fitWidth="240.0" layoutX="521.0" layoutY="453.0" onContextMenuRequested="#handlePremiumInfoImageViewContext" onMouseClicked="#handlePremiumInfoImageViewClicked" onMouseEntered="#handlePremiumInfoImageViewMouseEntered" onMouseExited="#handlePremiumInfoImageViewMouseExited">
-                           <image>
-                              <Image url="@../buttons/button-premium-infos.gif" />
-                           </image>
-                        </ImageView>
-                     </children>
+                  <Pane fx:id="contentDetailsPane" layoutX="2.0" layoutY="112.0" prefHeight="518.0" prefWidth="817.0" style="-fx-background-color: rgb(240,240,240);" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="1.0" >
+                     <fx:include fx:id="main_content" source="connection_subview.fxml"/>
                   </Pane>
                </children>
             </AnchorPane>
