@@ -33,6 +33,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
+import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -44,6 +45,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.LocaleChangeEvent;
@@ -62,6 +64,8 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     private PopupMenu popup;
     private TrayIcon trayIcon;
     private StringBuffer typedStrings = new StringBuffer();
+    
+    ConnectionSubviewController connectionSubviewController  = null ; 
     @FXML
     private Pane leftMenuPane;
     @FXML
@@ -132,12 +136,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     private Label vpnTypeValue;
     @FXML
     private Pane contentDetailsPane;
-    @FXML
-    private ImageView connectImageView;
-    @FXML
-    private ImageView productKeyImageView;
-    @FXML
-    private ImageView premiumInfoImageView;
     //private Label vpnTypeLabel;
     //private Label validUntilLabel;
     @FXML
@@ -146,8 +144,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     private Label serverListFooterLabel;
     @FXML
     private Label mapFooterLabel;
-    @FXML
-    private ImageView statusConnectionImageView;
 
     public ShellfireVPNMainFormFxmlController() {
         log.debug("No argumenent controller of shellfire has been called");
@@ -172,13 +168,11 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         mySetIconImage("/icons/sfvpn2-idle-big.png");
         String baseImageUrl = "src/main/resources";
         // initializing images of the form
-        this.statusConnectionImageView.setId(baseImageUrl + "/icons/status-unencrypted-width" + size + ".gif");
         this.connectoinBackgroundImageView.setImage(Util.getImageIconFX(baseImageUrl + "/buttons/button-connect-idle.png"));
         this.serverListBackgroundImage.setImage(Util.getImageIconFX(baseImageUrl + "/buttons/button-serverlist-idle.png"));
         this.mapBackgroundImageView.setImage(Util.getImageIconFX(baseImageUrl + "/buttons/button-map-idle.png"));
         this.streamsBackgroundImageView.setImage(Util.getImageIconFX(baseImageUrl + "/buttons/button-usa-idle.png"));
         this.globeConnectionImageView.setImage(Util.getImageIconFX(baseImageUrl + "/icons/small-globe-disconnected.png"));
-        this.connectImageView.setId(baseImageUrl + "/buttons/button-disconnect-" + langKey + ".gif");
         
          
         // initializing text of the form 
@@ -251,7 +245,8 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         Storage.register(this);
 
         this.initShortCuts();
-        this.initPremium();
+        //TODO uncomment initPrimium and add corresponding logic
+        //this.initPremium();
         this.initConnection();
 
         //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -342,10 +337,12 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
     @FXML
     private void handleMapPaneExited(MouseEvent event) {
+        this.application.getStage().getScene().setCursor(Cursor.DEFAULT);
     }
 
     @FXML
     private void handleMapPaneEntered(MouseEvent event) {
+        this.application.getStage().getScene().setCursor(Cursor.HAND);
     }
 
     @FXML
@@ -358,10 +355,12 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
     @FXML
     private void handleStreamsPaneMouseExited(MouseEvent event) {
+        this.application.getStage().getScene().setCursor(Cursor.DEFAULT);
     }
 
     @FXML
     private void handleStreamsPaneMouseEntered(MouseEvent event) {
+        this.application.getStage().getScene().setCursor(Cursor.HAND);
     }
 
     @FXML
@@ -374,10 +373,12 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
     @FXML
     private void handleHelpImageViewMouseExited(MouseEvent event) {
+        this.application.getStage().getScene().setCursor(Cursor.DEFAULT);
     }
 
     @FXML
     private void handleHelpImageViewMouseEntered(MouseEvent event) {
+        this.application.getStage().getScene().setCursor(Cursor.HAND);
     }
 
     @FXML
@@ -390,10 +391,12 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
     @FXML
     private void handleSettingsImageViewMouseExited(MouseEvent event) {
+        this.application.getStage().getScene().setCursor(Cursor.DEFAULT);
     }
 
     @FXML
     private void handleSettingsImageViewMouseEntered(MouseEvent event) {
+        this.application.getStage().getScene().setCursor(Cursor.HAND);
     }
 
     @FXML
@@ -406,10 +409,12 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
     @FXML
     private void handleHideImageViewExited(MouseEvent event) {
+        this.application.getStage().getScene().setCursor(Cursor.DEFAULT);
     }
 
     @FXML
     private void handleHideImageViewEntered(MouseEvent event) {
+        this.application.getStage().getScene().setCursor(Cursor.HAND);
     }
 
     @FXML
@@ -422,10 +427,12 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
     @FXML
     private void handleMinimizeImageViewExited(MouseEvent event) {
+        this.application.getStage().getScene().setCursor(Cursor.DEFAULT);
     }
 
     @FXML
     private void handleMinimizeImageViewEntered(MouseEvent event) {
+        this.application.getStage().getScene().setCursor(Cursor.HAND);
     }
 
     @FXML
@@ -434,14 +441,17 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
     @FXML
     private void handleMinimizeImageViewClicked(MouseEvent event) {
+        ((Stage)((ImageView)event.getSource()).getScene().getWindow()).setIconified(true);
     }
 
     @FXML
     private void handleExitImageViewMouseExited(MouseEvent event) {
+        this.application.getStage().getScene().setCursor(Cursor.DEFAULT);
     }
 
     @FXML
     private void handleExitImageViewMouseEntered(MouseEvent event) {
+        this.application.getStage().getScene().setCursor(Cursor.HAND);
     }
 
     @FXML
@@ -450,55 +460,35 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
     @FXML
     private void handleExitImageViewClicked(MouseEvent event) {
+        Platform.exit();
     }
 
-    @FXML
     private void handleConnectImageViewMouseExited(MouseEvent event) {
+        this.application.getStage().getScene().setCursor(Cursor.DEFAULT);
     }
 
-    @FXML
     private void handleConnectImageViewMouseEntered(MouseEvent event) {
+        this.application.getStage().getScene().setCursor(Cursor.HAND);
     }
 
-    @FXML
-    private void handleConnectImageViewContext(ContextMenuEvent event) {
-    }
 
-    @FXML
-    private void handleConnectImageViewClicked(MouseEvent event) {
-    }
-
-    @FXML
     private void handleProductKeyImageViewMouseExited(MouseEvent event) {
+        this.application.getStage().getScene().setCursor(Cursor.DEFAULT);
     }
 
-    @FXML
     private void handleProductKeyImageViewMouseEntered(MouseEvent event) {
+        this.application.getStage().getScene().setCursor(Cursor.HAND);
     }
 
-    @FXML
-    private void handleProductKeyImageViewContext(ContextMenuEvent event) {
-    }
 
-    @FXML
-    private void handleProductKeyImageViewClicked(MouseEvent event) {
-    }
-
-    @FXML
     private void handlePremiumInfoImageViewMouseExited(MouseEvent event) {
+        this.application.getStage().getScene().setCursor(Cursor.DEFAULT);
     }
 
-    @FXML
     private void handlePremiumInfoImageViewMouseEntered(MouseEvent event) {
+        this.application.getStage().getScene().setCursor(Cursor.HAND);
     }
 
-    @FXML
-    private void handlePremiumInfoImageViewContext(ContextMenuEvent event) {
-    }
-
-    @FXML
-    private void handlePremiumInfoImageViewClicked(MouseEvent event) {
-    }
 
     private void initController() {
         if (this.controller == null) {
@@ -749,14 +739,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         }
     }
 
-    private void initPremium() {
-        if (!this.isFreeAccount()) {
-            this.premiumInfoImageView.setVisible(false);
-            this.connectImageView.setVisible(false);
-        }
-        this.productKeyImageView.setVisible(false);
-        this.productKeyImageView.setVisible(false);
-    }
+
 
     private void initConnection() {
         new Thread() {
