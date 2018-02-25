@@ -166,7 +166,7 @@
                      </children>
                   </Pane>
                   <Pane fx:id="contentDetailsPane" layoutX="2.0" layoutY="112.0" prefHeight="518.0" prefWidth="817.0" style="-fx-background-color: rgb(240,240,240);" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="1.0" >
-                     <fx:include fx:id="main_content" source="connection_subview.fxml"/>
+                     <fx:include fx:id="connectionSubview" source="connection_subview.fxml"/>
                   </Pane>
                </children>
             </AnchorPane>

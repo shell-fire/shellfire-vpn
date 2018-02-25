@@ -136,4 +136,8 @@ public class ConnectionSubviewController implements Initializable {
         this.productKeyImageView.setVisible(false);
         this.productKeyImageView.setVisible(false);
     }
+        
+   public String displayCreationMessage(String msg){
+       return("ConnectionSubviewController: " + msg);
+   }
 }

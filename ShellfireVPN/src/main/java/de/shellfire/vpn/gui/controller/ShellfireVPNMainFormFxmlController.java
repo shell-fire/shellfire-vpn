@@ -6,16 +6,13 @@ import java.util.HashMap;
 import java.util.ResourceBundle;
 
 import de.shellfire.vpn.Util;
-import de.shellfire.vpn.client.Client;
 import de.shellfire.vpn.client.ConnectionState;
 import de.shellfire.vpn.client.ConnectionStateChangedEvent;
 import de.shellfire.vpn.client.ConnectionStateListener;
 import de.shellfire.vpn.client.Controller;
 import de.shellfire.vpn.exception.VpnException;
 import de.shellfire.vpn.gui.LoginForms;
-import de.shellfire.vpn.gui.helper.TitiliumFont;
 import de.shellfire.vpn.i18n.VpnI18N;
-import de.shellfire.vpn.proxy.ProxyConfig;
 import de.shellfire.vpn.types.ServerType;
 import de.shellfire.vpn.webservice.Vpn;
 import de.shellfire.vpn.webservice.WebService;
@@ -38,6 +35,7 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.image.Image;
@@ -65,7 +63,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     private TrayIcon trayIcon;
     private StringBuffer typedStrings = new StringBuffer();
     
-    ConnectionSubviewController connectionSubviewController  = null ; 
+    //ConnectionSubviewController connectionSubviewController  = null ; 
     @FXML
     private Pane leftMenuPane;
     @FXML
@@ -136,14 +134,20 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     private Label vpnTypeValue;
     @FXML
     private Pane contentDetailsPane;
-    //private Label vpnTypeLabel;
-    //private Label validUntilLabel;
     @FXML
     private Label vpnType;
     @FXML
     private Label serverListFooterLabel;
     @FXML
     private Label mapFooterLabel;
+    
+    // Access to embedded controller and variables in subviews
+    @FXML
+    private Parent connectionSubview;
+    
+    @FXML
+    private ConnectionSubviewController connectionSubviewController ;
+    
 
     public ShellfireVPNMainFormFxmlController() {
         log.debug("No argumenent controller of shellfire has been called");
@@ -191,6 +195,9 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         this.mapFooterLabel.setText(i18n.tr("Zeigt Verschlüsselungsroute"));
         this.streamsHeaderLabel.setText(i18n.tr("Streams aus den USA"));
         this.streamsFooterLabel.setText(i18n.tr("Liste amerikanischer TV Streams"));
+        
+        log.debug(connectionSubviewController.toString());
+        log.debug(connectionSubviewController.displayCreationMessage("Object refreence properly created"));
 
     }
 
