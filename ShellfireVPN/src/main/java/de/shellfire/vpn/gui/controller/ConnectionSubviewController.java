@@ -42,6 +42,22 @@ public class ConnectionSubviewController implements Initializable {
     private ImageView connectImageView;
     @FXML
     private ImageView productKeyImageView;
+
+    public ImageView getStatusConnectionImageView() {
+        return statusConnectionImageView;
+    }
+
+    public ImageView getConnectImageView() {
+        return connectImageView;
+    }
+
+    public ImageView getProductKeyImageView() {
+        return productKeyImageView;
+    }
+
+    public ImageView getPremiumInfoImageView() {
+        return premiumInfoImageView;
+    }
     @FXML
     private ImageView premiumInfoImageView;
     
@@ -128,7 +144,7 @@ public class ConnectionSubviewController implements Initializable {
     private void handlePremiumInfoImageViewClicked(MouseEvent event) {
     }
     
-        private void initPremium(boolean freeAccount) {
+    public void initPremium(boolean freeAccount) {
         if (!freeAccount) {
             this.premiumInfoImageView.setVisible(false);
             this.connectImageView.setVisible(false);
