@@ -1,156 +1,130 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package de.shellfire.vpn.gui.controller;
 
-import de.shellfire.vpn.gui.LoginForms;
-import de.shellfire.vpn.gui.controller.*;
-import de.shellfire.vpn.i18n.VpnI18N;
-import java.net.URL;
-import java.util.ResourceBundle;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
+
+import java.net.URL;
+import java.util.ResourceBundle;
+
 import org.xnap.commons.i18n.I18n;
 
-/**
- * FXML Controller class
- *
- * @author Tcheutchoua
- */
-public class ProgressDialogController extends AnchorPane implements Initializable {
+import de.shellfire.vpn.gui.LoginForms;
+import de.shellfire.vpn.i18n.VpnI18N;
+import javafx.event.ActionEvent;
 
-    @FXML
-    private Pane headerPanel1;
-    @FXML
-    private ImageView headerImageView1;
-    @FXML
-    private Label dynamicLabel;
-    @FXML
-    private Button leftButton;
-    @FXML
-    private Button rightButton;
-    @FXML
-    private Label additionTextLabel;
-    @FXML
-    private Label bottomLabel;
+import javafx.scene.control.Label;
 
-    @FXML
-    private ProgressBar progressBar;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
 
-    private boolean option1;
+public class ProgressDiagogVController extends AnchorPane implements Initializable {
+	@FXML
+	private Pane headerPane;
+	@FXML
+	private Label headerImgLabel;
+	@FXML
+	private ProgressBar progressDialogBar;
+	@FXML
+	private Button button1;
+	@FXML
+	private Button button2;
+	@FXML
+	private Label bottomLabel;
+	@FXML
+	private Label label1;
+	@FXML
+	private Label additonalTextLabel;
+
+	private boolean option1;
     private boolean option2;
     private Runnable optionCallback;
-    private static I18n i18n = VpnI18N.getI18n();
-    private LoginForms application;
+	private static I18n i18n = VpnI18N.getI18n();
+	private LoginForms application ; 
 
-    /**
-     * Initializes the controller class.
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-            
-         initComponents();
-        // Binding labels and buttons to their visibilities
-        leftButton.managedProperty().bind(leftButton.visibleProperty());
-        rightButton.managedProperty().bind(rightButton.visibleProperty());
-        bottomLabel.managedProperty().bind(bottomLabel.visibleProperty());
-        additionTextLabel.managedProperty().bind(additionTextLabel.visibleProperty());
-
-
-        this.pack();
-        setIndeterminate(true);
-    }
-
-    @FXML
-    private void handleLeftButton(ActionEvent event) {
+	// Event Listener on Button[#button1].onAction
+	@FXML
+	public void handleButton1(ActionEvent event) {
         this.option1 = true;
-        //setVisible(false);
+        button1.setVisible(false);
         this.callOptionCallback();
-    }
-
-    @FXML
-    private void handleRightButton(ActionEvent event) {
-        this.option2 = true;
-        //setVisible(false);
-        this.callOptionCallback();
-    }
-
-    public void setApp(LoginForms applic) {
-        this.application = applic;
-    }
-
-    public void initComponents() {
-        leftButton.setVisible(false);
-        rightButton.setVisible(false);
-        bottomLabel.setVisible(false);
-        additionTextLabel.setVisible(false);
-
-    }
-
-    public void setDialogText(String string) {
-        dynamicLabel.setText(string);
-    }
-
-    public void setAdditonalTextVisible(boolean visible, String text) {
-        additionTextLabel.setVisible(visible);
-        additionTextLabel.setText(i18n.tr(text));
-    }
-
-    public void setBottomLabelTextVisible(boolean visible, String text) {
-        bottomLabel.setVisible(visible);
-        bottomLabel.setText(i18n.tr(text));
-    }
-
-    public void setLeftButtonVisible(boolean visible, String text) {
-        leftButton.setVisible(visible);
-        leftButton.setText(i18n.tr(text));
-    }
-
-    public void setRighttButtonVisible(boolean visible, String text) {
-        rightButton.setVisible(visible);
-        rightButton.setText(i18n.tr(text));
-    }
-
-    public void pack() {
-        this.application.getStage().sizeToScene();
-        // TODO implement a custom version of swing pack.
-    }
-
-    public boolean isOption1() {
-        return option1;
-    }
-
-    public boolean isOption2() {
-        return option2;
-    }
-
+	}
+	// Event Listener on Button[#button2].onAction
+	@FXML
+	public void handleButton2(ActionEvent event) {
+		this.option2 = true;
+		button2.setVisible(false);
+		this.callOptionCallback();
+	}
+	
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
+		
+		initComponenets();
+				
+	}
+	
+	public void setApp(LoginForms applic){
+		this.application = applic ; 
+	}
+	
+	public  void initComponenets(){
+		label1.setText(i18n.tr("Einloggen...."));
+		additonalTextLabel.setText("jLabel2");
+		button2.setText("jButton1");
+		bottomLabel.setText("jLabel2");
+		//headerPane.setLayout();
+		//ImageI logoImg = ShellfireVPNMainForm.getLogo();
+		//headerImgLabel.
+	}
+	
     public void setOptionCallback(Runnable runnable) {
         this.optionCallback = runnable;
     }
 
     private void callOptionCallback() {
         if (this.optionCallback != null);
-        this.optionCallback.run();
+            this.optionCallback.run();
+    }
+    
+    public void updateProgress(double percentage){
+    	// just set the update progress property
+    	progressDialogBar.setProgress(percentage);
+    }
+    
+    void addInfo(String text){
+    	this.setTextAndShowComponent(this.additonalTextLabel, text);
+    }
+    
+    void setTextAndShowComponent(Label lbl, String text){
+    	lbl.setText(text);
+    	lbl.setVisible(true);
+    }
+    
+    void setTextAndShowComponent(Button btn, String text){
+    	btn.setText(text);
+    	btn.setVisible(true);
+        btn.setDisable(true);
+    }
+    
+    void addBottomText(String text) {
+        this.setTextAndShowComponent(this.bottomLabel, text);
+    }
+    
+    public void setOption(int i, String text) {
+       /// this.setOption(i, text, 0);        
+    }
+    public boolean isOption1() {
+        return option1;
+    }
+    public boolean isOption2() {
+        return option2;
     }
 
-    public void updateProgress(double percentage) {
-        // just set the update progress property
-        progressBar.setProgress(percentage);
-    }
-
-    public void setIndeterminate(boolean b) {
-        if (b == true) {
-            progressBar.setProgress(ProgressBar.INDETERMINATE_PROGRESS);
-        }
-
-    }
+	public void setIndeterminate(boolean b) {
+		if (b == true)
+			progressDialogBar.setProgress(ProgressBar.INDETERMINATE_PROGRESS);
+				
+	}
 }
