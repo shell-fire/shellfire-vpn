@@ -13,8 +13,8 @@
             <Font size="24.0" />
          </font>
       </Label>
-      <RadioButton layoutX="14.0" layoutY="57.0" mnemonicParsing="false" text="Datenroute und eigenen Standort anzeigen (falls verbunden)" />
-      <Button layoutX="399.0" layoutY="53.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="231.0" text="go to our location" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="53.0" />
+      <RadioButton fx:id="ShowOwnPosition" layoutX="14.0" layoutY="57.0" mnemonicParsing="false" text="Datenroute und eigenen Standort anzeigen (falls verbunden)" />
+      <Button fx:id="goToOurLocationButton" layoutX="399.0" layoutY="53.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="231.0" text="go to our location" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="53.0" />
       <ImageView layoutX="413.0" layoutY="57.0" AnchorPane.rightAnchor="206.0" AnchorPane.topAnchor="57.0">
          <image>
             <Image url="@../icons/icon-home.png" />
