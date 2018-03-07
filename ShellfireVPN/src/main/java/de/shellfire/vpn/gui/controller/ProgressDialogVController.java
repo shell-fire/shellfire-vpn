@@ -26,24 +26,15 @@ import org.xnap.commons.i18n.I18n;
  *
  * @author Tcheutchoua
  */
-public class ProgressDialogController extends AnchorPane implements Initializable {
+public class ProgressDialogVController extends AnchorPane implements Initializable {
 
-    @FXML
-    private Pane headerPanel1;
-    @FXML
-    private ImageView headerImageView1;
-    @FXML
     private Label dynamicLabel;
-    @FXML
     private Button leftButton;
-    @FXML
     private Button rightButton;
-    @FXML
     private Label additionTextLabel;
     @FXML
     private Label bottomLabel;
 
-    @FXML
     private ProgressBar progressBar;
 
     private boolean option1;
@@ -51,6 +42,20 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
     private Runnable optionCallback;
     private static I18n i18n = VpnI18N.getI18n();
     private LoginForms application;
+    @FXML
+    private Pane headerPane;
+    @FXML
+    private Label headerImgLabel;
+    @FXML
+    private ProgressBar progressDialogBar;
+    @FXML
+    private Button button1;
+    @FXML
+    private Button button2;
+    @FXML
+    private Label label1;
+    @FXML
+    private Label additonalTextLabel;
 
     /**
      * Initializes the controller class.
@@ -70,14 +75,12 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
         setIndeterminate(true);
     }
 
-    @FXML
     private void handleLeftButton(ActionEvent event) {
         this.option1 = true;
         //setVisible(false);
         this.callOptionCallback();
     }
 
-    @FXML
     private void handleRightButton(ActionEvent event) {
         this.option2 = true;
         //setVisible(false);
@@ -152,5 +155,13 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
             progressBar.setProgress(ProgressBar.INDETERMINATE_PROGRESS);
         }
 
+    }
+
+    @FXML
+    private void handleButton1(ActionEvent event) {
+    }
+
+    @FXML
+    private void handleButton2(ActionEvent event) {
     }
 }
