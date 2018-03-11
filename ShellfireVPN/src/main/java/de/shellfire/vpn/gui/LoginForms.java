@@ -47,7 +47,7 @@ public class LoginForms extends Application {
     private boolean minimize;
     public static LoginController instance;
     private static I18n i18n = VpnI18N.getI18n();
-    private AnchorPane page;
+    //private AnchorPane page;
     private boolean licenseAccepted;
     // Variables to control draggin of window
     private double xOffset = 0;
@@ -186,12 +186,13 @@ public class LoginForms extends Application {
         log.debug("In the ShellFire Main controller");
         try {
             this.shellFireMainController = (ShellfireVPNMainFormFxmlController) replaceSceneContent("ShellfireVPNMainFormFxml.fxml");
+           this.shellFireMainController.displayMessage("Object created");
             this.shellFireMainController.setApp(this);
 
         } catch (Exception ex) {
             log.debug("could not load main form fxml\n" + ex.getMessage());
         }
-        log.debug("ShellfireMain App completely initialized");
+        log.debug("ShellfireMainFrom initializtion method completed");
     }
 
     public void loadLicenceAcceptanceScreenController() {
@@ -214,7 +215,7 @@ public class LoginForms extends Application {
         //loader.setBuilderFactory(new JavaFXBuilderFactory());
         loader.setLocation(LoginForms.class.getResource("/fxml/" + fxml));
         System.out.println("Loacation of loader is " + loader.getLocation());
-
+        AnchorPane page = null;
         try {
             System.out.println("trying to load anchor pane for " + fxml);
             page = (AnchorPane) loader.load();
@@ -237,8 +238,15 @@ public class LoginForms extends Application {
                 stage.setY(event.getScreenY() - yOffset);
             }
         });
+        if(page.getScene() == null){
         Scene scene = new Scene(page);
         stage.setScene(scene);
+        log.debug("Scene of " + fxml + " has been newly created");
+        } else {
+        log.debug("Scene of " + fxml + " is that of anchorpane");
+        stage.setScene(page.getScene());
+        }
+ 
         stage.sizeToScene();
         return (Initializable) loader.getController();
     }
@@ -249,6 +257,7 @@ public class LoginForms extends Application {
         //loader.setBuilderFactory(new JavaFXBuilderFactory());
         loader.setLocation(LoginForms.class.getResource("/fxml/" + fxml));
         System.out.println("Loacation of loader is " + loader.getLocation());
+        AnchorPane page = null;
         try {
             System.out.println("trying to load anchor pane for " + fxml);
             //Parent root = (Parent) loader.load();
