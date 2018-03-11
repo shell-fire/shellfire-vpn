@@ -5,7 +5,6 @@
  */
 package de.shellfire.vpn.gui.controller;
 
-import de.shellfire.vpn.gui.controller.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
@@ -13,6 +12,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableView;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 
@@ -41,7 +41,40 @@ public class ServerListSubviewController implements Initializable {
     private ImageView keyBuyRadioButton;
     @FXML
     private ImageView connectImage2;
+    @FXML
+    private ToggleGroup networkTypeToggleGroup;
 
+    public TableView<?> getServerListTableView() {
+        return serverListTableView;
+    }
+
+    public RadioButton getUDPRadioButton() {
+        return UDPRadioButton;
+    }
+
+    public RadioButton getTCPRadioButton() {
+        return TCPRadioButton;
+    }
+
+    public ImageView getConnectImage1() {
+        return connectImage1;
+    }
+
+    public ImageView getKeyBuyRadioButton() {
+        return keyBuyRadioButton;
+    }
+
+    public ImageView getConnectImage2() {
+        return connectImage2;
+    }
+
+    public ToggleGroup getNetworkTypeToggleGroup() {
+        return networkTypeToggleGroup;
+    }
+    
+    
+    
+    
     /**
      * Initializes the controller class.
      */
