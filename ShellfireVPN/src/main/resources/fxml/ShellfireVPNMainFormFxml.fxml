@@ -163,10 +163,14 @@
                         <Label fx:id="vpnType" layoutX="590.0" layoutY="14.0" text="VPN Typ:" />
                         <Label fx:id="vpnIdValue" layoutX="518.0" layoutY="50.0" text="(vpnId)" />
                         <Label fx:id="vpnTypeValue" layoutX="590.0" layoutY="50.0" text="(vpnTyp)" />
+                        <Label fx:id="validUntilLabel" layoutX="686.0" layoutY="14.0" prefHeight="17.0" prefWidth="94.0" text="Valid Until" />
+                        <Label fx:id="validUntilValue" layoutX="686.0" layoutY="50.0" prefHeight="17.0" prefWidth="83.0" text="(valid until)" />
                      </children>
                   </Pane>
-                  <Pane fx:id="contentDetailsPane" layoutX="2.0" layoutY="112.0" prefHeight="518.0" prefWidth="817.0" style="-fx-background-color: rgb(240,240,240);" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="1.0" >
-                     <fx:include fx:id="connectionSubview" source="connection_subview.fxml"/>
+                  <Pane fx:id="contentDetailsPane" layoutX="2.0" layoutY="112.0" prefHeight="518.0" prefWidth="817.0" style="-fx-background-color: rgb(240,240,240);" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="1.0">
+                     <children>
+                        <fx:include fx:id="connectionSubview" source="connection_subview.fxml" />
+                     </children>
                   </Pane>
                </children>
             </AnchorPane>
