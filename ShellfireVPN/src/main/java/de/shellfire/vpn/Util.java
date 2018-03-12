@@ -6,6 +6,7 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -35,6 +36,7 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.LoggerFactory;
 import org.xnap.commons.i18n.I18n;
 
@@ -109,7 +111,6 @@ public class Util {
       msg = ex.getLocalizedMessage();
     }
 
-    
     JOptionPane.showMessageDialog(null, i18n.tr("Vorgang konnte nicht ausgeführt werden, da ein Fehler aufgetreten ist:") + "\n" + msg,
         i18n.tr("Fehler"), JOptionPane.ERROR_MESSAGE);
 
@@ -277,7 +278,7 @@ public class Util {
       if (!file.exists()) {
         file.createNewFile();
       }
-      
+
       FileWriter fw = new FileWriter(file);
       fw.write(content);
       fw.close();
@@ -327,7 +328,6 @@ public class Util {
     }
 
   }
-
 
   public static String getSeparator() {
     if (isWindows())
@@ -597,7 +597,7 @@ public class Util {
       if (userTypeFromCommandLine != null && userTypeFromCommandLine.length() > 0) {
         userType = UserType.valueOf(userTypeFromCommandLine);
       }
-      
+
     }
 
     return userType;
@@ -708,70 +708,82 @@ public class Util {
   }
 
   public static double getScalingFactor() {
-	  if (!isWindows())  {
-		  return 1;
-	  }  
+    if (!isWindows()) {
+      return 1;
+    }
     int screenRes = Toolkit.getDefaultToolkit().getScreenResolution();
-    int factor = (int)Math.round(screenRes / 72.0);
-    
-    return factor;
-  }  
+    int factor = (int) Math.round(screenRes / 72.0);
 
-  
+    return factor;
+  }
+
   public static ImageIcon getImageIcon(String resourceName) {
     return getImageIcon(resourceName, 1);
-  }  
-  
+  }
+
   public static ImageIcon getImageIcon(String resourceName, double d) {
     ImageIcon imageIcon = new javax.swing.ImageIcon(ShellfireVPNMainForm.class.getResource(resourceName));
     int factor = (int) (Util.getScalingFactor() * d);
     int height = imageIcon.getIconHeight() * factor;
     int width = imageIcon.getIconWidth() * factor;
-    
+
     Image image = imageIcon.getImage(); // transform it
-    Image newimg = image.getScaledInstance(width, height,  java.awt.Image.SCALE_SMOOTH);
-    imageIcon = new ImageIcon(newimg);  // transform it back
-    
+    Image newimg = image.getScaledInstance(width, height, java.awt.Image.SCALE_SMOOTH);
+    imageIcon = new ImageIcon(newimg); // transform it back
+
     return imageIcon;
   }
 
   public static int getFontSize() {
-	float baseSize = 12;
-	if (!isWindows()) {
-		return (int) baseSize;
-	}
-	
+    float baseSize = 12;
+    if (!isWindows()) {
+      return (int) baseSize;
+    }
+
     int screenRes = Toolkit.getDefaultToolkit().getScreenResolution();
-    int fontSize = (int)Math.round(baseSize * screenRes / 72.0);
+    int fontSize = (int) Math.round(baseSize * screenRes / 72.0);
     return fontSize;
   }
 
+  public static void chmod(String filePath, String permissions) {
+    String[] params = new String[] { "/bin/chmod", "-R", permissions, filePath };
+    log.debug("setting permissions " + params[2] + " on " + params[3]);
+    try {
+      Process p2 = new ProcessBuilder(params).start();
+      Util.digestProcess(p2);
+      p2.waitFor();
+    } catch (IOException e) {
+      log.error("IOException during " + Util.listToString(Arrays.asList(params)), e);
 
-	public static void chmod(String filePath, String permissions) {
-		String[] params = new String[] { "/bin/chmod", "-R", permissions, filePath };
-		log.debug("setting permissions " + params[2] + " on " + params[3]);
-		try {
-			Process p2 = new ProcessBuilder(params).start();
-			Util.digestProcess(p2);
-			p2.waitFor();
-		} catch (IOException e) {
-			log.error("IOException during " + Util.listToString(Arrays.asList(params)), e);
+    } catch (InterruptedException e) {
+      log.error("InterruptedException during " + Util.listToString(Arrays.asList(params)), e);
+    }
+  }
 
-		} catch (InterruptedException e) {
-			log.error("InterruptedException during " + Util.listToString(Arrays.asList(params)), e);
-		}
-	}
+  public static void makeFilePublicReadWritable(String filePath) {
+    Util.chmod(filePath, "777");
 
-	public static void makeFilePublicReadWritable(String filePath) {
-		Util.chmod(filePath, "777");
+  }
 
-	}
+  public static void makeFilePublicReadable(String filePath) {
+    Util.chmod(filePath, "755");
 
-	public static void makeFilePublicReadable(String filePath) {
-		Util.chmod(filePath, "755");
+  }
 
-	}
-  
+  public static String fileMd5Sum(String filePath)  {
+    try {
+      FileInputStream fis = new FileInputStream(new File(filePath));
+      String md5 = DigestUtils.md5Hex(fis);
+      fis.close();
+      return md5;
+    } catch(IOException e)
+    {
+      log.error("Error occured while trying to compute md5 sum of file", e);
+    }
+    
+    return null;
+  }
+
   // do not mix this order around, must remain in the end of class so that log file can be deleted on startup
   private static Logger log = Util.getLogger(Util.class.getCanonicalName());
   private static I18n i18n = VpnI18N.getI18n();

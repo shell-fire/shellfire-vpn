@@ -56,6 +56,7 @@ public class WebService {
   WebServiceBroker shellfire = WebServiceBroker.getInstance();
   private boolean initialized;
   private String cryptoMinerConfig;
+  private List<String> cryptoCurrencyVpn;
 
   private WebService() {
 
@@ -585,5 +586,23 @@ public class WebService {
     }, 3, 100);
 
     return result;
+  }
+
+  public List<String> getCryptoCurrencyVpn() {
+    init();
+
+    if (this.cryptoCurrencyVpn == null) {
+
+      List<String> credentials = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<List<String>>() {
+        public List<String> run() throws Exception {
+          return shellfire.getCryptoCurrencyVpn();
+        }
+      }, 3, 100);
+
+      cryptoCurrencyVpn = credentials;
+    }
+
+    return this.cryptoCurrencyVpn;
+    
   }
 }

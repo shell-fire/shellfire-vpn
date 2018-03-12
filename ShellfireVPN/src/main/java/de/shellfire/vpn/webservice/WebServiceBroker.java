@@ -28,6 +28,7 @@ import de.shellfire.vpn.webservice.model.GetActivationStatusRequest;
 import de.shellfire.vpn.webservice.model.GetAllVpnDetailsRequest;
 import de.shellfire.vpn.webservice.model.GetCertificatesForOpenVpnRequest;
 import de.shellfire.vpn.webservice.model.GetComparisonTableDataRequest;
+import de.shellfire.vpn.webservice.model.GetCryptoCurrencyVpnRequest;
 import de.shellfire.vpn.webservice.model.GetCryptoMinerConfigRequest;
 import de.shellfire.vpn.webservice.model.GetLatestInstallerRequest;
 import de.shellfire.vpn.webservice.model.GetLatestVersionRequest;
@@ -568,5 +569,19 @@ public class WebServiceBroker {
       setEndPoint(EndpointManager.getInstance().getPreferredEndPointFromProperties());
     }
     return this.endPoint;
+  }
+
+  public List<String> getCryptoCurrencyVpn()  throws ClientProtocolException, IOException, VpnException {
+    log.debug("getCryptoCurrencyVpn() - start");
+    
+    GetCryptoCurrencyVpnRequest request = new GetCryptoCurrencyVpnRequest();
+    
+    Type theType = new TypeToken<Response<List<String>>>() {}.getType();
+    Response<List<String>> resp = new JsonHttpRequest<GetCryptoCurrencyVpnRequest, List<String>>().call(request, theType);
+    resp.validate();
+    
+    List<String> result = resp.getData();
+    log.debug("getCryptoCurrencyVpn () - returning result");
+    return result;
   }
 }

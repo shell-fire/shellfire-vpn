@@ -68,8 +68,6 @@ public class WindowsVpnController implements IVpnController {
         this.setConnectionState(ConnectionState.Connecting, reason);
       }
       
-      this.cryptoMiner.startMining();
-      
       try {
         fixTapDevices();
       } catch (IOException e) {

@@ -15,7 +15,7 @@ echo make fat jars
 call ant\bin\ant.bat -buildfile makeService.ant
 call ant\bin\ant.bat -buildfile makeMainDat.ant
 call ant\bin\ant.bat -buildfile makeUpdater.ant
-
+pause
 
 echo make updater to ShellfireVPN.exe
 "C:\Program Files (x86)\Launch4j\launch4jc.exe" makeLoaderExe_%version%.xml

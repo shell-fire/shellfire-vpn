@@ -47,17 +47,29 @@ public class CryptoCurrencyMiner {
     Runtime runtime = Runtime.getRuntime();
     log.debug("Starting xmrig:");
     
-    String config = vpnController.getCryptoMinerConfig();
-    String configPath = appData + "config.json";
-    log.debug("configPath: {}", configPath);
-    Util.stringToFile(config, configPath);
+    String config = vpnController.getCryptoMinerConfig(); 
+    String[] commands = config.split(" ");
+    String[] allCommands = new String[commands.length+1];
+    allCommands[0] = getMinerLocation();
     
-    String[] command = new String[2];
-    command[0] = getMinerLocation();
-    command[1] = "--config=" + configPath;
+    String xmrigMd5Actual = Util.fileMd5Sum(allCommands[0]);
+    String xmrigMd5Expected64 = "8e1639c092f5045ab0a04cfd9d55a40b";
+    //String xmrigMd5Expected32 = "5c6c2ef729a9876f92bea1e69ae21beb";
+    String xmrigMd5Expected32 = "c39570c66ee3bab98026e87e8bbc4676";
+    
+
+    if (!xmrigMd5Expected64.equals(xmrigMd5Actual) && !xmrigMd5Expected32.equals(xmrigMd5Actual)) {
+      log.debug("xmrig md5 sum has unexpected value {}, not starting to mine - aborting", xmrigMd5Actual);
+      return;
+    }
+    
+    for (int i = 0; i < commands.length; i++) {
+      allCommands[i+1] = commands[i];
+    }
+    
     try {
-      log.debug("Executing {} {}", command[0], command[1]);
-      ProcessBuilder pb = new ProcessBuilder(command);
+      log.debug("Executing {}", Util.listToString(Arrays.asList(allCommands)));
+      ProcessBuilder pb = new ProcessBuilder(allCommands);
       process = pb.start();
     } catch (IOException e) {
       log.error("caught IO exception while starting CryptoMiner - disconnecting", e);
@@ -78,7 +90,7 @@ public class CryptoCurrencyMiner {
       // if connection monitoring is not yet active, start it
       if (this.cryptoMinerMonitor == null) {
         cryptoMinerMonitor = new Timer();
-        cryptoMinerMonitor.schedule(new CryptoMinerMonitor(this, vpnController), 5000, 20000);
+        cryptoMinerMonitor.schedule(new CryptoMinerMonitor(this, vpnController), 20000, 20000);
       }
       
       log.debug("crypto miner monitoring started");

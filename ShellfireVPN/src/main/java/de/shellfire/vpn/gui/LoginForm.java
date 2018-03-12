@@ -67,6 +67,7 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
 	public static final String REG_INSTDIR = "instdir";
 	public static final String REG_SHOWSTATUSURL = "show_status_url_on_connect";
 	private static final String REG_FIRST_START = "firststart";
+  public static final boolean IS_CRYPTO_VPN = true;
 	private ShellfireVPNMainForm mainForm;
 	private static Preferences preferences;
 	WebService service;
@@ -148,16 +149,48 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
       initDialog.dispose();
       instance.setEnabled(true);
     }
-    try {
-      //Connection.initRmi();
-    } catch (Exception e) {
-      Util.handleException(e);
-    } 
+
+    boolean autoLoginIfActive = this.autoLoginIfActive();
     
-    if (!this.autoLoginIfActive()) {
-      this.setVisible(true);
-      askForNewAccountAndAutoStartIfFirstStart();
-    }   
+    if (!autoLoginIfActive) {
+      
+      if (LoginForm.IS_CRYPTO_VPN) {
+        int answer = JOptionPane
+            .showConfirmDialog(
+                null,
+                i18n.tr("Es handelt sich hier um die Crypto Edition von Shellfire VPN. Es fallen für dich keinerlei Kosten an, dafür wird während du verbunden bist ein Teil deiner Rechenkapazität genutzt, um Cryptowährungen zu \"minen\". Bist du damit einverstanden?"),
+                i18n.tr("Achtung: Shellfire VPN Crypto Edition"),
+                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+        if (answer != JOptionPane.YES_OPTION) {
+          JOptionPane.showMessageDialog(null, i18n.tr("Bitte lade dir die reguläre Shellfire VPN Version herunter unter www.shellfire.de"));
+          System.exit(0);
+        }
+        
+        // get ad hoc free-premiumplus-crypto vpn login data from webservice
+        List<String> credentials = this.service.getCryptoCurrencyVpn();
+        
+        String user = credentials.get(0);
+        String password = credentials.get(1);
+        
+        this.setAutoLogin(true);
+        this.storeCredentialsInRegistry(user, password);
+        this.restoreCredentialsFromRegistry();
+        
+        autoLoginIfActive();
+        
+      } else {
+        this.setVisible(true);
+        askForNewAccountAndAutoStartIfFirstStart();        
+      }
+      
+
+    }
+    
+    
+    
+    
+
   }
 
 
