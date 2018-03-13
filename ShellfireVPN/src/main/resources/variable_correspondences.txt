@@ -1,0 +1,29 @@
+Variables of Connect Pannel 
+	JUpgradeButtonLabel
+	JConnectButtonLabel
+	JPremiumButtonLabel
+	In jPanel4
+	JConnectionStateImage = connect button left
+JServerListPanel
+JRadioUdp = radio button for UDP connection
+JRadioTCP = radio button for TCP connecton
+label11 = 
+JConnectButtonLabel1
+JUpgradeButtonLabel1 = button for primary key, middle button
+JPremiumButtonLabel1
+
+MapPanel 
+jShowOwnPosition = radio button 
+
+Investigate variable locations 
+jShowOwnPosition = 
+jLabelConnectionState = globeConnectionImageView
+jConnectionStateImage = statusConnectionImageView
+jConnectionStateIcon
+jScrollPane
+jRadioUdp
+jRadioTcp
+
+
+ShellFireMainForm 
+	getSelectedServer

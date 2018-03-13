@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="serverListAnchorPane" prefHeight="564.0" prefWidth="635.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.ServerListSubviewController">
+   <children>
+      <TableView fx:id="serverListTableView" layoutX="3.0" layoutY="50.0" prefHeight="382.0" prefWidth="629.0" AnchorPane.leftAnchor="1.0" AnchorPane.topAnchor="50.0">
+        <columns>
+          <TableColumn prefWidth="104.0" style="-fx-background-color: rgb(64,69,73);" text="Country" />
+          <TableColumn prefWidth="110.0" text="Name" />
+            <TableColumn prefWidth="89.0" text="Server" />
+            <TableColumn prefWidth="126.0" text="Security" />
+            <TableColumn prefWidth="165.0" text="Speed" />
+        </columns>
+      </TableView>
+      <Label fx:id="selectServerLabel" contentDisplay="CENTER" layoutX="1.0" layoutY="2.0" prefHeight="42.0" prefWidth="629.0" style="-fx-background-color: rgb(64,69,73);" text="   WÃ¤hle einen Server fÃ¼r deine Verbindung" textFill="WHITE" AnchorPane.leftAnchor="1.0" AnchorPane.topAnchor="1.0">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Label fx:id="connectionTypeLabel" layoutX="3.0" layoutY="419.0" prefHeight="31.0" prefWidth="160.0" text="Connection type  " textFill="#404549" AnchorPane.bottomAnchor="91.0">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
+      <RadioButton fx:id="UDPRadioButton" layoutX="3.0" layoutY="459.0" mnemonicParsing="false" prefHeight="15.0" prefWidth="112.0" text="UDP (fast)" AnchorPane.bottomAnchor="58.0">
+         <toggleGroup>
+            <ToggleGroup fx:id="networkTypeToggleGroup" />
+         </toggleGroup>
+         <font>
+            <Font size="14.0" />
+         </font>
+      </RadioButton>
+      <RadioButton fx:id="TCPRadioButton" layoutX="138.0" layoutY="483.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="374.0" text="TCP (works with safe firewalls and proxies" toggleGroup="$networkTypeToggleGroup" AnchorPane.bottomAnchor="54.0">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </RadioButton>
+      <ImageView fx:id="connectImage1" fitHeight="46.0" fitWidth="200.0" layoutX="439.0" layoutY="487.0" AnchorPane.bottomAnchor="7.0">
+         <image>
+            <Image url="@../buttons/button-connect-de.gif" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="keyBuyRadioButton" fitHeight="46.0" fitWidth="200.0" layoutX="4.0" layoutY="488.0" AnchorPane.bottomAnchor="7.0">
+         <image>
+            <Image url="@../buttons/button-connect-de.gif" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="connectImage2" fitHeight="42.0" fitWidth="206.0" layoutX="216.0" layoutY="491.0" AnchorPane.bottomAnchor="7.0">
+         <image>
+            <Image url="@../buttons/button-serial-fr.gif" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>
