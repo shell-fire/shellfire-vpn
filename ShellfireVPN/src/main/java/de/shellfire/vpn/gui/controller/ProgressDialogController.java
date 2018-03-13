@@ -137,7 +137,6 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
         t.setRepeats(false);
         t.start();
     }
-
     public boolean isOption1() {
         return option1;
     }

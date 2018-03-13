@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="615.0" prefWidth="506.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml" fx:controller="de.shellfire.vpn.gui.controller.VpnSelectDialogController">
+   <children>
+      <AnchorPane id="AnchorPane" layoutX="10.0" layoutY="10.0" prefHeight="597.0" prefWidth="478.0">
+         <children>
+            <AnchorPane layoutX="10.0" layoutY="140.0" prefHeight="517.0" prefWidth="459.0" AnchorPane.bottomAnchor="8.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="9.0">
+               <children>
+                  <Button fx:id="selectVpnButton" layoutX="3.0" layoutY="390.0" mnemonicParsing="false" onAction="#handleSelectVpnButton" prefHeight="25.0" prefWidth="453.0" text="Button" AnchorPane.bottomAnchor="65.0" AnchorPane.leftAnchor="3.0" AnchorPane.rightAnchor="3.0" />
+                  <Label fx:id="vpnSelectLabel" layoutX="14.0" layoutY="-3.0" minHeight="16" minWidth="69" prefHeight="31.0" prefWidth="95.0" text="Login">
+                     <font>
+                        <Font name="Arial" size="24.0" />
+                     </font>
+                  </Label>
+                  <CheckBox fx:id="fAutoconnect" layoutX="2.0" layoutY="315.0" mnemonicParsing="false" onAction="#handlefAutoconnect" selected="true" text="CheckBox" AnchorPane.bottomAnchor="103.0" />
+                  <Label fx:id="vpnTypeLabel" layoutY="461.0" text="Label" AnchorPane.bottomAnchor="39.0" AnchorPane.leftAnchor="0.0" />
+                  <ScrollPane fx:id="vpnScrollPane" layoutX="9.0" layoutY="67.0" prefHeight="323.0" prefWidth="444.0">
+                     <content>
+                        <TableView fx:id="vpnListTable" prefHeight="321.0" prefWidth="441.0">
+                          <columns>
+                            <TableColumn fx:id="idTbleColumn" prefWidth="134.0" text="Id" />
+                            <TableColumn fx:id="typeTbleColumn" prefWidth="148.0" text="Typ" />
+                              <TableColumn fx:id="accArtTbleColumn" prefWidth="158.0" text="Account Art" />
+                          </columns>
+                        </TableView>
+                     </content>
+                  </ScrollPane>
+                  <Label fx:id="numAccountVpnLabel" layoutX="9.0" layoutY="35.0" text="Label" />
+               </children>
+            </AnchorPane>
+            <Pane fx:id="headerPanel" layoutX="4.0" prefHeight="62.0" prefWidth="474.0">
+               <children>
+                  <ImageView fx:id="headerImageView" fitHeight="60.0" fitWidth="250.0" layoutX="2.0" pickOnBounds="true" preserveRatio="true" />
+                  <Pane fx:id="exitLogoPane" layoutX="360.0" prefHeight="67.0" prefWidth="43.0">
+                     <children>
+                        <ImageView fx:id="exitImageView" fitHeight="42.0" fitWidth="43.0" onContextMenuRequested="#handleEXitButtonClicked" pickOnBounds="true" preserveRatio="true" />
+                     </children>
+                  </Pane>
+               </children>
+            </Pane>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

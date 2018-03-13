@@ -40,6 +40,7 @@
                <image>
                   <Image url="@../icons/sf_en.png" />
                </image></ImageView>
+
                   <Pane fx:id="backLabelPane" layoutX="393.0" layoutY="3.0" onMouseClicked="#handleBackLabel" onMouseEntered="#backPaneMouseEntered" onMouseExited="#backPaneMouseExited" prefHeight="51.0" prefWidth="101.0">
                      <children>
                         <Label fx:id="backLabel" alignment="CENTER_RIGHT" layoutX="1.0" layoutY="14.0" onMouseEntered="#handleMouseEntered" onMouseExited="#backLabelMousexited" prefHeight="31.0" prefWidth="96.0" style="-fx-background-color: rgb(0,0,0);" text="zurÃ¼ck" textFill="#eee5e5" />

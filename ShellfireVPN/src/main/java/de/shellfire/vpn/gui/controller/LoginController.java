@@ -1,5 +1,6 @@
 package de.shellfire.vpn.gui.controller;
 
+
 import de.shellfire.vpn.Storage;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -395,6 +396,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
             // perform login action when inputs are correct
             handlefButtonLogin(null);
         }
+
     }
 
     @FXML
