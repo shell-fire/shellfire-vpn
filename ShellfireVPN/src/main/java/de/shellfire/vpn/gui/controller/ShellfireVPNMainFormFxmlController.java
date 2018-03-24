@@ -173,7 +173,8 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     // Access to embedded controller and variables in subviews
     @FXML
     private Parent connectionSubview;
-
+    
+    @FXML
     private ConnectionSubviewController connectionSubviewController;
     @FXML
     private Label validUntilLabel;
@@ -238,18 +239,30 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         this.iconIdleAwt = Util.getImageIcon("/icons/sfvpn2-idle-big.png").getImage();
 
         //this.serverList = this.shellfireService.getServerList();
-        //this.updateOnlineHost();
         //this.updateLoginDetail();
        // this.initTray();
 
         //Storage.register(this);
 
         //this.initShortCuts();
-        //this.initPremium();
         //this.initConnection();
     }
+public void initializeComponents(){
+        //Notice that you manipulate the javaObjects out of the initialize if not it will raise an InvocationTargetException
+        this.updateLoginDetail();
+        this.validUntilLabel.managedProperty().bind(this.validUntilLabel.visibleProperty());
+        this.validUntilValue.managedProperty().bind(this.validUntilValue.visibleProperty());
+        
+        this.connectionSubviewController.initPremium(isFreeAccount());
+        this.updateOnlineHost();
+    }
 
-    /**
+    public static void setShellfireService(WebService shellfireService) {
+        ShellfireVPNMainFormFxmlController.shellfireService = shellfireService;
+        log.debug("ShellfireVPNMainFormFxmlController:" + "service initialized");
+    }
+
+/**
      * Initialized the service and other variables. Supposed to be an
      * overloading of constructor
      *
@@ -1147,11 +1160,11 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         int delay = 1000; // milliseconds
         connectedSince = new Date();
 
-        ActionListener taskPerformer = new ActionListener() {
+        ActionListener askPerformer = new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent arg0) {
-                //updateConnectedSince();
+                updateConnectedSince();
             }
         };
         //TODO
@@ -1179,15 +1192,20 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
             @Override
             protected String call() throws Exception {
                 String host = shellfireService.getLocalIpAddress();
+                log.debug("ShellfireMainFormController: Ip address in task" + host );
                 return host;
             }
         };
-        hostWorker.setOnScheduled(ignoredArg -> {
+        hostWorker.valueProperty().addListener((observable, oldValue, newValue) -> {
+                if (newValue != null) {
             String host = hostWorker.getValue();
-            onlineIpValue.setText(host);
+                onlineIpValue.setText(host);
+                log.debug("ShellfireMainFormController: Ip address is " + host );
+        }
+            
         });
         Thread worker = new Thread(hostWorker);
-        worker.start();
+        worker.run();
 
     }
 
@@ -1215,8 +1233,11 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         this.vpnTypeValue.setText(vpn.getAccountType().toString());
 
         if (vpn.getAccountType() == ServerType.Free) {
-            this.validUntilValue.setDisable(true);
-            this.validUntilLabel.setDisable(true);
+            this.validUntilValue.setVisible(false);
+            //this.validUntilValue.setManaged(false);
+            
+            this.validUntilLabel.setVisible(false);
+            //this.validUntilLabel.setManaged(false);
         } else {
 
             this.validUntilValue.setDisable(false);
@@ -1229,16 +1250,24 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         }
     }
 
-    private void initPremium() {
-        if (!this.isFreeAccount()) {
-            this.connectionSubviewController.getProductKeyImageView().setDisable(true);
-            //this.jPremiumButtonLabel1.setVisible(false);
-        }
-
-        this.connectionSubviewController.getPremiumInfoImageView().setDisable(true);
-    }
 
     public void displayMessage(String message) {
         log.debug("ShellFireMainController: " + message);
+    }
+    
+       public void updateConnectedSince() {
+        Date now = new Date();
+        long diffInSeconds = (now.getTime() - connectedSince.getTime()) / 1000;
+
+        long diff[] = new long[]{0, 0, 0, 0};
+        diff[3] = (diffInSeconds >= 60 ? diffInSeconds % 60 : diffInSeconds);
+        diff[2] = (diffInSeconds = (diffInSeconds / 60)) >= 60 ? diffInSeconds % 60 : diffInSeconds;
+        diff[1] = (diffInSeconds = (diffInSeconds / 60));
+        String since = String.format("%dh %dm %ds", diff[1], diff[2], diff[3]);
+
+        SimpleDateFormat df = new SimpleDateFormat("E, H:m", VpnI18N.getLanguage().getLocale());
+        String start = df.format(connectedSince);
+        String text = start + " " + "(" + since + ")";
+        this.connectedSinceValue.setText(text);
     }
 }

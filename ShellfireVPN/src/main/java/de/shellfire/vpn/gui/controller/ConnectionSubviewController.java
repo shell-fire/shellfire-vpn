@@ -94,6 +94,9 @@ public class ConnectionSubviewController implements Initializable {
         
         this.connectImageView.setId(baseImageUrl + "/buttons/button-disconnect-" + langKey + ".gif");
         this.statusConnectionImageView.setId(baseImageUrl + "/icons/status-unencrypted-width" + size + ".gif");
+        
+        //makes product key to be disable when disable is set to true
+        this.productKeyImageView.managedProperty().bind(this.productKeyImageView.visibleProperty());
     }    
 
     @FXML
@@ -149,11 +152,17 @@ public class ConnectionSubviewController implements Initializable {
             this.premiumInfoImageView.setVisible(false);
             this.connectImageView.setVisible(false);
         }
+        else {
         this.productKeyImageView.setVisible(false);
         this.productKeyImageView.setVisible(false);
+        }
     }
         
    public String displayCreationMessage(String msg){
        return("ConnectionSubviewController: " + msg);
+   }
+   
+   public void productKeyDisable(boolean value){
+       this.productKeyImageView.setDisable(value);
    }
 }
