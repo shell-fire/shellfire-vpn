@@ -738,7 +738,11 @@ public class Util {
   }
   public static javafx.scene.image.Image getImageIconFX(String resourceName, double d){
 	   javafx.scene.image.Image image = new javafx.scene.image.Image("file:"+resourceName);
+<<<<<<< HEAD
 	   log.debug("Resource is found at " + resourceName);
+=======
+	   System.out.println("Resource is found at " + resourceName);
+>>>>>>> 32656c998715dfdf2cb3c2b13af96c74a646dc3b
 	   int factor = (int) (Util.getScalingFactor() * d);
 	    double height = image.getHeight() * factor;
 	    double width = image.getWidth() * factor;
