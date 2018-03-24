@@ -527,30 +527,6 @@ public void initializeComponents(){
         Platform.exit();
     }
 
-    private void handleConnectImageViewMouseExited(MouseEvent event) {
-        this.application.getStage().getScene().setCursor(Cursor.DEFAULT);
-    }
-
-    private void handleConnectImageViewMouseEntered(MouseEvent event) {
-        this.application.getStage().getScene().setCursor(Cursor.HAND);
-    }
-
-    private void handleProductKeyImageViewMouseExited(MouseEvent event) {
-        this.application.getStage().getScene().setCursor(Cursor.DEFAULT);
-    }
-
-    private void handleProductKeyImageViewMouseEntered(MouseEvent event) {
-        this.application.getStage().getScene().setCursor(Cursor.HAND);
-    }
-
-    private void handlePremiumInfoImageViewMouseExited(MouseEvent event) {
-        this.application.getStage().getScene().setCursor(Cursor.DEFAULT);
-    }
-
-    private void handlePremiumInfoImageViewMouseEntered(MouseEvent event) {
-        this.application.getStage().getScene().setCursor(Cursor.HAND);
-    }
-
     private void initController() {
         if (this.controller == null) {
             this.controller = Controller.getInstanceFX(this, this.shellfireService);

@@ -20,6 +20,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseEvent;
@@ -33,7 +34,7 @@ import org.xnap.commons.i18n.I18n;
  * @author Tcheutchoua Steve
  */
 public class ConnectionSubviewController implements Initializable {
-    
+
     @FXML
     private Pane contentDetailsPane;
     @FXML
@@ -60,7 +61,7 @@ public class ConnectionSubviewController implements Initializable {
     }
     @FXML
     private ImageView premiumInfoImageView;
-    
+
     private LoginForms application;
     private static final Logger log = Util.getLogger(ShellfireVPNMainFormFxmlController.class.getCanonicalName());
     private static I18n i18n = VpnI18N.getI18n();
@@ -88,23 +89,43 @@ public class ConnectionSubviewController implements Initializable {
 
         String langKey = VpnI18N.getLanguage().getKey();
         log.debug("langKey: " + langKey);
-        
+
         //mySetIconImage("/icons/sfvpn2-idle-big.png");
         String baseImageUrl = "src/main/resources";
-        
+
         this.connectImageView.setId(baseImageUrl + "/buttons/button-disconnect-" + langKey + ".gif");
         this.statusConnectionImageView.setId(baseImageUrl + "/icons/status-unencrypted-width" + size + ".gif");
-        
+
         //makes product key to be disable when disable is set to true
         this.productKeyImageView.managedProperty().bind(this.productKeyImageView.visibleProperty());
-    }    
+    }
+
+    public void initPremium(boolean freeAccount) {
+        if (!freeAccount) {
+            this.premiumInfoImageView.setVisible(false);
+            this.connectImageView.setVisible(false);
+        } else {
+            this.productKeyImageView.setVisible(false);
+            this.productKeyImageView.setVisible(false);
+        }
+    }
+
+    public String displayCreationMessage(String msg) {
+        return ("ConnectionSubviewController: " + msg);
+    }
+
+    public void productKeyDisable(boolean value) {
+        this.productKeyImageView.setDisable(value);
+    }
 
     @FXML
     private void handleConnectImageViewMouseExited(MouseEvent event) {
+        this.application.getStage().getScene().setCursor(Cursor.DEFAULT);
     }
 
     @FXML
     private void handleConnectImageViewMouseEntered(MouseEvent event) {
+        this.application.getStage().getScene().setCursor(Cursor.HAND);
     }
 
     @FXML
@@ -117,10 +138,12 @@ public class ConnectionSubviewController implements Initializable {
 
     @FXML
     private void handleProductKeyImageViewMouseExited(MouseEvent event) {
+        this.application.getStage().getScene().setCursor(Cursor.DEFAULT);
     }
 
     @FXML
     private void handleProductKeyImageViewMouseEntered(MouseEvent event) {
+        this.application.getStage().getScene().setCursor(Cursor.HAND);
     }
 
     @FXML
@@ -133,10 +156,12 @@ public class ConnectionSubviewController implements Initializable {
 
     @FXML
     private void handlePremiumInfoImageViewMouseExited(MouseEvent event) {
+        this.application.getStage().getScene().setCursor(Cursor.DEFAULT);
     }
 
     @FXML
     private void handlePremiumInfoImageViewMouseEntered(MouseEvent event) {
+        this.application.getStage().getScene().setCursor(Cursor.HAND);
     }
 
     @FXML
@@ -146,23 +171,4 @@ public class ConnectionSubviewController implements Initializable {
     @FXML
     private void handlePremiumInfoImageViewClicked(MouseEvent event) {
     }
-    
-    public void initPremium(boolean freeAccount) {
-        if (!freeAccount) {
-            this.premiumInfoImageView.setVisible(false);
-            this.connectImageView.setVisible(false);
-        }
-        else {
-        this.productKeyImageView.setVisible(false);
-        this.productKeyImageView.setVisible(false);
-        }
-    }
-        
-   public String displayCreationMessage(String msg){
-       return("ConnectionSubviewController: " + msg);
-   }
-   
-   public void productKeyDisable(boolean value){
-       this.productKeyImageView.setDisable(value);
-   }
 }
