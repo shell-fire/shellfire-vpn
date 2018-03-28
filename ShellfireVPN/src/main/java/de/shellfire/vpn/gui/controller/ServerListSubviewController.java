@@ -5,12 +5,14 @@
  */
 package de.shellfire.vpn.gui.controller;
 
+import de.shellfire.vpn.gui.model.ServerListFXModel;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
@@ -26,7 +28,7 @@ public class ServerListSubviewController implements Initializable {
     @FXML
     private AnchorPane serverListAnchorPane;
     @FXML
-    private TableView<?> serverListTableView;
+    private TableView<ServerListFXModel> serverListTableView;
     @FXML
     private Label selectServerLabel;
     @FXML
@@ -43,8 +45,18 @@ public class ServerListSubviewController implements Initializable {
     private ImageView connectImage2;
     @FXML
     private ToggleGroup networkTypeToggleGroup;
+    @FXML
+    private TableColumn<ServerListFXModel, String> countryColunm;
+    @FXML
+    private TableColumn<ServerListFXModel, String> nameColumn;
+    @FXML
+    private TableColumn<ServerListFXModel, String> serverColumn;
+    @FXML
+    private TableColumn<ServerListFXModel, String> securityColumn;
+    @FXML
+    private TableColumn<ServerListFXModel, String> speedColumn;
 
-    public TableView<?> getServerListTableView() {
+    public TableView<ServerListFXModel> getServerListTableView() {
         return serverListTableView;
     }
 

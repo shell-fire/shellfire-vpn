@@ -10,11 +10,11 @@
    <children>
       <TableView fx:id="serverListTableView" layoutX="3.0" layoutY="50.0" prefHeight="382.0" prefWidth="629.0" AnchorPane.leftAnchor="1.0" AnchorPane.topAnchor="50.0">
         <columns>
-          <TableColumn prefWidth="104.0" style="-fx-background-color: rgb(64,69,73);" text="Country" />
-          <TableColumn prefWidth="110.0" text="Name" />
-            <TableColumn prefWidth="89.0" text="Server" />
-            <TableColumn prefWidth="126.0" text="Security" />
-            <TableColumn prefWidth="165.0" text="Speed" />
+          <TableColumn fx:id="countryColunm" prefWidth="104.0" style="-fx-background-color: rgb(64,69,73);" text="Country" />
+          <TableColumn fx:id="nameColumn" prefWidth="118.0" text="Name" />
+            <TableColumn fx:id="serverColumn" prefWidth="96.0" text="Server" />
+            <TableColumn fx:id="securityColumn" prefWidth="139.0" text="Security" />
+            <TableColumn fx:id="speedColumn" prefWidth="171.0" text="Speed" />
         </columns>
       </TableView>
       <Label fx:id="selectServerLabel" contentDisplay="CENTER" layoutX="1.0" layoutY="2.0" prefHeight="42.0" prefWidth="629.0" style="-fx-background-color: rgb(64,69,73);" text="   WÃ¤hle einen Server fÃ¼r deine Verbindung" textFill="WHITE" AnchorPane.leftAnchor="1.0" AnchorPane.topAnchor="1.0">
