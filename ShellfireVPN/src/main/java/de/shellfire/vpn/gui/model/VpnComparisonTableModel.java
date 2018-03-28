@@ -9,8 +9,11 @@ import javax.swing.table.AbstractTableModel;
 import org.xnap.commons.i18n.I18n;
 
 import de.shellfire.vpn.Storage;
+import de.shellfire.vpn.Util;
+import de.shellfire.vpn.gui.RegisterForm;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.webservice.WebService;
+import org.slf4j.Logger;
 
 /**
  * 
@@ -22,6 +25,7 @@ public class VpnComparisonTableModel extends AbstractTableModel {
   private static I18n i18n = VpnI18N.getI18n();
   private AttributeList vpnAttributeList;
   private String[] header = { "", i18n.tr("Free"), i18n.tr("Premium"), i18n.tr("Premium Plus") };
+  private static Logger log = Util.getLogger(RegisterForm.class.getCanonicalName());
 
   public VpnComparisonTableModel() {
     this.initData();
@@ -94,7 +98,7 @@ public class VpnComparisonTableModel extends AbstractTableModel {
     WebService service = (WebService)Storage.get(WebService.class);
     
     vpnAttributeList = new AttributeList(service.getVpnComparisonTable());
-    
+    log.debug("VpnComparisonTableModel: Attribute list is " + vpnAttributeList.toString() );
     
   }
 

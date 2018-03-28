@@ -17,7 +17,14 @@
                      <children>
                         <ScrollPane fx:id="premiumScrollPane" prefHeight="367.0" prefWidth="424.0" AnchorPane.bottomAnchor="72.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="7.0">
                            <content>
-                              <TextArea fx:id="licenceTextArea" maxWidth="1.7976931348623157E308" prefHeight="361.0" prefWidth="421.0" />
+                              <TableView fx:id="premiumTableView" prefHeight="364.0" prefWidth="422.0">
+                                <columns>
+                                  <TableColumn fx:id="connectionColumn" prefWidth="111.0" text="Connection" />
+                                  <TableColumn fx:id="freeColumn" prefWidth="94.0" text="Free" />
+                                    <TableColumn fx:id="premiumColumn" prefWidth="97.0" text="Premium" />
+                                    <TableColumn fx:id="premiumPlusColumn" prefWidth="118.0" text="Premium Plus" />
+                                </columns>
+                              </TableView>
                            </content>
                         </ScrollPane>
                         <Label fx:id="remainingTimeLabel" layoutX="18.0" layoutY="415.0" prefHeight="25.0" prefWidth="149.0" text="Remaining waiting time:" />
