@@ -5,7 +5,10 @@
  */
 package de.shellfire.vpn.gui.model;
 
+import de.shellfire.vpn.i18n.VpnI18N;
+import de.shellfire.vpn.webservice.ServerList;
 import javafx.beans.property.StringProperty;
+import org.xnap.commons.i18n.I18n;
 
 /**
  *
@@ -19,6 +22,10 @@ public class ServerListFXModel {
     private StringProperty security ;
     private StringProperty speed ;
 
+    private static I18n i18n = VpnI18N.getI18n();
+    private String[] header = {i18n.tr("Land"), i18n.tr("Name"), i18n.tr("Servertyp"), i18n.tr("Sicherheit"), i18n.tr("Geschwindigkeit")};
+    private ServerList serverList;
+    
     public String getLand() {
         return land.get();
     }
