@@ -12,6 +12,7 @@ import de.shellfire.vpn.client.ConnectionStateChangedEvent;
 import de.shellfire.vpn.client.ConnectionStateListener;
 import de.shellfire.vpn.client.Controller;
 import de.shellfire.vpn.exception.VpnException;
+import de.shellfire.vpn.gui.FxUIManager;
 import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.proxy.ProxyConfig;
@@ -39,6 +40,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
@@ -80,6 +82,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     private ProgressDialogController connectProgressDialog;
     private MapEncryptionSubviewController mapEncryptionSubviewController;
     private ServerListSubviewController serverListSubviewController;
+    private TvStreasSubviewController tvStreasSubviewController;
     private java.awt.Image iconConnecting;
     private Date connectedSince;
     private Image iconEcncryptionActive;
@@ -89,7 +92,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     private java.awt.Image iconConnected;
     private java.awt.Image iconDisconnectedAwt;
     private java.awt.Image iconIdleAwt;
-    private ServerList serverList;
+    
 
     private Timer currentConnectedSinceTimer;
     //ConnectionSubviewController connectionSubviewController  = null ; 
@@ -250,11 +253,17 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 public void initializeComponents(){
         //Notice that you manipulate the javaObjects out of the initialize if not it will raise an InvocationTargetException
         this.updateLoginDetail();
+        
+        //Bind visibility of buttons to their manage properties so that they are easilty rendered visible or invisible
         this.validUntilLabel.managedProperty().bind(this.validUntilLabel.visibleProperty());
         this.validUntilValue.managedProperty().bind(this.validUntilValue.visibleProperty());
         
         this.connectionSubviewController.initPremium(isFreeAccount());
         this.updateOnlineHost();
+        
+        serverListSubviewController = new ServerListSubviewController(shellfireService);
+        mapEncryptionSubviewController = new MapEncryptionSubviewController();
+        tvStreasSubviewController = new TvStreasSubviewController();
     }
 
     public static void setShellfireService(WebService shellfireService) {
@@ -379,6 +388,11 @@ public void initializeComponents(){
 
     @FXML
     private void handleConnectionPaneClicked(MouseEvent event) {
+        try {
+            contentDetailsPane.getChildren().setAll(FxUIManager.SwitchSubview(null,"connection_subview.fxml"));
+        } catch (IOException ex) {
+            log.debug("ShellfireVPNMainFormFxmlController:  handleServerListPaneClicked has error " + ex.getMessage());
+        }
     }
 
     @FXML
@@ -397,6 +411,13 @@ public void initializeComponents(){
 
     @FXML
     private void handleServerListPaneClicked(MouseEvent event) {
+
+        try {
+            contentDetailsPane.getChildren().setAll(FxUIManager.SwitchSubview(serverListSubviewController,"serverList_subview.fxml"));
+        } catch (IOException ex) {
+            log.debug("ShellfireVPNMainFormFxmlController:  handleServerListPaneClicked has error " + ex.getMessage());
+        }
+        
     }
 
     @FXML
@@ -415,6 +436,11 @@ public void initializeComponents(){
 
     @FXML
     private void handleMapPaneClicked(MouseEvent event) {
+        try {
+            contentDetailsPane.getChildren().setAll(FxUIManager.SwitchSubview(mapEncryptionSubviewController,"mapEncryption_subview.fxml"));
+        } catch (IOException ex) {
+            log.debug("ShellfireVPNMainFormFxmlController:  handleServerListPaneClicked has error " + ex.getMessage());
+        }
     }
 
     @FXML
@@ -433,6 +459,11 @@ public void initializeComponents(){
 
     @FXML
     private void handleStreamsPaneClicked(MouseEvent event) {
+        try {
+            contentDetailsPane.getChildren().setAll(FxUIManager.SwitchSubview(tvStreasSubviewController,"tvStreams_subview.fxml"));
+        } catch (IOException ex) {
+            log.debug("ShellfireVPNMainFormFxmlController:  handleServerListPaneClicked has error " + ex.getMessage());
+        }
     }
 
     @FXML

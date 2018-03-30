@@ -6,18 +6,18 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="serverListAnchorPane" prefHeight="564.0" prefWidth="635.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.ServerListSubviewController">
+<AnchorPane fx:id="serverListAnchorPane" prefHeight="518.0" prefWidth="660.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.ServerListSubviewController">
    <children>
-      <TableView fx:id="serverListTableView" layoutX="3.0" layoutY="50.0" prefHeight="382.0" prefWidth="629.0" AnchorPane.leftAnchor="1.0" AnchorPane.topAnchor="50.0">
+      <TableView fx:id="serverListTableView" layoutX="11.0" layoutY="50.0" prefHeight="346.0" prefWidth="623.0" AnchorPane.leftAnchor="11.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="50.0">
         <columns>
           <TableColumn fx:id="countryColunm" prefWidth="104.0" style="-fx-background-color: rgb(64,69,73);" text="Country" />
           <TableColumn fx:id="nameColumn" prefWidth="118.0" text="Name" />
             <TableColumn fx:id="serverColumn" prefWidth="96.0" text="Server" />
-            <TableColumn fx:id="securityColumn" prefWidth="139.0" text="Security" />
-            <TableColumn fx:id="speedColumn" prefWidth="171.0" text="Speed" />
+            <TableColumn fx:id="securityColumn" prefWidth="162.0" text="Security" />
+            <TableColumn fx:id="speedColumn" prefWidth="167.0" text="Speed" />
         </columns>
       </TableView>
-      <Label fx:id="selectServerLabel" contentDisplay="CENTER" layoutX="1.0" layoutY="2.0" prefHeight="42.0" prefWidth="629.0" style="-fx-background-color: rgb(64,69,73);" text="   WÃ¤hle einen Server fÃ¼r deine Verbindung" textFill="WHITE" AnchorPane.leftAnchor="1.0" AnchorPane.topAnchor="1.0">
+      <Label fx:id="selectServerLabel" contentDisplay="CENTER" layoutX="1.0" layoutY="2.0" prefHeight="42.0" prefWidth="636.0" style="-fx-background-color: rgb(64,69,73);" text="   WÃ¤hle einen Server fÃ¼r deine Verbindung" textFill="WHITE" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="1.0">
          <font>
             <Font size="24.0" />
          </font>
@@ -40,17 +40,17 @@
             <Font size="14.0" />
          </font>
       </RadioButton>
-      <ImageView fx:id="connectImage1" fitHeight="46.0" fitWidth="200.0" layoutX="439.0" layoutY="487.0" AnchorPane.bottomAnchor="7.0">
+      <ImageView fx:id="connectImage1" fitHeight="46.0" fitWidth="200.0" layoutX="439.0" layoutY="487.0" AnchorPane.bottomAnchor="7.0" AnchorPane.rightAnchor="2.0">
          <image>
             <Image url="@../buttons/button-connect-de.gif" />
          </image>
       </ImageView>
-      <ImageView fx:id="keyBuyRadioButton" fitHeight="46.0" fitWidth="200.0" layoutX="4.0" layoutY="488.0" AnchorPane.bottomAnchor="7.0">
+      <ImageView fx:id="keyBuyRadioButton" fitHeight="46.0" fitWidth="200.0" layoutX="4.0" layoutY="488.0" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="2.0">
          <image>
             <Image url="@../buttons/button-connect-de.gif" />
          </image>
       </ImageView>
-      <ImageView fx:id="connectImage2" fitHeight="42.0" fitWidth="206.0" layoutX="216.0" layoutY="491.0" AnchorPane.bottomAnchor="7.0">
+      <ImageView fx:id="connectImage2" fitHeight="42.0" fitWidth="206.0" layoutX="228.0" layoutY="469.0" preserveRatio="true" AnchorPane.bottomAnchor="7.0">
          <image>
             <Image url="@../buttons/button-serial-fr.gif" />
          </image>
