@@ -56,7 +56,7 @@ public class ServerListSubviewController implements Initializable {
     @FXML
     private ToggleGroup networkTypeToggleGroup;
     @FXML
-    private TableColumn<ServerListFXModel, String> countryColunm;
+    private TableColumn<ServerListFXModel, String> countryColumn;
     @FXML
     private TableColumn<ServerListFXModel, String> nameColumn;
     @FXML
@@ -78,7 +78,7 @@ public class ServerListSubviewController implements Initializable {
      */
     public ServerListSubviewController(WebService shellfireService) {
         this.shellfireService = shellfireService;
-        initComponents();
+        //initComponents();
     }
 
      /**
@@ -86,6 +86,10 @@ public class ServerListSubviewController implements Initializable {
      * 
      */
     public ServerListSubviewController() {
+    }
+
+    public void setShellfireService(WebService shellfireService) {
+        this.shellfireService = shellfireService;
     }
     
     
@@ -120,9 +124,11 @@ public class ServerListSubviewController implements Initializable {
     
     public void initComponents(){
         this.serverList = this.shellfireService.getServerList();
-        LinkedList<ServerListFXModel> serverData = initServerTable(this.shellfireService.getServerList().getAll());
-        serverListData.addAll(serverData);
-        serverListTableView.setItems(serverListData);
+        //LinkedList<ServerListFXModel> serverData = 
+        this.serverListData.addAll(initServerTable(this.shellfireService.getServerList().getAll()));
+        log.debug("ServerListSubviewController: data from observable lis "  + this.serverListData.get(0).getName().toString());
+        this.serverListTableView.setItems(serverListData);
+        
     }
     
     
@@ -136,18 +142,25 @@ public class ServerListSubviewController implements Initializable {
         this.TCPRadioButton.setText(i18n.tr("TCP (funktioniert auch bei sicheren Firewalls und Proxy-Servern.)"));
         this.UDPRadioButton.setText(i18n.tr("UDP (schnell)"));
         
+         //accArtTbleColumn.setCellValueFactory(cellData -> cellData.getValue().accountArtProperty());
+         countryColumn.setCellValueFactory(cellData -> cellData.getValue().countryProperty());
+         nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+         serverColumn.setCellValueFactory(cellData -> cellData.getValue().serverTypeProperty());
+         securityColumn.setCellValueFactory(cellData -> cellData.getValue().securityProperty());
+         speedColumn.setCellValueFactory(cellData -> cellData.getValue().speedProperty());
     }    
     
     	private LinkedList<ServerListFXModel> initServerTable(LinkedList<Server> servers) {
             LinkedList<ServerListFXModel> allModels = new LinkedList<>();
             log.debug("ServerListSubviewController: The size of all servers is " + servers.size());
-            for(Server server : servers){
+            for(int i = 0; i < servers.size(); i++){
                 ServerListFXModel serverModel = new ServerListFXModel();
-                serverModel.setLand(server.getCountryString());
-                serverModel.setName(server.getName());
+                serverModel.setCountry("land");
+                log.debug("ServerListSubviewController: " +servers.get(i).getName());
+                serverModel.setName(servers.get(i).getName());
                 // Will change security to match model later
-                serverModel.setSecurity(server.getSecurity().toString());
-                serverModel.setSpeed(server.getServerSpeed().toString());
+                serverModel.setSecurity(servers.get(i).getSecurity().toString());
+                serverModel.setSpeed(servers.get(i).getServerSpeed().toString());
                 allModels.add(serverModel);
             }
             return allModels;
