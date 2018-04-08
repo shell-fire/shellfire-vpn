@@ -122,10 +122,10 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
 		boolean internetAvailable = Util.internetIsAvailable();
 		
 		if (internetAvailable) {
-		  initDialog.setText(i18n.tr("Initialisiere ShellfireVPNService..."));
+		  initDialog.setText(i18n.tr("Initializing ShellfireVPNService..."));
 	    ServiceTools.getInstanceForOS().ensureServiceEnvironment(this);
 		} else {
-			JOptionPane.showMessageDialog(this, i18n.tr("Keine Internet-Verbindung verfügbar - ShellfireVPN wird beendet."), i18n.tr("Kein Internet"), JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, i18n.tr("No internet connection available - ShellfireVPN is being closed."), i18n.tr("No internet"), JOptionPane.ERROR_MESSAGE);
 			System.exit(0);
 		}
 	}
@@ -200,7 +200,7 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
 		    askForLicense();
 		    
 	      if (!this.licenseAccepted) {
-          JOptionPane.showMessageDialog(null, i18n.tr("Lizenz nicht akzeptiert - Shellfire VPN wird jetzt beendet."));
+          JOptionPane.showMessageDialog(null, i18n.tr("Licence not accepted - Shellfire VPN is now exiting."));
           System.exit(0);
         }
   	  }
@@ -220,8 +220,8 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
 		int answer = JOptionPane
 				.showConfirmDialog(
 						null,
-						i18n.tr("Dies ist dein erster Start von Shellfire VPN. Neuen Shellfire VPN Account anlegen?"),
-						i18n.tr("Willkommen: Erster Start"),
+						i18n.tr("This is the first time you start ShellfireV PN. Create a new Shellfire VPN account?"),
+						i18n.tr("Welcome: First Start"),
 						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
 		if (answer == JOptionPane.YES_OPTION) {
@@ -233,8 +233,8 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
 		int answer = JOptionPane
 				.showConfirmDialog(
 						null,
-						i18n.tr("Shellfire VPN beim Hochfahren starten und automatisch verbinden?"),
-						i18n.tr("Autostart"), JOptionPane.YES_NO_OPTION,
+						i18n.tr("Start Shellfire VPN on boot and connect automatically?"),
+						i18n.tr("Startup"), JOptionPane.YES_NO_OPTION,
 						JOptionPane.QUESTION_MESSAGE);
 
 		if (answer == JOptionPane.YES_OPTION) {
@@ -424,12 +424,12 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
 
         jLabel7.setFont(new java.awt.Font("Arial", 0, Util.getFontSize())); // NOI18N
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel7.setText(i18n.tr("Email / Benutzername:"));
+        jLabel7.setText(i18n.tr("Email / Username:"));
         jLabel7.setName("jLabel7"); // NOI18N
 
         jLabel15.setFont(new java.awt.Font("Arial", 0, Util.getFontSize())); // NOI18N
         jLabel15.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel15.setText(i18n.tr("Passwort:"));
+        jLabel15.setText(i18n.tr("Password:"));
         jLabel15.setName("jLabel15"); // NOI18N
 
         jPassword.setName("jPassword"); // NOI18N
@@ -447,7 +447,7 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
             }
         });
 
-        jAutoLogin.setText(i18n.tr("Automatisch einloggen"));
+        jAutoLogin.setText(i18n.tr("Login automatically"));
         jAutoLogin.setName("jAutoLogin"); // NOI18N
         jAutoLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -455,7 +455,7 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
             }
         });
 
-        jOpenRegisterFormButton.setText(i18n.tr("Keine Zugangsdaten?"));
+        jOpenRegisterFormButton.setText(i18n.tr("No user credentials?"));
         jOpenRegisterFormButton.setName("jOpenRegisterFormButton"); // NOI18N
         jOpenRegisterFormButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -463,8 +463,8 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
             }
         });
 
-        jLostUsernamePasswordButton.setText(i18n.tr("Zugangsdaten verloren?"));
-        jLostUsernamePasswordButton.setActionCommand(i18n.tr("Zugangsdaten verloren?"));
+        jLostUsernamePasswordButton.setText(i18n.tr("User credentials lost?"));
+        jLostUsernamePasswordButton.setActionCommand(i18n.tr("User credentials lost?"));
         jLostUsernamePasswordButton.setName("jLostUsernamePasswordButton"); // NOI18N
         jLostUsernamePasswordButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -472,7 +472,7 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
             }
         });
 
-        jStoreLoginData.setText(i18n.tr("Logindaten speichern"));
+        jStoreLoginData.setText(i18n.tr("Save login data"));
         jStoreLoginData.setName("jStoreLoginData"); // NOI18N
         jStoreLoginData.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -481,7 +481,7 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
         });
 
         jAutoStart.setSelected(true);
-        jAutoStart.setText(i18n.tr("Beim Hochfahren starten"));
+        jAutoStart.setText(i18n.tr("Start on boot"));
         jAutoStart.setName("jAutoStart"); // NOI18N
         jAutoStart.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -490,7 +490,7 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
         });
 
         jAutoConnect.setSelected(true);
-        jAutoConnect.setText(i18n.tr("Automatisch verbinden"));
+        jAutoConnect.setText(i18n.tr("Connect  automatically"));
         jAutoConnect.setName("jAutoConnect"); // NOI18N
         jAutoConnect.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -789,15 +789,15 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
 	      int answer = JOptionPane
 	          .showConfirmDialog(
 	              null,
-	              i18n.tr("Es ist eine neue Version von Shellfire VPN verfügbar. Ein Update ist zwingend erforderlich. Möchtest du jetzt updaten?"),
-	              i18n.tr("Neue Version"),
+	              i18n.tr("A new version of Shellfire VPN is available. An update is mandatory. Would you like to update now?"),
+	              i18n.tr("New Version"),
 	              JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
 	      if (answer == JOptionPane.YES_OPTION) {
 	        JOptionPane.showMessageDialog(
 	            null,
-	            i18n.tr("Du hast dich entschieden, zu updaten. Shellfire VPN wird jetzt mit Admin-Privilegien neugestartet um das Update durchzuführen."),
-	            i18n.tr("Update wird durchgeführt"), JOptionPane.INFORMATION_MESSAGE);
+	            i18n.tr("You decided, to update. Shellfire VPN is now being restarted with super user privileges to perform the update."),
+	            i18n.tr("Update is being performed"), JOptionPane.INFORMATION_MESSAGE);
 	        
 	        
 	        String installerPath = com.apple.eio.FileManager.getPathToApplicationBundle() + "/Contents/Java/ShellfireVPN2-Updater.app";
@@ -819,8 +819,8 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
 	      } else {
 	        JOptionPane.showMessageDialog(
 	            null,
-	            i18n.tr("Du hast dich entschieden, nicht zu updaten. Shellfire VPN wird jetzt beendet."),
-	            i18n.tr("Update abgelehnt"), JOptionPane.ERROR_MESSAGE);
+	            i18n.tr("You decided not to update - Shellfire VPN is now exiting."),
+	            i18n.tr("Update rejected"), JOptionPane.ERROR_MESSAGE);
 	        System.exit(0);
 	      }
 	      
@@ -834,7 +834,7 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
 	}
 
 	private void showLoginProgress() {
-		this.loginProgressDialog = new ProgressDialog(this, false, i18n.tr("Einloggen..."));
+		this.loginProgressDialog = new ProgressDialog(this, false, i18n.tr("Logging in..."));
 		this.loginProgressDialog.setVisible(true);
 	}
 
@@ -974,9 +974,9 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
 				} else {
 					JOptionPane.showMessageDialog(
 							null,
-							i18n.tr("Login fehlgeschlagen: ")
+							i18n.tr("Login error:")
 									+ loginResult.getMessage(),
-							i18n.tr("Fehler"), JOptionPane.ERROR_MESSAGE);
+							i18n.tr("Error"), JOptionPane.ERROR_MESSAGE);
 					setVisible(true);
 				}
 			}

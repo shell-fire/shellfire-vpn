@@ -111,8 +111,8 @@ public class Util {
       msg = ex.getLocalizedMessage();
     }
 
-    JOptionPane.showMessageDialog(null, i18n.tr("Vorgang konnte nicht ausgeführt werden, da ein Fehler aufgetreten ist:") + "\n" + msg,
-        i18n.tr("Fehler"), JOptionPane.ERROR_MESSAGE);
+    JOptionPane.showMessageDialog(null, i18n.tr("Action could not be completed, an error occured:") + "\n" + msg,
+        i18n.tr("Error"), JOptionPane.ERROR_MESSAGE);
 
   }
 

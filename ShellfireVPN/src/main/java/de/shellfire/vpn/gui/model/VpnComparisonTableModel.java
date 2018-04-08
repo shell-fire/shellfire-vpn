@@ -45,13 +45,13 @@ public class VpnComparisonTableModel extends AbstractTableModel {
   private void initData() {
     /*
     vpnAttributeList = new VpnAttributeList();
-    VpnAttributeContainer attributeContainer = new VpnAttributeContainer(i18n.tr("Verbindung"));
+    VpnAttributeContainer attributeContainer = new VpnAttributeContainer(i18n.tr("Connection"));
     attributeContainer.add(i18n.tr("Anonym im Internet surfen"), true, true);
     attributeContainer.add(i18n.tr("Eigene IP-Adresse wird versteckt"), true, true);
     attributeContainer.add(i18n.tr("Internet-Verbindung verschlüsselt"), true, true);
     attributeContainer.add(i18n.tr("Sicher in öffentlichen WLANs surfen"), true, true);
     attributeContainer.add(i18n.tr("Traffic / Übertragungsvolumen"), i18n.tr("unlimitiert"), i18n.tr("unlimitiert"));
-    attributeContainer.add(i18n.tr("Geschwindigkeit"), new Star(1, i18n.tr("384 kbit/sek")), new Star(3, i18n.tr("7200 kbit/sek")));
+    attributeContainer.add(i18n.tr("Speed"), new Star(1, i18n.tr("384 kbit/sek")), new Star(3, i18n.tr("7200 kbit/sek")));
     attributeContainer.add(i18n.tr("Verschlüsselung"), new Star(2, i18n.tr("128 bit")), new Star(3, i18n.tr("192 bit")));
     attributeContainer.add(i18n.tr("Server in Deutschland"), true, true);
     attributeContainer.add(i18n.tr("Server in USA"), false, true);

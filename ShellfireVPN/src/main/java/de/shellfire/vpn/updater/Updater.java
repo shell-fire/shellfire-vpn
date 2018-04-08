@@ -160,7 +160,7 @@ public class Updater implements CanContinueAfterBackEndAvailable {
 
     } catch (IOException e) {
 
-      this.displayError(i18n.tr("Update konnte nicht durchgeführt werden. Launcher wird beendet.") + ("\r\n") + e.getMessage());
+      this.displayError(i18n.tr("Update could not be processed. Launcher is being shut down.") + ("\r\n") + e.getMessage());
 
       System.exit(0);
     }
@@ -177,7 +177,7 @@ public class Updater implements CanContinueAfterBackEndAvailable {
       executeJava(exec);
     } catch (IOException e) {
 
-      this.displayError(i18n.tr("Hauptanwendung konnte nicht gestartet werden. Launcher wird beendet.") + ("\r\n") + e.getMessage());
+      this.displayError(i18n.tr("Main application could not be started. The launcher will now shut down.") + ("\r\n") + e.getMessage());
 
       System.exit(0);
     }
@@ -212,7 +212,7 @@ public class Updater implements CanContinueAfterBackEndAvailable {
         return "";
       } catch (IOException e1) {
         e1.printStackTrace();
-        displayError(i18n.tr("I/O Fehler während des Downloades der neuen Version. Abbruch."));
+        displayError(i18n.tr("I/O error during download of the newest version. Aborting"));
         System.exit(0);
 
       }
@@ -228,15 +228,15 @@ public class Updater implements CanContinueAfterBackEndAvailable {
     try {
       final String fileName = getService().getLatestInstaller();
 
-      updateProgressDialog = new ProgressDialog(null, false, i18n.tr("Downloade neue Version..."));
+      updateProgressDialog = new ProgressDialog(null, false, i18n.tr("Downloading update..."));
 
-      updateProgressDialog.setOption(2, i18n.tr("abbrechen"));
+      updateProgressDialog.setOption(2, i18n.tr("cancel"));
       final MyWorker w1 = new MyWorker(fileName, path, user);
       updateProgressDialog.setOptionCallback(new Runnable() {
         @Override
         public void run() {
           w1.cancel(true);
-          displayError(i18n.tr("Update abgebrochen. Anwendung wird beendet."));
+          displayError(i18n.tr("Update aborted, shutting down application."));
           System.exit(0);
         }
       });
@@ -252,11 +252,11 @@ public class Updater implements CanContinueAfterBackEndAvailable {
 
     } catch (InterruptedException e) {
       log.error("Error while downloading", e);
-      this.displayError(i18n.tr("Fehler während des Downloades der neuen Version. Abbruch."));
+      this.displayError(i18n.tr("Error while downloading new version. Aborting."));
       System.exit(0);
     } catch (ExecutionException e) {
       log.error("Error while downloading", e);
-      this.displayError(i18n.tr("Fehler während des Downloades der neuen Version. Abbruch."));
+      this.displayError(i18n.tr("Error while downloading new version. Aborting."));
       System.exit(0);
     }
 
@@ -294,7 +294,7 @@ public class Updater implements CanContinueAfterBackEndAvailable {
     int result = JOptionPane.showConfirmDialog(null,
         i18n.tr(
             "Update verfügbar. Ohne Durchführung des Updates ist der weitere Betrieb von Shellfire VPN leider nicht möglich.\n\nJetzt Updaten?"),
-        i18n.tr("Update verfügbar"), JOptionPane.YES_NO_OPTION);
+        i18n.tr("Update available"), JOptionPane.YES_NO_OPTION);
 
     return (result == JOptionPane.YES_OPTION);
   }
@@ -470,11 +470,11 @@ public class Updater implements CanContinueAfterBackEndAvailable {
       p = Runtime.getRuntime().exec(start);
     } else {
       updateProgressDialog.setIndeterminate(true);
-      updateProgressDialog.setText(i18n.tr("Shellfire VPN Service deinstallieren..."));
+      updateProgressDialog.setText(i18n.tr("Uninstalling Shellfire VPN Service"));
 
       ServiceTools.getInstanceForOS().uninstall(installPath + "/Contents/Java/");
 
-      updateProgressDialog.setText(i18n.tr("Neue Version installieren "));
+      updateProgressDialog.setText(i18n.tr("Install new version"));
 
       List<String> unzip = new ArrayList<String>();
       unzip.add("/usr/bin/unzip");
@@ -512,7 +512,7 @@ public class Updater implements CanContinueAfterBackEndAvailable {
       } catch (InterruptedException e) {
         log.error("Error occured during update");
       }
-      updateProgressDialog.setText(i18n.tr("Shellfire VPN Service installieren..."));
+      updateProgressDialog.setText(i18n.tr("Installing Shellfire VPN Service"));
       ServiceTools.getInstanceForOS().install(installPath + "/Contents/Java/");
 
       List<String> restart = new ArrayList<String>();
@@ -548,7 +548,7 @@ public class Updater implements CanContinueAfterBackEndAvailable {
           }
 
         } else {
-          displayError(i18n.tr("Du hast dich entschieden, das Update nicht durchzuführen. Die Anwendung wird sich beenden."));
+          displayError(i18n.tr("You chose not to update. The application will now shut down."));
           System.exit(0);
         }
       } else {

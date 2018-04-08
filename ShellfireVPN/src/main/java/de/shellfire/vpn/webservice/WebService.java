@@ -98,7 +98,7 @@ public class WebService {
         this.loadVpnDetails();
         log.debug("Load vpn details - finished");
       } catch (VpnException e) {
-        result.setMessage(i18n.tr("VPN-Daten konnten nicht geladen werden."));
+        result.setMessage(i18n.tr("VPN data could not be loaded."));
       }
     }
 
@@ -309,7 +309,7 @@ public class WebService {
     }, 3, 100);
 
     if (ip == null)
-      ip = i18n.tr("unbekannt");
+      ip = i18n.tr("unknown");
 
     return ip;
   }

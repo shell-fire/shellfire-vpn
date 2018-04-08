@@ -122,7 +122,7 @@ public class EndpointManager {
       }
       
       if (result == null) {
-        JOptionPane.showMessageDialog(null, i18n.tr("Konnte keine Verbindung zum Shellfire Backend herstellen - Shellfire VPN wird jetzt beendet"));
+        JOptionPane.showMessageDialog(null, i18n.tr("Could not connect to the Shellfire backend - Shellfire VPN is shutting down"));
         System.exit(0);
       }
       if (initDialogOrigin) {
@@ -139,7 +139,7 @@ public class EndpointManager {
         log.debug("No preferred endPoint set yet, not testing");
       } else {
         log.debug("testing preferred endPoint {}", preferredEndPoint);
-        initDialog.setText(i18n.tr("Teste zuvor funktionierenden Endpunkt..."));
+        initDialog.setText(i18n.tr("Testing endpoint that worked before..."));
         result = testEndpoint(preferredEndPoint);
       }
 
@@ -152,7 +152,7 @@ public class EndpointManager {
       boolean result = false;
       
       for (int i = 0;i < endPointList.size() && result == false; i++) {
-        initDialog.setText(i18n.tr("Suche Verbindung zu Shellfire Backend... ") + String.format("%s / %s", (i+1),  endPointList.size()));
+        initDialog.setText(i18n.tr("Searching for backend connection...") + String.format("%s / %s", (i+1),  endPointList.size()));
         String endPoint = endPointList.get(i);
         result = testEndpoint(endPoint);
       }
@@ -165,7 +165,7 @@ public class EndpointManager {
     protected String doInBackground() throws Exception {
 
       
-      initDialog.setText(i18n.tr("Suche Verbindung zu Shellfire Backend..."));
+      initDialog.setText(i18n.tr("Searching for backend connection..."));
       
       boolean result = false;
       

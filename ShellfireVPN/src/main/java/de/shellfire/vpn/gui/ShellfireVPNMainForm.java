@@ -343,19 +343,19 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
         
         jLabel2.setFont(new Font("Arial", Font.PLAIN, Util.getFontSize())); // NOI18N
         jLabel2.setForeground(resourceMap.getColor("jLabel2.foreground")); // NOI18N
-        jLabel2.setText(i18n.tr("Verbindungsstatus"));
+        jLabel2.setText(i18n.tr("Connection status"));
         jLabel2.setName("jLabel2"); // NOI18N
         jPanel2.add(jLabel2, "cell 1 0,grow,aligny top");
 
         jLabelConnectionState.setFont(new Font("Arial", Font.PLAIN, Util.getFontSize())); // NOI18N
         jLabelConnectionState.setForeground(resourceMap.getColor("jLabelConnectionState.foreground")); // NOI18N
-        jLabelConnectionState.setText(i18n.tr("Getrennt"));
+        jLabelConnectionState.setText(i18n.tr("Disconnected"));
         jLabelConnectionState.setName("jLabelConnectionState"); // NOI18N
         jPanel2.add(jLabelConnectionState, "cell 1 1,grow,aligny top");
 
         jLabel14.setFont(new Font("Arial", Font.PLAIN, Util.getFontSize())); // NOI18N
         jLabel14.setForeground(resourceMap.getColor("jLabelVpnId.foreground")); // NOI18N
-        jLabel14.setText(i18n.tr("Verbunden seit:"));
+        jLabel14.setText(i18n.tr("Connected since:"));
         jLabel14.setName("jLabel14"); // NOI18N
         jPanel2.add(jLabel14, "cell 2 0,growx,aligny top");
 
@@ -373,7 +373,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 
         jConnectedSince.setFont(new Font("Arial", Font.PLAIN, Util.getFontSize())); // NOI18N
         jConnectedSince.setForeground(resourceMap.getColor("jLabelVpnId.foreground")); // NOI18N
-        jConnectedSince.setText(i18n.tr("(nicht verbunden)"));
+        jConnectedSince.setText(i18n.tr("(not connected)"));
         jConnectedSince.setName("jConnectedSince"); // NOI18N
         jPanel2.add(jConnectedSince, "cell 2 1,growx,aligny top");
 
@@ -391,7 +391,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 
         jLabelValidUntilDesc.setFont(new Font("Arial", Font.PLAIN, Util.getFontSize())); // NOI18N
         jLabelValidUntilDesc.setForeground(resourceMap.getColor("jLabelVpnId.foreground")); // NOI18N
-        jLabelValidUntilDesc.setText(i18n.tr("Gültig bis:"));
+        jLabelValidUntilDesc.setText(i18n.tr("Valid Until:"));
         jLabelValidUntilDesc.setName("jLabelValidUntilDesc"); // NOI18N
         jPanel2.add(jLabelValidUntilDesc, "cell 6 0,growx,aligny top");
 
@@ -403,7 +403,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 
         jLabel19.setFont(new Font("Arial", Font.PLAIN, Util.getFontSize())); // NOI18N
         jLabel19.setForeground(resourceMap.getColor("jLabelVpnId.foreground")); // NOI18N
-        jLabel19.setText(i18n.tr("VPN Typ:"));
+        jLabel19.setText(i18n.tr("VPN type:"));
         jLabel19.setName("jLabel19"); // NOI18N
         jPanel2.add(jLabel19, "cell 5 0,growx,aligny top");
 
@@ -421,7 +421,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
         jLabel11.setBackground(resourceMap.getColor("jLabel11.background")); // NOI18N
         jLabel11.setFont(OxygenFont.getFontLargeBold());
         jLabel11.setForeground(resourceMap.getColor("jLabel11.foreground")); // NOI18N
-        jLabel11.setText("   " + i18n.tr("Wähle einen Server für deine Verbindung"));
+        jLabel11.setText("   " + i18n.tr("Select a Server for your connection"));
         jLabel11.setName("jLabel11"); // NOI18N
         jLabel11.setOpaque(true);
 
@@ -445,8 +445,8 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 
         jNetworkTransportType.add(jRadioUdp);
         jRadioUdp.setForeground(resourceMap.getColor("jRadioTcp.foreground")); // NOI18N
-        jRadioUdp.setText(i18n.tr("UDP (schnell)"));
-        jRadioUdp.setToolTipText(i18n.tr("<html>Wähle UDP für eine schnellere Verbindung.<br /> TCP solltest du nur wählen, wenn du Probleme hast, die Verbindung mit UDP aufzubauen.</html>"));
+        jRadioUdp.setText(i18n.tr("UDP (fast)"));
+        jRadioUdp.setToolTipText(i18n.tr("<html>Select UDP for a faster connection.<br /> You should only select TCP if you have problems connecting with UDP.</html>"));
         jRadioUdp.setContentAreaFilled(false);
         jRadioUdp.setName("jRadioUdp"); // NOI18N
         jRadioUdp.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -457,15 +457,15 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 
         jNetworkTransportType.add(jRadioTcp);
         jRadioTcp.setForeground(resourceMap.getColor("jRadioTcp.foreground")); // NOI18N
-        jRadioTcp.setText(i18n.tr("TCP (funktioniert auch bei sicheren Firewalls und Proxy-Servern.)"));
-        jRadioTcp.setToolTipText(i18n.tr("<html>Wähle UDP für eine schnellere Verbindung.<br /> TCP solltest du nur wählen, wenn du Probleme hast, die Verbindung mit UDP aufzubauen oder wenn ein Proxy-Server eingesetzt wird.</html>"));
+        jRadioTcp.setText(i18n.tr("TCP (works with safe firewalls and proxies.)"));
+        jRadioTcp.setToolTipText(i18n.tr("<html>Select UDP for a faster connection.<br /> You should only select TCP if you have problems connecting with UDP o when using a proxy-server.</html>"));
         jRadioTcp.setContentAreaFilled(false);
         jRadioTcp.setName("jRadioTcp"); // NOI18N
 
         jLabel12.setFont(OxygenFont.getFontLargeBold());
         jLabel12.setForeground(resourceMap.getColor("jRadioTcp.foreground")); // NOI18N
-        jLabel12.setText(i18n.tr("Verbindungstyp"));
-        jLabel12.setToolTipText(i18n.tr("<html>Wähle UDP für eine schnellere Verbindung.<br /> TCP solltest du nur wählen, wenn du Probleme hast, die Verbindung mit UDP aufzubauen.</html>"));
+        jLabel12.setText(i18n.tr("Connection type"));
+        jLabel12.setToolTipText(i18n.tr("<html>Select UDP for a faster connection.<br /> You should only select TCP if you have problems connecting with UDP.</html>"));
         jLabel12.setName("jLabel12"); // NOI18N
 
         jUpgradeButtonLabel1.setIcon(Util.getImageIcon("/buttons/button-serial-de.gif")); // NOI18N
@@ -564,7 +564,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
         jLabel13.setBackground(resourceMap.getColor("jLabel13.background")); // NOI18N
         jLabel13.setFont(OxygenFont.getFontLargeBold());
         jLabel13.setForeground(resourceMap.getColor("jLabel13.foreground")); // NOI18N
-        jLabel13.setText("   " + i18n.tr("Server Übersichtskarte"));
+        jLabel13.setText("   " + i18n.tr("Server map"));
         jLabel13.setName("jLabel13"); // NOI18N
         jLabel13.setOpaque(true);
 
@@ -576,7 +576,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
         jXMapKit1.setZoom(15);
 
         jShowOwnPosition.setForeground(resourceMap.getColor("jShowOwnPosition.foreground")); // NOI18N
-        jShowOwnPosition.setText(i18n.tr("Datenroute und eigenen Standort anzeigen (falls verbunden)"));
+        jShowOwnPosition.setText(i18n.tr("Show data route and your location (when connected)"));
         jShowOwnPosition.setContentAreaFilled(false);
         jShowOwnPosition.setName("jShowOwnPosition"); // NOI18N
         jShowOwnPosition.addActionListener(new java.awt.event.ActionListener() {
@@ -586,7 +586,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
         });
 
         jGotoOwnLocation.setIcon(Util.getImageIcon("/icons/icon-home.png")); // NOI18N
-        jGotoOwnLocation.setText(i18n.tr("gehe zu eigenem Standort"));
+        jGotoOwnLocation.setText(i18n.tr("go to your location"));
         jGotoOwnLocation.setEnabled(false);
         jGotoOwnLocation.setName("jGotoOwnLocation"); // NOI18N
         jGotoOwnLocation.addActionListener(new java.awt.event.ActionListener() {
@@ -610,12 +610,12 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
         jLabel16.setBackground(resourceMap.getColor("jLabel16.background")); // NOI18N
         jLabel16.setFont(OxygenFont.getFontLargeBold());
         jLabel16.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel16.setText("     " + i18n.tr("Liste von TV Streams aus den USA (englischsprachig)"));
+        jLabel16.setText("     " + i18n.tr("List of US TV streams (english language)"));
         jLabel16.setName("jLabel16"); // NOI18N
         jLabel16.setOpaque(true);
 
         jLabel10.setForeground(resourceMap.getColor("jLabel10.foreground")); // NOI18N
-        jLabel10.setText(i18n.tr("<html>Für die Verwendung dieser Streams ist in der Regel eine US-IP-Adresse nötig.<br>Diese erhälst du, in dem du dich auf einen Shellfire VPN Server in den USA verbindest.</html>"));
+        jLabel10.setText(i18n.tr("<html> Using these streams usually requires a US IP address.<br>You can get one by connecting to a Shellfire VPN server located in the USA.</html>"));
         jLabel10.setName("jLabel10"); // NOI18N
 
         jPanel3.setBackground(resourceMap.getColor("jPanel3.background")); // NOI18N
@@ -776,12 +776,12 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
         jPanelConnect.setLayout(new MigLayout("hidemode 3, insets 0, gapx 0, gapy 0", "[grow][grow]", "[grow][grow][grow]"));
 
         jLabelConnectHeader.setFont(new Font("Arial", Font.PLAIN, Util.getFontSize())); // NOI18N
-        jLabelConnectHeader.setText("     " + i18n.tr("Verbindung"));
+        jLabelConnectHeader.setText("     " + i18n.tr("Connection"));
         jLabelConnectHeader.setName("jLabelConnectHeader"); // NOI18N
         jPanelConnect.add(jLabelConnectHeader, "cell 1 0,alignx left,aligny bottom");
 
         jLabelConnectFooter.setFont(new Font("Arial", Font.PLAIN, Util.getFontSize())); // NOI18N
-        jLabelConnectFooter.setText("     " + i18n.tr("Jetzt zu Shellfire VPN verbinden"));
+        jLabelConnectFooter.setText("     " + i18n.tr("Connect to Shellfire VPN now"));
         jLabelConnectFooter.setName("jLabelConnectFooter"); // NOI18N
         jPanelConnect.add(jLabelConnectFooter, "cell 1 1,alignx left,aligny top");
 
@@ -811,12 +811,12 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
         jPanelServerList.setLayout(new MigLayout("hidemode 3, insets 0, gapx 0, gapy 0", "[grow][grow]", "[grow][grow]"));
 
         jLabelServerListHeader.setFont(new Font("Arial", Font.PLAIN, Util.getFontSize())); // NOI18N
-        jLabelServerListHeader.setText("     " + i18n.tr("Server Liste"));
+        jLabelServerListHeader.setText("     " + i18n.tr("Server list"));
         jLabelServerListHeader.setName("jLabelServerListHeader"); // NOI18N
         jPanelServerList.add(jLabelServerListHeader, "cell 1 0,alignx left,aligny bottom");
 
         jLabelServerListFooter.setFont(new Font("Arial", Font.PLAIN, Util.getFontSize())); // NOI18N
-        jLabelServerListFooter.setText("     " + i18n.tr("Liste aller VPN Server anzeigen"));
+        jLabelServerListFooter.setText("     " + i18n.tr("Show list of all VPN servers"));
         jLabelServerListFooter.setName("jLabelServerListFooter"); // NOI18N
         jPanelServerList.add(jLabelServerListFooter, "cell 1 1,alignx left,aligny top");
 
@@ -845,12 +845,12 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
         jPanelMap.setLayout(new MigLayout("hidemode 3, insets 0, gapx 0, gapy 0", "[grow][grow]", "[grow][grow]"));
 
         jLabelMapHeader.setFont(new Font("Arial", Font.PLAIN, Util.getFontSize())); // NOI18N
-        jLabelMapHeader.setText("     " + i18n.tr("Karte"));
+        jLabelMapHeader.setText("     " + i18n.tr("Map"));
         jLabelMapHeader.setName("jLabelMapHeader"); // NOI18N
         jPanelMap.add(jLabelMapHeader, "cell 1 0,alignx left,aligny bottom");
 
         jLabelMapFooter.setFont(new Font("Arial", Font.PLAIN, Util.getFontSize())); // NOI18N
-        jLabelMapFooter.setText("     " + i18n.tr("Zeigt Verschlüsselungsroute"));
+        jLabelMapFooter.setText("     " + i18n.tr("Show encryption route"));
         jLabelMapFooter.setName("jLabelMapFooter"); // NOI18N
         jPanelMap.add(jLabelMapFooter, "cell 1 1,alignx left,aligny top");
 
@@ -879,12 +879,12 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
         jPanelUsa.setLayout(new MigLayout("hidemode 3, insets 0, gapx 0, gapy 0", "[grow][grow]", "[grow][grow]"));
 
         jLabelUsaHeader.setFont(new Font("Arial", Font.PLAIN, Util.getFontSize())); // NOI18N
-        jLabelUsaHeader.setText("     " + i18n.tr("Streams aus den USA"));
+        jLabelUsaHeader.setText("     " + i18n.tr("USA streams"));
         jLabelUsaHeader.setName("jLabelUsaHeader"); // NOI18N
         jPanelUsa.add(jLabelUsaHeader, "cell 1 0,alignx left,aligny bottom");
 
         jLabelUsaFooter.setFont(new Font("Arial", Font.PLAIN, Util.getFontSize())); // NOI18N
-        jLabelUsaFooter.setText("     " + i18n.tr("Liste amerikanischer TV Streams"));
+        jLabelUsaFooter.setText("     " + i18n.tr("List of american TV streams"));
         jLabelUsaFooter.setName("jLabelUsaFooter"); // NOI18N
         jPanelUsa.add(jLabelUsaFooter, "cell 1 1,alignx left,aligny top");
 
@@ -1206,7 +1206,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 											.showConfirmDialog(
 													null,
 													i18n.tr("Dieser Server steht nur für Shellfire VPN Premium Kunden zur Verfügung\n\nWeitere Informationen zu Shellfire VPN Premium anzeigen?"),
-													i18n.tr("Premium Server ausgewählt"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE)) {
+													i18n.tr("Premium server selected"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE)) {
 
 										showNagScreenWithoutTimer();
 
@@ -1231,7 +1231,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 											.showConfirmDialog(
 													null,
 													i18n.tr("Dieser Server steht nur für Shellfire VPN PremiumPlus Kunden zur Verfügung\n\nWeitere Informationen zu Shellfire VPN PremiumPlus anzeigen?"),
-													i18n.tr("PremiumPlus Server ausgewählt"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE)) {
+													i18n.tr("PremiumPlus server selected"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE)) {
 
 										showNagScreenWithoutTimer();
 
@@ -1269,8 +1269,8 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 
 	private void showConnectProgress() {
 		if (this.connectProgressDialog == null) {
-			this.connectProgressDialog = new ProgressDialog(this, false, i18n.tr("Verbindung wird hergestellt..."));
-			this.connectProgressDialog.setOption(2, i18n.tr("abbrechen"));
+			this.connectProgressDialog = new ProgressDialog(this, false, i18n.tr("Connection is being processed..."));
+			this.connectProgressDialog.setOption(2, i18n.tr("cancel"));
 			this.connectProgressDialog.setOptionCallback(new Runnable() {
 
 				@Override
@@ -1786,7 +1786,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 		
 		this.jConnectButtonLabel.setEnabled(true);
 		this.jConnectButtonLabel1.setEnabled(true);
-		this.jLabelConnectionState.setText(i18n.tr("Nicht verbunden"));
+		this.jLabelConnectionState.setText(i18n.tr("Not connected"));
 		mySetIconImage(iconDisconnected);
 		this.jConnectionStateIcon.setIcon(new ImageIcon(this.iconIdleSmall));
 		this.jConnectionStateImage.setIcon(new ImageIcon(this.iconEcncryptionInactive));
@@ -1800,39 +1800,39 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 			switch (this.controller.getReasonForStateChange()) {
 			case PasswordWrong:
 				showMessage = true;
-				message = i18n.tr("Passwort Falsch");
+				message = i18n.tr("Invalid password");
 				break;
 			case NotEnoughPrivileges:
 				showMessage = true;
-				message = i18n.tr("Prozess wird ohne Administrator-Rechte ausgeführt.");
+				message = i18n.tr("Process is being executed without administrator rights.");
 				break;
 			case CertificateFailed:
 				showMessage = true;
-				message = i18n.tr("Unbekannter Zertifikate-Fehler");
+				message = i18n.tr("Unknown certificate error");
 				break;
 			case AllTapInUse:
 				showMessage = true;
-				message = i18n.tr("Alle Tap-Geräte in Verwendung. Bitte alle openvpn.exe Prozesse im Task Manager schließen oder PC neu starten.");
+				message = i18n.tr("All Tap devices in use. Please close openvpn.exe using the task manager or reboot your PC.");
 				break;
 			case DisconnectDetected:
 				showMessage = true;
-				message = i18n.tr("Verbindung wurde unterbrochen.");
+				message = i18n.tr("Connection interrupted.");
 				break;
 			case OpenVpnNotFound:
 				showMessage = true;
-				message = i18n.tr("OpenVPN Installation wurde nicht gefunden. Bitte Shellfire VPN neu installieren.");
+				message = i18n.tr("No OpenVPN installation found. Please reinstall Shellfire VPN.");
 				break;
 			case NoOpenVpnParameters:
 				showMessage = true;
-				message = i18n.tr("OpenVPN Startparameter konnten nicht geladen werden - Bitte überprüfe deine Internet-Verbindung.");
+				message = i18n.tr("OpenVPN startup parameters could not be downloaded - Please check your internet connection.");
 				break;
 			case TapDriverTooOld:
 				showMessage = true;
-				message = i18n.tr("Der installierte Tap Treiber ist zu alt. Bitte installiere Shellfire VPN neu.");
+				message = i18n.tr("The installed Tap driver is out of date. Please reinstall Shellfire VPN.");
 				break;
       case TapDriverNotFound:
         showMessage = true;
-        message = i18n.tr("Es wurde kein Tap Treiber installiert. Bitte installiere Shellfire VPN neu.");
+        message = i18n.tr("No Tap driver installed. Please reinstall Shellfire VPN.");
         break;
       case TapDriverNotFoundPleaseRetry:
         connectFromButton(true);
@@ -1840,12 +1840,12 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 			case GatewayRedirectFailed:
 				showMessage = true;
 				message = i18n
-						.tr("Das Gateway konnte nicht umgeleitet werden. Bitte bei den TCP/IP Einstellungen der aktuellen Netzwerkverbindung ein Gateway einstellen.");
+						.tr("The gateway coul not be switched. Please set a gateway in the TCP/IP settings of the current network adapter.");
 				break;
 			case UnknownOpenVPNError:
 				showMessage = true;
 				message = i18n
-						.tr("Es ist ein unbekannter Fehler mit der VPN Verbindung aufgetreten. Bitte versuche einen Reboot und/oder Shellfire VPN neu zu installieren.");
+						.tr("An unknown error has occured while establishing the VPN connection. Please reboot and/or reinstall Shellfire VPN.");
 				break;
 
 			default:
@@ -1872,7 +1872,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 		this.setNormalCursor();
 		this.updateOnlineHost();
 		this.mapController.updateMap();
-		popupConnectItem.setLabel(i18n.tr("Verbinden"));
+		popupConnectItem.setLabel(i18n.tr("Connect"));
 		popupConnectItem.setEnabled(true);
 		jServerListTable.setEnabled(true);
 		if (!ProxyConfig.isProxyEnabled()) {
@@ -1893,8 +1893,8 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 					Reason reasonForChange = get();
 					if (reasonForChange == Reason.DisconnectButtonPressed || reasonForChange == Reason.DisconnectDetected) {
 
-						showTrayMessageWithoutCallback(i18n.tr("Verbindung getrennt"),
-								i18n.tr("Shellfire VPN Verbindung getrennt. Deine Internet-Verbindung ist nicht mehr geschützt!"));
+						showTrayMessageWithoutCallback(i18n.tr("Disconnected"),
+								i18n.tr("Shellfire VPN connection terminated. Your internet connection is no longer secured!"));
 					}
 				} catch (Exception e) {
 					Util.handleException(e);
@@ -1930,7 +1930,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 		if (!this.jShowOwnPosition.isSelected())
 			this.jShowOwnPosition.setEnabled(false);
 
-		this.jLabelConnectionState.setText(i18n.tr("Verbindung wird hergestellt..."));
+		this.jLabelConnectionState.setText(i18n.tr("Connection is being processed..."));
 		mySetIconImage(iconConnecting);
 		
 		if (this.trayIcon != null) {
@@ -1939,7 +1939,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 		this.setWaitCursor();
 		this.jConnectionStateIcon.setIcon(new ImageIcon(this.iconConnectingSmall));
 
-		popupConnectItem.setLabel(i18n.tr("Verbinde..."));
+		popupConnectItem.setLabel(i18n.tr("Connecting..."));
 		popupConnectItem.setEnabled(false);
 		jServerListTable.setEnabled(false);
 		jScrollPane.getViewport().setBackground(Color.lightGray);
@@ -1958,7 +1958,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 		if (!this.jShowOwnPosition.isSelected())
 			this.jShowOwnPosition.setEnabled(false);
 
-		this.jLabelConnectionState.setText(i18n.tr("Verbunden"));
+		this.jLabelConnectionState.setText(i18n.tr("Connected"));
 		
 		mySetIconImage(iconConnected);
 		this.jConnectionStateImage.setIcon(new ImageIcon(this.iconEcncryptionActive));
@@ -1977,7 +1977,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 
 		this.mapController.updateMap();
 
-		popupConnectItem.setLabel(i18n.tr("Verbindung trennen"));
+		popupConnectItem.setLabel(i18n.tr("Disconnect"));
 		popupConnectItem.setEnabled(true);
 
 		jServerListTable.setEnabled(false);
@@ -1985,8 +1985,8 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 		jRadioUdp.setEnabled(false);
 		jRadioTcp.setEnabled(false);
 
-		showTrayMessageWithoutCallback(i18n.tr("Verbindung Erfolgreich"),
-				i18n.tr("Du bist jetzt mit Shellfire VPN verbunden. Deine Internet-Verbindung ist verschlüsselt."));
+		showTrayMessageWithoutCallback(i18n.tr("Connection successful"),
+				i18n.tr("You are now connected to Shellfire VPN. Your internet connection is encrypted."));
 
 		showStatusUrlIfEnabled();
 
@@ -2038,7 +2038,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 			};
 
 			popup = new PopupMenu();
-			MenuItem defaultItem = new MenuItem(i18n.tr("Beenden"));
+			MenuItem defaultItem = new MenuItem(i18n.tr("Exit"));
 			defaultItem.addActionListener(exitListener);
 
 			ActionListener nagListener = new ActionListener() {
@@ -2048,7 +2048,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 				}
 			};
 
-			MenuItem nagItem = new MenuItem(i18n.tr("Shellfire VPN Premium Infos"));
+			MenuItem nagItem = new MenuItem(i18n.tr("Shellfire VPN premium infos"));
 			nagItem.addActionListener(nagListener);
 
 			ActionListener helpListener = new ActionListener() {
@@ -2058,7 +2058,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 				}
 			};
 
-			MenuItem helpItem = new MenuItem(i18n.tr("Hilfe"));
+			MenuItem helpItem = new MenuItem(i18n.tr("Help"));
 			helpItem.addActionListener(helpListener);
 
 			ActionListener popupConnectListener = new ActionListener() {
@@ -2068,7 +2068,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 				}
 			};
 
-			popupConnectItem = new MenuItem(i18n.tr("Verbinden"));
+			popupConnectItem = new MenuItem(i18n.tr("Connect"));
 			popupConnectItem.addActionListener(popupConnectListener);
 
 			ActionListener statusListener = new ActionListener() {
@@ -2078,7 +2078,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 				}
 			};
 
-			MenuItem statusItem = new MenuItem(i18n.tr("Zeige VPN Status im Browser"));
+			MenuItem statusItem = new MenuItem(i18n.tr("Show VPN state in your browser"));
 			statusItem.addActionListener(statusListener);
 
 			ActionListener openListener = new ActionListener() {
@@ -2095,7 +2095,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 				}
 			};
 
-			MenuItem openItem = new MenuItem(i18n.tr("Shellfire VPN in den Vordergrund"));
+			MenuItem openItem = new MenuItem(i18n.tr("Shellfire VPN to front"));
 			openItem.addActionListener(openListener);
 			popup = new PopupMenu();
 			popup.add(openItem);
@@ -2293,7 +2293,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 			this.jLabelValidUntilDesc.setVisible(true);
 			this.jLabelVpnValidUntil.setVisible(true);
 
-			SimpleDateFormat df = new SimpleDateFormat(i18n.tr("d.MM.yyyy"), VpnI18N.getLanguage().getLocale());
+			SimpleDateFormat df = new SimpleDateFormat(i18n.tr("d/MM/yyyy"), VpnI18N.getLanguage().getLocale());
 			String date = df.format(vpn.getPremiumUntil());
 
 			this.jLabelVpnValidUntil.setText(date);
@@ -2307,7 +2307,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 
 	@Override
 	public void localeChanged(LocaleChangeEvent lce) {
-		JOptionPane.showMessageDialog(null, i18n.tr("Geänderte Spracheinstellungen werden erst nach einem Neustart von Shellfire VPN aktiv.",
+		JOptionPane.showMessageDialog(null, i18n.tr("Changed language settings require a restart of Shellfire VPN to take effect.",
 				"Geänderte Sprache", JOptionPane.INFORMATION_MESSAGE));
 	}
 
@@ -2386,7 +2386,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 				}
 			}
 		} else {
-			messages.add(new VpnTrayMessage(i18n.tr("Nicht verbunden"), i18n.tr("Du bist nicht zu Shellfire VPN verbunden.")));
+			messages.add(new VpnTrayMessage(i18n.tr("Not connected"), i18n.tr("You are not connected to Shellfire VPN.")));
 		}
 
 		if (messages.size() > 0) {
@@ -2399,7 +2399,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 	}
 
 	private void askForDisconnectedAndQuit() {
-		int result = JOptionPane.showConfirmDialog(null, i18n.tr("Verbindung trennen und Shellfire VPN schließen?"), i18n.tr("Verbindung besteht"),
+		int result = JOptionPane.showConfirmDialog(null, i18n.tr("Disconnect and close Shellfire VPN?"), i18n.tr("Currently Connected"),
 				JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
 
   		if (result == JOptionPane.OK_OPTION) {
@@ -2451,7 +2451,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 	}
 
 	private void delayedConnect(Server selectedServer, VpnProtocol protocol, Reason reason) {
-		popupConnectItem.setLabel(i18n.tr("Verbinde..."));
+		popupConnectItem.setLabel(i18n.tr("Connecting..."));
 		popupConnectItem.setEnabled(false);
 
 		nagScreen = new PremiumVPNNagScreen(this, true, new ActionListener() {
@@ -2468,7 +2468,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 					nagScreen = null;
 				}
 
-				popupConnectItem.setLabel(i18n.tr("Verbinden"));
+				popupConnectItem.setLabel(i18n.tr("Connect"));
 				popupConnectItem.setEnabled(true);
 				setNormalCursor();
 			}
