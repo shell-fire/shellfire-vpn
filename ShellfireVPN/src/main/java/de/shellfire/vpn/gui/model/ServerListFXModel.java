@@ -5,41 +5,73 @@
  */
 package de.shellfire.vpn.gui.model;
 
-import de.shellfire.vpn.i18n.VpnI18N;
-import de.shellfire.vpn.webservice.ServerList;
+import de.shellfire.vpn.types.Server;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import org.xnap.commons.i18n.I18n;
 
 /**
  *
  * @author Tcheutchoua Steve
  */
 public class ServerListFXModel {
-    
-    private StringProperty land ;
-    private StringProperty Name ;
-    private StringProperty serverType ;
-    private StringProperty security ;
-    private StringProperty speed ;
+    private final StringProperty name;
+    private final StringProperty serverType;
+    private final ObjectProperty<Server> security;
+    private final ObjectProperty<Server> speed;
+    private final ObjectProperty<Server> country;
 
-    private static I18n i18n = VpnI18N.getI18n();
-    private String[] header = {i18n.tr("Land"), i18n.tr("Name"), i18n.tr("Servertyp"), i18n.tr("Sicherheit"), i18n.tr("Geschwindigkeit")};
-    private ServerList serverList;
     
-    public String getLand() {
-        return land.get();
+    //private static I18n i18n = VpnI18N.getI18n();
+    //private String[] header = {i18n.tr("Land"), i18n.tr("Name"), i18n.tr("Servertyp"), i18n.tr("Sicherheit"), i18n.tr("Geschwindigkeit")};
+    ///private ServerList serverList;
+    public ServerListFXModel() {
+        this(null, null, null, null, null);
     }
 
-    public void setLand(String land) {
-        this.land.set(land);
+    public ServerListFXModel(Object country, String name, String serverType, Object security, Object speed) {
+        this.country = new SimpleObjectProperty(country);
+        this.name = new SimpleStringProperty(name);
+        this.serverType = new SimpleStringProperty(serverType);
+        this.security = new SimpleObjectProperty(security);
+        this.speed = new SimpleObjectProperty(speed);
+    }
+
+    public Object getCountry() {
+        return country.get();
+    }
+
+    public void setCountry(Server country) {
+        this.country.set(country);
+    }
+
+    public ObjectProperty<Server> countryProperty() {
+        return country;
     }
 
     public String getName() {
-        return Name.get();
+        return name.get();
     }
 
     public void setName(String name) {
-        this.Name.set(name);
+        this.name.set(name);
+    }
+
+    public StringProperty nameProperty() {
+        return name;
+    }
+
+    public Server getSecurity() {
+        return security.get();
+    }
+
+    public void setSecurity(Server security) {
+        this.security.set(security);
+    }
+
+    public ObjectProperty<Server> securityProperty() {
+        return security;
     }
 
     public String getServerType() {
@@ -50,21 +82,20 @@ public class ServerListFXModel {
         this.serverType.set(serverType);
     }
 
-    public String getSecurity() {
-        return security.get();
+    public StringProperty serverTypeProperty() {
+        return serverType;
     }
 
-    public void setSecurity(String security) {
-        this.security.set(security);
-    }
-
-    public String getSpeed() {
+    public Server getSpeed() {
         return speed.get();
     }
 
-    public void setSpeed(String speed) {
+    public void setSpeed(Server speed) {
         this.speed.set(speed);
     }
-    
+
+    public ObjectProperty<Server> speedProperty() {
+        return speed;
+    }
     
 }
