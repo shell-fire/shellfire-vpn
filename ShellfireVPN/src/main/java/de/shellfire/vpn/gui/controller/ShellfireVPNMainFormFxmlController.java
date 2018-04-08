@@ -4,7 +4,7 @@ import de.shellfire.vpn.Storage;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.ResourceBundle;
-
+import javafx.util.Pair;
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.client.Client;
 import de.shellfire.vpn.client.ConnectionState;
@@ -20,7 +20,6 @@ import de.shellfire.vpn.types.Reason;
 import de.shellfire.vpn.types.Server;
 import de.shellfire.vpn.types.ServerType;
 import de.shellfire.vpn.types.VpnProtocol;
-import de.shellfire.vpn.webservice.ServerList;
 import de.shellfire.vpn.webservice.Vpn;
 import de.shellfire.vpn.webservice.WebService;
 import java.awt.AWTEvent;
@@ -247,7 +246,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
         //Storage.register(this);
 
-        //this.initShortCuts();
         //this.initConnection();
     }
 public void initializeComponents(){
@@ -261,9 +259,9 @@ public void initializeComponents(){
         this.connectionSubviewController.initPremium(isFreeAccount());
         this.updateOnlineHost();
         
-        serverListSubviewController = new ServerListSubviewController(shellfireService);
-        mapEncryptionSubviewController = new MapEncryptionSubviewController();
-        tvStreasSubviewController = new TvStreasSubviewController();
+        //serverListSubviewController = new ServerListSubviewController(shellfireService);
+        //mapEncryptionSubviewController = new MapEncryptionSubviewController();
+        //tvStreasSubviewController = new TvStreasSubviewController();
     }
 
     public static void setShellfireService(WebService shellfireService) {
@@ -389,7 +387,10 @@ public void initializeComponents(){
     @FXML
     private void handleConnectionPaneClicked(MouseEvent event) {
         try {
-            contentDetailsPane.getChildren().setAll(FxUIManager.SwitchSubview(null,"connection_subview.fxml"));
+            Pair<Pane, Object> pair = FxUIManager.SwitchSubview("connection_subview.fxml");
+            contentDetailsPane.getChildren().setAll(pair.getKey());
+            this.connectionSubviewController = (ConnectionSubviewController)pair.getValue();
+            this.connectionSubviewController.initPremium(isFreeAccount());
         } catch (IOException ex) {
             log.debug("ShellfireVPNMainFormFxmlController:  handleServerListPaneClicked has error " + ex.getMessage());
         }
@@ -413,7 +414,12 @@ public void initializeComponents(){
     private void handleServerListPaneClicked(MouseEvent event) {
 
         try {
-            contentDetailsPane.getChildren().setAll(FxUIManager.SwitchSubview(serverListSubviewController,"serverList_subview.fxml"));
+            Pair<Pane, Object> pair = FxUIManager.SwitchSubview("serverList_subview.fxml");
+            
+            this.serverListSubviewController = (ServerListSubviewController)pair.getValue();
+            this.serverListSubviewController.setShellfireService((this.shellfireService));
+            this.serverListSubviewController.initComponents();
+            contentDetailsPane.getChildren().setAll(pair.getKey());
         } catch (IOException ex) {
             log.debug("ShellfireVPNMainFormFxmlController:  handleServerListPaneClicked has error " + ex.getMessage());
         }
@@ -437,7 +443,9 @@ public void initializeComponents(){
     @FXML
     private void handleMapPaneClicked(MouseEvent event) {
         try {
-            contentDetailsPane.getChildren().setAll(FxUIManager.SwitchSubview(mapEncryptionSubviewController,"mapEncryption_subview.fxml"));
+            Pair<Pane, Object> pair = FxUIManager.SwitchSubview("mapEncryption_subview.fxml");
+            contentDetailsPane.getChildren().setAll(pair.getKey());
+            this.mapEncryptionSubviewController = (MapEncryptionSubviewController)pair.getValue();
         } catch (IOException ex) {
             log.debug("ShellfireVPNMainFormFxmlController:  handleServerListPaneClicked has error " + ex.getMessage());
         }

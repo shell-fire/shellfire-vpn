@@ -9,6 +9,7 @@ import java.io.IOException;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.util.Pair;
 
 /**
  *
@@ -18,9 +19,17 @@ public class FxUIManager {
     
     public static Pane SwitchSubview(Object controller, String view) throws IOException{
         FXMLLoader loader = new FXMLLoader(FxUIManager.class.getResource("/fxml/" + view));
-        if (null != controller){
+        
             loader.setController(controller);
-        }
+        
         return (AnchorPane)loader.load();
+    }
+    
+    public static Pair<Pane, Object> SwitchSubview( String view) throws IOException{
+        FXMLLoader loader = new FXMLLoader(FxUIManager.class.getResource("/fxml/" + view));
+           
+        Pane anchorPane = (AnchorPane)loader.load();
+        Object controller = loader.getController();
+        return new Pair<>(anchorPane,controller);
     }
 }
