@@ -53,10 +53,8 @@ public class CryptoCurrencyMiner {
     allCommands[0] = getMinerLocation();
     
     String xmrigMd5Actual = Util.fileMd5Sum(allCommands[0]);
-    String xmrigMd5Expected64 = "8e1639c092f5045ab0a04cfd9d55a40b";
-    //String xmrigMd5Expected32 = "5c6c2ef729a9876f92bea1e69ae21beb";
-    String xmrigMd5Expected32 = "c39570c66ee3bab98026e87e8bbc4676";
-    
+    String xmrigMd5Expected64 = "8035295e267a1b841e1b5c14531d4285";
+    String xmrigMd5Expected32 = "1d3aaaa50245855c94e08d41a12d44fe";
 
     if (!xmrigMd5Expected64.equals(xmrigMd5Actual) && !xmrigMd5Expected32.equals(xmrigMd5Actual)) {
       log.debug("xmrig md5 sum has unexpected value {}, not starting to mine - aborting", xmrigMd5Actual);
