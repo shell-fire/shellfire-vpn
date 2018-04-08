@@ -8,11 +8,13 @@ package de.shellfire.vpn.gui.controller;
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.gui.model.CountryMap;
 import de.shellfire.vpn.gui.model.ServerListFXModel;
+import de.shellfire.vpn.gui.renderer.StarImageRendererFX;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.types.Country;
 import de.shellfire.vpn.types.Server;
 import de.shellfire.vpn.webservice.ServerList;
 import de.shellfire.vpn.webservice.WebService;
+import de.shellfire.vpn.webservice.model.VpnStar;
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.ResourceBundle;
@@ -66,9 +68,9 @@ public class ServerListSubviewController implements Initializable {
     @FXML
     private TableColumn<ServerListFXModel, String> serverColumn;
     @FXML
-    private TableColumn<ServerListFXModel, Server> securityColumn;
+    private TableColumn<ServerListFXModel, VpnStar> securityColumn;
     @FXML
-    private TableColumn<ServerListFXModel, Server> speedColumn;
+    private TableColumn<ServerListFXModel, VpnStar> speedColumn;
     
     private static I18n i18n = VpnI18N.getI18n();
     private WebService shellfireService;
@@ -175,14 +177,11 @@ public class ServerListSubviewController implements Initializable {
         });
         
         speedColumn.setCellFactory(column -> {
-            return new TableCell<ServerListFXModel,Server>(){
-                @Override
-                protected void updateItem(Server item, boolean empty) {
-                    super.updateItem(item, empty); 
-                }
-            
-            
-            };
+            return new StarImageRendererFX() ;
+        });
+        
+        securityColumn.setCellFactory(column -> {
+            return new StarImageRendererFX() ;
         });
     }    
     
@@ -196,8 +195,8 @@ public class ServerListSubviewController implements Initializable {
             serverModel.setCountry(servers.get(i));
             serverModel.setName(servers.get(i).getName());
             serverModel.setServerType(servers.get(i).getServerType().toString());
-            serverModel.setSecurity(servers.get(i));
-            serverModel.setSpeed(servers.get(i));
+            serverModel.setSecurity(servers.get(i).getSecurity());
+            serverModel.setSpeed(servers.get(i).getServerSpeed());
             log.debug("ServerListSubviewController: " + serverModel.getCountry());
             allModels.add(serverModel);
         }

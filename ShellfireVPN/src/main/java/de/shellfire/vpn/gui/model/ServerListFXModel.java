@@ -6,6 +6,7 @@
 package de.shellfire.vpn.gui.model;
 
 import de.shellfire.vpn.types.Server;
+import de.shellfire.vpn.webservice.model.VpnStar;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -18,8 +19,8 @@ import javafx.beans.property.StringProperty;
 public class ServerListFXModel {
     private final StringProperty name;
     private final StringProperty serverType;
-    private final ObjectProperty<Server> security;
-    private final ObjectProperty<Server> speed;
+    private final ObjectProperty<VpnStar> security;
+    private final ObjectProperty<VpnStar> speed;
     private final ObjectProperty<Server> country;
 
     
@@ -62,15 +63,15 @@ public class ServerListFXModel {
         return name;
     }
 
-    public Server getSecurity() {
+    public VpnStar getSecurity() {
         return security.get();
     }
 
-    public void setSecurity(Server security) {
+    public void setSecurity(VpnStar security) {
         this.security.set(security);
     }
 
-    public ObjectProperty<Server> securityProperty() {
+    public ObjectProperty<VpnStar> securityProperty() {
         return security;
     }
 
@@ -86,15 +87,15 @@ public class ServerListFXModel {
         return serverType;
     }
 
-    public Server getSpeed() {
+    public VpnStar getSpeed() {
         return speed.get();
     }
 
-    public void setSpeed(Server speed) {
+    public void setSpeed(VpnStar speed) {
         this.speed.set(speed);
     }
 
-    public ObjectProperty<Server> speedProperty() {
+    public ObjectProperty<VpnStar> speedProperty() {
         return speed;
     }
     

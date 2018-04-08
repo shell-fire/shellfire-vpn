@@ -6,19 +6,19 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane fx:id="serverListAnchorPane" prefHeight="518.0" prefWidth="660.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.ServerListSubviewController">
+<AnchorPane fx:id="serverListAnchorPane" prefHeight="518.0" prefWidth="635.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.ServerListSubviewController">
    <children>
       <AnchorPane layoutX="2.0" layoutY="48.0" prefHeight="345.0" prefWidth="662.0" AnchorPane.bottomAnchor="125.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="48.0">
          <children>
-            <ScrollPane prefViewportHeight="345.0" prefViewportWidth="658.0">
+            <ScrollPane pannable="true" prefViewportHeight="345.0" prefViewportWidth="658.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <content>
-                  <TableView fx:id="serverListTableView" prefHeight="345.0" prefWidth="658.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <TableView fx:id="serverListTableView" editable="true" fixedCellSize="0.0" prefHeight="345.0" prefWidth="658.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <columns>
-                      <TableColumn fx:id="countryColumn" prefWidth="128.0" text="Country" />
-                      <TableColumn fx:id="nameColumn" prefWidth="109.0" text="Name" />
-                        <TableColumn fx:id="serverColumn" prefWidth="152.0" text="Server" />
-                        <TableColumn fx:id="securityColumn" prefWidth="125.0" text="Security" />
-                        <TableColumn fx:id="speedColumn" prefWidth="138.0" text="Speed" />
+                      <TableColumn fx:id="countryColumn" prefWidth="108.0" text="Country" />
+                      <TableColumn fx:id="nameColumn" prefWidth="91.0" text="Name" />
+                        <TableColumn fx:id="serverColumn" prefWidth="114.0" text="Server" />
+                        <TableColumn fx:id="securityColumn" prefWidth="147.0" text="Security" />
+                        <TableColumn fx:id="speedColumn" prefWidth="197.0" text="Speed" />
                     </columns>
                   </TableView>
                </content>
