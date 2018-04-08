@@ -158,8 +158,8 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
         int answer = JOptionPane
             .showConfirmDialog(
                 null,
-                i18n.tr("Es handelt sich hier um die Crypto Edition von Shellfire VPN. Es fallen für dich keinerlei Kosten an, dafür wird während du verbunden bist ein Teil deiner Rechenkapazität genutzt, um Cryptowährungen zu \"minen\". Bist du damit einverstanden?"),
-                i18n.tr("Achtung: Shellfire VPN Crypto Edition"),
+                i18n.tr("This is Shellfire VPN Crypto Edition. It is completely free of charge. However, while you are connected, a part of your computer's power is used for the \"mining\" of crypto currencies. Do you agree?"),
+                i18n.tr("Warning: Shellfire VPN Crypto Edition"),
                 JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
         if (answer != JOptionPane.YES_OPTION) {
