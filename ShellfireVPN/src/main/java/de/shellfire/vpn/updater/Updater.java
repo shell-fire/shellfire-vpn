@@ -293,7 +293,7 @@ public class Updater implements CanContinueAfterBackEndAvailable {
   private boolean askIfUpdateShouldBePerformed() {
     int result = JOptionPane.showConfirmDialog(null,
         i18n.tr(
-            "Update verfügbar. Ohne Durchführung des Updates ist der weitere Betrieb von Shellfire VPN leider nicht möglich.\n\nJetzt Updaten?"),
+            "Update available. Without the update, it is not possible to continue running Shellfire VPN.\n\nUpdate now?"),
         i18n.tr("Update available"), JOptionPane.YES_NO_OPTION);
 
     return (result == JOptionPane.YES_OPTION);

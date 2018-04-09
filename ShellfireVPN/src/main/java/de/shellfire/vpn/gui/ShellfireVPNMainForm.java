@@ -1205,7 +1205,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 									if (JOptionPane.YES_OPTION == JOptionPane
 											.showConfirmDialog(
 													null,
-													i18n.tr("Dieser Server steht nur für Shellfire VPN Premium Kunden zur Verfügung\n\nWeitere Informationen zu Shellfire VPN Premium anzeigen?"),
+													i18n.tr("This server is only available for customers of Shellfire VPN Premium.\n\nDisplay further information about Shellfire VPN Premium?"),
 													i18n.tr("Premium server selected"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE)) {
 
 										showNagScreenWithoutTimer();
@@ -1230,7 +1230,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 									if (JOptionPane.YES_OPTION == JOptionPane
 											.showConfirmDialog(
 													null,
-													i18n.tr("Dieser Server steht nur für Shellfire VPN PremiumPlus Kunden zur Verfügung\n\nWeitere Informationen zu Shellfire VPN PremiumPlus anzeigen?"),
+													i18n.tr("This server is only available for customers of Shellfire VPN Premium Plus.\n\nDisplay further information about Shellfire VPN Premium Plus?"),
 													i18n.tr("PremiumPlus server selected"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE)) {
 
 										showNagScreenWithoutTimer();

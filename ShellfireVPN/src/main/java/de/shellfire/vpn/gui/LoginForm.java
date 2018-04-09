@@ -67,7 +67,7 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
 	public static final String REG_INSTDIR = "instdir";
 	public static final String REG_SHOWSTATUSURL = "show_status_url_on_connect";
 	private static final String REG_FIRST_START = "firststart";
-  public static final boolean IS_CRYPTO_VPN = true;
+  public static final boolean IS_CRYPTO_VPN = false;
 	private ShellfireVPNMainForm mainForm;
 	private static Preferences preferences;
 	WebService service;
@@ -163,7 +163,7 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
                 JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
         if (answer != JOptionPane.YES_OPTION) {
-          JOptionPane.showMessageDialog(null, i18n.tr("Bitte lade dir die reguläre Shellfire VPN Version herunter unter www.shellfire.de"));
+          JOptionPane.showMessageDialog(null, i18n.tr("Please download the regular version of Shellfire VPN at www.shellfire.net"));
           System.exit(0);
         }
         
