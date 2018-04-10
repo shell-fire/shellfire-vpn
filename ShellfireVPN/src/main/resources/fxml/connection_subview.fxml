@@ -4,27 +4,32 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<Pane fx:id="contentDetailsPane" prefHeight="518.0" prefWidth="817.0" style="-fx-background-color: rgb(240,240,240);" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.ConnectionSubviewController">
+
+<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.ConnectionSubviewController">
    <children>
-      <ImageView fx:id="statusConnectionImageView" fitHeight="435.0" fitWidth="800.0" layoutX="5.0" layoutY="6.0">
-         <image>
-            <Image url="@../icons/status-unencrypted-width736.gif" />
-         </image>
-      </ImageView>
-      <ImageView fx:id="connectImageView" fitHeight="46.0" fitWidth="200.0" layoutX="24.0" layoutY="452.0" onContextMenuRequested="#handleConnectImageViewContext" onMouseClicked="#handleConnectImageViewClicked" onMouseEntered="#handleConnectImageViewMouseEntered" onMouseExited="#handleConnectImageViewMouseExited">
-         <image>
-            <Image url="@../buttons/button-connect-en.gif" />
-         </image>
-      </ImageView>
-      <ImageView fx:id="productKeyImageView" fitHeight="46.0" fitWidth="248.0" layoutX="249.0" layoutY="454.0" onContextMenuRequested="#handleProductKeyImageViewContext" onMouseClicked="#handleProductKeyImageViewClicked" onMouseEntered="#handleProductKeyImageViewMouseEntered" onMouseExited="#handleProductKeyImageViewMouseExited">
-         <image>
-            <Image url="@../buttons/button-serial-en.gif" />
-         </image>
-      </ImageView>
-      <ImageView fx:id="premiumInfoImageView" fitHeight="46.0" fitWidth="240.0" layoutX="521.0" layoutY="453.0" onContextMenuRequested="#handlePremiumInfoImageViewContext" onMouseClicked="#handlePremiumInfoImageViewClicked" onMouseEntered="#handlePremiumInfoImageViewMouseEntered" onMouseExited="#handlePremiumInfoImageViewMouseExited">
-         <image>
-            <Image url="@../buttons/button-premium-infos.gif" />
-         </image>
-      </ImageView>
+      <Pane fx:id="contentDetailsPane" prefHeight="518.0" prefWidth="817.0" style="-fx-background-color: rgb(240,240,240);">
+         <children>
+            <ImageView fx:id="statusConnectionImageView" fitHeight="435.0" fitWidth="800.0" layoutX="5.0" layoutY="6.0">
+               <image>
+                  <Image url="@../icons/status-unencrypted-width736.gif" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="connectImageView" fitHeight="46.0" fitWidth="200.0" layoutX="24.0" layoutY="452.0" onContextMenuRequested="#handleConnectImageViewContext" onMouseClicked="#handleConnectImageViewClicked" onMouseEntered="#handleConnectImageViewMouseEntered" onMouseExited="#handleConnectImageViewMouseExited">
+               <image>
+                  <Image url="@../buttons/button-connect-en.gif" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="productKeyImageView" fitHeight="46.0" fitWidth="248.0" layoutX="249.0" layoutY="454.0" onContextMenuRequested="#handleProductKeyImageViewContext" onMouseClicked="#handleProductKeyImageViewClicked" onMouseEntered="#handleProductKeyImageViewMouseEntered" onMouseExited="#handleProductKeyImageViewMouseExited">
+               <image>
+                  <Image url="@../buttons/button-serial-en.gif" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="premiumInfoImageView" fitHeight="46.0" fitWidth="240.0" layoutX="521.0" layoutY="453.0" onContextMenuRequested="#handlePremiumInfoImageViewContext" onMouseClicked="#handlePremiumInfoImageViewClicked" onMouseEntered="#handlePremiumInfoImageViewMouseEntered" onMouseExited="#handlePremiumInfoImageViewMouseExited">
+               <image>
+                  <Image url="@../buttons/button-premium-infos.gif" />
+               </image>
+            </ImageView>
+         </children>
+      </Pane>
    </children>
-</Pane>
+</AnchorPane>

@@ -28,6 +28,7 @@ import javax.swing.table.TableColumnModel;
 import org.xnap.commons.i18n.I18n;
 
 import de.shellfire.vpn.Util;
+import de.shellfire.vpn.gui.controller.VpnSelectDialogController;
 import de.shellfire.vpn.gui.helper.MoveMouseListener;
 import de.shellfire.vpn.gui.model.VpnAttributeHeader;
 import de.shellfire.vpn.gui.model.VpnComparisonTableModel;
@@ -37,6 +38,7 @@ import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.webservice.WebService;
 import de.shellfire.vpn.webservice.model.VpnEntry;
 import net.miginfocom.swing.MigLayout;
+import org.slf4j.Logger;
 
 /**
  * 
@@ -45,7 +47,7 @@ import net.miginfocom.swing.MigLayout;
 public class PremiumVPNNagScreen extends javax.swing.JDialog {
   private final ShellfireVPNMainForm aparent;
   private MoveMouseListener mml;
-
+private static Logger log = Util.getLogger(PremiumVPNNagScreen.class.getCanonicalName());
   /** Creates new form PremiumVPNNagScreen */
   public PremiumVPNNagScreen(java.awt.Frame parent, boolean modal, ActionListener al) {
     super(parent, modal);
@@ -285,10 +287,12 @@ public class PremiumVPNNagScreen extends javax.swing.JDialog {
             return new StarImageRenderer().getTableCellRendererComponent(table, value, hasFocus, isSelected, row, col);
           } else {
           setText(entry.getText());
+          log.debug("PremiumVPNNagScreen: Entry Values " + entry.getText());
         }
         
       } else if (value instanceof String) {
         setText((String)value);
+        log.debug("PremiumVPNNagScreen: String Values " + (String)value);
       }
       
       

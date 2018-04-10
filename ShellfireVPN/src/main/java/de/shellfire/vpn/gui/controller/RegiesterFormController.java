@@ -257,7 +257,7 @@ public class RegiesterFormController extends AnchorPane implements Initializable
 
     @FXML
     private void handleBackLabelClicked(MouseEvent event) {
-        this.application.getLoginController();
+        this.application.loadLoginController();
         this.application.getStage().show();
     }
 

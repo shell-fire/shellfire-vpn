@@ -49,7 +49,7 @@ public class VpnSelectionFModel {
 	}
 
 	public void setType(String type) {
-		this.type.set(type);;
+		this.type.set(type);
 	}
 
 	public StringProperty typeProperty(){

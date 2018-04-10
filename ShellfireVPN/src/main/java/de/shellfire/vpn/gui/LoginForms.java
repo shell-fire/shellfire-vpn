@@ -1,7 +1,5 @@
 package de.shellfire.vpn.gui;
 
- dev
-
 import java.util.LinkedList;
 import java.util.List;
 

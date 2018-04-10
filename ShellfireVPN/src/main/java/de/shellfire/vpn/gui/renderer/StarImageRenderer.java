@@ -57,11 +57,11 @@ public class StarImageRenderer extends DefaultTableCellRenderer {
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
       init();
       setEnabled(table == null || table.isEnabled());
-      lbl.setOpaque(true);
+      lbl.setOpaque(true);                  
       
       
       lbl.setFont(lbl.getFont().deriveFont(Font.PLAIN, Util.getFontSize()));
-      
+        
       if (isEnabled()) {
       	lbl.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, ContentPane.colorLightGray));
       } else {
@@ -73,7 +73,7 @@ public class StarImageRenderer extends DefaultTableCellRenderer {
 			lbl.setForeground(ContentPane.colorDarkGrey);
 		} else {
 			lbl.setForeground(Color.darkGray);
-		}
+		}      
         
         lbl.setBackground(table.getSelectionBackground());
       } else {
