@@ -58,7 +58,7 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
 	}
 	
 	public  void initComponenets(){
-		dynamicLabel.setText(i18n.tr("Einloggen...."));
+		dynamicLabel.setText(i18n.tr("Logging in..."));
 		additionTextLabel.setText("jLabel2");
 		rightButton.setDisable(true);
 		bottomLabel.setDisable(true);

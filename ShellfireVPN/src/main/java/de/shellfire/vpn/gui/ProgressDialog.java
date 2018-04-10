@@ -110,7 +110,7 @@ public class ProgressDialog extends javax.swing.JDialog {
         jWrapperPanel.setBackground(new java.awt.Color(244, 244, 244));
         jWrapperPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
 
-        jLabel1.setText(i18n.tr("Einloggen...."));
+        jLabel1.setText(i18n.tr("Logging in..."));
         jLabel1.setName("jLabel1"); // NOI18N
 
         jProgressBar1.setName("jProgressBar1"); // NOI18N

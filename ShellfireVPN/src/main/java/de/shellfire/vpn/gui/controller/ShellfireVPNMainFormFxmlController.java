@@ -215,20 +215,20 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         this.iconEcncryptionActive = Util.getImageIconFX(baseImageUrl + "/icons/status-encrypted-width" + size + ".gif");
         this.iconEcncryptionInactive = Util.getImageIconFX(baseImageUrl + "/icons/status-unencrypted-width" + size + ".gif");
         // initializing text of the form 
-        this.connectionStatusLabel.setText(i18n.tr("Verbindungsstatus"));
-        this.connectedSinceLabel.setText(i18n.tr("Verbunden seit:"));
+        this.connectionStatusLabel.setText(i18n.tr("Connection status"));
+        this.connectedSinceLabel.setText(i18n.tr("Connected since:"));
         this.onlineIpLabel.setText(i18n.tr("Online IP"));
         this.vpnIdLabel.setText(i18n.tr("VPN Id:"));
-        this.validUntilLabel.setText(i18n.tr("Gültig bis:"));
+        this.validUntilLabel.setText(i18n.tr("Valid Until:"));
 
-        this.connectionHeaderLabel.setText(i18n.tr("Verbindung"));
-        this.connectionFooter.setText(i18n.tr("Jetzt zu Shellfire VPN verbinden"));
-        this.serverListHeaderLabel.setText(i18n.tr("Server Liste"));
-        this.serverListFooterLabel.setText(i18n.tr("Liste aller VPN Server anzeigen"));
-        this.mapHeaderLabel.setText(i18n.tr("Karte"));
-        this.mapFooterLabel.setText(i18n.tr("Zeigt Verschlüsselungsroute"));
-        this.streamsHeaderLabel.setText(i18n.tr("Streams aus den USA"));
-        this.streamsFooterLabel.setText(i18n.tr("Liste amerikanischer TV Streams"));
+        this.connectionHeaderLabel.setText(i18n.tr("Connection"));
+        this.connectionFooter.setText(i18n.tr("Connect to Shellfire VPN now"));
+        this.serverListHeaderLabel.setText(i18n.tr("Server list"));
+        this.serverListFooterLabel.setText(i18n.tr("Show list of all VPN servers"));
+        this.mapHeaderLabel.setText(i18n.tr("Map"));
+        this.mapFooterLabel.setText(i18n.tr("Show encryption route"));
+        this.streamsHeaderLabel.setText(i18n.tr("USA streams"));
+        this.streamsFooterLabel.setText(i18n.tr("List of american TV streams"));
 
 //        log.debug(connectionSubviewController.toString());
   //      log.debug(connectionSubviewController.displayCreationMessage("Object refreence properly created"));
@@ -628,7 +628,7 @@ public void initializeComponents(){
                                         .showConfirmDialog(
                                                 null,
                                                 i18n.tr("Dieser Server steht nur für Shellfire VPN Premium Kunden zur Verfügung\n\nWeitere Informationen zu Shellfire VPN Premium anzeigen?"),
-                                                i18n.tr("Premium Server ausgewählt"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE)) {
+                                                i18n.tr("Premium server selected"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE)) {
                                     
                                     //TODO 
                                    // showNagScreenWithoutTimer();
@@ -654,7 +654,7 @@ public void initializeComponents(){
                                         .showConfirmDialog(
                                                 null,
                                                 i18n.tr("Dieser Server steht nur für Shellfire VPN PremiumPlus Kunden zur Verfügung\n\nWeitere Informationen zu Shellfire VPN PremiumPlus anzeigen?"),
-                                                i18n.tr("PremiumPlus Server ausgewählt"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE)) {
+                                                i18n.tr("PremiumPlus server selected"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE)) {
 
                                     showNagScreenWithoutTimer();
 
@@ -699,7 +699,7 @@ public void initializeComponents(){
 
         this.connectionSubviewController.getConnectImageView().setDisable(false);
         //this.jConnectButtonLabel1.setEnabled(true);
-        this.connectionStatusValue.setText(i18n.tr("Nicht verbunden"));
+        this.connectionStatusValue.setText(i18n.tr("Not connected"));
         mySetIconImage("/icons/sfvpn2-disconnected-big.png");
         this.globeConnectionImageView.setImage(this.iconIdleSmall);
         this.connectionSubviewController.getStatusConnectionImageView().setImage(this.iconEcncryptionInactive);
@@ -714,39 +714,39 @@ public void initializeComponents(){
             switch (this.controller.getReasonForStateChange()) {
                 case PasswordWrong:
                     showMessage = true;
-                    message = i18n.tr("Passwort Falsch");
+                    message = i18n.tr("Invalid password");
                     break;
                 case NotEnoughPrivileges:
                     showMessage = true;
-                    message = i18n.tr("Prozess wird ohne Administrator-Rechte ausgeführt.");
+                    message = i18n.tr("Process is being executed without administrator rights.");
                     break;
                 case CertificateFailed:
                     showMessage = true;
-                    message = i18n.tr("Unbekannter Zertifikate-Fehler");
+                    message = i18n.tr("Unknown certificate error");
                     break;
                 case AllTapInUse:
                     showMessage = true;
-                    message = i18n.tr("Alle Tap-Geräte in Verwendung. Bitte alle openvpn.exe Prozesse im Task Manager schließen oder PC neu starten.");
+                    message = i18n.tr("All Tap devices in use. Please close openvpn.exe using the task manager or reboot your PC.");
                     break;
                 case DisconnectDetected:
                     showMessage = true;
-                    message = i18n.tr("Verbindung wurde unterbrochen.");
+                    message = i18n.tr("Connection interrupted.");
                     break;
                 case OpenVpnNotFound:
                     showMessage = true;
-                    message = i18n.tr("OpenVPN Installation wurde nicht gefunden. Bitte Shellfire VPN neu installieren.");
+                    message = i18n.tr("No OpenVPN installation found. Please reinstall Shellfire VPN.");
                     break;
                 case NoOpenVpnParameters:
                     showMessage = true;
-                    message = i18n.tr("OpenVPN Startparameter konnten nicht geladen werden - Bitte überprüfe deine Internet-Verbindung.");
+                    message = i18n.tr("OpenVPN startup parameters could not be downloaded - Please check your internet connection.");
                     break;
                 case TapDriverTooOld:
                     showMessage = true;
-                    message = i18n.tr("Der installierte Tap Treiber ist zu alt. Bitte installiere Shellfire VPN neu.");
+                    message = i18n.tr("The installed Tap driver is out of date. Please reinstall Shellfire VPN.");
                     break;
                 case TapDriverNotFound:
                     showMessage = true;
-                    message = i18n.tr("Es wurde kein Tap Treiber installiert. Bitte installiere Shellfire VPN neu.");
+                    message = i18n.tr("No Tap driver installed. Please reinstall Shellfire VPN.");
                     break;
                 case TapDriverNotFoundPleaseRetry:
                     connectFromButton(true);
@@ -754,12 +754,12 @@ public void initializeComponents(){
                 case GatewayRedirectFailed:
                     showMessage = true;
                     message = i18n
-                            .tr("Das Gateway konnte nicht umgeleitet werden. Bitte bei den TCP/IP Einstellungen der aktuellen Netzwerkverbindung ein Gateway einstellen.");
+                            .tr("The gateway coul not be switched. Please set a gateway in the TCP/IP settings of the current network adapter.");
                     break;
                 case UnknownOpenVPNError:
                     showMessage = true;
                     message = i18n
-                            .tr("Es ist ein unbekannter Fehler mit der VPN Verbindung aufgetreten. Bitte versuche einen Reboot und/oder Shellfire VPN neu zu installieren.");
+                            .tr("An unknown error has occured while establishing the VPN connection. Please reboot and/or reinstall Shellfire VPN.");
                     break;
 
                 default:
@@ -803,7 +803,7 @@ public void initializeComponents(){
             }
         }*/
 
-        this.connectionStatusLabel.setText(i18n.tr("Verbindung wird hergestellt..."));
+        this.connectionStatusLabel.setText(i18n.tr("Connection is being processed..."));
         mySetIconImage("/icons/sfvpn2-connecting-big.png");
 
         if (this.trayIcon != null) {
@@ -813,7 +813,7 @@ public void initializeComponents(){
         //TODO find FX equivalant variable
         //this.jConnectionStateIcon.setIcon(new ImageIcon(this.iconConnectingSmall));
 
-        popupConnectItem.setLabel(i18n.tr("Verbinde..."));
+        popupConnectItem.setLabel(i18n.tr("Connecting..."));
         popupConnectItem.setEnabled(false);
         /*jServerListTable.setEnabled(false);
         jScrollPane.getViewport().setBackground(Color.lightGray);
@@ -846,7 +846,7 @@ public void initializeComponents(){
 
                 // Set the dialog into the controller.
                 connectProgressDialog = loader.getController();
-                connectProgressDialog.setOption(2, i18n.tr("abbrechen"));
+                connectProgressDialog.setOption(2, i18n.tr("cancel"));
 
                 Task<Void> task = new Task<Void>() {
                     @Override
@@ -898,7 +898,7 @@ public void initializeComponents(){
             };
 
             popup = new PopupMenu();
-            MenuItem defaultItem = new MenuItem(i18n.tr("Beenden"));
+            MenuItem defaultItem = new MenuItem(i18n.tr("Exit"));
             defaultItem.addActionListener(exitListener);
 
             ActionListener nagListener = new ActionListener() {
@@ -910,7 +910,7 @@ public void initializeComponents(){
                 }
             };
 
-            MenuItem nagItem = new MenuItem(i18n.tr("Shellfire VPN Premium Infos"));
+            MenuItem nagItem = new MenuItem(i18n.tr("Shellfire VPN premium infos"));
             nagItem.addActionListener(nagListener);
 
             ActionListener helpListener = new ActionListener() {
@@ -921,7 +921,7 @@ public void initializeComponents(){
                 }
             };
 
-            MenuItem helpItem = new MenuItem(i18n.tr("Hilfe"));
+            MenuItem helpItem = new MenuItem(i18n.tr("Help"));
             helpItem.addActionListener(helpListener);
 
             ActionListener popupConnectListener = new ActionListener() {
@@ -932,7 +932,7 @@ public void initializeComponents(){
                 }
             };
 
-            popupConnectItem = new MenuItem(i18n.tr("Verbinden"));
+            popupConnectItem = new MenuItem(i18n.tr("Connect"));
             popupConnectItem.addActionListener(popupConnectListener);
 
             ActionListener statusListener = new ActionListener() {
@@ -942,7 +942,7 @@ public void initializeComponents(){
                 }
             };
 
-            MenuItem statusItem = new MenuItem(i18n.tr("Zeige VPN Status im Browser"));
+            MenuItem statusItem = new MenuItem(i18n.tr("Show VPN state in your browser"));
             statusItem.addActionListener(statusListener);
 
             ActionListener openListener = new ActionListener() {
@@ -960,7 +960,7 @@ public void initializeComponents(){
                 }
             };
 
-            MenuItem openItem = new MenuItem(i18n.tr("Shellfire VPN in den Vordergrund"));
+            MenuItem openItem = new MenuItem(i18n.tr("Shellfire VPN to front"));
             openItem.addActionListener(openListener);
             popup = new PopupMenu();
             popup.add(openItem);
@@ -1128,7 +1128,7 @@ public void initializeComponents(){
             this.mapEncryptionSubviewController.getShowOwnPosition().setDisable(true);
         }*/
 
-        this.connectionStatusLabel.setText(i18n.tr("Verbunden"));
+        this.connectionStatusLabel.setText(i18n.tr("Connected"));
 
         //TODO check if image not already loaddd
         mySetIconImage("/icons/sfvpn2-connected-big.png");
@@ -1148,7 +1148,7 @@ public void initializeComponents(){
         /*
 		this.mapController.updateMap();
 
-		popupConnectItem.setLabel(i18n.tr("Verbindung trennen"));
+		popupConnectItem.setLabel(i18n.tr("Disconnect"));
 		popupConnectItem.setEnabled(true);
 
 		jServerListTable.setEnabled(false);
@@ -1156,8 +1156,8 @@ public void initializeComponents(){
 		jRadioUdp.setEnabled(false);
 		jRadioTcp.setEnabled(false);
 
-		showTrayMessageWithoutCallback(i18n.tr("Verbindung Erfolgreich"),
-				i18n.tr("Du bist jetzt mit Shellfire VPN verbunden. Deine Internet-Verbindung ist verschlüsselt."));
+		showTrayMessageWithoutCallback(i18n.tr("Connection successful"),
+				i18n.tr("You are now connected to Shellfire VPN. Your internet connection is encrypted."));
 
 		showStatusUrlIfEnabled();
 
@@ -1258,7 +1258,7 @@ public void initializeComponents(){
             this.validUntilValue.setDisable(false);
             this.validUntilLabel.setDisable(false);
 
-            SimpleDateFormat df = new SimpleDateFormat(i18n.tr("d.MM.yyyy"), VpnI18N.getLanguage().getLocale());
+            SimpleDateFormat df = new SimpleDateFormat(i18n.tr("d/MM/yyyy"), VpnI18N.getLanguage().getLocale());
             String date = df.format(vpn.getPremiumUntil());
 
             this.validUntilValue.setText(date);

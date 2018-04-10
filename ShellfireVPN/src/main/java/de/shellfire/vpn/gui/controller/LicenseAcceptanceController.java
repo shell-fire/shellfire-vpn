@@ -71,9 +71,9 @@ public class LicenseAcceptanceController extends AnchorPane implements Initializ
     }
     
     public void initComponents(){
-        declineButton.setText(i18n.tr("Ablehnen"));
-        acceptButton.setText(i18n.tr("Akzeptieren"));
-        acceptLicenceLabel.setText(i18n.tr("Lizenz akzeptieren"));
+        declineButton.setText(i18n.tr("Reject"));
+        acceptButton.setText(i18n.tr("Accept"));
+        acceptLicenceLabel.setText(i18n.tr("Accept licence"));
     }
     
     private void initLicense() {

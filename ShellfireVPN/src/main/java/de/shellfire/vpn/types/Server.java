@@ -97,12 +97,12 @@ public class Server implements LocatableIcon {
   public VpnStar getServerSpeed() {
     switch (this.serverType) {
     case PremiumPlus:
-      return new VpnStar(5, i18n.tr("unlimitierte kbit/sec"));
+      return new VpnStar(5, i18n.tr("unlimited kbit/sec"));
     case Premium:
-      return new VpnStar(3, i18n.tr("bis 10.000 kbit/sec"));
+      return new VpnStar(3, i18n.tr("up to 10,000 kbit/sec"));
     case Free:
     default:
-      return new VpnStar(1, i18n.tr("bis 768 kbit/sec"));
+      return new VpnStar(1, i18n.tr("up to 768 kbit/sec"));
     }
   }
 

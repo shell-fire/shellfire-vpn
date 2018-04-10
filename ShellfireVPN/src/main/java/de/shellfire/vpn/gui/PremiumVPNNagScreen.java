@@ -111,7 +111,7 @@ private static Logger log = Util.getLogger(PremiumVPNNagScreen.class.getCanonica
 
         
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, Util.getFontSize()));
-        jLabel1.setText(i18n.tr("Verbleibende Wartezeit:"));
+        jLabel1.setText(i18n.tr("Remaining waiting time:"));
         jLabel1.setName("jLabel1"); // NOI18N
 
         jRemainingTime.setFont(new java.awt.Font("Tahoma", 0, Util.getFontSize()));
@@ -119,7 +119,7 @@ private static Logger log = Util.getLogger(PremiumVPNNagScreen.class.getCanonica
         jRemainingTime.setName("jRemainingTime"); // NOI18N
 
         jButton1.setFont(new java.awt.Font("Tahoma", 0, Util.getFontSize()));
-        jButton1.setText(i18n.tr("Abbrechen"));
+        jButton1.setText(i18n.tr("Cancel"));
         jButton1.setName("jButton1"); // NOI18N
 
         jScrollPane1.setBackground(new java.awt.Color(18, 172, 229));
@@ -147,7 +147,7 @@ private static Logger log = Util.getLogger(PremiumVPNNagScreen.class.getCanonica
         
 
         jButton2.setFont(new java.awt.Font("Arial", 1, Util.getFontSize()));
-        jButton2.setText(i18n.tr("Jetzt Premium kaufen"));
+        jButton2.setText(i18n.tr("Buy premium now"));
         jButton2.setName("jButton2"); // NOI18N
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -169,7 +169,7 @@ private static Logger log = Util.getLogger(PremiumVPNNagScreen.class.getCanonica
 
         jLabel2.setFont(new java.awt.Font("Arial", 1, Util.getFontSize())); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("<html>"+i18n.tr("Jetzt Upgraden auf Shellfire VPN Premium")+"</html>");
+        jLabel2.setText("<html>"+i18n.tr("Upgrade to Shellfire VPN premium now")+"</html>");
         jLabel2.setName("jLabel2"); // NOI18N
         jHeaderPanel.add(jLabel2, "cell 0 1,alignx left,growy");
 

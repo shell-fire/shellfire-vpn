@@ -77,12 +77,12 @@ public class VpnI18N {
   public static String[] dummies() {
     I18n i18n = getI18n();
     String[] dummies = new String[] {
-        i18n.tr("Deutsch"),
-        i18n.tr("Englisch"),
-        i18n.tr("Französisch"),
-        i18n.tr("Bitte gib einen Benutzernamen und ein Passwort ein."),
-        i18n.tr("Login fehlgeschlagen. Bitte mit Shellfire Kundennummer (K400...), Emailadresse oder VPN Benutzernamen (sf...) einloggen."),
-        i18n.tr("Bitte gib eine gültige Email-Adresse ein."), i18n.tr("Ein Account mit dieser Email-Adresse existiert bereits.") };
+        i18n.tr("German"),
+        i18n.tr("English"),
+        i18n.tr("French"),
+        i18n.tr("Please enter username and password."),
+        i18n.tr("Login failed. Please log in using your Shellfire customer Id (K400...), email address or VPN username (sf...)."),
+        i18n.tr("Please enter a valid email address."), i18n.tr("An account is already registered for this email address.") };
 
     return dummies;
   }

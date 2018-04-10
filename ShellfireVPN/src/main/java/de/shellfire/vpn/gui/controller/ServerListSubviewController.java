@@ -140,10 +140,10 @@ public class ServerListSubviewController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        this.selectServerLabel.setText(i18n.tr("Wähle einen Server für deine Verbindung"));
-        this.connectionTypeLabel.setText(i18n.tr("Verbindungstyp"));
-        this.TCPRadioButton.setText(i18n.tr("TCP (funktioniert auch bei sicheren Firewalls und Proxy-Servern.)"));
-        this.UDPRadioButton.setText(i18n.tr("UDP (schnell)"));
+        this.selectServerLabel.setText(i18n.tr("Select a Server for your connection"));
+        this.connectionTypeLabel.setText(i18n.tr("Connection type"));
+        this.TCPRadioButton.setText(i18n.tr("TCP (works with safe firewalls and proxies.)"));
+        this.UDPRadioButton.setText(i18n.tr("UDP (fast)"));
 
         //accArtTbleColumn.setCellValueFactory(cellData -> cellData.getValue().accountArtProperty());
         nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());

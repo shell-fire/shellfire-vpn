@@ -90,17 +90,17 @@ public class UpgradeDialog extends javax.swing.JDialog {
 
         jLabelEmailAddress.setFont(new java.awt.Font("Arial", 0, Util.getFontSize())); // NOI18N
         jLabelEmailAddress.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabelEmailAddress.setText("<html>"+i18n.tr("Gib hier den bereits erworbenen Produktschlüssel ein, um das<br> Upgrade zur Premium oder Premium-Plus Version durchzuführen.")+"</html>");
+        jLabelEmailAddress.setText("<html>"+i18n.tr("Enter a product key here, to activate the <br>upgrade to premium or premium plus.")+"</html>");
         jLabelEmailAddress.setName("jLabelEmailAddress"); // NOI18N
         jLoginPanel.add(jLabelEmailAddress, "cell 0 1 9 1,grow");
 
         jLabel16.setFont(new java.awt.Font("Arial", 1, Util.getFontSize()*2)); // NOI18N
         jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        jLabel16.setText(i18n.tr("produktschlüssel eingeben"));
+        jLabel16.setText(i18n.tr("enter product key"));
         jLabel16.setName("jLabel16"); // NOI18N
         jLoginPanel.add(jLabel16, "cell 0 0 9 1,grow");
 
-        jPerformUpgradeButton.setText(i18n.tr("Jetzt Upgraden"));
+        jPerformUpgradeButton.setText(i18n.tr("Upgrade Now"));
         jPerformUpgradeButton.setName("jPerformUpgradeButton"); // NOI18N
         jPerformUpgradeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -161,7 +161,7 @@ public class UpgradeDialog extends javax.swing.JDialog {
         jLabel6.setForeground(new java.awt.Color(255, 255, 255));
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel6.setIcon(Util.getImageIcon("/icons/exit.png")); // NOI18N
-        jLabel6.setText(i18n.tr("zurück"));
+        jLabel6.setText(i18n.tr("back"));
         jLabel6.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel6.setName("jLabel6"); // NOI18N
         jLabel6.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -219,10 +219,10 @@ public class UpgradeDialog extends javax.swing.JDialog {
       
       
       if (result != null && result.getUpgradeSuccesful() == 0) {
-        JOptionPane.showMessageDialog(null, i18n.tr("Produktschlüssel ungültig:") + " " + key, i18n.tr("Fehler"), JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(null, i18n.tr("Produktschlüssel ungültig:") + " " + key, i18n.tr("Error"), JOptionPane.ERROR_MESSAGE);
       } else if (result.getUpgradeSuccesful() == 1) {
         String msg = i18n.tr("Produktschlüssel erfolgreich eingelöst!") + "\n\n";
-        msg += i18n.tr("VPN Typ:") + " " + result.getEAccountType() + "\n";
+        msg += i18n.tr("VPN type:") + " " + result.getEAccountType() + "\n";
         
         long until = (long)result.getIUpgradeUntil() *1000;
         
@@ -230,7 +230,7 @@ public class UpgradeDialog extends javax.swing.JDialog {
         SimpleDateFormat df = new SimpleDateFormat(i18n.tr("d. MMMM yyyy"), VpnI18N.getLanguage().getLocale());
         String dt = df.format(upgradeUntil);        
         
-        msg += i18n.tr("Gültig bis:") + " " + dt + "\n\n";
+        msg += i18n.tr("Valid Until:") + " " + dt + "\n\n";
         
         msg += i18n.tr("Um dein Upgrade zu aktivieren, muss   neu gestartet werden.") + "\n\n";
         msg += i18n.tr("Shellfire VPN jetzt neu starten?");

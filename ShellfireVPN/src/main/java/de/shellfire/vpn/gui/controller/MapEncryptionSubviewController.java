@@ -46,9 +46,9 @@ public class MapEncryptionSubviewController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        this.showOwnPosition.setText(i18n.tr("Datenroute und eigenen Standort anzeigen (falls verbunden)"));
-        this.selectServerLabel.setText("   " + i18n.tr("Server Übersichtskarte"));
-        this.goToOurLocationButton.setText(i18n.tr("gehe zu eigenem Standort"));
+        this.showOwnPosition.setText(i18n.tr("Show data route and your location (when connected)"));
+        this.selectServerLabel.setText("   " + i18n.tr("Server map"));
+        this.goToOurLocationButton.setText(i18n.tr("go to your location"));
     }    
 
     public Label getSelectServerLabel() {

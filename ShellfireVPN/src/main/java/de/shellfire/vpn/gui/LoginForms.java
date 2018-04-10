@@ -359,15 +359,15 @@ public class LoginForms extends Application {
                 int answer = JOptionPane
                         .showConfirmDialog(
                                 null,
-                                i18n.tr("Es ist eine neue Version von Shellfire VPN verfügbar. Ein Update ist zwingend erforderlich. Möchtest du jetzt updaten?"),
-                                i18n.tr("Neue Version"),
+                                i18n.tr("A new version of Shellfire VPN is available. An update is mandatory. Would you like to update now?"),
+                                i18n.tr("New Version"),
                                 JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
                 if (answer == JOptionPane.YES_OPTION) {
                     JOptionPane.showMessageDialog(
                             null,
-                            i18n.tr("Du hast dich entschieden, zu updaten. Shellfire VPN wird jetzt mit Admin-Privilegien neugestartet um das Update durchzuführen."),
-                            i18n.tr("Update wird durchgeführt"), JOptionPane.INFORMATION_MESSAGE);
+                            i18n.tr("You decided, to update. Shellfire VPN is now being restarted with super user privileges to perform the update."),
+                            i18n.tr("Update is being performed"), JOptionPane.INFORMATION_MESSAGE);
 
                     String installerPath = com.apple.eio.FileManager.getPathToApplicationBundle() + "/Contents/Java/ShellfireVPN2-Updater.app";
                     log.debug("Opening updater using Desktop.open(): " + installerPath);
@@ -387,8 +387,8 @@ public class LoginForms extends Application {
                 } else {
                     JOptionPane.showMessageDialog(
                             null,
-                            i18n.tr("Du hast dich entschieden, nicht zu updaten. Shellfire VPN wird jetzt beendet."),
-                            i18n.tr("Update abgelehnt"), JOptionPane.ERROR_MESSAGE);
+                            i18n.tr("You decided not to update - Shellfire VPN is now exiting."),
+                            i18n.tr("Update rejected"), JOptionPane.ERROR_MESSAGE);
                     System.exit(0);
                 }
 
@@ -418,7 +418,7 @@ public class LoginForms extends Application {
     }
 
     private void showLoginProgress() {
-        //this.loginProgressDialog = new ProgressDialog(this, false, i18n.tr("Einloggen..."));
+        //this.loginProgressDialog = new ProgressDialog(this, false, i18n.tr("Logging in..."));
         this.initDialog.setVisible(true);
     }
 
@@ -448,14 +448,14 @@ public class LoginForms extends Application {
         boolean internetAvailable = Util.internetIsAvailable();
 
         if (internetAvailable) {
-            initDialog.setDialogText(i18n.tr("Initialisiere ShellfireVPNService..."));
+            initDialog.setDialogText(i18n.tr("Initializing ShellfireVPNService..."));
             ServiceTools.getInstanceForOS().ensureServiceEnvironmentFX(this);
         } else {
 
             Alert alert = new Alert(Alert.AlertType.ERROR);
             //alert.setTitle("Error");
-            alert.setHeaderText(i18n.tr("Kein Internet"));
-            alert.setContentText(i18n.tr("Keine Internet-Verbindung verfügbar - ShellfireVPN wird beendet."));
+            alert.setHeaderText(i18n.tr("No internet"));
+            alert.setContentText(i18n.tr("No internet connection available - ShellfireVPN is being closed."));
             alert.showAndWait();
             Platform.exit();
         }

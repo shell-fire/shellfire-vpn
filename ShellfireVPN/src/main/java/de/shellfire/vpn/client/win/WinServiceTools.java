@@ -27,18 +27,18 @@ public class WinServiceTools extends ServiceTools {
     if (!serviceIsRunning()) {
       log.debug("service not running - installElevated()");
       JOptionPane.showMessageDialog(null,
-          i18n.tr("Der Shellfire VPN Service wird jetzt installiert. Gib dazu bitte im nachfolgenden Fenster dein Admin-Passwort ein."));
+          i18n.tr("Shellfire VPN service is now being installed. Please enter your admin password in the next window."));
 
       LoginForm.initDialog.dispose();
       installElevated();
 
-      loginProgressDialog = new ProgressDialog(form, false, i18n.tr("Installiere Service.."));
-      loginProgressDialog.setOption(2, i18n.tr("abbrechen"));
+      loginProgressDialog = new ProgressDialog(form, false, i18n.tr("Installing Service..."));
+      loginProgressDialog.setOption(2, i18n.tr("cancel"));
       loginProgressDialog.setOptionCallback(new Runnable() {
 
         @Override
         public void run() {
-          JOptionPane.showMessageDialog(null, i18n.tr("Service wurde nicht korrekt installiert - Shellfire VPN wird jetzt beendet."));
+          JOptionPane.showMessageDialog(null, i18n.tr("Service has not been installed correctly - Shellfire VPN is now exited"));
           System.exit(0);
         }
       });

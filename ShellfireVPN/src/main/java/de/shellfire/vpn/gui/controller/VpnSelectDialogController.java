@@ -123,8 +123,8 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
         VpnSelectionFXModel selectedItem = this.vpnListTable.getSelectionModel().getSelectedItem();
         if (selectedItem == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText(i18n.tr("Kein Vpn ausgewählt"));
-            alert.setContentText(i18n.tr("Bitte wähle einen VPN aus der Liste um fortzufahren"));
+            alert.setHeaderText(i18n.tr("No VPN selected"));
+            alert.setContentText(i18n.tr("Please select a VPN from the list to proceed"));
             alert.showAndWait();
         } else {
             rememberSelectionIfDesired(selectedItem.getVpn());
@@ -218,10 +218,10 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
         this.headerImageView.setImage(ShellfireVPNMainFormFxmlController.getLogo());
         this.numAccountVpnLabel.setText(
                 i18n.tr("In deinem Shellfire Account wurden mehrere VPN gefunden. \nBitte wähle den VPN aus, den du benutzen möchtest"));
-        this.backLabel.setText(i18n.tr("zurück"));
-        this.selectVpnButton.setText(i18n.tr("VPN auswählen"));
-        this.fAutoconnect.setText(i18n.tr("Auswahl merken"));
-        this.vpnSelectLabel.setText(i18n.tr("vpn auswahl"));
+        this.backLabel.setText(i18n.tr("back"));
+        this.selectVpnButton.setText(i18n.tr("select VPN"));
+        this.fAutoconnect.setText(i18n.tr("Save my choice"));
+        this.vpnSelectLabel.setText(i18n.tr("vpn choice"));
         this.vpnTypeLabel.setText(
                 i18n.tr("Hinweis: Die VPN Typen PPTP und L2TP/IPSec müssen \n nach der Auswahl zunächst auf OpenVPN gewechselt werden,\n damit sf vpn die Verbindung herstellen kann."));
     }

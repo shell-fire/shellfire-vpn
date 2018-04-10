@@ -20,7 +20,7 @@ import de.shellfire.vpn.webservice.Vpn;
 public class VpnSelectionTableModel extends AbstractTableModel {
 
     private static I18n i18n = VpnI18N.getI18n();
-    private String[] header = {i18n.tr("Id"), i18n.tr("Typ"), i18n.tr("Account Art")};
+    private String[] header = {i18n.tr("id"), i18n.tr("type"), i18n.tr("account type")};
 
     private LinkedList<Vpn> vpns;
 

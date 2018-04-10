@@ -223,8 +223,8 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
                         } else {
                             Alert alert = new Alert(AlertType.ERROR);
-                            alert.setHeaderText(i18n.tr("Fehler"));
-                            alert.setContentText(i18n.tr("Login fehlgeschlagen: ") + loginResult.getMessage());
+                            alert.setHeaderText(i18n.tr("Error"));
+                            alert.setContentText(i18n.tr("Login error:") + loginResult.getMessage());
                             alert.showAndWait();
                         }
                     }
@@ -314,25 +314,25 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
     }
 
     public void initComponents() {
-        this.fLabelUsername.setText(i18n.tr("Email / Benutzername:"));
+        this.fLabelUsername.setText(i18n.tr("Email / Username:"));
         this.fLabelUsername.setFont(Font.font("Arial", Util.getFontSize()));
 
-        this.fLabelPassword.setText(i18n.tr("Passwort:"));
+        this.fLabelPassword.setText(i18n.tr("Password:"));
         this.fLabelPassword.setFont(Font.font("Arial", Util.getFontSize()));
 
-        this.fAutoLogin.setText(i18n.tr("Automatisch einloggen"));
+        this.fAutoLogin.setText(i18n.tr("Login automatically"));
 
-        this.fButtonOpenRegistrationForm.setText(i18n.tr("Keine Zugangsdaten?"));
+        this.fButtonOpenRegistrationForm.setText(i18n.tr("No user credentials?"));
 
-        this.fButtonLostUserCredential.setText(i18n.tr("Zugangsdaten verloren?"));
+        this.fButtonLostUserCredential.setText(i18n.tr("User credentials lost?"));
 
         this.fButtonLogin.setText(i18n.tr("Login"));
 
-        this.fAutoStart.setText(i18n.tr("Beim Hochfahren starten"));
+        this.fAutoStart.setText(i18n.tr("Start on boot"));
 
-        this.fAutoconnect.setText(i18n.tr("Automatisch verbinden"));
+        this.fAutoconnect.setText(i18n.tr("Connect  automatically"));
 
-        this.fStoreLoginData.setText(i18n.tr("Logindaten speichern"));
+        this.fStoreLoginData.setText(i18n.tr("Save login data"));
 
         this.headerImageView.setImage(ShellfireVPNMainFormFxmlController.getLogo());
 
@@ -594,7 +594,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
                     Alert alert = new Alert(AlertType.ERROR);
                     //alert.setTitle("Error");
                     //alert.setHeaderText("Printer error");
-                    alert.setContentText(i18n.tr("Lizenz nicht akzeptiert - Shellfire VPN wird jetzt beendet."));
+                    alert.setContentText(i18n.tr("Licence not accepted - Shellfire VPN is now exiting."));
                     alert.showAndWait();
                     Platform.exit();
                 }
@@ -620,9 +620,9 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
     private void askForAutoStart() {
         Alert alert = new Alert(AlertType.CONFIRMATION);
-        alert.setTitle(i18n.tr("Autostart"));
-//String s = i18n.tr("Shellfire VPN beim Hochfahren starten und automatisch verbinden?");
-        alert.setContentText(i18n.tr("Shellfire VPN beim Hochfahren starten und automatisch verbinden?"));
+        alert.setTitle(i18n.tr("Startup"));
+//String s = i18n.tr("Start Shellfire VPN on boot and connect automatically?");
+        alert.setContentText(i18n.tr("Start Shellfire VPN on boot and connect automatically?"));
 
         Optional<ButtonType> result = alert.showAndWait();
 
@@ -638,8 +638,8 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
     private void askForNewAccount() {
         Alert alert = new Alert(AlertType.CONFIRMATION);
-        alert.setTitle(i18n.tr("Willkommen: Erster Start"));
-        alert.setContentText(i18n.tr("Dies ist dein erster Start von Shellfire VPN. Neuen Shellfire VPN Account anlegen?"));
+        alert.setTitle(i18n.tr("Welcome: First Start"));
+        alert.setContentText(i18n.tr("This is the first time you start ShellfireV PN. Create a new Shellfire VPN account?"));
 
         Optional<ButtonType> result = alert.showAndWait();
 

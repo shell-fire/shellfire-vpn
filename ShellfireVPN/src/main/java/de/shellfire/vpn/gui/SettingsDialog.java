@@ -71,11 +71,11 @@ public class SettingsDialog extends javax.swing.JDialog {
         jLaunchStatusWebsiteOnConnect = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle(i18n.tr("Shellfire VPN Einstellungen"));
+        setTitle(i18n.tr("Shellfire VPN settings"));
 
         jSettingsPanel.setName("jSettingsPanel");
 
-        jRememberLoginData.setText(i18n.tr("Logindaten speichern"));
+        jRememberLoginData.setText(i18n.tr("Save login data"));
         jRememberLoginData.setName("jRememberLoginData"); // NOI18N
         jRememberLoginData.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -85,7 +85,7 @@ public class SettingsDialog extends javax.swing.JDialog {
         jSettingsPanel.setLayout(new MigLayout("", "[][][]", "[][][][][][][][]"));
         jSettingsPanel.add(jRememberLoginData, "cell 0 0 2 1,growx,aligny top");
 
-        jAutoLogin.setText(i18n.tr("Automatisch einloggen"));
+        jAutoLogin.setText(i18n.tr("Login automatically"));
         jAutoLogin.setName("jAutoLogin"); // NOI18N
         jAutoLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -94,7 +94,7 @@ public class SettingsDialog extends javax.swing.JDialog {
         });
         jSettingsPanel.add(jAutoLogin, "cell 0 1 2 1,growx,aligny bottom");
 
-        jSaveVpnSelection.setText(i18n.tr("VPN Auswahl merken"));
+        jSaveVpnSelection.setText(i18n.tr("Save VPN choice"));
         jSaveVpnSelection.setName("jSaveVpnSelection"); // NOI18N
         jSaveVpnSelection.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -111,11 +111,11 @@ public class SettingsDialog extends javax.swing.JDialog {
         });
         jSettingsPanel.add(jLanguageComboBox, "cell 1 6,growx,aligny top");
 
-        jLabel2.setText(i18n.tr("Sprache") + ":");
+        jLabel2.setText(i18n.tr("Language") + ":");
         jLabel2.setName("jLabel2"); // NOI18N
         jSettingsPanel.add(jLabel2, "cell 0 6,alignx right,aligny bottom");
 
-        jSaveSettings.setText(i18n.tr("Einstellungen Speichern"));
+        jSaveSettings.setText(i18n.tr("Save settings"));
         jSaveSettings.setName("jSaveSettings"); // NOI18N
         jSaveSettings.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -124,7 +124,7 @@ public class SettingsDialog extends javax.swing.JDialog {
         });
         jSettingsPanel.add(jSaveSettings, "cell 0 7,alignx left,aligny top");
 
-        jButton1.setText(i18n.tr("Abbrechen"));
+        jButton1.setText(i18n.tr("Cancel"));
         jButton1.setName("jButton1"); // NOI18N
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -134,15 +134,15 @@ public class SettingsDialog extends javax.swing.JDialog {
         getContentPane().setLayout(new MigLayout("", "", ""));
         jSettingsPanel.add(jButton1, "cell 1 7,growx,aligny top");
 
-        jAutoStart.setText(i18n.tr("Beim Hochfahren starten"));
+        jAutoStart.setText(i18n.tr("Start on boot"));
         jAutoStart.setName("jAutoStart"); // NOI18N
         jSettingsPanel.add(jAutoStart, "cell 0 3 2 1,growx,aligny top");
 
-        jAutoConnect.setText(i18n.tr("Automatisch verbinden"));
+        jAutoConnect.setText(i18n.tr("Connect  automatically"));
         jAutoConnect.setName("jAutoConnect"); // NOI18N
         jSettingsPanel.add(jAutoConnect, "cell 0 4 2 1,growx,aligny top");
 
-        jLaunchStatusWebsiteOnConnect.setText(i18n.tr("Zeige Status-Seite nach Verbindungsaufbau"));
+        jLaunchStatusWebsiteOnConnect.setText(i18n.tr("Show status site after connection has been established"));
         jLaunchStatusWebsiteOnConnect.setName("jLaunchStatusWebsiteOnConnect"); // NOI18N
         jSettingsPanel.add(jLaunchStatusWebsiteOnConnect, "cell 0 5 2 1,growx,aligny top");
         getContentPane().add(jSettingsPanel, "cell 0 0,grow");
@@ -232,7 +232,7 @@ public class SettingsDialog extends javax.swing.JDialog {
         
         if (!currentLanguage.equals(oldLanguage)) {
           VpnI18N.setLanguage(currentLanguage);  
-          int res = JOptionPane.showConfirmDialog(null, i18n.tr("Die Änderung der Sprache wird erst nach einem Neustart von Shellfire VPN aktiv. Jetzt neu starten?"), i18n.tr("Geänderte Sprache erst nach Neustart wirksam"), JOptionPane.YES_NO_OPTION);
+          int res = JOptionPane.showConfirmDialog(null, i18n.tr("Changed language settings require a restart of Shellfire VPN to take effect. Restart now?"), i18n.tr("Changed language settings require a restart of ShellfireVPN to take effect."), JOptionPane.YES_NO_OPTION);
           if (res == JOptionPane.YES_OPTION) {
             this.dispose();
             LoginForm.restart();

@@ -121,13 +121,13 @@ public class RegiesterFormController extends AnchorPane implements Initializable
         this.registerHeadingLabel.setText(i18n.tr("Registrierung"));
         //this.emailTextField.setText(i18n.tr("Registrierung"));
 
-        this.passwordLabel.setText(i18n.tr("Passwort:"));
+        this.passwordLabel.setText(i18n.tr("Password:"));
 
-        this.confirmPasswordLabel.setText(i18n.tr("Passwort-Check:"));
+        this.confirmPasswordLabel.setText(i18n.tr("Password check:"));
 
-        this.registerButton.setText(i18n.tr("Jetzt Registrieren"));
+        this.registerButton.setText(i18n.tr("Register now"));
 
-        this.newsLetterCheckBox.setText(i18n.tr("Ich abonniere den Newsletter"));
+        this.newsLetterCheckBox.setText(i18n.tr("I subscribe to the newsletter"));
 
         this.registerBackLabel.setText(i18n.tr("zurÃ¼ck"));
 
@@ -209,7 +209,7 @@ public class RegiesterFormController extends AnchorPane implements Initializable
         String email = emailTextField.getText();
         if (!GenericValidator.isEmail(email)) {
             error = true;
-            message = i18n.tr("Bitte gib eine gültige Email-Adresse ein.");
+            message = i18n.tr("Please enter a valid email address.");
             jumpTo = emailTextField;
         }
 
@@ -217,36 +217,36 @@ public class RegiesterFormController extends AnchorPane implements Initializable
         String passwordCheck = this.getPasswordCheck();
         if (!error && GenericValidator.isBlankOrNull(password)) {
             error = true;
-            message = i18n.tr("Bitte gib ein Passwort ein.");
+            message = i18n.tr("Please enter a password.");
             jumpTo = passwordField;
         }
 
         if (!error && password.length() < 5) {
             error = true;
-            message = i18n.tr("Dein Passwort muss mindestens 5 Zeichen lang sein.");
+            message = i18n.tr("Your password must contain at least 5 characters.");
             jumpTo = passwordField;
         }
 
         if (!error && GenericValidator.isBlankOrNull(passwordCheck)) {
             error = true;
-            message = i18n.tr("Bitte gib dein Passwort zur Sicherheit noch einmal im Feld Passwort-Check ein.");
+            message = i18n.tr("Please enter the password again into the password check field for your safety.");
             jumpTo = confirmPasswordField;
         }
 
         if (!error && !password.equals(passwordCheck)) {
             error = true;
-            message = i18n.tr("Passwort und Passwort-Check stimmen nicht überein.");
+            message = i18n.tr("Password and password check do not match.");
             jumpTo = confirmPasswordField;
         }
 
         if (!error && !fAutoconnect1.isSelected()) {
             error = true;
-            message = i18n.tr("Die AGB, Datenschutzerklärung und Widerrufstrecht müssen akzeptiert werden, um die Registrierung abzuschließen.");
+            message = i18n.tr("You must accept the terms and conditions, privacy policy and right of withdrawal to complete your registration.");
             jumpTo = null;
         }
 
         if (error) {
-            JOptionPane.showMessageDialog(null, message, i18n.tr("Fehler"), JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, message, i18n.tr("Error"), JOptionPane.ERROR_MESSAGE);
             if (jumpTo != null) {
                 SwingUtilities.invokeLater(new RegiesterFormController.FocusRequester(jumpTo));
             }
@@ -305,8 +305,8 @@ public class RegiesterFormController extends AnchorPane implements Initializable
                     progressDialog.setVisible(false);
                 }
 
-                JOptionPane.showMessageDialog(null, i18n.tr("Fehler bei Registrierung:") + " " + i18n.tr(registrationResult.getMessage()),
-                        i18n.tr("Fehler"), JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, i18n.tr("Error registering:") + " " + i18n.tr(registrationResult.getMessage()),
+                        i18n.tr("Error"), JOptionPane.ERROR_MESSAGE);
             }
 
             return null;
@@ -317,11 +317,11 @@ public class RegiesterFormController extends AnchorPane implements Initializable
     private void waitForActivation() {
 
         /*    this.progressDialog = new ProgressDialog(this, false,
-                i18n.tr("Das Shellfire VPN System hat dir soeben eine Email geschickt, bitte folge den Anweisungen dort."));
-        this.progressDialog.addInfo(i18n.tr("Warte auf Aktivierung des Accounts..."));
-        this.progressDialog.addBottomText(i18n.tr("Keine Email erhalten?"));
-        this.progressDialog.setOption(1, i18n.tr("Email neu anfordern"), 30);
-        this.progressDialog.setOption(2, i18n.tr("Emailadresse ändern"), 30);
+                i18n.tr("You have just received an email from the Shellfire VPN system, please follow the instructions in this email."));
+        this.progressDialog.addInfo(i18n.tr("Waiting for account activation..."));
+        this.progressDialog.addBottomText(i18n.tr("No email received?"));
+        this.progressDialog.setOption(1, i18n.tr("Request new email"), 30);
+        this.progressDialog.setOption(2, i18n.tr("Change email address"), 30);
         this.progressDialog.setOptionCallback(new Runnable() {
 
             @Override
@@ -336,8 +336,8 @@ public class RegiesterFormController extends AnchorPane implements Initializable
                 } else if (progressDialog.isOption2()) {
                     progressDialog.setVisible(false);
                     isResend = false;
-                    JOptionPane.showMessageDialog(null, i18n.tr("Bitte wähle nun eine andere Email-Adresse und versuche es erneut."),
-                            i18n.tr("Email-Adresse ändern"), JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(null, i18n.tr("Please select a different email address and try again."),
+                            i18n.tr("Change email address"), JOptionPane.INFORMATION_MESSAGE);
                 }
             }
         });

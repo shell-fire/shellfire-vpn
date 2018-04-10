@@ -128,8 +128,8 @@ public class LogViewer extends JFrame {
   }
 
   private void sendLogToShellfire() {
-    sendLogProgressDialog = new ProgressDialog(this, false, i18n.tr("Log hochladen.."));
-    sendLogProgressDialog.setOption(2, i18n.tr("abbrechen"));
+    sendLogProgressDialog = new ProgressDialog(this, false, i18n.tr("Upload log.."));
+    sendLogProgressDialog.setOption(2, i18n.tr("cancel"));
     
     final SendLogTask sendLogTask = new SendLogTask(this);
     
@@ -137,7 +137,7 @@ public class LogViewer extends JFrame {
 
       @Override
       public void run() {
-        JOptionPane.showMessageDialog(null, i18n.tr("Log-Upload abgebrochen."));
+        JOptionPane.showMessageDialog(null, i18n.tr("Log upload cancelled."));
         if (sendLogTask != null && !sendLogTask.isDone() )
           sendLogTask.cancel(true);
       }
@@ -177,7 +177,7 @@ public class LogViewer extends JFrame {
       
       sendLogProgressDialog.setVisible(false);
       if (finished == true) {
-        JOptionPane.showMessageDialog(viewer, i18n.tr("Log wurde gesendet."));  
+        JOptionPane.showMessageDialog(viewer, i18n.tr("Log sent."));  
       }
       
 

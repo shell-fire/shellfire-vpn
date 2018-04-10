@@ -115,7 +115,7 @@ public class RegisterForm extends javax.swing.JFrame {
         jLabel16.setName("jLabel16"); // NOI18N
         jLoginPanel.add(jLabel16, "cell 0 0 3 1,grow");
 
-        jButtonRequestRegKey.setText(i18n.tr("Jetzt Registrieren"));
+        jButtonRequestRegKey.setText(i18n.tr("Register now"));
         jButtonRequestRegKey.setName("jButtonRequestRegKey"); // NOI18N
         jButtonRequestRegKey.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -142,25 +142,25 @@ public class RegisterForm extends javax.swing.JFrame {
 
         jLabelEmailAddress.setFont(new java.awt.Font("Arial", 0, Util.getFontSize()));
         jLabelEmailAddress.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabelEmailAddress.setText(i18n.tr("Email-Adresse:"));
+        jLabelEmailAddress.setText(i18n.tr("Email address:"));
         jLabelEmailAddress.setName("jLabelEmailAddress"); // NOI18N
         jLoginPanel.add(jLabelEmailAddress, "cell 0 1 2 1,growx,aligny center");
 
         jNewsletterCheckbox.setSelected(true);
-        lblNewsletterLabel.setText(i18n.tr("Ich abonniere den Newsletter"));
+        lblNewsletterLabel.setText(i18n.tr("I subscribe to the newsletter"));
         jNewsletterCheckbox.setText("");
         jNewsletterCheckbox.setName("jNewsletterCheckbox"); // NOI18N
         jLoginPanel.add(jNewsletterCheckbox, "cell 1 5,alignx center,growy");
 
         jLabelEmailAddress1.setFont(new java.awt.Font("Arial", 0, Util.getFontSize()));
         jLabelEmailAddress1.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabelEmailAddress1.setText(i18n.tr("Passwort:"));
+        jLabelEmailAddress1.setText(i18n.tr("Password:"));
         jLabelEmailAddress1.setName("jLabelEmailAddress1"); // NOI18N
         jLoginPanel.add(jLabelEmailAddress1, "cell 0 2 2 1,growx,aligny center");
 
         jLabelEmailAddress2.setFont(new java.awt.Font("Arial", 0, Util.getFontSize()));
         jLabelEmailAddress2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabelEmailAddress2.setText(i18n.tr("Passwort-Check:"));
+        jLabelEmailAddress2.setText(i18n.tr("Password check:"));
         jLabelEmailAddress2.setName("jLabelEmailAddress2"); // NOI18N
         jLoginPanel.add(jLabelEmailAddress2, "cell 0 3 2 1,growx,aligny center");
 
@@ -201,7 +201,7 @@ public class RegisterForm extends javax.swing.JFrame {
         jEditorPane1.setFont(new java.awt.Font("Arial", 0, Util.getFontSize())); // NOI18N
         jEditorPane1.setText("<html>" + "  <body>"
                 + i18n
-                .tr("Ich akzeptiere die <a target='_agb' href='https://www.shellfire.de/agb/'>AGB</a> und habe die <a target='_datenschutzerklaerung' href='https://www.shellfire.de/datenschutzerklaerung/'>Datenschutzerklärung</a><br />sowie das <a target='_widerrufsrecht' href='https://www.shellfire.de/widerrufsrecht/'>Widerrufsrecht</a> zur Kenntnis genommen")
+                .tr("I accept the <a target='_agb' href='https://www.shellfire.de/agb/'>Terms and Conditions</a> and have read and noted the <a target='_datenschutzerklaerung' href='https://www.shellfire.de/datenschutzerklaerung/'>Privacy Policy</a> <br /> and the <a target='_widerrufsrecht' href='https://www.shellfire.de/widerrufsrecht/'>Right of Withdrawal</a>.")
                 + "  </body>" + "</html>");
         jEditorPane1.setDisabledTextColor(new java.awt.Color(238, 238, 238));
         jEditorPane1.setName("jEditorPane1"); // NOI18N
@@ -239,7 +239,7 @@ public class RegisterForm extends javax.swing.JFrame {
         jLabel6.setForeground(new java.awt.Color(77, 77, 77));
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel6.setIcon(Util.getImageIcon("/icons/exit.png")); // NOI18N
-        jLabel6.setText(i18n.tr("zurück"));
+        jLabel6.setText(i18n.tr("back"));
         jLabel6.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jLabel6.setName("jLabel6"); // NOI18N
         jLabel6.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -344,7 +344,7 @@ public class RegisterForm extends javax.swing.JFrame {
 
     private void showRequestProgress() {
         if (this.progressDialog == null) {
-            this.progressDialog = new ProgressDialog(this, false, i18n.tr("Fordere Aktivierungsschlüssel an..."));
+            this.progressDialog = new ProgressDialog(this, false, i18n.tr("Requesting activation key..."));
         }
 
         this.progressDialog.setVisible(true);
@@ -378,7 +378,7 @@ public class RegisterForm extends javax.swing.JFrame {
         String email = jEmailAddress.getText();
         if (!GenericValidator.isEmail(email)) {
             error = true;
-            message = i18n.tr("Bitte gib eine gültige Email-Adresse ein.");
+            message = i18n.tr("Please enter a valid email address.");
             jumpTo = jEmailAddress;
         }
 
@@ -386,36 +386,36 @@ public class RegisterForm extends javax.swing.JFrame {
         String passwordCheck = this.getPasswordCheck();
         if (!error && GenericValidator.isBlankOrNull(password)) {
             error = true;
-            message = i18n.tr("Bitte gib ein Passwort ein.");
+            message = i18n.tr("Please enter a password.");
             jumpTo = jPassword;
         }
 
         if (!error && password.length() < 5) {
             error = true;
-            message = i18n.tr("Dein Passwort muss mindestens 5 Zeichen lang sein.");
+            message = i18n.tr("Your password must contain at least 5 characters.");
             jumpTo = jPassword;
         }
 
         if (!error && GenericValidator.isBlankOrNull(passwordCheck)) {
             error = true;
-            message = i18n.tr("Bitte gib dein Passwort zur Sicherheit noch einmal im Feld Passwort-Check ein.");
+            message = i18n.tr("Please enter the password again into the password check field for your safety.");
             jumpTo = jPasswordCheck;
         }
 
         if (!error && !password.equals(passwordCheck)) {
             error = true;
-            message = i18n.tr("Passwort und Passwort-Check stimmen nicht überein.");
+            message = i18n.tr("Password and password check do not match.");
             jumpTo = jPasswordCheck;
         }
 
         if (!error && !jAGBCheckbox.isSelected()) {
             error = true;
-            message = i18n.tr("Die AGB, Datenschutzerklärung und Widerrufstrecht müssen akzeptiert werden, um die Registrierung abzuschließen.");
+            message = i18n.tr("You must accept the terms and conditions, privacy policy and right of withdrawal to complete your registration.");
             jumpTo = null;
         }
 
         if (error) {
-            JOptionPane.showMessageDialog(null, message, i18n.tr("Fehler"), JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, message, i18n.tr("Error"), JOptionPane.ERROR_MESSAGE);
             if (jumpTo != null) {
                 SwingUtilities.invokeLater(new FocusRequester(jumpTo));
             }
@@ -449,8 +449,8 @@ public class RegisterForm extends javax.swing.JFrame {
                     progressDialog.setVisible(false);
                 }
 
-                JOptionPane.showMessageDialog(null, i18n.tr("Fehler bei Registrierung:") + " " + i18n.tr(registrationResult.getMessage()),
-                        i18n.tr("Fehler"), JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, i18n.tr("Error registering:") + " " + i18n.tr(registrationResult.getMessage()),
+                        i18n.tr("Error"), JOptionPane.ERROR_MESSAGE);
             }
 
             return null;
@@ -459,11 +459,11 @@ public class RegisterForm extends javax.swing.JFrame {
 
     private void waitForActivation() {
         this.progressDialog = new ProgressDialog(this, false,
-                i18n.tr("Das Shellfire VPN System hat dir soeben eine Email geschickt, bitte folge den Anweisungen dort."));
-        this.progressDialog.addInfo(i18n.tr("Warte auf Aktivierung des Accounts..."));
-        this.progressDialog.addBottomText(i18n.tr("Keine Email erhalten?"));
-        this.progressDialog.setOption(1, i18n.tr("Email neu anfordern"), 30);
-        this.progressDialog.setOption(2, i18n.tr("Emailadresse ändern"), 30);
+                i18n.tr("You have just received an email from the Shellfire VPN system, please follow the instructions in this email."));
+        this.progressDialog.addInfo(i18n.tr("Waiting for account activation..."));
+        this.progressDialog.addBottomText(i18n.tr("No email received?"));
+        this.progressDialog.setOption(1, i18n.tr("Request new email"), 30);
+        this.progressDialog.setOption(2, i18n.tr("Change email address"), 30);
         this.progressDialog.setOptionCallback(new Runnable() {
 
             @Override
@@ -478,8 +478,8 @@ public class RegisterForm extends javax.swing.JFrame {
                 } else if (progressDialog.isOption2()) {
                     progressDialog.setVisible(false);
                     isResend = false;
-                    JOptionPane.showMessageDialog(null, i18n.tr("Bitte wähle nun eine andere Email-Adresse und versuche es erneut."),
-                            i18n.tr("Email-Adresse ändern"), JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(null, i18n.tr("Please select a different email address and try again."),
+                            i18n.tr("Change email address"), JOptionPane.INFORMATION_MESSAGE);
                 }
             }
         });
@@ -494,8 +494,8 @@ public class RegisterForm extends javax.swing.JFrame {
         bringToFront();
         JOptionPane.showMessageDialog(null,
                 i18n.tr(
-                        "Dein Shellfire Account wurde soeben erfolgreich aktiviert. Logge dich jetzt mit Email-Adresse und Passwort ein, um Shellfire VPN zu starten."),
-                i18n.tr("Registrierung erfolgreich."), JOptionPane.INFORMATION_MESSAGE);
+                        "Your Shellfire account has been successfully activated. Please log in with your email address and password to start Shellfire VPN."),
+                i18n.tr("Registration successful."), JOptionPane.INFORMATION_MESSAGE);
         parentFrame.setUsername(this.getUser());
         parentFrame.setPassword(this.getPassword());
         parentFrame.setAutoLogin(false);

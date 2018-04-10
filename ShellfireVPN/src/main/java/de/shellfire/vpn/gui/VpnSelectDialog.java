@@ -95,7 +95,7 @@ public class VpnSelectDialog extends javax.swing.JFrame {
     jBackLabel.setForeground(new java.awt.Color(255, 255, 255));
     jBackLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
     jBackLabel.setIcon(Util.getImageIcon("/icons/exit.png")); // NOI18N
-    jBackLabel.setText(i18n.tr("zurück"));
+    jBackLabel.setText(i18n.tr("back"));
     jBackLabel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
     jBackLabel.setName("jBackLabel"); // NOI18N
     jBackLabel.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -131,10 +131,10 @@ public class VpnSelectDialog extends javax.swing.JFrame {
     jSelectVpnPanel.setName("jSelectVpnPanel"); // NOI18N
 
     jLabel1.setText(i18n.tr(
-        "<html>In deinem Shellfire Account wurden mehrere VPN gefunden.<br />Bitte wähle den VPN aus, den du benutzen möchtest</html>"));
+        "<html>Multiple VPN are located in your Shellfire account.<br />Please select the VPN you want to use</html>"));
     jLabel1.setName("jLabel1"); // NOI18N
 
-    jSelectButton.setText(i18n.tr("VPN auswählen"));
+    jSelectButton.setText(i18n.tr("select VPN"));
     jSelectButton.setName("jSelectButton"); // NOI18N
     jSelectButton.addActionListener(new java.awt.event.ActionListener() {
       public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -156,16 +156,16 @@ public class VpnSelectDialog extends javax.swing.JFrame {
     jScrollPane1.setViewportView(jVpnSelectTable);
 
     jRememberSelection.setSelected(true);
-    jRememberSelection.setText(i18n.tr("Auswahl merken"));
+    jRememberSelection.setText(i18n.tr("Save my choice"));
     jRememberSelection.setName("jRememberSelection"); // NOI18N
 
     jLabel16.setFont(new java.awt.Font("Arial", 1, Util.getFontSize() * 2));
     jLabel16.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-    jLabel16.setText(i18n.tr("vpn auswahl"));
+    jLabel16.setText(i18n.tr("vpn choice"));
     jLabel16.setName("jLabel16"); // NOI18N
 
     jLabel3.setText(i18n.tr(
-        "<html>Hinweis: Die VPN Typen PPTP und L2TP/IPSec müssen<br> nach der Auswahl zunächst auf OpenVPN gewechselt werden,<br>damit sf vpn die Verbindung herstellen kann.</html>"));
+        "<html>Note: VPN types PPTP and L2TP/IPSec<br>have to be switched to OpenVPN before<br>you can connect using sf vpn.</html>"));
     jLabel3.setName("jLabel3");
 
     jPanel7.add(jSelectVpnPanel, "cell 0 0,growx,aligny top");
@@ -201,7 +201,7 @@ public class VpnSelectDialog extends javax.swing.JFrame {
     try {
       int selected = this.jVpnSelectTable.getSelectedRow();
       if (selected == -1) {
-        JOptionPane.showMessageDialog(null, i18n.tr("Bitte wähle einen VPN aus der Liste um fortzufahren"), i18n.tr("Kein Vpn ausgewählt"),
+        JOptionPane.showMessageDialog(null, i18n.tr("Please select a VPN from the list to proceed"), i18n.tr("No VPN selected"),
             JOptionPane.ERROR_MESSAGE);
       } else {
         Vpn selectedVpn = this.vpnSelectionTableModel.getVpn(selected);
