@@ -70,7 +70,7 @@ public class ProgressDiagogVController extends AnchorPane implements Initializab
 	}
 	
 	public  void initComponenets(){
-		label1.setText(i18n.tr("Einloggen...."));
+		label1.setText(i18n.tr("Logging in..."));
 		additonalTextLabel.setText("jLabel2");
 		button2.setText("jButton1");
 		bottomLabel.setText("jLabel2");

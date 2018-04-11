@@ -54,7 +54,7 @@ public class DownloadProgressDialog extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        jLabel1.setText(i18n.tr("Downloading Update..."));
+        jLabel1.setText(i18n.tr("Downloading update..."));
 
         jCurrent.setText("0");
 

@@ -28,6 +28,7 @@ import javax.swing.table.TableColumnModel;
 import org.xnap.commons.i18n.I18n;
 
 import de.shellfire.vpn.Util;
+import de.shellfire.vpn.gui.controller.VpnSelectDialogController;
 import de.shellfire.vpn.gui.helper.MoveMouseListener;
 import de.shellfire.vpn.gui.model.VpnAttributeHeader;
 import de.shellfire.vpn.gui.model.VpnComparisonTableModel;
@@ -37,6 +38,7 @@ import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.webservice.WebService;
 import de.shellfire.vpn.webservice.model.VpnEntry;
 import net.miginfocom.swing.MigLayout;
+import org.slf4j.Logger;
 
 /**
  * 
@@ -45,7 +47,7 @@ import net.miginfocom.swing.MigLayout;
 public class PremiumVPNNagScreen extends javax.swing.JDialog {
   private final ShellfireVPNMainForm aparent;
   private MoveMouseListener mml;
-
+private static Logger log = Util.getLogger(PremiumVPNNagScreen.class.getCanonicalName());
   /** Creates new form PremiumVPNNagScreen */
   public PremiumVPNNagScreen(java.awt.Frame parent, boolean modal, ActionListener al) {
     super(parent, modal);
@@ -109,7 +111,7 @@ public class PremiumVPNNagScreen extends javax.swing.JDialog {
 
         
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, Util.getFontSize()));
-        jLabel1.setText(i18n.tr("Verbleibende Wartezeit:"));
+        jLabel1.setText(i18n.tr("Remaining waiting time:"));
         jLabel1.setName("jLabel1"); // NOI18N
 
         jRemainingTime.setFont(new java.awt.Font("Tahoma", 0, Util.getFontSize()));
@@ -117,7 +119,7 @@ public class PremiumVPNNagScreen extends javax.swing.JDialog {
         jRemainingTime.setName("jRemainingTime"); // NOI18N
 
         jButton1.setFont(new java.awt.Font("Tahoma", 0, Util.getFontSize()));
-        jButton1.setText(i18n.tr("Abbrechen"));
+        jButton1.setText(i18n.tr("Cancel"));
         jButton1.setName("jButton1"); // NOI18N
 
         jScrollPane1.setBackground(new java.awt.Color(18, 172, 229));
@@ -145,7 +147,7 @@ public class PremiumVPNNagScreen extends javax.swing.JDialog {
         
 
         jButton2.setFont(new java.awt.Font("Arial", 1, Util.getFontSize()));
-        jButton2.setText(i18n.tr("Jetzt Premium kaufen"));
+        jButton2.setText(i18n.tr("Buy premium now"));
         jButton2.setName("jButton2"); // NOI18N
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -167,7 +169,7 @@ public class PremiumVPNNagScreen extends javax.swing.JDialog {
 
         jLabel2.setFont(new java.awt.Font("Arial", 1, Util.getFontSize())); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("<html>"+i18n.tr("Jetzt Upgraden auf Shellfire VPN Premium")+"</html>");
+        jLabel2.setText("<html>"+i18n.tr("Upgrade to Shellfire VPN premium now")+"</html>");
         jLabel2.setName("jLabel2"); // NOI18N
         jHeaderPanel.add(jLabel2, "cell 0 1,alignx left,growy");
 
@@ -285,10 +287,12 @@ public class PremiumVPNNagScreen extends javax.swing.JDialog {
             return new StarImageRenderer().getTableCellRendererComponent(table, value, hasFocus, isSelected, row, col);
           } else {
           setText(entry.getText());
+          log.debug("PremiumVPNNagScreen: Entry Values " + entry.getText());
         }
         
       } else if (value instanceof String) {
         setText((String)value);
+        log.debug("PremiumVPNNagScreen: String Values " + (String)value);
       }
       
       

@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
 
 import de.shellfire.vpn.Util;
-<<<<<<< HEAD
 import de.shellfire.vpn.VpnProperties;
 import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.gui.model.VpnSelectionFXModel;
@@ -37,28 +36,10 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TableView;
-=======
-import de.shellfire.vpn.gui.LoginForms;
-import de.shellfire.vpn.gui.model.VpnSelectionFModel;
-import de.shellfire.vpn.i18n.VpnI18N;
-import javafx.event.ActionEvent;
-
-import javafx.scene.control.Label;
-
-import javafx.scene.control.ScrollPane;
-
-import javafx.scene.image.ImageView;
-
-import javafx.scene.control.CheckBox;
-
-import javafx.scene.control.TableView;
-
->>>>>>> 32656c998715dfdf2cb3c2b13af96c74a646dc3b
 import javafx.scene.control.TableColumn;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 
-<<<<<<< HEAD
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -100,45 +81,10 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
     private static LoginForms application;
     private static final long serialVersionUID = 1L;
     private static Logger log = Util.getLogger(VpnSelectDialogController.class.getCanonicalName());
-=======
-import javafx.scene.input.ContextMenuEvent;
-import javafx.scene.input.MouseEvent;
-
-public class VpnSelectDialogController extends AnchorPane implements Initializable {
-	@FXML
-	private Button selectVpnButton;
-	@FXML
-	private Label vpnSelectLabel;
-	@FXML
-	private CheckBox fAutoconnect;
-	@FXML
-	private Label vpnTypeLabel;
-	@FXML
-	private ScrollPane vpnScrollPane;
-	@FXML
-	private TableView vpnListTable;
-	@FXML
-	private TableColumn<VpnSelectionFModel,Integer> idTbleColumn;
-	@FXML
-	private TableColumn<VpnSelectionFModel,String> typeTbleColumn;
-	@FXML
-	private TableColumn<VpnSelectionFModel,String> accArtTbleColumn;
-	@FXML
-	private Label numAccountVpnLabel;
-	@FXML
-	private Pane headerPanel;
-	@FXML
-	private ImageView headerImageView;
-
-	private LoginForms application;
-	private static I18n i18n = VpnI18N.getI18n();
-	private static Logger log = Util.getLogger(LoginForms.class.getCanonicalName());
->>>>>>> 32656c998715dfdf2cb3c2b13af96c74a646dc3b
     @FXML
     private Pane backLabelPane;
     @FXML
     private ImageView backImageVeiw;
-<<<<<<< HEAD
 
     private ObservableList<VpnSelectionFXModel> vpnData = FXCollections.observableArrayList();
 
@@ -177,8 +123,8 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
         VpnSelectionFXModel selectedItem = this.vpnListTable.getSelectionModel().getSelectedItem();
         if (selectedItem == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText(i18n.tr("Kein Vpn ausgewählt"));
-            alert.setContentText(i18n.tr("Bitte wähle einen VPN aus der Liste um fortzufahren"));
+            alert.setHeaderText(i18n.tr("No VPN selected"));
+            alert.setContentText(i18n.tr("Please select a VPN from the list to proceed"));
             alert.showAndWait();
         } else {
             rememberSelectionIfDesired(selectedItem.getVpn());
@@ -197,6 +143,8 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
         mainFormStage.show();
              */
             this.application.loadShellFireMainController();
+            this.application.shellFireMainController.setShellfireService(this.shellfireService);
+            this.application.shellFireMainController.initializeComponents();
             this.application.shellFireMainController.displayMessage("Creation of object successful");
             this.application.shellFireMainController.setSerciceAndInitialize(this.shellfireService);
             this.application.getStage().show();
@@ -270,10 +218,10 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
         this.headerImageView.setImage(ShellfireVPNMainFormFxmlController.getLogo());
         this.numAccountVpnLabel.setText(
                 i18n.tr("In deinem Shellfire Account wurden mehrere VPN gefunden. \nBitte wähle den VPN aus, den du benutzen möchtest"));
-        this.backLabel.setText(i18n.tr("zurück"));
-        this.selectVpnButton.setText(i18n.tr("VPN auswählen"));
-        this.fAutoconnect.setText(i18n.tr("Auswahl merken"));
-        this.vpnSelectLabel.setText(i18n.tr("vpn auswahl"));
+        this.backLabel.setText(i18n.tr("back"));
+        this.selectVpnButton.setText(i18n.tr("select VPN"));
+        this.fAutoconnect.setText(i18n.tr("Save my choice"));
+        this.vpnSelectLabel.setText(i18n.tr("vpn choice"));
         this.vpnTypeLabel.setText(
                 i18n.tr("Hinweis: Die VPN Typen PPTP und L2TP/IPSec müssen \n nach der Auswahl zunächst auf OpenVPN gewechselt werden,\n damit sf vpn die Verbindung herstellen kann."));
     }
@@ -332,50 +280,4 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
     public void setApp(LoginForms applic) {
         this.application = applic;
     }
-
-=======
-	
-	/**
-	 * The constructor.
-	 * The constructor is called before the initialize() method.
-	 */
-	public VpnSelectDialogController() {
-		super();
-	}
-	// Event Listener on Button[#selectVpnButton].onAction
-	@FXML
-	public void handleSelectVpnButton(ActionEvent event) {
-		// TODO Autogenerated
-	}
-	// Event Listener on CheckBox[#fAutoconnect].onAction
-	@FXML
-	public void handlefAutoconnect(ActionEvent event) {
-		// TODO Autogenerated
-	}
-	// Event Listener on ImageView[#exitImageView].onContextMenuRequested
-	public void handleEXitButtonClicked(ContextMenuEvent event) {
-		// TODO Autogenerated
-	}
-	@Override
-	public void initialize(URL arg0, ResourceBundle arg1) {
-		// TODO Auto-generated method stub
-		// firstNameColumn.setCellValueFactory(cellData -> cellData.getValue().firstNameProperty());
-		//idTbleColumn.setCellValueFactory(cellData -> cellData.getValue().idProperty().asObject() );
-		//typeTbleColumn.setCellValueFactory(cellData -> cellData.getValue().typeProperty() );
-		//accArtTbleColumn.setCellValueFactory(cellData -> cellData.getValue().accountArtProperty() );
-		
-		initComponents();
-	}
-	
-	public void initComponents(){
-		
-		this.headerImageView.setImage(ShellfireVPNMainFormFxmlController.getLogo());
-		this.numAccountVpnLabel.setText(
-				i18n.tr("<html>In deinem Shellfire Account wurden mehrere VPN gefunden.<br />Bitte wähle den VPN aus, den du benutzen möchtest</html>"));
-	}
-
-    @FXML
-    private void handleBackLabel(MouseEvent event) {
-    }
->>>>>>> 32656c998715dfdf2cb3c2b13af96c74a646dc3b
 }

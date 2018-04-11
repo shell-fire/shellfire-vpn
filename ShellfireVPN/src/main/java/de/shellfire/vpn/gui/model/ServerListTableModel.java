@@ -20,7 +20,7 @@ import de.shellfire.vpn.webservice.ServerList;
 public class ServerListTableModel extends AbstractTableModel {
     private static I18n i18n = VpnI18N.getI18n();
 
-    private String[] header = {i18n.tr("Land"), i18n.tr("Name"), i18n.tr("Servertyp"), i18n.tr("Sicherheit"), i18n.tr("Geschwindigkeit")};
+    private String[] header = {i18n.tr("Country"), i18n.tr("Name"), i18n.tr("Server type"), i18n.tr("Security"), i18n.tr("Speed")};
     
     private ServerList serverList;
 

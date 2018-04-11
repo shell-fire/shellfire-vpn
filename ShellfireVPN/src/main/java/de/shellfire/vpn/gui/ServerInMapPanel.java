@@ -84,16 +84,16 @@ public class ServerInMapPanel extends javax.swing.JPanel implements ConnectionSt
         jHostLabel.getAccessibleContext().setAccessibleName("");
 
         jLabel1.setFont(new java.awt.Font("Lucida Grande", 0, Util.getFontSize())); // NOI18N
-        jLabel1.setText(i18n.tr("Servertyp:"));
+        jLabel1.setText(i18n.tr("Server type:"));
         jLabel1.setName("jLabel1"); // NOI18N
         add(jLabel1, "cell 0 4,growx,aligny top");
 
         jLabel3.setFont(new java.awt.Font("Lucida Grande", 0, Util.getFontSize())); // NOI18N
-        jLabel3.setText(i18n.tr("Land:"));
+        jLabel3.setText(i18n.tr("Country:"));
         jLabel3.setName("jLabel3"); // NOI18N
         add(jLabel3, "cell 0 6,growx,aligny top");
 
-        jConnectButton.setText(i18n.tr("Verbinden"));
+        jConnectButton.setText(i18n.tr("Connect"));
         jConnectButton.setName("jConnectButton"); // NOI18N
         jConnectButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -169,11 +169,11 @@ public class ServerInMapPanel extends javax.swing.JPanel implements ConnectionSt
 
     switch (currentState) {
     case Disconnected:
-      this.jConnectButton.setText(i18n.tr("Verbinden"));
+      this.jConnectButton.setText(i18n.tr("Connect"));
       this.jConnectButton.setEnabled(true);
       break;
     case Connecting:
-      this.jConnectButton.setText(i18n.tr("Verbinde..."));
+      this.jConnectButton.setText(i18n.tr("Connecting..."));
       this.jConnectButton.setEnabled(false);
       break;
 
@@ -182,10 +182,10 @@ public class ServerInMapPanel extends javax.swing.JPanel implements ConnectionSt
       
       if (this.server.equals(s)) {
         
-        this.jConnectButton.setText(i18n.tr("Trennen"));
+        this.jConnectButton.setText(i18n.tr("Disconnect"));
         this.jConnectButton.setEnabled(true);
       } else {
-        this.jConnectButton.setText(i18n.tr("Verbinde..."));
+        this.jConnectButton.setText(i18n.tr("Connecting..."));
         this.jConnectButton.setEnabled(false);
 
       }

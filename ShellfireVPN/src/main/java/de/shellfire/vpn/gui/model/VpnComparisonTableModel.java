@@ -9,8 +9,11 @@ import javax.swing.table.AbstractTableModel;
 import org.xnap.commons.i18n.I18n;
 
 import de.shellfire.vpn.Storage;
+import de.shellfire.vpn.Util;
+import de.shellfire.vpn.gui.RegisterForm;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.webservice.WebService;
+import org.slf4j.Logger;
 
 /**
  * 
@@ -22,6 +25,7 @@ public class VpnComparisonTableModel extends AbstractTableModel {
   private static I18n i18n = VpnI18N.getI18n();
   private AttributeList vpnAttributeList;
   private String[] header = { "", i18n.tr("Free"), i18n.tr("Premium"), i18n.tr("Premium Plus") };
+  private static Logger log = Util.getLogger(RegisterForm.class.getCanonicalName());
 
   public VpnComparisonTableModel() {
     this.initData();
@@ -45,13 +49,13 @@ public class VpnComparisonTableModel extends AbstractTableModel {
   private void initData() {
     /*
     vpnAttributeList = new VpnAttributeList();
-    VpnAttributeContainer attributeContainer = new VpnAttributeContainer(i18n.tr("Verbindung"));
+    VpnAttributeContainer attributeContainer = new VpnAttributeContainer(i18n.tr("Connection"));
     attributeContainer.add(i18n.tr("Anonym im Internet surfen"), true, true);
     attributeContainer.add(i18n.tr("Eigene IP-Adresse wird versteckt"), true, true);
     attributeContainer.add(i18n.tr("Internet-Verbindung verschlüsselt"), true, true);
     attributeContainer.add(i18n.tr("Sicher in öffentlichen WLANs surfen"), true, true);
     attributeContainer.add(i18n.tr("Traffic / Übertragungsvolumen"), i18n.tr("unlimitiert"), i18n.tr("unlimitiert"));
-    attributeContainer.add(i18n.tr("Geschwindigkeit"), new Star(1, i18n.tr("384 kbit/sek")), new Star(3, i18n.tr("7200 kbit/sek")));
+    attributeContainer.add(i18n.tr("Speed"), new Star(1, i18n.tr("384 kbit/sek")), new Star(3, i18n.tr("7200 kbit/sek")));
     attributeContainer.add(i18n.tr("Verschlüsselung"), new Star(2, i18n.tr("128 bit")), new Star(3, i18n.tr("192 bit")));
     attributeContainer.add(i18n.tr("Server in Deutschland"), true, true);
     attributeContainer.add(i18n.tr("Server in USA"), false, true);
@@ -94,7 +98,7 @@ public class VpnComparisonTableModel extends AbstractTableModel {
     WebService service = (WebService)Storage.get(WebService.class);
     
     vpnAttributeList = new AttributeList(service.getVpnComparisonTable());
-    
+    log.debug("VpnComparisonTableModel: Attribute list is " + vpnAttributeList.toString() );
     
   }
 

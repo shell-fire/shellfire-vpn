@@ -7,12 +7,14 @@ import javax.swing.ImageIcon;
 
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.types.Country;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 public class CountryMap {
   
   private static final EnumMap<Country, String> countryMap = new EnumMap<Country, String>(Country.class);
   private static final EnumMap<Country, ImageIcon> iconMap = new EnumMap<Country, ImageIcon>(Country.class);
-  
+  private static final EnumMap<Country, Image> iconMapFX = new EnumMap<Country, Image>(Country.class);
   
   static {
     countryMap.put(Country.Afghanistan, "af");
@@ -273,6 +275,21 @@ public class CountryMap {
     return iconMap.get(country);
   }
   
-  
+  public static Image getIconFX(Country country){
+      if (iconMapFX.get(country) == null) {
+      URL file = CountryMap.class.getResource("/flags/"+get(country) + ".png");
+      Image icon = null;
+      if (file != null) {
+        icon = Util.getImageIconFX("src/main/resources/flags/"+get(country) + ".png");
+      } else {
+        icon = Util.getImageIconFX("src/main/resources/flags/de.png");
+      }
+      
+
+      iconMapFX.put(country, icon);
+    }
+    
+    return iconMapFX.get(country);
+  }
 }
 

@@ -53,14 +53,14 @@ public class OwnPositionPanel extends javax.swing.JPanel {
         jOwnPlaceLabel.setFont(new java.awt.Font("Arial", 1, Util.getFontSize())); // NOI18N
         jOwnPlaceLabel.setForeground(new java.awt.Color(255, 255, 255));
         jOwnPlaceLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jOwnPlaceLabel.setText(i18n.tr("Eigener Standort"));
+        jOwnPlaceLabel.setText(i18n.tr("Your location"));
         jOwnPlaceLabel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
         jOwnPlaceLabel.setName("jOwnPlaceLabel"); // NOI18N
         jOwnPlaceLabel.setOpaque(true);
         add(jOwnPlaceLabel, "cell 0 0 3 1,grow");
 
         jLabel2.setFont(new java.awt.Font("Lucida Grande", 0, Util.getFontSize())); // NOI18N
-        jLabel2.setText(i18n.tr("Land:"));
+        jLabel2.setText(i18n.tr("Country:"));
         jLabel2.setName("jLabel2"); // NOI18N
         add(jLabel2, "cell 0 2,alignx right,aligny top");
 
@@ -70,7 +70,7 @@ public class OwnPositionPanel extends javax.swing.JPanel {
         add(jCountryLabel, "cell 2 2,alignx left,aligny top");
 
         jLabel1.setFont(new java.awt.Font("Lucida Grande", 0, Util.getFontSize())); // NOI18N
-        jLabel1.setText(i18n.tr("Stadt:"));
+        jLabel1.setText(i18n.tr("City:"));
         jLabel1.setName("jLabel1"); // NOI18N
         add(jLabel1, "cell 0 4,alignx right,aligny top");
 

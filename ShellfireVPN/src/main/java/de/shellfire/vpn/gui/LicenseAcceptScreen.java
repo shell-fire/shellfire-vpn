@@ -89,12 +89,12 @@ public class LicenseAcceptScreen extends javax.swing.JDialog {
         jLoginPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 14));
-        jLabel1.setText(i18n.tr("Verbleibende Wartezeit:"));
+        jLabel1.setText(i18n.tr("Remaining waiting time:"));
         jLabel1.setName("jLabel1"); // NOI18N
         jLoginPanel.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(23, 470, 157, -1));
 
         jAbortButton.setFont(new java.awt.Font("Tahoma", 0, 14));
-        jAbortButton.setText(i18n.tr("Ablehnen"));
+        jAbortButton.setText(i18n.tr("Reject"));
         jAbortButton.setName("jAbortButton"); // NOI18N
         jAbortButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -104,7 +104,7 @@ public class LicenseAcceptScreen extends javax.swing.JDialog {
         jLoginPanel.add(jAbortButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 430, 267, 25));
 
         jAcceptButton.setFont(new java.awt.Font("Tahoma", 0, 14));
-        jAcceptButton.setText(i18n.tr("Akzeptieren"));
+        jAcceptButton.setText(i18n.tr("Accept"));
         jAcceptButton.setName("jAcceptButton"); // NOI18N
         jAcceptButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -137,7 +137,7 @@ public class LicenseAcceptScreen extends javax.swing.JDialog {
         jLabel2.setFont(new java.awt.Font("Arial", 1, 24));
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        jLabel2.setText("<html>"+i18n.tr("Lizenz akzeptieren")+"</html>");
+        jLabel2.setText("<html>"+i18n.tr("Accept licence")+"</html>");
         jLabel2.setName("jLabel2"); // NOI18N
         jHeaderPanel.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 10, 340, 80));
 
