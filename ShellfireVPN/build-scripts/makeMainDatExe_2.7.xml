@@ -2,8 +2,8 @@
 <launch4jConfig>
   <dontWrapJar>false</dontWrapJar>
   <headerType>gui</headerType>
-  <jar>A:\Seafile\My Library\workspace\shellfire-vpn\ShellfireVPN\bin\ShellfireVPN2Dat.jar</jar>
-  <outfile>A:\Seafile\My Library\workspace\shellfire-vpn\ShellfireVPN\bin\ShellfireVPN2Dat.exe</outfile>
+  <jar>A:\Seafile\My Library\workspace\shellfire-vpn4\ShellfireVPN\bin\ShellfireVPN2Dat.jar</jar>
+  <outfile>A:\Seafile\My Library\workspace\shellfire-vpn4\ShellfireVPN\bin\ShellfireVPN2Dat.exe</outfile>
   <errTitle>Java Loader Fehler</errTitle>
   <cmdLine> </cmdLine>
   <chdir>.</chdir>
@@ -13,7 +13,7 @@
   <stayAlive>false</stayAlive>
   <restartOnCrash>false</restartOnCrash>
   <manifest></manifest>
-  <icon>A:\Seafile\My Library\workspace\shellfire-vpn\ShellfireVPN\build-scripts\images\normal.ico</icon>
+  <icon>A:\Seafile\My Library\workspace\shellfire-vpn4\ShellfireVPN\build-scripts\images\normal.ico</icon>
   <jre>
     <path></path>
     <bundledJre64Bit>false</bundledJre64Bit>
@@ -24,7 +24,7 @@
     <runtimeBits>64/32</runtimeBits>
   </jre>
   <splash>
-    <file>A:\Seafile\My Library\workspace\shellfire-vpn\ShellfireVPN\build-scripts\images\slpash\slpash-2.7.bmp</file>
+    <file>A:\Seafile\My Library\workspace\shellfire-vpn4\ShellfireVPN\build-scripts\images\slpash\slpash-2.7.bmp</file>
     <waitForWindow>true</waitForWindow>
     <timeout>5</timeout>
     <timeoutErr>false</timeoutErr>

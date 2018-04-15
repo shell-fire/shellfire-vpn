@@ -160,7 +160,7 @@ msgstr "Mot de passe:"
 #: main/java/de/shellfire/vpn/gui/LoginForm.java:450
 #: main/java/de/shellfire/vpn/gui/SettingsDialog.java:88
 msgid "Login automatically"
-msgstr "Connexion automatique"
+msgstr "Identification automatique"
 
 #: main/java/de/shellfire/vpn/gui/LoginForm.java:458
 msgid "No user credentials?"
@@ -184,7 +184,7 @@ msgstr "Lancement au démarrage"
 #: main/java/de/shellfire/vpn/gui/LoginForm.java:493
 #: main/java/de/shellfire/vpn/gui/SettingsDialog.java:141
 msgid "Connect  automatically"
-msgstr "Connexion automatique"
+msgstr "Connexion VPN automatique"
 
 #: main/java/de/shellfire/vpn/gui/LoginForm.java:792
 msgid ""
@@ -819,7 +819,7 @@ msgstr "Shellfire VPN au premier plan"
 
 #: main/java/de/shellfire/vpn/gui/ShellfireVPNMainForm.java:2296
 msgid "d/MM/yyyy"
-msgstr "j.MM.aaaa"
+msgstr "d.MM.YYYY"
 
 #: main/java/de/shellfire/vpn/gui/ShellfireVPNMainForm.java:2310
 msgid ""
