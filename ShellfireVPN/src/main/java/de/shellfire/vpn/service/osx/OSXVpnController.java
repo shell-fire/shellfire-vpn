@@ -385,7 +385,7 @@ public class OSXVpnController implements IVpnController {
 
         }
 
-        @Override
+        //@Override
         public void systemAweoke(SystemSleepEvent e) {
           systemAwoke(e);
           
