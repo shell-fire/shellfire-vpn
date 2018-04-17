@@ -1,10 +1,6 @@
 package de.shellfire.vpn.gui.controller;
 
-<<<<<<< HEAD
-
 import de.shellfire.vpn.Storage;
-=======
->>>>>>> 32656c998715dfdf2cb3c2b13af96c74a646dc3b
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -18,7 +14,6 @@ import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
 
 import de.shellfire.vpn.Util;
-<<<<<<< HEAD
 import de.shellfire.vpn.VpnProperties;
 import de.shellfire.vpn.client.Client;
 import de.shellfire.vpn.gui.CanContinueAfterBackEndAvailableFX;
@@ -31,16 +26,7 @@ import de.shellfire.vpn.webservice.Response;
 import de.shellfire.vpn.webservice.WebService;
 import de.shellfire.vpn.webservice.model.LoginResponse;
 import java.util.Optional;
-=======
-import de.shellfire.vpn.gui.LoginForms;
-import de.shellfire.vpn.gui.RegisterForm;
-import de.shellfire.vpn.gui.controller.ShellfireVPNMainFormFxmlController;
-import de.shellfire.vpn.i18n.VpnI18N;
-import de.shellfire.vpn.webservice.Response;
-import de.shellfire.vpn.webservice.WebService;
-import de.shellfire.vpn.webservice.model.LoginResponse;
-import javafx.concurrent.Task;
->>>>>>> 32656c998715dfdf2cb3c2b13af96c74a646dc3b
+
 import javafx.event.ActionEvent;
 
 import javafx.scene.control.Label;
@@ -58,7 +44,6 @@ import javafx.scene.text.Font;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-<<<<<<< HEAD
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.scene.Cursor;
@@ -425,7 +410,6 @@ public class LoginController extends AnchorPane implements Initializable {
         }
     }
 });*/
-<<<<<<< HEAD
     // Event Listener on ImageView[#exitImageView].onContextMenuRequested
     @FXML
     private void handleEXitButtonClicked(MouseEvent event) {
@@ -501,88 +485,6 @@ public class LoginController extends AnchorPane implements Initializable {
     public void showLoginProgress() {
         // TODO implement loginprogrss
     }
-=======
-
-	// Event Listener on ImageView[#exitImageView].onContextMenuRequested
-        @FXML
-        private void handleEXitButtonClicked(MouseEvent event) {
-             Platform.exit();
-        }
-        @Override
-	public void initialize(URL arg0, ResourceBundle arg1) {
-		initComponents();
-                this.service = WebService.getInstance();
-                fButtonLostUserCredential.setOnAction((ActionEvent event) ->{
-                    Util.openUrl(service.getUrlPasswordLost());
-                });
-	}
-
-	public void initComponents() {
-		this.fLabelUsername.setText(i18n.tr("Email / Benutzername:"));
-		this.fLabelUsername.setFont(Font.font("Arial", Util.getFontSize()));
-
-                    this.fLabelPassword.setText(i18n.tr("Passwort:"));
-		this.fLabelPassword.setFont(Font.font("Arial", Util.getFontSize()));
-
-		this.fAutoLogin.setText(i18n.tr("Automatisch einloggen"));
-
-		this.fButtonOpenRegistrationForm.setText(i18n.tr("Keine Zugangsdaten?"));
-
-		this.fButtonLostUserCredential.setText(i18n.tr("Zugangsdaten verloren?"));
-
-		this.fButtonLogin.setText(i18n.tr("Keine Zugangsdaten?"));
-
-		this.fAutoStart.setText(i18n.tr("Beim Hochfahren starten"));
-
-		this.fAutoconnect.setText(i18n.tr("Automatisch verbinden"));
-
-		this.fStoreLoginData.setText(i18n.tr("Logindaten speichern"));
-
-		this.headerImageView.setImage(ShellfireVPNMainFormFxmlController.getLogo());
-
-		this.headerPanel.setStyle("-fx-background-color: rgb(18,172,229);");
-
-		this.exitImageView.setImage(Util.getImageIconFX("src/main/resources/icons/exit.png"));
-                
-                
-                // Listeners for changes in password field
-                fPassword.focusedProperty().addListener(new ChangeListener<Boolean>() {
-                @Override
-                public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue)
-                {
-                    // password field in focus
-                    if (newPropertyValue)
-                    {
-                        if( passwordBogus){
-                            fPassword.setText("");
-                        }
-                    }
-                    else
-                    {
-                        // password field out of focus
-                        password = fPassword.getText();
-                        passwordBogus = false;
-                    }
-                }
-            });
-	}
-
-	public void setApp(LoginForms applic) {
-		this.application = applic;
-	}
-
-	public boolean isMinimize() {
-		return minimize;
-	}
-
-	public void setMinimize(boolean minimize) {
-		this.minimize = minimize;
-	}
-
-	public void showLoginProgress() {
-		// TODO implement loginprogrss
-	}
->>>>>>> 32656c998715dfdf2cb3c2b13af96c74a646dc3b
 
     @FXML
     private void handleUsernameChanged(InputMethodEvent event) {
@@ -601,35 +503,26 @@ public class LoginController extends AnchorPane implements Initializable {
     @FXML
     private void handlePasswordFieldPressed(KeyEvent event) {
         if (event.getCode().equals(KeyCode.ENTER)) {
-<<<<<<< HEAD
+
             this.password = fPassword.getText();
             this.passwordBogus = false;
             // perform login action when inputs are correct
             handlefButtonLogin(null);
         }
 
-=======
-			this.password = fPassword.getText();
-                        this.passwordBogus = false;
-                        // perform login action when inputs are correct
-			handlefButtonLogin(null);
-		}
->>>>>>> 32656c998715dfdf2cb3c2b13af96c74a646dc3b
+
     }
 
     @FXML
     private void handleExitImageMouseExited(MouseEvent event) {
         //this.exitImageView.setBlendMode(BlendMode.LIGHTEN);
-<<<<<<< HEAD
         this.application.getStage().getScene().setCursor(Cursor.DEFAULT);
-=======
->>>>>>> 32656c998715dfdf2cb3c2b13af96c74a646dc3b
+
     }
 
     @FXML
     private void handleExitImageMouseEntered(MouseEvent event) {
         //this.exitImageView.setBlendMode(BlendMode.OVERLAY);
-<<<<<<< HEAD
         this.application.getStage().getScene().setCursor(Cursor.HAND);
     }
 
@@ -888,42 +781,40 @@ public class LoginController extends AnchorPane implements Initializable {
         props.setBoolean(REG_AUTOCONNECT, autoConnect);
 
     }
-=======
     }
 
 
 	
-	class LoginTAsk extends Task<Response<LoginResponse>>{
-		
-		public void done(){
-			Response<LoginResponse> loginResult = null;
-			try {
-				loginResult = get();
-			} catch (Exception ignore) {
-				ignore.printStackTrace();
-			}
-			hideLoginProgress();
-			String user = getUser();
-			String password = getPassword();
-		}
-		@Override
-		protected Response<LoginResponse> call() throws Exception {
-			// TODO Auto-generated method stub
-			return null;
-		}
-		
-	}
-	
-	public void hideLoginProgress(){
-		this.setDisable(true);
-	}
-	
-	public String getUser(){
-		return this.fUsername.getText() ;
-	}
-	
-	public String getPassword(){
-		return this.fPassword.getText();
-	}
->>>>>>> 32656c998715dfdf2cb3c2b13af96c74a646dc3b
-}
+//	class LoginTAsk extends Task<Response<LoginResponse>>{
+//		
+//		public void done(){
+//			Response<LoginResponse> loginResult = null;
+//			try {
+//				loginResult = get();
+//			} catch (Exception ignore) {
+//				ignore.printStackTrace();
+//			}
+//			hideLoginProgress();
+//			String user = getUser();
+//			String password = getPassword();
+//		}
+//		@Override
+//		protected Response<LoginResponse> call() throws Exception {
+//			// TODO Auto-generated method stub
+//			return null;
+//		}
+//		
+//	}
+//	
+//	public void hideLoginProgress(){
+//		this.setDisable(true);
+//	}
+//	
+//	public String getUser(){
+//		return this.fUsername.getText() ;
+//	}
+//	
+//	public String getPassword(){
+//		return this.fPassword.getText();
+//	}
+//}

@@ -1,15 +1,11 @@
 package de.shellfire.vpn.gui.controller;
 
-<<<<<<< HEAD
 import de.shellfire.vpn.Storage;
-=======
->>>>>>> 32656c998715dfdf2cb3c2b13af96c74a646dc3b
 import java.net.URL;
 import java.util.HashMap;
 import java.util.ResourceBundle;
 import javafx.util.Pair;
 import de.shellfire.vpn.Util;
-<<<<<<< HEAD
 import de.shellfire.vpn.client.Client;
 import de.shellfire.vpn.client.ConnectionState;
 import de.shellfire.vpn.client.ConnectionStateChangedEvent;
@@ -95,7 +91,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     private java.awt.Image iconConnected;
     private java.awt.Image iconDisconnectedAwt;
     private java.awt.Image iconIdleAwt;
-    
 
     private Timer currentConnectedSinceTimer;
     //ConnectionSubviewController connectionSubviewController  = null ; 
@@ -179,7 +174,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     // Access to embedded controller and variables in subviews
     @FXML
     private Parent connectionSubview;
-    
+
     @FXML
     private ConnectionSubviewController connectionSubviewController;
     @FXML
@@ -235,7 +230,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         this.streamsFooterLabel.setText(i18n.tr("List of american TV streams"));
 
 //        log.debug(connectionSubviewController.toString());
-  //      log.debug(connectionSubviewController.displayCreationMessage("Object refreence properly created"));
+        //      log.debug(connectionSubviewController.displayCreationMessage("Object refreence properly created"));
         this.iconConnected = Util.getImageIcon("/icons/sfvpn2-connected-big.png").getImage();
         this.iconConnectedSmall = Util.getImageIconFX(baseImageUrl + "/icons/small-globe-connected.png");
         this.iconConnecting = Util.getImageIcon("/icons/sfvpn2-connecting-big.png").getImage();
@@ -246,23 +241,22 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
         //this.serverList = this.shellfireService.getServerList();
         //this.updateLoginDetail();
-       // this.initTray();
-
+        // this.initTray();
         //Storage.register(this);
-
         //this.initConnection();
     }
-public void initializeComponents(){
+
+    public void initializeComponents() {
         //Notice that you manipulate the javaObjects out of the initialize if not it will raise an InvocationTargetException
         this.updateLoginDetail();
-        
+
         //Bind visibility of buttons to their manage properties so that they are easilty rendered visible or invisible
         this.validUntilLabel.managedProperty().bind(this.validUntilLabel.visibleProperty());
         this.validUntilValue.managedProperty().bind(this.validUntilValue.visibleProperty());
-        
+
         this.connectionSubviewController.initPremium(isFreeAccount());
         this.updateOnlineHost();
-        
+
         //serverListSubviewController = new ServerListSubviewController(shellfireService);
         //mapEncryptionSubviewController = new MapEncryptionSubviewController();
         //tvStreasSubviewController = new TvStreasSubviewController();
@@ -273,7 +267,7 @@ public void initializeComponents(){
         log.debug("ShellfireVPNMainFormFxmlController:" + "service initialized");
     }
 
-/**
+    /**
      * Initialized the service and other variables. Supposed to be an
      * overloading of constructor
      *
@@ -393,7 +387,7 @@ public void initializeComponents(){
         try {
             Pair<Pane, Object> pair = FxUIManager.SwitchSubview("connection_subview.fxml");
             contentDetailsPane.getChildren().setAll(pair.getKey());
-            this.connectionSubviewController = (ConnectionSubviewController)pair.getValue();
+            this.connectionSubviewController = (ConnectionSubviewController) pair.getValue();
             this.connectionSubviewController.initPremium(isFreeAccount());
         } catch (IOException ex) {
             log.debug("ShellfireVPNMainFormFxmlController:  handleServerListPaneClicked has error " + ex.getMessage());
@@ -419,15 +413,15 @@ public void initializeComponents(){
 
         try {
             Pair<Pane, Object> pair = FxUIManager.SwitchSubview("serverList_subview.fxml");
-            
-            this.serverListSubviewController = (ServerListSubviewController)pair.getValue();
+
+            this.serverListSubviewController = (ServerListSubviewController) pair.getValue();
             this.serverListSubviewController.setShellfireService((this.shellfireService));
             this.serverListSubviewController.initComponents();
             contentDetailsPane.getChildren().setAll(pair.getKey());
         } catch (IOException ex) {
             log.debug("ShellfireVPNMainFormFxmlController:  handleServerListPaneClicked has error " + ex.getMessage());
         }
-        
+
     }
 
     @FXML
@@ -449,7 +443,7 @@ public void initializeComponents(){
         try {
             Pair<Pane, Object> pair = FxUIManager.SwitchSubview("mapEncryption_subview.fxml");
             contentDetailsPane.getChildren().setAll(pair.getKey());
-            this.mapEncryptionSubviewController = (MapEncryptionSubviewController)pair.getValue();
+            this.mapEncryptionSubviewController = (MapEncryptionSubviewController) pair.getValue();
         } catch (IOException ex) {
             log.debug("ShellfireVPNMainFormFxmlController:  handleServerListPaneClicked has error " + ex.getMessage());
         }
@@ -472,7 +466,7 @@ public void initializeComponents(){
     @FXML
     private void handleStreamsPaneClicked(MouseEvent event) {
         try {
-            contentDetailsPane.getChildren().setAll(FxUIManager.SwitchSubview(tvStreasSubviewController,"tvStreams_subview.fxml"));
+            contentDetailsPane.getChildren().setAll(FxUIManager.SwitchSubview(tvStreasSubviewController, "tvStreams_subview.fxml"));
         } catch (IOException ex) {
             log.debug("ShellfireVPNMainFormFxmlController:  handleServerListPaneClicked has error " + ex.getMessage());
         }
@@ -708,10 +702,9 @@ public void initializeComponents(){
         this.globeConnectionImageView.setImage(this.iconIdleSmall);
         this.connectionSubviewController.getStatusConnectionImageView().setImage(this.iconEcncryptionInactive);
         log.debug("ShellfireMainForm: In setStateDisconnected method ");
-        
+
         //TODO_subview
         //this.mapEncryptionSubviewController.getShowOwnPosition().setDisable(false);
-
         boolean showMessage = false;
         String message = "";
         if (this.controller != null) {
@@ -798,7 +791,7 @@ public void initializeComponents(){
         this.connectionSubviewController.getConnectImageView().setDisable(true);
         //TODO implement this in the other subview controller
         //this.jConnectButtonLabel1.setEnabled(false);
-        
+
         //TODO_subview
         /*
         if (null != mapEncryptionSubviewController) { // test if the controller has been initialized before doing any work.
@@ -806,7 +799,6 @@ public void initializeComponents(){
                 this.mapEncryptionSubviewController.getShowOwnPosition().setDisable(true);
             }
         }*/
-
         this.connectionStatusLabel.setText(i18n.tr("Connection is being processed..."));
         mySetIconImage("/icons/sfvpn2-connecting-big.png");
 
@@ -1131,7 +1123,6 @@ public void initializeComponents(){
         if (!this.mapEncryptionSubviewController.getShowOwnPosition().isSelected()) {
             this.mapEncryptionSubviewController.getShowOwnPosition().setDisable(true);
         }*/
-
         this.connectionStatusLabel.setText(i18n.tr("Connected"));
 
         //TODO check if image not already loaddd
@@ -1211,17 +1202,17 @@ public void initializeComponents(){
             @Override
             protected String call() throws Exception {
                 String host = shellfireService.getLocalIpAddress();
-                log.debug("ShellfireMainFormController: Ip address in task" + host );
+                log.debug("ShellfireMainFormController: Ip address in task" + host);
                 return host;
             }
         };
         hostWorker.valueProperty().addListener((observable, oldValue, newValue) -> {
-                if (newValue != null) {
-            String host = hostWorker.getValue();
+            if (newValue != null) {
+                String host = hostWorker.getValue();
                 onlineIpValue.setText(host);
-                log.debug("ShellfireMainFormController: Ip address is " + host );
-        }
-            
+                log.debug("ShellfireMainFormController: Ip address is " + host);
+            }
+
         });
         Thread worker = new Thread(hostWorker);
         worker.run();
@@ -1254,7 +1245,7 @@ public void initializeComponents(){
         if (vpn.getAccountType() == ServerType.Free) {
             this.validUntilValue.setVisible(false);
             //this.validUntilValue.setManaged(false);
-            
+
             this.validUntilLabel.setVisible(false);
             //this.validUntilLabel.setManaged(false);
         } else {
@@ -1269,48 +1260,11 @@ public void initializeComponents(){
         }
     }
 
-
     public void displayMessage(String message) {
         log.debug("ShellFireMainController: " + message);
     }
-<<<<<<< HEAD
-=======
-import de.shellfire.vpn.gui.ShellfireVPNMainForm;
-import de.shellfire.vpn.i18n.VpnI18N;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.image.Image;
 
-public class ShellfireVPNMainFormFxmlController extends AnchorPane implements Initializable {
-
-	@Override
-	public void initialize(URL arg0, ResourceBundle arg1) {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	
-	private final static HashMap<String, Image> mainIconMap = new HashMap<String, Image>() {
-		{
-			put("de", Util.getImageIconFX("src/main/resources/icons/sf.png"));
-			put("en", Util.getImageIconFX("src/main/resources/icons/sf_en.png"));
-			put("fr", Util.getImageIconFX("src/main/resources/icons/sf_fr.png"));
-		}
-	};
-
-	public static Image getLogo() {
-		  Image imagelogo = ShellfireVPNMainFormFxmlController.mainIconMap.get(VpnI18N.getLanguage().getKey());
-		  System.out.println("The image key is found at "+VpnI18N.getLanguage().getKey());
-		  
-			return imagelogo;
-		}
-
->>>>>>> 32656c998715dfdf2cb3c2b13af96c74a646dc3b
-}
-=======
-    
-       public void updateConnectedSince() {
+    public void updateConnectedSince() {
         Date now = new Date();
         long diffInSeconds = (now.getTime() - connectedSince.getTime()) / 1000;
 
@@ -1326,4 +1280,3 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         this.connectedSinceValue.setText(text);
     }
 }
->>>>>>> 1b67eb60e45c24e53a6b570ac3a88550dd27bc13

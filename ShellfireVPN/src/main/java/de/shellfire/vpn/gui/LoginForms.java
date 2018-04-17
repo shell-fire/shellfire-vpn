@@ -146,9 +146,9 @@ public class LoginForms extends Application {
         System.out.println("In the getLogin controller");
         try {
             this.instance = (LoginController) replaceSceneContent("login.fxml");
-            //Platform.runLater(() -> progressDialog.setVisible(true));
             this.instance.setApp(this);
             this.stage.setTitle("Shellfire VPN 2 Login");
+            log.debug("LoginForms: Login controller loaded");
 
         } catch (Exception ex) {
             log.debug("could not load loginController fxml\n" + ex.getMessage());
