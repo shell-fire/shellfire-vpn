@@ -443,7 +443,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         try {
             Pair<Pane, Object> pair = FxUIManager.SwitchSubview("mapEncryption_subview.fxml");
             contentDetailsPane.getChildren().setAll(pair.getKey());
-            this.mapEncryptionSubviewController = (MapEncryptionSubviewController) pair.getValue();
+            //this.mapEncryptionSubviewController = (MapEncryptionSubviewController) pair.getValue();
         } catch (IOException ex) {
             log.debug("ShellfireVPNMainFormFxmlController:  handleServerListPaneClicked has error " + ex.getMessage());
         }
@@ -466,7 +466,10 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     @FXML
     private void handleStreamsPaneClicked(MouseEvent event) {
         try {
-            contentDetailsPane.getChildren().setAll(FxUIManager.SwitchSubview(tvStreasSubviewController, "tvStreams_subview.fxml"));
+            Pair<Pane, Object> pair = FxUIManager.SwitchSubview("tvStreams_subview.fxml");
+            contentDetailsPane.getChildren().setAll(pair.getKey());
+            //this.tvStreasSubviewController = (TvStreasSubviewController) pair.getValue();
+            //this.tvStreasSubviewController.initializeContents();
         } catch (IOException ex) {
             log.debug("ShellfireVPNMainFormFxmlController:  handleServerListPaneClicked has error " + ex.getMessage());
         }
