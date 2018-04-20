@@ -40,7 +40,7 @@ public class ServerListFXModel {
         this.speed = new SimpleObjectProperty(speed);
     }
 
-    public Object getCountry() {
+    public Server getCountry() {
         return country.get();
     }
 

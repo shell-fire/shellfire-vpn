@@ -163,7 +163,6 @@ public class ServerListSubviewController implements Initializable {
                         log.debug("ServerListSubviewController: Country Image and text could not be rendered");
                         setText("Empty");
                     } else {
-
                         // get the corresponding country of this server
                         Country country = item.getCountry();
                         // Attach the imageview to the cell
@@ -190,8 +189,6 @@ public class ServerListSubviewController implements Initializable {
         //log.debug("ServerListSubviewController: The size of all servers is " + servers.size());
         for (int i = 0; i < servers.size(); i++) {
             ServerListFXModel serverModel = new ServerListFXModel();
-            // getting image for the country 
-            Country country = servers.get(i).getCountry();
             serverModel.setCountry(servers.get(i));
             serverModel.setName(servers.get(i).getName());
             serverModel.setServerType(servers.get(i).getServerType().toString());

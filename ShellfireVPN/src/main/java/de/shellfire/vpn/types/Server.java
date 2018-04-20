@@ -63,7 +63,7 @@ public class Server implements LocatableIcon {
   }
 
   public Country getCountry() {
-    return country;
+    return this.country;
   }
 
   public void setCountry(Country country) {

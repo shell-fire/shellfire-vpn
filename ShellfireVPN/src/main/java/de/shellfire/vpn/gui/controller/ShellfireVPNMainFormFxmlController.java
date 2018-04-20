@@ -417,6 +417,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
             this.serverListSubviewController = (ServerListSubviewController) pair.getValue();
             this.serverListSubviewController.setShellfireService((this.shellfireService));
             this.serverListSubviewController.initComponents();
+            contentDetailsPane.getChildren().clear();
             contentDetailsPane.getChildren().setAll(pair.getKey());
         } catch (IOException ex) {
             log.debug("ShellfireVPNMainFormFxmlController:  handleServerListPaneClicked has error " + ex.getMessage());
@@ -442,8 +443,8 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     private void handleMapPaneClicked(MouseEvent event) {
         try {
             Pair<Pane, Object> pair = FxUIManager.SwitchSubview("mapEncryption_subview.fxml");
+            contentDetailsPane.getChildren().clear();
             contentDetailsPane.getChildren().setAll(pair.getKey());
-            //this.mapEncryptionSubviewController = (MapEncryptionSubviewController) pair.getValue();
         } catch (IOException ex) {
             log.debug("ShellfireVPNMainFormFxmlController:  handleServerListPaneClicked has error " + ex.getMessage());
         }
@@ -467,6 +468,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     private void handleStreamsPaneClicked(MouseEvent event) {
         try {
             Pair<Pane, Object> pair = FxUIManager.SwitchSubview("tvStreams_subview.fxml");
+            contentDetailsPane.getChildren().clear();
             contentDetailsPane.getChildren().setAll(pair.getKey());
             //this.tvStreasSubviewController = (TvStreasSubviewController) pair.getValue();
             //this.tvStreasSubviewController.initializeContents();
