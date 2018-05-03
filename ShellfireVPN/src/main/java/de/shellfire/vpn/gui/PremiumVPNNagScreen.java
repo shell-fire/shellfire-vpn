@@ -28,7 +28,6 @@ import javax.swing.table.TableColumnModel;
 import org.xnap.commons.i18n.I18n;
 
 import de.shellfire.vpn.Util;
-import de.shellfire.vpn.gui.controller.VpnSelectDialogController;
 import de.shellfire.vpn.gui.helper.MoveMouseListener;
 import de.shellfire.vpn.gui.model.VpnAttributeHeader;
 import de.shellfire.vpn.gui.model.VpnComparisonTableModel;
