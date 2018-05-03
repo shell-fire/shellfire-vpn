@@ -8,7 +8,6 @@ package de.shellfire.vpn.gui.controller;
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.client.Controller;
 import de.shellfire.vpn.gui.LoginForms;
-import de.shellfire.vpn.gui.controller.*;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.webservice.WebService;
 import java.awt.Dimension;

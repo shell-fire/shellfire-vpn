@@ -182,6 +182,8 @@ public class ServerListSubviewController implements Initializable {
         securityColumn.setCellFactory(column -> {
             return new StarImageRendererFX() ;
         });
+        
+        this.connectImage2.managedProperty().bind(this.connectImage2.visibleProperty());
     }    
     
     private LinkedList<ServerListFXModel> initServerTable(LinkedList<Server> servers) {
@@ -200,4 +202,11 @@ public class ServerListSubviewController implements Initializable {
         return allModels;
     }
     
+        public void initPremium(boolean freeAccount) {
+        if (!freeAccount) {
+            this.connectImage2.setVisible(true);
+        } else {
+            this.connectImage2.setVisible(false);
+        }
+    }
 }
