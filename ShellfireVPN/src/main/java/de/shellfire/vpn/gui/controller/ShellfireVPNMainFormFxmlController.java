@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.ResourceBundle;
 import javafx.util.Pair;
 import de.shellfire.vpn.Util;
+import de.shellfire.vpn.VpnProperties;
 import de.shellfire.vpn.client.Client;
 import de.shellfire.vpn.client.ConnectionState;
 import de.shellfire.vpn.client.ConnectionStateChangedEvent;
@@ -36,10 +37,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.logging.Level;
+import java.util.List;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
@@ -59,6 +62,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javax.swing.Timer;
 import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
@@ -1285,4 +1289,21 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         String text = start + " " + "(" + since + ")";
         this.connectedSinceValue.setText(text);
     }
+    
+    private void showSettingsDialog() {
+		//new SettingsDialog(this, true);
+        try {
+            Pair<Pane, Object> pair = FxUIManager.createDialogWindow("menuShellfireSettings.fxml");
+            Stage dialogStage = new Stage(StageStyle.UTILITY);
+            //SettingsDialogController settingsDialogController = (SettingsDialogController) pair.getValue();
+            Scene scene = new Scene(pair.getKey());
+            dialogStage.setScene(scene);
+            dialogStage.initModality(Modality.APPLICATION_MODAL);
+            dialogStage.setAlwaysOnTop(true);
+            dialogStage.setResizable(false);
+        } catch (IOException ex) {
+            log.debug("ShellfireVPNMainFormFxmlController:  handleServerListPaneClicked has error " + ex.getMessage());
+        }
+    }
+
 }
