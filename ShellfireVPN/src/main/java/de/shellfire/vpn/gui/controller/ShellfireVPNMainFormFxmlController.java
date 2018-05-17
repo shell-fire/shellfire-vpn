@@ -516,6 +516,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
     @FXML
     private void handleSettingsImageViewClicked(MouseEvent event) {
+        showSettingsDialog();
     }
 
     @FXML
@@ -1291,16 +1292,18 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     }
     
     private void showSettingsDialog() {
-		//new SettingsDialog(this, true);
+        Parent root;
         try {
             Pair<Pane, Object> pair = FxUIManager.createDialogWindow("menuShellfireSettings.fxml");
             Stage dialogStage = new Stage(StageStyle.UTILITY);
             //SettingsDialogController settingsDialogController = (SettingsDialogController) pair.getValue();
             Scene scene = new Scene(pair.getKey());
+            dialogStage.setTitle(i18n.tr("Shellfire VPN settings"));
             dialogStage.setScene(scene);
             dialogStage.initModality(Modality.APPLICATION_MODAL);
             dialogStage.setAlwaysOnTop(true);
             dialogStage.setResizable(false);
+            dialogStage.show();
         } catch (IOException ex) {
             log.debug("ShellfireVPNMainFormFxmlController:  handleServerListPaneClicked has error " + ex.getMessage());
         }

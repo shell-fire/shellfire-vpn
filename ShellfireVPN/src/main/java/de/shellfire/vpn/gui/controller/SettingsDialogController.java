@@ -7,7 +7,6 @@ package de.shellfire.vpn.gui.controller;
 
 import de.shellfire.vpn.VpnProperties;
 import de.shellfire.vpn.client.Client;
-import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.i18n.Language;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.webservice.Vpn;
@@ -26,6 +25,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
+import javafx.stage.Stage;
 import org.xnap.commons.i18n.I18n;
 
 /**
@@ -79,14 +79,28 @@ public class SettingsDialogController implements Initializable{
 
     @FXML
     private void handleSaveLoginData(ActionEvent event) {
+        if (!this.saveLoginData.isDisabled()&& !saveLoginData.isSelected()) {
+          if (!this.loginAutomatically.isDisabled()) {
+            this.loginAutomatically.setSelected(false);
+          }
+          if (!this.saveLoginData.isDisabled()) {
+            this.saveLoginData.setSelected(false);
+          }
+        }
     }
 
     @FXML
     private void handleLoginAutomatically(ActionEvent event) {
+        if (!this.loginAutomatically.isDisabled() && loginAutomatically.isSelected() && !this.saveLoginData.isDisabled()) {
+            this.saveLoginData.setSelected(true);
+        }
     }
 
     @FXML
     private void handleSaveVpnChoice(ActionEvent event) {
+        if (!this.saveVpnChoice.isDisabled() && saveVpnChoice.isSelected() && !this.saveLoginData.isDisabled()) {
+        this.saveLoginData.setSelected(true);
+      }
     }
 
     @FXML
@@ -107,10 +121,20 @@ public class SettingsDialogController implements Initializable{
 
     @FXML
     private void handleSaveSettingsButton(ActionEvent event) {
+        // get a handle to the stage
+    Stage stage = (Stage) this.saveSettingsButton.getScene().getWindow();
+    // do what you have to do
+    stage.hide();
+    save();
+    
     }
 
     @FXML
     private void handleCancelButton(ActionEvent event) {
+        // get a handle to the stage
+    Stage stage = (Stage) this.cancelButton.getScene().getWindow();
+    // do what you have to do
+    stage.hide();
     }
     
       private void initValues() {
@@ -201,7 +225,6 @@ public class SettingsDialogController implements Initializable{
                             alert.setContentText(I18N.tr("Changed language settings require a restart of ShellfireVPN to take effect."));
                             alert.showAndWait();
             Optional<ButtonType> result = alert.showAndWait();
-
         if ((result.isPresent()) && (result.get() == ButtonType.OK)) {
             alert.close();
             //TODO LoginController.restart();

@@ -16,15 +16,21 @@ import org.xnap.commons.i18n.I18n;
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.VpnProperties;
 import de.shellfire.vpn.client.Client;
+import de.shellfire.vpn.client.Controller;
 import de.shellfire.vpn.gui.CanContinueAfterBackEndAvailableFX;
 import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.service.CryptFactory;
+import de.shellfire.vpn.types.Reason;
 import de.shellfire.vpn.types.ServerType;
 import de.shellfire.vpn.webservice.EndpointManager;
 import de.shellfire.vpn.webservice.Response;
 import de.shellfire.vpn.webservice.WebService;
 import de.shellfire.vpn.webservice.model.LoginResponse;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import javafx.event.ActionEvent;
@@ -98,7 +104,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
     private static final String REG_FIRST_START = "firststart";
     WebService service;
     private boolean minimize;
-    private LoginForms application;
+    private static LoginForms application;
     private static I18n i18n = VpnI18N.getI18n();
     private static Logger log = Util.getLogger(LoginForms.class.getCanonicalName());
     private String username;
@@ -146,13 +152,13 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
                             } else {
                                 setAutoConnectInRegistry(false);
                             }
-                            
+
                             // We initialise the vpn selection form but we do not display it yet.
                             this.application.loadVPNSelect();
                             this.application.vpnSelectController.setService(this.service);
                             this.application.vpnSelectController.setAutoConnect(fAutoconnect.isSelected());
                             int rememberedVpnSelection = this.application.vpnSelectController.rememberedVpnSelection();
-                           /* FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/VpnSelectDialog.fxml"));
+                            /* FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/VpnSelectDialog.fxml"));
                         log.debug("Resource is found in: " +loader.getLocation());
                         //ShellfireVPNMainFormFxmlController mainFormController = new ShellfireVPNMainFormFxmlController();
                         //loader.setController(mainFormController);
@@ -187,35 +193,36 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
                             } else {
                                 //try {
-                                    if (selectionRequired
-                                            && rememberedVpnSelection != 0) {
-                                        if (!service.selectVpn(rememberedVpnSelection)) {
-                                            // remembered vpn id is invalid
-                                            //dispose();
-                                            //dia.setVisible(true);
-                                            this.application.vpnSelectController.setApp(application);
-                                            log.debug("condition for !service.selectVpn(rememberedVpnSelection");
-                                            this.application.getStage().show();
-                                        }
-                                    }
-
-                                    if (!this.application.vpnSelectController.isVisible()) {
-                                        //setVisible(false);
+                                if (selectionRequired
+                                        && rememberedVpnSelection != 0) {
+                                    if (!service.selectVpn(rememberedVpnSelection)) {
+                                        // remembered vpn id is invalid
                                         //dispose();
-                                        //mainForm = new ShellfireVPNMainFormFxmlController(service);
-                                        //TODO, uncomment load comment below
-                                        //this.application.loadShellFireMainController();
-                                        this.application.shellFireMainController.setSerciceAndInitialize(service);
-                                        boolean vis = true;
-                                        if (minimize
-                                                && service.getVpn().getAccountType() != ServerType.Free) {
-                                            vis = false;
-                                        }
-
-                                        mainForm.setVisible(vis);
-                                        mainForm.afterLogin(fAutoconnect.isSelected());
+                                        //dia.setVisible(true);
+                                        this.application.vpnSelectController.setApp(application);
+                                        log.debug("condition for !service.selectVpn(rememberedVpnSelection");
+                                        this.application.getStage().show();
                                     }
-                                } /*catch (VpnException ex) {
+                                }
+
+                                if (!this.application.vpnSelectController.isVisible()) {
+                                    //setVisible(false);
+                                    //dispose();
+                                    //mainForm = new ShellfireVPNMainFormFxmlController(service);
+                                    //TODO, uncomment load comment below
+                                    //this.application.loadShellFireMainController();
+                                    this.application.shellFireMainController.setSerciceAndInitialize(service);
+                                    boolean vis = true;
+                                    if (minimize
+                                            && service.getVpn().getAccountType() != ServerType.Free) {
+                                        vis = false;
+                                    }
+
+                                    mainForm.setVisible(vis);
+                                    mainForm.afterLogin(fAutoconnect.isSelected());
+                                }
+                            }
+                            /*catch (VpnException ex) {
                                     Util.handleException(ex);
                                 }*/
 
@@ -510,7 +517,6 @@ public class LoginController extends AnchorPane implements Initializable {
             handlefButtonLogin(null);
         }
 
-
     }
 
     @FXML
@@ -781,10 +787,76 @@ public class LoginController extends AnchorPane implements Initializable {
         props.setBoolean(REG_AUTOCONNECT, autoConnect);
 
     }
+
+    public void restart() {
+        if (Util.isWindows()) {
+
+            if (LoginForms.instance != null) {
+
+                if (LoginForms.shellFireMainController != null) {
+                    
+                    Controller c = this.application.shellFireMainController.getController();
+                    if (c != null) {
+                        c.disconnect(Reason.GuiRestarting);
+
+                    }
+
+                    //this.application.shellFireMainController.dispose();
+                    this.application.shellFireMainController = null;
+                }
+                
+                //TODO - investigage if commenting causes memory leaks
+                //LoginForms.instance.close();
+                LoginForms.instance = null;
+
+                List<String> restart = new ArrayList<String>();
+                restart.add("ShellfireVPN2.exe");
+                Process p;
+                try {
+                    p = new ProcessBuilder(restart).directory(new File(getInstDir())).start();
+                    Util.digestProcess(p);
+
+                    System.exit(0);
+                } catch (IOException e) {
+                    Util.handleException(e);
+                }
+
+            }
+        } else {
+            List<String> restart = new ArrayList<String>();
+            restart.add("/usr/bin/open");
+            restart.add("-n");
+            restart.add(com.apple.eio.FileManager.getPathToApplicationBundle());
+            Process p;
+            try {
+                p = new ProcessBuilder(restart).directory(new File(com.apple.eio.FileManager.getPathToApplicationBundle())).start();
+                Util.digestProcess(p);
+
+                Platform.exit();
+            } catch (IOException e) {
+                Util.handleException(e);
+            }
+
+        }
+
     }
 
+    public static String getInstDir() {
+        VpnProperties props = VpnProperties.getInstance();
+        String instDir = props.getProperty(REG_INSTDIR, null);
 
-	
+        if (instDir == null) {
+            if (Util.isWindows()) {
+                instDir = new File("").getAbsolutePath();
+            } else {
+                instDir = WebService.macOsAppDirectory() + "/ShellfireVPN";
+            }
+        }
+
+        return instDir;
+    }
+}
+
 //	class LoginTAsk extends Task<Response<LoginResponse>>{
 //		
 //		public void done(){
