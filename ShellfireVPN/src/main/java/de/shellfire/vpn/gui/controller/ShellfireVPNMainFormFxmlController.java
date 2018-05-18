@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.ResourceBundle;
 import javafx.util.Pair;
 import de.shellfire.vpn.Util;
-import de.shellfire.vpn.VpnProperties;
 import de.shellfire.vpn.client.Client;
 import de.shellfire.vpn.client.ConnectionState;
 import de.shellfire.vpn.client.ConnectionStateChangedEvent;
@@ -64,6 +63,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javax.swing.Timer;
+import org.jdesktop.application.Action;
 import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.LocaleChangeEvent;
@@ -77,7 +77,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     private static final Logger log = Util.getLogger(ShellfireVPNMainFormFxmlController.class.getCanonicalName());
     private static I18n i18n = VpnI18N.getI18n();
     private Controller controller;
-    private static WebService shellfireService;
+    private  WebService shellfireService;
     private MenuItem popupConnectItem;
     private PopupMenu popup;
     private TrayIcon trayIcon;
@@ -252,7 +252,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
     public void initializeComponents() {
         //Notice that you manipulate the javaObjects out of the initialize if not it will raise an InvocationTargetException
-        this.updateLoginDetail();
+         this.updateLoginDetail();
 
         //Bind visibility of buttons to their manage properties so that they are easilty rendered visible or invisible
         this.validUntilLabel.managedProperty().bind(this.validUntilLabel.visibleProperty());
@@ -266,8 +266,8 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         //tvStreasSubviewController = new TvStreasSubviewController();
     }
 
-    public static void setShellfireService(WebService shellfireService) {
-        ShellfireVPNMainFormFxmlController.shellfireService = shellfireService;
+    public void setShellfireService(WebService shellfireService) {
+        this.shellfireService = shellfireService;
         log.debug("ShellfireVPNMainFormFxmlController:" + "service initialized");
     }
 
@@ -498,6 +498,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
     @FXML
     private void handleHelpImageViewClicked(MouseEvent event) {
+        this.openHelp();
     }
 
     @FXML
@@ -1250,6 +1251,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
     private void updateLoginDetail() {
         Vpn vpn = this.shellfireService.getVpn();
+        log.debug("ShellfireMainFormController: vpn is " +vpn.toString());
         this.vpnIdValue.setText("sf" + vpn.getVpnId());
         this.vpnTypeValue.setText(vpn.getAccountType().toString());
 
@@ -1294,7 +1296,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     private void showSettingsDialog() {
         Parent root;
         try {
-            Pair<Pane, Object> pair = FxUIManager.createDialogWindow("menuShellfireSettings.fxml");
+            Pair<Pane, Object> pair = FxUIManager.SwitchSubview("menuShellfireSettings.fxml");
             Stage dialogStage = new Stage(StageStyle.UTILITY);
             //SettingsDialogController settingsDialogController = (SettingsDialogController) pair.getValue();
             Scene scene = new Scene(pair.getKey());
@@ -1308,5 +1310,12 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
             log.debug("ShellfireVPNMainFormFxmlController:  handleServerListPaneClicked has error " + ex.getMessage());
         }
     }
+@Action
+	public void openHelp() {
+		org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance().getContext()
+				.getResourceMap(ShellfireVPNMainFormFxmlController.class);
 
+		Util.openUrl(shellfireService.getUrlHelp());
+
+	}
 }

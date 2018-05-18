@@ -74,7 +74,7 @@ public class SettingsDialogController implements Initializable{
         this.saveSettingsButton.setText(I18N.tr("save settings"));
         this.cancelButton.setText(I18N.tr("cancel"));
         
-       
+       initValues();
     }
 
     @FXML
@@ -141,9 +141,9 @@ public class SettingsDialogController implements Initializable{
       VpnProperties props = VpnProperties.getInstance();
         
         if (props.getProperty(LoginController.REG_USER, null) != null) {
-            this.saveLoginData.setSelected(true);
+            this.saveLoginData.setDisable(true);
         } else {
-            this.saveLoginData.setDisable(true); // can only be enabled from login dialog
+            this.saveLoginData.setSelected(true); // can only be enabled from login dialog
         }
         
         if (props.getBoolean(LoginController.REG_AUTOLOGIN, false)) {
