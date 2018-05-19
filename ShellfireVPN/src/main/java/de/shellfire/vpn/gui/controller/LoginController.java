@@ -119,7 +119,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
     // Event Listener on Button[#fButtonLogin].onAction
     @FXML
     public void handlefButtonLogin(ActionEvent event) {
-        //fButtonLogin.setDisable(true);
+        fButtonLogin.setDisable(true);
         log.debug("Login attempt made");
         if (validate()) {
             log.debug("Login attempt with valid user input");
@@ -227,7 +227,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
         } else {
             fUsername.requestFocus();
         }
-
+        fButtonLogin.setDisable(false);
     }
 
     // Event Listener on Button[#fButtonLostUserCredential].onAction
@@ -317,7 +317,9 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
         this.headerPanel.setStyle("-fx-background-color: rgb(18,172,229);");
 
         this.exitImageView.setImage(Util.getImageIconFX("src/main/resources/icons/exit.png"));
-
+        
+        this.fButtonLogin.managedProperty().bind(this.fButtonLogin.visibleProperty());
+        
         // Listeners for changes in password field
         fPassword.focusedProperty().addListener(new ChangeListener<Boolean>() {
             @Override

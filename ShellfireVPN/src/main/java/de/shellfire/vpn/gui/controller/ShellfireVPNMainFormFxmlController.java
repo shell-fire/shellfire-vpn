@@ -26,6 +26,7 @@ import java.awt.AWTEvent;
 import java.awt.AWTException;
 import java.awt.Dimension;
 import java.awt.EventQueue;
+import java.awt.Frame;
 import java.awt.MenuItem;
 import java.awt.PopupMenu;
 import java.awt.SystemTray;
@@ -36,12 +37,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
@@ -574,6 +572,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     @FXML
     private void handleExitImageViewClicked(MouseEvent event) {
         Platform.exit();
+        System.exit(0);
     }
 
     private void initController() {
@@ -924,8 +923,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
             ActionListener helpListener = new ActionListener() {
 
                 public void actionPerformed(ActionEvent e) {
-                    //TODO
-                    //openHelp();
+                    openHelp();
                 }
             };
 
@@ -953,18 +951,15 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
             MenuItem statusItem = new MenuItem(i18n.tr("Show VPN state in your browser"));
             statusItem.addActionListener(statusListener);
 
-            ActionListener openListener = new ActionListener() {
-
-                public void actionPerformed(ActionEvent e) {
-                    setVisible(true);
-                    toFront();
-                    //TODO
-                    //setState(Frame.NORMAL);
-
-                    if (!Util.isWindows()) {
-                        com.apple.eawt.Application app = com.apple.eawt.Application.getApplication();
-                        app.requestForeground(true);
-                    }
+            ActionListener openListener = (ActionEvent e) -> {
+                setVisible(true);
+                toFront();
+                //TODO
+                //setState(Frame.NORMAL);
+                
+                if (!Util.isWindows()) {
+                    com.apple.eawt.Application app = com.apple.eawt.Application.getApplication();
+                    app.requestForeground(true);
                 }
             };
 
@@ -983,7 +978,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
                 public void actionPerformed(ActionEvent e) {
                     setVisible(true);
                     toFront();
-                    //TODO
                     //setState(Frame.NORMAL);
                 }
             };
@@ -1005,41 +999,25 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
                 }
 
-                /*
-				public void mouseReleased(MouseEvent e) {
-				}
-
-				public void mouseEntered(MouseEvent e) {
-				}
-
-				public void mouseExited(MouseEvent e) {
-				}
-
-				public void mousePressed(MouseEvent e) {
-				}*/
                 @Override
-                public void mouseClicked(java.awt.event.MouseEvent e) {
-                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                public void mouseClicked(java.awt.event.MouseEvent e) {  
+                    mouseClicked(e);
                 }
 
                 @Override
                 public void mousePressed(java.awt.event.MouseEvent e) {
-                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
                 }
 
                 @Override
                 public void mouseReleased(java.awt.event.MouseEvent e) {
-                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
                 }
 
                 @Override
                 public void mouseEntered(java.awt.event.MouseEvent e) {
-                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
                 }
 
                 @Override
                 public void mouseExited(java.awt.event.MouseEvent e) {
-                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
                 }
 
             };

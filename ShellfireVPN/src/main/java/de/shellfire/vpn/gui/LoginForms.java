@@ -86,7 +86,7 @@ public class LoginForms extends Application {
     }
 
     public static void main(String[] args) {
-        //System.setProperty("java.library.path", "C:\\Users\\Tcheutchoua\\Documents\\NetBeansProjects\\ShellFire\\shellfire-vpn\\ShellfireVPN\\lib");
+        ///TODO: login automatically chexbox makes login to bypass login form
 
         System.setProperty("java.library.path", "./lib");
         default_args = args;
@@ -98,12 +98,12 @@ public class LoginForms extends Application {
         final boolean minimize;
         if (args.length > 0) {
             String cmd = args[0];
-
+            
             minimize = cmd.equals("minimize");
         } else {
             minimize = false;
         }
-
+        LOG.debug("LoginForms: In the initializations method");
         ProxyConfig.perform();
         setLookAndFeel();
     }
