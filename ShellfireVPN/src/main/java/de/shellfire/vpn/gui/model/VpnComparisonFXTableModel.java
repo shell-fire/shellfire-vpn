@@ -5,7 +5,10 @@
  */
 package de.shellfire.vpn.gui.model;
 
+import de.shellfire.vpn.webservice.model.VpnEntry;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -16,20 +19,23 @@ import javafx.beans.property.StringProperty;
  */
 public class VpnComparisonFXTableModel {
     private StringProperty connection;
-    private ObjectProperty free;
-    private ObjectProperty premium ;
-    private ObjectProperty premiumPlus;
+    private ObjectProperty<VpnEntry> free;
+    private ObjectProperty<VpnEntry> premium ;
+    private ObjectProperty<VpnEntry> premiumPlus;
+    // Used to determine if the comparison model is a container or not
+    private BooleanProperty isContainer ;
 
     public VpnComparisonFXTableModel() {
     }
 
     
     
-    public VpnComparisonFXTableModel(String connection, Object free, Object premium, Object premiumPlus) {
+    public VpnComparisonFXTableModel(String connection, Object free, Object premium, Object premiumPlus, boolean container) {
         this.connection = new SimpleStringProperty(connection);
         this.free = new SimpleObjectProperty( free);
         this.premium = new SimpleObjectProperty( premium);
         this.premiumPlus = new SimpleObjectProperty( premiumPlus);
+        this.isContainer  = new SimpleBooleanProperty(container);
     }
 
     public String getConnection() {
@@ -44,38 +50,50 @@ public class VpnComparisonFXTableModel {
         return connection;
     }
     
-    public Object getFree() {
+    public VpnEntry getFree() {
         return free.get();
     }
 
-    public void setFree(String free) {
+    public void setFree(VpnEntry free) {
         this.free.set( free);
     }
 
-    public ObjectProperty freeProperty(){
+    public ObjectProperty<VpnEntry> freeProperty(){
         return free;
     }
-    public Object getPremium() {
+    public VpnEntry getPremium() {
         return premium.get();
     }
 
-    public void setPremium(String premium) {
+    public void setPremium(VpnEntry premium) {
         this.premium.set(premium);
     }
     
-    public ObjectProperty premiumProperty(){
+    public ObjectProperty<VpnEntry> premiumProperty(){
         return premium;
     }
     
-    public Object getPremiumPlus() {
+    public VpnEntry getPremiumPlus() {
         return premiumPlus.get();
     }
 
-    public void setPremiumPlus(ObjectProperty premiumPlus) {
+    public void setPremiumPlus(VpnEntry premiumPlus) {
         this.premiumPlus.set(premiumPlus);
     }
     
-    public ObjectProperty premiumPlusProperty(){
+    public ObjectProperty<VpnEntry> premiumPlusProperty(){
         return premiumPlus ;
+    }
+
+    public Boolean getIsContainer() {
+        return isContainer.get();
+    }
+
+    public void setIsContainer(Boolean isContainer) {
+        this.isContainer.set(isContainer);
+    }
+    
+    public BooleanProperty isContainerProperty(){
+        return isContainer;
     }
 }
