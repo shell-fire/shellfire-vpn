@@ -14,6 +14,7 @@ import de.shellfire.vpn.client.Controller;
 import de.shellfire.vpn.exception.VpnException;
 import de.shellfire.vpn.gui.FxUIManager;
 import de.shellfire.vpn.gui.LoginForms;
+import de.shellfire.vpn.gui.VpnTrayMessage;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.proxy.ProxyConfig;
 import de.shellfire.vpn.types.Reason;
@@ -22,11 +23,11 @@ import de.shellfire.vpn.types.ServerType;
 import de.shellfire.vpn.types.VpnProtocol;
 import de.shellfire.vpn.webservice.Vpn;
 import de.shellfire.vpn.webservice.WebService;
+import de.shellfire.vpn.webservice.model.TrayMessage;
 import java.awt.AWTEvent;
 import java.awt.AWTException;
 import java.awt.Dimension;
 import java.awt.EventQueue;
-import java.awt.Frame;
 import java.awt.MenuItem;
 import java.awt.PopupMenu;
 import java.awt.SystemTray;
@@ -40,6 +41,9 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
@@ -75,7 +79,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     private static final Logger log = Util.getLogger(ShellfireVPNMainFormFxmlController.class.getCanonicalName());
     private static I18n i18n = VpnI18N.getI18n();
     private Controller controller;
-    private  WebService shellfireService;
+    private WebService shellfireService;
     private MenuItem popupConnectItem;
     private PopupMenu popup;
     private TrayIcon trayIcon;
@@ -93,7 +97,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     private java.awt.Image iconConnected;
     private java.awt.Image iconDisconnectedAwt;
     private java.awt.Image iconIdleAwt;
-
+    private PremiumScreenController nagScreen;
     private Timer currentConnectedSinceTimer;
     //ConnectionSubviewController connectionSubviewController  = null ; 
     @FXML
@@ -250,7 +254,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
     public void initializeComponents() {
         //Notice that you manipulate the javaObjects out of the initialize if not it will raise an InvocationTargetException
-         this.updateLoginDetail();
+        this.updateLoginDetail();
 
         //Bind visibility of buttons to their manage properties so that they are easilty rendered visible or invisible
         this.validUntilLabel.managedProperty().bind(this.validUntilLabel.visibleProperty());
@@ -913,18 +917,21 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     //TODO
-                    //showNagScreenWithoutTimer();
+                            Platform.runLater(new Runnable(){
+                                @Override
+                                public void run() {
+                                    showNagScreenWithoutTimer();
+                                }
+                            });
+                    
                 }
             };
 
             MenuItem nagItem = new MenuItem(i18n.tr("Shellfire VPN premium infos"));
             nagItem.addActionListener(nagListener);
 
-            ActionListener helpListener = new ActionListener() {
-
-                public void actionPerformed(ActionEvent e) {
-                    openHelp();
-                }
+            ActionListener helpListener = (ActionEvent e) -> {
+                openHelp();
             };
 
             MenuItem helpItem = new MenuItem(i18n.tr("Help"));
@@ -941,11 +948,8 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
             popupConnectItem = new MenuItem(i18n.tr("Connect"));
             popupConnectItem.addActionListener(popupConnectListener);
 
-            ActionListener statusListener = new ActionListener() {
-
-                public void actionPerformed(ActionEvent e) {
-                    Util.openUrl(shellfireService.getUrlSuccesfulConnect());
-                }
+            ActionListener statusListener = (ActionEvent e) -> {
+                Util.openUrl(shellfireService.getUrlSuccesfulConnect());
             };
 
             MenuItem statusItem = new MenuItem(i18n.tr("Show VPN state in your browser"));
@@ -956,7 +960,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
                 toFront();
                 //TODO
                 //setState(Frame.NORMAL);
-                
+
                 if (!Util.isWindows()) {
                     com.apple.eawt.Application app = com.apple.eawt.Application.getApplication();
                     app.requestForeground(true);
@@ -1000,7 +1004,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
                 }
 
                 @Override
-                public void mouseClicked(java.awt.event.MouseEvent e) {  
+                public void mouseClicked(java.awt.event.MouseEvent e) {
                     mouseClicked(e);
                 }
 
@@ -1028,7 +1032,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
             trayIcon.addMouseListener(mouseListener);
 
             //TODO
-            //startNagScreenTimer();
+            startNagScreenTimer();
             try {
                 tray.add(trayIcon);
             } catch (AWTException e) {
@@ -1229,7 +1233,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
     private void updateLoginDetail() {
         Vpn vpn = this.shellfireService.getVpn();
-        log.debug("ShellfireMainFormController: vpn is " +vpn.toString());
+        log.debug("ShellfireMainFormController: vpn is " + vpn.toString());
         this.vpnIdValue.setText("sf" + vpn.getVpnId());
         this.vpnTypeValue.setText(vpn.getAccountType().toString());
 
@@ -1270,7 +1274,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         String text = start + " " + "(" + since + ")";
         this.connectedSinceValue.setText(text);
     }
-    
+
     private void showSettingsDialog() {
         Parent root;
         try {
@@ -1288,12 +1292,85 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
             log.debug("ShellfireVPNMainFormFxmlController:  handleServerListPaneClicked has error " + ex.getMessage());
         }
     }
-@Action
-	public void openHelp() {
-		org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance().getContext()
-				.getResourceMap(ShellfireVPNMainFormFxmlController.class);
 
-		Util.openUrl(shellfireService.getUrlHelp());
+    @Action
+    public void openHelp() {
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance().getContext()
+                .getResourceMap(ShellfireVPNMainFormFxmlController.class);
 
-	}
+        Util.openUrl(shellfireService.getUrlHelp());
+
+    }
+
+    private void startNagScreenTimer() {
+        int oneHour = 1000 * 60 * 60;
+
+        ActionListener taskPerformer = new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                showTrayIconNagScreen();
+            }
+        };
+
+        Timer nagScreenTimer = new Timer(oneHour, taskPerformer);
+        nagScreenTimer.setRepeats(true);
+        nagScreenTimer.start();
+    }
+
+    private void showTrayIconNagScreen() {
+        LinkedList<VpnTrayMessage> messages = new LinkedList<VpnTrayMessage>();
+        if (controller.getCurrentConnectionState() == ConnectionState.Connected) {
+            ActionListener premiumInfoClicked = (ActionEvent e) -> {
+                showNagScreenWithoutTimer();
+            };
+
+            if (this.shellfireService.getVpn().getAccountType() == ServerType.Free) {
+                List<TrayMessage> trayMessages = this.shellfireService.getTrayMessages();
+
+                trayMessages.forEach((msg) -> {
+                    messages.add(new VpnTrayMessage(msg.getHeader(), msg.getText(), msg.getButtontext(), premiumInfoClicked));
+                });
+            }
+        } else {
+            messages.add(new VpnTrayMessage(i18n.tr("Not connected"), i18n.tr("You are not connected to Shellfire VPN.")));
+        }
+
+        if (messages.size() > 0) {
+            Random generator = new Random((new Date()).getTime());
+            int num = generator.nextInt(messages.size());
+            VpnTrayMessage msgToShow = messages.get(num);
+            msgToShow.run();
+        }
+
+    }
+
+    private void showNagScreenWithoutTimer() {
+        log.debug("ShellfireVPNMainFormFxmlController:  showNagScreenWithoutTimer method entered");
+        Parent root;
+        try {
+            Pair<Pane, Object> pair = FxUIManager.SwitchSubview("premiumNavScreen.fxml");
+            Stage dialogStage = new Stage(StageStyle.UTILITY);
+            log.debug("ShellfireVPNMainFormFxmlController:  showNagScreenWithoutTimer before controller object");
+            PremiumScreenController premiumScreenController = (PremiumScreenController) pair.getValue();
+            log.debug("ShellfireVPNMainFormFxmlController:  showNagScreenWithoutTimer after controller object");
+            premiumScreenController.setService(shellfireService);
+            premiumScreenController.initComparisonTable();
+            premiumScreenController.setApp(application);
+            log.debug("ShellfireVPNMainFormFxmlController:  showNagScreenWithoutTimer after initComparison table and setting app");            
+           
+            Scene scene = new Scene(pair.getKey());
+            dialogStage.setTitle(i18n.tr("Shellfire Premium Screen"));
+            dialogStage.setScene(scene);
+            dialogStage.initModality(Modality.APPLICATION_MODAL);
+            dialogStage.setAlwaysOnTop(true);
+            dialogStage.setResizable(false);
+            dialogStage.show();
+        } catch (IOException ex) {
+            log.debug("ShellfireVPNMainFormFxmlController:  showNagScreenWithoutTimer has error " + ex.getMessage() + ex.toString());
+        } catch (Exception ex){
+            log.debug("ShellfireVPNMainFormFxmlController:  showNagScreenWithoutTimer has error " + ex.getMessage()+ ex.toString());
+        }
+        setNormalCursor();
+    }
 }

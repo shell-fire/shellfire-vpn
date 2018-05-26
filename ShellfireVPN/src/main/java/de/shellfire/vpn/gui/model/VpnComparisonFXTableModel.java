@@ -5,7 +5,6 @@
  */
 package de.shellfire.vpn.gui.model;
 
-import de.shellfire.vpn.webservice.model.VpnStar;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;

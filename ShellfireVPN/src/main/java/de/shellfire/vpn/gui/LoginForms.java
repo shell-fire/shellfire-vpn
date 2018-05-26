@@ -103,7 +103,7 @@ public class LoginForms extends Application {
         } else {
             minimize = false;
         }
-        LOG.debug("LoginForms: In the initializations method");
+        
         ProxyConfig.perform();
         setLookAndFeel();
     }
