@@ -43,7 +43,7 @@ import org.slf4j.Logger;
  * 
  * @author bettmenn
  */
-public class PremiumVPNNagScreen extends javax.swing.JDialog {
+ public class PremiumVPNNagScreen extends javax.swing.JDialog {
   private final ShellfireVPNMainForm aparent;
   private MoveMouseListener mml;
 private static Logger log = Util.getLogger(PremiumVPNNagScreen.class.getCanonicalName());
