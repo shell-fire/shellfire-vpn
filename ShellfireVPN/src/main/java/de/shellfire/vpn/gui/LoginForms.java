@@ -2,10 +2,6 @@ package de.shellfire.vpn.gui;
 
 import java.util.LinkedList;
 import java.util.List;
-
-import javax.swing.JOptionPane;
-import javax.swing.UIManager;
-
 import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
 
@@ -22,6 +18,7 @@ import de.shellfire.vpn.proxy.ProxyConfig;
 import de.shellfire.vpn.updater.Updater;
 import java.io.File;
 import java.io.IOException;
+import java.util.Optional;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -30,6 +27,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -44,9 +42,9 @@ public class LoginForms extends Application {
     public RegisterFormController registerController;
     public LicenseAcceptanceController licenceAcceptanceController;
     public static VpnSelectDialogController vpnSelectController;
-    public  ShellfireVPNMainFormFxmlController shellFireMainController;
+    public ShellfireVPNMainFormFxmlController shellFireMainController;
     private boolean minimize;
-    public static LoginController instance;
+    public static  LoginController instance;
     private static final I18n I18N = VpnI18N.getI18n();
     //private AnchorPane page;
     private boolean licenseAccepted;
@@ -98,25 +96,25 @@ public class LoginForms extends Application {
         final boolean minimize;
         if (args.length > 0) {
             String cmd = args[0];
-            
+
             minimize = cmd.equals("minimize");
         } else {
             minimize = false;
         }
-        
+
         ProxyConfig.perform();
-        setLookAndFeel();
+        //setLookAndFeel();
     }
 
-    private static void setLookAndFeel() {
-        try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            Util.setDefaultSize(Util.getFontSize());
-
-        } catch (Exception ex) {
-        }
-
-    }
+//    private static void setLookAndFeel() {
+//        try {
+//            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+//            Util.setDefaultSize(Util.getFontSize());
+//
+//        } catch (Exception ex) {
+//        }
+//
+//    }
 
     public void loadProgressDialog(String message) {
         try {
@@ -187,7 +185,7 @@ public class LoginForms extends Application {
         LOG.debug("In the ShellFire Main controller");
         try {
             this.shellFireMainController = (ShellfireVPNMainFormFxmlController) replaceSceneContent("ShellfireVPNMainFormFxml.fxml");
-           this.shellFireMainController.displayMessage("Object created");
+            this.shellFireMainController.displayMessage("Object created");
             this.shellFireMainController.setApp(this);
 
         } catch (Exception ex) {
@@ -212,13 +210,11 @@ public class LoginForms extends Application {
 
     public Initializable replaceSceneContent(String fxml) throws Exception {
         FXMLLoader loader = new FXMLLoader(LoginForms.class.getClassLoader().getResource(fxml));
-        // InputStream in = LoginForms.class.getResourceAsStream(fxml);
-        //loader.setBuilderFactory(new JavaFXBuilderFactory());
         loader.setLocation(LoginForms.class.getResource("/fxml/" + fxml));
         System.out.println("Loacation of loader is " + loader.getLocation());
         AnchorPane page = null;
         try {
-            System.out.println("trying to load anchor pane for " + fxml);
+            System.out.println("ReplaceSceneContent trying to load anchor pane for " + fxml);
             page = (AnchorPane) loader.load();
             System.out.println("Location of Controller is " + loader.getController());
 
@@ -239,15 +235,15 @@ public class LoginForms extends Application {
                 stage.setY(event.getScreenY() - yOffset);
             }
         });
-        if(page.getScene() == null){
-        Scene scene = new Scene(page);
-        stage.setScene(scene);
-        LOG.debug("Scene of " + fxml + " has been newly created");
+        if (page.getScene() == null) {
+            Scene scene = new Scene(page);
+            stage.setScene(scene);
+            LOG.debug("Scene of " + fxml + " has been newly created");
         } else {
-        LOG.debug("Scene of " + fxml + " is that of anchorpane");
-        stage.setScene(page.getScene());
+            LOG.debug("Scene of " + fxml + " is that of anchorpane");
+            stage.setScene(page.getScene());
         }
- 
+
         stage.sizeToScene();
         return (Initializable) loader.getController();
     }
@@ -257,7 +253,7 @@ public class LoginForms extends Application {
         // InputStream in = LoginForms.class.getResourceAsStream(fxml);
         //loader.setBuilderFactory(new JavaFXBuilderFactory());
         loader.setLocation(LoginForms.class.getResource("/fxml/" + fxml));
-        System.out.println("Loacation of loader is " + loader.getLocation());
+        System.out.println("replaceSCenContentWithSameRoot Loacation of loader is " + loader.getLocation());
         AnchorPane page = null;
         try {
             System.out.println("trying to load anchor pane for " + fxml);
@@ -347,7 +343,7 @@ public class LoginForms extends Application {
         LOG.debug("Hiding stage");
         //this.stage.hide();
         LOG.debug("after dialog box , before login controller");
-        loadLoginController();
+        //this.loadLoginController();
 
         // test Internet connection 
         boolean internetAvailable = Util.internetIsAvailable();
@@ -356,20 +352,18 @@ public class LoginForms extends Application {
             Updater updater = new Updater();
             if (updater.newVersionAvailable()) {
 
-                int answer = JOptionPane
-                        .showConfirmDialog(null,
-                                I18N.tr("A new version of Shellfire VPN is available. An update is mandatory. Would you like to update now?"),
-                                I18N.tr("New Version"),
-                                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setHeaderText(I18N.tr("New Version"));
+                alert.setContentText(I18N.tr("A new version of Shellfire VPN is available. An update is mandatory. Would you like to update now?"));
 
-                if (answer == JOptionPane.YES_OPTION) {
-                    JOptionPane.showMessageDialog(null,
-                            I18N.tr("You decided, to update. Shellfire VPN is now being restarted with super user privileges to perform the update."),
-                            I18N.tr("Update is being performed"), JOptionPane.INFORMATION_MESSAGE);
-
+                alert.showAndWait();
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.get() == ButtonType.OK) {
+                    Alert ialert = new Alert(Alert.AlertType.INFORMATION);
+                    ialert.setHeaderText(I18N.tr("Update is being performed"));
+                    ialert.setContentText(I18N.tr("You decided, to update. Shellfire VPN is now being restarted with super user privileges to perform the update."));
                     String installerPath = com.apple.eio.FileManager.getPathToApplicationBundle() + "/Contents/Java/ShellfireVPN2-Updater.app";
                     LOG.debug("Opening updater using Desktop.open(): " + installerPath);
-
                     List<String> cmds = new LinkedList<String>();
                     cmds.add("/usr/bin/open");
                     cmds.add(installerPath);
@@ -380,24 +374,26 @@ public class LoginForms extends Application {
                     } catch (IOException e) {
                         Util.handleException(e);
                     }
+                    Platform.exit();
                     System.exit(0);
-
                 } else {
-                    JOptionPane.showMessageDialog(null,
-                            I18N.tr("You decided not to update - Shellfire VPN is now exiting."),
-                            I18N.tr("Update rejected"), JOptionPane.ERROR_MESSAGE);
+                    Alert falert = new Alert(Alert.AlertType.ERROR);
+                    falert.setHeaderText(I18N.tr("Update rejected"));
+                    falert.setContentText(I18N.tr("You decided not to update - Shellfire VPN is now exiting."));
+                    falert.showAndWait();
+                    Platform.exit();
                     System.exit(0);
                 }
-
                 return;
-            }
+            } else {LOG.debug("LoginForms: No update available");}
         } else {
             LOG.debug("No internet available, skipping update check");
         }
         LOG.debug("giving control to login");
-        instance.setApp(this);
-        System.out.println("Preparing to display login menu");
-
+        
+        //instance.setApp(this);
+        LOG.debug("Preparing to display login menu");
+        this.loadLoginController();
         this.stage.show();
     }
 

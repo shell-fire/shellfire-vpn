@@ -48,7 +48,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
@@ -102,9 +101,9 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
     public static final String REG_INSTDIR = "instdir";
     public static final String REG_SHOWSTATUSURL = "show_status_url_on_connect";
     private static final String REG_FIRST_START = "firststart";
-    WebService service;
+    WebService service = null;
     private boolean minimize;
-    private static LoginForms application;
+    private LoginForms application;
     private static I18n i18n = VpnI18N.getI18n();
     private static Logger log = Util.getLogger(LoginForms.class.getCanonicalName());
     private String username;
@@ -286,9 +285,10 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
     public void initialize(URL arg0, ResourceBundle arg1) {
         initComponents();
         this.service = WebService.getInstance();
-        fButtonLostUserCredential.setOnAction((ActionEvent event) -> {
+        this.fButtonLostUserCredential.setOnAction((ActionEvent event) -> {
             Util.openUrl(service.getUrlPasswordLost());
-        });
+        });        
+        //continueAfterBackEndAvailabledFX();
     }
 
     public void initComponents() {
@@ -321,24 +321,22 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
         this.fButtonLogin.managedProperty().bind(this.fButtonLogin.visibleProperty());
         
         // Listeners for changes in password field
-        fPassword.focusedProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue) {
-                // password field in focus
-                if (newPropertyValue) {
-                    if (passwordBogus) {
-                        fPassword.setText("");
-                    }
-                } else {
-                    // password field out of focus
-                    password = fPassword.getText();
-                    passwordBogus = false;
+        fPassword.focusedProperty().addListener((ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue) -> {
+            // password field in focus
+            if (newPropertyValue) {
+                if (passwordBogus) {
+                    fPassword.setText("");
                 }
+            } else {
+                // password field out of focus
+                password = fPassword.getText();
+                passwordBogus = false;
             }
-        });
+        }); 
     }
 
     public void setApp(LoginForms applic) {
+        log.debug("LoginController: Application set up appropriately");
         this.application = applic;
     }
 
@@ -395,7 +393,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
     @Override
     public void continueAfterBackEndAvailabledFX() {
-        this.service = WebService.getInstance();
+        //this.service = WebService.getInstance();
         Storage.register(service);
         this.restoreCredentialsFromRegistry();
         this.restoreAutoConnectFromRegistry();
@@ -404,8 +402,9 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
         if (null != initProgressDialog) {
             //initProgressDialog.h();
+            // //Connection.initRmi();
             // TODO check if logic intention was properly converted from swing counterpart.
-            this.application.loadLoginController();
+            //this.application.loadLoginController();
         }
         try {
             //Connection.initRmi();
@@ -421,7 +420,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
     @Override
     public ProgressDialogController getDialogFX() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.application.initDialog ;
     }
 
     class LoginTAsk extends Task<Response<LoginResponse>> {
@@ -472,31 +471,6 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
         log.debug("Ensured that ShellfireVPNService is running. Trying to connect to the Shellfire webservice backend...");
 
         EndpointManager.getInstance().ensureShellfireBackendAvailableFx(this);
-    }
-
-    public void continueAfterBackEndAvailabled() {
-        this.service = WebService.getInstance();
-        Storage.register(service);
-        this.restoreCredentialsFromRegistry();
-        this.restoreAutoConnectFromRegistry();
-        this.restoreAutoStartFromRegistry();
-        this.application.setLicenseAccepted(false);
-
-        /* if (initProgressDialog != null) {
-      initProgressDialog.dispose();
-      instance.setEnabled(true);
-    }*/
-        // TODO ensure that the login menu is currently displayed.
-        try {
-            //Connection.initRmi();
-        } catch (Exception e) {
-            Util.handleException(e);
-        }
-
-        if (!this.autoLoginIfActive()) {
-            this.setVisible(true);
-            askForNewAccountAndAutoStartIfFirstStart();
-        }
     }
 
     private void restoreCredentialsFromRegistry() {
@@ -652,7 +626,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
     public void restart() {
         if (Util.isWindows()) {
 
-            if (LoginForms.instance != null) {
+            if (this.application != null) {
 
                 if (this.application.shellFireMainController != null) {
                     
@@ -668,7 +642,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
                 
                 //TODO - investigage if commenting causes memory leaks
                 //LoginForms.instance.close();
-                LoginForms.instance = null;
+                this.application = null;
 
                 List<String> restart = new ArrayList<String>();
                 restart.add("ShellfireVPN2.exe");
@@ -716,38 +690,5 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
         return instDir;
     }
+  
 }
-
-//	class LoginTAsk extends Task<Response<LoginResponse>>{
-//		
-//		public void done(){
-//			Response<LoginResponse> loginResult = null;
-//			try {
-//				loginResult = get();
-//			} catch (Exception ignore) {
-//				ignore.printStackTrace();
-//			}
-//			hideLoginProgress();
-//			String user = getUser();
-//			String password = getPassword();
-//		}
-//		@Override
-//		protected Response<LoginResponse> call() throws Exception {
-//			// TODO Auto-generated method stub
-//			return null;
-//		}
-//		
-//	}
-//	
-//	public void hideLoginProgress(){
-//		this.setDisable(true);
-//	}
-//	
-//	public String getUser(){
-//		return this.fUsername.getText() ;
-//	}
-//	
-//	public String getPassword(){
-//		return this.fPassword.getText();
-//	}
-//}
