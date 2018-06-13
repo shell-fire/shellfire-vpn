@@ -103,7 +103,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
     private static final String REG_FIRST_START = "firststart";
     WebService service = null;
     private boolean minimize;
-    private LoginForms application;
+    public static LoginForms application;
     private static I18n i18n = VpnI18N.getI18n();
     private static Logger log = Util.getLogger(LoginForms.class.getCanonicalName());
     private String username;
@@ -164,15 +164,10 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
                             boolean selectionRequired = service.vpnSelectionRequired();
 
                             if (selectionRequired && rememberedVpnSelection == 0) {
-
-                                //setVisible(false);
-                                //dia.setVisible(true);
-                                // display the vpn selection window if there are no prefered stored vpns.
-                                
-                                //this.application.vpnSelectController.setApp(application);
-                                this.application.vpnSelectController.displayVpnSelect();
                                 log.debug("Condition for electionRequired && rememberedVpnSelection == 0");
-                                //this.application.getStage().show();
+                                //this.application.vpnSelectController.displayVpnSelect();
+                                this.application.vpnSelectController.setApp(this.application);
+                                this.application.getStage().show();
 
                             } else {
                                 //try {
@@ -194,15 +189,16 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
                                     //mainForm = new ShellfireVPNMainFormFxmlController(service);
                                     //TODO, uncomment load comment below
                                     //this.application.loadShellFireMainController();
-                                    this.application.shellFireMainController.setSerciceAndInitialize(service);
+                                    this.application.shellFireMainController.setShellfireService(service);
                                     boolean vis = true;
                                     if (minimize
                                             && service.getVpn().getAccountType() != ServerType.Free) {
                                         vis = false;
                                     }
 
-                                    mainForm.setVisible(vis);
-                                    mainForm.afterLogin(fAutoconnect.isSelected());
+                                 this.application.shellFireMainController.initializeComponents();
+                                this.application.shellFireMainController.displayMessage("Creation of object successful");
+                                this.application.shellFireMainController.setSerciceAndInitialize(this.service);
                                 }
                             }
                             /*catch (VpnException ex) {
@@ -287,7 +283,10 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
         this.service = WebService.getInstance();
         this.fButtonLostUserCredential.setOnAction((ActionEvent event) -> {
             Util.openUrl(service.getUrlPasswordLost());
-        });        
+        });    
+        this.restoreCredentialsFromRegistry();
+        this.restoreAutoConnectFromRegistry();
+        this.restoreAutoStartFromRegistry();
         //continueAfterBackEndAvailabledFX();
     }
 

@@ -77,7 +77,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
     private LoginForms application;
     private static final Logger log = Util.getLogger(ShellfireVPNMainFormFxmlController.class.getCanonicalName());
-    private static I18n i18n = VpnI18N.getI18n();
+    private static final I18n i18n = VpnI18N.getI18n();
     private Controller controller;
     private WebService shellfireService;
     private MenuItem popupConnectItem;

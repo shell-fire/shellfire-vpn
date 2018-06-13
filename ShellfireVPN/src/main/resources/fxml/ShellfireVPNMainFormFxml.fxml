@@ -19,7 +19,7 @@
                <children>
                   <Pane fx:id="leftConnectionPane" layoutY="60.0" onContextMenuRequested="#handleConnectionPaneContext" onMouseClicked="#handleConnectionPaneClicked" onMouseEntered="#handleConnectionPaneMouseEntered" onMouseExited="#handleConnectionPaneMouseExited" prefHeight="68.0" prefWidth="248.0" style="-fx-background-image: ..\icons\sf_en.png; -fx-border-color: black;">
                      <children>
-                        <ImageView fx:id="connectoinBackgroundImageView" blendMode="LIGHTEN" fitHeight="58.0" fitWidth="248.0" layoutY="9.0" style="--fx-border-color: yellow;">
+                        <ImageView fx:id="connectoinBackgroundImageView" blendMode="LIGHTEN" fitHeight="58.0" fitWidth="252.0" layoutX="-5.0" layoutY="9.0" style="--fx-border-color: yellow;">
                            <image>
                               <Image url="@../buttons/button-connect-idle.png" />
                            </image>
@@ -29,7 +29,7 @@
                               <Font size="16.0" />
                            </font>
                         </Label>
-                        <Label fx:id="connectionFooter" graphicTextGap="2.0" layoutX="45.0" layoutY="35.0" prefHeight="27.0" prefWidth="199.0" text="Connect to ShellFire VPN now" textFill="#f0f0f0">
+                        <Label fx:id="connectionFooter" graphicTextGap="2.0" layoutX="43.0" layoutY="35.0" prefHeight="27.0" prefWidth="199.0" text="Connect to ShellFire VPN now" textFill="#f0f0f0">
                            <font>
                               <Font size="15.0" />
                            </font>
@@ -105,7 +105,7 @@
                         <Insets top="1.0" />
                      </padding>
                   </Pane>
-                  <ImageView fx:id="shellfireImageView" fitHeight="64.0" fitWidth="248.0" layoutY="-2.0">
+                  <ImageView fx:id="shellfireImageView" fitHeight="66.0" fitWidth="252.0" layoutX="-4.0" layoutY="-4.0">
                      <image>
                         <Image url="@../icons/sf_en.png" />
                      </image>
