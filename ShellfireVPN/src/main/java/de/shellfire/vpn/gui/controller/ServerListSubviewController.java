@@ -12,12 +12,17 @@ import de.shellfire.vpn.gui.renderer.StarImageRendererFX;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.types.Country;
 import de.shellfire.vpn.types.Server;
+import de.shellfire.vpn.types.ServerType;
+import de.shellfire.vpn.types.VpnProtocol;
 import de.shellfire.vpn.webservice.ServerList;
 import de.shellfire.vpn.webservice.WebService;
 import de.shellfire.vpn.webservice.model.VpnStar;
 import java.net.URL;
+import java.util.Date;
 import java.util.LinkedList;
+import java.util.Random;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -209,4 +214,76 @@ public class ServerListSubviewController implements Initializable {
             this.connectImage2.setVisible(false);
         }
     }
+        
+        public Server getRandomFreeServer() {
+        Server[] arrServer = new Server[this.getNumberOfServers()];
+        int i = 0;
+        for (Server server : this.shellfireService.getServerList().getAll()) {
+            if (server.getServerType() == ServerType.Free) {
+                arrServer[i++] = server;
+            }
+        }
+
+        Random generator = new Random((new Date()).getTime());
+        int num = generator.nextInt(i);
+
+        return arrServer[num];
+
+    }
+        
+    public int getNumberOfServers() {
+        if (this.shellfireService == null) {
+            return 0;
+        } else {
+            return this.shellfireService.getServerList().getAll().size();
+        }
+    }
+    
+    //Selects a server on serverlist table based on the index (position) of the server
+    public void setSelectedServer(int number){
+        //Embeded in a Platform runner because we are modifying the UI thread. 
+        Platform.runLater(new Runnable()
+{
+    @Override
+    public void run()
+    {
+        serverListTableView.requestFocus();
+        serverListTableView.getSelectionModel().select(number);
+        serverListTableView.getFocusModel().focus(number);
+    }
+});
+    }
+            public VpnProtocol getSelectedProtocol() {
+		if (this.UDPRadioButton.isSelected()) {
+			return VpnProtocol.UDP;
+		} else if (this.TCPRadioButton.isSelected()) {
+			return VpnProtocol.TCP;
+		}
+
+		return null;
+	}
+            
+    	public Server getSelectedServer() {
+                ServerListFXModel serverModel = serverListTableView.getSelectionModel().getSelectedItem();
+
+		//The getCountry method of ServerListFXModel returns the server object
+		log.debug("getSelectedServer() - returning: " + serverModel.getCountry());
+		return serverModel.getCountry();
+	}
+        
+     public Server getRandomPremiumServer() {
+      Server[] arrServer = new Server[this.getNumberOfServers()];
+      int i = 0;
+      for (Server server : this.shellfireService.getServerList().getAll()) {
+          if (server.getServerType() == ServerType.Premium) {
+              arrServer[i++] = server;
+          }
+      }
+
+      Random generator = new Random((new Date()).getTime());
+      int num = generator.nextInt(i);
+
+      return arrServer[num];
+
+  }
 }

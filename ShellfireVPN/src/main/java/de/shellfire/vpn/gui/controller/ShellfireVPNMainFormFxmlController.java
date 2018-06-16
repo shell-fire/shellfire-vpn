@@ -43,6 +43,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -54,6 +55,7 @@ import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.image.Image;
@@ -229,6 +231,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         this.connectionHeaderLabel.setText(i18n.tr("Connection"));
         this.connectionFooter.setText(i18n.tr("Connect to Shellfire VPN now"));
         this.serverListHeaderLabel.setText(i18n.tr("Server list"));
+        this.connectionStatusValue.setText(i18n.tr("Not connected"));
         this.serverListFooterLabel.setText(i18n.tr("Show list of all VPN servers"));
         this.mapHeaderLabel.setText(i18n.tr("Map"));
         this.mapFooterLabel.setText(i18n.tr("Show encryption route"));
@@ -628,61 +631,63 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
             if (state == null) {
                 state = ConnectionState.Disconnected;
             }
-            /*
+
             switch (state) {
                 case Disconnected:
                     if (isFreeAccount()) {
 
-                        Server server = getSelectedServer();
+                        Server server = this.serverListSubviewController.getSelectedServer();
                         if (server.getServerType() == ServerType.Premium || server.getServerType() == ServerType.PremiumPlus) {
                             if (failIfPremiumServerForFreeUser) {
                                 setNormalCursor();
-                                if (JOptionPane.YES_OPTION == JOptionPane
-                                        .showConfirmDialog(
-                                                null,
-                                                i18n.tr("Dieser Server steht nur für Shellfire VPN Premium Kunden zur Verfügung\n\nWeitere Informationen zu Shellfire VPN Premium anzeigen?"),
-                                                i18n.tr("Premium server selected"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE)) {
-                                    
-                                    //TODO 
-                                   // showNagScreenWithoutTimer();
+                                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                                alert.setHeaderText(i18n.tr("Premium server selected"));
+                                alert.setContentText(i18n.tr("Dieser Server steht nur für Shellfire VPN Premium Kunden zur Verfügung\n\nWeitere Informationen zu Shellfire VPN Premium anzeigen?"));
+                                Optional<ButtonType> result = alert.showAndWait();
 
+                                if ((result.isPresent()) && (result.get() == ButtonType.OK)) {
+
+                                    //showNagScreenWithoutTimer();
                                 }
+
                                 return;
                             } else {
-                                server = serverList.getRandomFreeServer();
+                                server = this.serverListSubviewController.getRandomFreeServer();
                                 setSelectedServer(server);
                             }
 
                         }
 
-                        delayedConnect(server, getSelectedProtocol(), Reason.ConnectButtonPressed);
+                        delayedConnect(server, this.serverListSubviewController.getSelectedProtocol(), Reason.ConnectButtonPressed);
                     } else if (isPremiumAccount()) {
 
-                        Server server = getSelectedServer();
+                        Server server = this.serverListSubviewController.getSelectedServer();
 
                         if (server.getServerType() == ServerType.PremiumPlus) {
                             if (failIfPremiumServerForFreeUser) {
                                 setNormalCursor();
-                                if (JOptionPane.YES_OPTION == JOptionPane
-                                        .showConfirmDialog(
-                                                null,
-                                                i18n.tr("Dieser Server steht nur für Shellfire VPN PremiumPlus Kunden zur Verfügung\n\nWeitere Informationen zu Shellfire VPN PremiumPlus anzeigen?"),
-                                                i18n.tr("PremiumPlus server selected"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE)) {
+
+                                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                                alert.setHeaderText(i18n.tr("PremiumPlus server selected"));
+                                alert.setContentText(i18n.tr("Dieser Server steht nur für Shellfire VPN PremiumPlus Kunden zur Verfügung\n\nWeitere Informationen zu Shellfire VPN PremiumPlus anzeigen?"));
+                                Optional<ButtonType> result = alert.showAndWait();
+
+                                if ((result.isPresent()) && (result.get() == ButtonType.OK)) {
 
                                     showNagScreenWithoutTimer();
-
                                 }
+
                                 return;
                             } else {
-                                server = serverList.getRandomPremiumServer();
+                                server = this.serverListSubviewController.getRandomPremiumServer();
                                 setSelectedServer(server);
                             }
 
                         }
 
-                        controller.connect(getSelectedServer(), getSelectedProtocol(), Reason.ConnectButtonPressed);
+                        controller.connect(this.serverListSubviewController.getSelectedServer(), this.serverListSubviewController.getSelectedProtocol(), Reason.ConnectButtonPressed);
                     } else {
-                        controller.connect(getSelectedServer(), getSelectedProtocol(), Reason.ConnectButtonPressed);
+                        controller.connect(serverListSubviewController.getSelectedServer(), serverListSubviewController.getSelectedProtocol(), Reason.ConnectButtonPressed);
                     }
 
                     break;
@@ -692,9 +697,9 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
                 case Connected:
                     controller.disconnect(Reason.DisconnectButtonPressed);
                     break;
-            }*/
+            }
         });
-
+        task.run();
     }
 
     private boolean isFreeAccount() {
@@ -917,13 +922,13 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     //TODO
-                            Platform.runLater(new Runnable(){
-                                @Override
-                                public void run() {
-                                    showNagScreenWithoutTimer();
-                                }
-                            });
-                    
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            showNagScreenWithoutTimer();
+                        }
+                    });
+
                 }
             };
 
@@ -1083,17 +1088,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
     public Controller getController() {
         return this.controller;
-    }
-
-    public Server getSelectedServer() {
-        //TODO check equivalence in javafx
-        /* 
-        int serverNum = this.jServerListTable.getSelectedRow();
-        Server server = this.shellfireService.getServerList().getServer(serverNum);
-        log.debug("getSelectedServer() - returning: " + server);
-        return server;
-         */
-        return null;
     }
 
     private void setNormalCursor() {
@@ -1357,8 +1351,8 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
             premiumScreenController.setService(shellfireService);
             premiumScreenController.initComparisonTable();
             premiumScreenController.setApp(application);
-            log.debug("ShellfireVPNMainFormFxmlController:  showNagScreenWithoutTimer after initComparison table and setting app");            
-           
+            log.debug("ShellfireVPNMainFormFxmlController:  showNagScreenWithoutTimer after initComparison table and setting app");
+
             Scene scene = new Scene(pair.getKey());
             dialogStage.setTitle(i18n.tr("Shellfire Premium Screen"));
             dialogStage.setScene(scene);
@@ -1368,9 +1362,80 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
             dialogStage.show();
         } catch (IOException ex) {
             log.debug("ShellfireVPNMainFormFxmlController:  showNagScreenWithoutTimer has error " + ex.getMessage() + ex.toString());
-        } catch (Exception ex){
-            log.debug("ShellfireVPNMainFormFxmlController:  showNagScreenWithoutTimer has error " + ex.getMessage()+ ex.toString());
+        } catch (Exception ex) {
+            log.debug("ShellfireVPNMainFormFxmlController:  showNagScreenWithoutTimer has error " + ex.getMessage() + ex.toString());
         }
         setNormalCursor();
     }
+
+    private boolean isPremiumAccount() {
+        return this.shellfireService.getVpn().getAccountType() == ServerType.Premium;
+    }
+
+    public void setSelectedServer(Server server) {
+        log.debug("setSelectedServer(" + server + ")");
+        int num = this.shellfireService.getServerList().getServerNumberByServer(server);
+        this.serverListSubviewController.setSelectedServer(num);
+
+    }
+
+    private void delayedConnect(Server selectedServer, VpnProtocol protocol, Reason reason) {
+        popupConnectItem.setLabel(i18n.tr("Connecting..."));
+        popupConnectItem.setEnabled(false);
+
+//		nagScreen = new PremiumVPNNagScreen(this, true, new ActionListener() {
+//
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				if (nagScreentimer != null) {
+//					nagScreentimer.stop();
+//					nagScreentimer = null;
+//          controller.disconnect(Reason.DisconnectButtonPressed);
+//				}
+//				if (nagScreen != null) {
+//					nagScreen.dispose();
+//					nagScreen = null;
+//				}
+//
+//				popupConnectItem.setLabel(i18n.tr("Connect"));
+//				popupConnectItem.setEnabled(true);
+//				setNormalCursor();
+//			}
+//		});
+//
+//		SwingUtilities.invokeLater(new Runnable() {
+//
+//			@Override
+//			public void run() {
+//				if (nagScreen != null) {
+//					nagScreen.setAlwaysOnTop(true);
+//					nagScreen.setVisible(true);
+//
+//				}
+//			}
+//		});
+//		nagScreenDelay = 25;
+//
+//		nagScreentimer = new Timer(1000, new ActionListener() {
+//
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				if (nagScreenDelay == -1 && nagScreen != null) {
+//					nagScreen.setVisible(false);
+//					nagScreen.dispose();
+//					nagScreen = null;
+//					Timer t = (Timer) e.getSource();
+//					t.stop();
+//					controller.connect(getSelectedServer(), getSelectedProtocol(), Reason.ConnectButtonPressed);
+//				}
+//				if (nagScreen != null)
+//					nagScreen.setDelay(nagScreenDelay--);
+//			}
+//		});
+//
+//		nagScreentimer.setRepeats(true);
+//		nagScreentimer.setInitialDelay(0);
+//		nagScreentimer.start();
+    }
+
 }
