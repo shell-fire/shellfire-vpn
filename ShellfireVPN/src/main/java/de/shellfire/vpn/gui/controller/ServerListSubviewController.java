@@ -189,6 +189,10 @@ public class ServerListSubviewController implements Initializable {
         });
         
         this.connectImage2.managedProperty().bind(this.connectImage2.visibleProperty());
+        this.connectImage1.managedProperty().bind(this.connectImage1.visibleProperty());
+        this.keyBuyRadioButton.managedProperty().bind(this.keyBuyRadioButton.visibleProperty());
+        this.keyBuyRadioButton.setVisible(false);
+        this.connectImage2.setVisible(false);
     }    
     
     private LinkedList<ServerListFXModel> initServerTable(LinkedList<Server> servers) {
@@ -209,9 +213,9 @@ public class ServerListSubviewController implements Initializable {
     
         public void initPremium(boolean freeAccount) {
         if (!freeAccount) {
-            this.connectImage2.setVisible(true);
-        } else {
             this.connectImage2.setVisible(false);
+        } else {
+            this.connectImage2.setVisible(true);
         }
     }
         

@@ -99,16 +99,19 @@ public class ConnectionSubviewController implements Initializable {
         this.productKeyImageView.managedProperty().bind(this.productKeyImageView.visibleProperty());
         this.premiumInfoImageView.managedProperty().bind(this.premiumInfoImageView.visibleProperty());
         this.connectImageView.managedProperty().bind(this.connectImageView.visibleProperty());
+        this.productKeyImageView.setVisible(false);
+        this.premiumInfoImageView.setVisible(false);
 
     }
 
     public void initPremium(boolean freeAccount) {
+        log.debug("ConnectionSubviewController: initPremium is free? " + freeAccount);
         if (!freeAccount) {
-            this.productKeyImageView.setVisible(false);
+            //this.productKeyImageView.setVisible(false);
             //this.premiumInfoImageView.setVisible(false);
         } else {
             //this.productKeyImageView.setVisible(false);
-            this.premiumInfoImageView.setVisible(false);
+            this.premiumInfoImageView.setVisible(true);
         }
     }
 
