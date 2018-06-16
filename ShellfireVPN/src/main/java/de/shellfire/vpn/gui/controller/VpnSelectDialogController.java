@@ -177,7 +177,7 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
                 -> {
             rememberSelectionIfDesired(newValue.getVpn());
             this.shellfireService.selectVpn(newValue.getVpn());
-            this.loadMainForm();
+            //this.loadMainForm();
         });
 
     }

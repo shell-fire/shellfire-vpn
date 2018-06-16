@@ -42,7 +42,9 @@ public class ConnectionSubviewController implements Initializable {
     private ImageView connectImageView;
     @FXML
     private ImageView productKeyImageView;
-
+    @FXML
+    private ImageView premiumInfoImageView;
+    
     public ImageView getStatusConnectionImageView() {
         return statusConnectionImageView;
     }
@@ -58,8 +60,6 @@ public class ConnectionSubviewController implements Initializable {
     public ImageView getPremiumInfoImageView() {
         return premiumInfoImageView;
     }
-    @FXML
-    private ImageView premiumInfoImageView;
 
     private LoginForms application;
     private static final Logger log = Util.getLogger(ShellfireVPNMainFormFxmlController.class.getCanonicalName());
@@ -97,15 +97,18 @@ public class ConnectionSubviewController implements Initializable {
 
         //makes product key to be disable when disable is set to true
         this.productKeyImageView.managedProperty().bind(this.productKeyImageView.visibleProperty());
+        this.premiumInfoImageView.managedProperty().bind(this.premiumInfoImageView.visibleProperty());
+        this.connectImageView.managedProperty().bind(this.connectImageView.visibleProperty());
+
     }
 
     public void initPremium(boolean freeAccount) {
         if (!freeAccount) {
-            this.premiumInfoImageView.setVisible(false);
-            this.connectImageView.setVisible(false);
+            this.productKeyImageView.setVisible(false);
+            //this.premiumInfoImageView.setVisible(false);
         } else {
-            this.productKeyImageView.setVisible(false);
-            this.productKeyImageView.setVisible(false);
+            //this.productKeyImageView.setVisible(false);
+            this.premiumInfoImageView.setVisible(false);
         }
     }
 
