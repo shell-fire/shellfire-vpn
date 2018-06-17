@@ -173,7 +173,7 @@ public class LoginForms extends Application {
         LOG.debug("In the VPN controller");
         try {
             this.vpnSelectController = (VpnSelectDialogController) replaceSceneContent("VpnSelectDialogFxml.fxml");
-            this.vpnSelectController.setApp(this);
+            //this.vpnSelectController.setApp(this);
 
         } catch (Exception ex) {
             LOG.debug("could not load vpnSelect fxml\n" + ex.getMessage());

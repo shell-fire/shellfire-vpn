@@ -202,7 +202,8 @@ public class Updater implements CanContinueAfterBackEndAvailable, CanContinueAft
 
     @Override
     public void continueAfterBackEndAvailabledFX() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       //TODO 
+       log.debug("Updater: JavaFX implementation has to be completed");
     }
 
   class MyWorker extends SwingWorker<String, Object> {
