@@ -154,6 +154,7 @@ public class SettingsDialogController implements Initializable{
     @FXML
     private void handleFrenchAction(ActionEvent event) {
         log.debug("SettingsDialogController: handleFrenchAction");
+        languageMenuButton.setText(I18N.tr("French"));
     }
 
     @FXML
@@ -164,6 +165,7 @@ public class SettingsDialogController implements Initializable{
     @FXML
     private void handleGermanAction(ActionEvent event) {
         log.debug("SettingsDialogController: handleFrenchLanguageValidation");
+        languageMenuButton.setText(I18N.tr("German"));
     }
 
     @FXML
