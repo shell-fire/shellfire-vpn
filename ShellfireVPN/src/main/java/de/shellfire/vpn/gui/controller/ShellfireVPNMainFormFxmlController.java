@@ -14,6 +14,7 @@ import de.shellfire.vpn.client.Controller;
 import de.shellfire.vpn.exception.VpnException;
 import de.shellfire.vpn.gui.FxUIManager;
 import de.shellfire.vpn.gui.LoginForms;
+import de.shellfire.vpn.gui.VpnTrayMessage;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.proxy.ProxyConfig;
 import de.shellfire.vpn.types.Reason;
@@ -22,6 +23,7 @@ import de.shellfire.vpn.types.ServerType;
 import de.shellfire.vpn.types.VpnProtocol;
 import de.shellfire.vpn.webservice.Vpn;
 import de.shellfire.vpn.webservice.WebService;
+import de.shellfire.vpn.webservice.model.TrayMessage;
 import java.awt.AWTEvent;
 import java.awt.AWTException;
 import java.awt.Dimension;
@@ -39,7 +41,10 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.logging.Level;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
@@ -50,6 +55,7 @@ import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.image.Image;
@@ -59,7 +65,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javax.swing.Timer;
+import org.jdesktop.application.Action;
 import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.LocaleChangeEvent;
@@ -71,9 +79,9 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
     private LoginForms application;
     private static final Logger log = Util.getLogger(ShellfireVPNMainFormFxmlController.class.getCanonicalName());
-    private static I18n i18n = VpnI18N.getI18n();
+    private static final I18n i18n = VpnI18N.getI18n();
     private Controller controller;
-    private static WebService shellfireService;
+    private WebService shellfireService;
     private MenuItem popupConnectItem;
     private PopupMenu popup;
     private TrayIcon trayIcon;
@@ -91,8 +99,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     private java.awt.Image iconConnected;
     private java.awt.Image iconDisconnectedAwt;
     private java.awt.Image iconIdleAwt;
-    
-
+    private PremiumScreenController nagScreen;
     private Timer currentConnectedSinceTimer;
     //ConnectionSubviewController connectionSubviewController  = null ; 
     @FXML
@@ -175,7 +182,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     // Access to embedded controller and variables in subviews
     @FXML
     private Parent connectionSubview;
-    
+
     @FXML
     private ConnectionSubviewController connectionSubviewController;
     @FXML
@@ -224,6 +231,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         this.connectionHeaderLabel.setText(i18n.tr("Connection"));
         this.connectionFooter.setText(i18n.tr("Connect to Shellfire VPN now"));
         this.serverListHeaderLabel.setText(i18n.tr("Server list"));
+        this.connectionStatusValue.setText(i18n.tr("Not connected"));
         this.serverListFooterLabel.setText(i18n.tr("Show list of all VPN servers"));
         this.mapHeaderLabel.setText(i18n.tr("Map"));
         this.mapFooterLabel.setText(i18n.tr("Show encryption route"));
@@ -231,7 +239,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         this.streamsFooterLabel.setText(i18n.tr("List of american TV streams"));
 
 //        log.debug(connectionSubviewController.toString());
-  //      log.debug(connectionSubviewController.displayCreationMessage("Object refreence properly created"));
+        //      log.debug(connectionSubviewController.displayCreationMessage("Object refreence properly created"));
         this.iconConnected = Util.getImageIcon("/icons/sfvpn2-connected-big.png").getImage();
         this.iconConnectedSmall = Util.getImageIconFX(baseImageUrl + "/icons/small-globe-connected.png");
         this.iconConnecting = Util.getImageIcon("/icons/sfvpn2-connecting-big.png").getImage();
@@ -242,34 +250,34 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
         //this.serverList = this.shellfireService.getServerList();
         //this.updateLoginDetail();
-       // this.initTray();
-
+        // this.initTray();
         //Storage.register(this);
-
         //this.initConnection();
     }
-public void initializeComponents(){
+
+    public void initializeComponents() {
         //Notice that you manipulate the javaObjects out of the initialize if not it will raise an InvocationTargetException
         this.updateLoginDetail();
-        
+
         //Bind visibility of buttons to their manage properties so that they are easilty rendered visible or invisible
         this.validUntilLabel.managedProperty().bind(this.validUntilLabel.visibleProperty());
         this.validUntilValue.managedProperty().bind(this.validUntilValue.visibleProperty());
-        
+
         this.connectionSubviewController.initPremium(isFreeAccount());
+        this.connectionSubviewController.setApp(this.application);
         this.updateOnlineHost();
-        
+
         //serverListSubviewController = new ServerListSubviewController(shellfireService);
         //mapEncryptionSubviewController = new MapEncryptionSubviewController();
         //tvStreasSubviewController = new TvStreasSubviewController();
     }
 
-    public static void setShellfireService(WebService shellfireService) {
-        ShellfireVPNMainFormFxmlController.shellfireService = shellfireService;
+    public void setShellfireService(WebService shellfireService) {
+        this.shellfireService = shellfireService;
         log.debug("ShellfireVPNMainFormFxmlController:" + "service initialized");
     }
 
-/**
+    /**
      * Initialized the service and other variables. Supposed to be an
      * overloading of constructor
      *
@@ -389,7 +397,8 @@ public void initializeComponents(){
         try {
             Pair<Pane, Object> pair = FxUIManager.SwitchSubview("connection_subview.fxml");
             contentDetailsPane.getChildren().setAll(pair.getKey());
-            this.connectionSubviewController = (ConnectionSubviewController)pair.getValue();
+            this.connectionSubviewController = (ConnectionSubviewController) pair.getValue();
+            this.connectionSubviewController.setApp(this.application);
             this.connectionSubviewController.initPremium(isFreeAccount());
         } catch (IOException ex) {
             log.debug("ShellfireVPNMainFormFxmlController:  handleServerListPaneClicked has error " + ex.getMessage());
@@ -415,15 +424,18 @@ public void initializeComponents(){
 
         try {
             Pair<Pane, Object> pair = FxUIManager.SwitchSubview("serverList_subview.fxml");
-            
-            this.serverListSubviewController = (ServerListSubviewController)pair.getValue();
+
+            this.serverListSubviewController = (ServerListSubviewController) pair.getValue();
             this.serverListSubviewController.setShellfireService((this.shellfireService));
             this.serverListSubviewController.initComponents();
+            this.serverListSubviewController.setApp(this.application);
+            this.serverListSubviewController.initPremium(isFreeAccount());
+            contentDetailsPane.getChildren().clear();
             contentDetailsPane.getChildren().setAll(pair.getKey());
         } catch (IOException ex) {
             log.debug("ShellfireVPNMainFormFxmlController:  handleServerListPaneClicked has error " + ex.getMessage());
         }
-        
+
     }
 
     @FXML
@@ -444,8 +456,8 @@ public void initializeComponents(){
     private void handleMapPaneClicked(MouseEvent event) {
         try {
             Pair<Pane, Object> pair = FxUIManager.SwitchSubview("mapEncryption_subview.fxml");
+            contentDetailsPane.getChildren().clear();
             contentDetailsPane.getChildren().setAll(pair.getKey());
-            this.mapEncryptionSubviewController = (MapEncryptionSubviewController)pair.getValue();
         } catch (IOException ex) {
             log.debug("ShellfireVPNMainFormFxmlController:  handleServerListPaneClicked has error " + ex.getMessage());
         }
@@ -468,7 +480,11 @@ public void initializeComponents(){
     @FXML
     private void handleStreamsPaneClicked(MouseEvent event) {
         try {
-            contentDetailsPane.getChildren().setAll(FxUIManager.SwitchSubview(tvStreasSubviewController,"tvStreams_subview.fxml"));
+            Pair<Pane, Object> pair = FxUIManager.SwitchSubview("tvStreams_subview.fxml");
+            contentDetailsPane.getChildren().clear();
+            contentDetailsPane.getChildren().setAll(pair.getKey());
+            //this.tvStreasSubviewController = (TvStreasSubviewController) pair.getValue();
+            //this.tvStreasSubviewController.initializeContents();
         } catch (IOException ex) {
             log.debug("ShellfireVPNMainFormFxmlController:  handleServerListPaneClicked has error " + ex.getMessage());
         }
@@ -490,6 +506,7 @@ public void initializeComponents(){
 
     @FXML
     private void handleHelpImageViewClicked(MouseEvent event) {
+        this.openHelp();
     }
 
     @FXML
@@ -508,6 +525,7 @@ public void initializeComponents(){
 
     @FXML
     private void handleSettingsImageViewClicked(MouseEvent event) {
+        showSettingsDialog();
     }
 
     @FXML
@@ -564,6 +582,7 @@ public void initializeComponents(){
     @FXML
     private void handleExitImageViewClicked(MouseEvent event) {
         Platform.exit();
+        System.exit(0);
     }
 
     private void initController() {
@@ -615,61 +634,63 @@ public void initializeComponents(){
             if (state == null) {
                 state = ConnectionState.Disconnected;
             }
-            /*
+
             switch (state) {
                 case Disconnected:
                     if (isFreeAccount()) {
 
-                        Server server = getSelectedServer();
+                        Server server = this.serverListSubviewController.getSelectedServer();
                         if (server.getServerType() == ServerType.Premium || server.getServerType() == ServerType.PremiumPlus) {
                             if (failIfPremiumServerForFreeUser) {
                                 setNormalCursor();
-                                if (JOptionPane.YES_OPTION == JOptionPane
-                                        .showConfirmDialog(
-                                                null,
-                                                i18n.tr("Dieser Server steht nur für Shellfire VPN Premium Kunden zur Verfügung\n\nWeitere Informationen zu Shellfire VPN Premium anzeigen?"),
-                                                i18n.tr("Premium server selected"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE)) {
-                                    
-                                    //TODO 
-                                   // showNagScreenWithoutTimer();
+                                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                                alert.setHeaderText(i18n.tr("Premium server selected"));
+                                alert.setContentText(i18n.tr("Dieser Server steht nur für Shellfire VPN Premium Kunden zur Verfügung\n\nWeitere Informationen zu Shellfire VPN Premium anzeigen?"));
+                                Optional<ButtonType> result = alert.showAndWait();
 
+                                if ((result.isPresent()) && (result.get() == ButtonType.OK)) {
+
+                                    //showNagScreenWithoutTimer();
                                 }
+
                                 return;
                             } else {
-                                server = serverList.getRandomFreeServer();
+                                server = this.serverListSubviewController.getRandomFreeServer();
                                 setSelectedServer(server);
                             }
 
                         }
 
-                        delayedConnect(server, getSelectedProtocol(), Reason.ConnectButtonPressed);
+                        delayedConnect(server, this.serverListSubviewController.getSelectedProtocol(), Reason.ConnectButtonPressed);
                     } else if (isPremiumAccount()) {
 
-                        Server server = getSelectedServer();
+                        Server server = this.serverListSubviewController.getSelectedServer();
 
                         if (server.getServerType() == ServerType.PremiumPlus) {
                             if (failIfPremiumServerForFreeUser) {
                                 setNormalCursor();
-                                if (JOptionPane.YES_OPTION == JOptionPane
-                                        .showConfirmDialog(
-                                                null,
-                                                i18n.tr("Dieser Server steht nur für Shellfire VPN PremiumPlus Kunden zur Verfügung\n\nWeitere Informationen zu Shellfire VPN PremiumPlus anzeigen?"),
-                                                i18n.tr("PremiumPlus server selected"), JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE)) {
+
+                                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                                alert.setHeaderText(i18n.tr("PremiumPlus server selected"));
+                                alert.setContentText(i18n.tr("Dieser Server steht nur für Shellfire VPN PremiumPlus Kunden zur Verfügung\n\nWeitere Informationen zu Shellfire VPN PremiumPlus anzeigen?"));
+                                Optional<ButtonType> result = alert.showAndWait();
+
+                                if ((result.isPresent()) && (result.get() == ButtonType.OK)) {
 
                                     showNagScreenWithoutTimer();
-
                                 }
+
                                 return;
                             } else {
-                                server = serverList.getRandomPremiumServer();
+                                server = this.serverListSubviewController.getRandomPremiumServer();
                                 setSelectedServer(server);
                             }
 
                         }
 
-                        controller.connect(getSelectedServer(), getSelectedProtocol(), Reason.ConnectButtonPressed);
+                        controller.connect(this.serverListSubviewController.getSelectedServer(), this.serverListSubviewController.getSelectedProtocol(), Reason.ConnectButtonPressed);
                     } else {
-                        controller.connect(getSelectedServer(), getSelectedProtocol(), Reason.ConnectButtonPressed);
+                        controller.connect(serverListSubviewController.getSelectedServer(), serverListSubviewController.getSelectedProtocol(), Reason.ConnectButtonPressed);
                     }
 
                     break;
@@ -679,9 +700,9 @@ public void initializeComponents(){
                 case Connected:
                     controller.disconnect(Reason.DisconnectButtonPressed);
                     break;
-            }*/
+            }
         });
-
+        task.run();
     }
 
     private boolean isFreeAccount() {
@@ -704,10 +725,9 @@ public void initializeComponents(){
         this.globeConnectionImageView.setImage(this.iconIdleSmall);
         this.connectionSubviewController.getStatusConnectionImageView().setImage(this.iconEcncryptionInactive);
         log.debug("ShellfireMainForm: In setStateDisconnected method ");
-        
+
         //TODO_subview
         //this.mapEncryptionSubviewController.getShowOwnPosition().setDisable(false);
-
         boolean showMessage = false;
         String message = "";
         if (this.controller != null) {
@@ -794,7 +814,7 @@ public void initializeComponents(){
         this.connectionSubviewController.getConnectImageView().setDisable(true);
         //TODO implement this in the other subview controller
         //this.jConnectButtonLabel1.setEnabled(false);
-        
+
         //TODO_subview
         /*
         if (null != mapEncryptionSubviewController) { // test if the controller has been initialized before doing any work.
@@ -802,7 +822,6 @@ public void initializeComponents(){
                 this.mapEncryptionSubviewController.getShowOwnPosition().setDisable(true);
             }
         }*/
-
         this.connectionStatusLabel.setText(i18n.tr("Connection is being processed..."));
         mySetIconImage("/icons/sfvpn2-connecting-big.png");
 
@@ -906,19 +925,21 @@ public void initializeComponents(){
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     //TODO
-                    //showNagScreenWithoutTimer();
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            showNagScreenWithoutTimer();
+                        }
+                    });
+
                 }
             };
 
             MenuItem nagItem = new MenuItem(i18n.tr("Shellfire VPN premium infos"));
             nagItem.addActionListener(nagListener);
 
-            ActionListener helpListener = new ActionListener() {
-
-                public void actionPerformed(ActionEvent e) {
-                    //TODO
-                    //openHelp();
-                }
+            ActionListener helpListener = (ActionEvent e) -> {
+                openHelp();
             };
 
             MenuItem helpItem = new MenuItem(i18n.tr("Help"));
@@ -935,28 +956,22 @@ public void initializeComponents(){
             popupConnectItem = new MenuItem(i18n.tr("Connect"));
             popupConnectItem.addActionListener(popupConnectListener);
 
-            ActionListener statusListener = new ActionListener() {
-
-                public void actionPerformed(ActionEvent e) {
-                    Util.openUrl(shellfireService.getUrlSuccesfulConnect());
-                }
+            ActionListener statusListener = (ActionEvent e) -> {
+                Util.openUrl(shellfireService.getUrlSuccesfulConnect());
             };
 
             MenuItem statusItem = new MenuItem(i18n.tr("Show VPN state in your browser"));
             statusItem.addActionListener(statusListener);
 
-            ActionListener openListener = new ActionListener() {
+            ActionListener openListener = (ActionEvent e) -> {
+                setVisible(true);
+                toFront();
+                //TODO
+                //setState(Frame.NORMAL);
 
-                public void actionPerformed(ActionEvent e) {
-                    setVisible(true);
-                    toFront();
-                    //TODO
-                    //setState(Frame.NORMAL);
-
-                    if (!Util.isWindows()) {
-                        com.apple.eawt.Application app = com.apple.eawt.Application.getApplication();
-                        app.requestForeground(true);
-                    }
+                if (!Util.isWindows()) {
+                    com.apple.eawt.Application app = com.apple.eawt.Application.getApplication();
+                    app.requestForeground(true);
                 }
             };
 
@@ -975,7 +990,6 @@ public void initializeComponents(){
                 public void actionPerformed(ActionEvent e) {
                     setVisible(true);
                     toFront();
-                    //TODO
                     //setState(Frame.NORMAL);
                 }
             };
@@ -997,41 +1011,25 @@ public void initializeComponents(){
 
                 }
 
-                /*
-				public void mouseReleased(MouseEvent e) {
-				}
-
-				public void mouseEntered(MouseEvent e) {
-				}
-
-				public void mouseExited(MouseEvent e) {
-				}
-
-				public void mousePressed(MouseEvent e) {
-				}*/
                 @Override
                 public void mouseClicked(java.awt.event.MouseEvent e) {
-                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                    mouseClicked(e);
                 }
 
                 @Override
                 public void mousePressed(java.awt.event.MouseEvent e) {
-                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
                 }
 
                 @Override
                 public void mouseReleased(java.awt.event.MouseEvent e) {
-                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
                 }
 
                 @Override
                 public void mouseEntered(java.awt.event.MouseEvent e) {
-                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
                 }
 
                 @Override
                 public void mouseExited(java.awt.event.MouseEvent e) {
-                    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
                 }
 
             };
@@ -1042,7 +1040,7 @@ public void initializeComponents(){
             trayIcon.addMouseListener(mouseListener);
 
             //TODO
-            //startNagScreenTimer();
+            startNagScreenTimer();
             try {
                 tray.add(trayIcon);
             } catch (AWTException e) {
@@ -1095,17 +1093,6 @@ public void initializeComponents(){
         return this.controller;
     }
 
-    public Server getSelectedServer() {
-        //TODO check equivalence in javafx
-        /* 
-        int serverNum = this.jServerListTable.getSelectedRow();
-        Server server = this.shellfireService.getServerList().getServer(serverNum);
-        log.debug("getSelectedServer() - returning: " + server);
-        return server;
-         */
-        return null;
-    }
-
     private void setNormalCursor() {
         this.application.getStage().getScene().setCursor(Cursor.DEFAULT);
     }
@@ -1127,7 +1114,6 @@ public void initializeComponents(){
         if (!this.mapEncryptionSubviewController.getShowOwnPosition().isSelected()) {
             this.mapEncryptionSubviewController.getShowOwnPosition().setDisable(true);
         }*/
-
         this.connectionStatusLabel.setText(i18n.tr("Connected"));
 
         //TODO check if image not already loaddd
@@ -1207,17 +1193,17 @@ public void initializeComponents(){
             @Override
             protected String call() throws Exception {
                 String host = shellfireService.getLocalIpAddress();
-                log.debug("ShellfireMainFormController: Ip address in task" + host );
+                log.debug("ShellfireMainFormController: Ip address in task" + host);
                 return host;
             }
         };
         hostWorker.valueProperty().addListener((observable, oldValue, newValue) -> {
-                if (newValue != null) {
-            String host = hostWorker.getValue();
+            if (newValue != null) {
+                String host = hostWorker.getValue();
                 onlineIpValue.setText(host);
-                log.debug("ShellfireMainFormController: Ip address is " + host );
-        }
-            
+                log.debug("ShellfireMainFormController: Ip address is " + host);
+            }
+
         });
         Thread worker = new Thread(hostWorker);
         worker.run();
@@ -1244,13 +1230,14 @@ public void initializeComponents(){
 
     private void updateLoginDetail() {
         Vpn vpn = this.shellfireService.getVpn();
+        log.debug("ShellfireMainFormController: vpn is " + vpn.toString());
         this.vpnIdValue.setText("sf" + vpn.getVpnId());
         this.vpnTypeValue.setText(vpn.getAccountType().toString());
 
         if (vpn.getAccountType() == ServerType.Free) {
             this.validUntilValue.setVisible(false);
             //this.validUntilValue.setManaged(false);
-            
+
             this.validUntilLabel.setVisible(false);
             //this.validUntilLabel.setManaged(false);
         } else {
@@ -1265,12 +1252,11 @@ public void initializeComponents(){
         }
     }
 
-
     public void displayMessage(String message) {
         log.debug("ShellFireMainController: " + message);
     }
-    
-       public void updateConnectedSince() {
+
+    public void updateConnectedSince() {
         Date now = new Date();
         long diffInSeconds = (now.getTime() - connectedSince.getTime()) / 1000;
 
@@ -1285,4 +1271,174 @@ public void initializeComponents(){
         String text = start + " " + "(" + since + ")";
         this.connectedSinceValue.setText(text);
     }
+
+    private void showSettingsDialog() {
+        Parent root;
+        try {
+            Pair<Pane, Object> pair = FxUIManager.SwitchSubview("menuShellfireSettings.fxml");
+            Stage dialogStage = new Stage(StageStyle.UTILITY);
+            //SettingsDialogController settingsDialogController = (SettingsDialogController) pair.getValue();
+            Scene scene = new Scene(pair.getKey());
+            dialogStage.setTitle(i18n.tr("Shellfire VPN settings"));
+            dialogStage.setScene(scene);
+            dialogStage.initModality(Modality.APPLICATION_MODAL);
+            dialogStage.setAlwaysOnTop(true);
+            dialogStage.setResizable(false);
+            dialogStage.show();
+        } catch (IOException ex) {
+            log.debug("ShellfireVPNMainFormFxmlController:  handleServerListPaneClicked has error " + ex.getMessage());
+        }
+    }
+
+    @Action
+    public void openHelp() {
+        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance().getContext()
+                .getResourceMap(ShellfireVPNMainFormFxmlController.class);
+
+        Util.openUrl(shellfireService.getUrlHelp());
+
+    }
+
+    private void startNagScreenTimer() {
+        int oneHour = 1000 * 60 * 60;
+
+        ActionListener taskPerformer = new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                showTrayIconNagScreen();
+            }
+        };
+
+        Timer nagScreenTimer = new Timer(oneHour, taskPerformer);
+        nagScreenTimer.setRepeats(true);
+        nagScreenTimer.start();
+    }
+
+    private void showTrayIconNagScreen() {
+        LinkedList<VpnTrayMessage> messages = new LinkedList<VpnTrayMessage>();
+        if (controller.getCurrentConnectionState() == ConnectionState.Connected) {
+            ActionListener premiumInfoClicked = (ActionEvent e) -> {
+                showNagScreenWithoutTimer();
+            };
+
+            if (this.shellfireService.getVpn().getAccountType() == ServerType.Free) {
+                List<TrayMessage> trayMessages = this.shellfireService.getTrayMessages();
+
+                trayMessages.forEach((msg) -> {
+                    messages.add(new VpnTrayMessage(msg.getHeader(), msg.getText(), msg.getButtontext(), premiumInfoClicked));
+                });
+            }
+        } else {
+            messages.add(new VpnTrayMessage(i18n.tr("Not connected"), i18n.tr("You are not connected to Shellfire VPN.")));
+        }
+
+        if (messages.size() > 0) {
+            Random generator = new Random((new Date()).getTime());
+            int num = generator.nextInt(messages.size());
+            VpnTrayMessage msgToShow = messages.get(num);
+            msgToShow.run();
+        }
+
+    }
+
+    private void showNagScreenWithoutTimer() {
+        log.debug("ShellfireVPNMainFormFxmlController:  showNagScreenWithoutTimer method entered");
+        Parent root;
+        try {
+            Pair<Pane, Object> pair = FxUIManager.SwitchSubview("premiumNavScreen.fxml");
+            Stage dialogStage = new Stage(StageStyle.UTILITY);
+            log.debug("ShellfireVPNMainFormFxmlController:  showNagScreenWithoutTimer before controller object");
+            PremiumScreenController premiumScreenController = (PremiumScreenController) pair.getValue();
+            log.debug("ShellfireVPNMainFormFxmlController:  showNagScreenWithoutTimer after controller object");
+            premiumScreenController.setService(shellfireService);
+            premiumScreenController.initComparisonTable();
+            premiumScreenController.setApp(application);
+            log.debug("ShellfireVPNMainFormFxmlController:  showNagScreenWithoutTimer after initComparison table and setting app");
+
+            Scene scene = new Scene(pair.getKey());
+            dialogStage.setTitle(i18n.tr("Shellfire Premium Screen"));
+            dialogStage.setScene(scene);
+            dialogStage.initModality(Modality.APPLICATION_MODAL);
+            dialogStage.setAlwaysOnTop(true);
+            dialogStage.setResizable(false);
+            dialogStage.show();
+        } catch (IOException ex) {
+            log.debug("ShellfireVPNMainFormFxmlController:  showNagScreenWithoutTimer has error " + ex.getMessage() + ex.toString());
+        } catch (Exception ex) {
+            log.debug("ShellfireVPNMainFormFxmlController:  showNagScreenWithoutTimer has error " + ex.getMessage() + ex.toString());
+        }
+        setNormalCursor();
+    }
+
+    private boolean isPremiumAccount() {
+        return this.shellfireService.getVpn().getAccountType() == ServerType.Premium;
+    }
+
+    public void setSelectedServer(Server server) {
+        log.debug("setSelectedServer(" + server + ")");
+        int num = this.shellfireService.getServerList().getServerNumberByServer(server);
+        this.serverListSubviewController.setSelectedServer(num);
+
+    }
+
+    private void delayedConnect(Server selectedServer, VpnProtocol protocol, Reason reason) {
+        popupConnectItem.setLabel(i18n.tr("Connecting..."));
+        popupConnectItem.setEnabled(false);
+
+//		nagScreen = new PremiumVPNNagScreen(this, true, new ActionListener() {
+//
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				if (nagScreentimer != null) {
+//					nagScreentimer.stop();
+//					nagScreentimer = null;
+//          controller.disconnect(Reason.DisconnectButtonPressed);
+//				}
+//				if (nagScreen != null) {
+//					nagScreen.dispose();
+//					nagScreen = null;
+//				}
+//
+//				popupConnectItem.setLabel(i18n.tr("Connect"));
+//				popupConnectItem.setEnabled(true);
+//				setNormalCursor();
+//			}
+//		});
+//
+//		SwingUtilities.invokeLater(new Runnable() {
+//
+//			@Override
+//			public void run() {
+//				if (nagScreen != null) {
+//					nagScreen.setAlwaysOnTop(true);
+//					nagScreen.setVisible(true);
+//
+//				}
+//			}
+//		});
+//		nagScreenDelay = 25;
+//
+//		nagScreentimer = new Timer(1000, new ActionListener() {
+//
+//			@Override
+//			public void actionPerformed(ActionEvent e) {
+//				if (nagScreenDelay == -1 && nagScreen != null) {
+//					nagScreen.setVisible(false);
+//					nagScreen.dispose();
+//					nagScreen = null;
+//					Timer t = (Timer) e.getSource();
+//					t.stop();
+//					controller.connect(getSelectedServer(), getSelectedProtocol(), Reason.ConnectButtonPressed);
+//				}
+//				if (nagScreen != null)
+//					nagScreen.setDelay(nagScreenDelay--);
+//			}
+//		});
+//
+//		nagScreentimer.setRepeats(true);
+//		nagScreentimer.setInitialDelay(0);
+//		nagScreentimer.start();
+    }
+
 }

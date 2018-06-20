@@ -6,18 +6,24 @@
 package de.shellfire.vpn.gui.controller;
 
 import de.shellfire.vpn.Util;
+import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.gui.model.CountryMap;
 import de.shellfire.vpn.gui.model.ServerListFXModel;
 import de.shellfire.vpn.gui.renderer.StarImageRendererFX;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.types.Country;
 import de.shellfire.vpn.types.Server;
+import de.shellfire.vpn.types.ServerType;
+import de.shellfire.vpn.types.VpnProtocol;
 import de.shellfire.vpn.webservice.ServerList;
 import de.shellfire.vpn.webservice.WebService;
 import de.shellfire.vpn.webservice.model.VpnStar;
 import java.net.URL;
+import java.util.Date;
 import java.util.LinkedList;
+import java.util.Random;
 import java.util.ResourceBundle;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -30,6 +36,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.ContextMenuEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
@@ -55,7 +63,6 @@ public class ServerListSubviewController implements Initializable {
     private RadioButton TCPRadioButton;
     @FXML
     private ImageView connectImage1;
-    @FXML
     private ImageView keyBuyRadioButton;
     @FXML
     private ImageView connectImage2;
@@ -71,12 +78,63 @@ public class ServerListSubviewController implements Initializable {
     private TableColumn<ServerListFXModel, VpnStar> securityColumn;
     @FXML
     private TableColumn<ServerListFXModel, VpnStar> speedColumn;
+    @FXML
+    private ImageView keyBuyImgeButton;
+    @FXML
+    private void handleConnectImage1MouseExited(MouseEvent event) {
+    }
+
+    @FXML
+    private void handleConnectImage1MouseEntered(MouseEvent event) {
+    }
+
+    @FXML
+    private void handleConnectImage1ContextRequested(ContextMenuEvent event) {
+    }
+
+    @FXML
+    private void handleConnectImage1MouseClicked(MouseEvent event) {
+    }
+
+    @FXML
+    private void handleKeyBuyImgeButtonExited(MouseEvent event) {
+    }
+
+    @FXML
+    private void handleKeyBuyImgeButtonEnterd(MouseEvent event) {
+    }
+
+    @FXML
+    private void handleKeyBuyImgeButtonContextRequested(ContextMenuEvent event) {
+    }
+
+    @FXML
+    private void handleKeyBuyImgeButtonClicked(MouseEvent event) {
+    }
+
+    @FXML
+    private void handleConnectImage2MouseExited(MouseEvent event) {
+    }
+
+    @FXML
+    private void handleConnectImage2MouseEntered(MouseEvent event) {
+    }
+
+    @FXML
+    private void handleConnectImage2ContextRequested(ContextMenuEvent event) {
+    }
+
+    @FXML
+    private void handleConnectImage2MouseClicked(MouseEvent event) {
+    }
     
     private static I18n i18n = VpnI18N.getI18n();
     private WebService shellfireService;
     private ServerList serverList;
+    private LoginForms application;
     private static final Logger log = Util.getLogger(ServerListSubviewController.class.getCanonicalName());
     private ObservableList<ServerListFXModel> serverListData = FXCollections.observableArrayList();
+
 
     /**
      * Constructor used to initialize serverListTable data from Webservice
@@ -163,7 +221,6 @@ public class ServerListSubviewController implements Initializable {
                         log.debug("ServerListSubviewController: Country Image and text could not be rendered");
                         setText("Empty");
                     } else {
-
                         // get the corresponding country of this server
                         Country country = item.getCountry();
                         // Attach the imageview to the cell
@@ -183,6 +240,12 @@ public class ServerListSubviewController implements Initializable {
         securityColumn.setCellFactory(column -> {
             return new StarImageRendererFX() ;
         });
+        
+        this.connectImage2.managedProperty().bind(this.connectImage2.visibleProperty());
+        this.connectImage1.managedProperty().bind(this.connectImage1.visibleProperty());
+        this.keyBuyRadioButton.managedProperty().bind(this.keyBuyRadioButton.visibleProperty());
+        this.keyBuyRadioButton.setVisible(false);
+        this.connectImage2.setVisible(false);
     }    
     
     private LinkedList<ServerListFXModel> initServerTable(LinkedList<Server> servers) {
@@ -190,8 +253,6 @@ public class ServerListSubviewController implements Initializable {
         //log.debug("ServerListSubviewController: The size of all servers is " + servers.size());
         for (int i = 0; i < servers.size(); i++) {
             ServerListFXModel serverModel = new ServerListFXModel();
-            // getting image for the country 
-            Country country = servers.get(i).getCountry();
             serverModel.setCountry(servers.get(i));
             serverModel.setName(servers.get(i).getName());
             serverModel.setServerType(servers.get(i).getServerType().toString());
@@ -203,4 +264,87 @@ public class ServerListSubviewController implements Initializable {
         return allModels;
     }
     
+        public void initPremium(boolean freeAccount) {
+        if (!freeAccount) {
+            this.connectImage2.setVisible(false);
+        } else {
+            this.connectImage2.setVisible(true);
+        }
+    }
+        
+        public Server getRandomFreeServer() {
+        Server[] arrServer = new Server[this.getNumberOfServers()];
+        int i = 0;
+        for (Server server : this.shellfireService.getServerList().getAll()) {
+            if (server.getServerType() == ServerType.Free) {
+                arrServer[i++] = server;
+            }
+        }
+
+        Random generator = new Random((new Date()).getTime());
+        int num = generator.nextInt(i);
+
+        return arrServer[num];
+
+    }
+        
+    public int getNumberOfServers() {
+        if (this.shellfireService == null) {
+            return 0;
+        } else {
+            return this.shellfireService.getServerList().getAll().size();
+        }
+    }
+    
+    //Selects a server on serverlist table based on the index (position) of the server
+    public void setSelectedServer(int number){
+        //Embeded in a Platform runner because we are modifying the UI thread. 
+        Platform.runLater(new Runnable()
+{
+    @Override
+    public void run()
+    {
+        serverListTableView.requestFocus();
+        serverListTableView.getSelectionModel().select(number);
+        serverListTableView.getFocusModel().focus(number);
+    }
+});
+    }
+            public VpnProtocol getSelectedProtocol() {
+		if (this.UDPRadioButton.isSelected()) {
+			return VpnProtocol.UDP;
+		} else if (this.TCPRadioButton.isSelected()) {
+			return VpnProtocol.TCP;
+		}
+
+		return null;
+	}
+            
+    	public Server getSelectedServer() {
+                ServerListFXModel serverModel = serverListTableView.getSelectionModel().getSelectedItem();
+
+		//The getCountry method of ServerListFXModel returns the server object
+		log.debug("getSelectedServer() - returning: " + serverModel.getCountry());
+		return serverModel.getCountry();
+	}
+        
+     public Server getRandomPremiumServer() {
+      Server[] arrServer = new Server[this.getNumberOfServers()];
+      int i = 0;
+      for (Server server : this.shellfireService.getServerList().getAll()) {
+          if (server.getServerType() == ServerType.Premium) {
+              arrServer[i++] = server;
+          }
+      }
+
+      Random generator = new Random((new Date()).getTime());
+      int num = generator.nextInt(i);
+
+      return arrServer[num];
+
+  }
+     
+     public void setApp(LoginForms app){
+        this.application = app;
+    }
 }

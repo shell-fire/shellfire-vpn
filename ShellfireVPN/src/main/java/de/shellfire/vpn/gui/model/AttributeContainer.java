@@ -13,7 +13,7 @@ import de.shellfire.vpn.webservice.model.VpnAttributeElement;
  *
  * @author bettmenn
  */
-class AttributeContainer {
+public class AttributeContainer {
 
     private final VpnAttributeHeader containerName;
     private LinkedList<AttributeElement> elements = new  LinkedList<AttributeElement>();

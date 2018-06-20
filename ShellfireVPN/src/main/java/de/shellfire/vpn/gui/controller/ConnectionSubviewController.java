@@ -8,7 +8,6 @@ package de.shellfire.vpn.gui.controller;
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.client.Controller;
 import de.shellfire.vpn.gui.LoginForms;
-import de.shellfire.vpn.gui.controller.*;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.webservice.WebService;
 import java.awt.Dimension;
@@ -43,7 +42,9 @@ public class ConnectionSubviewController implements Initializable {
     private ImageView connectImageView;
     @FXML
     private ImageView productKeyImageView;
-
+    @FXML
+    private ImageView premiumInfoImageView;
+    
     public ImageView getStatusConnectionImageView() {
         return statusConnectionImageView;
     }
@@ -59,8 +60,6 @@ public class ConnectionSubviewController implements Initializable {
     public ImageView getPremiumInfoImageView() {
         return premiumInfoImageView;
     }
-    @FXML
-    private ImageView premiumInfoImageView;
 
     private LoginForms application;
     private static final Logger log = Util.getLogger(ShellfireVPNMainFormFxmlController.class.getCanonicalName());
@@ -98,15 +97,21 @@ public class ConnectionSubviewController implements Initializable {
 
         //makes product key to be disable when disable is set to true
         this.productKeyImageView.managedProperty().bind(this.productKeyImageView.visibleProperty());
+        this.premiumInfoImageView.managedProperty().bind(this.premiumInfoImageView.visibleProperty());
+        this.connectImageView.managedProperty().bind(this.connectImageView.visibleProperty());
+        this.productKeyImageView.setVisible(false);
+        this.premiumInfoImageView.setVisible(false);
+
     }
 
     public void initPremium(boolean freeAccount) {
+        log.debug("ConnectionSubviewController: initPremium is free? " + freeAccount);
         if (!freeAccount) {
-            this.premiumInfoImageView.setVisible(false);
-            this.connectImageView.setVisible(false);
+            //this.productKeyImageView.setVisible(false);
+            //this.premiumInfoImageView.setVisible(false);
         } else {
-            this.productKeyImageView.setVisible(false);
-            this.productKeyImageView.setVisible(false);
+            //this.productKeyImageView.setVisible(false);
+            this.premiumInfoImageView.setVisible(true);
         }
     }
 
@@ -134,6 +139,7 @@ public class ConnectionSubviewController implements Initializable {
 
     @FXML
     private void handleConnectImageViewClicked(MouseEvent event) {
+        this.application.shellFireMainController.connectFromButton(true);
     }
 
     @FXML
@@ -170,5 +176,9 @@ public class ConnectionSubviewController implements Initializable {
 
     @FXML
     private void handlePremiumInfoImageViewClicked(MouseEvent event) {
+    }
+    
+    public void setApp(LoginForms app){
+        this.application = app;
     }
 }

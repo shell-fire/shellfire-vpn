@@ -1,6 +1,5 @@
 package de.shellfire.vpn.gui.controller;
 
-
 import de.shellfire.vpn.Storage;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -17,16 +16,23 @@ import org.xnap.commons.i18n.I18n;
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.VpnProperties;
 import de.shellfire.vpn.client.Client;
+import de.shellfire.vpn.client.Controller;
 import de.shellfire.vpn.gui.CanContinueAfterBackEndAvailableFX;
 import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.service.CryptFactory;
+import de.shellfire.vpn.types.Reason;
 import de.shellfire.vpn.types.ServerType;
 import de.shellfire.vpn.webservice.EndpointManager;
 import de.shellfire.vpn.webservice.Response;
 import de.shellfire.vpn.webservice.WebService;
 import de.shellfire.vpn.webservice.model.LoginResponse;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+
 import javafx.event.ActionEvent;
 
 import javafx.scene.control.Label;
@@ -42,7 +48,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
@@ -96,9 +101,9 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
     public static final String REG_INSTDIR = "instdir";
     public static final String REG_SHOWSTATUSURL = "show_status_url_on_connect";
     private static final String REG_FIRST_START = "firststart";
-    WebService service;
+    WebService service = null;
     private boolean minimize;
-    private LoginForms application;
+    public static LoginForms application;
     private static I18n i18n = VpnI18N.getI18n();
     private static Logger log = Util.getLogger(LoginForms.class.getCanonicalName());
     private String username;
@@ -113,7 +118,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
     // Event Listener on Button[#fButtonLogin].onAction
     @FXML
     public void handlefButtonLogin(ActionEvent event) {
-        //fButtonLogin.setDisable(true);
+        fButtonLogin.setDisable(true);
         log.debug("Login attempt made");
         if (validate()) {
             log.debug("Login attempt with valid user input");
@@ -133,89 +138,70 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
                             if (fStoreLoginData.isSelected()) {
                                 storeCredentialsInRegistry(username, password);
+                                log.debug("LoginController: Login Data stored");
                             } else {
                                 removeCredentialsFromRegistry();
                             }
                             if (fAutoStart.isSelected()) {
                                 Client.addVpnToAutoStart();
+                                log.debug("LoginController: Autostart Data stored");
                             } else {
                                 Client.removeVpnFromAutoStart();
                             }
                             if (fAutoconnect.isSelected()) {
                                 setAutoConnectInRegistry(true);
+                                log.debug("LoginController: Autoconnect Data stored");
                             } else {
                                 setAutoConnectInRegistry(false);
                             }
-                            
+
                             // We initialise the vpn selection form but we do not display it yet.
                             this.application.loadVPNSelect();
                             this.application.vpnSelectController.setService(this.service);
                             this.application.vpnSelectController.setAutoConnect(fAutoconnect.isSelected());
                             int rememberedVpnSelection = this.application.vpnSelectController.rememberedVpnSelection();
-                           /* FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/VpnSelectDialog.fxml"));
-                        log.debug("Resource is found in: " +loader.getLocation());
-                        //ShellfireVPNMainFormFxmlController mainFormController = new ShellfireVPNMainFormFxmlController();
-                        //loader.setController(mainFormController);
-                       
-                        Parent mainFormParent;
-                            try {
-                                mainFormParent = (Parent)loader.load();
-                                Scene mainFormScene = new Scene(mainFormParent);
-                                 VpnSelectDialogController vpnController = loader.<VpnSelectDialogController>getController();
-                        vpnController.setService(this.service);
-                         vpnController.setAutoConnect(fAutoconnect.isSelected());
-                        vpnController.echoMessage("VPN Controller instace successfully created");
-                        Stage mainFormStage = (Stage)((Node)event.getSource()).getScene().getWindow();
 
-                        mainFormStage.setScene(mainFormScene);
-                        mainFormStage.show();
-                            } catch (IOException ex) {
-                                log.debug("LoginController Message: " + ex.getMessage());
-                            }
-                        
-                           int rememberedVpnSelection = 0;*/
                             boolean selectionRequired = service.vpnSelectionRequired();
 
                             if (selectionRequired && rememberedVpnSelection == 0) {
-
-                                setVisible(false);
-                                //dia.setVisible(true);
-                                // display the vpn selection window if there are no prefered stored vpns.
-                                this.application.vpnSelectController.setApp(application);
                                 log.debug("Condition for electionRequired && rememberedVpnSelection == 0");
+                                //this.application.vpnSelectController.displayVpnSelect();
+                                this.application.vpnSelectController.setApp(this.application);
                                 this.application.getStage().show();
 
                             } else {
                                 //try {
-                                    if (selectionRequired
-                                            && rememberedVpnSelection != 0) {
-                                        if (!service.selectVpn(rememberedVpnSelection)) {
-                                            // remembered vpn id is invalid
-                                            //dispose();
-                                            //dia.setVisible(true);
-                                            this.application.vpnSelectController.setApp(application);
-                                            log.debug("condition for !service.selectVpn(rememberedVpnSelection");
-                                            this.application.getStage().show();
-                                        }
-                                    }
-
-                                    if (!this.application.vpnSelectController.isVisible()) {
-                                        //setVisible(false);
+                                if (selectionRequired
+                                        && rememberedVpnSelection != 0) {
+                                    if (!service.selectVpn(rememberedVpnSelection)) {
+                                        // remembered vpn id is invalid
                                         //dispose();
-                                        //mainForm = new ShellfireVPNMainFormFxmlController(service);
-                                        //TODO, uncomment load comment below
-                                        //this.application.loadShellFireMainController();
-                                        this.application.shellFireMainController.setSerciceAndInitialize(service);
-                                        boolean vis = true;
-                                        if (minimize
-                                                && service.getVpn().getAccountType() != ServerType.Free) {
-                                            vis = false;
-                                        }
-
-                                        mainForm.setVisible(vis);
-                                        mainForm.afterLogin(fAutoconnect.isSelected());
+                                        //dia.setVisible(true);
+                                        this.application.vpnSelectController.setApp(application);
+                                        log.debug("condition for !service.selectVpn(rememberedVpnSelection");
+                                        this.application.getStage().show();
                                     }
-                                } /*catch (VpnException ex) {
+                                }
+
+                                if (!this.application.vpnSelectController.isVisible()) {
+                                    //setVisible(false);
+                                    //dispose();
+                                    //mainForm = new ShellfireVPNMainFormFxmlController(service);
+                                    //TODO, uncomment load comment below
+                                    //this.application.loadShellFireMainController();
+                                    this.application.shellFireMainController.setShellfireService(service);
+                                    boolean vis = true;
+                                    if (minimize
+                                            && service.getVpn().getAccountType() != ServerType.Free) {
+                                        vis = false;
+                                    }
+
+                                 this.application.shellFireMainController.initializeComponents();
+                                this.application.shellFireMainController.displayMessage("Creation of object successful");
+                                this.application.shellFireMainController.setSerciceAndInitialize(this.service);
+                                }
+                            }
+                            /*catch (VpnException ex) {
                                     Util.handleException(ex);
                                 }*/
 
@@ -236,7 +222,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
         } else {
             fUsername.requestFocus();
         }
-
+        fButtonLogin.setDisable(false);
     }
 
     // Event Listener on Button[#fButtonLostUserCredential].onAction
@@ -248,7 +234,9 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
     // Event Listener on CheckBox[#fStoreLoginData].onAction
     @FXML
     public void handlefStoreLoginData(ActionEvent event) {
-        // TODO Autogenerated
+        if (!this.fStoreLoginData.isSelected()) {
+            this.fAutoLogin.setSelected(false);
+        }
     }
 
     // Event Listener on CheckBox[#fAutoLogin].onAction
@@ -283,21 +271,6 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
         this.application.getStage().show();
     }
 
-    /*   fPassword.focusedProperty().addListener(new ChangeListener<Boolean>()
-{
-    @Override
-    public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue)
-    {
-        if (newPropertyValue)
-        {
-            System.out.println("Textfield on focus");
-        }
-        else
-        {
-            System.out.println("Textfield out focus");
-        }
-    }
-});*/
     // Event Listener on ImageView[#exitImageView].onContextMenuRequested
     @FXML
     private void handleEXitButtonClicked(MouseEvent event) {
@@ -308,9 +281,13 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
     public void initialize(URL arg0, ResourceBundle arg1) {
         initComponents();
         this.service = WebService.getInstance();
-        fButtonLostUserCredential.setOnAction((ActionEvent event) -> {
+        this.fButtonLostUserCredential.setOnAction((ActionEvent event) -> {
             Util.openUrl(service.getUrlPasswordLost());
-        });
+        });    
+        this.restoreCredentialsFromRegistry();
+        this.restoreAutoConnectFromRegistry();
+        this.restoreAutoStartFromRegistry();
+        //continueAfterBackEndAvailabledFX();
     }
 
     public void initComponents() {
@@ -339,26 +316,26 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
         this.headerPanel.setStyle("-fx-background-color: rgb(18,172,229);");
 
         this.exitImageView.setImage(Util.getImageIconFX("src/main/resources/icons/exit.png"));
-
+        
+        this.fButtonLogin.managedProperty().bind(this.fButtonLogin.visibleProperty());
+        
         // Listeners for changes in password field
-        fPassword.focusedProperty().addListener(new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue) {
-                // password field in focus
-                if (newPropertyValue) {
-                    if (passwordBogus) {
-                        fPassword.setText("");
-                    }
-                } else {
-                    // password field out of focus
-                    password = fPassword.getText();
-                    passwordBogus = false;
+        fPassword.focusedProperty().addListener((ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue) -> {
+            // password field in focus
+            if (newPropertyValue) {
+                if (passwordBogus) {
+                    fPassword.setText("");
                 }
+            } else {
+                // password field out of focus
+                password = fPassword.getText();
+                passwordBogus = false;
             }
-        });
+        }); 
     }
 
     public void setApp(LoginForms applic) {
+        log.debug("LoginController: Application set up appropriately");
         this.application = applic;
     }
 
@@ -391,6 +368,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
     @FXML
     private void handlePasswordFieldPressed(KeyEvent event) {
         if (event.getCode().equals(KeyCode.ENTER)) {
+
             this.password = fPassword.getText();
             this.passwordBogus = false;
             // perform login action when inputs are correct
@@ -403,6 +381,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
     private void handleExitImageMouseExited(MouseEvent event) {
         //this.exitImageView.setBlendMode(BlendMode.LIGHTEN);
         this.application.getStage().getScene().setCursor(Cursor.DEFAULT);
+
     }
 
     @FXML
@@ -413,7 +392,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
     @Override
     public void continueAfterBackEndAvailabledFX() {
-        this.service = WebService.getInstance();
+        //this.service = WebService.getInstance();
         Storage.register(service);
         this.restoreCredentialsFromRegistry();
         this.restoreAutoConnectFromRegistry();
@@ -422,8 +401,9 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
         if (null != initProgressDialog) {
             //initProgressDialog.h();
+            // //Connection.initRmi();
             // TODO check if logic intention was properly converted from swing counterpart.
-            this.application.loadLoginController();
+            //this.application.loadLoginController();
         }
         try {
             //Connection.initRmi();
@@ -439,7 +419,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
     @Override
     public ProgressDialogController getDialogFX() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return this.application.initDialog ;
     }
 
     class LoginTAsk extends Task<Response<LoginResponse>> {
@@ -490,31 +470,6 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
         log.debug("Ensured that ShellfireVPNService is running. Trying to connect to the Shellfire webservice backend...");
 
         EndpointManager.getInstance().ensureShellfireBackendAvailableFx(this);
-    }
-
-    public void continueAfterBackEndAvailabled() {
-        this.service = WebService.getInstance();
-        Storage.register(service);
-        this.restoreCredentialsFromRegistry();
-        this.restoreAutoConnectFromRegistry();
-        this.restoreAutoStartFromRegistry();
-        this.application.setLicenseAccepted(false);
-
-        /* if (initProgressDialog != null) {
-      initProgressDialog.dispose();
-      instance.setEnabled(true);
-    }*/
-        // TODO ensure that the login menu is currently displayed.
-        try {
-            //Connection.initRmi();
-        } catch (Exception e) {
-            Util.handleException(e);
-        }
-
-        if (!this.autoLoginIfActive()) {
-            this.setVisible(true);
-            askForNewAccountAndAutoStartIfFirstStart();
-        }
     }
 
     private void restoreCredentialsFromRegistry() {
@@ -666,4 +621,73 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
         props.setBoolean(REG_AUTOCONNECT, autoConnect);
 
     }
+
+    public void restart() {
+        if (Util.isWindows()) {
+
+            if (this.application != null) {
+
+                if (this.application.shellFireMainController != null) {
+                    
+                    Controller c = this.application.shellFireMainController.getController();
+                    if (c != null) {
+                        c.disconnect(Reason.GuiRestarting);
+
+                    }
+
+                    //this.application.shellFireMainController.dispose();
+                    this.application.shellFireMainController = null;
+                }
+                
+                //TODO - investigage if commenting causes memory leaks
+                //LoginForms.instance.close();
+                this.application = null;
+
+                List<String> restart = new ArrayList<String>();
+                restart.add("ShellfireVPN2.exe");
+                Process p;
+                try {
+                    p = new ProcessBuilder(restart).directory(new File(getInstDir())).start();
+                    Util.digestProcess(p);
+
+                    System.exit(0);
+                } catch (IOException e) {
+                    Util.handleException(e);
+                }
+
+            }
+        } else {
+            List<String> restart = new ArrayList<String>();
+            restart.add("/usr/bin/open");
+            restart.add("-n");
+            restart.add(com.apple.eio.FileManager.getPathToApplicationBundle());
+            Process p;
+            try {
+                p = new ProcessBuilder(restart).directory(new File(com.apple.eio.FileManager.getPathToApplicationBundle())).start();
+                Util.digestProcess(p);
+
+                Platform.exit();
+            } catch (IOException e) {
+                Util.handleException(e);
+            }
+
+        }
+
+    }
+
+    public static String getInstDir() {
+        VpnProperties props = VpnProperties.getInstance();
+        String instDir = props.getProperty(REG_INSTDIR, null);
+
+        if (instDir == null) {
+            if (Util.isWindows()) {
+                instDir = new File("").getAbsolutePath();
+            } else {
+                instDir = WebService.macOsAppDirectory() + "/ShellfireVPN";
+            }
+        }
+
+        return instDir;
+    }
+  
 }

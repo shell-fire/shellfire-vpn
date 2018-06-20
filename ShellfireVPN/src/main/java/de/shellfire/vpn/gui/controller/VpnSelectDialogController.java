@@ -15,9 +15,6 @@ import de.shellfire.vpn.VpnProperties;
 import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.gui.model.VpnSelectionFXModel;
 import de.shellfire.vpn.i18n.VpnI18N;
-import de.shellfire.vpn.proxy.ProxyConfig;
-import de.shellfire.vpn.types.Server;
-import de.shellfire.vpn.types.VpnProtocol;
 import de.shellfire.vpn.webservice.Vpn;
 import de.shellfire.vpn.webservice.WebService;
 import java.io.IOException;
@@ -25,11 +22,7 @@ import java.util.LinkedList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -42,7 +35,6 @@ import javafx.scene.layout.Pane;
 
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import javafx.stage.Stage;
 
 public class VpnSelectDialogController extends AnchorPane implements Initializable {
 
@@ -73,12 +65,12 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
     @FXML
     private Label backLabel;
 
-    private static WebService shellfireService;
+    private WebService shellfireService;
     private boolean autoConnect;
     public static final String REG_REMEMBERSELECTION = "SelectedVpnId";
     private static I18n i18n = VpnI18N.getI18n();
 
-    private static LoginForms application;
+    private LoginForms application;
     private static final long serialVersionUID = 1L;
     private static Logger log = Util.getLogger(VpnSelectDialogController.class.getCanonicalName());
     @FXML
@@ -103,7 +95,7 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
     }
 
     public void setAutoConnect(boolean autoConnect) {
-        log.debug("We have set autoconnect");
+        log.debug("We have set autoconnect" + autoConnect);
         this.autoConnect = autoConnect;
     }
 
@@ -130,28 +122,7 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
             rememberSelectionIfDesired(selectedItem.getVpn());
 
             this.shellfireService.selectVpn(selectedItem.getVpn());
-            /*
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ShellfireVPNMainFormFxml.fxml"));
-        log.debug("Resource is found in: " +loader.getLocation());
-        Parent mainFormParent = (Parent)loader.load();
-        ShellfireVPNMainFormFxmlController mainFormController = loader.<ShellfireVPNMainFormFxmlController>getController();
-        mainFormController.displayMessage("Loaded from vpnSelect Dialog");
-        Scene mainFormScene = new Scene(mainFormParent);
-        Stage mainFormStage = (Stage)((Node)event.getSource()).getScene().getWindow();
-       this.application.shellFireMainController = mainFormController;
-        mainFormStage.setScene(mainFormScene);
-        mainFormStage.show();
-             */
-            this.application.loadShellFireMainController();
-            this.application.shellFireMainController.setShellfireService(this.shellfireService);
-            this.application.shellFireMainController.initializeComponents();
-            this.application.shellFireMainController.displayMessage("Creation of object successful");
-            this.application.shellFireMainController.setSerciceAndInitialize(this.shellfireService);
-            this.application.getStage().show();
-            log.debug("Testing APP mainForm " + this.application.shellFireMainController.getId());
-
-            this.application.shellFireMainController.afterLogin(autoConnect);
-
+            this.loadMainForm();
         }
 
     }
@@ -206,9 +177,7 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
                 -> {
             rememberSelectionIfDesired(newValue.getVpn());
             this.shellfireService.selectVpn(newValue.getVpn());
-            //TODO
-            // Implement after login of ShellfireMainForm
-            //handleSelectVpnButton(null);
+            //this.loadMainForm();
         });
 
     }
@@ -278,7 +247,28 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
     }
 
     public void setApp(LoginForms applic) {
+        log.debug("VpnSelectDialogController: Application set up appropriately");
         this.application = applic;
     }
 
+    public void displayVpnSelect() {
+        this.application.getStage().show();
+        log.debug("VpnSelectDialogController: displayVpnSelect(); displaying the select window");
+        //this.application.shellFireMainController.afterLogin(autoConnect);
+    }
+    
+    private void loadMainForm(){
+        if (this.application == null) {
+            log.debug("VpnSelectDialogController: LoginForms empty");
+            this.application = LoginController.application;
+        } else {
+            log.debug("VpnSelectDialogController: LoginForms already set");
+        }
+        this.application.toString();
+        this.application.loadShellFireMainController();
+        this.application.shellFireMainController.setShellfireService(this.shellfireService);
+        this.application.shellFireMainController.initializeComponents();
+        this.application.shellFireMainController.displayMessage("Creation of object successful");
+        this.application.shellFireMainController.setSerciceAndInitialize(this.shellfireService);
+    }
 }

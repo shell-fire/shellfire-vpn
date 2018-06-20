@@ -25,7 +25,8 @@ public class ServerListFXModel {
 
     
     //private static I18n i18n = VpnI18N.getI18n();
-    //private String[] header = {i18n.tr("Country"), i18n.tr("Name"), i18n.tr("Server type"), i18n.tr("Security"), i18n.tr("Speed")};
+
+    //private String[] header = {i18n.tr("Land"), i18n.tr("Name"), i18n.tr("Servertyp"), i18n.tr("Sicherheit"), i18n.tr("Geschwindigkeit")};
     ///private ServerList serverList;
     public ServerListFXModel() {
         this(null, null, null, null, null);
@@ -39,7 +40,7 @@ public class ServerListFXModel {
         this.speed = new SimpleObjectProperty(speed);
     }
 
-    public Object getCountry() {
+    public Server getCountry() {
         return country.get();
     }
 
