@@ -264,6 +264,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         this.validUntilValue.managedProperty().bind(this.validUntilValue.visibleProperty());
 
         this.connectionSubviewController.initPremium(isFreeAccount());
+        this.connectionSubviewController.setApp(this.application);
         this.updateOnlineHost();
 
         //serverListSubviewController = new ServerListSubviewController(shellfireService);
@@ -397,6 +398,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
             Pair<Pane, Object> pair = FxUIManager.SwitchSubview("connection_subview.fxml");
             contentDetailsPane.getChildren().setAll(pair.getKey());
             this.connectionSubviewController = (ConnectionSubviewController) pair.getValue();
+            this.connectionSubviewController.setApp(this.application);
             this.connectionSubviewController.initPremium(isFreeAccount());
         } catch (IOException ex) {
             log.debug("ShellfireVPNMainFormFxmlController:  handleServerListPaneClicked has error " + ex.getMessage());
@@ -426,6 +428,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
             this.serverListSubviewController = (ServerListSubviewController) pair.getValue();
             this.serverListSubviewController.setShellfireService((this.shellfireService));
             this.serverListSubviewController.initComponents();
+            this.serverListSubviewController.setApp(this.application);
             this.serverListSubviewController.initPremium(isFreeAccount());
             contentDetailsPane.getChildren().clear();
             contentDetailsPane.getChildren().setAll(pair.getKey());

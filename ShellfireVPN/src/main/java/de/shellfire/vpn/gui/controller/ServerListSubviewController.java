@@ -6,6 +6,7 @@
 package de.shellfire.vpn.gui.controller;
 
 import de.shellfire.vpn.Util;
+import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.gui.model.CountryMap;
 import de.shellfire.vpn.gui.model.ServerListFXModel;
 import de.shellfire.vpn.gui.renderer.StarImageRendererFX;
@@ -35,6 +36,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.ContextMenuEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
@@ -60,7 +63,6 @@ public class ServerListSubviewController implements Initializable {
     private RadioButton TCPRadioButton;
     @FXML
     private ImageView connectImage1;
-    @FXML
     private ImageView keyBuyRadioButton;
     @FXML
     private ImageView connectImage2;
@@ -76,12 +78,63 @@ public class ServerListSubviewController implements Initializable {
     private TableColumn<ServerListFXModel, VpnStar> securityColumn;
     @FXML
     private TableColumn<ServerListFXModel, VpnStar> speedColumn;
+    @FXML
+    private ImageView keyBuyImgeButton;
+    @FXML
+    private void handleConnectImage1MouseExited(MouseEvent event) {
+    }
+
+    @FXML
+    private void handleConnectImage1MouseEntered(MouseEvent event) {
+    }
+
+    @FXML
+    private void handleConnectImage1ContextRequested(ContextMenuEvent event) {
+    }
+
+    @FXML
+    private void handleConnectImage1MouseClicked(MouseEvent event) {
+    }
+
+    @FXML
+    private void handleKeyBuyImgeButtonExited(MouseEvent event) {
+    }
+
+    @FXML
+    private void handleKeyBuyImgeButtonEnterd(MouseEvent event) {
+    }
+
+    @FXML
+    private void handleKeyBuyImgeButtonContextRequested(ContextMenuEvent event) {
+    }
+
+    @FXML
+    private void handleKeyBuyImgeButtonClicked(MouseEvent event) {
+    }
+
+    @FXML
+    private void handleConnectImage2MouseExited(MouseEvent event) {
+    }
+
+    @FXML
+    private void handleConnectImage2MouseEntered(MouseEvent event) {
+    }
+
+    @FXML
+    private void handleConnectImage2ContextRequested(ContextMenuEvent event) {
+    }
+
+    @FXML
+    private void handleConnectImage2MouseClicked(MouseEvent event) {
+    }
     
     private static I18n i18n = VpnI18N.getI18n();
     private WebService shellfireService;
     private ServerList serverList;
+    private LoginForms application;
     private static final Logger log = Util.getLogger(ServerListSubviewController.class.getCanonicalName());
     private ObservableList<ServerListFXModel> serverListData = FXCollections.observableArrayList();
+
 
     /**
      * Constructor used to initialize serverListTable data from Webservice
@@ -290,4 +343,8 @@ public class ServerListSubviewController implements Initializable {
       return arrServer[num];
 
   }
+     
+     public void setApp(LoginForms app){
+        this.application = app;
+    }
 }

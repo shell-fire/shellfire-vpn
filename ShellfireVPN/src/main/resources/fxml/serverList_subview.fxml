@@ -48,17 +48,17 @@
             <Font size="14.0" />
          </font>
       </RadioButton>
-      <ImageView fx:id="connectImage1" fitHeight="46.0" fitWidth="200.0" layoutX="4.0" layoutY="488.0" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="2.0">
+      <ImageView fx:id="connectImage1" fitHeight="46.0" fitWidth="200.0" layoutX="4.0" layoutY="488.0" onContextMenuRequested="#handleConnectImage1ContextRequested" onMouseClicked="#handleConnectImage1MouseClicked" onMouseEntered="#handleConnectImage1MouseEntered" onMouseExited="#handleConnectImage1MouseExited" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="2.0">
          <image>
             <Image url="@../buttons/button-connect-de.gif" />
          </image>
       </ImageView>
-      <ImageView fx:id="keyBuyRadioButton" fitHeight="42.0" fitWidth="206.0" layoutX="215.0" layoutY="468.0" preserveRatio="true" AnchorPane.bottomAnchor="9.92218017578125">
+      <ImageView fx:id="keyBuyImgeButton" fitHeight="42.0" fitWidth="206.0" layoutX="215.0" layoutY="468.0" onContextMenuRequested="#handleKeyBuyImgeButtonContextRequested" onMouseClicked="#handleKeyBuyImgeButtonClicked" onMouseEntered="#handleKeyBuyImgeButtonEnterd" onMouseExited="#handleKeyBuyImgeButtonExited" preserveRatio="true" AnchorPane.bottomAnchor="9.92218017578125">
          <image>
             <Image url="@../buttons/button-serial-fr.gif" />
          </image>
       </ImageView>
-      <ImageView fx:id="connectImage2" fitHeight="46.0" fitWidth="200.0" layoutX="439.0" layoutY="487.0" AnchorPane.bottomAnchor="7.0" AnchorPane.rightAnchor="2.0">
+      <ImageView fx:id="connectImage2" fitHeight="46.0" fitWidth="200.0" layoutX="439.0" layoutY="487.0" onContextMenuRequested="#handleConnectImage2ContextRequested" onMouseClicked="#handleConnectImage2MouseClicked" onMouseEntered="#handleConnectImage2MouseEntered" onMouseExited="#handleConnectImage2MouseExited" AnchorPane.bottomAnchor="7.0" AnchorPane.rightAnchor="2.0">
          <image>
             <Image url="@../buttons/button-connect-de.gif" />
          </image>

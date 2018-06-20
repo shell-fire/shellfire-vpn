@@ -139,6 +139,7 @@ public class ConnectionSubviewController implements Initializable {
 
     @FXML
     private void handleConnectImageViewClicked(MouseEvent event) {
+        this.application.shellFireMainController.connectFromButton(true);
     }
 
     @FXML
@@ -175,5 +176,9 @@ public class ConnectionSubviewController implements Initializable {
 
     @FXML
     private void handlePremiumInfoImageViewClicked(MouseEvent event) {
+    }
+    
+    public void setApp(LoginForms app){
+        this.application = app;
     }
 }

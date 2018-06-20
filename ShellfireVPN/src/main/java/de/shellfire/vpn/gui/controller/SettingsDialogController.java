@@ -67,6 +67,7 @@ public class SettingsDialogController implements Initializable{
     
     private static final I18n I18N = VpnI18N.getI18n();
     private Language currentLanguage;
+    static LinkedList<Language> availableLanguages = VpnI18N.getAvailableTranslations(); 
     
     private static final Logger log = Util.getLogger(SettingsDialogController.class.getCanonicalName());
     public SettingsDialogController() {
@@ -85,6 +86,11 @@ public class SettingsDialogController implements Initializable{
         this.saveSettingsButton.setText(I18N.tr("save settings"));
         this.cancelButton.setText(I18N.tr("cancel"));
         
+        
+        // Display the name of the current language
+        this.languageMenuButton.setText(VpnI18N.getLanguage().getName());
+        log.debug("SettingsDialogController : initialize - currentlanguage is " + this.languageMenuButton.getText());
+
        initValues();
     }
 
@@ -144,6 +150,7 @@ public class SettingsDialogController implements Initializable{
     private void handleEnglishAction(ActionEvent event) {
         log.debug("SettingsDialogController: handleEnglishAction");
         languageMenuButton.setText(I18N.tr("English"));
+        currentLanguage = availableLanguages.stream().filter(e->e.getKey().toLowerCase().equals("en")).findFirst().get();
     }
 
     @FXML
@@ -155,6 +162,7 @@ public class SettingsDialogController implements Initializable{
     private void handleFrenchAction(ActionEvent event) {
         log.debug("SettingsDialogController: handleFrenchAction");
         languageMenuButton.setText(I18N.tr("French"));
+        currentLanguage = availableLanguages.stream().filter(e->e.getKey().toLowerCase().equals("fr")).findFirst().get();
     }
 
     @FXML
@@ -166,6 +174,7 @@ public class SettingsDialogController implements Initializable{
     private void handleGermanAction(ActionEvent event) {
         log.debug("SettingsDialogController: handleFrenchLanguageValidation");
         languageMenuButton.setText(I18N.tr("German"));
+        currentLanguage = availableLanguages.stream().filter(e->e.getKey().toLowerCase().equals("de")).findFirst().get();
     }
 
     @FXML
@@ -211,13 +220,12 @@ public class SettingsDialogController implements Initializable{
         boolean showStatusUrlOnConnect = props.getBoolean(LoginController.REG_SHOWSTATUSURL, false);
         this.showStatusSite.setSelected(showStatusUrlOnConnect);
 
-        //this.initLanguages();
+        this.initLanguages();
     }
       
        private void initLanguages() {
            log.debug("SettingsDialogController: initLanguages - method called");
         LinkedList<Language> languages = VpnI18N.getAvailableTranslations();
-
         for (Language language : languages) {
             MenuItem menu = new MenuItem(language.getName());
             menu.setOnAction((event)->{
@@ -268,7 +276,7 @@ public class SettingsDialogController implements Initializable{
         
         if (!currentLanguage.equals(oldLanguage)) {
           VpnI18N.setLanguage(currentLanguage);  
-          
+          log.debug("SettingsDialogController: save() - language changed to " + currentLanguage.getName());
           Alert alert = new Alert(Alert.AlertType.NONE);
                             alert.setHeaderText(I18N.tr("Changed language settings require a restart of Shellfire VPN to take effect. Restart now?"));
                             alert.setContentText(I18N.tr("Changed language settings require a restart of ShellfireVPN to take effect."));
