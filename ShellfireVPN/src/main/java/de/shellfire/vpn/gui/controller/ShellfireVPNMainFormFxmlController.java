@@ -401,7 +401,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
             this.connectionSubviewController.setApp(this.application);
             this.connectionSubviewController.initPremium(isFreeAccount());
         } catch (IOException ex) {
-            log.debug("ShellfireVPNMainFormFxmlController:  handleServerListPaneClicked has error " + ex.getMessage());
+            log.debug("ShellfireVPNMainFormFxmlController:  handleConnectionPaneClicked has error " + ex.getMessage());
         }
     }
 
@@ -459,7 +459,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
             contentDetailsPane.getChildren().clear();
             contentDetailsPane.getChildren().setAll(pair.getKey());
         } catch (IOException ex) {
-            log.debug("ShellfireVPNMainFormFxmlController:  handleServerListPaneClicked has error " + ex.getMessage());
+            log.debug("ShellfireVPNMainFormFxmlController:  handleMapPaneClicked has error " + ex.getMessage());
         }
     }
 
@@ -486,7 +486,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
             //this.tvStreasSubviewController = (TvStreasSubviewController) pair.getValue();
             //this.tvStreasSubviewController.initializeContents();
         } catch (IOException ex) {
-            log.debug("ShellfireVPNMainFormFxmlController:  handleServerListPaneClicked has error " + ex.getMessage());
+            log.debug("ShellfireVPNMainFormFxmlController:  handleStreamsPaneClicked has error " + ex.getMessage());
         }
     }
 
@@ -1286,7 +1286,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
             dialogStage.setResizable(false);
             dialogStage.show();
         } catch (IOException ex) {
-            log.debug("ShellfireVPNMainFormFxmlController:  handleServerListPaneClicked has error " + ex.getMessage());
+            log.debug("ShellfireVPNMainFormFxmlController:  showSettingsDialog has error " + ex.getMessage());
         }
     }
 

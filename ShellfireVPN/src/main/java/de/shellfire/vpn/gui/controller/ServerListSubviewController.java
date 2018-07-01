@@ -63,7 +63,6 @@ public class ServerListSubviewController implements Initializable {
     private RadioButton TCPRadioButton;
     @FXML
     private ImageView connectImage1;
-    private ImageView keyBuyRadioButton;
     @FXML
     private ImageView connectImage2;
     @FXML
@@ -143,7 +142,7 @@ public class ServerListSubviewController implements Initializable {
      */
     public ServerListSubviewController(WebService shellfireService) {
         this.shellfireService = shellfireService;
-        //initComponents();
+        initComponents();
     }
 
     /**
@@ -172,11 +171,7 @@ public class ServerListSubviewController implements Initializable {
     public ImageView getConnectImage1() {
         return connectImage1;
     }
-    
-    public ImageView getKeyBuyRadioButton() {
-        return keyBuyRadioButton;
-    }
-    
+     
     public ImageView getConnectImage2() {
         return connectImage2;
     }
@@ -243,8 +238,8 @@ public class ServerListSubviewController implements Initializable {
         
         this.connectImage2.managedProperty().bind(this.connectImage2.visibleProperty());
         this.connectImage1.managedProperty().bind(this.connectImage1.visibleProperty());
-        this.keyBuyRadioButton.managedProperty().bind(this.keyBuyRadioButton.visibleProperty());
-        this.keyBuyRadioButton.setVisible(false);
+        this.keyBuyImgeButton.managedProperty().bind(this.keyBuyImgeButton.visibleProperty());
+        this.keyBuyImgeButton.setVisible(false);
         this.connectImage2.setVisible(false);
     }    
     

@@ -1,11 +1,12 @@
 package de.shellfire.vpn.gui;
 
+import de.shellfire.vpn.Util;
 import java.util.LinkedList;
 import java.util.List;
 import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
 
-import de.shellfire.vpn.Util;
+
 import de.shellfire.vpn.client.ServiceTools;
 import de.shellfire.vpn.gui.controller.LicenseAcceptanceController;
 import de.shellfire.vpn.gui.controller.LoginController;

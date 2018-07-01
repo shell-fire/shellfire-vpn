@@ -1,3 +1,4 @@
+
 package de.shellfire.vpn.gui.controller;
 
 import de.shellfire.vpn.Storage;
@@ -118,9 +119,10 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
     // Event Listener on Button[#fButtonLogin].onAction
     @FXML
     public void handlefButtonLogin(ActionEvent event) {
-        fButtonLogin.setDisable(true);
+        this.fButtonLogin.setDisable(true);
         log.debug("Login attempt made");
-        if (validate()) {
+        //if (validate()) {
+            this.fButtonLogin.setDisable(true);
             log.debug("Login attempt with valid user input");
             try {
                 LoginTAsk task = new LoginTAsk();
@@ -134,8 +136,9 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
                         log.debug("Error while checking User registration " + e.getMessage());
                     }
                     if (loginResult != null) {
+                        log.debug("LoginController: handlefLogginButton - Login result is " + loginResult.getMessage());
                         if (service.isLoggedIn()) {
-
+                         log.debug("LoginController: handlefLogginButton - service is loggedIn " + loginResult.getMessage());
                             if (fStoreLoginData.isSelected()) {
                                 storeCredentialsInRegistry(username, password);
                                 log.debug("LoginController: Login Data stored");
@@ -207,22 +210,31 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
                             //}
 
-                        } else {
+                        }
+                        else{
                             Alert alert = new Alert(AlertType.ERROR);
                             alert.setHeaderText(i18n.tr("Error"));
-                            alert.setContentText(i18n.tr("Login error:") + loginResult.getMessage());
+                            alert.setContentText(i18n.tr("Login error:") + task.getValue().getMessage());
                             alert.showAndWait();
+                            this.fButtonLogin.setDisable(false);
                         }
                     }
+                    else {
+                    log.debug("LoginController: Login result is null");
+                    }
+                });
+                        this.fButtonLogin.setDisable(false);
+                // happens when the login task fails
+                task.setOnFailed((WorkerStateEvent fevent) -> {
+                    Alert alert = new Alert(AlertType.ERROR);
+                            alert.setHeaderText(i18n.tr("Error"));
+                            alert.setContentText(i18n.tr("Login error:") + task.getValue().getMessage());
+                            alert.showAndWait();
                 });
             } catch (Exception ex) {
                 log.debug("could not load progressDialog fxml in login window \n" + ex.getMessage());
             }
 
-        } else {
-            fUsername.requestFocus();
-        }
-        fButtonLogin.setDisable(false);
     }
 
     // Event Listener on Button[#fButtonLostUserCredential].onAction
@@ -323,12 +335,12 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
         fPassword.focusedProperty().addListener((ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue) -> {
             // password field in focus
             if (newPropertyValue) {
-                if (passwordBogus) {
+                if (this.passwordBogus) {
                     fPassword.setText("");
                 }
             } else {
                 // password field out of focus
-                password = fPassword.getText();
+                this.password = this.fPassword.getText();
                 passwordBogus = false;
             }
         }); 
@@ -365,17 +377,17 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
         //this.
     }
 
-    @FXML
-    private void handlePasswordFieldPressed(KeyEvent event) {
-        if (event.getCode().equals(KeyCode.ENTER)) {
-
-            this.password = fPassword.getText();
-            this.passwordBogus = false;
-            // perform login action when inputs are correct
-            handlefButtonLogin(null);
-        }
-
-    }
+//    @FXML
+//    private void handlePasswordFieldPressed(KeyEvent event) {
+//        if (event.getCode().equals(KeyCode.ENTER)) {
+//
+//            this.password = fPassword.getText();
+//            this.passwordBogus = false;
+//            // perform login action when inputs are correct
+//            handlefButtonLogin(null);
+//        }
+//
+//    }
 
     @FXML
     private void handleExitImageMouseExited(MouseEvent event) {
@@ -422,10 +434,27 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
         return this.application.initDialog ;
     }
 
+    @FXML
+    private void handlefButtonLoginClicked(MouseEvent event) {
+        this.fButtonLogin.setDisable(true);
+    }
+
+    @FXML
+    private void handlePasswordFieldKeyPressed(KeyEvent event) {
+        if (event.getCode().equals(KeyCode.ENTER)) {
+
+            this.password = this.fPassword.getText();
+            this.passwordBogus = false;
+            // perform login action when inputs are correct
+            handlefButtonLogin(null);
+        }
+
+    }
+
     class LoginTAsk extends Task<Response<LoginResponse>> {
 
         Response<LoginResponse> loginResult = null;
-
+        
         @Override
         protected Response<LoginResponse> call() throws Exception {
             log.debug("Starting login background task");
@@ -434,7 +463,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
             log.debug("service.login() - start()");
             loginResult = service.login(user, password);
             log.debug("service.login() - finished()");
-
+            fButtonLogin.setDisable(false);
             return loginResult;
         }
 
