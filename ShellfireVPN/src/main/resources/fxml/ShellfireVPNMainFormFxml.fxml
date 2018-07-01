@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="674.0" prefWidth="1073.0" style="-fx-background-color: rgb(64,69,73);" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.ShellfireVPNMainFormFxmlController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="674.0" prefWidth="1073.0" style="-fx-background-color: rgb(64,69,73);" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.ShellfireVPNMainFormFxmlController">
    <children>
       <AnchorPane layoutX="4.0" prefHeight="515.0" prefWidth="668.0" AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="4.0">
          <opaqueInsets>
@@ -147,7 +147,7 @@
             </AnchorPane>
             <AnchorPane fx:id="contentAnchorPane" layoutX="249.0" layoutY="34.0" prefHeight="633.0" prefWidth="820.0" style="-fx-background-color: rgb(240,240,240);" AnchorPane.bottomAnchor="-1.0" AnchorPane.rightAnchor="-4.0" AnchorPane.topAnchor="34.0">
                <children>
-                  <Pane fx:id="contentHeaderPane" layoutX="2.0" prefHeight="117.0" prefWidth="817.0" style="-fx-background-color: rgb(240,240,240);" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="0.0">
+                  <Pane fx:id="contentHeaderPane" layoutX="2.0" prefHeight="117.0" prefWidth="817.0" style="-fx-background-color: rgb(255,255,255);" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="0.0">
                      <children>
                         <ImageView fx:id="globeConnectionImageView" layoutX="16.0" layoutY="14.0">
                            <image>
