@@ -107,15 +107,6 @@ public class LoginForms extends Application {
         //setLookAndFeel();
     }
 
-//    private static void setLookAndFeel() {
-//        try {
-//            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-//            Util.setDefaultSize(Util.getFontSize());
-//
-//        } catch (Exception ex) {
-//        }
-//
-//    }
 
     public void loadProgressDialog(String message) {
         try {
