@@ -897,7 +897,8 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         this.application.getStage().getIcons().add(new Image(imagePath));
     }
 
-    private void initTray() {
+    private void initTray() 
+    {
         if (!Util.isWindows()) {
             this.hideImageView.setVisible(false);
 
@@ -964,10 +965,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
             statusItem.addActionListener(statusListener);
 
             ActionListener openListener = (ActionEvent e) -> {
-                setVisible(true);
-                toFront();
-                //TODO
-                //setState(Frame.NORMAL);
+                Platform.runLater(() -> {mouseClickedFX();});
 
                 if (!Util.isWindows()) {
                     com.apple.eawt.Application app = com.apple.eawt.Application.getApplication();
@@ -984,7 +982,9 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
             popup.add(helpItem);
             popup.add(nagItem);
             popup.add(defaultItem);
-
+            
+            
+            
             ActionListener actionListener = new ActionListener() {
 
                 public void actionPerformed(ActionEvent e) {
@@ -993,13 +993,13 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
                     //setState(Frame.NORMAL);
                 }
             };
-
+            
             MouseListener mouseListener = new MouseListener() {
-                //@Override
-                public void mouseClicked(MouseEvent e) {
+                
+               @Override
+                public void mouseClicked(java.awt.event.MouseEvent e) {
                     if (e.getClickCount() == 2) {
-                        setVisible(true);
-                        toFront();
+                        Platform.runLater(() -> {mouseClickedFX();});
                         //TODO
                         //setState(Frame.NORMAL);
 
@@ -1007,15 +1007,9 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
                             com.apple.eawt.Application app = com.apple.eawt.Application.getApplication();
                             app.requestForeground(true);
                         }
-                    }
-
+                    };
+                    
                 }
-
-                @Override
-                public void mouseClicked(java.awt.event.MouseEvent e) {
-                    mouseClicked(e);
-                }
-
                 @Override
                 public void mousePressed(java.awt.event.MouseEvent e) {
                 }
@@ -1052,6 +1046,18 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         }
     }
 
+     public void mouseClickedFX() {
+                    
+                 this.application.getStage().setIconified(false);
+                        
+
+                        if (!Util.isWindows()) {
+                            com.apple.eawt.Application app = com.apple.eawt.Application.getApplication();
+                            app.requestForeground(true);
+                        }
+                    
+
+                };
     private void initShortCuts() {
         EventQueue ev = Toolkit.getDefaultToolkit().getSystemEventQueue();
 
