@@ -230,7 +230,7 @@ public class SettingsDialogController implements Initializable{
             MenuItem menu = new MenuItem(language.getName());
             menu.setOnAction((event)->{
                 log.debug("SettingsDialogController: initLanguages - onAction event for " + language.getName());
-                currentLanguage = language;
+                this.currentLanguage = language;
                 this.languageMenuButton.setText(currentLanguage.getName());
                 log.debug("SettingsDialogController: initLanguages - setting language for " + language.getName());
             });
