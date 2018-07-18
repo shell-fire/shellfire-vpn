@@ -161,6 +161,8 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
                             this.application.loadVPNSelect();
                             this.application.vpnSelectController.setService(this.service);
                             this.application.vpnSelectController.setAutoConnect(fAutoconnect.isSelected());
+                            
+                            // prepare the other necessary controllers 
                             int rememberedVpnSelection = this.application.vpnSelectController.rememberedVpnSelection();
                             this.application.getStage().hide();
                             boolean selectionRequired = service.vpnSelectionRequired();
@@ -197,6 +199,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
                                  this.application.shellFireMainController.initializeComponents();
                                 this.application.shellFireMainController.displayMessage("Creation of object successful");
                                 this.application.shellFireMainController.setSerciceAndInitialize(this.service);
+                                this.application.shellFireMainController.prepareControllers();
                                 this.application.shellFireMainController.setApp(this.application);
                                 } else {
                                 log.debug("handlefButtonLogin: vpnController is visible");

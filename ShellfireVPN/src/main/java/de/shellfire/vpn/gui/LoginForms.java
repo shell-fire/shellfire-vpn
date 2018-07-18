@@ -235,7 +235,7 @@ public class LoginForms extends Application {
             LOG.debug("Scene of " + fxml + " is that of anchorpane");
             stage.setScene(page.getScene());
         }
-
+        stage.centerOnScreen();
         stage.sizeToScene();
         return (Initializable) loader.getController();
     }

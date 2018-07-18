@@ -93,6 +93,7 @@ public class ServerListSubviewController implements Initializable {
 
     @FXML
     private void handleConnectImage1MouseClicked(MouseEvent event) {
+        this.application.shellFireMainController.connectFromButton(true);
     }
 
     @FXML
@@ -180,6 +181,10 @@ public class ServerListSubviewController implements Initializable {
         return networkTypeToggleGroup;
     }
     
+    public void setsetConnetImage1Disable(boolean enable){
+         this.connectImage1.setDisable(enable);
+    }
+    
     public void initComponents() {
         this.serverList = this.shellfireService.getServerList();
         //LinkedList<ServerListFXModel> serverData = 
@@ -197,6 +202,7 @@ public class ServerListSubviewController implements Initializable {
         this.connectionTypeLabel.setText(i18n.tr("Connection type"));
         this.TCPRadioButton.setText(i18n.tr("TCP (works with safe firewalls and proxies.)"));
         this.UDPRadioButton.setText(i18n.tr("UDP (fast)"));
+        //this.connectImage1.setImage(new Image("\\buttons\\button-connect-de.gif"));
 
         //accArtTbleColumn.setCellValueFactory(cellData -> cellData.getValue().accountArtProperty());
         nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
@@ -316,8 +322,9 @@ public class ServerListSubviewController implements Initializable {
 	}
             
     	public Server getSelectedServer() {
-                ServerListFXModel serverModel = serverListTableView.getSelectionModel().getSelectedItem();
-
+            
+                ServerListFXModel serverModel = this.serverListTableView.getSelectionModel().getSelectedItem();
+                //log.debug("getSelectedServer: select item is " + serverModel.toString());
 		//The getCountry method of ServerListFXModel returns the server object
 		log.debug("getSelectedServer() - returning: " + serverModel.getCountry());
 		return serverModel.getCountry();

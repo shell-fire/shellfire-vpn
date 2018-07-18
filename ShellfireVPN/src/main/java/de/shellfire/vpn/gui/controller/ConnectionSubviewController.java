@@ -60,6 +60,10 @@ public class ConnectionSubviewController implements Initializable {
     public ImageView getPremiumInfoImageView() {
         return premiumInfoImageView;
     }
+    
+    public void connectImageviewDisable(boolean disable){
+        this.connectImageView.setDisable(disable);
+    }
 
     private LoginForms application;
     private static final Logger log = Util.getLogger(ShellfireVPNMainFormFxmlController.class.getCanonicalName());
