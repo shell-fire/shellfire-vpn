@@ -1199,6 +1199,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 						if (isFreeAccount()) {
 
 							Server server = getSelectedServer();
+                                                        log.debug("ShellfireVPNMainform: connect button, server selection returned " );
 							if (server.getServerType() == ServerType.Premium || server.getServerType() == ServerType.PremiumPlus) {
 								if (failIfPremiumServerForFreeUser) {
 									setNormalCursor();
@@ -1238,6 +1239,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 									}
 									return;
 								} else {
+                                                                    log.debug("ShellfireVPNMainform: connect button selection of server was random");
 									server = serverList.getRandomPremiumServer();
 									setSelectedServer(server);
 								}
@@ -2114,7 +2116,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 				}
 			};
 
-			MouseListener mouseListener = new MouseListener() {
+			MouseListener   mouseListener = new MouseListener() {
 				@Override
 				public void mouseClicked(MouseEvent e) {
 					if (e.getClickCount() == 2) {

@@ -45,6 +45,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
+import java.util.Timer;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -64,10 +68,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javax.swing.Timer;
 import org.jdesktop.application.Action;
 import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
@@ -101,7 +105,8 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     private java.awt.Image iconDisconnectedAwt;
     private java.awt.Image iconIdleAwt;
     private PremiumScreenController nagScreen;
-    private Timer currentConnectedSinceTimer;
+    private ScheduledExecutorService currentConnectedSinceTimerFX = Executors.newSingleThreadScheduledExecutor();
+    //private Timer currentConnectedSinceTimer;
     //ConnectionSubviewController connectionSubviewController  = null ; 
     @FXML
     private Pane leftMenuPane;
@@ -192,7 +197,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     private Label validUntilValue;
     
     String baseImageUrl = "src/main/resources";
-
+    
     public ShellfireVPNMainFormFxmlController() {
         log.debug("No argumenent controller of shellfire has been called");
     }
@@ -719,10 +724,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         enableSystemProxyIfProxyConfig();
         enableSystemProxyIfProxyConfig();
         this.hideConnectProgress();
-        // variables already set in Fxml
-        //this.jConnectButtonLabel.setIcon(new ImageIcon(buttonConnect));
-        //this.jConnectButtonLabel1.setIcon(new ImageIcon(buttonConnect));
-
+        
         this.connectionSubviewController.getConnectImageView().setDisable(false);
         //this.jConnectButtonLabel1.setEnabled(true);
         this.connectionStatusValue.setText(i18n.tr("Not connected"));
@@ -795,8 +797,9 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         }
         if (showMessage) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText(i18n.tr("Fehler: Verbindung fehlgeschlagen"));
+            //alert.setHeaderText(i18n.tr("Fehler: Verbindung fehlgeschlagen"));
             alert.setContentText(message);
+            alert.getDialogPane().getChildren().stream().filter(node -> node instanceof Label).forEach(node -> ((Label)node).setMinWidth(Region.USE_PREF_SIZE));
             alert.showAndWait();
             if (this.trayIcon != null) {
                 this.trayIcon.setImage(this.iconDisconnectedAwt);
@@ -813,9 +816,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     }
 
     private void setStateConnecting() {
-        Platform.runLater(()->{this.showConnectProgress();});
-        //this.jConnectButtonLabel.setIcon(new ImageIcon(buttonConnect));
-        //this.jConnectButtonLabel1.setIcon(new ImageIscon(buttonConnect));
+        this.showConnectProgress();
         this.connectionSubviewController.connectImageviewDisable(true);
         this.serverListSubviewController.setsetConnetImage1Disable(true); 
 
@@ -858,19 +859,20 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(LoginForms.class.getResource("/fxml/ProgressDialog.fxml"));
                 AnchorPane page = (AnchorPane) loader.load();
-
-                // Create the dialog Stage.
+                
+                Platform.runLater(()->{
+                    // Create the dialog Stage.
                 Stage dialogStage = new Stage();
                 dialogStage.setTitle("Connecting");
                 dialogStage.initModality(Modality.WINDOW_MODAL);
                 dialogStage.initOwner(this.application.getStage());
                 Scene scene = new Scene(page);
                 dialogStage.setScene(scene);
-
+                });
                 // Set the dialog into the controller.
                 connectProgressDialog = loader.getController();
                 connectProgressDialog.setOption(2, i18n.tr("cancel"));
-
+                
                 Task<Void> task = new Task<Void>() {
                     @Override
                     protected Void call() throws Exception {
@@ -898,7 +900,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     }
 
     public void mySetIconImage(String imagePath) {
-        log.debug("Image path is " + imagePath);
+        log.debug("mySetIconImage: the icon Image  path is " + imagePath);
         Platform.runLater(()->{
             this.application.getStage().getIcons().clear();
             this.application.getStage().getIcons().add(new Image(imagePath));});
@@ -1133,7 +1135,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         if (!this.mapEncryptionSubviewController.getShowOwnPosition().isSelected()) {
             this.mapEncryptionSubviewController.getShowOwnPosition().setDisable(true);
         }*/
-        Platform.runLater(()->{this.connectionStatusLabel.setText(i18n.tr("Connected"));});
+        Platform.runLater(()->{this.connectionStatusValue.setText(i18n.tr("Connected"));});
 
         //TODO check if image not already loaddd
         mySetIconImage("/icons/sfvpn2-connected-big.png");
@@ -1180,17 +1182,24 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         int delay = 1000; // milliseconds
         connectedSince = new Date();
 
-        ActionListener askPerformer = new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                updateConnectedSince();
-            }
-        };
+//        ActionListener askPerformer = new ActionListener() {
+//
+//            @Override
+//            public void actionPerformed(ActionEvent arg0) {
+//                updateConnectedSince();
+//            }
+//        };
         //TODO
         /*this.currentConnectedSinceTimer = new Timer(delay, taskPerformer);
 		this.currentConnectedSinceTimer.setRepeats(true);
 		this.currentConnectedSinceTimer.start();*/
+        currentConnectedSinceTimerFX.scheduleWithFixedDelay(new Runnable() {
+            @Override
+            public void run() {
+                updateConnectedSince();
+            }
+        }, 0, delay, TimeUnit.MILLISECONDS);
+        
     }
 
     private void enableSystemProxyIfProxyConfig() {
@@ -1201,9 +1210,10 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     }
 
     private void stopConnectedSinceTimer() {
-        if (this.currentConnectedSinceTimer != null) {
-            this.currentConnectedSinceTimer.stop();
-            this.currentConnectedSinceTimer = null;
+        if (this.currentConnectedSinceTimerFX != null) {
+            //terminate all existing timer tasks
+            this.currentConnectedSinceTimerFX.shutdown();
+            this.currentConnectedSinceTimerFX = Executors.newSingleThreadScheduledExecutor();
         }
     }
 
@@ -1288,7 +1298,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         SimpleDateFormat df = new SimpleDateFormat("E, H:m", VpnI18N.getLanguage().getLocale());
         String start = df.format(connectedSince);
         String text = start + " " + "(" + since + ")";
-        this.connectedSinceValue.setText(text);
+        Platform.runLater(()->{this.connectedSinceValue.setText(text);});
     }
 
     private void showSettingsDialog() {
@@ -1319,19 +1329,25 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     }
 
     private void startNagScreenTimer() {
-        int oneHour = 1000 * 60 * 60;
-
-        ActionListener taskPerformer = new ActionListener() {
-
+//        int oneHour = 1000 * 60 * 60;
+//        ActionListener taskPerformer = new ActionListener() {
+//
+//            @Override
+//            public void actionPerformed(ActionEvent arg0) {
+//                showTrayIconNagScreen();
+//            }
+//        };
+//        Timer nagScreenTimer = new Timer(oneHour, taskPerformer);
+//        nagScreenTimer.setRepeats(true);
+//        nagScreenTimer.start();
+        
+        currentConnectedSinceTimerFX.scheduleWithFixedDelay(new Runnable() {
             @Override
-            public void actionPerformed(ActionEvent arg0) {
+            public void run() {
                 showTrayIconNagScreen();
             }
-        };
-
-        Timer nagScreenTimer = new Timer(oneHour, taskPerformer);
-        nagScreenTimer.setRepeats(true);
-        nagScreenTimer.start();
+        }, 0, 1, TimeUnit.HOURS);
+ 
     }
 
     private void showTrayIconNagScreen() {

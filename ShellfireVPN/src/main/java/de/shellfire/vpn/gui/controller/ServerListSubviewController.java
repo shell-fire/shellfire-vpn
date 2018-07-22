@@ -93,7 +93,7 @@ public class ServerListSubviewController implements Initializable {
 
     @FXML
     private void handleConnectImage1MouseClicked(MouseEvent event) {
-        this.application.shellFireMainController.connectFromButton(true);
+        this.application.shellFireMainController.connectFromButton(false);
     }
 
     @FXML
