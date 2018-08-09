@@ -6,6 +6,7 @@
 package de.shellfire.vpn.gui.controller;
 
 import de.shellfire.vpn.Util;
+import de.shellfire.vpn.client.ConnectionState;
 import de.shellfire.vpn.client.Controller;
 import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.i18n.VpnI18N;
@@ -20,6 +21,7 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseEvent;
@@ -44,11 +46,24 @@ public class ConnectionSubviewController implements Initializable {
     private ImageView productKeyImageView;
     @FXML
     private ImageView premiumInfoImageView;
+    private LoginForms application;
+    private static final Logger log = Util.getLogger(ShellfireVPNMainFormFxmlController.class.getCanonicalName());
+    private static I18n i18n = VpnI18N.getI18n();
+    private Controller controller;
+    private static WebService shellfireService;
+    private MenuItem popupConnectItem;
+    private PopupMenu popup;
+    private TrayIcon trayIcon;
+    private ShellfireVPNMainFormFxmlController mainController; 
+    String baseImageUrl = "src/main/resources";
+    String size = "736";
+    String langKey = VpnI18N.getLanguage().getKey();
+    
     
     public ImageView getStatusConnectionImageView() {
         return statusConnectionImageView;
     }
-
+ 
     public ImageView getConnectImageView() {
         return connectImageView;
     }
@@ -65,15 +80,13 @@ public class ConnectionSubviewController implements Initializable {
         this.connectImageView.setDisable(disable);
     }
 
-    private LoginForms application;
-    private static final Logger log = Util.getLogger(ShellfireVPNMainFormFxmlController.class.getCanonicalName());
-    private static I18n i18n = VpnI18N.getI18n();
-    private Controller controller;
-    private static WebService shellfireService;
-    private MenuItem popupConnectItem;
-    private PopupMenu popup;
-    private TrayIcon trayIcon;
+    public void setConnectImageView(ImageView connectImageView) {
+        this.connectImageView = connectImageView;
+    }
 
+    public void setStatusConnectionImageView(ImageView statusConnectionImageView) {
+        this.statusConnectionImageView = statusConnectionImageView;
+    }   
     /**
      * Initializes the controller class.
      */
@@ -85,20 +98,18 @@ public class ConnectionSubviewController implements Initializable {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         double width = screenSize.getWidth();
 
-        String size = "736";
+        
         if (width > 3000) {
             size = "1472";
         }
-
-        String langKey = VpnI18N.getLanguage().getKey();
         log.debug("langKey: " + langKey);
 
         //mySetIconImage("/icons/sfvpn2-idle-big.png");
-        String baseImageUrl = "src/main/resources";
+        
 
         this.connectImageView.setId(baseImageUrl + "/buttons/button-disconnect-" + langKey + ".gif");
         this.statusConnectionImageView.setId(baseImageUrl + "/icons/status-unencrypted-width" + size + ".gif");
-
+        
         //makes product key to be disable when disable is set to true
         this.productKeyImageView.managedProperty().bind(this.productKeyImageView.visibleProperty());
         this.premiumInfoImageView.managedProperty().bind(this.premiumInfoImageView.visibleProperty());
@@ -107,7 +118,20 @@ public class ConnectionSubviewController implements Initializable {
         this.premiumInfoImageView.setVisible(false);
 
     }
-
+    
+    public void updateComponents(boolean connected){
+//        try{
+//        if(this.application.shellFireMainController.getController().getCurrentConnectionState() == ConnectionState.Connected)
+//        this.statusConnectionImageView.setId(baseImageUrl + "/icons/status-encrypted-width" + size + ".gif");
+//        } catch(Exception e){
+//        log.debug("Initialize: controller is not initialize so status is disconnected " + e.getMessage());
+//        }
+          if (connected){
+          this.statusConnectionImageView.setImage(new Image("/icons/status-encrypted-width" + size + ".gif"));
+          this.connectImageView.setImage(new Image("/buttons/button-disconnect-" + langKey + ".gif"));     
+          }
+    }
+    
     public void initPremium(boolean freeAccount) {
         log.debug("ConnectionSubviewController: initPremium is free? " + freeAccount);
         if (!freeAccount) {
@@ -184,5 +208,9 @@ public class ConnectionSubviewController implements Initializable {
     
     public void setApp(LoginForms app){
         this.application = app;
+    }
+    
+    public void setParentController(ShellfireVPNMainFormFxmlController shellController){
+        this.mainController = shellController ;
     }
 }

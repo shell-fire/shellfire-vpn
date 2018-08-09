@@ -43,7 +43,7 @@ public class LoginForms extends Application {
     public RegisterFormController registerController;
     public LicenseAcceptanceController licenceAcceptanceController;
     public static VpnSelectDialogController vpnSelectController;
-    public ShellfireVPNMainFormFxmlController shellFireMainController;
+    public static ShellfireVPNMainFormFxmlController shellFireMainController;
     private boolean minimize;
     public static  LoginController instance;
     private static final I18n I18N = VpnI18N.getI18n();

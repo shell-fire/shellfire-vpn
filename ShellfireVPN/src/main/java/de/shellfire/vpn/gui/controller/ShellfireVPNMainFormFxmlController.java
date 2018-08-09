@@ -82,7 +82,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
     private static final I18n I18N = VpnI18N.getI18n();
 
-    private LoginForms application;
+    private static LoginForms application;
     private static final Logger log = Util.getLogger(ShellfireVPNMainFormFxmlController.class.getCanonicalName());
     private static final I18n i18n = VpnI18N.getI18n();
     private Controller controller;
@@ -273,6 +273,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
         this.connectionSubviewController.initPremium(isFreeAccount());
         this.connectionSubviewController.setApp(this.application);
+        this.connectionSubviewController.updateComponents(false);
         this.updateOnlineHost();
 
         //serverListSubviewController = new ServerListSubviewController(shellfireService);
@@ -406,8 +407,11 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
             Pair<Pane, Object> pair = FxUIManager.SwitchSubview("connection_subview.fxml");
             contentDetailsPane.getChildren().setAll(pair.getKey());
             this.connectionSubviewController = (ConnectionSubviewController) pair.getValue();
-            this.connectionSubviewController.setApp(this.application);
             this.connectionSubviewController.initPremium(isFreeAccount());
+            this.connectionSubviewController.setApp(this.application);
+            boolean connectionStatus = getController().getCurrentConnectionState() == ConnectionState.Connected ;
+            log.debug("handleConnectionPanelClicked: VPN connection status is " + connectionStatus);
+            this.connectionSubviewController.updateComponents(connectionStatus);
         } catch (IOException ex) {
             log.debug("ShellfireVPNMainFormFxmlController:  handleConnectionPaneClicked has error " + ex.getMessage());
         }
@@ -436,8 +440,8 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
             this.serverListSubviewController = (ServerListSubviewController) pair.getValue();
             this.serverListSubviewController.setShellfireService((this.shellfireService));
             this.serverListSubviewController.initComponents();
-            this.serverListSubviewController.setApp(this.application);
             this.serverListSubviewController.initPremium(isFreeAccount());
+            this.serverListSubviewController.setApp(this.application);
             contentDetailsPane.getChildren().clear();
             contentDetailsPane.getChildren().setAll(pair.getKey());
         } catch (IOException ex) {
@@ -816,7 +820,12 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     }
 
     private void setStateConnecting() {
-        this.showConnectProgress();
+        log.debug("SetStateConnecting: Connnection in proessess");
+        try {
+            this.showConnectProgress();
+        } catch (IOException ex) {
+            log.debug("setStateConnecting: cannot start showConnectProgress with error " + ex.getMessage());
+        }
         this.connectionSubviewController.connectImageviewDisable(true);
         this.serverListSubviewController.setsetConnetImage1Disable(true); 
 
@@ -852,15 +861,15 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
      *
      * @return no return value
      */
-    private void showConnectProgress() {
+    private void showConnectProgress() throws IOException {
             // create an instance of progress dialog 
-            try {
+            
                 // Load the fxml file and create a new stage for the popup dialog.
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(LoginForms.class.getResource("/fxml/ProgressDialog.fxml"));
                 AnchorPane page = (AnchorPane) loader.load();
                 
-                Platform.runLater(()->{
+               Platform.runLater(()->{
                     // Create the dialog Stage.
                 Stage dialogStage = new Stage();
                 dialogStage.setTitle("Connecting");
@@ -868,7 +877,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
                 dialogStage.initOwner(this.application.getStage());
                 Scene scene = new Scene(page);
                 dialogStage.setScene(scene);
-                });
+                //});
                 // Set the dialog into the controller.
                 connectProgressDialog = loader.getController();
                 connectProgressDialog.setOption(2, i18n.tr("cancel"));
@@ -877,9 +886,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
                     @Override
                     protected Void call() throws Exception {
                         controller.disconnect(Reason.AbortButtonPressed);
-
-                        // TODO investgite if it should be in setOnsucceed of task, 
-                        // if it's correct at it's place
                         setNormalCursor();
                         return null;
                     }
@@ -888,15 +894,9 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
                 // unbind any previous progress bar
                 connectProgressDialog.getProgressBar().progressProperty().unbind();
                 connectProgressDialog.getProgressBar().progressProperty().bind(task.progressProperty());
-            } catch (IOException ex) {
-                log.debug(ex.getMessage());
-                //return false;
-            }
-
-        
-
-        connectProgressDialog.setVisible(true);
-
+            
+                connectProgressDialog.setVisible(true);
+               });
     }
 
     public void mySetIconImage(String imagePath) {
@@ -1182,17 +1182,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         int delay = 1000; // milliseconds
         connectedSince = new Date();
 
-//        ActionListener askPerformer = new ActionListener() {
-//
-//            @Override
-//            public void actionPerformed(ActionEvent arg0) {
-//                updateConnectedSince();
-//            }
-//        };
-        //TODO
-        /*this.currentConnectedSinceTimer = new Timer(delay, taskPerformer);
-		this.currentConnectedSinceTimer.setRepeats(true);
-		this.currentConnectedSinceTimer.start();*/
         currentConnectedSinceTimerFX.scheduleWithFixedDelay(new Runnable() {
             @Override
             public void run() {
@@ -1328,19 +1317,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
     }
 
-    private void startNagScreenTimer() {
-//        int oneHour = 1000 * 60 * 60;
-//        ActionListener taskPerformer = new ActionListener() {
-//
-//            @Override
-//            public void actionPerformed(ActionEvent arg0) {
-//                showTrayIconNagScreen();
-//            }
-//        };
-//        Timer nagScreenTimer = new Timer(oneHour, taskPerformer);
-//        nagScreenTimer.setRepeats(true);
-//        nagScreenTimer.start();
-        
+    private void startNagScreenTimer() {        
         currentConnectedSinceTimerFX.scheduleWithFixedDelay(new Runnable() {
             @Override
             public void run() {
@@ -1483,8 +1460,8 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
             this.serverListSubviewController = (ServerListSubviewController) pair.getValue();
             this.serverListSubviewController.setShellfireService((this.shellfireService));
             this.serverListSubviewController.initComponents();
-            this.serverListSubviewController.setApp(this.application);
             this.serverListSubviewController.initPremium(isFreeAccount());
+            this.serverListSubviewController.setApp(this.application);
              } catch (IOException ex) {
             log.debug("ShellfireVPNMainFormFxmlController:  prepareServerController has error " + ex.getMessage());
         }
