@@ -677,7 +677,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
                         delayedConnect(server, this.serverListSubviewController.getSelectedProtocol(), Reason.ConnectButtonPressed);
                     } else if (isPremiumAccount()) {
-
+                        log.debug("ServerList Subview controller  has the object " + serverListSubviewController.toString());
                         Server server = this.serverListSubviewController.getSelectedServer();
 
                         if (server.getServerType() == ServerType.PremiumPlus) {
@@ -1467,7 +1467,29 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         }
     }
     
-    public void prepareControllers(){
-       // prepareServerController();
+    /**
+     *  Prepare controllers so that they load controllers so that controller objects can be accessed. 
+     */
+    public void prepareSubviewControllers(){
+
+        // load the serverList pane
+        try {
+            Pair<Pane, Object> pair = FxUIManager.SwitchSubview("serverList_subview.fxml");
+            this.serverListSubviewController = (ServerListSubviewController) pair.getValue();
+            this.serverListSubviewController.setShellfireService((this.shellfireService));
+            this.serverListSubviewController.initComponents();
+            this.serverListSubviewController.initPremium(isFreeAccount());
+            this.serverListSubviewController.setApp(this.application);
+        } catch (IOException ex) {
+            log.debug("ShellfireVPNMainFormFxmlController:  prepareControllers has error " + ex.getMessage());
+        }
+        
+        try {
+            Pair<Pane, Object> pair = FxUIManager.SwitchSubview("tvStreams_subview.fxml");
+            this.tvStreasSubviewController = (TvStreasSubviewController) pair.getValue();
+            //this.tvStreasSubviewController.initializeContents();
+        } catch (IOException ex) {
+            log.debug("ShellfireVPNMainFormFxmlController:  handleStreamsPaneClicked has error " + ex.getMessage());
+        }
     }
 }

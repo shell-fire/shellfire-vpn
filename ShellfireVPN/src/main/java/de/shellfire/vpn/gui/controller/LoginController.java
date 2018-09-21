@@ -199,7 +199,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
                                  this.application.shellFireMainController.initializeComponents();
                                 this.application.shellFireMainController.displayMessage("Creation of object successful");
                                 this.application.shellFireMainController.setSerciceAndInitialize(this.service);
-                                this.application.shellFireMainController.prepareControllers();
+                                this.application.shellFireMainController.prepareSubviewControllers();
                                 this.application.shellFireMainController.setApp(this.application);
                                 } else {
                                 log.debug("handlefButtonLogin: vpnController is visible");
