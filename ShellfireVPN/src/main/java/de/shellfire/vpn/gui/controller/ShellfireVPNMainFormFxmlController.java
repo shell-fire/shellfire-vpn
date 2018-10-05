@@ -101,6 +101,8 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     private Image iconEcncryptionInactive;
     private Image iconConnectedSmall;
     private Image iconIdleSmall;
+    private Image buttonConnect;
+    private Image buttonDisconnect; 
     private java.awt.Image iconConnected;
     private java.awt.Image iconDisconnectedAwt;
     private java.awt.Image iconIdleAwt;
@@ -229,6 +231,8 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
         this.iconEcncryptionActive = Util.getImageIconFX(baseImageUrl + "/icons/status-encrypted-width" + size + ".gif");
         this.iconEcncryptionInactive = Util.getImageIconFX(baseImageUrl + "/icons/status-unencrypted-width" + size + ".gif");
+        this.buttonConnect = Util.getImageIconFX(baseImageUrl + "/buttons/button-connect-" + langKey + ".gif");
+        this.buttonDisconnect = Util.getImageIconFX(baseImageUrl + "/buttons/button-disconnect-" + langKey + ".gif");
         // initializing text of the form 
         this.connectionStatusLabel.setText(i18n.tr("Connection status"));
         this.connectedSinceLabel.setText(i18n.tr("Connected since:"));
@@ -622,7 +626,8 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
                 Platform.runLater(()->{this.setStateDisconnected();});
                 break;
             case Connecting:
-                this.setStateConnecting();
+                Platform.runLater(() ->{ this.setStateConnecting();});
+               
                 break;
             case Connected:
                 this.setStateConnected();
@@ -1140,7 +1145,8 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         //TODO check if image not already loaddd
         mySetIconImage("/icons/sfvpn2-connected-big.png");
         this.connectionSubviewController.getStatusConnectionImageView().setImage(this.iconEcncryptionActive);
-
+        this.connectionSubviewController.getConnectImageView().setImage(this.buttonDisconnect);
+         
         if (this.trayIcon != null) {
             this.trayIcon.setImage(this.iconConnected);
         }
