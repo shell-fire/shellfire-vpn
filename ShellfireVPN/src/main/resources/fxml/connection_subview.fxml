@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
-
 
 <AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.ConnectionSubviewController">
    <children>
@@ -29,6 +29,7 @@
                   <Image url="@../buttons/button-premium-infos.gif" />
                </image>
             </ImageView>
+            <Button id="connect-button" fx:id="connectButton" layoutX="24.0" layoutY="451.0" mnemonicParsing="false" onAction="#handlePremiumInfoImageViewClicked" prefHeight="46.0" prefWidth="200.0" stylesheets="@../stylesheets/main-en.css" />
          </children>
       </Pane>
    </children>
