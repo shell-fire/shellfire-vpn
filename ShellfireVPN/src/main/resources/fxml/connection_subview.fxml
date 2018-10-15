@@ -14,7 +14,7 @@
                   <Image url="@../icons/status-unencrypted-width736.gif" />
                </image>
             </ImageView>
-            <ImageView fx:id="connectImageView" fitHeight="46.0" fitWidth="200.0" layoutX="24.0" layoutY="452.0" onContextMenuRequested="#handleConnectImageViewContext" onMouseClicked="#handleConnectImageViewClicked" onMouseEntered="#handleConnectImageViewMouseEntered" onMouseExited="#handleConnectImageViewMouseExited">
+            <ImageView fx:id="connectImageView" fitHeight="46.0" fitWidth="200.0" layoutX="24.0" layoutY="451.0" onContextMenuRequested="#handleConnectImageViewContext" onMouseClicked="#handleConnectImageViewClicked" onMouseEntered="#handleConnectImageViewMouseEntered" onMouseExited="#handleConnectImageViewMouseExited">
                <image>
                   <Image url="@../buttons/button-connect-en.gif" />
                </image>
@@ -29,7 +29,7 @@
                   <Image url="@../buttons/button-premium-infos.gif" />
                </image>
             </ImageView>
-            <Button id="connect-button" fx:id="connectButton" layoutX="24.0" layoutY="451.0" mnemonicParsing="false" onAction="#handlePremiumInfoImageViewClicked" prefHeight="46.0" prefWidth="200.0" stylesheets="@../stylesheets/main-en.css" />
+            <Button id="connect-button" fx:id="connectButton" layoutX="24.0" layoutY="451.0" mnemonicParsing="false" onAction="#handleConnectButtonClicked" prefHeight="46.0" prefWidth="200.0" stylesheets="@../stylesheets/main-en.css" />
          </children>
       </Pane>
    </children>

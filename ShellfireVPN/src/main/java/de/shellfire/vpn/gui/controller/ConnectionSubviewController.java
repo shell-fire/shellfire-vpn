@@ -114,8 +114,10 @@ public class ConnectionSubviewController implements Initializable {
         this.connectImageView.setId(baseImageUrl + "/buttons/button-disconnect-" + langKey + ".gif");
         this.statusConnectionImageView.setId(baseImageUrl + "/icons/status-unencrypted-width" + size + ".gif");
         
-        //this.connectButton.setGraphic(connectImageView);
-        this.connectButton.setStyle("-fx-background-image: url("+baseImageUrl+"../buttons/button-disconnect-" + langKey + ".gif);");
+        this.connectButton.setGraphic(connectImageView);
+        //this.connectButton.setStyle("-fx-background-image: url(../buttons/button-disconnect-" + langKey + ".gif);");
+        
+        //this.connectButton.setGraphic();   Style("-fx-background-image: url("+baseImageUrl+"../buttons/button-disconnect-" + langKey + ".gif);");
         
         //makes product key to be disable when disable is set to true
         this.productKeyImageView.managedProperty().bind(this.productKeyImageView.visibleProperty());
@@ -222,6 +224,8 @@ public class ConnectionSubviewController implements Initializable {
     }
 
     @FXML
-    private void handlePremiumInfoImageViewClicked(ActionEvent event) {
+    private void handleConnectButtonClicked(ActionEvent event) {
+        this.application.shellFireMainController.connectFromButton(true);
     }
+
 }

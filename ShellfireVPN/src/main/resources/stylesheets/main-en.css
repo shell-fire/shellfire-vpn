@@ -1,6 +1,6 @@
 #connect-button {
     -fx-padding: 1;
-    -fx-background-image: url("..\buttons\button-connect-en.gif");
+    -fx-background-image: url("../buttons/button-connect-en.gif");
 }
 
 #disconnect-button {
