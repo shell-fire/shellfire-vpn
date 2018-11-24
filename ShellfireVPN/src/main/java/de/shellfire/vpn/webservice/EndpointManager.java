@@ -309,12 +309,6 @@ public class EndpointManager {
             return result;
         }
 
-        /* this.setOnSucceeded((WorkerStateEvent event) -> {
-        if (initDialogOriginFX) {
-            initDialogFX.setVisible(false);  
-            // TODO check if there are several dialogs loaded
-            }
-    });*/
     }
 
     public class FindEndpointTaskFXFactory {
@@ -326,8 +320,12 @@ public class EndpointManager {
         public FindEndpointTaskFXFactory(CanContinueAfterBackEndAvailableFX form) {
             endPointTask = new FindEndpointTaskFX(form);
         }
-
-        public void run() {
+        
+        //Calls the FindPoint execution procedure
+        public void call() {
+            log.debug("FindEndpointTaskFXFactory: In the factory fx method");
+            endPointTask.getContinueFormFX().continueAfterBackEndAvailabledFX();
+            new Thread(endPointTask).start();
             endPointTask.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
                 @Override
                 public void handle(WorkerStateEvent t) {
@@ -364,9 +362,6 @@ public class EndpointManager {
         initDialog.dispose();
             TODO Check if this conversion is necessary 
       }*/
-
-            endPointTask.getContinueFormFX().continueAfterBackEndAvailabledFX();
-            new Thread(endPointTask).start();
         }
     }
 
@@ -380,9 +375,9 @@ public class EndpointManager {
         //initDialog = LoginForms.getInitDialog();
         initDialogFX = LoginController.initProgressDialog;
         //FindEndpointTaskFX task = new FindEndpointTaskFX(form);
-        //task.execute();
-        FindEndpointTaskFXFactory task = new FindEndpointTaskFXFactory(form);
-        // new Thread(task).start();
+        //task.run();
+       FindEndpointTaskFXFactory taskE = new FindEndpointTaskFXFactory(form);
+       taskE.call();
     }
 
     private boolean testEndpoint(String endPoint) {

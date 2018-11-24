@@ -88,6 +88,7 @@ public class LoginForms extends Application {
         ///TODO: login automatically chexbox makes login to bypass login form
 
         System.setProperty("java.library.path", "./lib");
+        LOG.debug("In the main method");
         default_args = args;
         initializations(args);
         launch(args);
@@ -102,8 +103,8 @@ public class LoginForms extends Application {
         } else {
             minimize = false;
         }
-
-        ProxyConfig.perform();
+        ProxyConfig proxy = new ProxyConfig();
+        proxy.perform();
         //setLookAndFeel();
     }
 

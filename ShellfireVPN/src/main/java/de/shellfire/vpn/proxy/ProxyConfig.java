@@ -52,6 +52,7 @@ public class ProxyConfig {
   public static void perform() {
 	  if (Util.isWindows()) {
 		  performWindows();
+                  log.debug("In the ProxyConfig class");
 	  }
    }
 
@@ -74,7 +75,7 @@ public class ProxyConfig {
     List<Proxy> l = null;
     try {
       ProxySelector selector = getSelector();
-      
+      log.debug("ProxyConfig: selector is " + selector.toString());
       l = selector.select(new URI("http://www.shellfire.de"));
       ProxySelector.setDefault(null);
     } catch (Exception e) {
