@@ -356,7 +356,7 @@ public class EndpointManager {
                 alert.setContentText(i18n.tr("Could not connect to the Shellfire backend - Shellfire VPN is shutting down"));
                 alert.showAndWait();
 
-                Platform.exit();
+                //Platform.exit();
             }
             /*if (initDialogOrigin) {
         initDialog.dispose();

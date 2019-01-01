@@ -69,7 +69,7 @@ public class Util {
   public static UserType userType = null;
   private static Properties properties;
   private static String configDir;
-
+   private static Logger LOG = Util.getLogger(Util.class.getCanonicalName());
   static {
     semaphore = new Object();
     Security.setProperty("networkaddress.cache.ttl", "1");
@@ -497,6 +497,7 @@ public class Util {
   }
 
   public static boolean internetIsAvailable() {
+      LOG.debug("Testing if connection exists");
     Boolean networkIsAvailable = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<Boolean>() {
       public Boolean run() throws Exception {
         List<String> siteList = new ArrayList<String>();

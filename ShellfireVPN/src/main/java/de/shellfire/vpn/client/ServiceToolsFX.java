@@ -9,6 +9,7 @@ import de.shellfire.vpn.Util;
 import static de.shellfire.vpn.client.ServiceTools.serviceIsRunning;
 import de.shellfire.vpn.client.osx.OSXServiceTools;
 import de.shellfire.vpn.client.win.WinServiceTools;
+import de.shellfire.vpn.client.win.WinServiceToolsFX;
 import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.gui.controller.LoginController;
 import de.shellfire.vpn.gui.controller.ProgressDialogController;
@@ -29,7 +30,7 @@ public abstract class ServiceToolsFX {
     protected static boolean init;
     private static ServiceToolsFX instance;
 
-    public abstract void ensureServiceEnvironmentFX(LoginForms form);
+    public abstract void ensureServiceEnvironmentFX(LoginController form);
     
       public abstract void uninstall(String path);
   public abstract void install(String path);
@@ -99,4 +100,16 @@ public abstract class ServiceToolsFX {
         }
     
     }
+      public static ServiceToolsFX getInstanceForOS() {
+    if (instance == null) {
+      if (Util.isWindows()) {
+        instance = new WinServiceToolsFX();
+      } else {
+        instance = new WinServiceToolsFX();;
+        log.error("Please run javafx on windows");
+      }
+    }
+      
+    return instance;
+  }
 }

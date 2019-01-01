@@ -20,9 +20,11 @@ public class ProxyConfig {
   private static boolean proxyEnabled;
 
   public static void performWindows() {
+      log.debug("ProxyConfig - In performWindows method");
 	   System.setProperty("java.net.useSystemProxies", "true");
-	    Proxy proxy = null;
-	    proxy = getProxy();
+	    //Proxy proxy = null;
+	    //proxy = getProxy();
+           Proxy proxy = getProxy();
 	    if (proxy != null && proxy.type() == Proxy.Type.HTTP) {
 	      InetSocketAddress addr = (InetSocketAddress) proxy.address();
 	      if (addr != null) {
@@ -94,6 +96,7 @@ public class ProxyConfig {
       if (proxyAutoConfigEnabled())
         return getPacProxySelector();
       else
+          log.debug("Returning default Proxy selector");
         return ProxySelector.getDefault();
   }
 

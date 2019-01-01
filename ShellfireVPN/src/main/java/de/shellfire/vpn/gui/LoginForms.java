@@ -8,6 +8,7 @@ import org.xnap.commons.i18n.I18n;
 
 
 import de.shellfire.vpn.client.ServiceTools;
+import de.shellfire.vpn.client.ServiceToolsFX;
 import de.shellfire.vpn.gui.controller.LicenseAcceptanceController;
 import de.shellfire.vpn.gui.controller.LoginController;
 import de.shellfire.vpn.gui.controller.ProgressDialogController;
@@ -19,6 +20,8 @@ import de.shellfire.vpn.proxy.ProxyConfig;
 import de.shellfire.vpn.updater.Updater;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -46,42 +49,22 @@ public class LoginForms extends Application {
     public static ShellfireVPNMainFormFxmlController shellFireMainController;
     private boolean minimize;
     public static  LoginController instance;
+    public final static boolean isJavaFX = true;
     private static final I18n I18N = VpnI18N.getI18n();
     //private AnchorPane page;
     private boolean licenseAccepted;
     // Variables to control draggin of window
-    private double xOffset = 0;
-    private double yOffset = 0;
-
+    private static double xOffset = 0;
+    private static double yOffset = 0;
+    
+    public HashMap<Object,Stage> controllersAndStage = new HashMap<>();
+    
     public static Stage getStage() {
         return stage;
     }
 
     public static void setStage(Stage stage) {
         LoginForms.stage = stage;
-    }
-
-    @Override
-    public void start(Stage primaryStage) {
-        try {
-            this.stage = primaryStage;
-            // remove the standard menu buttons on display
-            this.stage.initStyle(StageStyle.UNDECORATED);
-            initializations(default_args);
-            loadProgressDialog();
-            stage.sizeToScene();
-            stage.getProperties().put("hostServices", this.getHostServices());
-            this.stage.show();
-
-        } catch (Exception ex) {
-            LOG.debug("could not start with first stage load " + ex);
-        }
-
-        try {
-            afterDialogDisplay();
-        } catch (Exception ex) {
-            LOG.debug("could not latter message after login in start \n" + ex.getMessage());
-        }
     }
 
     public static void main(String[] args) {
@@ -95,6 +78,7 @@ public class LoginForms extends Application {
     }
 
     public static void initializations(String args[]) {
+        System.setProperty("java.library.path", "./lib");
         final boolean minimize;
         if (args.length > 0) {
             String cmd = args[0];
@@ -103,18 +87,49 @@ public class LoginForms extends Application {
         } else {
             minimize = false;
         }
-        ProxyConfig proxy = new ProxyConfig();
-        proxy.perform();
+        ProxyConfig.perform();
+
         //setLookAndFeel();
+        //initConnectionTest();
     }
 
-
-    public void loadProgressDialog(String message) {
+    @Override
+    public void start(Stage primaryStage) {
+        
         try {
-            this.initDialog = (ProgressDialogController) replaceSceneContent("ProgressDialog.fxml");
+            this.stage = primaryStage;
+            this.stage.initStyle(StageStyle.UNDECORATED);
+            LOG.debug("Stage has value " + this.stage);
+            this.loadLoginController();
+            //Stage loginStage = (Stage)((Stage)stage).clone();
+            //controllersAndStage.put(LOG, stage)
+            this.loadProgressDialog();
+            initConnectionTest();
+            
+        } catch (Exception ex) {
+            LOG.debug("could not start with first stage load " + ex);
+        }
+
+        try {
+            initializations(default_args);
+            
+            stage.sizeToScene();
+            stage.getProperties().put("hostServices", this.getHostServices());
+            
+            afterDialogDisplay();
+            this.stage.show();
+        } catch (Exception ex) {
+            LOG.debug("could not latter message after login in start \n" + ex.getMessage());
+        }
+        
+    }
+    
+    public static void loadProgressDialog(String message) {
+        try {
+            initDialog = (ProgressDialogController) replaceSceneContent("ProgressDialog.fxml");
             //Platform.runLater(() -> progressDialog.setVisible(true));
-            this.initDialog.setDialogText(message);
-            this.initDialog.setApp(this);
+            initDialog.setDialogText(message);
+            //initDialog.setApp();
 
         } catch (Exception ex) {
             LOG.debug("could not load progressDialog fxml \n" + ex.getMessage());
@@ -201,7 +216,7 @@ public class LoginForms extends Application {
 
     }
 
-    public Initializable replaceSceneContent(String fxml) throws Exception {
+    public static Initializable replaceSceneContent(String fxml) throws Exception {
         FXMLLoader loader = new FXMLLoader(LoginForms.class.getClassLoader().getResource(fxml));
         loader.setLocation(LoginForms.class.getResource("/fxml/" + fxml));
         System.out.println("Loacation of loader is " + loader.getLocation());
@@ -334,7 +349,7 @@ public class LoginForms extends Application {
         }
         // hidding stage
         LOG.debug("Hiding stage");
-        //this.stage.hide();
+        this.stage.hide();
         LOG.debug("after dialog box , before login controller");
         //this.loadLoginController();
 
@@ -386,7 +401,7 @@ public class LoginForms extends Application {
         
         //instance.setApp(this);
         LOG.debug("Preparing to display login menu");
-        this.loadLoginController();
+        //this.loadLoginController();
         this.stage.show();
     }
 
@@ -428,16 +443,18 @@ public class LoginForms extends Application {
         return initDialog;
     }
 
-    private void initConnectionTest() {
+    private static void initConnectionTest() {
         // before doing anything else, we should test for an internet connection. without internet, we cant do anything!
-
+        LOG.debug("In initConnection Test method");
         boolean internetAvailable = Util.internetIsAvailable();
 
         if (internetAvailable) {
+            LOG.debug("Before the service Environment Ensure");
             initDialog.setDialogText(I18N.tr("Initializing ShellfireVPNService..."));
-            ServiceTools.getInstanceForOS().ensureServiceEnvironmentFX(this);
+            ServiceToolsFX.getInstanceForOS().ensureServiceEnvironmentFX(instance);
+            LOG.debug("After the service Environment Ensure");
         } else {
-
+            LOG.debug("Connection not available");
             Alert alert = new Alert(Alert.AlertType.ERROR);
             //alert.setTitle("Error");
             alert.setHeaderText(I18N.tr("No internet"));
