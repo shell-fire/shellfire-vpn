@@ -351,7 +351,7 @@ public class LoginForms extends Application {
         LOG.debug("Hiding stage");
         this.stage.hide();
         LOG.debug("after dialog box , before login controller");
-        //this.loadLoginController();
+        this.loadLoginController();
 
         // test Internet connection 
         boolean internetAvailable = Util.internetIsAvailable();
@@ -399,7 +399,7 @@ public class LoginForms extends Application {
         }
         LOG.debug("giving control to login");
         
-        //instance.setApp(this);
+        instance.setApp(this);
         LOG.debug("Preparing to display login menu");
         //this.loadLoginController();
         this.stage.show();
