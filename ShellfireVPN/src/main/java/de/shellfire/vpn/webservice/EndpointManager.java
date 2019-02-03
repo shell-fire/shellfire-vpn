@@ -321,9 +321,12 @@ public class EndpointManager {
             endPointTask = new FindEndpointTaskFX(form);
         }
         
+        //boolean couldNotConnect = false;
         //Calls the FindPoint execution procedure
-        public void call() {
+        public boolean call() {
             log.debug("FindEndpointTaskFXFactory: In the factory fx method");
+            
+            boolean couldNotConnect = true;
             endPointTask.getContinueFormFX().continueAfterBackEndAvailabledFX();
             new Thread(endPointTask).start();
             endPointTask.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
@@ -347,14 +350,9 @@ public class EndpointManager {
                     log.debug("Execution of FindEndpointTaskFX task has failed");
                 }
             });
-
             if (null == result) {
-                //JOptionPane.showMessageDialog(null, i18n.tr("Could not connect to the Shellfire backend - Shellfire VPN is shutting down"));
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                //alert.setTitle("Error");
-                //alert.setHeaderText("Printer error");
-                alert.setContentText(i18n.tr("Could not connect to the Shellfire backend - Shellfire VPN is shutting down"));
-                alert.showAndWait();
+            couldNotConnect = false;
+            log.debug("Could not connect to the Shellfire backend - Shellfire VPN is shutting down");
 
                 //Platform.exit();
             }
@@ -362,6 +360,7 @@ public class EndpointManager {
         initDialog.dispose();
             TODO Check if this conversion is necessary 
       }*/
+            return couldNotConnect;
         }
     }
 
@@ -377,7 +376,14 @@ public class EndpointManager {
         //FindEndpointTaskFX task = new FindEndpointTaskFX(form);
         //task.run();
        FindEndpointTaskFXFactory taskE = new FindEndpointTaskFXFactory(form);
-       taskE.call();
+       boolean connect = taskE.call();
+      if(connect){
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setContentText(i18n.tr("Could not connect to the Shellfire backend - Shellfire VPN is shutting down"));
+        alert.showAndWait();        
+      }
+       log.debug("ensureShellfireBackendAvailableFx: has finished running is giving result");
+       
     }
 
     private boolean testEndpoint(String endPoint) {

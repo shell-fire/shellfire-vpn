@@ -139,8 +139,8 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
                         if (service.isLoggedIn()) {
                          log.debug("LoginController: handlefLogginButton - service is loggedIn " + loginResult.getMessage());
                             if (fStoreLoginData.isSelected()) {
-                                storeCredentialsInRegistry(username, password);
-                                log.debug("LoginController: Login Data stored");
+                                storeCredentialsInRegistry(this.username, this.password);
+                                log.debug("LoginController: Login Data stored, username is " + this.username + " and passwd is " + this.password);
                             } else {
                                 removeCredentialsFromRegistry();
                             }
@@ -547,7 +547,8 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
     protected void setPassword(String password) {
         this.password = password;
-        this.setPasswordBogus();
+        this.fPassword.setText(this.password);
+        //this.setPasswordBogus();
     }
 
     void setPasswordBogus() {
