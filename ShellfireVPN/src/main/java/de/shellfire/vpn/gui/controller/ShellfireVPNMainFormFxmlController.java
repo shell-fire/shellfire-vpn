@@ -53,6 +53,7 @@ import java.util.logging.Level;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -60,8 +61,10 @@ import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -102,7 +105,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     private Image iconConnectedSmall;
     private Image iconIdleSmall;
     private Image buttonConnect;
-    private Image buttonDisconnect; 
+    private Image buttonDisconnect;
     private java.awt.Image iconConnected;
     private java.awt.Image iconDisconnectedAwt;
     private java.awt.Image iconIdleAwt;
@@ -197,9 +200,9 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     private Label validUntilLabel;
     @FXML
     private Label validUntilValue;
-    
+
     String baseImageUrl = "src/main/resources";
-    
+
     public ShellfireVPNMainFormFxmlController() {
         log.debug("No argumenent controller of shellfire has been called");
     }
@@ -221,7 +224,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         log.debug("langKey: " + langKey);
 
         mySetIconImage("/icons/sfvpn2-idle-big.png");
-        
+
         // initializing images of the form
         this.connectoinBackgroundImageView.setImage(Util.getImageIconFX(baseImageUrl + "/buttons/button-connect-idle.png"));
         this.serverListBackgroundImage.setImage(Util.getImageIconFX(baseImageUrl + "/buttons/button-serverlist-idle.png"));
@@ -259,7 +262,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         this.iconDisconnectedAwt = Util.getImageIcon("/icons/sfvpn2-disconnected-big.png").getImage();
         this.iconIdleSmall = Util.getImageIconFX(baseImageUrl + "/icons/small-globe-disconnected.png");
         this.iconIdleAwt = Util.getImageIcon("/icons/sfvpn2-idle-big.png").getImage();
-        
+
         //this.serverList = this.shellfireService.getServerList();
         //this.updateLoginDetail();
         // this.initTray();
@@ -326,12 +329,12 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         this.initController();
         //this.application.getStage().show();
         /*
-        // continue here, cursor
-        //CustomLayout.register();
-        //this.setFont(TitiliumFont.getFont());
-        //this.loadIcons();
-        //this.setLookAndFeel();
-        //initComponents();
+         // continue here, cursor
+         //CustomLayout.register();
+         //this.setFont(TitiliumFont.getFont());
+         //this.loadIcons();
+         //this.setLookAndFeel();
+         //initComponents();
          */
         this.initTray();
 
@@ -413,7 +416,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
             this.connectionSubviewController = (ConnectionSubviewController) pair.getValue();
             this.connectionSubviewController.initPremium(isFreeAccount());
             this.connectionSubviewController.setApp(this.application);
-            boolean connectionStatus = getController().getCurrentConnectionState() == ConnectionState.Connected ;
+            boolean connectionStatus = getController().getCurrentConnectionState() == ConnectionState.Connected;
             log.debug("handleConnectionPanelClicked: VPN connection status is " + connectionStatus);
             this.connectionSubviewController.updateComponents(connectionStatus);
         } catch (IOException ex) {
@@ -435,7 +438,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     private void handleServerListPaneContext(ContextMenuEvent event) {
     }
 
-       @FXML
+    @FXML
     private void handleServerListPaneClicked(MouseEvent event) {
 
         try {
@@ -451,7 +454,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         } catch (IOException ex) {
             log.debug("ShellfireVPNMainFormFxmlController:  handleServerListPaneClicked has error " + ex.getMessage());
         }
-       
+
     }
 
     @FXML
@@ -623,11 +626,13 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         log.debug("connectionStateChanged " + state + ", reason=" + e.getReason());
         switch (state) {
             case Disconnected:
-                Platform.runLater(()->{this.setStateDisconnected();});
+                Platform.runLater(() -> {
+                    this.setStateDisconnected();
+                });
                 break;
             case Connecting:
-                Platform.runLater(() ->{ this.setStateConnecting();});
-               
+                //Platform.runLater(() ->{ this.setStateConnecting();});
+                this.setStateConnecting();
                 break;
             case Connected:
                 this.setStateConnected();
@@ -733,7 +738,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         enableSystemProxyIfProxyConfig();
         enableSystemProxyIfProxyConfig();
         this.hideConnectProgress();
-        
+
         this.connectionSubviewController.getConnectImageView().setDisable(false);
         //this.jConnectButtonLabel1.setEnabled(true);
         this.connectionStatusValue.setText(i18n.tr("Not connected"));
@@ -808,7 +813,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
             Alert alert = new Alert(Alert.AlertType.ERROR);
             //alert.setHeaderText(i18n.tr("Fehler: Verbindung fehlgeschlagen"));
             alert.setContentText(message);
-            alert.getDialogPane().getChildren().stream().filter(node -> node instanceof Label).forEach(node -> ((Label)node).setMinWidth(Region.USE_PREF_SIZE));
+            alert.getDialogPane().getChildren().stream().filter(node -> node instanceof Label).forEach(node -> ((Label) node).setMinWidth(Region.USE_PREF_SIZE));
             alert.showAndWait();
             if (this.trayIcon != null) {
                 this.trayIcon.setImage(this.iconDisconnectedAwt);
@@ -832,17 +837,23 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
             log.debug("setStateConnecting: cannot start showConnectProgress with error " + ex.getMessage());
         }
         this.connectionSubviewController.connectImageviewDisable(true);
-        this.serverListSubviewController.setsetConnetImage1Disable(true); 
+        this.serverListSubviewController.setsetConnetImage1Disable(true);
 
         //TODO_subview
-        
         if (null != mapEncryptionSubviewController) { // test if the controller has been initialized before doing any work.
             if (!this.mapEncryptionSubviewController.getShowOwnPosition().isSelected()) {
                 this.mapEncryptionSubviewController.getShowOwnPosition().setDisable(true);
             }
         }
         this.connectionStatusValue.setText(i18n.tr("Connection is being processed..."));
-        Platform.runLater(()->{this.globeConnectionImageView.setImage(Util.getImageIconFX(baseImageUrl + "/icons/small-globe-connecting.png"));});
+        try {
+            showConnectProgress();
+        } catch (Exception e) {
+            log.debug(e.getMessage());
+        }
+        Platform.runLater(() -> {
+            this.globeConnectionImageView.setImage(Util.getImageIconFX(baseImageUrl + "/icons/small-globe-connecting.png"));
+        });
         mySetIconImage("/icons/sfvpn2-connecting-big.png");
 
         if (this.trayIcon != null) {
@@ -855,9 +866,9 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         popupConnectItem.setLabel(i18n.tr("Connecting..."));
         popupConnectItem.setEnabled(false);
         /*jServerListTable.setEnabled(false);
-        jScrollPane.getViewport().setBackground(Color.lightGray);
-        jRadioUdp.setEnabled(false);
-        jRadioTcp.setEnabled(false);*/
+         jScrollPane.getViewport().setBackground(Color.lightGray);
+         jRadioUdp.setEnabled(false);
+         jRadioTcp.setEnabled(false);*/
 
     }
 
@@ -867,48 +878,97 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
      * @return no return value
      */
     private void showConnectProgress() throws IOException {
-            // create an instance of progress dialog 
-            
+        // create an instance of progress dialog 
+        log.debug("showConnectProgress: Loading progress bar");
+
+        Task<AnchorPane> task = new Task<AnchorPane>() {
+            @Override
+            protected AnchorPane call() throws Exception {
+                log.debug("showConnectProgress: Thread Has started");
+                //return FXMLLoader.load(getClass().getResource("sample2.fxml"));
                 // Load the fxml file and create a new stage for the popup dialog.
                 FXMLLoader loader = new FXMLLoader();
                 loader.setLocation(LoginForms.class.getResource("/fxml/ProgressDialog.fxml"));
+                connectProgressDialog.setDialogText("Connecting ...");
+                connectProgressDialog.getProgressBar();
+                loader.setController(connectProgressDialog);
                 AnchorPane page = (AnchorPane) loader.load();
-                
-               Platform.runLater(()->{
-                    // Create the dialog Stage.
-                Stage dialogStage = new Stage();
-                dialogStage.setTitle("Connecting");
-                dialogStage.initModality(Modality.WINDOW_MODAL);
-                dialogStage.initOwner(this.application.getStage());
-                Scene scene = new Scene(page);
-                dialogStage.setScene(scene);
-                //});
-                // Set the dialog into the controller.
-                connectProgressDialog = loader.getController();
-                connectProgressDialog.setOption(2, i18n.tr("cancel"));
-                
-                Task<Void> task = new Task<Void>() {
-                    @Override
-                    protected Void call() throws Exception {
-                        controller.disconnect(Reason.AbortButtonPressed);
-                        setNormalCursor();
-                        return null;
-                    }
+                return page;
+            }
+        };
 
-                };
-                // unbind any previous progress bar
-                connectProgressDialog.getProgressBar().progressProperty().unbind();
-                connectProgressDialog.getProgressBar().progressProperty().bind(task.progressProperty());
-            
-                connectProgressDialog.setVisible(true);
-               });
+        task.setOnSucceeded(event -> {
+            AnchorPane anchorPane = task.getValue();
+            //ProgressBar bar = new ProgressBar(0);
+            //bar.setPrefSize(200, 24);
+            Button button = new Button("Cancel");
+            //anchorPane.getChildren().addAll(bar, button);
+            Stage stage = new Stage();
+            stage.setScene(new Scene(anchorPane));
+            stage.show();
+
+            button.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
+
+                @Override
+                public void handle(javafx.event.ActionEvent event) {
+                    //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                    log.debug("Cancel button has been clicked");
+                }
+            });
+        });
+        Thread thread = new Thread(task);
+        thread.start();
+//                    // Create the dialog Stage.
+//                Stage dialogStage = new Stage();
+//                dialogStage.setTitle("Connection is being processed...");
+//                dialogStage.initModality(Modality.WINDOW_MODAL);
+//                dialogStage.initOwner(this.application.getStage());
+//                Scene scene = new Scene(page);
+//                dialogStage.setScene(scene);
+//                // Set the dialog into the controller.
+//               // connectProgressDialog = loader.getController();
+//               // connectProgressDialog.setOption(2, i18n.tr("cancel"));
+//                ProgressBar bar = new ProgressBar(0);
+//                bar.setPrefSize(200, 24);
+//                button = new Button("Go!");
+//                dialogStage.show();
+//             } catch (Exception e) {
+//                 e.printStackTrace();
+//             }finally{
+//                if (null == button)
+//                    button = new Button("Go!");
+//            }
+//                button.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
+//
+//                @Override
+//                public void handle(javafx.event.ActionEvent event) {
+//                    //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//                    log.debug("Cancel button has been clicked");
+//                }
+//            });
+//    
+//                Task<Void> task = new Task<Void>() {
+//                    @Override
+//                    protected Void call() throws Exception {
+//                        controller.disconnect(Reason.AbortButtonPressed);
+//                        setNormalCursor();
+//                        return null;
+//                    }
+//
+//                };
+        // unbind any previous progress bar
+        //connectProgressDialog.getProgressBar().progressProperty().unbind();
+        // connectProgressDialog.getProgressBar().progressProperty().bind(task.progressProperty());
+                //connectProgressDialog.setVisible(true);
+        //});
     }
 
     public void mySetIconImage(String imagePath) {
         log.debug("mySetIconImage: the icon Image  path is " + imagePath);
-        Platform.runLater(()->{
+        Platform.runLater(() -> {
             this.application.getStage().getIcons().clear();
-            this.application.getStage().getIcons().add(new Image(imagePath));});
+            this.application.getStage().getIcons().add(new Image(imagePath));
+        });
     }
 
     private void initTray() {
@@ -1064,11 +1124,9 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
     public void mouseClickedFX() {
 
-        
-
-        if(this.application.getStage().isIconified())
+        if (this.application.getStage().isIconified()) {
             this.application.getStage().setIconified(false);
-        else {
+        } else {
             this.application.getStage().toFront();
         }
         if (!Util.isWindows()) {
@@ -1137,16 +1195,18 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
         //TODO_subview
         /*
-        if (!this.mapEncryptionSubviewController.getShowOwnPosition().isSelected()) {
-            this.mapEncryptionSubviewController.getShowOwnPosition().setDisable(true);
-        }*/
-        Platform.runLater(()->{this.connectionStatusValue.setText(i18n.tr("Connected"));});
+         if (!this.mapEncryptionSubviewController.getShowOwnPosition().isSelected()) {
+         this.mapEncryptionSubviewController.getShowOwnPosition().setDisable(true);
+         }*/
+        Platform.runLater(() -> {
+            this.connectionStatusValue.setText(i18n.tr("Connected"));
+        });
 
         //TODO check if image not already loaddd
         mySetIconImage("/icons/sfvpn2-connected-big.png");
         this.connectionSubviewController.getStatusConnectionImageView().setImage(this.iconEcncryptionActive);
         this.connectionSubviewController.getConnectImageView().setImage(this.buttonDisconnect);
-         
+
         if (this.trayIcon != null) {
             this.trayIcon.setImage(this.iconConnected);
         }
@@ -1159,22 +1219,22 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         this.updateOnlineHost();
         //TODO
         /*
-		this.mapController.updateMap();
+         this.mapController.updateMap();
 
-		popupConnectItem.setLabel(i18n.tr("Disconnect"));
-		popupConnectItem.setEnabled(true);
+         popupConnectItem.setLabel(i18n.tr("Disconnect"));
+         popupConnectItem.setEnabled(true);
 
-		jServerListTable.setEnabled(false);
-		jScrollPane.getViewport().setBackground(Color.lightGray);
-		jRadioUdp.setEnabled(false);
-		jRadioTcp.setEnabled(false);
+         jServerListTable.setEnabled(false);
+         jScrollPane.getViewport().setBackground(Color.lightGray);
+         jRadioUdp.setEnabled(false);
+         jRadioTcp.setEnabled(false);
 
-		showTrayMessageWithoutCallback(i18n.tr("Connection successful"),
-				i18n.tr("You are now connected to Shellfire VPN. Your internet connection is encrypted."));
+         showTrayMessageWithoutCallback(i18n.tr("Connection successful"),
+         i18n.tr("You are now connected to Shellfire VPN. Your internet connection is encrypted."));
 
-		showStatusUrlIfEnabled();
+         showStatusUrlIfEnabled();
 
-		disableSystemProxyIfProxyConfig();
+         disableSystemProxyIfProxyConfig();
          */
     }
 
@@ -1194,7 +1254,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
                 updateConnectedSince();
             }
         }, 0, delay, TimeUnit.MILLISECONDS);
-        
+
     }
 
     private void enableSystemProxyIfProxyConfig() {
@@ -1293,7 +1353,9 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         SimpleDateFormat df = new SimpleDateFormat("E, H:m", VpnI18N.getLanguage().getLocale());
         String start = df.format(connectedSince);
         String text = start + " " + "(" + since + ")";
-        Platform.runLater(()->{this.connectedSinceValue.setText(text);});
+        Platform.runLater(() -> {
+            this.connectedSinceValue.setText(text);
+        });
     }
 
     private void showSettingsDialog() {
@@ -1323,14 +1385,14 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
     }
 
-    private void startNagScreenTimer() {        
+    private void startNagScreenTimer() {
         currentConnectedSinceTimerFX.scheduleWithFixedDelay(new Runnable() {
             @Override
             public void run() {
                 showTrayIconNagScreen();
             }
         }, 0, 1, TimeUnit.HOURS);
- 
+
     }
 
     private void showTrayIconNagScreen() {
@@ -1459,24 +1521,25 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 //		nagScreentimer.start();
     }
 
-    public void prepareServerController(){
-       try {
-        Pair<Pane, Object> pair = FxUIManager.SwitchSubview("serverList_subview.fxml");
+    public void prepareServerController() {
+        try {
+            Pair<Pane, Object> pair = FxUIManager.SwitchSubview("serverList_subview.fxml");
 
             this.serverListSubviewController = (ServerListSubviewController) pair.getValue();
             this.serverListSubviewController.setShellfireService((this.shellfireService));
             this.serverListSubviewController.initComponents();
             this.serverListSubviewController.initPremium(isFreeAccount());
             this.serverListSubviewController.setApp(this.application);
-             } catch (IOException ex) {
+        } catch (IOException ex) {
             log.debug("ShellfireVPNMainFormFxmlController:  prepareServerController has error " + ex.getMessage());
         }
     }
-    
+
     /**
-     *  Prepare controllers so that they load controllers so that controller objects can be accessed. 
+     * Prepare controllers so that they load controllers so that controller
+     * objects can be accessed.
      */
-    public void prepareSubviewControllers(){
+    public void prepareSubviewControllers() {
 
         // load the serverList pane
         try {
@@ -1489,7 +1552,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         } catch (IOException ex) {
             log.debug("ShellfireVPNMainFormFxmlController:  prepareControllers has error " + ex.getMessage());
         }
-        
+
         try {
             Pair<Pane, Object> pair = FxUIManager.SwitchSubview("tvStreams_subview.fxml");
             this.tvStreasSubviewController = (TvStreasSubviewController) pair.getValue();

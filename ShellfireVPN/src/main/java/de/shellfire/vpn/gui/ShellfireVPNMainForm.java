@@ -1184,7 +1184,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 				ConnectionState state = controller.getCurrentConnectionState();
 				log.debug("retrieved current connection state: " + state);
 				return state;
-			}
+			}        
 
 			public void done() {
 
