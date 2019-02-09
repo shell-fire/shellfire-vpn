@@ -65,6 +65,14 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
         bottomLabel.setDisable(true);
     }
 
+    public Button getLeftButton() {
+        return leftButton;
+    }
+
+    public void setLeftButton(Button leftButton) {
+        this.leftButton = leftButton;
+    }
+    
     public ProgressBar getProgressBar() {
         return progressBar;
     }

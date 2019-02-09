@@ -203,6 +203,12 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
     String baseImageUrl = "src/main/resources";
 
+    //Declaration of task responsible for connecting to VPN
+    Task<ConnectionState> connectionTask ;
+    
+    // Declaration of task for ProgressBar pop up
+    Task<AnchorPane> progressTask ; 
+    
     public ShellfireVPNMainFormFxmlController() {
         log.debug("No argumenent controller of shellfire has been called");
     }
@@ -214,7 +220,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         log.debug("ScalingFactor: " + scaleFactor);
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         double width = screenSize.getWidth();
-
+        //connectProgressDialog = new ProgressDialogController();
         String size = "736";
         if (width > 3000) {
             size = "1472";
@@ -645,7 +651,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         log.debug("connectFromButton(" + failIfPremiumServerForFreeUser + ")");
         this.setWaitCursor();
 
-        Task<ConnectionState> task = new Task<ConnectionState>() {
+        connectionTask = new Task<ConnectionState>() {
             @Override
             protected ConnectionState call() throws Exception {
                 ConnectionState state = controller.getCurrentConnectionState();
@@ -653,8 +659,8 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
                 return state;
             }
         };
-        task.setOnSucceeded(ignoreEvent -> {
-            ConnectionState state = task.getValue();
+        connectionTask.setOnSucceeded(ignoreEvent -> {
+            ConnectionState state = connectionTask.getValue();
             if (state == null) {
                 state = ConnectionState.Disconnected;
             }
@@ -726,7 +732,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
                     break;
             }
         });
-        task.run();
+        connectionTask.run();
     }
 
     private boolean isFreeAccount() {
@@ -881,86 +887,41 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         // create an instance of progress dialog 
         log.debug("showConnectProgress: Loading progress bar");
 
-        Task<AnchorPane> task = new Task<AnchorPane>() {
+        progressTask = new Task<AnchorPane>() {
             @Override
             protected AnchorPane call() throws Exception {
-                log.debug("showConnectProgress: Thread Has started");
-                //return FXMLLoader.load(getClass().getResource("sample2.fxml"));
-                // Load the fxml file and create a new stage for the popup dialog.
-                FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(LoginForms.class.getResource("/fxml/ProgressDialog.fxml"));
-                connectProgressDialog.setDialogText("Connecting ...");
-                connectProgressDialog.getProgressBar();
-                loader.setController(connectProgressDialog);
-                AnchorPane page = (AnchorPane) loader.load();
-                return page;
+            log.debug("showConnectProgress: Thread Has started");
+            //return FXMLLoader.load(getClass().getResource("sample2.fxml"));
+            // Load the fxml file and create a new stage for the popup dialog.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(LoginForms.class.getResource("/fxml/ProgressDialog.fxml"));
+            AnchorPane page = (AnchorPane) loader.load();
+            connectProgressDialog = (ProgressDialogController)loader.getController();
+            connectProgressDialog.setDialogText("Connecting ...");
+            connectProgressDialog.getProgressBar().setProgress(ProgressBar.INDETERMINATE_PROGRESS);
+            connectProgressDialog.addInfo("");
+            connectProgressDialog.addBottomText("");
+            return page;
             }
         };
 
-        task.setOnSucceeded(event -> {
-            AnchorPane anchorPane = task.getValue();
-            //ProgressBar bar = new ProgressBar(0);
-            //bar.setPrefSize(200, 24);
-            Button button = new Button("Cancel");
-            //anchorPane.getChildren().addAll(bar, button);
+        progressTask.setOnSucceeded(event -> {
+            AnchorPane anchorPane = progressTask.getValue();
             Stage stage = new Stage();
             stage.setScene(new Scene(anchorPane));
             stage.show();
-
-            button.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
+            connectProgressDialog.getProgressBar().progressProperty().bind(connectionTask.progressProperty());
+            connectProgressDialog.getLeftButton().setOnAction(new EventHandler<javafx.event.ActionEvent>() {
 
                 @Override
                 public void handle(javafx.event.ActionEvent event) {
-                    //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                    connectionTask.cancel(true);
                     log.debug("Cancel button has been clicked");
                 }
             });
         });
-        Thread thread = new Thread(task);
+        Thread thread = new Thread(progressTask);
         thread.start();
-//                    // Create the dialog Stage.
-//                Stage dialogStage = new Stage();
-//                dialogStage.setTitle("Connection is being processed...");
-//                dialogStage.initModality(Modality.WINDOW_MODAL);
-//                dialogStage.initOwner(this.application.getStage());
-//                Scene scene = new Scene(page);
-//                dialogStage.setScene(scene);
-//                // Set the dialog into the controller.
-//               // connectProgressDialog = loader.getController();
-//               // connectProgressDialog.setOption(2, i18n.tr("cancel"));
-//                ProgressBar bar = new ProgressBar(0);
-//                bar.setPrefSize(200, 24);
-//                button = new Button("Go!");
-//                dialogStage.show();
-//             } catch (Exception e) {
-//                 e.printStackTrace();
-//             }finally{
-//                if (null == button)
-//                    button = new Button("Go!");
-//            }
-//                button.setOnAction(new EventHandler<javafx.event.ActionEvent>() {
-//
-//                @Override
-//                public void handle(javafx.event.ActionEvent event) {
-//                    //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-//                    log.debug("Cancel button has been clicked");
-//                }
-//            });
-//    
-//                Task<Void> task = new Task<Void>() {
-//                    @Override
-//                    protected Void call() throws Exception {
-//                        controller.disconnect(Reason.AbortButtonPressed);
-//                        setNormalCursor();
-//                        return null;
-//                    }
-//
-//                };
-        // unbind any previous progress bar
-        //connectProgressDialog.getProgressBar().progressProperty().unbind();
-        // connectProgressDialog.getProgressBar().progressProperty().bind(task.progressProperty());
-                //connectProgressDialog.setVisible(true);
-        //});
     }
 
     public void mySetIconImage(String imagePath) {
