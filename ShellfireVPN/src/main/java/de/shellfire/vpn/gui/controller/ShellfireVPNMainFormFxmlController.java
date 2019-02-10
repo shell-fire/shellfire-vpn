@@ -288,12 +288,13 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         this.connectionSubviewController.setApp(this.application);
         this.connectionSubviewController.updateComponents(false);
         this.updateOnlineHost();
-
+        //this.initializeProgessBarTask();
+        
         //serverListSubviewController = new ServerListSubviewController(shellfireService);
         //mapEncryptionSubviewController = new MapEncryptionSubviewController();
         //tvStreasSubviewController = new TvStreasSubviewController();
     }
-
+    
     public void setShellfireService(WebService shellfireService) {
         this.shellfireService = shellfireService;
         log.debug("ShellfireVPNMainFormFxmlController:" + "service initialized");
@@ -732,9 +733,50 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
                     break;
             }
         });
-        connectionTask.run();
+        //connectionTask.run();
+        callProgessBarTask(this.progressTask);
     }
 
+    void callProgessBarTask(Task task){
+        progressTask = new Task<AnchorPane>() {
+            @Override
+            protected AnchorPane call() throws Exception {
+            log.debug("showConnectProgress: Thread Has started");
+            //return FXMLLoader.load(getClass().getResource("sample2.fxml"));
+            // Load the fxml file and create a new stage for the popup dialog.
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(LoginForms.class.getResource("/fxml/ProgressDialog.fxml"));
+            AnchorPane page = (AnchorPane) loader.load();
+            connectProgressDialog = (ProgressDialogController)loader.getController();
+            connectProgressDialog.setDialogText("Connecting ...");
+            connectProgressDialog.getProgressBar().setProgress(ProgressBar.INDETERMINATE_PROGRESS);
+            connectProgressDialog.addInfo("");
+            connectProgressDialog.addBottomText("");
+            return page;
+            }
+        };
+
+        progressTask.setOnSucceeded(event -> {
+            AnchorPane anchorPane = progressTask.getValue();
+            Stage stage = new Stage();
+            stage.setScene(new Scene(anchorPane));
+            stage.show();
+            connectProgressDialog.setOptionCallback(task);
+            connectProgressDialog.callOptionCallback();
+            connectProgressDialog.getProgressBar().progressProperty().bind(connectionTask.progressProperty());
+            connectProgressDialog.getLeftButton().setOnAction(new EventHandler<javafx.event.ActionEvent>() {
+
+                @Override
+                public void handle(javafx.event.ActionEvent event) {
+                    connectionTask.cancel(true);
+                    log.debug("Cancel button has been clicked");
+                }
+            });
+        });
+        Thread thread = new Thread(progressTask);
+        thread.start();
+    }
+    
     private boolean isFreeAccount() {
         return this.shellfireService.getVpn().getAccountType() == ServerType.Free;
     }
@@ -886,42 +928,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     private void showConnectProgress() throws IOException {
         // create an instance of progress dialog 
         log.debug("showConnectProgress: Loading progress bar");
-
-        progressTask = new Task<AnchorPane>() {
-            @Override
-            protected AnchorPane call() throws Exception {
-            log.debug("showConnectProgress: Thread Has started");
-            //return FXMLLoader.load(getClass().getResource("sample2.fxml"));
-            // Load the fxml file and create a new stage for the popup dialog.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(LoginForms.class.getResource("/fxml/ProgressDialog.fxml"));
-            AnchorPane page = (AnchorPane) loader.load();
-            connectProgressDialog = (ProgressDialogController)loader.getController();
-            connectProgressDialog.setDialogText("Connecting ...");
-            connectProgressDialog.getProgressBar().setProgress(ProgressBar.INDETERMINATE_PROGRESS);
-            connectProgressDialog.addInfo("");
-            connectProgressDialog.addBottomText("");
-            return page;
-            }
-        };
-
-        progressTask.setOnSucceeded(event -> {
-            AnchorPane anchorPane = progressTask.getValue();
-            Stage stage = new Stage();
-            stage.setScene(new Scene(anchorPane));
-            stage.show();
-            connectProgressDialog.getProgressBar().progressProperty().bind(connectionTask.progressProperty());
-            connectProgressDialog.getLeftButton().setOnAction(new EventHandler<javafx.event.ActionEvent>() {
-
-                @Override
-                public void handle(javafx.event.ActionEvent event) {
-                    connectionTask.cancel(true);
-                    log.debug("Cancel button has been clicked");
-                }
-            });
-        });
-        Thread thread = new Thread(progressTask);
-        thread.start();
+        connectProgressDialog.getStage().show();
     }
 
     public void mySetIconImage(String imagePath) {
@@ -1201,7 +1208,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
     private void hideConnectProgress() {
         if (this.connectProgressDialog != null) {
-            this.connectProgressDialog.setDisable(true);
+            this.connectProgressDialog.getStage().hide();
         }
     }
 

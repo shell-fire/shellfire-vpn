@@ -1,5 +1,6 @@
 package de.shellfire.vpn.gui.controller;
 
+import de.shellfire.vpn.Util;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -20,7 +21,9 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 import javax.swing.Timer;
+import org.slf4j.Logger;
 
 public class ProgressDialogController extends AnchorPane implements Initializable {
 
@@ -46,6 +49,8 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
     private Label additionTextLabel;
     @FXML
     private Label bottomLabel;
+    private static final Logger LOG = Util.getLogger(ProgressDialogController.class.getCanonicalName());
+    private Stage stage ; 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -57,7 +62,15 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
     public static void setApp(LoginForms applic) {
         application = applic;
     }
-
+    
+    public  void setStage(Stage stage){
+        this.stage = stage; 
+    }
+    
+    public Stage getStage(){
+        return this.stage;
+    }
+    
     public void initComponenets() {
         dynamicLabel.setText(i18n.tr("Logging in..."));
         additionTextLabel.setText("<dynamic>");
@@ -78,10 +91,11 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
     }
 
     public void setOptionCallback(Runnable runnable) {
+        LOG.debug("setOptionCallback: Runnable has been initialised " + runnable.toString());
         this.optionCallback = runnable;
     }
 
-    private void callOptionCallback() {
+    public void callOptionCallback() {
         if (this.optionCallback != null);
         this.optionCallback.run();
     }
