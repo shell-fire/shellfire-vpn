@@ -633,9 +633,9 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         log.debug("connectionStateChanged " + state + ", reason=" + e.getReason());
         switch (state) {
             case Disconnected:
-                Platform.runLater(() -> {
+                //Platform.runLater(() -> {
                     this.setStateDisconnected();
-                });
+                //});
                 break;
             case Connecting:
                 //Platform.runLater(() ->{ this.setStateConnecting();});
@@ -738,43 +738,47 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     }
 
     void callProgessBarTask(Task task){
+        
         progressTask = new Task<AnchorPane>() {
+        @Override
+        protected AnchorPane call() throws Exception {
+        log.debug("showConnectProgress: Thread Has started");
+        //return FXMLLoader.load(getClass().getResource("sample2.fxml"));
+        // Load the fxml file and create a new stage for the popup dialog.
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(LoginForms.class.getResource("/fxml/ProgressDialog.fxml"));
+        AnchorPane page = (AnchorPane) loader.load();
+        connectProgressDialog = (ProgressDialogController)loader.getController();
+        connectProgressDialog.setDialogText("Connecting ...");
+        connectProgressDialog.getProgressBar().setProgress(ProgressBar.INDETERMINATE_PROGRESS);
+        connectProgressDialog.addInfo("");
+        connectProgressDialog.addBottomText("");
+        return page;
+        }
+    };
+
+    progressTask.setOnSucceeded(event -> {
+        AnchorPane anchorPane = progressTask.getValue();
+        Stage stage = new Stage();
+        stage.setScene(new Scene(anchorPane));
+        stage.show();
+        //connectProgressDialog.setOptionCallback(task);
+        //connectProgressDialog.callOptionCallback();
+        connectProgressDialog.getProgressBar().progressProperty().bind(connectionTask.progressProperty());
+        connectProgressDialog.getLeftButton().setOnAction(new EventHandler<javafx.event.ActionEvent>() {
+
             @Override
-            protected AnchorPane call() throws Exception {
-            log.debug("showConnectProgress: Thread Has started");
-            //return FXMLLoader.load(getClass().getResource("sample2.fxml"));
-            // Load the fxml file and create a new stage for the popup dialog.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(LoginForms.class.getResource("/fxml/ProgressDialog.fxml"));
-            AnchorPane page = (AnchorPane) loader.load();
-            connectProgressDialog = (ProgressDialogController)loader.getController();
-            connectProgressDialog.setDialogText("Connecting ...");
-            connectProgressDialog.getProgressBar().setProgress(ProgressBar.INDETERMINATE_PROGRESS);
-            connectProgressDialog.addInfo("");
-            connectProgressDialog.addBottomText("");
-            return page;
+            public void handle(javafx.event.ActionEvent event) {
+                connectionTask.cancel(true);
+                log.debug("Cancel button has been clicked");
             }
-        };
-
-        progressTask.setOnSucceeded(event -> {
-            AnchorPane anchorPane = progressTask.getValue();
-            Stage stage = new Stage();
-            stage.setScene(new Scene(anchorPane));
-            stage.show();
-            connectProgressDialog.setOptionCallback(task);
-            connectProgressDialog.callOptionCallback();
-            connectProgressDialog.getProgressBar().progressProperty().bind(connectionTask.progressProperty());
-            connectProgressDialog.getLeftButton().setOnAction(new EventHandler<javafx.event.ActionEvent>() {
-
-                @Override
-                public void handle(javafx.event.ActionEvent event) {
-                    connectionTask.cancel(true);
-                    log.debug("Cancel button has been clicked");
-                }
-            });
         });
-        Thread thread = new Thread(progressTask);
-        thread.start();
+    });
+    Thread thread = new Thread(progressTask);
+    thread.start();
+    
+    Thread connect = new Thread(connectionTask);
+    connect.start();
     }
     
     private boolean isFreeAccount() {
