@@ -737,7 +737,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         callProgessBarTask(this.progressTask);
     }
 
-    void callProgessBarTask(Task task){
+    void callProgessBarTask(Task task){ 
         
         progressTask = new Task<AnchorPane>() {
         @Override
