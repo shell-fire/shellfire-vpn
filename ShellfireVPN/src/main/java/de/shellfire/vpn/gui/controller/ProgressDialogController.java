@@ -13,6 +13,7 @@ import org.xnap.commons.i18n.I18n;
 import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.i18n.VpnI18N;
 import java.awt.event.ActionListener;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 
 import javafx.scene.control.Label;
@@ -29,7 +30,7 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
 
     private boolean option1;
     private boolean option2;
-    private Runnable optionCallback;
+    private Task optionCallback;
     private static I18n i18n = VpnI18N.getI18n();
     private static LoginForms application;
 
@@ -90,9 +91,9 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
         return progressBar;
     }
 
-    public void setOptionCallback(Runnable runnable) {
-        LOG.debug("setOptionCallback: Runnable has been initialised " + runnable.toString());
-        this.optionCallback = runnable;
+    public void setOptionCallback(Task task) {
+        LOG.debug("setOptionCallback: Runnable has been initialised " + task.toString());
+        this.optionCallback = task;
     }
 
     public void callOptionCallback() {
@@ -176,6 +177,7 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
 
     @FXML
     private void handleLeftButton(ActionEvent event) {
+        LOG.debug("handleLeftButton has been clicked");
         this.option1 = true;
         leftButton.setVisible(false);
         this.callOptionCallback();

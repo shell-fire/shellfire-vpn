@@ -185,7 +185,6 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
                                         this.application.getStage().show();
                                     }
                                 }
-
                                 if (!this.application.getStage().isShowing()) {
                                     log.debug("handlefButtonLogin: vpnController not visible");
                                     this.application.loadShellFireMainController();
