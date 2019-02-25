@@ -14,6 +14,7 @@ import de.shellfire.vpn.i18n.VpnI18N;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import javafx.concurrent.Task;
 import javafx.scene.control.Alert;
 import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
@@ -43,15 +44,17 @@ public class WinServiceToolsFX extends ServiceToolsFX{
       loginProgressDialog = new ProgressDialogController();
       loginProgressDialog.setDialogText(i18n.tr("Installing Service..."));
       loginProgressDialog.setOption(2, i18n.tr("cancel"));
-      loginProgressDialog.setOptionCallback(new Runnable() {
+      loginProgressDialog.setOptionCallback(new Task() {
 
-        @Override
-        public void run() {
-          Alert alert = new Alert(Alert.AlertType.INFORMATION);
+          @Override
+          protected Object call() throws Exception {
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
           alert.setContentText( i18n.tr("Service has not been installed correctly - Shellfire VPN is now exited"));
           System.exit(0);
-        }
+          return null; 
+          }
       });
+        
 
       loginProgressDialog.setVisible(true);
 

@@ -1,5 +1,6 @@
 package de.shellfire.vpn.gui.controller;
 
+import de.shellfire.vpn.Util;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -12,6 +13,7 @@ import org.xnap.commons.i18n.I18n;
 import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.i18n.VpnI18N;
 import java.awt.event.ActionListener;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 
 import javafx.scene.control.Label;
@@ -20,13 +22,15 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 import javax.swing.Timer;
+import org.slf4j.Logger;
 
 public class ProgressDialogController extends AnchorPane implements Initializable {
 
     private boolean option1;
     private boolean option2;
-    private Runnable optionCallback;
+    private Task optionCallback;
     private static I18n i18n = VpnI18N.getI18n();
     private static LoginForms application;
 
@@ -46,6 +50,8 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
     private Label additionTextLabel;
     @FXML
     private Label bottomLabel;
+    private static final Logger LOG = Util.getLogger(ProgressDialogController.class.getCanonicalName());
+    private Stage stage ; 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -57,7 +63,15 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
     public static void setApp(LoginForms applic) {
         application = applic;
     }
-
+    
+    public  void setStage(Stage stage){
+        this.stage = stage; 
+    }
+    
+    public Stage getStage(){
+        return this.stage;
+    }
+    
     public void initComponenets() {
         dynamicLabel.setText(i18n.tr("Logging in..."));
         additionTextLabel.setText("<dynamic>");
@@ -65,15 +79,24 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
         bottomLabel.setDisable(true);
     }
 
+    public Button getLeftButton() {
+        return leftButton;
+    }
+
+    public void setLeftButton(Button leftButton) {
+        this.leftButton = leftButton;
+    }
+    
     public ProgressBar getProgressBar() {
         return progressBar;
     }
 
-    public void setOptionCallback(Runnable runnable) {
-        this.optionCallback = runnable;
+    public void setOptionCallback(Task task) {
+        LOG.debug("setOptionCallback: Runnable has been initialised " + task.toString());
+        this.optionCallback = task;
     }
 
-    private void callOptionCallback() {
+    public void callOptionCallback() {
         if (this.optionCallback != null);
         this.optionCallback.run();
     }
@@ -154,6 +177,7 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
 
     @FXML
     private void handleLeftButton(ActionEvent event) {
+        LOG.debug("handleLeftButton has been clicked");
         this.option1 = true;
         leftButton.setVisible(false);
         this.callOptionCallback();
