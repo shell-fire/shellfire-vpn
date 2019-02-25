@@ -296,7 +296,7 @@ public class WebService {
     }
 
   }
-
+  
   public String getLocalIpAddress() {
     init();
 
@@ -306,7 +306,7 @@ public class WebService {
       }
     }, 3, 100);
 
-    if (ip == null)
+    if (ip == null) 
       ip = i18n.tr("unknown");
 
     return ip;

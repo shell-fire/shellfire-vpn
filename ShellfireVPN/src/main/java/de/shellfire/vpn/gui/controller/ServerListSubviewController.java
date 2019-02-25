@@ -1,4 +1,4 @@
-/*
+  /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
@@ -204,7 +204,6 @@ public class ServerListSubviewController implements Initializable {
         this.UDPRadioButton.setText(i18n.tr("UDP (fast)"));
         //this.connectImage1.setImage(new Image("\\buttons\\button-connect-de.gif"));
 
-        //accArtTbleColumn.setCellValueFactory(cellData -> cellData.getValue().accountArtProperty());
         nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
         serverColumn.setCellValueFactory(cellData -> cellData.getValue().serverTypeProperty());
         securityColumn.setCellValueFactory(cellData -> cellData.getValue().securityProperty());
@@ -322,12 +321,17 @@ public class ServerListSubviewController implements Initializable {
 	}
             
     	public Server getSelectedServer() {
-            
-                ServerListFXModel serverModel = this.serverListTableView.getSelectionModel().getSelectedItem();
-                //log.debug("getSelectedServer: select item is " + serverModel.toString());
-		//The getCountry method of ServerListFXModel returns the server object
-		log.debug("getSelectedServer() - returning: " + serverModel.getCountry());
+		
+            log.debug("About to test server model to load");
+                if (null == this.serverListTableView.getSelectionModel().getSelectedItem()){
+                    log.debug("Return default server 18");
+                   return this.shellfireService.getServerList().getServer(18);
+                } else {
+                ServerListFXModel serverModel = this.serverListTableView.getSelectionModel().getSelectedItem();                
+                //The getCountry method of ServerListFXModel returns the server object
+                log.debug("getSelectedServer() - returning: " + serverModel.getCountry());
 		return serverModel.getCountry();
+                }
 	}
         
      public Server getRandomPremiumServer() {

@@ -18,9 +18,11 @@ import java.awt.Toolkit;
 import java.awt.TrayIcon;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ContextMenuEvent;
@@ -58,6 +60,8 @@ public class ConnectionSubviewController implements Initializable {
     String baseImageUrl = "src/main/resources";
     String size = "736";
     String langKey = VpnI18N.getLanguage().getKey();
+    @FXML
+    private Button connectButton;
     
     
     public ImageView getStatusConnectionImageView() {
@@ -109,6 +113,11 @@ public class ConnectionSubviewController implements Initializable {
 
         this.connectImageView.setId(baseImageUrl + "/buttons/button-disconnect-" + langKey + ".gif");
         this.statusConnectionImageView.setId(baseImageUrl + "/icons/status-unencrypted-width" + size + ".gif");
+        
+        this.connectButton.setGraphic(connectImageView);
+        //this.connectButton.setStyle("-fx-background-image: url(../buttons/button-disconnect-" + langKey + ".gif);");
+        
+        //this.connectButton.setGraphic();   Style("-fx-background-image: url("+baseImageUrl+"../buttons/button-disconnect-" + langKey + ".gif);");
         
         //makes product key to be disable when disable is set to true
         this.productKeyImageView.managedProperty().bind(this.productKeyImageView.visibleProperty());
@@ -213,4 +222,10 @@ public class ConnectionSubviewController implements Initializable {
     public void setParentController(ShellfireVPNMainFormFxmlController shellController){
         this.mainController = shellController ;
     }
+
+    @FXML
+    private void handleConnectButtonClicked(ActionEvent event) {
+        this.application.shellFireMainController.connectFromButton(true);
+    }
+
 }

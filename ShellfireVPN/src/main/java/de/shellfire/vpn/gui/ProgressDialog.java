@@ -39,7 +39,7 @@ public class ProgressDialog extends javax.swing.JDialog {
     /**
      * Creates new form LoginProgressDialog
      */
-    public ProgressDialog(java.awt.Frame parent, boolean modal, String text) {
+     public ProgressDialog(java.awt.Frame parent, boolean modal, String text) {
         super(parent, modal);
         this.setUndecorated(true);
 
