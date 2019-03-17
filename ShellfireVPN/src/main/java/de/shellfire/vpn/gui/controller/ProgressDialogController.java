@@ -64,6 +64,10 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
         application = applic;
     }
     
+    public static LoginForms getApplication() {
+        return application;
+    }
+    
     public  void setStage(Stage stage){
         this.stage = stage; 
     }
@@ -106,7 +110,7 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
         progressBar.setProgress(percentage);
     }
 
-    void addInfo(String text) {
+    public void addInfo(String text) {
         this.setTextAndShowComponent(this.additionTextLabel, text);
     }
 
@@ -121,7 +125,7 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
         btn.setDisable(true);
     }
 
-    void addBottomText(String text) {
+    public void addBottomText(String text) {
         this.setTextAndShowComponent(this.bottomLabel, text);
     }
 

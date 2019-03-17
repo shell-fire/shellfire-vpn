@@ -25,7 +25,14 @@ import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class EndpointManager {
 
@@ -43,7 +50,9 @@ public class EndpointManager {
     private String preferredEndPoint;
     private boolean currentlyUsingDefaultList = false;
     private VpnProperties vpnProperties;
-
+    
+    Stage initDialogStage = null;
+    
     private EndpointManager() {
         loadFromProperties();
     }
@@ -149,7 +158,7 @@ public class EndpointManager {
                 log.debug("No preferred endPoint set yet, not testing");
             } else {
                 log.debug("testing preferred endPoint {}", preferredEndPoint);
-                initDialog.setText(i18n.tr("Testing endpoint that worked before..."));
+                //initDialog.setText(i18n.tr("Testing endpoint that worked before..."));
                 result = testEndpoint(preferredEndPoint);
             }
 
@@ -218,18 +227,32 @@ public class EndpointManager {
         private CanContinueAfterBackEndAvailableFX continueFormFX;
         private boolean initDialogOriginFX;
 
-        public CanContinueAfterBackEndAvailableFX getContinueFormFX() {
-            return continueFormFX;
-        }
-
-        public boolean isInitDialogOriginFX() {
-            return initDialogOriginFX;
-        }
-
         public FindEndpointTaskFX(CanContinueAfterBackEndAvailableFX form) {
             this.continueFormFX = form;
             initDialogFX = form.getDialogFX();
-
+            try {
+                // Load the fxml file and create a new stage for the popup dialog.
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(LoginForms.class.getResource("/fxml/ProgressDialog.fxml"));
+                AnchorPane page = (AnchorPane) loader.load();
+                //TODO check if reassigning is necessary
+                initDialogFX = (ProgressDialogController)loader.getController();
+                initDialogFX.setDialogText("Connecting ...");
+                initDialogFX.getProgressBar().setProgress(ProgressBar.INDETERMINATE_PROGRESS);
+                initDialogFX.addInfo("");
+                initDialogFX.addBottomText("");
+            
+            initDialogStage = new Stage();
+                initDialogStage.initStyle(StageStyle.UNDECORATED);
+                initDialogStage.setTitle("Connecting");
+                initDialogStage.initModality(Modality.WINDOW_MODAL);
+                initDialogStage.initOwner(form.getDialogFX().getStage());
+                Scene scene = new Scene(page);
+                initDialogStage.setScene(scene);
+                //connectProgressDialog = loader.getController();
+            } catch (Exception e) {
+                log.debug("There is an exception caused by the FindEndpointTaskFX method");
+            }
             if (null == initDialogFX) {
                 initDialogFX = LoginForms.getInitDialog();
                 initDialogFX.setDialogText("Update Check");
@@ -237,7 +260,8 @@ public class EndpointManager {
             }
             Platform.runLater(new Runnable() {
                 public void run() {
-                    initDialogFX.setVisible(true);
+                    //initDialogFX.setVisible(true);
+                    initDialogStage.show();
                     // TODO: check if intention was not to load the dialog. 
                 }
             });
@@ -248,6 +272,7 @@ public class EndpointManager {
         @Override
         protected Object call() throws Exception {
             initDialogFX.setDialogText(i18n.tr("Searching for backend connection..."));
+            log.debug("Find Endpoint task method, init dialog has " + initDialogFX.toString());
             boolean result = false;
 
             result = testPreferredEndpoint();
@@ -286,15 +311,29 @@ public class EndpointManager {
             if (preferredEndPoint == null) {
                 log.debug("No preferred endPoint set yet, not testing");
             } else {
-                log.debug("testing preferred endPoint {}", preferredEndPoint);
-                initDialogFX.setDialogText(i18n.tr("Testing endpoint that worked before..."));
+                log.debug("fx testing preferred endPoint {}", preferredEndPoint);
+                //initDialogFX.setDialogText(i18n.tr("Testing endpoint that worked before..."));
+                if (null != initDialogStage){
+                    initDialogStage.show();
+                    log.debug("testPreferredEndpoint(): Testing endpoint stage is shown");
+                }else{
+                    log.debug("testPreferredEndpoint(): Testing endpoint stage is null");
+                }
+                log.debug("testPreferredEndpoint - Tested endpoint that worked befores");
+                
                 result = testEndpoint(preferredEndPoint);
             }
 
             log.debug("testPreferredEndpoint() - finished, returning {}", result);
             return result;
         }
+        public CanContinueAfterBackEndAvailableFX getContinueFormFX() {
+            return continueFormFX;
+        }
 
+        public boolean isInitDialogOriginFX() {
+            return initDialogOriginFX;
+        }
         private boolean testEndPointList(List<String> endPointList) {
             log.debug("testEndPointList() - start");
             boolean result = false;
@@ -334,7 +373,8 @@ public class EndpointManager {
                 public void handle(WorkerStateEvent t) {
                     // Code to run once FindEndpointTaskFX is completed **successfully**
                     if (endPointTask.isInitDialogOriginFX()) {
-                        initDialogFX.setVisible(false);
+                        //initDialogFX.setVisible(true);
+                        initDialogStage.hide();
                         // TODO check if logic meant to load the dialog box instead of it's 
                         // calling it's visible method
                     }
@@ -347,6 +387,7 @@ public class EndpointManager {
                 @Override
                 public void handle(WorkerStateEvent t) {
                     // Code to run once FindEndpointTaskFX **fails**
+                    initDialogStage.hide();
                     log.debug("Execution of FindEndpointTaskFX task has failed");
                 }
             });
