@@ -73,7 +73,7 @@ public class LoginForms extends Application {
         System.setProperty("java.library.path", "./lib");
         LOG.debug("In the main method");
         default_args = args;
-        initializations(args);
+        //initializations(args);
         launch(args);
     }
 

@@ -50,9 +50,9 @@ public class EndpointManager {
     private String preferredEndPoint;
     private boolean currentlyUsingDefaultList = false;
     private VpnProperties vpnProperties;
-    
+
     Stage initDialogStage = null;
-    
+
     private EndpointManager() {
         loadFromProperties();
     }
@@ -101,13 +101,13 @@ public class EndpointManager {
     public class FindEndpointTask extends SwingWorker<String, Object> {
 
         /*
-     * Main task. Executed in background thread.
+         * Main task. Executed in background thread.
          */
-
         private CanContinueAfterBackEndAvailable continueForm;
         private boolean initDialogOrigin;
 
         public FindEndpointTask(CanContinueAfterBackEndAvailable form) {
+            log.debug("\nThis is the start of the endpoint task\n");
             this.continueForm = form;
             initDialog = form.getDialog();
             if (initDialog == null) {
@@ -123,7 +123,7 @@ public class EndpointManager {
         }
 
         /*
-     * Executed in event dispatch thread
+         * Executed in event dispatch thread
          */
         public void done() {
 
@@ -221,51 +221,55 @@ public class EndpointManager {
     public class FindEndpointTaskFX extends Task<Object> {
 
         /*
-     * Main task. Executed in background thread of javaFX app.
+         * Main task. Executed in background thread of javaFX app.
          */
-
         private CanContinueAfterBackEndAvailableFX continueFormFX;
         private boolean initDialogOriginFX;
 
         public FindEndpointTaskFX(CanContinueAfterBackEndAvailableFX form) {
+            log.debug("FindEndpointTaskFX: Constructor of Endpoint task");
             this.continueFormFX = form;
             initDialogFX = form.getDialogFX();
-            try {
-                // Load the fxml file and create a new stage for the popup dialog.
-                FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(LoginForms.class.getResource("/fxml/ProgressDialog.fxml"));
-                AnchorPane page = (AnchorPane) loader.load();
-                //TODO check if reassigning is necessary
-                initDialogFX = (ProgressDialogController)loader.getController();
-                initDialogFX.setDialogText("Connecting ...");
-                initDialogFX.getProgressBar().setProgress(ProgressBar.INDETERMINATE_PROGRESS);
-                initDialogFX.addInfo("");
-                initDialogFX.addBottomText("");
-            
-            initDialogStage = new Stage();
-                initDialogStage.initStyle(StageStyle.UNDECORATED);
-                initDialogStage.setTitle("Connecting");
-                initDialogStage.initModality(Modality.WINDOW_MODAL);
-                initDialogStage.initOwner(form.getDialogFX().getStage());
-                Scene scene = new Scene(page);
-                initDialogStage.setScene(scene);
-                //connectProgressDialog = loader.getController();
-            } catch (Exception e) {
-                log.debug("There is an exception caused by the FindEndpointTaskFX method");
-            }
+            Platform.runLater(() -> {
+                try {
+                    // Load the fxml file and create a new stage for the popup dialog.
+                    FXMLLoader loader = new FXMLLoader();
+                    loader.setLocation(LoginForms.class.getResource("/fxml/ProgressDialog.fxml"));
+                    AnchorPane page = (AnchorPane) loader.load();
+                    //TODO check if reassigning is necessary
+                    initDialogFX = (ProgressDialogController) loader.getController();
+                    initDialogFX.setDialogText("Connecting ...");
+                    initDialogFX.getProgressBar().setProgress(ProgressBar.INDETERMINATE_PROGRESS);
+                    initDialogFX.addInfo("");
+                    initDialogFX.addBottomText("");
+                    initDialogFX.getLeftButton().setDisable(true);
+
+                    initDialogStage = new Stage();
+                    initDialogStage.initStyle(StageStyle.UNDECORATED);
+                    initDialogStage.setTitle("Connecting");
+                    initDialogStage.initModality(Modality.WINDOW_MODAL);
+                    //initDialogStage.initOwner(form.getDialogFX().getStage());
+                    Scene scene = new Scene(page);
+                    initDialogStage.setScene(scene);
+                    //connectProgressDialog = loader.getController();
+                } catch (Exception e) {
+                    log.debug("There is an exception caused by the FindEndpointTaskFX method");
+                }
+            });
             if (null == initDialogFX) {
+                log.debug("\nFindEndpointTaskFX: In Dialog is null \n");
                 initDialogFX = LoginForms.getInitDialog();
                 initDialogFX.setDialogText("Update Check");
                 initDialogOriginFX = true;
             }
-            Platform.runLater(new Runnable() {
-                public void run() {
-                    //initDialogFX.setVisible(true);
-                    initDialogStage.show();
-                    // TODO: check if intention was not to load the dialog. 
-                }
-            });
-
+//            Platform.runLater(new Runnable() {
+//                public void run() {
+//                    //initDialogFX.setVisible(true);
+//                    initDialogStage.show();
+//                    // TODO: check if intention was not to load the dialog.
+//                }
+//            });
+            initDialogStage.show();
         }
 
         // corresponds to Swing's doInBackgraound
@@ -313,20 +317,21 @@ public class EndpointManager {
             } else {
                 log.debug("fx testing preferred endPoint {}", preferredEndPoint);
                 //initDialogFX.setDialogText(i18n.tr("Testing endpoint that worked before..."));
-                if (null != initDialogStage){
+                if (null != initDialogStage) {
                     initDialogStage.show();
                     log.debug("testPreferredEndpoint(): Testing endpoint stage is shown");
-                }else{
+                } else {
                     log.debug("testPreferredEndpoint(): Testing endpoint stage is null");
                 }
                 log.debug("testPreferredEndpoint - Tested endpoint that worked befores");
-                
+
                 result = testEndpoint(preferredEndPoint);
             }
 
             log.debug("testPreferredEndpoint() - finished, returning {}", result);
             return result;
         }
+
         public CanContinueAfterBackEndAvailableFX getContinueFormFX() {
             return continueFormFX;
         }
@@ -334,6 +339,7 @@ public class EndpointManager {
         public boolean isInitDialogOriginFX() {
             return initDialogOriginFX;
         }
+
         private boolean testEndPointList(List<String> endPointList) {
             log.debug("testEndPointList() - start");
             boolean result = false;
@@ -359,12 +365,12 @@ public class EndpointManager {
         public FindEndpointTaskFXFactory(CanContinueAfterBackEndAvailableFX form) {
             endPointTask = new FindEndpointTaskFX(form);
         }
-        
+
         //boolean couldNotConnect = false;
         //Calls the FindPoint execution procedure
         public boolean call() {
             log.debug("FindEndpointTaskFXFactory: In the factory fx method");
-            
+
             boolean couldNotConnect = true;
             endPointTask.getContinueFormFX().continueAfterBackEndAvailabledFX();
             new Thread(endPointTask).start();
@@ -375,7 +381,7 @@ public class EndpointManager {
                     if (endPointTask.isInitDialogOriginFX()) {
                         //initDialogFX.setVisible(true);
                         initDialogStage.hide();
-                        // TODO check if logic meant to load the dialog box instead of it's 
+                        // TODO check if logic meant to load the dialog box instead of it's
                         // calling it's visible method
                     }
 
@@ -392,15 +398,15 @@ public class EndpointManager {
                 }
             });
             if (null == result) {
-            couldNotConnect = false;
-            log.debug("Could not connect to the Shellfire backend - Shellfire VPN is shutting down");
+                couldNotConnect = false;
+                log.debug("Could not connect to the Shellfire backend - Shellfire VPN is shutting down");
 
                 //Platform.exit();
             }
             /*if (initDialogOrigin) {
-        initDialog.dispose();
-            TODO Check if this conversion is necessary 
-      }*/
+             initDialog.dispose();
+             TODO Check if this conversion is necessary
+             }*/
             return couldNotConnect;
         }
     }
@@ -416,15 +422,15 @@ public class EndpointManager {
         initDialogFX = LoginController.initProgressDialog;
         //FindEndpointTaskFX task = new FindEndpointTaskFX(form);
         //task.run();
-       FindEndpointTaskFXFactory taskE = new FindEndpointTaskFXFactory(form);
-       boolean connect = taskE.call();
-      if(connect){
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setContentText(i18n.tr("Could not connect to the Shellfire backend - Shellfire VPN is shutting down"));
-        alert.showAndWait();        
-      }
-       log.debug("ensureShellfireBackendAvailableFx: has finished running is giving result");
-       
+        FindEndpointTaskFXFactory taskE = new FindEndpointTaskFXFactory(form);
+        boolean connect = taskE.call();
+        if (connect) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setContentText(i18n.tr("Could not connect to the Shellfire backend - Shellfire VPN is shutting down"));
+            alert.showAndWait();
+        }
+        log.debug("ensureShellfireBackendAvailableFx: has finished running is giving result");
+
     }
 
     private boolean testEndpoint(String endPoint) {

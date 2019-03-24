@@ -176,7 +176,7 @@ public class ConnectionSubviewController implements Initializable {
 
     @FXML
     private void handleConnectImageViewClicked(MouseEvent event) {
-        this.application.shellFireMainController.connectFromButton(false);
+        this.application.shellFireMainController.connectFromButton(true);
     }
 
     @FXML

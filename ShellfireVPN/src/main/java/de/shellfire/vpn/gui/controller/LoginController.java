@@ -106,7 +106,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
     private boolean minimize;
     public static LoginForms application;
     private static I18n i18n = VpnI18N.getI18n();
-    private static Logger log = Util.getLogger(LoginForms.class.getCanonicalName());
+    private static Logger log = Util.getLogger(LoginController.class.getCanonicalName());
     private String username;
     private String password;
     private static boolean passwordBogus;
