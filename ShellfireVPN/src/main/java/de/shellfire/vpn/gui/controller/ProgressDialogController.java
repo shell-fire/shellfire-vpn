@@ -50,7 +50,7 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
     private Label additionTextLabel;
     @FXML
     private Label bottomLabel;
-    private static final Logger LOG = Util.getLogger(ProgressDialogController.class.getCanonicalName());
+    private static final Logger log = Util.getLogger(ProgressDialogController.class.getCanonicalName());
     private Stage stage ; 
 
     @Override
@@ -96,7 +96,7 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
     }
 
     public void setOptionCallback(Task task) {
-        LOG.debug("setOptionCallback: Runnable has been initialised " + task.toString());
+        log.debug("setOptionCallback: Runnable has been initialised " + task.toString());
         this.optionCallback = task;
     }
 
@@ -181,7 +181,7 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
 
     @FXML
     private void handleLeftButton(ActionEvent event) {
-        LOG.debug("handleLeftButton has been clicked");
+        log.debug("handleLeftButton has been clicked");
         this.option1 = true;
         leftButton.setVisible(false);
         this.callOptionCallback();

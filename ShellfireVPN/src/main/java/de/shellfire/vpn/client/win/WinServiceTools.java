@@ -67,7 +67,7 @@ public class WinServiceTools extends ServiceTools {
       
       
       template = template.replace("$$TEMP$$", Util.getTempDir());
-      template = template.replace("$$LOGFILE$$", Util.getTempDir()+File.separator + "ProcRunLog.log");
+      template = template.replace("$$logFILE$$", Util.getTempDir()+File.separator + "ProcRunLog.log");
       template = template.replace("$$JVM_DLL$$",  Util.getJvmDll());
       template = template.replace("$$PROCRUNPATH$$", procRunPath);
       

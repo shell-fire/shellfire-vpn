@@ -69,7 +69,7 @@ public class Util {
   public static UserType userType = null;
   private static Properties properties;
   private static String configDir;
-   private static Logger LOG = Util.getLogger(Util.class.getCanonicalName());
+   private static Logger log = Util.getLogger(Util.class.getCanonicalName());
   static {
     semaphore = new Object();
     Security.setProperty("networkaddress.cache.ttl", "1");
@@ -497,7 +497,7 @@ public class Util {
   }
 
   public static boolean internetIsAvailable() {
-      LOG.debug("Testing if connection exists");
+      log.debug("Testing if connection exists");
     Boolean networkIsAvailable = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<Boolean>() {
       public Boolean run() throws Exception {
         List<String> siteList = new ArrayList<String>();
@@ -784,7 +784,6 @@ public class Util {
 	}
   
   // do not mix this order around, must remain in the end of class so that log file can be deleted on startup
-  private static Logger log = Util.getLogger(Util.class.getCanonicalName());
   private static I18n i18n = VpnI18N.getI18n();
   private static String jvmDll;
   
