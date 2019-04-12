@@ -32,8 +32,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ProgressBar;
 
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -56,7 +58,7 @@ public class LoginForms extends Application {
     // Variables to control draggin of window
     private static double xOffset = 0;
     private static double yOffset = 0;
-    
+    public static Stage initDialogStage = null;
     public HashMap<Object,Stage> controllersAndStage = new HashMap<>();
     
     public static Stage getStage() {
@@ -88,8 +90,6 @@ public class LoginForms extends Application {
             minimize = false;
         }
         ProxyConfig.perform();
-
-        //setLookAndFeel();
         //initConnectionTest();
     }
 
@@ -100,6 +100,7 @@ public class LoginForms extends Application {
             this.stage = primaryStage;
             this.stage.initStyle(StageStyle.UNDECORATED);
             log.debug("Stage has value " + this.stage);
+            setLookAndFeel();
             this.loadLoginController();
             //Stage loginStage = (Stage)((Stage)stage).clone();
             //controllersAndStage.put(log, stage)
@@ -117,13 +118,49 @@ public class LoginForms extends Application {
             stage.getProperties().put("hostServices", this.getHostServices());
             
             afterDialogDisplay();
-            this.stage.show();
+            //this.stage.show();
         } catch (Exception ex) {
             log.debug("could not latter message after login in start \n" + ex.getMessage());
         }
         
     }
     
+    public static void setLookAndFeel(){
+        log.debug("setLookAndFeel: first test");
+            //Platform.runLater(() -> {
+                try {
+                    
+                    // Load the fxml file and create a new stage for the popup dialog.
+                    FXMLLoader loader = new FXMLLoader(LoginForms.class.getClassLoader().getResource("/fxml/ProgressDialog.fxml"));
+                    loader.setLocation(LoginForms.class.getResource("/fxml/ProgressDialog.fxml"));
+                    log.debug("setLookAndFeel: second test");
+                    initDialog = new ProgressDialogController();
+                    
+                    loader.setController(initDialog);
+                    AnchorPane page = (AnchorPane) loader.load();
+                    //TODO check if reassigning is necessary
+                    //initDialog = (ProgressDialogController) loader.getController();
+                    
+                    initDialog.setDialogText("Connecting ...");
+                    log.debug("setLookAndFeel: third test");
+                    initDialog.getProgressBar().setProgress(ProgressBar.INDETERMINATE_PROGRESS);
+                    initDialog.addInfo("");
+                    initDialog.addBottomText("");
+                    initDialog.getLeftButton().setDisable(true);
+                    log.debug("setLookAndFeel: fourth test");
+                    initDialogStage = new Stage();
+                    initDialogStage.initStyle(StageStyle.UNDECORATED);
+                    initDialogStage.setTitle("Connecting");
+                    initDialogStage.initModality(Modality.WINDOW_MODAL);
+                    //initDialogStage.initOwner(form.getDialogFX().getStage());
+                    Scene scene = new Scene(page);
+                    initDialogStage.setScene(scene);
+                    //connectProgressDialog = loader.getController();
+                } catch (Exception e) {
+                    log.debug("There is an exception caused by the setLookAndFeel method, " + e.toString());
+                }
+           // });
+    }
     public static void loadProgressDialog(String message) {
         try {
             initDialog = (ProgressDialogController) replaceSceneContent("ProgressDialog.fxml");

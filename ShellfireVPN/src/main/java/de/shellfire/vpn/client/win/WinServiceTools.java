@@ -215,6 +215,7 @@ public class WinServiceTools extends ServiceTools {
 
     @Override
     public void ensureServiceEnvironmentFX(LoginForms form) {
+        log.debug("\nThis is JavaFX Thread");
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

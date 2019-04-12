@@ -172,7 +172,7 @@ private String getProcrunExe() {
           String command = Util.getCscriptExe() + " " + elevateVbs;
           log.debug("Calling elevateVbs with command {} in dir {}", command, instDir.getAbsolutePath());
           Process p = Runtime.getRuntime().exec(command, null, instDir);
-          Util.digestProcess(p);
+          Util.digestProcess(p); 
 
           long start = System.currentTimeMillis();
 

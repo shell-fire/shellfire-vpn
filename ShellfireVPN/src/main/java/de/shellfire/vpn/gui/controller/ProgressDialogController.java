@@ -53,6 +53,10 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
     private static final Logger log = Util.getLogger(ProgressDialogController.class.getCanonicalName());
     private Stage stage ; 
 
+    public ProgressDialogController() {
+        log.debug("ProgressDialogController: In netbeans");
+    }
+    
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
