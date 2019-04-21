@@ -195,7 +195,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
                                         vis = false;
                                     }
 
-                                 this.application.shellFireMainController.initializeComponents();
+                                this.application.shellFireMainController.initializeComponents();
                                 this.application.shellFireMainController.displayMessage("Creation of object successful");
                                 this.application.shellFireMainController.setSerciceAndInitialize(this.service);
                                 this.application.shellFireMainController.prepareSubviewControllers();
