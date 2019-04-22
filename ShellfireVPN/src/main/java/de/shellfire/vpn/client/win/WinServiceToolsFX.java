@@ -5,7 +5,7 @@
  */
 package de.shellfire.vpn.client.win;
 
-import de.shellfire.vpn.Util;
+import de.shellfire.vpn.Util; 
 import de.shellfire.vpn.client.ServiceToolsFX;
 import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.gui.controller.LoginController;
@@ -111,7 +111,7 @@ public class WinServiceToolsFX extends ServiceToolsFX{
       
       
       template = template.replace("$$TEMP$$", Util.getTempDir());
-      template = template.replace("$$LOGFILE$$", Util.getTempDir()+File.separator + "ProcRunLog.log");
+      template = template.replace("$$logFILE$$", Util.getTempDir()+File.separator + "ProcRunLog.log");
       template = template.replace("$$JVM_DLL$$",  Util.getJvmDll());
       template = template.replace("$$PROCRUNPATH$$", procRunPath);
       
@@ -172,7 +172,7 @@ private String getProcrunExe() {
           String command = Util.getCscriptExe() + " " + elevateVbs;
           log.debug("Calling elevateVbs with command {} in dir {}", command, instDir.getAbsolutePath());
           Process p = Runtime.getRuntime().exec(command, null, instDir);
-          Util.digestProcess(p);
+          Util.digestProcess(p); 
 
           long start = System.currentTimeMillis();
 

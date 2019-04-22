@@ -50,9 +50,13 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
     private Label additionTextLabel;
     @FXML
     private Label bottomLabel;
-    private static final Logger LOG = Util.getLogger(ProgressDialogController.class.getCanonicalName());
+    private static final Logger log = Util.getLogger(ProgressDialogController.class.getCanonicalName());
     private Stage stage ; 
 
+    public ProgressDialogController() {
+        log.debug("ProgressDialogController: In netbeans");
+    }
+    
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -62,6 +66,10 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
 
     public static void setApp(LoginForms applic) {
         application = applic;
+    }
+    
+    public static LoginForms getApplication() {
+        return application;
     }
     
     public  void setStage(Stage stage){
@@ -92,7 +100,7 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
     }
 
     public void setOptionCallback(Task task) {
-        LOG.debug("setOptionCallback: Runnable has been initialised " + task.toString());
+        log.debug("setOptionCallback: Runnable has been initialised " + task.toString());
         this.optionCallback = task;
     }
 
@@ -106,7 +114,7 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
         progressBar.setProgress(percentage);
     }
 
-    void addInfo(String text) {
+    public void addInfo(String text) {
         this.setTextAndShowComponent(this.additionTextLabel, text);
     }
 
@@ -121,7 +129,7 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
         btn.setDisable(true);
     }
 
-    void addBottomText(String text) {
+    public void addBottomText(String text) {
         this.setTextAndShowComponent(this.bottomLabel, text);
     }
 
@@ -177,7 +185,7 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
 
     @FXML
     private void handleLeftButton(ActionEvent event) {
-        LOG.debug("handleLeftButton has been clicked");
+        log.debug("handleLeftButton has been clicked");
         this.option1 = true;
         leftButton.setVisible(false);
         this.callOptionCallback();

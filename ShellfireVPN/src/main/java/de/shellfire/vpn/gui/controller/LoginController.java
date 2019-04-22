@@ -97,7 +97,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
     private static final long serialVersionUID = 1L;
     public static final String REG_PASS = "pass";
     public static final String REG_USER = "user";
-    public static final String REG_AUTOLOGIN = "autologin";
+    public static final String REG_AUTOlogIN = "autologin";
     public static final String REG_AUTOCONNECT = "autoConnect";
     public static final String REG_INSTDIR = "instdir";
     public static final String REG_SHOWSTATUSURL = "show_status_url_on_connect";
@@ -106,7 +106,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
     private boolean minimize;
     public static LoginForms application;
     private static I18n i18n = VpnI18N.getI18n();
-    private static Logger log = Util.getLogger(LoginForms.class.getCanonicalName());
+    private static Logger log = Util.getLogger(LoginController.class.getCanonicalName());
     private String username;
     private String password;
     private static boolean passwordBogus;
@@ -195,7 +195,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
                                         vis = false;
                                     }
 
-                                 this.application.shellFireMainController.initializeComponents();
+                                this.application.shellFireMainController.initializeComponents();
                                 this.application.shellFireMainController.displayMessage("Creation of object successful");
                                 this.application.shellFireMainController.setSerciceAndInitialize(this.service);
                                 this.application.shellFireMainController.prepareSubviewControllers();
@@ -527,7 +527,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
     private boolean autoLoginIfActive() {
         VpnProperties props = VpnProperties.getInstance();
-        boolean doAutoLogin = props.getBoolean(REG_AUTOLOGIN, false);
+        boolean doAutoLogin = props.getBoolean(REG_AUTOlogIN, false);
 
         if (doAutoLogin) {
             this.fAutoLogin.setSelected(true);
@@ -559,7 +559,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
         VpnProperties props = VpnProperties.getInstance();
         props.remove(REG_USER);
         props.remove(REG_PASS);
-        props.remove(REG_AUTOLOGIN);
+        props.remove(REG_AUTOlogIN);
     }
 
     private void askForNewAccountAndAutoStartIfFirstStart() {
@@ -586,7 +586,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
     private boolean firstStart() {
         VpnProperties props = VpnProperties.getInstance();
         boolean firstStart = props.getBoolean(LoginController.REG_FIRST_START, true);
-        String autoLogin = props.getProperty(LoginController.REG_AUTOLOGIN, null);
+        String autoLogin = props.getProperty(LoginController.REG_AUTOlogIN, null);
 
         return firstStart && autoLogin == null;
     }
@@ -634,7 +634,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
         VpnProperties props = VpnProperties.getInstance();
         props.setProperty(REG_USER, CryptFactory.encrypt(user));
         props.setProperty(REG_PASS, CryptFactory.encrypt(password));
-        props.setBoolean(REG_AUTOLOGIN, fAutoLogin.isSelected());
+        props.setBoolean(REG_AUTOlogIN, fAutoLogin.isSelected());
 
     }
 

@@ -7,6 +7,7 @@ package de.shellfire.vpn.gui.controller;
 
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.gui.LoginForms;
+import static de.shellfire.vpn.gui.controller.ShellfireVPNMainFormFxmlController.currentSidePane;
 import de.shellfire.vpn.gui.model.CountryMap;
 import de.shellfire.vpn.gui.model.ServerListFXModel;
 import de.shellfire.vpn.gui.renderer.StarImageRendererFX;
@@ -190,7 +191,7 @@ public class ServerListSubviewController implements Initializable {
         //LinkedList<ServerListFXModel> serverData = 
         this.serverListData.addAll(initServerTable(this.shellfireService.getServerList().getAll()));
         this.serverListTableView.setItems(serverListData);
-        
+
     }
 
     /**
