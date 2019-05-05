@@ -129,12 +129,6 @@ public class ConnectionSubviewController implements Initializable {
     }
     
     public void updateComponents(boolean connected){
-//        try{
-//        if(this.application.shellFireMainController.getController().getCurrentConnectionState() == ConnectionState.Connected)
-//        this.statusConnectionImageView.setId(baseImageUrl + "/icons/status-encrypted-width" + size + ".gif");
-//        } catch(Exception e){
-//        log.debug("Initialize: controller is not initialize so status is disconnected " + e.getMessage());
-//        }
           if (connected){
           this.statusConnectionImageView.setImage(new Image("/icons/status-encrypted-width" + size + ".gif"));
           this.connectImageView.setImage(new Image("/buttons/button-disconnect-" + langKey + ".gif"));     
