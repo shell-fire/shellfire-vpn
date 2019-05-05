@@ -17,9 +17,11 @@ import de.shellfire.vpn.types.Server;
 import de.shellfire.vpn.types.ServerType;
 import de.shellfire.vpn.types.VpnProtocol;
 import de.shellfire.vpn.webservice.ServerList;
+import de.shellfire.vpn.webservice.Vpn;
 import de.shellfire.vpn.webservice.WebService;
 import de.shellfire.vpn.webservice.model.VpnStar;
 import java.net.URL;
+import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.Random;
@@ -34,14 +36,17 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
+import org.fxmisc.easybind.EasyBind;
 
 /**
  * FXML Controller class
@@ -130,12 +135,13 @@ public class ServerListSubviewController implements Initializable {
     }
     
     private static I18n i18n = VpnI18N.getI18n();
+    public static Vpn currentVpn;
     private WebService shellfireService;
     private ServerList serverList;
     private LoginForms application;
     private static final Logger log = Util.getLogger(ServerListSubviewController.class.getCanonicalName());
     private ObservableList<ServerListFXModel> serverListData = FXCollections.observableArrayList();
-
+    private ShellfireVPNMainFormFxmlController mainFormController ; 
 
     /**
      * Constructor used to initialize serverListTable data from Webservice
@@ -144,6 +150,7 @@ public class ServerListSubviewController implements Initializable {
      */
     public ServerListSubviewController(WebService shellfireService) {
         this.shellfireService = shellfireService;
+        currentVpn = shellfireService.getVpn();        
         initComponents();
     }
 
@@ -188,12 +195,11 @@ public class ServerListSubviewController implements Initializable {
     
     public void initComponents() {
         this.serverList = this.shellfireService.getServerList();
-        //LinkedList<ServerListFXModel> serverData = 
         this.serverListData.addAll(initServerTable(this.shellfireService.getServerList().getAll()));
         this.serverListTableView.setItems(serverListData);
 
     }
-
+      
     /**
      * Initializes the controller class.
      */
@@ -214,7 +220,7 @@ public class ServerListSubviewController implements Initializable {
         countryColumn.setCellFactory(column -> {
             //Set up the Table
             return new TableCell<ServerListFXModel, Server>() {
-                
+                                
                 @Override
                 protected void updateItem(Server item, boolean empty) {
                     super.updateItem(item, empty); //To change body of generated methods, choose Tools | Templates.
@@ -222,6 +228,8 @@ public class ServerListSubviewController implements Initializable {
                         log.debug("ServerListSubviewController: Country Image and text could not be rendered");
                         setText("Empty");
                     } else {
+                        if(shellfireService.getVpn().getServer().equals(item))
+                            log.debug("****The current VPN has server " + item +" and id " + shellfireService.getVpn().getVpnId());
                         // get the corresponding country of this server
                         Country country = item.getCountry();
                         // Attach the imageview to the cell
@@ -229,8 +237,9 @@ public class ServerListSubviewController implements Initializable {
                         getGraphic().setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
                         setText(VpnI18N.getCountryI18n().getCountryName(country));
                     }
+                    this.setDisable(true);
+                    this.setDisabled(true);
                 }
-                
             };
         });
         
@@ -247,8 +256,11 @@ public class ServerListSubviewController implements Initializable {
         this.keyBuyImgeButton.managedProperty().bind(this.keyBuyImgeButton.visibleProperty());
         this.keyBuyImgeButton.setVisible(false);
         this.connectImage2.setVisible(false);
-    }    
+    }
     
+    public void afterInitialization(){
+        this.connectImage1.imageProperty().bindBidirectional(this.mainFormController.getConnectionSubviewController().getConnectImageView().imageProperty());
+    }   
     private LinkedList<ServerListFXModel> initServerTable(LinkedList<Server> servers) {
         LinkedList<ServerListFXModel> allModels = new LinkedList<>();
         //log.debug("ServerListSubviewController: The size of all servers is " + servers.size());
@@ -353,5 +365,9 @@ public class ServerListSubviewController implements Initializable {
      
      public void setApp(LoginForms app){
         this.application = app;
+    }
+     
+    public void setMainFormController(ShellfireVPNMainFormFxmlController mainController){
+        this.mainFormController = mainController;
     }
 }

@@ -198,6 +198,10 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         log.debug("No argumenent controller of shellfire has been called");
     }
 
+    public ConnectionSubviewController getConnectionSubviewController() {
+        return connectionSubviewController;
+    }
+       
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
         // setting the scaling factor to adjust sizes 
@@ -453,6 +457,8 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
             this.serverListSubviewController.initComponents();
             this.serverListSubviewController.initPremium(isFreeAccount());
             this.serverListSubviewController.setApp(this.application);
+            this.serverListSubviewController.setMainFormController(this);
+            this.serverListSubviewController.afterInitialization();
             contentDetailsPane.getChildren().clear();
             contentDetailsPane.getChildren().setAll(pair.getKey());
             currentSidePane = SidePane.SERVERLIST;
@@ -796,6 +802,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         mySetIconImage("/icons/sfvpn2-disconnected-big.png");
         this.globeConnectionImageView.setImage(this.iconIdleSmall);
         this.connectionSubviewController.getStatusConnectionImageView().setImage(this.iconEcncryptionInactive);
+        this.serverListSubviewController.getConnectImage1().setImage(this.buttonDisconnect);
         log.debug("ShellfireMainForm: In setStateDisconnected method ");
 
         //TODO_subview
