@@ -459,6 +459,8 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
             this.serverListSubviewController.setApp(this.application);
             this.serverListSubviewController.setMainFormController(this);
             this.serverListSubviewController.afterInitialization();
+            boolean connectionStatus = getController().getCurrentConnectionState() == ConnectionState.Connected ;
+            this.serverListSubviewController.updateComponents(connectionStatus);
             contentDetailsPane.getChildren().clear();
             contentDetailsPane.getChildren().setAll(pair.getKey());
             currentSidePane = SidePane.SERVERLIST;
@@ -792,7 +794,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
     private void setStateDisconnected() {
         log.debug("setStateDisconnected() - start");
-        enableSystemProxyIfProxyConfig();
+        //enableSystemProxyIfProxyConfig();
         enableSystemProxyIfProxyConfig();
         this.hideConnectProgress();
         
@@ -800,9 +802,11 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         //this.jConnectButtonLabel1.setEnabled(true);
         this.connectionStatusValue.setText(i18n.tr("Not connected"));
         mySetIconImage("/icons/sfvpn2-disconnected-big.png");
-        this.globeConnectionImageView.setImage(this.iconIdleSmall);
+        //this.globeConnectionImageView.setImage(this.iconIdleSmall);
+        Platform.runLater(()->{this.globeConnectionImageView.setImage(this.iconIdleSmall);});
         this.connectionSubviewController.getStatusConnectionImageView().setImage(this.iconEcncryptionInactive);
-        this.serverListSubviewController.getConnectImage1().setImage(this.buttonDisconnect);
+        this.connectionSubviewController.getConnectImageView().setImage(this.buttonConnect);
+        this.serverListSubviewController.getConnectImage1().setImage(this.buttonConnect);
         log.debug("ShellfireMainForm: In setStateDisconnected method ");
 
         //TODO_subview
@@ -1180,6 +1184,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         mySetIconImage("/icons/sfvpn2-connected-big.png");
         this.connectionSubviewController.getStatusConnectionImageView().setImage(this.iconEcncryptionActive);
         this.connectionSubviewController.getConnectImageView().setImage(this.buttonDisconnect);
+        this.serverListSubviewController.getConnectImage1().setImage(this.buttonDisconnect);
          
         if (this.trayIcon != null) {
             this.trayIcon.setImage(this.iconConnected);

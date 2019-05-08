@@ -39,6 +39,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseEvent;
@@ -261,6 +262,16 @@ public class ServerListSubviewController implements Initializable {
     public void afterInitialization(){
         this.connectImage1.imageProperty().bindBidirectional(this.mainFormController.getConnectionSubviewController().getConnectImageView().imageProperty());
     }   
+    
+    /**Updates buttons and other components when connection status changes 
+     * @param isConnected boolean variable for the connection status
+     */
+    public void updateComponents(boolean isConnected){
+          if (isConnected){
+          this.connectImage1.setImage(new Image("/buttons/button-disconnect-" + VpnI18N.getLanguage().getKey() + ".gif"));     
+          }
+    }
+    
     private LinkedList<ServerListFXModel> initServerTable(LinkedList<Server> servers) {
         LinkedList<ServerListFXModel> allModels = new LinkedList<>();
         //log.debug("ServerListSubviewController: The size of all servers is " + servers.size());
