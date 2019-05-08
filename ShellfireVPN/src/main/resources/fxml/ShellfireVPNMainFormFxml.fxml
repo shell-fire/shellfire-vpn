@@ -23,9 +23,9 @@
          <children>
             <Pane fx:id="leftMenuPane" layoutX="1.0" layoutY="1.0" prefHeight="515.0" prefWidth="248.0" style="-fx-background-color: rgb(49,57,64);" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0" AnchorPane.topAnchor="1.0">
                <children>
-                  <Pane fx:id="leftConnectionPane" layoutY="60.0" onContextMenuRequested="#handleConnectionPaneContext" onMouseClicked="#handleConnectionPaneClicked" onMouseEntered="#handleConnectionPaneMouseEntered" onMouseExited="#handleConnectionPaneMouseExited" prefHeight="60.0" prefWidth="248.0" style="-fx-background-color: black;">
+                  <Pane fx:id="leftConnectionPane" layoutY="60.0" onContextMenuRequested="#handleConnectionPaneContext" onMouseClicked="#handleConnectionPaneClicked" onMouseEntered="#handleConnectionPaneMouseEntered" onMouseExited="#handleConnectionPaneMouseExited" prefHeight="66.0" prefWidth="248.0" style="-fx-background-color: black;">
                      <children>
-                        <ImageView fx:id="connectoinBackgroundImageView" blendMode="LIGHTEN" fitHeight="58.0" fitWidth="252.0" layoutX="-5.0" layoutY="4.0" style="--fx-border-color: yellow;">
+                        <ImageView fx:id="connectoinBackgroundImageView" blendMode="LIGHTEN" fitHeight="58.0" fitWidth="252.0" layoutX="-5.0" layoutY="5.0" style="--fx-border-color: yellow;">
                            <image>
                               <Image url="@../buttons/button-connect-idle.png" />
                            </image>
@@ -35,7 +35,7 @@
                               <Font size="16.0" />
                            </font>
                         </Label>
-                        <Label fx:id="connectionFooter" graphicTextGap="2.0" layoutX="43.0" layoutY="31.0" prefHeight="25.0" prefWidth="199.0" text="Connect to ShellFire VPN now" textFill="#f0f0f0">
+                        <Label fx:id="connectionFooter" graphicTextGap="2.0" layoutX="42.0" layoutY="32.0" prefHeight="25.0" prefWidth="199.0" text="Connect to ShellFire VPN now" textFill="#f0f0f0">
                            <font>
                               <Font size="15.0" />
                            </font>
@@ -45,9 +45,9 @@
                         <Insets top="1.0" />
                      </padding>
                   </Pane>
-                  <Pane fx:id="serverListPane" layoutX="1.0" layoutY="128.0" onContextMenuRequested="#handleServerListPaneContext" onMouseClicked="#handleServerListPaneClicked" onMouseEntered="#handleServerListPaneMouseEntered" onMouseExited="#handleServerListPaneMouseExited" prefHeight="57.0" prefWidth="248.0" style="-fx-background-color: black;">
+                  <Pane fx:id="serverListPane" layoutX="1.0" layoutY="123.0" onContextMenuRequested="#handleServerListPaneContext" onMouseClicked="#handleServerListPaneClicked" onMouseEntered="#handleServerListPaneMouseEntered" onMouseExited="#handleServerListPaneMouseExited" prefHeight="66.0" prefWidth="248.0" style="-fx-background-color: black;">
                      <children>
-                        <ImageView fx:id="serverListBackgroundImage" blendMode="LIGHTEN" fitHeight="58.0" fitWidth="248.0" layoutY="1.0">
+                        <ImageView fx:id="serverListBackgroundImage" blendMode="LIGHTEN" fitHeight="58.0" fitWidth="248.0">
                            <image>
                               <Image url="@../buttons/button-serverlist-idle.png" />
                            </image>
@@ -67,9 +67,9 @@
                         <Insets top="1.0" />
                      </padding>
                   </Pane>
-                  <Pane fx:id="streamsPane" layoutY="188.0" onContextMenuRequested="#handleStreamsPaneContext" onMouseClicked="#handleStreamsPaneClicked" onMouseEntered="#handleStreamsPaneMouseEntered" onMouseExited="#handleStreamsPaneMouseExited" prefHeight="61.0" prefWidth="248.0" style="-fx-background-color: black;">
+                  <Pane fx:id="streamsPane" layoutY="182.0" onContextMenuRequested="#handleStreamsPaneContext" onMouseClicked="#handleStreamsPaneClicked" onMouseEntered="#handleStreamsPaneMouseEntered" onMouseExited="#handleStreamsPaneMouseExited" prefHeight="59.0" prefWidth="248.0" style="-fx-background-color: black;">
                      <children>
-                        <ImageView fx:id="streamsBackgroundImageView" blendMode="LIGHTEN" fitHeight="58.0" fitWidth="248.0" layoutY="1.0">
+                        <ImageView fx:id="streamsBackgroundImageView" blendMode="LIGHTEN" fitHeight="58.0" fitWidth="248.0">
                            <image>
                               <Image url="@../buttons/button-usa-idle.png" />
                            </image>
