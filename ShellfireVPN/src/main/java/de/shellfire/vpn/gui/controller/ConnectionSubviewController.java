@@ -6,7 +6,6 @@
 package de.shellfire.vpn.gui.controller;
 
 import de.shellfire.vpn.Util;
-import de.shellfire.vpn.client.ConnectionState;
 import de.shellfire.vpn.client.Controller;
 import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.i18n.VpnI18N;
@@ -21,6 +20,7 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -80,8 +80,8 @@ public class ConnectionSubviewController implements Initializable {
         return premiumInfoImageView;
     }
     
-    public void connectImageviewDisable(boolean disable){
-        this.connectImageView.setDisable(disable);
+    public void connectButtonDisable(boolean disable){
+        this.connectButton.setDisable(disable);
     }
 
     public void setConnectImageView(ImageView connectImageView) {
@@ -109,23 +109,23 @@ public class ConnectionSubviewController implements Initializable {
         log.debug("langKey: " + langKey);
 
         //mySetIconImage("/icons/sfvpn2-idle-big.png");
-        
-
-        this.connectImageView.setId(baseImageUrl + "/buttons/button-disconnect-" + langKey + ".gif");
-        this.statusConnectionImageView.setId(baseImageUrl + "/icons/status-unencrypted-width" + size + ".gif");
+        log.debug("Before initialization of images");
+        //this.connectImageView.setImage(new Image("/buttons/button-connect-" + langKey + ".gif"));
+        //this.connectImageView.setId(baseImageUrl + "/buttons/button-disconnect-" + langKey + ".gif");
+        //this.statusConnectionImageView.setId(baseImageUrl + "/icons/status-unencrypted-width" + size + ".gif");
         
         this.connectButton.setGraphic(connectImageView);
+        this.connectButton.setPadding(Insets.EMPTY);
         //this.connectButton.setStyle("-fx-background-image: url(../buttons/button-disconnect-" + langKey + ".gif);");
         
         //this.connectButton.setGraphic();   Style("-fx-background-image: url("+baseImageUrl+"../buttons/button-disconnect-" + langKey + ".gif);");
-        
         //makes product key to be disable when disable is set to true
         this.productKeyImageView.managedProperty().bind(this.productKeyImageView.visibleProperty());
         this.premiumInfoImageView.managedProperty().bind(this.premiumInfoImageView.visibleProperty());
         this.connectImageView.managedProperty().bind(this.connectImageView.visibleProperty());
         this.productKeyImageView.setVisible(false);
-        this.premiumInfoImageView.setVisible(false);
-
+        this.premiumInfoImageView.setVisible(false);    
+        log.debug("After initialization of images");
     }
     
     public void updateComponents(boolean connected){
@@ -152,25 +152,6 @@ public class ConnectionSubviewController implements Initializable {
 
     public void productKeyDisable(boolean value) {
         this.productKeyImageView.setDisable(value);
-    }
-
-    @FXML
-    private void handleConnectImageViewMouseExited(MouseEvent event) {
-        this.application.getStage().getScene().setCursor(Cursor.DEFAULT);
-    }
-
-    @FXML
-    private void handleConnectImageViewMouseEntered(MouseEvent event) {
-        this.application.getStage().getScene().setCursor(Cursor.HAND);
-    }
-
-    @FXML
-    private void handleConnectImageViewContext(ContextMenuEvent event) {
-    }
-
-    @FXML
-    private void handleConnectImageViewClicked(MouseEvent event) {
-        this.application.shellFireMainController.connectFromButton(true);
     }
 
     @FXML
@@ -216,10 +197,25 @@ public class ConnectionSubviewController implements Initializable {
     public void setParentController(ShellfireVPNMainFormFxmlController shellController){
         this.mainController = shellController ;
     }
+    
+    @FXML
+    private void handleConnectButtonExited(MouseEvent event) {
+        this.application.getStage().getScene().setCursor(Cursor.DEFAULT);
+    }
 
     @FXML
-    private void handleConnectButtonClicked(ActionEvent event) {
+    private void handleConnectButtonEntered(MouseEvent event) {
+        this.application.getStage().getScene().setCursor(Cursor.HAND);
+    }
+
+    @FXML
+    private void handleConnectButtonClicked(MouseEvent event) {
         this.application.shellFireMainController.connectFromButton(false);
+    }
+
+    @FXML
+    private void handleConnectButtonAction(ActionEvent event) {
+        handleConnectButtonClicked(null);
     }
 
 }

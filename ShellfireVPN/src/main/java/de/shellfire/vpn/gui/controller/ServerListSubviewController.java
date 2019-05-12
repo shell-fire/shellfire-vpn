@@ -29,9 +29,13 @@ import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.geometry.NodeOrientation;
+import javafx.scene.Cursor;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableCell;
@@ -47,7 +51,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.util.Callback;
 import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
-import org.fxmisc.easybind.EasyBind;
 
 /**
  * FXML Controller class
@@ -87,21 +90,8 @@ public class ServerListSubviewController implements Initializable {
     @FXML
     private ImageView keyBuyImgeButton;
     @FXML
-    private void handleConnectImage1MouseExited(MouseEvent event) {
-    }
+    private Button connectButton1;
 
-    @FXML
-    private void handleConnectImage1MouseEntered(MouseEvent event) {
-    }
-
-    @FXML
-    private void handleConnectImage1ContextRequested(ContextMenuEvent event) {
-    }
-
-    @FXML
-    private void handleConnectImage1MouseClicked(MouseEvent event) {
-        this.application.shellFireMainController.connectFromButton(false);
-    }
 
     @FXML
     private void handleKeyBuyImgeButtonExited(MouseEvent event) {
@@ -191,7 +181,7 @@ public class ServerListSubviewController implements Initializable {
     }
     
     public void setsetConnetImage1Disable(boolean enable){
-         this.connectImage1.setDisable(enable);
+         this.connectButton1.setDisable(enable);
     }
     
     public void initComponents() {
@@ -211,7 +201,8 @@ public class ServerListSubviewController implements Initializable {
         this.TCPRadioButton.setText(i18n.tr("TCP (works with safe firewalls and proxies.)"));
         this.UDPRadioButton.setText(i18n.tr("UDP (fast)"));
         //this.connectImage1.setImage(new Image("\\buttons\\button-connect-de.gif"));
-
+        this.connectButton1.setGraphic(connectImage1);
+        this.connectButton1.setPadding(Insets.EMPTY);
         nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
         serverColumn.setCellValueFactory(cellData -> cellData.getValue().serverTypeProperty());
         securityColumn.setCellValueFactory(cellData -> cellData.getValue().securityProperty());
@@ -380,5 +371,25 @@ public class ServerListSubviewController implements Initializable {
      
     public void setMainFormController(ShellfireVPNMainFormFxmlController mainController){
         this.mainFormController = mainController;
+    }
+
+    @FXML
+    private void connectButton1Exited(MouseEvent event) {
+        this.application.getStage().getScene().setCursor(Cursor.DEFAULT);
+    }
+
+    @FXML
+    private void connectButton1Entered(MouseEvent event) {
+        this.application.getStage().getScene().setCursor(Cursor.HAND);
+    }
+
+    @FXML
+    private void connectButton1Clicked(MouseEvent event) {
+        this.application.shellFireMainController.connectFromButton(false);
+    }
+
+    @FXML
+    private void connectButton1OnAction(ActionEvent event) {
+        connectButton1Clicked(null);
     }
 }

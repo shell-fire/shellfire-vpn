@@ -283,6 +283,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     }
 
     public void setShellfireService(WebService shellfireService) {
+        log.debug("In setShellfireService method");
         this.shellfireService = shellfireService;
         log.debug("ShellfireVPNMainFormFxmlController:" + "service initialized");
     }
@@ -798,8 +799,8 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         enableSystemProxyIfProxyConfig();
         this.hideConnectProgress();
         
-        this.connectionSubviewController.getConnectImageView().setDisable(false);
-        //this.jConnectButtonLabel1.setEnabled(true);
+        this.connectionSubviewController.connectButtonDisable(false);
+        this.serverListSubviewController.setsetConnetImage1Disable(false);
         this.connectionStatusValue.setText(i18n.tr("Not connected"));
         mySetIconImage("/icons/sfvpn2-disconnected-big.png");
         //this.globeConnectionImageView.setImage(this.iconIdleSmall);
@@ -809,8 +810,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         this.serverListSubviewController.getConnectImage1().setImage(this.buttonConnect);
         log.debug("ShellfireMainForm: In setStateDisconnected method ");
 
-        //TODO_subview
-        //this.mapEncryptionSubviewController.getShowOwnPosition().setDisable(false);
         boolean showMessage = false;
         String message = "";
         if (this.controller != null) {
@@ -873,7 +872,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         }
         if (showMessage) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            //alert.setHeaderText(i18n.tr("Fehler: Verbindung fehlgeschlagen"));
             alert.setContentText(message);
             alert.getDialogPane().getChildren().stream().filter(node -> node instanceof Label).forEach(node -> ((Label)node).setMinWidth(Region.USE_PREF_SIZE));
             alert.showAndWait();
@@ -898,7 +896,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         } catch (IOException ex) {
             log.debug("setStateConnecting: cannot start showConnectProgress with error " + ex.getMessage());
         }
-        this.connectionSubviewController.connectImageviewDisable(true);
+        this.connectionSubviewController.connectButtonDisable(true);
         this.serverListSubviewController.setsetConnetImage1Disable(true); 
 
         //TODO_subview
@@ -1167,24 +1165,15 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     private void setStateConnected() {
         Platform.runLater(() -> {this.hideConnectProgress();});
         
-        // TODO - buttonlables already loaded from scenebuilder (check and verify)
-        //this.jConnectButtonLabel.setIcon(new ImageIcon(buttonDisconnect));
-        //this.jConnectButtonLabel1.setIcon(new ImageIcon(buttonDisconnect));
-        //this.jConnectButtonLabel.setEnabled(true);
-        //this.jConnectButtonLabel1.setEnabled(true);
-
-        //TODO_subview
-        /*
-        if (!this.mapEncryptionSubviewController.getShowOwnPosition().isSelected()) {
-            this.mapEncryptionSubviewController.getShowOwnPosition().setDisable(true);
-        }*/
-        Platform.runLater(()->{this.connectionStatusValue.setText(i18n.tr("Connected"));});
+        Platform.runLater(()->{this.connectionStatusValue.setText(i18n.tr("Connected"));;});
 
         //TODO check if image not already loaddd
         mySetIconImage("/icons/sfvpn2-connected-big.png");
         this.connectionSubviewController.getStatusConnectionImageView().setImage(this.iconEcncryptionActive);
         this.connectionSubviewController.getConnectImageView().setImage(this.buttonDisconnect);
         this.serverListSubviewController.getConnectImage1().setImage(this.buttonDisconnect);
+        this.connectionSubviewController.connectButtonDisable(false);
+        this.serverListSubviewController.setsetConnetImage1Disable(false);
          
         if (this.trayIcon != null) {
             this.trayIcon.setImage(this.iconConnected);

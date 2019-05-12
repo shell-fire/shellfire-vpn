@@ -264,7 +264,7 @@ public class LoginForms extends Application {
             System.out.println("Location of Controller is " + loader.getController());
 
         } catch (Exception ex) {
-            log.debug(" Loading fxml has error for replaceSceneContent " + ex.getMessage());
+            log.debug(" Loading fxml has error for replaceSceneContent for " + fxml + " with error " + ex.getMessage());
         }
         page.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override

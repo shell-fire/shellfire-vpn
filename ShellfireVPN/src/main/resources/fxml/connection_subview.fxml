@@ -9,14 +9,14 @@
    <children>
       <Pane fx:id="contentDetailsPane" prefHeight="518.0" prefWidth="817.0" style="-fx-background-color: rgb(240,240,240);">
          <children>
+            <ImageView fx:id="connectImageView" fitHeight="46.0" fitWidth="200.0" layoutX="18.0" layoutY="380.0">
+               <image>
+                  <Image url="@../buttons/button-connect-en.gif" />
+               </image>
+            </ImageView>
             <ImageView fx:id="statusConnectionImageView" fitHeight="435.0" fitWidth="800.0" layoutX="5.0" layoutY="6.0">
                <image>
                   <Image url="@../icons/status-unencrypted-width736.gif" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="connectImageView" fitHeight="46.0" fitWidth="200.0" layoutX="24.0" layoutY="451.0" onContextMenuRequested="#handleConnectImageViewContext" onMouseClicked="#handleConnectImageViewClicked" onMouseEntered="#handleConnectImageViewMouseEntered" onMouseExited="#handleConnectImageViewMouseExited">
-               <image>
-                  <Image url="@../buttons/button-connect-en.gif" />
                </image>
             </ImageView>
             <ImageView fx:id="productKeyImageView" fitHeight="46.0" fitWidth="248.0" layoutX="249.0" layoutY="454.0" onContextMenuRequested="#handleProductKeyImageViewContext" onMouseClicked="#handleProductKeyImageViewClicked" onMouseEntered="#handleProductKeyImageViewMouseEntered" onMouseExited="#handleProductKeyImageViewMouseExited">
@@ -29,7 +29,7 @@
                   <Image url="@../buttons/button-premium-infos.gif" />
                </image>
             </ImageView>
-            <Button id="connect-button" fx:id="connectButton" layoutX="24.0" layoutY="451.0" mnemonicParsing="false" onAction="#handleConnectButtonClicked" prefHeight="46.0" prefWidth="200.0" stylesheets="@../stylesheets/main-en.css" />
+            <Button id="connect-button" fx:id="connectButton" layoutX="18.0" layoutY="453.0" mnemonicParsing="false" onAction="#handleConnectButtonAction" onMouseClicked="#handleConnectButtonClicked" onMouseEntered="#handleConnectButtonEntered" onMouseExited="#handleConnectButtonExited" prefHeight="46.0" prefWidth="200.0" />
          </children>
       </Pane>
    </children>
