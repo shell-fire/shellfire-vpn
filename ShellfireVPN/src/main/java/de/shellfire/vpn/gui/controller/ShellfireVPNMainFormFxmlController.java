@@ -762,7 +762,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
                     @Override
                     public void handle(javafx.event.ActionEvent event) {
                         controller.disconnect(Reason.DisconnectButtonPressed);
-                        task.cancel();
+                        task.cancel(true);
                         log.debug("showConnectProgress: Cancel button clicked");
                     }
                 });
