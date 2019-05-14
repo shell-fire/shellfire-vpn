@@ -741,9 +741,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         });
         
         log.debug("showConnectProgress: Thread Has started");
-        //return FXMLLoader.load(getClass().getResource("sample2.fxml"));
         Platform.setImplicitExit(false);
-        Platform.runLater(()->System.out.println("Inside Platform.runLater()"));
         Platform.runLater(()->{
             try {
                 // Load the fxml file and create a new stage for the popup dialog.
@@ -773,18 +771,15 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
                 popUpStage.initOwner(this.application.getStage());
                 Scene scene = new Scene(page);
                 popUpStage.setScene(scene);
-                connectProgressDialog = loader.getController();
-                
-             
+                connectProgressDialog = loader.getController();            
                 // unbind any previous progress bar
                 connectProgressDialog.getProgressBar().progressProperty().unbind();
-                //connectProgressDialog.getProgressBar().progressProperty().bind(task2.progressProperty());
             
                 connectProgressDialog.setVisible(true);
             } catch (IOException ex) {
                 log.debug("connectFromButton. Error is " + ex.getMessage());
             }
-               });
+        });
         
         task.run();
     }

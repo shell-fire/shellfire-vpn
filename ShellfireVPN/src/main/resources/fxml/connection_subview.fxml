@@ -9,6 +9,11 @@
    <children>
       <Pane fx:id="contentDetailsPane" prefHeight="518.0" prefWidth="817.0" style="-fx-background-color: rgb(240,240,240);">
          <children>
+            <ImageView fx:id="premiumInfoImageView" fitHeight="46.0" fitWidth="240.0" layoutX="524.0" layoutY="380.0">
+               <image>
+                  <Image url="@../buttons/button-premium-infos.gif" />
+               </image>
+            </ImageView>
             <ImageView fx:id="connectImageView" fitHeight="46.0" fitWidth="200.0" layoutX="18.0" layoutY="380.0">
                <image>
                   <Image url="@../buttons/button-connect-en.gif" />
@@ -24,12 +29,8 @@
                   <Image url="@../buttons/button-serial-en.gif" />
                </image>
             </ImageView>
-            <ImageView fx:id="premiumInfoImageView" fitHeight="46.0" fitWidth="240.0" layoutX="521.0" layoutY="453.0" onContextMenuRequested="#handlePremiumInfoImageViewContext" onMouseClicked="#handlePremiumInfoImageViewClicked" onMouseEntered="#handlePremiumInfoImageViewMouseEntered" onMouseExited="#handlePremiumInfoImageViewMouseExited">
-               <image>
-                  <Image url="@../buttons/button-premium-infos.gif" />
-               </image>
-            </ImageView>
             <Button id="connect-button" fx:id="connectButton" layoutX="18.0" layoutY="453.0" mnemonicParsing="false" onAction="#handleConnectButtonAction" onMouseClicked="#handleConnectButtonClicked" onMouseEntered="#handleConnectButtonEntered" onMouseExited="#handleConnectButtonExited" prefHeight="46.0" prefWidth="200.0" />
+            <Button fx:id="premiumButton" ellipsisString="" layoutX="550.0" layoutY="456.0" mnemonicParsing="false" onAction="#premiumButtonOnAction" onMouseClicked="#premiumButtonClicked" onMouseEntered="#premiumButtonEntered" onMouseExited="#premiumButtonExited" prefHeight="46.0" prefWidth="240.0" />
          </children>
       </Pane>
    </children>

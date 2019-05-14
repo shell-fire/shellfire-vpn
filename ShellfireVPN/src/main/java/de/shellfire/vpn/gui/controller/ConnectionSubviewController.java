@@ -48,6 +48,10 @@ public class ConnectionSubviewController implements Initializable {
     private ImageView productKeyImageView;
     @FXML
     private ImageView premiumInfoImageView;
+    @FXML
+    private Button premiumButton;
+    @FXML
+    private Button connectButton;
     private LoginForms application;
     private static final Logger log = Util.getLogger(ShellfireVPNMainFormFxmlController.class.getCanonicalName());
     private static I18n i18n = VpnI18N.getI18n();
@@ -60,8 +64,7 @@ public class ConnectionSubviewController implements Initializable {
     String baseImageUrl = "src/main/resources";
     String size = "736";
     String langKey = VpnI18N.getLanguage().getKey();
-    @FXML
-    private Button connectButton;
+
     
     
     public ImageView getStatusConnectionImageView() {
@@ -107,24 +110,19 @@ public class ConnectionSubviewController implements Initializable {
             size = "1472";
         }
         log.debug("langKey: " + langKey);
-
-        //mySetIconImage("/icons/sfvpn2-idle-big.png");
-        log.debug("Before initialization of images");
-        //this.connectImageView.setImage(new Image("/buttons/button-connect-" + langKey + ".gif"));
-        //this.connectImageView.setId(baseImageUrl + "/buttons/button-disconnect-" + langKey + ".gif");
-        //this.statusConnectionImageView.setId(baseImageUrl + "/icons/status-unencrypted-width" + size + ".gif");
         
         this.connectButton.setGraphic(connectImageView);
         this.connectButton.setPadding(Insets.EMPTY);
-        //this.connectButton.setStyle("-fx-background-image: url(../buttons/button-disconnect-" + langKey + ".gif);");
-        
-        //this.connectButton.setGraphic();   Style("-fx-background-image: url("+baseImageUrl+"../buttons/button-disconnect-" + langKey + ".gif);");
+        this.premiumButton.setGraphic(premiumInfoImageView);
+        this.premiumButton.setPadding(Insets.EMPTY);
+       
         //makes product key to be disable when disable is set to true
         this.productKeyImageView.managedProperty().bind(this.productKeyImageView.visibleProperty());
         this.premiumInfoImageView.managedProperty().bind(this.premiumInfoImageView.visibleProperty());
         this.connectImageView.managedProperty().bind(this.connectImageView.visibleProperty());
         this.productKeyImageView.setVisible(false);
-        this.premiumInfoImageView.setVisible(false);    
+        this.premiumInfoImageView.setVisible(false);
+        this.premiumButton.setVisible(false);
         log.debug("After initialization of images");
     }
     
@@ -143,6 +141,7 @@ public class ConnectionSubviewController implements Initializable {
         } else {
             //this.productKeyImageView.setVisible(false);
             this.premiumInfoImageView.setVisible(true);
+            this.premiumButton.setVisible(true);
         }
     }
 
@@ -171,24 +170,6 @@ public class ConnectionSubviewController implements Initializable {
     @FXML
     private void handleProductKeyImageViewClicked(MouseEvent event) {
     }
-
-    @FXML
-    private void handlePremiumInfoImageViewMouseExited(MouseEvent event) {
-        this.application.getStage().getScene().setCursor(Cursor.DEFAULT);
-    }
-
-    @FXML
-    private void handlePremiumInfoImageViewMouseEntered(MouseEvent event) {
-        this.application.getStage().getScene().setCursor(Cursor.HAND);
-    }
-
-    @FXML
-    private void handlePremiumInfoImageViewContext(ContextMenuEvent event) {
-    }
-
-    @FXML
-    private void handlePremiumInfoImageViewClicked(MouseEvent event) {
-    }
     
     public void setApp(LoginForms app){
         this.application = app;
@@ -216,6 +197,27 @@ public class ConnectionSubviewController implements Initializable {
     @FXML
     private void handleConnectButtonAction(ActionEvent event) {
         handleConnectButtonClicked(null);
+    }
+
+    @FXML
+    private void premiumButtonExited(MouseEvent event) {
+        this.application.getStage().getScene().setCursor(Cursor.DEFAULT);
+    }
+
+    @FXML
+    private void premiumButtonEntered(MouseEvent event) {
+        this.application.getStage().getScene().setCursor(Cursor.HAND);        
+    }
+
+    @FXML
+    private void premiumButtonClicked(MouseEvent event) {
+        WebService service = WebService.getInstance();
+        Util.openUrl(service.getUrlPremiumInfo());
+    }
+
+    @FXML
+    private void premiumButtonOnAction(ActionEvent event) {
+        premiumButtonClicked(null);
     }
 
 }
