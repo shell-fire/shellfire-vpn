@@ -159,7 +159,7 @@ public class EndpointManager {
                 log.debug("No preferred endPoint set yet, not testing");
             } else {
                 log.debug("testing preferred endPoint {}", preferredEndPoint);
-                //initDialog.setText(i18n.tr("Testing endpoint that worked before..."));
+                //initDialogFX.setDialogText(i18n.tr("Testing endpoint that worked before..."));
                 result = testEndpoint(preferredEndPoint);
             }
 
@@ -183,7 +183,8 @@ public class EndpointManager {
 
         @Override
         protected String doInBackground() throws Exception {
-
+            
+            log.debug("EndpoingManager: In doInBackground method");
             initDialog.setText(i18n.tr("Searching for backend connection..."));
 
             boolean result = false;
@@ -237,21 +238,15 @@ public class EndpointManager {
                 initDialogFX.setDialogText("Update Check");
                 initDialogOriginFX = true;
             }
-//            Platform.runLater(new Runnable() {
-//                public void run() {
-//                    //initDialogFX.setVisible(true);
-//                    initDialogStage.show();
-//                    // TODO: check if intention was not to load the dialog.
-//                }
-//            });
-            //initDialogStage.show();
         }
 
         // corresponds to Swing's doInBackgraound
         @Override
         protected Object call() throws Exception {
+            log.debug("EndpointManager: start of call method");
             Platform.setImplicitExit(false);
-            Platform.runLater(()->LoginForms.initDialog.setDialogText(i18n.tr("Searching for backend connection...")));
+            //Platform.runLater(()->initDialogFX.setDialogText(i18n.tr("Searching for backend connection...")));
+            initDialogFX.setDialogText(i18n.tr("Searching for backend connection..."));
             log.debug("Find Endpoint task method, init dialog has " + initDialogFX.toString());
             boolean result = false;
 
@@ -292,7 +287,7 @@ public class EndpointManager {
                 log.debug("No preferred endPoint set yet, not testing");
             } else {
                 log.debug("fx testing preferred endPoint {}", preferredEndPoint);
-                //initDialogFX.setDialogText(i18n.tr("Testing endpoint that worked before..."));
+                initDialogFX.setDialogText(i18n.tr("Testing endpoint that worked before..."));
                 if (null != initDialogStage) {
                     LoginForms.initDialogStage.show();
                     log.debug("testPreferredEndpoint(): Testing endpoint stage is shown");
@@ -329,7 +324,7 @@ public class EndpointManager {
             log.debug("testEndPointList() - finished, returning {}", result);
             return result;
         }
-
+               
     }
 
     public class FindEndpointTaskFXFactory {
@@ -350,6 +345,7 @@ public class EndpointManager {
             boolean couldNotConnect = true;
             endPointTask.getContinueFormFX().continueAfterBackEndAvailabledFX();
             new Thread(endPointTask).start();
+            
             endPointTask.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
                 @Override
                 public void handle(WorkerStateEvent t) {

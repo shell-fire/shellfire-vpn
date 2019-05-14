@@ -102,13 +102,10 @@ public class LoginForms extends Application {
             log.debug("Stage has value " + this.stage);
             setLookAndFeel();
             this.loadLoginController();
-            //Stage loginStage = (Stage)((Stage)stage).clone();
-            //controllersAndStage.put(log, stage)
-            this.loadProgressDialog();
             initConnectionTest();
             
         } catch (Exception ex) {
-            log.debug("could not start with first stage load " + ex);
+            log.error("could not start with first stage load " + ex);
         }
 
         try {
@@ -120,46 +117,39 @@ public class LoginForms extends Application {
             afterDialogDisplay();
             //this.stage.show();
         } catch (Exception ex) {
-            log.debug("could not latter message after login in start \n" + ex.getMessage());
+            log.error("could not latter message after login in start \n" + ex.getMessage());
         }
         
     }
     
     public static void setLookAndFeel(){
         log.debug("setLookAndFeel: first test");
-            //Platform.runLater(() -> {
-                try {
-                    
-                    // Load the fxml file and create a new stage for the popup dialog.
-                    FXMLLoader loader = new FXMLLoader(LoginForms.class.getClassLoader().getResource("/fxml/ProgressDialog.fxml"));
-                    loader.setLocation(LoginForms.class.getResource("/fxml/ProgressDialog.fxml"));
-                    log.debug("setLookAndFeel: second test");
-                    initDialog = new ProgressDialogController();
-                    
-                    loader.setController(initDialog);
-                    AnchorPane page = (AnchorPane) loader.load();
-                    //TODO check if reassigning is necessary
-                    //initDialog = (ProgressDialogController) loader.getController();
-                    
-                    initDialog.setDialogText("Connecting ...");
-                    log.debug("setLookAndFeel: third test");
-                    initDialog.getProgressBar().setProgress(ProgressBar.INDETERMINATE_PROGRESS);
-                    initDialog.addInfo("");
-                    initDialog.addBottomText("");
-                    initDialog.getLeftButton().setDisable(true);
-                    log.debug("setLookAndFeel: fourth test");
-                    initDialogStage = new Stage();
-                    initDialogStage.initStyle(StageStyle.UNDECORATED);
-                    initDialogStage.setTitle("Connecting");
-                    initDialogStage.initModality(Modality.WINDOW_MODAL);
-                    //initDialogStage.initOwner(form.getDialogFX().getStage());
-                    Scene scene = new Scene(page);
-                    initDialogStage.setScene(scene);
-                    //connectProgressDialog = loader.getController();
-                } catch (Exception e) {
-                    log.debug("There is an exception caused by the setLookAndFeel method, " + e.toString());
-                }
-           // });
+        try {
+
+            // Load the fxml file and create a new stage for the popup dialog.
+            FXMLLoader loader = new FXMLLoader(LoginForms.class.getClassLoader().getResource("/fxml/ProgressDialog.fxml"));
+            loader.setLocation(LoginForms.class.getResource("/fxml/ProgressDialog.fxml"));
+            log.debug("setLookAndFeel: second test");
+
+            AnchorPane page = (AnchorPane) loader.load();
+            initDialog = (ProgressDialogController)loader.getController();
+            initDialog.setDialogText("Connecting ...");
+            initDialog.getProgressBar().setProgress(ProgressBar.INDETERMINATE_PROGRESS);
+            initDialog.addInfo("");
+            initDialog.addBottomText("");
+            initDialog.getLeftButton().setDisable(true);
+            log.debug("setLookAndFeel: fourth test");
+            initDialogStage = new Stage();
+            initDialogStage.initStyle(StageStyle.UNDECORATED);
+            initDialogStage.setTitle("Connecting");
+            initDialogStage.initModality(Modality.WINDOW_MODAL);
+            //initDialogStage.initOwner(form.getDialogFX().getStage());
+            Scene scene = new Scene(page);
+            initDialogStage.setScene(scene);
+            //connectProgressDialog = loader.getController();
+        } catch (Exception e) {
+            log.error("There is an exception caused by the setLookAndFeel method, " + e.toString());
+        }
     }
     public static void loadProgressDialog(String message) {
         try {
@@ -169,19 +159,19 @@ public class LoginForms extends Application {
             //initDialog.setApp();
 
         } catch (Exception ex) {
-            log.debug("could not load progressDialog fxml \n" + ex.getMessage());
+            log.error("could not load progressDialog fxml \n" + ex.getMessage());
         }
     }
 
     // Overloading of Method loadProgressDialog
     public void loadProgressDialog() {
+        log.debug("LoginForms: sAttempt has been made to load progressdialog");
         try {
             this.initDialog = (ProgressDialogController) replaceSceneContent("ProgressDialog.fxml");
-            //Platform.runLater(() -> progressDialog.setVisible(true));
             this.initDialog.setApp(this);
 
         } catch (Exception ex) {
-            log.debug("could not load progressDialog fxml \n" + ex.getMessage());
+            log.error("could not load progressDialog fxml \n" + ex.getMessage());
         }
     }
 
@@ -194,7 +184,7 @@ public class LoginForms extends Application {
             log.debug("LoginForms: Login controller loaded");
 
         } catch (Exception ex) {
-            log.debug("could not load loginController fxml\n" + ex.getMessage());
+            log.error("could not load loginController fxml\n" + ex.getMessage());
         }
 
     }
@@ -209,7 +199,7 @@ public class LoginForms extends Application {
             //this.stage.setTitle("Shellfire VPN 2 Login");
 
         } catch (Exception ex) {
-            log.debug("could not load RegisterForm fxml\n" + ex.getMessage());
+            log.error("could not load RegisterForm fxml\n" + ex.getMessage());
         }
 
     }
@@ -221,7 +211,7 @@ public class LoginForms extends Application {
             //this.vpnSelectController.setApp(this);
 
         } catch (Exception ex) {
-            log.debug("could not load vpnSelect fxml\n" + ex.getMessage());
+            log.error("could not load vpnSelect fxml\n" + ex.getMessage());
         }
 
     }
@@ -234,7 +224,7 @@ public class LoginForms extends Application {
             this.shellFireMainController.setApp(this);
 
         } catch (Exception ex) {
-            log.debug("could not load main form fxml\n" + ex.getMessage());
+            log.error("could not load main form fxml\n" + ex.getMessage());
         }
         log.debug("ShellfireMainFrom initializtion method completed");
     }
@@ -248,7 +238,7 @@ public class LoginForms extends Application {
             //this.stage.setTitle("Shellfire VPN 2 Login");
 
         } catch (Exception ex) {
-            log.debug("could not load RegisterForm fxml\n" + ex.getMessage());
+            log.error("could not load RegisterForm fxml\n" + ex.getMessage());
         }
 
     }
@@ -264,7 +254,7 @@ public class LoginForms extends Application {
             System.out.println("Location of Controller is " + loader.getController());
 
         } catch (Exception ex) {
-            log.debug(" Loading fxml has error for replaceSceneContent for " + fxml + " with error " + ex.getMessage());
+            log.error(" Loading fxml has error for replaceSceneContent for " + fxml + " with error " + ex.getMessage());
         }
         page.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
@@ -308,7 +298,7 @@ public class LoginForms extends Application {
             System.out.println("Location of Controller is " + loader.getController());
 
         } catch (Exception ex) {
-            log.debug(" Loading fxml has error for replaceSceneContentWithSameRoot " + ex.getMessage());
+            log.error(" Loading fxml has error for replaceSceneContentWithSameRoot " + ex.getMessage());
         }
         page.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
