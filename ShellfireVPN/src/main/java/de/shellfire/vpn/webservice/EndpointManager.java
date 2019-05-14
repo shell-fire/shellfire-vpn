@@ -245,8 +245,7 @@ public class EndpointManager {
         protected Object call() throws Exception {
             log.debug("EndpointManager: start of call method");
             Platform.setImplicitExit(false);
-            //Platform.runLater(()->initDialogFX.setDialogText(i18n.tr("Searching for backend connection...")));
-            initDialogFX.setDialogText(i18n.tr("Searching for backend connection..."));
+            Platform.runLater(()->initDialogFX.setDialogText(i18n.tr("Searching for backend connection...")));
             log.debug("Find Endpoint task method, init dialog has " + initDialogFX.toString());
             boolean result = false;
 
@@ -287,7 +286,8 @@ public class EndpointManager {
                 log.debug("No preferred endPoint set yet, not testing");
             } else {
                 log.debug("fx testing preferred endPoint {}", preferredEndPoint);
-                initDialogFX.setDialogText(i18n.tr("Testing endpoint that worked before..."));
+                Platform.setImplicitExit(false);
+                Platform.runLater(()->initDialogFX.setDialogText(i18n.tr("Testing endpoint that worked before...")));
                 if (null != initDialogStage) {
                     LoginForms.initDialogStage.show();
                     log.debug("testPreferredEndpoint(): Testing endpoint stage is shown");

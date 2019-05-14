@@ -273,7 +273,7 @@ public class ServerListSubviewController implements Initializable {
             serverModel.setServerType(servers.get(i).getServerType().toString());
             serverModel.setSecurity(servers.get(i).getSecurity());
             serverModel.setSpeed(servers.get(i).getServerSpeed());
-            log.debug("ServerListSubviewController: " + serverModel.getCountry());
+            //log.debug("ServerListSubviewController: " + serverModel.getCountry());
             allModels.add(serverModel);
         }
         return allModels;
