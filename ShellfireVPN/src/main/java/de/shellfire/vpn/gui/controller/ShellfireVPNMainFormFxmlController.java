@@ -1385,30 +1385,8 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
     private void showNagScreenWithoutTimer() {
         log.debug("ShellfireVPNMainFormFxmlController:  showNagScreenWithoutTimer method entered");
-        Parent root;
-        try {
-            Pair<Pane, Object> pair = FxUIManager.SwitchSubview("premiumNavScreen.fxml");
-            Stage dialogStage = new Stage(StageStyle.UTILITY);
-            log.debug("ShellfireVPNMainFormFxmlController:  showNagScreenWithoutTimer before controller object");
-            PremiumScreenController premiumScreenController = (PremiumScreenController) pair.getValue();
-            log.debug("ShellfireVPNMainFormFxmlController:  showNagScreenWithoutTimer after controller object");
-            premiumScreenController.setService(shellfireService);
-            premiumScreenController.initComparisonTable();
-            premiumScreenController.setApp(application);
-            log.debug("ShellfireVPNMainFormFxmlController:  showNagScreenWithoutTimer after initComparison table and setting app");
-
-            Scene scene = new Scene(pair.getKey());
-            dialogStage.setTitle(i18n.tr("Shellfire Premium Screen"));
-            dialogStage.setScene(scene);
-            dialogStage.initModality(Modality.APPLICATION_MODAL);
-            dialogStage.setAlwaysOnTop(true);
-            dialogStage.setResizable(false);
-            dialogStage.show();
-        } catch (IOException ex) {
-            log.debug("ShellfireVPNMainFormFxmlController:  showNagScreenWithoutTimer has error " + ex.getMessage() + ex.toString());
-        } catch (Exception ex) {
-            log.debug("ShellfireVPNMainFormFxmlController:  showNagScreenWithoutTimer has error " + ex.getMessage() + ex.toString());
-        }
+        WebService service = WebService.getInstance();
+        Util.openUrl(service.getUrlPremiumInfo());
         setNormalCursor();
     }
 
@@ -1426,60 +1404,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     private void delayedConnect(Server selectedServer, VpnProtocol protocol, Reason reason) {
         popupConnectItem.setLabel(i18n.tr("Connecting..."));
         popupConnectItem.setEnabled(false);
-
-//		nagScreen = new PremiumVPNNagScreen(this, true, new ActionListener() {
-//
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				if (nagScreentimer != null) {
-//					nagScreentimer.stop();
-//					nagScreentimer = null;
-//          controller.disconnect(Reason.DisconnectButtonPressed);
-//				}
-//				if (nagScreen != null) {
-//					nagScreen.dispose();
-//					nagScreen = null;
-//				}
-//
-//				popupConnectItem.setLabel(i18n.tr("Connect"));
-//				popupConnectItem.setEnabled(true);
-//				setNormalCursor();
-//			}
-//		});
-//
-//		SwingUtilities.invokeLater(new Runnable() {
-//
-//			@Override
-//			public void run() {
-//				if (nagScreen != null) {
-//					nagScreen.setAlwaysOnTop(true);
-//					nagScreen.setVisible(true);
-//
-//				}
-//			}
-//		});
-//		nagScreenDelay = 25;
-//
-//		nagScreentimer = new Timer(1000, new ActionListener() {
-//
-//			@Override
-//			public void actionPerformed(ActionEvent e) {
-//				if (nagScreenDelay == -1 && nagScreen != null) {
-//					nagScreen.setVisible(false);
-//					nagScreen.dispose();
-//					nagScreen = null;
-//					Timer t = (Timer) e.getSource();
-//					t.stop();
-//					controller.connect(getSelectedServer(), getSelectedProtocol(), Reason.ConnectButtonPressed);
-//				}
-//				if (nagScreen != null)
-//					nagScreen.setDelay(nagScreenDelay--);
-//			}
-//		});
-//
-//		nagScreentimer.setRepeats(true);
-//		nagScreentimer.setInitialDelay(0);
-//		nagScreentimer.start();
+        showNagScreenWithoutTimer();
     }
 
     public void prepareServerController(){

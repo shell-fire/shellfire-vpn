@@ -205,12 +205,6 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
                                 log.debug("handlefButtonLogin: vpnController is visible");
                                 }
                             }
-                            /*catch (VpnException ex) {
-                                    Util.handleException(ex);
-                                }*/
-
-                            //}
-
                         }
                         else{
                             Alert alert = new Alert(AlertType.ERROR);
@@ -224,14 +218,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
                     log.debug("LoginController: Login result is null");
                     }
                 });
-                        this.fButtonLogin.setDisable(false);
-                // happens when the login task fails
-//                task.setOnFailed((WorkerStateEvent fevent) -> {
-//                    Alert alert = new Alert(AlertType.ERROR);
-//                            alert.setHeaderText(i18n.tr("Error"));
-//                            alert.setContentText(i18n.tr("Login error:") );
-//                            alert.showAndWait();
-//                });
+                this.fButtonLogin.setDisable(false);
             } catch (Exception ex) {
                 log.debug("could not load progressDialog fxml in login window \n" + ex.getMessage());
             }
