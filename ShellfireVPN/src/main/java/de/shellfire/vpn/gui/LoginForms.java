@@ -378,7 +378,7 @@ public class LoginForms extends Application {
         log.debug("Hiding stage");
         this.stage.hide();
         log.debug("after dialog box , before login controller");
-        this.loadLoginController();
+        //this.loadLoginController();
 
         // test Internet connection 
         boolean internetAvailable = Util.internetIsAvailable();

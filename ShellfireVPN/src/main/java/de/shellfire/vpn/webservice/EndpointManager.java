@@ -287,6 +287,7 @@ public class EndpointManager {
                 log.debug("No preferred endPoint set yet, not testing");
             } else {
                 log.debug("fx testing preferred endPoint {}", preferredEndPoint);
+                Platform.setImplicitExit(false);
                 Platform.runLater(()->initDialogFX.setDialogText(i18n.tr("Testing endpoint that worked before...")));
                 if (null != initDialogStage) {
                     LoginForms.initDialogStage.show();
