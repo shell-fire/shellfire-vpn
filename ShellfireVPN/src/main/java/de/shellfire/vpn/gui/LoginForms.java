@@ -154,9 +154,7 @@ public class LoginForms extends Application {
     public static void loadProgressDialog(String message) {
         try {
             initDialog = (ProgressDialogController) replaceSceneContent("ProgressDialog.fxml");
-            //Platform.runLater(() -> progressDialog.setVisible(true));
             initDialog.setDialogText(message);
-            //initDialog.setApp();
 
         } catch (Exception ex) {
             log.error("could not load progressDialog fxml \n" + ex.getMessage());

@@ -25,14 +25,9 @@ import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.layout.AnchorPane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
+
 
 public class EndpointManager {
 
@@ -288,8 +283,8 @@ public class EndpointManager {
             } else {
                 log.debug("fx testing preferred endPoint {}", preferredEndPoint);
                 Platform.setImplicitExit(false);
-                Platform.runLater(()->initDialogFX.setDialogText(i18n.tr("Testing endpoint that worked before...")));
-                if (null != initDialogStage) {
+                Platform.runLater(()->LoginForms.initDialog.setDialogText(i18n.tr("Testing endpoint that worked before...")));
+                if (null != LoginForms.initDialogStage) {
                     LoginForms.initDialogStage.show();
                     log.debug("testPreferredEndpoint(): Testing endpoint stage is shown");
                 } else {
@@ -354,6 +349,7 @@ public class EndpointManager {
                     // Code to run once FindEndpointTaskFX is completed **successfully**
                     if (endPointTask.isInitDialogOriginFX()) {
                         //initDialogFX.setVisible(true);
+                        log.debug("end task is successfully set");
                         LoginForms.initDialogStage.hide();
                         // TODO check if logic meant to load the dialog box instead of it's
                         // calling it's visible method
