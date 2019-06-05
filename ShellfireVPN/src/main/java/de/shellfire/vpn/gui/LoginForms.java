@@ -143,10 +143,8 @@ public class LoginForms extends Application {
             initDialogStage.initStyle(StageStyle.UNDECORATED);
             initDialogStage.setTitle("Connecting");
             initDialogStage.initModality(Modality.WINDOW_MODAL);
-            //initDialogStage.initOwner(form.getDialogFX().getStage());
             Scene scene = new Scene(page);
-            initDialogStage.setScene(scene);
-            //connectProgressDialog = loader.getController();
+            initDialogStage.setScene(scene); 
         } catch (Exception e) {
             log.error("There is an exception caused by the setLookAndFeel method, " + e.toString());
         }
@@ -192,9 +190,7 @@ public class LoginForms extends Application {
         try {
             this.registerController = (RegisterFormController) replaceSceneContent("RegisterFormFxml"
                     + ".fxml");
-            //Platform.runLater(() -> progressDialog.setVisible(true));
             this.registerController.setApp(this);
-            //this.stage.setTitle("Shellfire VPN 2 Login");
 
         } catch (Exception ex) {
             log.error("could not load RegisterForm fxml\n" + ex.getMessage());
@@ -206,7 +202,6 @@ public class LoginForms extends Application {
         log.debug("In the VPN controller");
         try {
             this.vpnSelectController = (VpnSelectDialogController) replaceSceneContent("VpnSelectDialogFxml.fxml");
-            //this.vpnSelectController.setApp(this);
 
         } catch (Exception ex) {
             log.error("could not load vpnSelect fxml\n" + ex.getMessage());
@@ -283,14 +278,11 @@ public class LoginForms extends Application {
 
     public Initializable replaceSceneContentWithSameRoot(String fxml) throws Exception {
         FXMLLoader loader = new FXMLLoader(LoginForms.class.getClassLoader().getResource(fxml));
-        // InputStream in = LoginForms.class.getResourceAsStream(fxml);
-        //loader.setBuilderFactory(new JavaFXBuilderFactory());
         loader.setLocation(LoginForms.class.getResource("/fxml/" + fxml));
         System.out.println("replaceSCenContentWithSameRoot Loacation of loader is " + loader.getLocation());
         AnchorPane page = null;
         try {
             System.out.println("trying to load anchor pane for " + fxml);
-            //Parent root = (Parent) loader.load();
             loader.setController(shellFireMainController);
             loader.setRoot(loader);
             System.out.println("Location of Controller is " + loader.getController());
@@ -426,7 +418,6 @@ public class LoginForms extends Application {
         
         instance.setApp(this);
         log.debug("Preparing to display login menu");
-        //this.loadLoginController();
         this.stage.show();
     }
 
@@ -438,8 +429,6 @@ public class LoginForms extends Application {
     }
 
     public LoginController getLoginInstance(boolean minimize) {
-        // if (instance == null)
-        // gotoLogin();
         return this.instance;
     }
 
@@ -481,7 +470,6 @@ public class LoginForms extends Application {
         } else {
             log.debug("Connection not available");
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            //alert.setTitle("Error");
             alert.setHeaderText(I18N.tr("No internet"));
             alert.setContentText(I18N.tr("No internet connection available - ShellfireVPN is being closed."));
             alert.showAndWait();

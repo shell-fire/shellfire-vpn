@@ -1592,46 +1592,46 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 		DefaultTableCellRenderer defaultRenderer = new DefaultTableCellRenderer() {
 			JLabel lbl = new JLabel();
 
-			public Component getTableCellRendererComponent(JTable table, Object value, boolean selected, boolean focused, int row, int column) {
-				setEnabled(table == null || table.isEnabled());
+                    public Component getTableCellRendererComponent(JTable table, Object value, boolean selected, boolean focused, int row, int column) {
+                        setEnabled(table == null || table.isEnabled());
 
-				lbl.setOpaque(true);
-			    if (isEnabled()) {
-			    	lbl.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, ContentPane.colorLightGray));
-			    } else {
-			    	lbl.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, ContentPane.colorVeryLightGray));
-			    }
-			    
-				if (selected) {
-					lbl.setBackground(table.getSelectionBackground());
-					if (isEnabled()) {
-						lbl.setForeground(ContentPane.colorDarkGrey);
-					} else {
-						lbl.setForeground(Color.darkGray);
-					}
+                        lbl.setOpaque(true);
+                        if (isEnabled()) {
+                            lbl.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, ContentPane.colorLightGray));
+                        } else {
+                            lbl.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, ContentPane.colorVeryLightGray));
+                        }
 
-				} else {
-					if (isEnabled()) {
-						lbl.setBackground(table.getBackground());
-						lbl.setForeground(table.getForeground());
-					} else {
-						lbl.setBackground(Color.white);
-						lbl.setForeground(Color.lightGray);
-					}
-				}
+                        if (selected) {
+                            lbl.setBackground(table.getSelectionBackground());
+                            if (isEnabled()) {
+                                    lbl.setForeground(ContentPane.colorDarkGrey);
+                            } else {
+                                    lbl.setForeground(Color.darkGray);
+                            }
 
-				String text = (value == null) ? "" : value.toString();
+                        } else {
+                            if (isEnabled()) {
+                                    lbl.setBackground(table.getBackground());
+                                    lbl.setForeground(table.getForeground());
+                            } else {
+                                    lbl.setBackground(Color.white);
+                                    lbl.setForeground(Color.lightGray);
+                            }
+                        }
 
-				lbl.setText(text);
-				lbl.setFont(lbl.getFont().deriveFont(Font.PLAIN, Util.getFontSize()));
-				lbl.setHorizontalAlignment(JLabel.LEFT);
-				
-				return lbl;
-			}
+                        String text = (value == null) ? "" : value.toString();
+
+                        lbl.setText(text);
+                        lbl.setFont(lbl.getFont().deriveFont(Font.PLAIN, Util.getFontSize()));
+                        lbl.setHorizontalAlignment(JLabel.LEFT);
+
+                        return lbl;
+                    }
 
 		};
     
-    jServerListTable.setRowHeight(38);
+                jServerListTable.setRowHeight(38);
     
 		jServerListTable.setBorder(null);
 		jScrollPane.setBorder(null);

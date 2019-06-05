@@ -739,7 +739,7 @@ public class Util {
   }
   public static javafx.scene.image.Image getImageIconFX(String resourceName, double d){
 	   javafx.scene.image.Image image = new javafx.scene.image.Image("file:"+resourceName);
-	   log.debug("Resource is found at " + resourceName);
+	   //log.debug("Resource is found at " + resourceName);
 	   int factor = (int) (Util.getScalingFactor() * d);
 	    double height = image.getHeight() * factor;
 	    double width = image.getWidth() * factor;
@@ -792,7 +792,7 @@ public class Util {
 	    imageView.setPreserveRatio(preserveRatio);
 	    imageView.setFitWidth(targetWidth);
 	    imageView.setFitHeight(targetHeight);
-	    System.out.println("Image width is " + String.valueOf(targetWidth) + " and height is " + String.valueOf(targetHeight));
+	    //System.out.println("Image width is " + String.valueOf(targetWidth) + " and height is " + String.valueOf(targetHeight));
 	    return imageView.snapshot(null, null);
 	}
 

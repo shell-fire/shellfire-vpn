@@ -1268,7 +1268,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
                 //this.serverListSubviewController.getUDPRadioButton().setSelected(true);
                 break;
             case TCP:
-                //TODO_subview
+                //TOD O_subview
                 //this.serverListSubviewController.getTCPRadioButton().setSelected(true);
                 break;
         }
@@ -1277,7 +1277,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
     private void updateLoginDetail() {
         Vpn vpn = this.shellfireService.getVpn();
-        log.debug("ShellfireMainFormController: vpn is " + vpn.toString());
+        log.debug("ShellfireMainFormController: vpn id and server are %s and %s " + vpn.getServerId(), vpn.getServer());
         this.vpnIdValue.setText("sf" + vpn.getVpnId());
         this.vpnTypeValue.setText(vpn.getAccountType().toString());
 

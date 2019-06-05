@@ -241,7 +241,6 @@ public class EndpointManager {
             log.debug("EndpointManager: start of call method");
             Platform.setImplicitExit(false);
             Platform.runLater(()->initDialogFX.setDialogText(i18n.tr("Searching for backend connection...")));
-            //initDialogFX.setDialogText(i18n.tr("Searching for backend connection..."));
             log.debug("Find Endpoint task method, init dialog has " + initDialogFX.toString());
             boolean result = false;
 
@@ -364,7 +363,7 @@ public class EndpointManager {
                 public void handle(WorkerStateEvent t) {
                     // Code to run once FindEndpointTaskFX **fails**
                     LoginForms.initDialogStage.hide();
-                    log.debug("Execution of FindEndpointTaskFX task has failed");
+                    log.error("Execution of FindEndpointTaskFX task has failed");
                 }
             });
             if (null == result) {

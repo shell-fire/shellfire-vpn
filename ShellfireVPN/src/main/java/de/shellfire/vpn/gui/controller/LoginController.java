@@ -121,36 +121,36 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
     public void handlefButtonLogin(ActionEvent event) {
         this.fButtonLogin.setDisable(true);
         log.debug("Login attempt made");
-            this.fButtonLogin.setDisable(true);
-            log.debug("Login attempt with valid user input");
-            try {
-                LoginTAsk task = new LoginTAsk();
-                task.run();
-                task.setOnSucceeded((WorkerStateEvent wEvent) -> {
-                    log.info("Login task completed successfully");
-                    Response<LoginResponse> loginResult = null;
-                    try {
-                        loginResult = task.getValue();
-                    } catch (Exception e) {
-                        log.debug("Error while checking User registration " + e.getMessage());
-                    }
-                    if (loginResult != null) {
-                        log.debug("LoginController: handlefLogginButton - Login result is " + loginResult.getMessage());
-                        if (service.isLoggedIn()) {
-                         log.debug("LoginController: handlefLogginButton - service is loggedIn " + loginResult.getMessage());
-                            if (fStoreLoginData.isSelected()) {
-                                storeCredentialsInRegistry(this.username, this.password);
-                                log.debug("LoginController: Login Data stored, username is " + this.username + " and passwd is " + this.password);
-                            } else {
-                                removeCredentialsFromRegistry();
-                            }
-                            if (fAutoStart.isSelected()) {
-                                Client.addVpnToAutoStart();
-                                log.debug("LoginController: Autostart Data stored");
-                            } else {
-                                Client.removeVpnFromAutoStart();
-                            }
-                            if (fAutoconnect.isSelected()) {
+        this.fButtonLogin.setDisable(true);
+        log.debug("Login attempt with valid user input");
+        try {
+            LoginTAsk task = new LoginTAsk();
+            task.run();
+            task.setOnSucceeded((WorkerStateEvent wEvent) -> {
+                log.info("Login task completed successfully");
+                Response<LoginResponse> loginResult = null;
+                try {
+                    loginResult = task.getValue();
+                } catch (Exception e) {
+                    log.debug("Error while checking User registration " + e.getMessage());
+                }
+                if (loginResult != null) {
+                    log.debug("LoginController: handlefLogginButton - Login result is " + loginResult.getMessage());
+                    if (service.isLoggedIn()) {
+                     log.debug("LoginController: handlefLogginButton - service is loggedIn " + loginResult.getMessage());
+                        if (fStoreLoginData.isSelected()) {
+                            storeCredentialsInRegistry(this.username, this.password);
+                            log.debug("LoginController: Login Data stored, username is " + this.username + " and passwd is " + this.password);
+                        } else {
+                            removeCredentialsFromRegistry();
+                        }
+                        if (fAutoStart.isSelected()) {
+                            Client.addVpnToAutoStart();
+                            log.debug("LoginController: Autostart Data stored");
+                        } else {
+                            Client.removeVpnFromAutoStart();
+                        }
+                        if (fAutoconnect.isSelected()) {
                                 setAutoConnectInRegistry(true);
                                 log.debug("LoginController: Autoconnect Data stored");
                             } else {
