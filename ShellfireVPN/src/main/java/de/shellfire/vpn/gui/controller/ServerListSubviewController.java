@@ -7,7 +7,6 @@ package de.shellfire.vpn.gui.controller;
 
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.gui.LoginForms;
-import static de.shellfire.vpn.gui.controller.ShellfireVPNMainFormFxmlController.currentSidePane;
 import de.shellfire.vpn.gui.model.CountryMap;
 import de.shellfire.vpn.gui.model.ServerListFXModel;
 import de.shellfire.vpn.gui.renderer.StarImageRendererFX;
@@ -186,9 +185,6 @@ public class ServerListSubviewController implements Initializable {
         this.serverList = this.shellfireService.getServerList();
         this.serverListData.addAll(initServerTable(this.shellfireService.getServerList().getAll()));
         this.serverListTableView.setItems(serverListData);
-//        serverListTableView.getSelectionModel().select(shellfireService.getVpn().getVpnId());
-//        serverListTableView.getFocusModel().focus(shellfireService.getVpn().getVpnId());
-//        log.debug("ServerListSubviewController. The selected server is "+ shellfireService.getVpn().getServer() + " and id is " + shellfireService.getVpn().getVpnId() + " serverType: " + shellfireService.getVpn().getAccountType() );
         selectCurrentVpn();
     }
       
@@ -201,7 +197,6 @@ public class ServerListSubviewController implements Initializable {
         this.connectionTypeLabel.setText(i18n.tr("Connection type"));
         this.TCPRadioButton.setText(i18n.tr("TCP (works with safe firewalls and proxies.)"));
         this.UDPRadioButton.setText(i18n.tr("UDP (fast)"));
-        //this.connectImage1.setImage(new Image("\\buttons\\button-connect-de.gif"));
         this.connectButton1.setGraphic(connectImage1);
         this.connectButton1.setPadding(Insets.EMPTY);
         nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
@@ -260,19 +255,19 @@ public class ServerListSubviewController implements Initializable {
     public void afterInitialization(){
         this.connectImage1.imageProperty().bindBidirectional(this.mainFormController.getConnectionSubviewController().getConnectImageView().imageProperty());
     }   
-    
+      
     /**Updates buttons and other components when connection status changes 
      * @param isConnected boolean variable for the connection status
      */
     public void updateComponents(boolean isConnected){
           if (isConnected){
-          this.connectImage1.setImage(new Image("/buttons/button-disconnect-" + VpnI18N.getLanguage().getKey() + ".gif"));     
+          this.connectImage1.setImage(new Image("/buttons/button-disconnect-" + VpnI18N.getLanguage().getKey() + ".gif")); 
+          serverListTableView.disableProperty().set(isConnected);
           }
     }
     
     private LinkedList<ServerListFXModel> initServerTable(LinkedList<Server> servers) {
         LinkedList<ServerListFXModel> allModels = new LinkedList<>();
-        //log.debug("ServerListSubviewController: The size of all servers is " + servers.size());
         for (int i = 0; i < servers.size(); i++) {
             ServerListFXModel serverModel = new ServerListFXModel();
             serverModel.setCountry(servers.get(i));
@@ -280,7 +275,6 @@ public class ServerListSubviewController implements Initializable {
             serverModel.setServerType(servers.get(i).getServerType().toString());
             serverModel.setSecurity(servers.get(i).getSecurity());
             serverModel.setSpeed(servers.get(i).getServerSpeed());
-            //log.debug("ServerListSubviewController: " + serverModel.getCountry());
             allModels.add(serverModel);
         }
         return allModels;

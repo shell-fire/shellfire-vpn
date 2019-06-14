@@ -72,6 +72,7 @@ import javafx.scene.layout.Region;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javax.swing.JOptionPane;
 import org.jdesktop.application.Action;
 import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
@@ -276,10 +277,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         this.connectionSubviewController.setApp(this.application);
         this.connectionSubviewController.updateComponents(false);
         this.updateOnlineHost();
-
-        //serverListSubviewController = new ServerListSubviewController(shellfireService);
-        //mapEncryptionSubviewController = new MapEncryptionSubviewController();
-        //tvStreasSubviewController = new TvStreasSubviewController();
     }
 
     public void setShellfireService(WebService shellfireService) {
@@ -615,8 +612,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
     @FXML
     private void handleExitImageViewClicked(MouseEvent event) {
-        Platform.exit();
-        System.exit(0);
+        exitHandler();        
     }
 
     private void initController() {
@@ -682,7 +678,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
                                 setNormalCursor();
                                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                                 alert.setHeaderText(i18n.tr("Premium server selected"));
-                                alert.setContentText(i18n.tr("Dieser Server steht nur fÃ¼r Shellfire VPN Premium Kunden zur VerfÃ¼gung\n\nWeitere Informationen zu Shellfire VPN Premium anzeigen?"));
+                                alert.setContentText(i18n.tr("Dieser Server steht nur fÃƒÂ¼r Shellfire VPN Premium Kunden zur VerfÃƒÂ¼gung\n\nWeitere Informationen zu Shellfire VPN Premium anzeigen?"));
                                 Optional<ButtonType> result = alert.showAndWait();
 
                                 if ((result.isPresent()) && (result.get() == ButtonType.OK)) {
@@ -709,7 +705,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
                                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                                 alert.setHeaderText(i18n.tr("PremiumPlus server selected"));
-                                alert.setContentText(i18n.tr("Dieser Server steht nur fÃ¼r Shellfire VPN PremiumPlus Kunden zur VerfÃ¼gung\n\nWeitere Informationen zu Shellfire VPN PremiumPlus anzeigen?"));
+                                alert.setContentText(i18n.tr("Dieser Server steht nur fÃƒÂ¼r Shellfire VPN PremiumPlus Kunden zur VerfÃƒÂ¼gung\n\nWeitere Informationen zu Shellfire VPN PremiumPlus anzeigen?"));
                                 Optional<ButtonType> result = alert.showAndWait();
 
                                 if ((result.isPresent()) && (result.get() == ButtonType.OK)) {
@@ -790,7 +786,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
     private void setStateDisconnected() {
         log.debug("setStateDisconnected() - start");
-        //enableSystemProxyIfProxyConfig();
         enableSystemProxyIfProxyConfig();
         this.hideConnectProgress();
         
@@ -798,7 +793,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         this.serverListSubviewController.setsetConnetImage1Disable(false);
         this.connectionStatusValue.setText(i18n.tr("Not connected"));
         mySetIconImage("/icons/sfvpn2-disconnected-big.png");
-        //this.globeConnectionImageView.setImage(this.iconIdleSmall);
         Platform.runLater(()->{this.globeConnectionImageView.setImage(this.iconIdleSmall);});
         this.connectionSubviewController.getStatusConnectionImageView().setImage(this.iconEcncryptionInactive);
         this.connectionSubviewController.getConnectImageView().setImage(this.buttonConnect);
@@ -869,7 +863,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText(message);
             alert.getDialogPane().getChildren().stream().filter(node -> node instanceof Label).forEach(node -> ((Label)node).setMinWidth(Region.USE_PREF_SIZE));
-            alert.showAndWait();
+        alert.showAndWait();
             if (this.trayIcon != null) {
                 this.trayIcon.setImage(this.iconDisconnectedAwt);
             }
@@ -878,10 +872,9 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         }
 
         this.stopConnectedSinceTimer();
-
+        serverListSubviewController.getServerListTableView().disableProperty().set(false);
         this.setNormalCursor();
         this.updateOnlineHost();
-        //this.mapController.updateMap();
     }
 
     private void setStateConnecting() {
@@ -914,8 +907,8 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
         popupConnectItem.setLabel(i18n.tr("Connecting..."));
         popupConnectItem.setEnabled(false);
-        /*jServerListTable.setEnabled(false);
-        jScrollPane.getViewport().setBackground(Color.lightGray);
+        serverListSubviewController.getServerListTableView().disableProperty().set(true);
+        /*jScrollPane.getViewport().setBackground(Color.lightGray);
         jRadioUdp.setEnabled(false);
         jRadioTcp.setEnabled(false);*/
 
@@ -1169,7 +1162,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         this.serverListSubviewController.getConnectImage1().setImage(this.buttonDisconnect);
         this.connectionSubviewController.connectButtonDisable(false);
         this.serverListSubviewController.setsetConnetImage1Disable(false);
-         
+        serverListSubviewController.getServerListTableView().disableProperty().set(true);
         if (this.trayIcon != null) {
             this.trayIcon.setImage(this.iconConnected);
         }
@@ -1324,7 +1317,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         try {
             Pair<Pane, Object> pair = FxUIManager.SwitchSubview("menuShellfireSettings.fxml");
             Stage dialogStage = new Stage(StageStyle.UTILITY);
-            //SettingsDialogController settingsDialogController = (SettingsDialogController) pair.getValue();
             Scene scene = new Scene(pair.getKey());
             dialogStage.setTitle(i18n.tr("Shellfire VPN settings"));
             dialogStage.setScene(scene);
@@ -1444,6 +1436,32 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
             //this.tvStreasSubviewController.initializeContents();
         } catch (IOException ex) {
             log.debug("ShellfireVPNMainFormFxmlController:  handleStreamsPaneClicked has error " + ex.getMessage());
+        }
+    }
+    
+    private void exitHandler() {
+        boolean connected;
+
+        connected = this.controller.getCurrentConnectionState() != ConnectionState.Disconnected;
+        if (connected) {
+            askForDisconnectedAndQuit();
+        } else {
+            enableSystemProxyIfProxyConfig();
+            Platform.exit();
+        }
+    }
+    private void askForDisconnectedAndQuit() {
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setHeaderText(i18n.tr("Currently Connected"));
+        alert.setContentText(i18n.tr("Disconnect and close Shellfire VPN?"));
+        Optional<ButtonType> result = alert.showAndWait();
+
+        if ((result.isPresent()) && (result.get() == ButtonType.OK)) {
+            this.controller.disconnect(Reason.ApplicationExit);
+            enableSystemProxyIfProxyConfig();
+            Platform.exit();
+            System.exit(0);
         }
     }
 }
