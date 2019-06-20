@@ -201,6 +201,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
                                 this.application.shellFireMainController.setSerciceAndInitialize(this.service);
                                 this.application.shellFireMainController.prepareSubviewControllers();
                                 this.application.shellFireMainController.setApp(this.application);
+                                this.application.shellFireMainController.afterLogin(fAutoconnect.isSelected());
                                 } else {
                                 log.debug("handlefButtonLogin: vpnController is visible");
                                 }

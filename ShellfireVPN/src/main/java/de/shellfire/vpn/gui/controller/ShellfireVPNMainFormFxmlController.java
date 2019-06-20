@@ -368,7 +368,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
     public void afterLogin(boolean autoConnect) {
         Vpn vpn = this.shellfireService.getVpn();
-
+        log.debug("Starting the connection after login");
         if (ProxyConfig.isProxyEnabled()) {
             this.setSelectedProtocol(VpnProtocol.TCP);
             //TODO_subview
@@ -381,7 +381,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         Server server = vpn.getServer();
 
         if (autoConnect) {
-            //this.connectFromButton(false);
+            this.connectFromButton(false);
         }
 
     }
@@ -1448,6 +1448,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         } else {
             enableSystemProxyIfProxyConfig();
             Platform.exit();
+            System.exit(0);
         }
     }
     private void askForDisconnectedAndQuit() {
