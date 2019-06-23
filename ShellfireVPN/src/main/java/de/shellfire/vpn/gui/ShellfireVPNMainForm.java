@@ -1678,21 +1678,21 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 	}
 
 	WebService getShellfireService() {
-		return this.shellfireService;
+            return this.shellfireService;
 	}
 
 	public void setSelectedProtocol(VpnProtocol protocol) {
-		if (protocol == null)
-			protocol = VpnProtocol.UDP;
+            if (protocol == null)
+                    protocol = VpnProtocol.UDP;
 
-		switch (protocol) {
-		case UDP:
-			this.jNetworkTransportType.setSelected(jRadioUdp.getModel(), true);
-			break;
-		case TCP:
-			this.jNetworkTransportType.setSelected(jRadioTcp.getModel(), true);
-			break;
-		}
+            switch (protocol) {
+            case UDP:
+                    this.jNetworkTransportType.setSelected(jRadioUdp.getModel(), true);
+                    break;
+            case TCP:
+                    this.jNetworkTransportType.setSelected(jRadioTcp.getModel(), true);
+                    break;
+            }
 
 	}
 

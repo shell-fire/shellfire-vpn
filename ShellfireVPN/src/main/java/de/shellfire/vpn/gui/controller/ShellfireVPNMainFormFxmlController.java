@@ -33,6 +33,7 @@ import java.awt.PopupMenu;
 import java.awt.SystemTray;
 import java.awt.Toolkit;
 import java.awt.TrayIcon;
+import java.awt.TrayIcon.MessageType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -50,6 +51,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
+import javafx.concurrent.Worker;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -371,8 +373,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         log.debug("Starting the connection after login");
         if (ProxyConfig.isProxyEnabled()) {
             this.setSelectedProtocol(VpnProtocol.TCP);
-            //TODO_subview
-            //this.serverListSubviewController.getTCPRadioButton().setDisable(true);
+            this.serverListSubviewController.getUDPRadioButton().setDisable(true);
         } else {
             VpnProtocol selectedProtocol = vpn.getProtocol();
             this.setSelectedProtocol(selectedProtocol);
@@ -875,6 +876,35 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         serverListSubviewController.getServerListTableView().disableProperty().set(false);
         this.setNormalCursor();
         this.updateOnlineHost();
+        if (!ProxyConfig.isProxyEnabled()) {
+			this.serverListSubviewController.getUDPRadioButton().setDisable(false);
+		}
+	this.serverListSubviewController.getTCPRadioButton().setDisable(false);
+        Task<Reason> disconnectTask = new Task<Reason>() {
+
+            @Override
+            protected Reason call() throws Exception {
+                Reason reasonForChange = controller.getReasonForStateChange();
+		return reasonForChange;
+            }
+
+            @Override
+            protected void succeeded() {
+                try {
+                    Reason reasonForChange = get();
+                    if (reasonForChange == Reason.DisconnectButtonPressed || reasonForChange == Reason.DisconnectDetected) {
+
+                            showTrayMessageWithoutCallback(i18n.tr("Disconnected"),
+                                            i18n.tr("Shellfire VPN connection terminated. Your internet connection is no longer secured!"));
+                    }
+                    } catch (Exception e) {
+                            Util.handleException(e);
+                    }
+            }
+            
+            
+        };
+        new Thread(disconnectTask).start();
     }
 
     private void setStateConnecting() {
@@ -1258,11 +1288,11 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         switch (protocol) {
             case UDP:
                 //TODO_subview
-                //this.serverListSubviewController.getUDPRadioButton().setSelected(true);
+                this.serverListSubviewController.getUDPRadioButton().setSelected(true);
                 break;
             case TCP:
                 //TOD O_subview
-                //this.serverListSubviewController.getTCPRadioButton().setSelected(true);
+                this.serverListSubviewController.getTCPRadioButton().setSelected(true);
                 break;
         }
 
@@ -1465,6 +1495,15 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
             System.exit(0);
         }
     }
+    
+    	private void showTrayMessageWithoutCallback(String header, String content) {
+		// This will run only on windows systems so it is ok to leave just this test
+		if (Util.isWindows()) {
+			trayIcon.displayMessage(header, content, MessageType.INFO);
+		} 
+
+	}
+
 }
     enum SidePane 
     { 
