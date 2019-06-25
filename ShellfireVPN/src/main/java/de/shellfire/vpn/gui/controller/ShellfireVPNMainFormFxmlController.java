@@ -49,6 +49,7 @@ import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.prefs.Preferences;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
@@ -111,8 +112,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     private java.awt.Image iconIdleAwt;
     private PremiumScreenController nagScreen;
     private ScheduledExecutorService currentConnectedSinceTimerFX = Executors.newSingleThreadScheduledExecutor();
-    //private Timer currentConnectedSinceTimer;
-    //ConnectionSubviewController connectionSubviewController  = null ; 
+    private Preferences preferences; 
     @FXML
     private Pane leftMenuPane;
     @FXML
@@ -1203,27 +1203,34 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         this.startConnectedSinceTimer();
 
         this.updateOnlineHost();
-        //TODO
-        /*
-		this.mapController.updateMap();
-
-		popupConnectItem.setLabel(i18n.tr("Disconnect"));
-		popupConnectItem.setEnabled(true);
-
-		jServerListTable.setEnabled(false);
-		jScrollPane.getViewport().setBackground(Color.lightGray);
-		jRadioUdp.setEnabled(false);
-		jRadioTcp.setEnabled(false);
-
-		showTrayMessageWithoutCallback(i18n.tr("Connection successful"),
+        this.serverListSubviewController.getUDPRadioButton().setDisable(true);
+        this.serverListSubviewController.getUDPRadioButton().setDisable(true);
+        showTrayMessageWithoutCallback(i18n.tr("Connection successful"),
 				i18n.tr("You are now connected to Shellfire VPN. Your internet connection is encrypted."));
-
-		showStatusUrlIfEnabled();
-
-		disableSystemProxyIfProxyConfig();
-         */
+        showStatusUrlIfEnabled();
+	disableSystemProxyIfProxyConfig();
     }
+    
+    private void showStatusUrlIfEnabled() {
+		if (showStatusUrl())
+			Util.openUrl(shellfireService.getUrlSuccesfulConnect());
 
+	}
+
+	private boolean showStatusUrl() {
+            Preferences prefs = this.getPreferences();
+
+            boolean showStatus = prefs.getBoolean(LoginController.REG_SHOWSTATUSURL, false);
+            return showStatus;
+	}
+    	
+        private Preferences getPreferences() {
+            if (preferences == null) {
+                    preferences = Preferences.userNodeForPackage(this.getClass());
+            }
+            return preferences;
+	}
+        
     private void hideConnectProgress() {
         if (this.popUpStage != null) {
             this.popUpStage.close();
@@ -1242,7 +1249,12 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         }, 0, delay, TimeUnit.MILLISECONDS);
         
     }
-
+    private void disableSystemProxyIfProxyConfig() {
+        if (ProxyConfig.isProxyEnabled()) {
+          Client.disableSystemProxy();
+        }
+    }
+        
     private void enableSystemProxyIfProxyConfig() {
         if (ProxyConfig.isProxyEnabled()) {
             Client.enableSystemProxy();
