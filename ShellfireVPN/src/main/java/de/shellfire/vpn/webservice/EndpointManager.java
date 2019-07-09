@@ -21,13 +21,13 @@ import de.shellfire.vpn.gui.ProgressDialog;
 import de.shellfire.vpn.gui.controller.LoginController;
 import de.shellfire.vpn.gui.controller.ProgressDialogController;
 import de.shellfire.vpn.i18n.VpnI18N;
+import java.util.logging.Level;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
-
 
 public class EndpointManager {
 
@@ -178,7 +178,7 @@ public class EndpointManager {
 
         @Override
         protected String doInBackground() throws Exception {
-            
+
             log.debug("EndpoingManager: In doInBackground method");
             initDialog.setText(i18n.tr("Searching for backend connection..."));
 
@@ -226,13 +226,14 @@ public class EndpointManager {
         public FindEndpointTaskFX(CanContinueAfterBackEndAvailableFX form) {
             log.debug("FindEndpointTaskFX: Constructor of Endpoint task");
             this.continueFormFX = form;
-            LoginForms.initDialogStage.show();
+
             if (null == initDialogFX) {
                 log.debug("\nFindEndpointTaskFX: In Dialog is null \n");
                 initDialogFX = LoginForms.getInitDialog();
                 initDialogFX.setDialogText("Update Check");
                 initDialogOriginFX = true;
             }
+            LoginForms.initDialogStage.show();
         }
 
         // corresponds to Swing's doInBackgraound
@@ -240,7 +241,7 @@ public class EndpointManager {
         protected Object call() throws Exception {
             log.debug("EndpointManager: start of call method");
             Platform.setImplicitExit(false);
-            Platform.runLater(()->initDialogFX.setDialogText(i18n.tr("Searching for backend connection...")));
+            Platform.runLater(() -> initDialogFX.setDialogText(i18n.tr("Searching for backend connection...")));
             log.debug("Find Endpoint task method, init dialog has " + initDialogFX.toString());
             boolean result = false;
 
@@ -275,14 +276,14 @@ public class EndpointManager {
         }
 
         private boolean testPreferredEndpoint() {
-            log.debug("testPreferredEndpoint() - start");
+            log.debug("testPreferredEndpoint() - start"  + initDialog.toString());
             boolean result = false;
             if (preferredEndPoint == null) {
-                log.debug("No preferred endPoint set yet, not testing");
+                log.debug("No preferred endPoint set yet, not testing ");
             } else {
                 log.debug("fx testing preferred endPoint {}", preferredEndPoint);
                 Platform.setImplicitExit(false);
-                Platform.runLater(()->LoginForms.initDialog.setDialogText(i18n.tr("Testing endpoint that worked before...")));
+                Platform.runLater(() -> LoginForms.initDialog.setDialogText(i18n.tr("Testing endpoint that worked before...")));
                 if (null != LoginForms.initDialogStage) {
                     LoginForms.initDialogStage.show();
                     log.debug("testPreferredEndpoint(): Testing endpoint stage is shown");
@@ -312,7 +313,7 @@ public class EndpointManager {
 
             for (int i = 0; i < endPointList.size() && result == false; i++) {
                 Platform.setImplicitExit(false);
-                    initDialogFX.setDialogText(i18n.tr("Searching for backend connection...") + String.format("%s / %s", (i + 1), endPointList.size()));
+                initDialogFX.setDialogText(i18n.tr("Searching for backend connection...") + String.format("%s / %s", (i + 1), endPointList.size()));
                 String endPoint = endPointList.get(i);
                 result = testEndpoint(endPoint);
             }
@@ -320,7 +321,7 @@ public class EndpointManager {
             log.debug("testEndPointList() - finished, returning {}", result);
             return result;
         }
-               
+
     }
 
     public class FindEndpointTaskFXFactory {
@@ -340,11 +341,18 @@ public class EndpointManager {
 
             boolean couldNotConnect = true;
             endPointTask.getContinueFormFX().continueAfterBackEndAvailabledFX();
-            new Thread(endPointTask).start();
-            
-            endPointTask.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+            Thread t = new Thread("EndPointThread"){
+                @Override
+                public void run() {
+                    try {
+                        endPointTask.call();
+                    } catch (Exception ex) {
+                        log.error("EndPoint Task could not be called " + ex.getMessage());
+                    }
+                endPointTask.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
                 @Override
                 public void handle(WorkerStateEvent t) {
+                    log.debug("endPointTask has returned successful");
                     // Code to run once FindEndpointTaskFX is completed **successfully**
                     if (endPointTask.isInitDialogOriginFX()) {
                         //initDialogFX.setVisible(true);
@@ -358,14 +366,18 @@ public class EndpointManager {
 
                 }
             });
-            endPointTask.setOnFailed(new EventHandler<WorkerStateEvent>() {
-                @Override
-                public void handle(WorkerStateEvent t) {
-                    // Code to run once FindEndpointTaskFX **fails**
-                    LoginForms.initDialogStage.hide();
-                    log.error("Execution of FindEndpointTaskFX task has failed");
+                endPointTask.setOnFailed(new EventHandler<WorkerStateEvent>() {
+                    @Override
+                    public void handle(WorkerStateEvent t) {
+                        // Code to run once FindEndpointTaskFX **fails**
+                        LoginForms.initDialogStage.hide();
+                        log.error("Execution of FindEndpointTaskFX task has failed");
+                    }
+                });
                 }
-            });
+            };
+            t.start();
+
             if (null == result) {
                 couldNotConnect = false;
                 log.debug("Could not connect to the Shellfire backend - Shellfire VPN is shutting down");
