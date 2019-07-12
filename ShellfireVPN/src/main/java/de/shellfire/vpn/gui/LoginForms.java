@@ -70,10 +70,7 @@ public class LoginForms extends Application {
     }
 
     public static void main(String[] args) {
-        ///TODO: login automatically chexbox makes login to bypass login form
-
         System.setProperty("java.library.path", "./lib");
-        log.debug("In the main method");
         default_args = args;
         //initializations(args);
         launch(args);
@@ -121,7 +118,9 @@ public class LoginForms extends Application {
         }
         
     }
-    
+    /**
+     *Initializing the dialog controller & stage
+     */
     public static void setLookAndFeel(){
         log.debug("setLookAndFeel: first test");
         try {
@@ -129,7 +128,7 @@ public class LoginForms extends Application {
             // Load the fxml file and create a new stage for the popup dialog.
             FXMLLoader loader = new FXMLLoader(LoginForms.class.getClassLoader().getResource("/fxml/ProgressDialog.fxml"));
             loader.setLocation(LoginForms.class.getResource("/fxml/ProgressDialog.fxml"));
-            log.debug("setLookAndFeel: second test");
+            //log.debug("setLookAndFeel: second test");
 
             AnchorPane page = (AnchorPane) loader.load();
             initDialog = (ProgressDialogController)loader.getController();

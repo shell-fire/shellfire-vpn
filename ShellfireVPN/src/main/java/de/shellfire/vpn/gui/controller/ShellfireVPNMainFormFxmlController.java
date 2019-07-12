@@ -637,12 +637,9 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         switch (state) {
             case Disconnected:
                 Platform.runLater(()->{this.setStateDisconnected();});
-                //this.setStateDisconnected();
                 break;
             case Connecting:
                 Platform.runLater(() ->{ this.setStateConnecting();});
-                //this.setStateConnecting();
-               
                 break;
             case Connected:
                 this.setStateConnected();
@@ -679,7 +676,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
                                 setNormalCursor();
                                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                                 alert.setHeaderText(i18n.tr("Premium server selected"));
-                                alert.setContentText(i18n.tr("Dieser Server steht nur fÃƒÂ¼r Shellfire VPN Premium Kunden zur VerfÃƒÂ¼gung\n\nWeitere Informationen zu Shellfire VPN Premium anzeigen?"));
+                                alert.setContentText(i18n.tr("Dieser Server steht nur für Shellfire VPN Premium Kunden zur Verfügung\n\nWeitere Informationen zu Shellfire VPN Premium anzeigen?"));
                                 Optional<ButtonType> result = alert.showAndWait();
 
                                 if ((result.isPresent()) && (result.get() == ButtonType.OK)) {
@@ -706,7 +703,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
                                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                                 alert.setHeaderText(i18n.tr("PremiumPlus server selected"));
-                                alert.setContentText(i18n.tr("Dieser Server steht nur fÃƒÂ¼r Shellfire VPN PremiumPlus Kunden zur VerfÃƒÂ¼gung\n\nWeitere Informationen zu Shellfire VPN PremiumPlus anzeigen?"));
+                                alert.setContentText(i18n.tr("Dieser Server steht nur für Shellfire VPN PremiumPlus Kunden zur Verfügung\n\nWeitere Informationen zu Shellfire VPN PremiumPlus anzeigen?"));
                                 Optional<ButtonType> result = alert.showAndWait();
 
                                 if ((result.isPresent()) && (result.get() == ButtonType.OK)) {
@@ -791,7 +788,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         this.hideConnectProgress();
         
         this.connectionSubviewController.connectButtonDisable(false);
-        this.serverListSubviewController.setsetConnetImage1Disable(false);
+        this.serverListSubviewController.setConnetImage1Disable(false);
         this.connectionStatusValue.setText(i18n.tr("Not connected"));
         mySetIconImage("/icons/sfvpn2-disconnected-big.png");
         Platform.runLater(()->{this.globeConnectionImageView.setImage(this.iconIdleSmall);});
@@ -863,8 +860,9 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         if (showMessage) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setContentText(message);
-            alert.getDialogPane().getChildren().stream().filter(node -> node instanceof Label).forEach(node -> ((Label)node).setMinWidth(Region.USE_PREF_SIZE));
-        alert.showAndWait();
+            alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+            //alert.getDialogPane().getChildren().stream().filter(node -> node instanceof Label).forEach(node -> ((Label)node).setMinWidth(Region.USE_PREF_SIZE));
+            alert.showAndWait();
             if (this.trayIcon != null) {
                 this.trayIcon.setImage(this.iconDisconnectedAwt);
             }
@@ -915,7 +913,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
             log.debug("setStateConnecting: cannot start showConnectProgress with error " + ex.getMessage());
         }
         this.connectionSubviewController.connectButtonDisable(true);
-        this.serverListSubviewController.setsetConnetImage1Disable(true); 
+        this.serverListSubviewController.setConnetImage1Disable(true); 
 
         //TODO_subview
         
@@ -938,10 +936,8 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         popupConnectItem.setLabel(i18n.tr("Connecting..."));
         popupConnectItem.setEnabled(false);
         serverListSubviewController.getServerListTableView().disableProperty().set(true);
-        /*jScrollPane.getViewport().setBackground(Color.lightGray);
-        jRadioUdp.setEnabled(false);
-        jRadioTcp.setEnabled(false);*/
-
+        serverListSubviewController.getUDPRadioButton().setDisable(true);
+        serverListSubviewController.getTCPRadioButton().setDisable(true);
     }
 
     /**
@@ -1191,7 +1187,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         this.connectionSubviewController.getConnectImageView().setImage(this.buttonDisconnect);
         this.serverListSubviewController.getConnectImage1().setImage(this.buttonDisconnect);
         this.connectionSubviewController.connectButtonDisable(false);
-        this.serverListSubviewController.setsetConnetImage1Disable(false);
+        this.serverListSubviewController.setConnetImage1Disable(false);
         serverListSubviewController.getServerListTableView().disableProperty().set(true);
         if (this.trayIcon != null) {
             this.trayIcon.setImage(this.iconConnected);
@@ -1203,8 +1199,8 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         this.startConnectedSinceTimer();
 
         this.updateOnlineHost();
-        this.serverListSubviewController.getUDPRadioButton().setDisable(true);
-        this.serverListSubviewController.getUDPRadioButton().setDisable(true);
+        serverListSubviewController.getUDPRadioButton().disableProperty().set(true);
+        serverListSubviewController.getTCPRadioButton().disableProperty().set(true);
         showTrayMessageWithoutCallback(i18n.tr("Connection successful"),
 				i18n.tr("You are now connected to Shellfire VPN. Your internet connection is encrypted."));
         showStatusUrlIfEnabled();
@@ -1299,11 +1295,9 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
         switch (protocol) {
             case UDP:
-                //TODO_subview
                 this.serverListSubviewController.getUDPRadioButton().setSelected(true);
                 break;
             case TCP:
-                //TOD O_subview
                 this.serverListSubviewController.getTCPRadioButton().setSelected(true);
                 break;
         }

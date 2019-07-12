@@ -221,7 +221,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
                 });
                 this.fButtonLogin.setDisable(false);
             } catch (Exception ex) {
-                log.debug("could not load progressDialog fxml in login window \n" + ex.getMessage());
+                log.error("could not load progressDialog fxml in login window \n" + ex.getMessage());
             }
 
     }

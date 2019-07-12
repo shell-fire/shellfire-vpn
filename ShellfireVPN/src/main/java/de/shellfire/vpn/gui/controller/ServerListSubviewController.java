@@ -177,7 +177,7 @@ public class ServerListSubviewController implements Initializable {
         return networkTypeToggleGroup;
     }
     
-    public void setsetConnetImage1Disable(boolean enable){
+    public void setConnetImage1Disable(boolean enable){
          this.connectButton1.setDisable(enable);
     }
     
@@ -263,6 +263,8 @@ public class ServerListSubviewController implements Initializable {
           if (isConnected){
           this.connectImage1.setImage(new Image("/buttons/button-disconnect-" + VpnI18N.getLanguage().getKey() + ".gif")); 
           serverListTableView.disableProperty().set(isConnected);
+          TCPRadioButton.disableProperty().set(isConnected);
+          UDPRadioButton.disableProperty().set(isConnected);
           }
     }
     
