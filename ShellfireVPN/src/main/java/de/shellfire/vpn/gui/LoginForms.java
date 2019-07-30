@@ -102,7 +102,8 @@ public class LoginForms extends Application {
             initConnectionTest();
             
         } catch (Exception ex) {
-            log.error("could not start with first stage load " + ex);
+            log.error("could not start with first stage load \n"); 
+            ex.printStackTrace(System.out);
         }
 
         try {
@@ -137,13 +138,13 @@ public class LoginForms extends Application {
             initDialog.addInfo("");
             initDialog.addBottomText("");
             initDialog.getLeftButton().setDisable(true);
-            log.debug("setLookAndFeel: fourth test");
             initDialogStage = new Stage();
             initDialogStage.initStyle(StageStyle.UNDECORATED);
             initDialogStage.setTitle("Connecting");
             initDialogStage.initModality(Modality.WINDOW_MODAL);
             Scene scene = new Scene(page);
             initDialogStage.setScene(scene); 
+            log.debug("setLookAndFeel: last test");
         } catch (Exception e) {
             log.error("There is an exception caused by the setLookAndFeel method, " + e.toString());
         }
@@ -340,7 +341,6 @@ public class LoginForms extends Application {
                 System.exit(0);
                 return;
             } else if (cmd.equals("doupdate")) {
-
                 String path = "";
                 String user = "";
                 if (default_args.length > 2) {

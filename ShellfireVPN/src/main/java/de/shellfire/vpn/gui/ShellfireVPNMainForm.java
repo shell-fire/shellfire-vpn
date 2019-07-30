@@ -141,70 +141,70 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 	private Image image;
 	
 	
-	private final static HashMap<String, ImageIcon> mainIconMap = new HashMap<String, ImageIcon>() {
-		{
-			put("de", Util.getImageIcon("/icons/sf.png"));
-			put("en", Util.getImageIcon("/icons/sf_en.png"));
-			put("fr", Util.getImageIcon("/icons/sf_fr.png"));
-		}
-	};
+    private final static HashMap<String, ImageIcon> mainIconMap = new HashMap<String, ImageIcon>() {
+        {
+            put("de", Util.getImageIcon("/icons/sf.png"));
+            put("en", Util.getImageIcon("/icons/sf_en.png"));
+            put("fr", Util.getImageIcon("/icons/sf_fr.png"));
+        }
+    };
 
 	private MenuItem popupConnectItem;
 	private PopupMenu popup;
 
-	/** Creates new form */
-	ShellfireVPNMainForm(WebService service) throws VpnException {
-		if (!service.isLoggedIn()) {
-			throw new VpnException("ShellfireVPN Main Form required a logged in service. This should not happen!");
-		}
+    /**
+     * Creates new form
+     */
+    ShellfireVPNMainForm(WebService service) throws VpnException {
+        if (!service.isLoggedIn()) {
+            throw new VpnException("ShellfireVPN Main Form required a logged in service. This should not happen!");
+        }
 
-		log.debug("ShellfireVPNMainForm starting up");
-		if (Util.isWindows()) {
-		  log.debug("Running on Windows " + Util.getOsVersion());
-		  
-		  if (Util.isVistaOrLater()) {
-		    log.debug("Running on Vista Or Later Version");
-		  } else {
-		    log.debug("Running on XP");
-		  }
-		  
-		} else {
-		  log.debug("Running on Mac OS X " + Util.getOsVersion());
-		}
-		
-		log.debug("System Architecture: " + Util.getArchitecture());
-		
-		this.shellfireService = service;
-		this.initController();
+        log.debug("ShellfireVPNMainForm starting up");
+        if (Util.isWindows()) {
+            log.debug("Running on Windows " + Util.getOsVersion());
 
-		this.setUndecorated(true);
-		this.enableMouseMoveListener();
+            if (Util.isVistaOrLater()) {
+                log.debug("Running on Vista Or Later Version");
+            } else {
+                log.debug("Running on XP");
+            }
 
-		CustomLayout.register();
-		this.setFont(TitiliumFont.getFont());
-		this.loadIcons();
-		this.setLookAndFeel();
+        } else {
+            log.debug("Running on Mac OS X " + Util.getOsVersion());
+        }
 
-		initComponents();
-		this.initTray();
+        log.debug("System Architecture: " + Util.getArchitecture());
 
-		this.initLayeredPaneSize();
+        this.shellfireService = service;
+        this.initController();
 
-		
-		
-		this.initContent();
-		Storage.register(this);
+        this.setUndecorated(true);
+        this.enableMouseMoveListener();
 
-		this.initShortCuts();
-		this.initPremium();
-		this.initConnection();
-		
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		pack();
-		this.setLocationRelativeTo(null);
-		setVisible(true);
+        CustomLayout.register();
+        this.setFont(TitiliumFont.getFont());
+        this.loadIcons();
+        this.setLookAndFeel();
 
-	}
+        initComponents();
+        this.initTray();
+
+        this.initLayeredPaneSize();
+
+        this.initContent();
+        Storage.register(this);
+
+        this.initShortCuts();
+        this.initPremium();
+        this.initConnection();
+
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        pack();
+        this.setLocationRelativeTo(null);
+        setVisible(true);
+
+    }
 
   private void initConnection() {
 		new Thread() {

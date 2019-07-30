@@ -716,7 +716,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
                                 server = this.serverListSubviewController.getRandomPremiumServer();
                                 setSelectedServer(server);
                             }
-
+                                                                                                                                                                                               
                         }
 
                         controller.connect(this.serverListSubviewController.getSelectedServer(), this.serverListSubviewController.getSelectedProtocol(), Reason.ConnectButtonPressed);

@@ -123,6 +123,10 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
         lbl.setVisible(true);
     }
 
+    public Label getDynamicLabel() {
+        return dynamicLabel;
+    }
+
     void setTextAndShowComponent(Button btn, String text) {
         btn.setText(text);
         btn.setVisible(true);

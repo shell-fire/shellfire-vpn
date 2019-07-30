@@ -478,7 +478,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
     public void afterShellfireServiceEnvironmentEnsured() {
         log.debug("Ensured that ShellfireVPNService is running. Trying to connect to the Shellfire webservice backend...");
-
+        
         EndpointManager.getInstance().ensureShellfireBackendAvailableFx(this);
     }
 
