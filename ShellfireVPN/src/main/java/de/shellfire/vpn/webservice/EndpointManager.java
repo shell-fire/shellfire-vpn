@@ -176,7 +176,8 @@ public class EndpointManager {
             boolean result = false;
 
             for (int i = 0; i < endPointList.size() && result == false; i++) {
-                dialogTextProperty.set(i18n.tr("Searching for backend connection...") + String.format("%s / %s", (i + 1), endPointList.size()));
+                initDialog = null; 
+                initDialog.setText(i18n.tr("Searching for backend connection...") + String.format("%s / %s", (i + 1), endPointList.size()));
                 String endPoint = endPointList.get(i);
                 result = testEndpoint(endPoint);
             }
@@ -189,8 +190,8 @@ public class EndpointManager {
         protected String doInBackground() throws Exception {
 
             log.debug("EndpoingManager: In doInBackground method");
+            //initDialog.setText(i18n.tr("Searching for backend connection..."));
             dialogTextProperty.set(i18n.tr("Searching for backend connection..."));
-
             boolean result = false;
 
             result = testPreferredEndpoint();
@@ -251,7 +252,7 @@ public class EndpointManager {
             log.debug("EndpointManager: start of call method");
             //Platform.setImplicitExit(false);
             //Platform.runLater(() -> initDialogFX.setDialogText(i18n.tr("Searching for backend connection...")));
-            dialogTextProperty.set(i18n.tr("Searching for backend connection..."));
+            Platform.runLater(()->dialogTextProperty.set(i18n.tr("Searching for backend connection...")));
             log.debug("Find Endpoint task method, init dialog has " + initDialogFX.toString());
             boolean result = false;
 
@@ -281,7 +282,7 @@ public class EndpointManager {
                     }
                 }
             }
-
+            //succeeded();
             return preferredEndPoint;
         }
         
@@ -298,7 +299,7 @@ public class EndpointManager {
                 log.debug("fx testing preferred endPoint {}", preferredEndPoint);
                 //Platform.setImplicitExit(false);
                 //Platform.runLater(() -> LoginForms.initDialog.setDialogText(i18n.tr("Testing endpoint that worked before...")));
-                dialogTextProperty.set(i18n.tr("Testing endpoint that worked before..."));
+                Platform.runLater(() -> dialogTextProperty.set(i18n.tr("Testing endpoint that worked before...")));
 //                Platform.runLater(()->
 //                {if (null != LoginForms.initDialogStage) {
 //                    LoginForms.initDialogStage.show();
@@ -340,17 +341,18 @@ public class EndpointManager {
 
         @Override
         protected void failed() {
-            super.failed(); //To change body of generated methods, choose Tools | Templates.
+            log.debug("testEndpointlist did not worked so failed");
         }
 
+        
         @Override
         protected void succeeded() {
-            super.succeeded(); //To change body of generated methods, choose Tools | Templates.
+            log.debug("testEndpointlist worked and succeeded");
             String result = null ;
             if (isInitDialogOriginFX()) {
                 log.debug("end task is successfully set");
                 LoginForms.initDialogStage.hide();
-                initDialogStage.hide();
+                //initDialogStage.hide();
                 // TODO check if logic meant to load the dialog box instead of it's
                 // calling it's visible method
             }
@@ -367,7 +369,7 @@ public class EndpointManager {
             if (isInitDialogOriginFX()) {
                 //nitDialogFX.setVisible(false);
                 LoginForms.initDialogStage.hide();
-                initDialogStage.hide();
+                //initDialogStage.hide();
             }
 
             this.continueFormFX.continueAfterBackEndAvailabledFX();
@@ -386,10 +388,9 @@ public class EndpointManager {
         initDialogFX = LoginController.initProgressDialog;
         log.debug("ensureShellfireBackendAvailableFx continuation...");
         FindEndpointTaskFX taskE = new FindEndpointTaskFX(form);
-        taskE.call();
-
-
-    }
+        Thread t = new Thread(taskE);
+        t.start();
+        }
 
     private boolean testEndpoint(String endPoint) {
         log.debug("testEndpoint({}) - start", endPoint);

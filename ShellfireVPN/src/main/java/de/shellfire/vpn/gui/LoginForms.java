@@ -59,7 +59,7 @@ public class LoginForms extends Application {
     private static double xOffset = 0;
     private static double yOffset = 0;
     public static Stage initDialogStage = null;
-    public HashMap<Object,Stage> controllersAndStage = new HashMap<>();
+    //public HashMap<Object,Stage> controllersAndStage = new HashMap<>();
     
     public static Stage getStage() {
         return stage;
@@ -96,7 +96,6 @@ public class LoginForms extends Application {
         try {
             this.stage = primaryStage;
             this.stage.initStyle(StageStyle.UNDECORATED);
-            log.debug("Stage has value " + this.stage);
             setLookAndFeel();
             this.loadLoginController();
             initConnectionTest();
@@ -133,17 +132,18 @@ public class LoginForms extends Application {
 
             AnchorPane page = (AnchorPane) loader.load();
             initDialog = (ProgressDialogController)loader.getController();
-            initDialog.setDialogText("Connecting ...");
+            initDialog.setDialogText("Init ...");
             initDialog.getProgressBar().setProgress(ProgressBar.INDETERMINATE_PROGRESS);
             initDialog.addInfo("");
             initDialog.addBottomText("");
             initDialog.getLeftButton().setDisable(true);
             initDialogStage = new Stage();
             initDialogStage.initStyle(StageStyle.UNDECORATED);
-            initDialogStage.setTitle("Connecting");
+            initDialogStage.setTitle("Init");
             initDialogStage.initModality(Modality.WINDOW_MODAL);
             Scene scene = new Scene(page);
             initDialogStage.setScene(scene); 
+            initDialogStage.show();
             log.debug("setLookAndFeel: last test");
         } catch (Exception e) {
             log.error("There is an exception caused by the setLookAndFeel method, " + e.toString());
