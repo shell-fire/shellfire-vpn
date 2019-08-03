@@ -251,6 +251,8 @@ public class EndpointManager {
         protected String call() {
             log.debug("EndpointManager: start of call method");
             //Platform.setImplicitExit(false);
+            // creating a nullpointer error to analyse loading of dialog boxes during logintime
+            dialogTextProperty = null;
             //Platform.runLater(() -> initDialogFX.setDialogText(i18n.tr("Searching for backend connection...")));
             Platform.runLater(()->dialogTextProperty.set(i18n.tr("Searching for backend connection...")));
             log.debug("Find Endpoint task method, init dialog has " + initDialogFX.toString());
