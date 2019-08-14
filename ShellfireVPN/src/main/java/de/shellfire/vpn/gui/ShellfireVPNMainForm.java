@@ -2337,20 +2337,20 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 	}
 
 	private void startConnectedSinceTimer() {
-		int delay = 1000; // milliseconds
-		connectedSince = new Date();
+            int delay = 1000; // milliseconds
+            connectedSince = new Date();
 
-		ActionListener taskPerformer = new ActionListener() {
+            ActionListener taskPerformer = new ActionListener() {
 
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				updateConnectedSince();
-			}
-		};
+                    @Override
+                    public void actionPerformed(ActionEvent arg0) {
+                            updateConnectedSince();
+                    }
+            };
 
-		this.currentConnectedSinceTimer = new Timer(delay, taskPerformer);
-		this.currentConnectedSinceTimer.setRepeats(true);
-		this.currentConnectedSinceTimer.start();
+            this.currentConnectedSinceTimer = new Timer(delay, taskPerformer);
+            this.currentConnectedSinceTimer.setRepeats(true);
+            this.currentConnectedSinceTimer.start();
 	}
 
 	private void startNagScreenTimer() {
@@ -2412,15 +2412,15 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 	}
 	
 	private void exitHandler() {
-		boolean connected;
+            boolean connected;
 
-    connected = this.controller.getCurrentConnectionState() != ConnectionState.Disconnected;
-		if (connected) {
-			askForDisconnectedAndQuit();
-		} else {
-		    enableSystemProxyIfProxyConfig();  
-			System.exit(0);
-		}
+            connected = this.controller.getCurrentConnectionState() != ConnectionState.Disconnected;
+            if (connected) {
+                    askForDisconnectedAndQuit();
+            } else {
+                enableSystemProxyIfProxyConfig();  
+                    System.exit(0);
+            }
 	}
 
 	private void showNagScreenWithoutTimer() {

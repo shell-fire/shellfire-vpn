@@ -44,7 +44,7 @@ public class LoginForms extends Application {
     private static final Logger log = Util.getLogger(LoginForms.class.getCanonicalName());
     public static Stage stage;
     public static String[] default_args;
-    public static ProgressDialogController initDialog;
+    public static ProgressDialogController initDialog ;
     public RegisterFormController registerController;
     public LicenseAcceptanceController licenceAcceptanceController;
     public static VpnSelectDialogController vpnSelectController;
@@ -132,15 +132,15 @@ public class LoginForms extends Application {
 
             AnchorPane page = (AnchorPane) loader.load();
             initDialog = (ProgressDialogController)loader.getController();
-            initDialog.setDialogText("Init ...");
-            initDialog.getProgressBar().setProgress(ProgressBar.INDETERMINATE_PROGRESS);
-            initDialog.addInfo("");
-            initDialog.addBottomText("");
-            initDialog.getLeftButton().setDisable(true);
+//            initDialog.setDialogText("Init ...");
+//            initDialog.getProgressBar().setProgress(ProgressBar.INDETERMINATE_PROGRESS);
+//            initDialog.addInfo("");
+//            initDialog.addBottomText("");
+//            initDialog.getLeftButton().setDisable(true);
             initDialogStage = new Stage();
-            initDialogStage.initStyle(StageStyle.UNDECORATED);
+            //initDialogStage.initStyle(StageStyle.UNDECORATED);
             initDialogStage.setTitle("Init");
-            initDialogStage.initModality(Modality.WINDOW_MODAL);
+            //initDialogStage.initModality(Modality.WINDOW_MODAL);
             Scene scene = new Scene(page);
             initDialogStage.setScene(scene); 
             initDialogStage.show();

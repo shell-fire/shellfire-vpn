@@ -61,7 +61,7 @@ public class EndpointManager {
     public void setDialogBinding(){
         dialogTextProperty = new SimpleStringProperty();
         LoginForms.initDialog.getDynamicLabel().textProperty().bind(dialogTextProperty);
-        initDialogFX.getDynamicLabel().textProperty().bind(dialogTextProperty);
+        //initDialogFX.getDynamicLabel().textProperty().bind(dialogTextProperty);
     }
     private void loadFromProperties() {
         vpnProperties = VpnProperties.getInstance();
@@ -76,7 +76,7 @@ public class EndpointManager {
 
         setEndPointListFromCsv(endPointListCsv);
         setPreferredEndPoint(getPreferredEndPointFromProperties());
-
+        setDialogBinding();
     }
 
     public String getPreferredEndPointFromProperties() {
@@ -190,8 +190,8 @@ public class EndpointManager {
         protected String doInBackground() throws Exception {
 
             log.debug("EndpoingManager: In doInBackground method");
-            //initDialog.setText(i18n.tr("Searching for backend connection..."));
-            dialogTextProperty.set(i18n.tr("Searching for backend connection..."));
+            initDialog.setText(i18n.tr("Searching for backend connection..."));
+            //dialogTextProperty.set(i18n.tr("Searching for backend connection..."));
             boolean result = false;
 
             result = testPreferredEndpoint();
@@ -240,10 +240,10 @@ public class EndpointManager {
             if (null == initDialogFX) {
                 log.debug("\nFindEndpointTaskFX: In Dialog is null \n");
                 initDialogFX = LoginForms.getInitDialog();
-                initDialogFX.setDialogText("Update Check");
+                dialogTextProperty.set(i18n.tr("Update Check"));
                 initDialogOriginFX = true;
             }
-            setDialogBinding();
+            //setDialogBinding();
         }
 
         // corresponds to Swing's doInBackgraound
@@ -252,7 +252,7 @@ public class EndpointManager {
             log.debug("EndpointManager: start of call method");
             //Platform.setImplicitExit(false);
             // creating a nullpointer error to analyse loading of dialog boxes during logintime
-            dialogTextProperty = null;
+            //dialogTextProperty = null;
             //Platform.runLater(() -> initDialogFX.setDialogText(i18n.tr("Searching for backend connection...")));
             Platform.runLater(()->dialogTextProperty.set(i18n.tr("Searching for backend connection...")));
             log.debug("Find Endpoint task method, init dialog has " + initDialogFX.toString());

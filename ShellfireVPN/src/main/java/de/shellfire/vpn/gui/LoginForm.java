@@ -928,7 +928,8 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
                                         && service.getVpn().getAccountType() != ServerType.Free) {
                                     vis = false;
                                 }
-
+                                
+                                log.debug("This is where the login is made visible");
                                 mainForm.setVisible(vis);
                                 mainForm.afterLogin(jAutoConnect.isSelected());
                             }
