@@ -390,8 +390,8 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     @FXML
     private void handleConnectionPaneMouseExited(MouseEvent event) {
         this.application.getStage().getScene().setCursor(Cursor.DEFAULT);
-                if(!currentSidePane.equals(SidePane.CONNECTION)){
-               this.connectoinBackgroundImageView.setImage(Util.getImageIconFX(baseImageUrl + "/buttons/button-connect-idle.png"));
+           if(!currentSidePane.equals(SidePane.CONNECTION)){
+           this.connectoinBackgroundImageView.setImage(Util.getImageIconFX(baseImageUrl + "/buttons/button-connect-idle.png"));
         }
     }
 
