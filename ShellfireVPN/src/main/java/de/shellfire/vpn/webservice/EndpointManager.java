@@ -76,7 +76,14 @@ public class EndpointManager {
 
         setEndPointListFromCsv(endPointListCsv);
         setPreferredEndPoint(getPreferredEndPointFromProperties());
-        setDialogBinding();
+        
+        // Check if JavaFX application is running. True if Platform variable is set or not null
+        try {
+            if(Platform.isImplicitExit()? true: true)
+                setDialogBinding();
+        } catch (Exception e) {
+            log.debug("Swing Application running");
+        }
     }
 
     public String getPreferredEndPointFromProperties() {
