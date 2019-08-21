@@ -201,6 +201,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
                                 this.application.shellFireMainController.setSerciceAndInitialize(this.service);
                                 this.application.shellFireMainController.prepareSubviewControllers();
                                 this.application.shellFireMainController.setApp(this.application);
+                                this.application.shellFireMainController.afterLogin(fAutoconnect.isSelected());
                                 } else {
                                 log.debug("handlefButtonLogin: vpnController is visible");
                                 }
@@ -220,7 +221,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
                 });
                 this.fButtonLogin.setDisable(false);
             } catch (Exception ex) {
-                log.debug("could not load progressDialog fxml in login window \n" + ex.getMessage());
+                log.error("could not load progressDialog fxml in login window \n" + ex.getMessage());
             }
 
     }
@@ -477,7 +478,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
     public void afterShellfireServiceEnvironmentEnsured() {
         log.debug("Ensured that ShellfireVPNService is running. Trying to connect to the Shellfire webservice backend...");
-
+        
         EndpointManager.getInstance().ensureShellfireBackendAvailableFx(this);
     }
 

@@ -44,7 +44,7 @@ public class LoginForms extends Application {
     private static final Logger log = Util.getLogger(LoginForms.class.getCanonicalName());
     public static Stage stage;
     public static String[] default_args;
-    public static ProgressDialogController initDialog;
+    public static ProgressDialogController initDialog ;
     public RegisterFormController registerController;
     public LicenseAcceptanceController licenceAcceptanceController;
     public static VpnSelectDialogController vpnSelectController;
@@ -59,7 +59,7 @@ public class LoginForms extends Application {
     private static double xOffset = 0;
     private static double yOffset = 0;
     public static Stage initDialogStage = null;
-    public HashMap<Object,Stage> controllersAndStage = new HashMap<>();
+    //public HashMap<Object,Stage> controllersAndStage = new HashMap<>();
     
     public static Stage getStage() {
         return stage;
@@ -70,10 +70,7 @@ public class LoginForms extends Application {
     }
 
     public static void main(String[] args) {
-        ///TODO: login automatically chexbox makes login to bypass login form
-
         System.setProperty("java.library.path", "./lib");
-        log.debug("In the main method");
         default_args = args;
         //initializations(args);
         launch(args);
@@ -99,13 +96,13 @@ public class LoginForms extends Application {
         try {
             this.stage = primaryStage;
             this.stage.initStyle(StageStyle.UNDECORATED);
-            log.debug("Stage has value " + this.stage);
             setLookAndFeel();
             this.loadLoginController();
             initConnectionTest();
             
         } catch (Exception ex) {
-            log.error("could not start with first stage load " + ex);
+            log.error("could not start with first stage load \n"); 
+            ex.printStackTrace(System.out);
         }
 
         try {
@@ -121,30 +118,55 @@ public class LoginForms extends Application {
         }
         
     }
-    
+    /**
+     *Initializing the dialog controller & stage
+     */
     public static void setLookAndFeel(){
         log.debug("setLookAndFeel: first test");
         try {
 
             // Load the fxml file and create a new stage for the popup dialog.
-            FXMLLoader loader = new FXMLLoader(LoginForms.class.getClassLoader().getResource("/fxml/ProgressDialog.fxml"));
-            loader.setLocation(LoginForms.class.getResource("/fxml/ProgressDialog.fxml"));
-            log.debug("setLookAndFeel: second test");
+//            FXMLLoader loader = new FXMLLoader(LoginForms.class.getClassLoader().getResource("/fxml/ProgressDialog.fxml"));
+//            loader.setLocation(LoginForms.class.getResource("/fxml/ProgressDialog.fxml"));
+            //log.debug("setLookAndFeel: second test");
 
-            AnchorPane page = (AnchorPane) loader.load();
-            initDialog = (ProgressDialogController)loader.getController();
-            initDialog.setDialogText("Connecting ...");
-            initDialog.getProgressBar().setProgress(ProgressBar.INDETERMINATE_PROGRESS);
-            initDialog.addInfo("");
-            initDialog.addBottomText("");
-            initDialog.getLeftButton().setDisable(true);
-            log.debug("setLookAndFeel: fourth test");
-            initDialogStage = new Stage();
-            initDialogStage.initStyle(StageStyle.UNDECORATED);
-            initDialogStage.setTitle("Connecting");
-            initDialogStage.initModality(Modality.WINDOW_MODAL);
-            Scene scene = new Scene(page);
-            initDialogStage.setScene(scene); 
+//            AnchorPane page = (AnchorPane) loader.load();
+//            initDialog = (ProgressDialogController)loader.getController();
+//            initDialog.setDialogText("Init ...");
+//            initDialog.getProgressBar().setProgress(ProgressBar.INDETERMINATE_PROGRESS);
+//            initDialog.addInfo("");
+//            initDialog.addBottomText("");
+//            initDialog.getLeftButton().setDisable(true);
+//            loadProgressDialog("Init");
+//            initDialogStage = new Stage();
+//            //initDialogStage.initStyle(StageStyle.UNDECORATED);
+//            initDialogStage.setTitle("Init");
+//            //in itDialogStage.initModality(Modality.WINDOW_MODAL);
+            // Load the fxml file and create a new stage for the popup dialog.
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(LoginForms.class.getResource("/fxml/ProgressDialog.fxml"));
+                AnchorPane page = (AnchorPane) loader.load();
+                initDialog = (ProgressDialogController)loader.getController();
+                initDialog.setDialogText("Init ...");
+                initDialog.getProgressBar().setProgress(ProgressBar.INDETERMINATE_PROGRESS);
+                initDialog.addInfo("");
+                initDialog.addBottomText("");
+                
+                initDialogStage = new Stage();
+                initDialogStage.initStyle(StageStyle.UNDECORATED);
+                initDialogStage.setTitle("Init");
+                initDialogStage.initModality(Modality.WINDOW_MODAL);
+                initDialogStage.initOwner(getStage());
+                Scene scene = new Scene(page);
+                initDialogStage.setScene(scene);
+            
+                initDialog = loader.getController();            
+                // unbind any previous progress bar
+                initDialog.getProgressBar().progressProperty().unbind();
+            
+                initDialog.setVisible(true);
+                initDialogStage.show();
+               log.debug("setLookAndFeel: last test");
         } catch (Exception e) {
             log.error("There is an exception caused by the setLookAndFeel method, " + e.toString());
         }
@@ -341,7 +363,6 @@ public class LoginForms extends Application {
                 System.exit(0);
                 return;
             } else if (cmd.equals("doupdate")) {
-
                 String path = "";
                 String user = "";
                 if (default_args.length > 2) {

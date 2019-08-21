@@ -141,70 +141,70 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 	private Image image;
 	
 	
-	private final static HashMap<String, ImageIcon> mainIconMap = new HashMap<String, ImageIcon>() {
-		{
-			put("de", Util.getImageIcon("/icons/sf.png"));
-			put("en", Util.getImageIcon("/icons/sf_en.png"));
-			put("fr", Util.getImageIcon("/icons/sf_fr.png"));
-		}
-	};
+    private final static HashMap<String, ImageIcon> mainIconMap = new HashMap<String, ImageIcon>() {
+        {
+            put("de", Util.getImageIcon("/icons/sf.png"));
+            put("en", Util.getImageIcon("/icons/sf_en.png"));
+            put("fr", Util.getImageIcon("/icons/sf_fr.png"));
+        }
+    };
 
 	private MenuItem popupConnectItem;
 	private PopupMenu popup;
 
-	/** Creates new form */
-	ShellfireVPNMainForm(WebService service) throws VpnException {
-		if (!service.isLoggedIn()) {
-			throw new VpnException("ShellfireVPN Main Form required a logged in service. This should not happen!");
-		}
+    /**
+     * Creates new form
+     */
+    ShellfireVPNMainForm(WebService service) throws VpnException {
+        if (!service.isLoggedIn()) {
+            throw new VpnException("ShellfireVPN Main Form required a logged in service. This should not happen!");
+        }
 
-		log.debug("ShellfireVPNMainForm starting up");
-		if (Util.isWindows()) {
-		  log.debug("Running on Windows " + Util.getOsVersion());
-		  
-		  if (Util.isVistaOrLater()) {
-		    log.debug("Running on Vista Or Later Version");
-		  } else {
-		    log.debug("Running on XP");
-		  }
-		  
-		} else {
-		  log.debug("Running on Mac OS X " + Util.getOsVersion());
-		}
-		
-		log.debug("System Architecture: " + Util.getArchitecture());
-		
-		this.shellfireService = service;
-		this.initController();
+        log.debug("ShellfireVPNMainForm starting up");
+        if (Util.isWindows()) {
+            log.debug("Running on Windows " + Util.getOsVersion());
 
-		this.setUndecorated(true);
-		this.enableMouseMoveListener();
+            if (Util.isVistaOrLater()) {
+                log.debug("Running on Vista Or Later Version");
+            } else {
+                log.debug("Running on XP");
+            }
 
-		CustomLayout.register();
-		this.setFont(TitiliumFont.getFont());
-		this.loadIcons();
-		this.setLookAndFeel();
+        } else {
+            log.debug("Running on Mac OS X " + Util.getOsVersion());
+        }
 
-		initComponents();
-		this.initTray();
+        log.debug("System Architecture: " + Util.getArchitecture());
 
-		this.initLayeredPaneSize();
+        this.shellfireService = service;
+        this.initController();
 
-		
-		
-		this.initContent();
-		Storage.register(this);
+        this.setUndecorated(true);
+        this.enableMouseMoveListener();
 
-		this.initShortCuts();
-		this.initPremium();
-		this.initConnection();
-		
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		pack();
-		this.setLocationRelativeTo(null);
-		setVisible(true);
+        CustomLayout.register();
+        this.setFont(TitiliumFont.getFont());
+        this.loadIcons();
+        this.setLookAndFeel();
 
-	}
+        initComponents();
+        this.initTray();
+
+        this.initLayeredPaneSize();
+
+        this.initContent();
+        Storage.register(this);
+
+        this.initShortCuts();
+        this.initPremium();
+        this.initConnection();
+
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        pack();
+        this.setLocationRelativeTo(null);
+        setVisible(true);
+
+    }
 
   private void initConnection() {
 		new Thread() {
@@ -1678,21 +1678,21 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 	}
 
 	WebService getShellfireService() {
-		return this.shellfireService;
+            return this.shellfireService;
 	}
 
 	public void setSelectedProtocol(VpnProtocol protocol) {
-		if (protocol == null)
-			protocol = VpnProtocol.UDP;
+            if (protocol == null)
+                    protocol = VpnProtocol.UDP;
 
-		switch (protocol) {
-		case UDP:
-			this.jNetworkTransportType.setSelected(jRadioUdp.getModel(), true);
-			break;
-		case TCP:
-			this.jNetworkTransportType.setSelected(jRadioTcp.getModel(), true);
-			break;
-		}
+            switch (protocol) {
+            case UDP:
+                    this.jNetworkTransportType.setSelected(jRadioUdp.getModel(), true);
+                    break;
+            case TCP:
+                    this.jNetworkTransportType.setSelected(jRadioTcp.getModel(), true);
+                    break;
+            }
 
 	}
 
@@ -2337,20 +2337,20 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 	}
 
 	private void startConnectedSinceTimer() {
-		int delay = 1000; // milliseconds
-		connectedSince = new Date();
+            int delay = 1000; // milliseconds
+            connectedSince = new Date();
 
-		ActionListener taskPerformer = new ActionListener() {
+            ActionListener taskPerformer = new ActionListener() {
 
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				updateConnectedSince();
-			}
-		};
+                    @Override
+                    public void actionPerformed(ActionEvent arg0) {
+                            updateConnectedSince();
+                    }
+            };
 
-		this.currentConnectedSinceTimer = new Timer(delay, taskPerformer);
-		this.currentConnectedSinceTimer.setRepeats(true);
-		this.currentConnectedSinceTimer.start();
+            this.currentConnectedSinceTimer = new Timer(delay, taskPerformer);
+            this.currentConnectedSinceTimer.setRepeats(true);
+            this.currentConnectedSinceTimer.start();
 	}
 
 	private void startNagScreenTimer() {
@@ -2412,15 +2412,15 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 	}
 	
 	private void exitHandler() {
-		boolean connected;
+            boolean connected;
 
-    connected = this.controller.getCurrentConnectionState() != ConnectionState.Disconnected;
-		if (connected) {
-			askForDisconnectedAndQuit();
-		} else {
-		    enableSystemProxyIfProxyConfig();  
-			System.exit(0);
-		}
+            connected = this.controller.getCurrentConnectionState() != ConnectionState.Disconnected;
+            if (connected) {
+                    askForDisconnectedAndQuit();
+            } else {
+                enableSystemProxyIfProxyConfig();  
+                    System.exit(0);
+            }
 	}
 
 	private void showNagScreenWithoutTimer() {

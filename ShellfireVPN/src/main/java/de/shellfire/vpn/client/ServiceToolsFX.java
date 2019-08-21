@@ -26,56 +26,59 @@ public abstract class ServiceToolsFX {
 
     private static Logger log = Util.getLogger(ServiceTools.class.getCanonicalName());
     protected static String nl = "\r\n";
-    protected static ProgressDialogController loginProgressDialog; 
+    protected static ProgressDialogController loginProgressDialog;
     protected static boolean init;
     private static ServiceToolsFX instance;
 
     public abstract void ensureServiceEnvironmentFX(LoginController form);
-    
-      public abstract void uninstall(String path);
-  public abstract void install(String path);
-	public abstract void installElevated();
 
-	public static void startWithoutService() {
-		Service.main(new String[0]);
-	}
+    public abstract void uninstall(String path);
 
+    public abstract void install(String path);
 
-	protected static boolean serviceIsRunning() {
-		log.debug("serviceIsRunning() - start");
-		boolean result = false;		
-		
-		try {
-      Client client = Client.getInstance();
-      
-      if (client.ping()) {
-        result = true;
-      }
-      
-    } catch (IOException e) {
-      log.error("error occured during serviceIsRunning() - returning false", e);
+    public abstract void installElevated();
+
+    public static void startWithoutService() {
+        Service.main(new String[0]);
     }
 
-		log.debug("serviceIsRunning - finished - returnung result {}", result);
-		return result;
-	}
-	public void install() {
-		String instDir = LoginController.getInstDir();
-		install(instDir);
-	}
-	public void uninstall() {
-		String instDir = LoginController.getInstDir();
-		uninstall(instDir);
-	}
-    
-    public class WaitForServiceTask extends Task<Object>{
-        
+    protected static boolean serviceIsRunning() {
+        log.debug("serviceIsRunning() - start");
+        boolean result = false;
+
+        try {
+            Client client = Client.getInstance();
+
+            if (client.ping()) {
+                result = true;
+            }
+
+        } catch (IOException e) {
+            log.error("error occured during serviceIsRunning() - returning false", e);
+        }
+
+        log.debug("serviceIsRunning - finished - returnung result {}", result);
+        return result;
+    }
+
+    public void install() {
+        String instDir = LoginController.getInstDir();
+        install(instDir);
+    }
+
+    public void uninstall() {
+        String instDir = LoginController.getInstDir();
+        uninstall(instDir);
+    }
+
+    public class WaitForServiceTask extends Task<Object> {
+
         private LoginController loginForm;
 
         public WaitForServiceTask(LoginController loginForm) {
             this.loginForm = loginForm;
         }
-        
+
         /**
          * Executes when the thread has changed to succeeded state
          */
@@ -85,31 +88,32 @@ public abstract class ServiceToolsFX {
             loginProgressDialog.setVisible(false);
             this.loginForm.afterShellfireServiceEnvironmentEnsured();
         }
-        
+
         @Override
         protected Object call() throws Exception {
             while (!serviceIsRunning()) {
-				try {
-					Thread.sleep(100);
-				} catch (InterruptedException e) {
-					Util.handleException(e);
-				}
-			}
-			
-			return null;
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    Util.handleException(e);
+                }
+            }
+
+            return null;
         }
-    
+
     }
-      public static ServiceToolsFX getInstanceForOS() {
-    if (instance == null) {
-      if (Util.isWindows()) {
-        instance = new WinServiceToolsFX();
-      } else {
-        instance = new WinServiceToolsFX();;
-        log.error("Please run javafx on windows");
-      }
+
+    public static ServiceToolsFX getInstanceForOS() {
+        if (instance == null) {
+            if (Util.isWindows()) {
+                instance = new WinServiceToolsFX();
+            } else {
+                instance = new WinServiceToolsFX();;
+                log.error("Please run javafx on windows");
+            }
+        }
+
+        return instance;
     }
-      
-    return instance;
-  }
 }

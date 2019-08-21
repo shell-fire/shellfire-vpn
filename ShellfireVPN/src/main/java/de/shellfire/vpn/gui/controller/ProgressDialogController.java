@@ -123,6 +123,10 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
         lbl.setVisible(true);
     }
 
+    public Label getDynamicLabel() {
+        return dynamicLabel;
+    }
+
     void setTextAndShowComponent(Button btn, String text) {
         btn.setText(text);
         btn.setVisible(true);
@@ -205,6 +209,7 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
      * Text used in constructor of progressDialog swing
      */
     
+    // Removed because the dynamic label has a binding in EntityManager
     public void setDialogText(String string) {
         dynamicLabel.setText(string);
     }
