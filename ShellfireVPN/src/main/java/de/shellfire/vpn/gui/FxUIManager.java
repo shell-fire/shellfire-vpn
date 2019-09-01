@@ -19,11 +19,11 @@ import org.slf4j.Logger;
  */
 public class FxUIManager {
 
-    private static final Logger log = Util.getLogger(RegisterForm.class.getCanonicalName());
+    private static final Logger log = Util.getLogger(FxUIManager.class.getCanonicalName());
 
     public static Pane SwitchSubview(Object controller, String view) throws IOException {
+        log.debug("SwitchSubview with two object and view parameters has controller " + controller.toString());
         FXMLLoader loader = new FXMLLoader(FxUIManager.class.getResource("/fxml/" + view));
-
         loader.setController(controller);
 
         return (AnchorPane) loader.load();

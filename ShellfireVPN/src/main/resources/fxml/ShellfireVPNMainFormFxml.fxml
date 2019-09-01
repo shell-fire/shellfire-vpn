@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
@@ -8,7 +14,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="674.0" prefWidth="1073.0" style="-fx-background-color: rgb(64,69,73);" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.ShellfireVPNMainFormFxmlController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="674.0" prefWidth="1073.0" style="-fx-background-color: rgb(64,69,73);" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.ShellfireVPNMainFormFxmlController">
    <children>
       <AnchorPane layoutX="4.0" prefHeight="515.0" prefWidth="668.0" AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="4.0">
          <opaqueInsets>
@@ -17,19 +23,19 @@
          <children>
             <Pane fx:id="leftMenuPane" layoutX="1.0" layoutY="1.0" prefHeight="515.0" prefWidth="248.0" style="-fx-background-color: rgb(49,57,64);" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="1.0" AnchorPane.topAnchor="1.0">
                <children>
-                  <Pane fx:id="leftConnectionPane" layoutY="60.0" onContextMenuRequested="#handleConnectionPaneContext" onMouseClicked="#handleConnectionPaneClicked" onMouseEntered="#handleConnectionPaneMouseEntered" onMouseExited="#handleConnectionPaneMouseExited" prefHeight="68.0" prefWidth="248.0" style="-fx-background-image: ..\icons\sf_en.png; -fx-border-color: black;">
+                  <Pane fx:id="leftConnectionPane" layoutY="60.0" onContextMenuRequested="#handleConnectionPaneContext" onMouseClicked="#handleConnectionPaneClicked" onMouseEntered="#handleConnectionPaneMouseEntered" onMouseExited="#handleConnectionPaneMouseExited" prefHeight="66.0" prefWidth="248.0" style="-fx-background-color: black;">
                      <children>
-                        <ImageView fx:id="connectoinBackgroundImageView" blendMode="LIGHTEN" fitHeight="58.0" fitWidth="252.0" layoutX="-5.0" layoutY="9.0" style="--fx-border-color: yellow;">
+                        <ImageView fx:id="connectoinBackgroundImageView" blendMode="LIGHTEN" fitHeight="58.0" fitWidth="252.0" layoutX="-5.0" layoutY="5.0" style="--fx-border-color: yellow;">
                            <image>
                               <Image url="@../buttons/button-connect-idle.png" />
                            </image>
                         </ImageView>
-                        <Label fx:id="connectionHeaderLabel" layoutX="47.0" layoutY="9.0" prefHeight="27.0" prefWidth="188.0" style="-fx-font-style: bold;" text="Connection" textFill="#f0f0f0">
+                        <Label fx:id="connectionHeaderLabel" layoutX="47.0" layoutY="2.0" prefHeight="25.0" prefWidth="188.0" style="-fx-font-style: bold;" text="Connection" textFill="#f0f0f0">
                            <font>
                               <Font size="16.0" />
                            </font>
                         </Label>
-                        <Label fx:id="connectionFooter" graphicTextGap="2.0" layoutX="43.0" layoutY="35.0" prefHeight="27.0" prefWidth="199.0" text="Connect to ShellFire VPN now" textFill="#f0f0f0">
+                        <Label fx:id="connectionFooter" graphicTextGap="2.0" layoutX="42.0" layoutY="32.0" prefHeight="25.0" prefWidth="199.0" text="Connect to ShellFire VPN now" textFill="#f0f0f0">
                            <font>
                               <Font size="15.0" />
                            </font>
@@ -39,19 +45,19 @@
                         <Insets top="1.0" />
                      </padding>
                   </Pane>
-                  <Pane fx:id="serverListPane" layoutX="1.0" layoutY="128.0" onContextMenuRequested="#handleServerListPaneContext" onMouseClicked="#handleServerListPaneClicked" onMouseEntered="#handleServerListPaneMouseEntered" onMouseExited="#handleServerListPaneMouseExited" prefHeight="68.0" prefWidth="248.0" style="-fx-background-image: ..\icons\sf_en.png; -fx-border-color: black;">
+                  <Pane fx:id="serverListPane" layoutX="1.0" layoutY="123.0" onContextMenuRequested="#handleServerListPaneContext" onMouseClicked="#handleServerListPaneClicked" onMouseEntered="#handleServerListPaneMouseEntered" onMouseExited="#handleServerListPaneMouseExited" prefHeight="66.0" prefWidth="248.0" style="-fx-background-color: black;">
                      <children>
-                        <ImageView fx:id="serverListBackgroundImage" blendMode="LIGHTEN" fitHeight="58.0" fitWidth="248.0" layoutY="9.0">
+                        <ImageView fx:id="serverListBackgroundImage" blendMode="LIGHTEN" fitHeight="58.0" fitWidth="248.0">
                            <image>
                               <Image url="@../buttons/button-serverlist-idle.png" />
                            </image>
                         </ImageView>
-                        <Label fx:id="serverListHeaderLabel" layoutX="47.0" layoutY="9.0" prefHeight="27.0" prefWidth="188.0" style="-fx-font-style: bold;" text="Server list" textFill="#f0f0f0">
+                        <Label fx:id="serverListHeaderLabel" layoutX="47.0" layoutY="1.0" prefHeight="25.0" prefWidth="188.0" style="-fx-font-style: bold;" text="Server list" textFill="#f0f0f0">
                            <font>
                               <Font size="16.0" />
                            </font>
                         </Label>
-                        <Label fx:id="serverListFooterLabel" graphicTextGap="2.0" layoutX="45.0" layoutY="36.0" prefHeight="27.0" prefWidth="199.0" text="Show list of all VPN servers" textFill="#f0f0f0">
+                        <Label fx:id="serverListFooterLabel" graphicTextGap="2.0" layoutX="45.0" layoutY="28.0" prefHeight="25.0" prefWidth="199.0" text="Show list of all VPN servers" textFill="#f0f0f0">
                            <font>
                               <Font size="15.0" />
                            </font>
@@ -61,41 +67,19 @@
                         <Insets top="1.0" />
                      </padding>
                   </Pane>
-                  <Pane fx:id="mapPane" layoutY="196.0" onContextMenuRequested="#handleMapPaneContext" onMouseClicked="#handleMapPaneClicked" onMouseEntered="#handleMapPaneEntered" onMouseExited="#handleMapPaneExited" prefHeight="68.0" prefWidth="248.0" style="-fx-background-image: ..\icons\sf_en.png; -fx-border-color: black;">
+                  <Pane fx:id="streamsPane" layoutY="182.0" onContextMenuRequested="#handleStreamsPaneContext" onMouseClicked="#handleStreamsPaneClicked" onMouseEntered="#handleStreamsPaneMouseEntered" onMouseExited="#handleStreamsPaneMouseExited" prefHeight="59.0" prefWidth="248.0" style="-fx-background-color: black;">
                      <children>
-                        <ImageView fx:id="mapBackgroundImageView" blendMode="LIGHTEN" fitHeight="58.0" fitWidth="248.0" layoutY="9.0">
-                           <image>
-                              <Image url="@../buttons/button-map-idle.png" />
-                           </image>
-                        </ImageView>
-                        <Label fx:id="mapHeaderLabel" layoutX="47.0" layoutY="9.0" prefHeight="27.0" prefWidth="188.0" style="-fx-font-style: bold;" text="Map" textFill="#f0f0f0">
-                           <font>
-                              <Font size="16.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="mapFooterLabel" graphicTextGap="2.0" layoutX="45.0" layoutY="36.0" prefHeight="27.0" prefWidth="199.0" text="Show encryption route" textFill="#f0f0f0">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                        </Label>
-                     </children>
-                     <padding>
-                        <Insets top="1.0" />
-                     </padding>
-                  </Pane>
-                  <Pane fx:id="streamsPane" layoutY="264.0" onContextMenuRequested="#handleStreamsPaneContext" onMouseClicked="#handleStreamsPaneClicked" onMouseEntered="#handleStreamsPaneMouseEntered" onMouseExited="#handleStreamsPaneMouseExited" prefHeight="68.0" prefWidth="248.0" style="-fx-background-image: ..\icons\sf_en.png; -fx-border-color: black;">
-                     <children>
-                        <ImageView fx:id="streamsBackgroundImageView" blendMode="LIGHTEN" fitHeight="58.0" fitWidth="248.0" layoutY="9.0">
+                        <ImageView fx:id="streamsBackgroundImageView" blendMode="LIGHTEN" fitHeight="58.0" fitWidth="248.0">
                            <image>
                               <Image url="@../buttons/button-usa-idle.png" />
                            </image>
                         </ImageView>
-                        <Label fx:id="streamsHeaderLabel" layoutX="47.0" layoutY="10.0" prefHeight="27.0" prefWidth="188.0" style="-fx-font-style: bold;" text="USA streams" textFill="#f0f0f0">
+                        <Label fx:id="streamsHeaderLabel" layoutX="47.0" layoutY="2.0" prefHeight="25.0" prefWidth="188.0" style="-fx-font-style: bold;" text="USA streams" textFill="#f0f0f0">
                            <font>
                               <Font size="16.0" />
                            </font>
                         </Label>
-                        <Label fx:id="streamsFooterLabel" graphicTextGap="2.0" layoutX="45.0" layoutY="36.0" prefHeight="27.0" prefWidth="199.0" text="List of American TV streams" textFill="#f0f0f0">
+                        <Label fx:id="streamsFooterLabel" graphicTextGap="2.0" layoutX="45.0" layoutY="24.0" prefHeight="25.0" prefWidth="199.0" text="List of American TV streams" textFill="#f0f0f0">
                            <font>
                               <Font size="15.0" />
                            </font>
@@ -147,24 +131,24 @@
             </AnchorPane>
             <AnchorPane fx:id="contentAnchorPane" layoutX="249.0" layoutY="34.0" prefHeight="633.0" prefWidth="820.0" style="-fx-background-color: rgb(240,240,240);" AnchorPane.bottomAnchor="-1.0" AnchorPane.rightAnchor="-4.0" AnchorPane.topAnchor="34.0">
                <children>
-                  <Pane fx:id="contentHeaderPane" layoutX="2.0" prefHeight="117.0" prefWidth="817.0" style="-fx-background-color: rgb(240,240,240);" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="0.0">
+                  <Pane fx:id="contentHeaderPane" layoutX="2.0" prefHeight="117.0" prefWidth="817.0" style="-fx-background-color: rgb(255,255,255);" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <ImageView fx:id="globeConnectionImageView" layoutX="16.0" layoutY="14.0">
+                        <ImageView fx:id="globeConnectionImageView" layoutX="5.0" layoutY="14.0">
                            <image>
                               <Image url="@../icons/small-globe-disconnected.png" />
                            </image>
                         </ImageView>
-                        <Label fx:id="connectionStatusLabel" layoutX="100.0" layoutY="14.0" text="Verbindungsstatus" />
-                        <Label fx:id="connectionStatusValue" layoutX="118.0" layoutY="51.0" text="Getrennt" />
-                        <Label fx:id="connectedSinceLabel" layoutX="243.0" layoutY="15.0" text="Verbunden seit:" />
+                        <Label fx:id="connectionStatusLabel" layoutX="77.0" layoutY="14.0" text="Verbindungsstatus" />
+                        <Label fx:id="connectionStatusValue" layoutX="77.0" layoutY="51.0" text="Getrennt" />
+                        <Label fx:id="connectedSinceLabel" layoutX="249.0" layoutY="15.0" text="Verbunden seit:" />
                         <Label fx:id="onlineIpLabel" layoutX="384.0" layoutY="14.0" text="Online IP:" />
-                        <Label fx:id="connectedSinceValue" layoutX="236.0" layoutY="51.0" text="(nicht verbunden)" />
-                        <Label fx:id="onlineIpValue" layoutX="360.0" layoutY="50.0" prefHeight="17.0" prefWidth="126.0" text="(IP)" />
-                        <Label fx:id="vpnIdLabel" layoutX="496.0" layoutY="14.0" text="VPN Id:" />
-                        <Label fx:id="vpnType" layoutX="593.0" layoutY="14.0" text="VPN Typ:" />
-                        <Label fx:id="vpnIdValue" layoutX="498.0" layoutY="50.0" text="(vpnId)" />
-                        <Label fx:id="vpnTypeValue" layoutX="590.0" layoutY="50.0" text="(vpnTyp)" />
-                        <Label fx:id="validUntilLabel" layoutX="700.0" layoutY="14.0" prefHeight="17.0" prefWidth="83.0" text="Valid Until" />
+                        <Label fx:id="connectedSinceValue" layoutX="247.0" layoutY="51.0" text="(nicht verbunden)" />
+                        <Label fx:id="onlineIpValue" layoutX="379.0" layoutY="50.0" prefHeight="17.0" prefWidth="107.0" text="(IP)" />
+                        <Label fx:id="vpnIdLabel" layoutX="504.0" layoutY="14.0" text="VPN Id:" />
+                        <Label fx:id="vpnType" layoutX="600.0" layoutY="14.0" text="VPN Typ:" />
+                        <Label fx:id="vpnIdValue" layoutX="504.0" layoutY="50.0" text="(vpnId)" />
+                        <Label fx:id="vpnTypeValue" layoutX="594.0" layoutY="50.0" text="(vpnTyp)" />
+                        <Label fx:id="validUntilLabel" layoutX="708.0" layoutY="14.0" prefHeight="17.0" prefWidth="83.0" text="Valid Until" />
                         <Label fx:id="validUntilValue" layoutX="703.0" layoutY="50.0" prefHeight="17.0" prefWidth="83.0" text="(valid until)" />
                      </children>
                   </Pane>

@@ -62,7 +62,7 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
     private static final long serialVersionUID = 1L;
     public static final String REG_PASS = "pass";
     public static final String REG_USER = "user";
-    public static final String REG_AUTOLOGIN = "autologin";
+    public static final String REG_AUTOlogIN = "autologin";
     public static final String REG_AUTOCONNECT = "autoConnect";
     public static final String REG_INSTDIR = "instdir";
     public static final String REG_SHOWSTATUSURL = "show_status_url_on_connect";
@@ -214,7 +214,7 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
     private boolean firstStart() {
         VpnProperties props = VpnProperties.getInstance();
         boolean firstStart = props.getBoolean(LoginForm.REG_FIRST_START, true);
-        String autoLogin = props.getProperty(LoginForm.REG_AUTOLOGIN, null);
+        String autoLogin = props.getProperty(LoginForm.REG_AUTOlogIN, null);
 
         return firstStart && autoLogin == null;
     }
@@ -617,14 +617,14 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
         VpnProperties props = VpnProperties.getInstance();
         props.remove(REG_USER);
         props.remove(REG_PASS);
-        props.remove(REG_AUTOLOGIN);
+        props.remove(REG_AUTOlogIN);
     }
 
     private void storeCredentialsInRegistry(String user, String password) {
         VpnProperties props = VpnProperties.getInstance();
         props.setProperty(REG_USER, CryptFactory.encrypt(user));
         props.setProperty(REG_PASS, CryptFactory.encrypt(password));
-        props.setBoolean(REG_AUTOLOGIN, jAutoLogin.isSelected());
+        props.setBoolean(REG_AUTOlogIN, jAutoLogin.isSelected());
 
     }
 
@@ -835,7 +835,7 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
 
     private boolean autoLoginIfActive() {
         VpnProperties props = VpnProperties.getInstance();
-        boolean doAutoLogin = props.getBoolean(REG_AUTOLOGIN, false);
+        boolean doAutoLogin = props.getBoolean(REG_AUTOlogIN, false);
 
         if (doAutoLogin) {
             this.jAutoLogin.setSelected(true);
@@ -928,7 +928,8 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
                                         && service.getVpn().getAccountType() != ServerType.Free) {
                                     vis = false;
                                 }
-
+                                
+                                log.debug("This is where the login is made visible");
                                 mainForm.setVisible(vis);
                                 mainForm.afterLogin(jAutoConnect.isSelected());
                             }

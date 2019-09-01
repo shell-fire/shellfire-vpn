@@ -20,9 +20,11 @@ public class ProxyConfig {
   private static boolean proxyEnabled;
 
   public static void performWindows() {
+      log.debug("ProxyConfig - In performWindows method");
 	   System.setProperty("java.net.useSystemProxies", "true");
-	    Proxy proxy = null;
-	    proxy = getProxy();
+	    //Proxy proxy = null;
+	    //proxy = getProxy();
+           Proxy proxy = getProxy();
 	    if (proxy != null && proxy.type() == Proxy.Type.HTTP) {
 	      InetSocketAddress addr = (InetSocketAddress) proxy.address();
 	      if (addr != null) {
@@ -52,6 +54,7 @@ public class ProxyConfig {
   public static void perform() {
 	  if (Util.isWindows()) {
 		  performWindows();
+                  log.debug("In the ProxyConfig class");
 	  }
    }
 
@@ -74,7 +77,7 @@ public class ProxyConfig {
     List<Proxy> l = null;
     try {
       ProxySelector selector = getSelector();
-      
+      log.debug("ProxyConfig: selector is " + selector.toString());
       l = selector.select(new URI("http://www.shellfire.de"));
       ProxySelector.setDefault(null);
     } catch (Exception e) {
@@ -93,6 +96,7 @@ public class ProxyConfig {
       if (proxyAutoConfigEnabled())
         return getPacProxySelector();
       else
+          log.debug("Returning default Proxy selector");
         return ProxySelector.getDefault();
   }
 

@@ -69,7 +69,7 @@ public class Util {
   public static UserType userType = null;
   private static Properties properties;
   private static String configDir;
-
+   private static Logger log = Util.getLogger(Util.class.getCanonicalName());
   static {
     semaphore = new Object();
     Security.setProperty("networkaddress.cache.ttl", "1");
@@ -497,6 +497,7 @@ public class Util {
   }
 
   public static boolean internetIsAvailable() {
+      log.debug("Testing if connection exists");
     Boolean networkIsAvailable = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<Boolean>() {
       public Boolean run() throws Exception {
         List<String> siteList = new ArrayList<String>();
@@ -738,7 +739,7 @@ public class Util {
   }
   public static javafx.scene.image.Image getImageIconFX(String resourceName, double d){
 	   javafx.scene.image.Image image = new javafx.scene.image.Image("file:"+resourceName);
-	   log.debug("Resource is found at " + resourceName);
+	   //log.debug("Resource is found at " + resourceName);
 	   int factor = (int) (Util.getScalingFactor() * d);
 	    double height = image.getHeight() * factor;
 	    double width = image.getWidth() * factor;
@@ -783,7 +784,6 @@ public class Util {
 	}
   
   // do not mix this order around, must remain in the end of class so that log file can be deleted on startup
-  private static Logger log = Util.getLogger(Util.class.getCanonicalName());
   private static I18n i18n = VpnI18N.getI18n();
   private static String jvmDll;
   
@@ -792,7 +792,7 @@ public class Util {
 	    imageView.setPreserveRatio(preserveRatio);
 	    imageView.setFitWidth(targetWidth);
 	    imageView.setFitHeight(targetHeight);
-	    System.out.println("Image width is " + String.valueOf(targetWidth) + " and height is " + String.valueOf(targetHeight));
+	    //System.out.println("Image width is " + String.valueOf(targetWidth) + " and height is " + String.valueOf(targetHeight));
 	    return imageView.snapshot(null, null);
 	}
 

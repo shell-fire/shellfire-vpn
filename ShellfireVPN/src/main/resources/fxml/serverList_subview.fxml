@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TableColumn?>
@@ -10,17 +15,22 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="serverListAnchorPane" prefHeight="518.0" prefWidth="635.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.ServerListSubviewController">
+<AnchorPane fx:id="serverListAnchorPane" prefHeight="518.0" prefWidth="810.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.ServerListSubviewController">
    <children>
-      <AnchorPane layoutX="2.0" layoutY="48.0" prefHeight="345.0" prefWidth="662.0" AnchorPane.bottomAnchor="125.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="48.0">
+      <ImageView fx:id="connectImage1" fitHeight="46.0" fitWidth="200.0" layoutX="98.0" layoutY="396.0" AnchorPane.bottomAnchor="76.0" AnchorPane.leftAnchor="98.0">
+         <image>
+            <Image url="@../buttons/button-connect-de.gif" />
+         </image>
+      </ImageView>
+      <AnchorPane layoutX="2.0" layoutY="48.0" prefHeight="345.0" prefWidth="800.0" AnchorPane.bottomAnchor="125.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="48.0">
          <children>
-                  <TableView fx:id="serverListTableView" editable="true" fixedCellSize="0.0" prefHeight="345.0" prefWidth="658.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <TableView fx:id="serverListTableView" editable="true" fixedCellSize="0.0" prefHeight="345.0" prefWidth="808.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <columns>
-                      <TableColumn fx:id="countryColumn" prefWidth="108.0" text="Country" />
-                      <TableColumn fx:id="nameColumn" prefWidth="91.0" text="Name" />
-                        <TableColumn fx:id="serverColumn" prefWidth="114.0" text="Server" />
-                        <TableColumn fx:id="securityColumn" prefWidth="147.0" text="Security" />
-                        <TableColumn fx:id="speedColumn" prefWidth="197.0" text="Speed" />
+                      <TableColumn fx:id="countryColumn" prefWidth="149.0" text="Country" />
+                      <TableColumn fx:id="nameColumn" prefWidth="115.0" text="Name" />
+                        <TableColumn fx:id="serverColumn" prefWidth="121.0" text="Server" />
+                        <TableColumn fx:id="securityColumn" prefWidth="183.0" text="Security" />
+                        <TableColumn fx:id="speedColumn" prefWidth="233.0" text="Speed" />
                     </columns>
                   </TableView>
          </children>
@@ -35,7 +45,7 @@
             <Font name="System Bold" size="18.0" />
          </font>
       </Label>
-      <RadioButton fx:id="UDPRadioButton" layoutX="3.0" layoutY="459.0" mnemonicParsing="false" prefHeight="15.0" prefWidth="112.0" selected="true" text="UDP (fast)" AnchorPane.bottomAnchor="58.0">
+      <RadioButton fx:id="UDPRadioButton" layoutX="3.0" layoutY="459.0" mnemonicParsing="false" prefHeight="15.0" prefWidth="112.0" text="UDP (fast)" AnchorPane.bottomAnchor="58.0">
          <toggleGroup>
             <ToggleGroup fx:id="networkTypeToggleGroup" />
          </toggleGroup>
@@ -43,16 +53,11 @@
             <Font size="14.0" />
          </font>
       </RadioButton>
-      <RadioButton fx:id="TCPRadioButton" layoutX="138.0" layoutY="483.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="374.0" text="TCP (works with safe firewalls and proxies)" toggleGroup="$networkTypeToggleGroup" AnchorPane.bottomAnchor="54.0">
+      <RadioButton fx:id="TCPRadioButton" layoutX="138.0" layoutY="483.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="374.0" selected="true" text="TCP (works with safe firewalls and proxies)" toggleGroup="$networkTypeToggleGroup" AnchorPane.bottomAnchor="54.0">
          <font>
             <Font size="14.0" />
          </font>
       </RadioButton>
-      <ImageView fx:id="connectImage1" fitHeight="46.0" fitWidth="200.0" layoutX="4.0" layoutY="488.0" onContextMenuRequested="#handleConnectImage1ContextRequested" onMouseClicked="#handleConnectImage1MouseClicked" onMouseEntered="#handleConnectImage1MouseEntered" onMouseExited="#handleConnectImage1MouseExited" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="2.0">
-         <image>
-            <Image url="@../buttons/button-connect-de.gif" />
-         </image>
-      </ImageView>
       <ImageView fx:id="keyBuyImgeButton" fitHeight="42.0" fitWidth="206.0" layoutX="215.0" layoutY="468.0" onContextMenuRequested="#handleKeyBuyImgeButtonContextRequested" onMouseClicked="#handleKeyBuyImgeButtonClicked" onMouseEntered="#handleKeyBuyImgeButtonEnterd" onMouseExited="#handleKeyBuyImgeButtonExited" preserveRatio="true" AnchorPane.bottomAnchor="9.92218017578125">
          <image>
             <Image url="@../buttons/button-serial-fr.gif" />
@@ -63,5 +68,6 @@
             <Image url="@../buttons/button-connect-de.gif" />
          </image>
       </ImageView>
+      <Button fx:id="connectButton1" ellipsisString="" layoutX="14.0" layoutY="467.0" mnemonicParsing="false" onAction="#connectButton1OnAction" onMouseClicked="#connectButton1Clicked" onMouseEntered="#connectButton1Entered" onMouseExited="#connectButton1Exited" prefHeight="40.0" prefWidth="184.0" />
    </children>
 </AnchorPane>

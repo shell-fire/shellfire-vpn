@@ -1,12 +1,14 @@
 package de.shellfire.vpn.gui;
 
+import de.shellfire.vpn.Util;
 import java.util.LinkedList;
 import java.util.List;
 import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
 
-import de.shellfire.vpn.Util;
+
 import de.shellfire.vpn.client.ServiceTools;
+import de.shellfire.vpn.client.ServiceToolsFX;
 import de.shellfire.vpn.gui.controller.LicenseAcceptanceController;
 import de.shellfire.vpn.gui.controller.LoginController;
 import de.shellfire.vpn.gui.controller.ProgressDialogController;
@@ -18,6 +20,8 @@ import de.shellfire.vpn.proxy.ProxyConfig;
 import de.shellfire.vpn.updater.Updater;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -28,30 +32,35 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ProgressBar;
 
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 public class LoginForms extends Application {
 
-    private static final Logger LOG = Util.getLogger(LoginForms.class.getCanonicalName());
+    private static final Logger log = Util.getLogger(LoginForms.class.getCanonicalName());
     public static Stage stage;
     public static String[] default_args;
-    public static ProgressDialogController initDialog;
+    public static ProgressDialogController initDialog ;
     public RegisterFormController registerController;
     public LicenseAcceptanceController licenceAcceptanceController;
     public static VpnSelectDialogController vpnSelectController;
-    public ShellfireVPNMainFormFxmlController shellFireMainController;
+    public static ShellfireVPNMainFormFxmlController shellFireMainController;
     private boolean minimize;
     public static  LoginController instance;
+    public final static boolean isJavaFX = true;
     private static final I18n I18N = VpnI18N.getI18n();
     //private AnchorPane page;
     private boolean licenseAccepted;
     // Variables to control draggin of window
-    private double xOffset = 0;
-    private double yOffset = 0;
-
+    private static double xOffset = 0;
+    private static double yOffset = 0;
+    public static Stage initDialogStage = null;
+    //public HashMap<Object,Stage> controllersAndStage = new HashMap<>();
+    
     public static Stage getStage() {
         return stage;
     }
@@ -60,39 +69,15 @@ public class LoginForms extends Application {
         LoginForms.stage = stage;
     }
 
-    @Override
-    public void start(Stage primaryStage) {
-        try {
-            this.stage = primaryStage;
-            // remove the standard menu buttons on display
-            this.stage.initStyle(StageStyle.UNDECORATED);
-            initializations(default_args);
-            loadProgressDialog();
-            stage.sizeToScene();
-            stage.getProperties().put("hostServices", this.getHostServices());
-            this.stage.show();
-
-        } catch (Exception ex) {
-            LOG.debug("could not start with first stage load " + ex);
-        }
-
-        try {
-            afterDialogDisplay();
-        } catch (Exception ex) {
-            LOG.debug("could not latter message after login in start \n" + ex.getMessage());
-        }
-    }
-
     public static void main(String[] args) {
-        ///TODO: login automatically chexbox makes login to bypass login form
-
         System.setProperty("java.library.path", "./lib");
         default_args = args;
-        initializations(args);
+        //initializations(args);
         launch(args);
     }
 
     public static void initializations(String args[]) {
+        System.setProperty("java.library.path", "./lib");
         final boolean minimize;
         if (args.length > 0) {
             String cmd = args[0];
@@ -101,42 +86,110 @@ public class LoginForms extends Application {
         } else {
             minimize = false;
         }
-
         ProxyConfig.perform();
-        //setLookAndFeel();
+        //initConnectionTest();
     }
 
-//    private static void setLookAndFeel() {
-//        try {
-//            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-//            Util.setDefaultSize(Util.getFontSize());
-//
-//        } catch (Exception ex) {
-//        }
-//
-//    }
-
-    public void loadProgressDialog(String message) {
+    @Override
+    public void start(Stage primaryStage) {
+        
         try {
-            this.initDialog = (ProgressDialogController) replaceSceneContent("ProgressDialog.fxml");
-            //Platform.runLater(() -> progressDialog.setVisible(true));
-            this.initDialog.setDialogText(message);
-            this.initDialog.setApp(this);
+            this.stage = primaryStage;
+            this.stage.initStyle(StageStyle.UNDECORATED);
+            setLookAndFeel();
+            this.loadLoginController();
+            initConnectionTest();
+            
+        } catch (Exception ex) {
+            log.error("could not start with first stage load \n"); 
+            ex.printStackTrace(System.out);
+        }
+
+        try {
+            initializations(default_args);
+            
+            stage.sizeToScene();
+            stage.getProperties().put("hostServices", this.getHostServices());
+            
+            afterDialogDisplay();
+            //this.stage.show();
+        } catch (Exception ex) {
+            log.error("could not latter message after login in start \n" + ex.getMessage());
+        }
+        
+    }
+    /**
+     *Initializing the dialog controller & stage
+     */
+    public static void setLookAndFeel(){
+        log.debug("setLookAndFeel: first test");
+        try {
+
+            // Load the fxml file and create a new stage for the popup dialog.
+//            FXMLLoader loader = new FXMLLoader(LoginForms.class.getClassLoader().getResource("/fxml/ProgressDialog.fxml"));
+//            loader.setLocation(LoginForms.class.getResource("/fxml/ProgressDialog.fxml"));
+            //log.debug("setLookAndFeel: second test");
+
+//            AnchorPane page = (AnchorPane) loader.load();
+//            initDialog = (ProgressDialogController)loader.getController();
+//            initDialog.setDialogText("Init ...");
+//            initDialog.getProgressBar().setProgress(ProgressBar.INDETERMINATE_PROGRESS);
+//            initDialog.addInfo("");
+//            initDialog.addBottomText("");
+//            initDialog.getLeftButton().setDisable(true);
+//            loadProgressDialog("Init");
+//            initDialogStage = new Stage();
+//            //initDialogStage.initStyle(StageStyle.UNDECORATED);
+//            initDialogStage.setTitle("Init");
+//            //in itDialogStage.initModality(Modality.WINDOW_MODAL);
+            // Load the fxml file and create a new stage for the popup dialog.
+                FXMLLoader loader = new FXMLLoader();
+                loader.setLocation(LoginForms.class.getResource("/fxml/ProgressDialog.fxml"));
+                AnchorPane page = (AnchorPane) loader.load();
+                initDialog = (ProgressDialogController)loader.getController();
+                initDialog.setDialogText("Init ...");
+                initDialog.getProgressBar().setProgress(ProgressBar.INDETERMINATE_PROGRESS);
+                initDialog.addInfo("");
+                initDialog.addBottomText("");
+                
+                initDialogStage = new Stage();
+                initDialogStage.initStyle(StageStyle.UNDECORATED);
+                initDialogStage.setTitle("Init");
+                initDialogStage.initModality(Modality.WINDOW_MODAL);
+                initDialogStage.initOwner(getStage());
+                Scene scene = new Scene(page);
+                initDialogStage.setScene(scene);
+            
+                initDialog = loader.getController();            
+                // unbind any previous progress bar
+                initDialog.getProgressBar().progressProperty().unbind();
+            
+                initDialog.setVisible(true);
+                initDialogStage.show();
+               log.debug("setLookAndFeel: last test");
+        } catch (Exception e) {
+            log.error("There is an exception caused by the setLookAndFeel method, " + e.toString());
+        }
+    }
+    public static void loadProgressDialog(String message) {
+        try {
+            initDialog = (ProgressDialogController) replaceSceneContent("ProgressDialog.fxml");
+            initDialog.setDialogText(message);
 
         } catch (Exception ex) {
-            LOG.debug("could not load progressDialog fxml \n" + ex.getMessage());
+            log.error("could not load progressDialog fxml \n" + ex.getMessage());
         }
     }
 
     // Overloading of Method loadProgressDialog
     public void loadProgressDialog() {
+        log.debug("LoginForms: sAttempt has been made to load progressdialog");
         try {
             this.initDialog = (ProgressDialogController) replaceSceneContent("ProgressDialog.fxml");
-            //Platform.runLater(() -> progressDialog.setVisible(true));
             this.initDialog.setApp(this);
 
         } catch (Exception ex) {
-            LOG.debug("could not load progressDialog fxml \n" + ex.getMessage());
+            log.error("could not load progressDialog fxml \n" + ex.getMessage());
         }
     }
 
@@ -146,56 +199,53 @@ public class LoginForms extends Application {
             this.instance = (LoginController) replaceSceneContent("login.fxml");
             this.instance.setApp(this);
             this.stage.setTitle("Shellfire VPN 2 Login");
-            LOG.debug("LoginForms: Login controller loaded");
+            log.debug("LoginForms: Login controller loaded");
 
         } catch (Exception ex) {
-            LOG.debug("could not load loginController fxml\n" + ex.getMessage());
+            log.error("could not load loginController fxml\n" + ex.getMessage());
         }
 
     }
 
     public void loadRegisterFormController() {
-        LOG.debug("In the RegisterForm controller");
+        log.debug("In the RegisterForm controller");
         try {
             this.registerController = (RegisterFormController) replaceSceneContent("RegisterFormFxml"
                     + ".fxml");
-            //Platform.runLater(() -> progressDialog.setVisible(true));
             this.registerController.setApp(this);
-            //this.stage.setTitle("Shellfire VPN 2 Login");
 
         } catch (Exception ex) {
-            LOG.debug("could not load RegisterForm fxml\n" + ex.getMessage());
+            log.error("could not load RegisterForm fxml\n" + ex.getMessage());
         }
 
     }
 
     public void loadVPNSelect() {
-        LOG.debug("In the VPN controller");
+        log.debug("In the VPN controller");
         try {
             this.vpnSelectController = (VpnSelectDialogController) replaceSceneContent("VpnSelectDialogFxml.fxml");
-            //this.vpnSelectController.setApp(this);
 
         } catch (Exception ex) {
-            LOG.debug("could not load vpnSelect fxml\n" + ex.getMessage());
+            log.error("could not load vpnSelect fxml\n" + ex.getMessage());
         }
 
     }
 
     public void loadShellFireMainController() {
-        LOG.debug("In the ShellFire Main controller");
+        log.debug("In the ShellFire Main controller");
         try {
             this.shellFireMainController = (ShellfireVPNMainFormFxmlController) replaceSceneContent("ShellfireVPNMainFormFxml.fxml");
             this.shellFireMainController.displayMessage("Object created");
             this.shellFireMainController.setApp(this);
 
         } catch (Exception ex) {
-            LOG.debug("could not load main form fxml\n" + ex.getMessage());
+            log.error("could not load main form fxml\n" + ex.getMessage());
         }
-        LOG.debug("ShellfireMainFrom initializtion method completed");
+        log.debug("ShellfireMainFrom initializtion method completed");
     }
 
     public void loadLicenceAcceptanceScreenController() {
-        LOG.debug("In the licence Acceptance Screen controller");
+        log.debug("In the licence Acceptance Screen controller");
         try {
             this.licenceAcceptanceController = (LicenseAcceptanceController) replaceSceneContent("LicenseAcceptScreen.fxml");
             //Platform.runLater(() -> progressDialog.setVisible(true));
@@ -203,12 +253,12 @@ public class LoginForms extends Application {
             //this.stage.setTitle("Shellfire VPN 2 Login");
 
         } catch (Exception ex) {
-            LOG.debug("could not load RegisterForm fxml\n" + ex.getMessage());
+            log.error("could not load RegisterForm fxml\n" + ex.getMessage());
         }
 
     }
 
-    public Initializable replaceSceneContent(String fxml) throws Exception {
+    public static Initializable replaceSceneContent(String fxml) throws Exception {
         FXMLLoader loader = new FXMLLoader(LoginForms.class.getClassLoader().getResource(fxml));
         loader.setLocation(LoginForms.class.getResource("/fxml/" + fxml));
         System.out.println("Loacation of loader is " + loader.getLocation());
@@ -219,7 +269,7 @@ public class LoginForms extends Application {
             System.out.println("Location of Controller is " + loader.getController());
 
         } catch (Exception ex) {
-            LOG.debug(" Loading fxml has error for replaceSceneContent " + ex.getMessage());
+            log.error(" Loading fxml has error for replaceSceneContent for " + fxml + " with error " + ex.getMessage());
         }
         page.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
@@ -238,32 +288,29 @@ public class LoginForms extends Application {
         if (page.getScene() == null) {
             Scene scene = new Scene(page);
             stage.setScene(scene);
-            LOG.debug("Scene of " + fxml + " has been newly created");
+            log.debug("Scene of " + fxml + " has been newly created");
         } else {
-            LOG.debug("Scene of " + fxml + " is that of anchorpane");
+            log.debug("Scene of " + fxml + " is that of anchorpane");
             stage.setScene(page.getScene());
         }
-
+        stage.centerOnScreen();
         stage.sizeToScene();
         return (Initializable) loader.getController();
     }
 
     public Initializable replaceSceneContentWithSameRoot(String fxml) throws Exception {
         FXMLLoader loader = new FXMLLoader(LoginForms.class.getClassLoader().getResource(fxml));
-        // InputStream in = LoginForms.class.getResourceAsStream(fxml);
-        //loader.setBuilderFactory(new JavaFXBuilderFactory());
         loader.setLocation(LoginForms.class.getResource("/fxml/" + fxml));
         System.out.println("replaceSCenContentWithSameRoot Loacation of loader is " + loader.getLocation());
         AnchorPane page = null;
         try {
             System.out.println("trying to load anchor pane for " + fxml);
-            //Parent root = (Parent) loader.load();
             loader.setController(shellFireMainController);
             loader.setRoot(loader);
             System.out.println("Location of Controller is " + loader.getController());
 
         } catch (Exception ex) {
-            LOG.debug(" Loading fxml has error for replaceSceneContentWithSameRoot " + ex.getMessage());
+            log.error(" Loading fxml has error for replaceSceneContentWithSameRoot " + ex.getMessage());
         }
         page.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
@@ -307,7 +354,7 @@ public class LoginForms extends Application {
                     }
                 }
 
-                LOG.debug("Retrieved installation path from args parameter: " + path);
+                log.debug("Retrieved installation path from args parameter: " + path);
 
                 if (cmd.equals("installservice")) {
                     ServiceTools.getInstanceForOS().install(path);
@@ -316,7 +363,6 @@ public class LoginForms extends Application {
                 System.exit(0);
                 return;
             } else if (cmd.equals("doupdate")) {
-
                 String path = "";
                 String user = "";
                 if (default_args.length > 2) {
@@ -331,7 +377,7 @@ public class LoginForms extends Application {
                     }
                 }
 
-                LOG.debug("Retrieved installation path from args parameter: " + path);
+                log.debug("Retrieved installation path from args parameter: " + path);
                 //initDialog.dispose();
                 //this.stage.hide();
                 new Updater().performUpdate(path, user);
@@ -340,14 +386,14 @@ public class LoginForms extends Application {
             }
         }
         // hidding stage
-        LOG.debug("Hiding stage");
-        //this.stage.hide();
-        LOG.debug("after dialog box , before login controller");
+        log.debug("Hiding stage");
+        this.stage.hide();
+        log.debug("after dialog box , before login controller");
         //this.loadLoginController();
 
         // test Internet connection 
         boolean internetAvailable = Util.internetIsAvailable();
-        LOG.debug("after getting the login controller ");
+        log.debug("after getting the login controller ");
         if (internetAvailable) {
             Updater updater = new Updater();
             if (updater.newVersionAvailable()) {
@@ -363,7 +409,7 @@ public class LoginForms extends Application {
                     ialert.setHeaderText(I18N.tr("Update is being performed"));
                     ialert.setContentText(I18N.tr("You decided, to update. Shellfire VPN is now being restarted with super user privileges to perform the update."));
                     String installerPath = com.apple.eio.FileManager.getPathToApplicationBundle() + "/Contents/Java/ShellfireVPN2-Updater.app";
-                    LOG.debug("Opening updater using Desktop.open(): " + installerPath);
+                    log.debug("Opening updater using Desktop.open(): " + installerPath);
                     List<String> cmds = new LinkedList<String>();
                     cmds.add("/usr/bin/open");
                     cmds.add(installerPath);
@@ -385,15 +431,14 @@ public class LoginForms extends Application {
                     System.exit(0);
                 }
                 return;
-            } else {LOG.debug("LoginForms: No update available");}
+            } else {log.debug("LoginForms: No update available");}
         } else {
-            LOG.debug("No internet available, skipping update check");
+            log.debug("No internet available, skipping update check");
         }
-        LOG.debug("giving control to login");
+        log.debug("giving control to login");
         
-        //instance.setApp(this);
-        LOG.debug("Preparing to display login menu");
-        this.loadLoginController();
+        instance.setApp(this);
+        log.debug("Preparing to display login menu");
         this.stage.show();
     }
 
@@ -405,8 +450,6 @@ public class LoginForms extends Application {
     }
 
     public LoginController getLoginInstance(boolean minimize) {
-        // if (instance == null)
-        // gotoLogin();
         return this.instance;
     }
 
@@ -435,18 +478,19 @@ public class LoginForms extends Application {
         return initDialog;
     }
 
-    private void initConnectionTest() {
+    private static void initConnectionTest() {
         // before doing anything else, we should test for an internet connection. without internet, we cant do anything!
-
+        log.debug("In initConnection Test method");
         boolean internetAvailable = Util.internetIsAvailable();
 
         if (internetAvailable) {
+            log.debug("Before the service Environment Ensure");
             initDialog.setDialogText(I18N.tr("Initializing ShellfireVPNService..."));
-            ServiceTools.getInstanceForOS().ensureServiceEnvironmentFX(this);
+            ServiceToolsFX.getInstanceForOS().ensureServiceEnvironmentFX(instance);
+            log.debug("After the service Environment Ensure");
         } else {
-
+            log.debug("Connection not available");
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            //alert.setTitle("Error");
             alert.setHeaderText(I18N.tr("No internet"));
             alert.setContentText(I18N.tr("No internet connection available - ShellfireVPN is being closed."));
             alert.showAndWait();
