@@ -392,6 +392,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
     @Override
     public void continueAfterBackEndAvailabledFX() {
+        log.debug("continueAfterBackEndAvailabledFX: being enabled");
         //this.service = WebService.getInstance();
         Storage.register(service);
         this.restoreCredentialsFromRegistry();
@@ -399,11 +400,10 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
         this.restoreAutoStartFromRegistry();
         this.application.setLicenseAccepted(false);
 
-        if (null != initProgressDialog) {
-            //initProgressDialog.h();
-            // //Connection.initRmi();
+        if (!this.application.getStage().isShowing()) {
+            log.debug("Initial progress dialog is hidden");
             // TODO check if logic intention was properly converted from swing counterpart.
-            //this.application.loadLoginController();
+            this.application.getStage().show();
         }
         try {
             //Connection.initRmi();

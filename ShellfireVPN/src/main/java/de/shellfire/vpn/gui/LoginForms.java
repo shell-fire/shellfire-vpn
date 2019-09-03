@@ -6,7 +6,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
 
-
 import de.shellfire.vpn.client.ServiceTools;
 import de.shellfire.vpn.client.ServiceToolsFX;
 import de.shellfire.vpn.gui.controller.LicenseAcceptanceController;
@@ -44,13 +43,13 @@ public class LoginForms extends Application {
     private static final Logger log = Util.getLogger(LoginForms.class.getCanonicalName());
     public static Stage stage;
     public static String[] default_args;
-    public static ProgressDialogController initDialog ;
+    public static ProgressDialogController initDialog;
     public RegisterFormController registerController;
     public LicenseAcceptanceController licenceAcceptanceController;
     public static VpnSelectDialogController vpnSelectController;
     public static ShellfireVPNMainFormFxmlController shellFireMainController;
     private boolean minimize;
-    public static  LoginController instance;
+    public static LoginController instance;
     public final static boolean isJavaFX = true;
     private static final I18n I18N = VpnI18N.getI18n();
     //private AnchorPane page;
@@ -60,7 +59,7 @@ public class LoginForms extends Application {
     private static double yOffset = 0;
     public static Stage initDialogStage = null;
     //public HashMap<Object,Stage> controllersAndStage = new HashMap<>();
-    
+
     public static Stage getStage() {
         return stage;
     }
@@ -87,90 +86,73 @@ public class LoginForms extends Application {
             minimize = false;
         }
         ProxyConfig.perform();
-        //initConnectionTest();
     }
 
     @Override
     public void start(Stage primaryStage) {
-        
+
         try {
             this.stage = primaryStage;
             this.stage.initStyle(StageStyle.UNDECORATED);
             setLookAndFeel();
             this.loadLoginController();
-            initConnectionTest();
-            
+            //initConnectionTest();
+            this.afterDialogDisplay();
+
         } catch (Exception ex) {
-            log.error("could not start with first stage load \n"); 
+            log.error("could not start with first stage load \n");
             ex.printStackTrace(System.out);
         }
 
         try {
             initializations(default_args);
-            
+
             stage.sizeToScene();
             stage.getProperties().put("hostServices", this.getHostServices());
-            
+
             afterDialogDisplay();
             //this.stage.show();
         } catch (Exception ex) {
             log.error("could not latter message after login in start \n" + ex.getMessage());
         }
-        
+
     }
+
     /**
-     *Initializing the dialog controller & stage
+     * Initializing the dialog controller & stage
      */
-    public static void setLookAndFeel(){
+    public static void setLookAndFeel() {
         log.debug("setLookAndFeel: first test");
         try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(LoginForms.class.getResource("/fxml/ProgressDialog.fxml"));
+            AnchorPane page = (AnchorPane) loader.load();
+            initDialog = (ProgressDialogController) loader.getController();
+            initDialog.setDialogText("Init ...");
+            initDialog.getProgressBar().setProgress(ProgressBar.INDETERMINATE_PROGRESS);
+            initDialog.addInfo("");
+            initDialog.addBottomText("");
 
-            // Load the fxml file and create a new stage for the popup dialog.
-//            FXMLLoader loader = new FXMLLoader(LoginForms.class.getClassLoader().getResource("/fxml/ProgressDialog.fxml"));
-//            loader.setLocation(LoginForms.class.getResource("/fxml/ProgressDialog.fxml"));
-            //log.debug("setLookAndFeel: second test");
+            initDialogStage = new Stage();
+            initDialogStage.initStyle(StageStyle.UNDECORATED);
+            initDialogStage.setTitle("Init");
+            initDialogStage.initModality(Modality.WINDOW_MODAL);
+            initDialogStage.initOwner(getStage().getOwner());
+            Scene scene = new Scene(page);
+            initDialogStage.setScene(scene);
 
-//            AnchorPane page = (AnchorPane) loader.load();
-//            initDialog = (ProgressDialogController)loader.getController();
-//            initDialog.setDialogText("Init ...");
-//            initDialog.getProgressBar().setProgress(ProgressBar.INDETERMINATE_PROGRESS);
-//            initDialog.addInfo("");
-//            initDialog.addBottomText("");
-//            initDialog.getLeftButton().setDisable(true);
-//            loadProgressDialog("Init");
-//            initDialogStage = new Stage();
-//            //initDialogStage.initStyle(StageStyle.UNDECORATED);
-//            initDialogStage.setTitle("Init");
-//            //in itDialogStage.initModality(Modality.WINDOW_MODAL);
-            // Load the fxml file and create a new stage for the popup dialog.
-                FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(LoginForms.class.getResource("/fxml/ProgressDialog.fxml"));
-                AnchorPane page = (AnchorPane) loader.load();
-                initDialog = (ProgressDialogController)loader.getController();
-                initDialog.setDialogText("Init ...");
-                initDialog.getProgressBar().setProgress(ProgressBar.INDETERMINATE_PROGRESS);
-                initDialog.addInfo("");
-                initDialog.addBottomText("");
-                
-                initDialogStage = new Stage();
-                initDialogStage.initStyle(StageStyle.UNDECORATED);
-                initDialogStage.setTitle("Init");
-                initDialogStage.initModality(Modality.WINDOW_MODAL);
-                initDialogStage.initOwner(getStage());
-                Scene scene = new Scene(page);
-                initDialogStage.setScene(scene);
-            
-                initDialog = loader.getController();            
-                // unbind any previous progress bar
-                initDialog.getProgressBar().progressProperty().unbind();
-            
-                initDialog.setVisible(true);
-                initDialogStage.show();
-               log.debug("setLookAndFeel: last test");
+            initDialog = loader.getController();
+            // unbind any previous progress bar
+            initDialog.getProgressBar().progressProperty().unbind();
+
+            initDialog.setVisible(true);
+            initDialogStage.show();
+            log.debug("setLookAndFeel: last test");
         } catch (Exception e) {
             log.error("There is an exception caused by the setLookAndFeel method, " + e.toString());
         }
     }
+
     public static void loadProgressDialog(String message) {
         try {
             initDialog = (ProgressDialogController) replaceSceneContent("ProgressDialog.fxml");
@@ -337,10 +319,12 @@ public class LoginForms extends Application {
             if (cmd.equals("uninstallservice")) {
                 ServiceTools.getInstanceForOS().uninstall();
                 //initDialog.dispose();
+                //initDialog.getScene().setRoot(null);
                 this.stage.hide();
                 return;
             } else if (cmd.equals("installservice")) {
                 //initDialog.dispose();
+                //initDialog.getScene().setRoot(null);
                 this.stage.hide();
                 String path = "";
 
@@ -389,11 +373,9 @@ public class LoginForms extends Application {
         log.debug("Hiding stage");
         this.stage.hide();
         log.debug("after dialog box , before login controller");
-        //this.loadLoginController();
 
         // test Internet connection 
         boolean internetAvailable = Util.internetIsAvailable();
-        log.debug("after getting the login controller ");
         if (internetAvailable) {
             Updater updater = new Updater();
             if (updater.newVersionAvailable()) {
@@ -431,15 +413,18 @@ public class LoginForms extends Application {
                     System.exit(0);
                 }
                 return;
-            } else {log.debug("LoginForms: No update available");}
+            } else {
+                log.debug("LoginForms: No update available");
+            }
         } else {
             log.debug("No internet available, skipping update check");
         }
         log.debug("giving control to login");
-        
+
         instance.setApp(this);
         log.debug("Preparing to display login menu");
-        this.stage.show();
+        //this.stage.show();
+        this.initConnectionTest();
     }
 
     public LoginController getLoginInstance() {
