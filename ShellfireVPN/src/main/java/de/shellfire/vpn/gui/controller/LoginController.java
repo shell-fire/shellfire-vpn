@@ -274,6 +274,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
     @FXML
     private void handleEXitButtonClicked(MouseEvent event) {
         Platform.exit();
+        System.exit(0);
     }
 
     @Override
