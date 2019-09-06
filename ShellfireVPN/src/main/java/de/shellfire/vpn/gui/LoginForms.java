@@ -124,29 +124,29 @@ public class LoginForms extends Application {
     public static void setLookAndFeel() {
         log.debug("setLookAndFeel: first test");
         try {
+            // Load the fxml file and create a new stage for the popup dialog.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(LoginForms.class.getResource("/fxml/ProgressDialog.fxml"));
             AnchorPane page = (AnchorPane) loader.load();
-            initDialog = (ProgressDialogController) loader.getController();
+            initDialog = (ProgressDialogController)loader.getController();
             initDialog.setDialogText("Init ...");
             initDialog.getProgressBar().setProgress(ProgressBar.INDETERMINATE_PROGRESS);
             initDialog.addInfo("");
             initDialog.addBottomText("");
-
             initDialogStage = new Stage();
             initDialogStage.initStyle(StageStyle.UNDECORATED);
             initDialogStage.setTitle("Init");
             initDialogStage.initModality(Modality.WINDOW_MODAL);
-            initDialogStage.initOwner(getStage().getOwner());
+            initDialogStage.initOwner(getStage());
             Scene scene = new Scene(page);
             initDialogStage.setScene(scene);
-
-            initDialog = loader.getController();
+            initDialogStage.show();
+            initDialog = loader.getController();            
             // unbind any previous progress bar
             initDialog.getProgressBar().progressProperty().unbind();
 
             initDialog.setVisible(true);
-            initDialogStage.show();
+            
             log.debug("setLookAndFeel: last test");
         } catch (Exception e) {
             log.error("There is an exception caused by the setLookAndFeel method, " + e.toString());
