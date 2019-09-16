@@ -32,8 +32,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.image.ImageView;
 
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Region;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -128,20 +130,22 @@ public class LoginForms extends Application {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(LoginForms.class.getResource("/fxml/ProgressDialog.fxml"));
             AnchorPane page = (AnchorPane) loader.load();
-            initDialog = (ProgressDialogController)loader.getController();
+            initDialog = loader.getController();
+            initDialogStage = new Stage();
+            initDialogStage.initOwner(getStage());
+            Scene scene = new Scene(page);
+            initDialogStage.setScene(scene);
             initDialog.setDialogText("Init ...");
             initDialog.getProgressBar().setProgress(ProgressBar.INDETERMINATE_PROGRESS);
             initDialog.addInfo("");
             initDialog.addBottomText("");
-            initDialogStage = new Stage();
+            
             initDialogStage.initStyle(StageStyle.UNDECORATED);
             initDialogStage.setTitle("Init");
             initDialogStage.initModality(Modality.WINDOW_MODAL);
-            initDialogStage.initOwner(getStage());
-            Scene scene = new Scene(page);
-            initDialogStage.setScene(scene);
+
             initDialogStage.show();
-            initDialog = loader.getController();            
+            //initDialog = loader.getController();            
             // unbind any previous progress bar
             initDialog.getProgressBar().progressProperty().unbind();
 
@@ -153,10 +157,10 @@ public class LoginForms extends Application {
         }
     }
 
-    public static void loadProgressDialog(String message) {
+    public static void loadInitializeProgressDialog() {
         try {
-            initDialog = (ProgressDialogController) replaceSceneContent("ProgressDialog.fxml");
-            initDialog.setDialogText(message);
+            initDialog = (ProgressDialogController) replaceSceneWithDialogStage("ProgressDialog.fxml");
+            //initDialog.setApp(this);
 
         } catch (Exception ex) {
             log.error("could not load progressDialog fxml \n" + ex.getMessage());
@@ -174,7 +178,10 @@ public class LoginForms extends Application {
             log.error("could not load progressDialog fxml \n" + ex.getMessage());
         }
     }
-
+    
+    public void loadProgressDialogAndInitStage(){
+        
+    }
     public void loadLoginController() {
         System.out.println("In the getLogin controller");
         try {
@@ -206,7 +213,7 @@ public class LoginForms extends Application {
         log.debug("In the VPN controller");
         try {
             this.vpnSelectController = (VpnSelectDialogController) replaceSceneContent("VpnSelectDialogFxml.fxml");
-
+            this.vpnSelectController.setApp(this);
         } catch (Exception ex) {
             log.error("could not load vpnSelect fxml\n" + ex.getMessage());
         }
@@ -280,20 +287,19 @@ public class LoginForms extends Application {
         return (Initializable) loader.getController();
     }
 
-    public Initializable replaceSceneContentWithSameRoot(String fxml) throws Exception {
+    public static Initializable replaceSceneWithDialogStage(String fxml) throws Exception {
         FXMLLoader loader = new FXMLLoader(LoginForms.class.getClassLoader().getResource(fxml));
         loader.setLocation(LoginForms.class.getResource("/fxml/" + fxml));
         System.out.println("replaceSCenContentWithSameRoot Loacation of loader is " + loader.getLocation());
         AnchorPane page = null;
         try {
-            System.out.println("trying to load anchor pane for " + fxml);
-            loader.setController(shellFireMainController);
-            loader.setRoot(loader);
+            System.out.println("ReplaceSceneContent trying to load anchor pane for " + fxml);
+            page = (AnchorPane) loader.load();
             System.out.println("Location of Controller is " + loader.getController());
-
         } catch (Exception ex) {
             log.error(" Loading fxml has error for replaceSceneContentWithSameRoot " + ex.getMessage());
         }
+        initDialogStage = new Stage();
         page.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -304,10 +310,20 @@ public class LoginForms extends Application {
         page.setOnMouseDragged(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-                stage.setX(event.getScreenX() - xOffset);
-                stage.setY(event.getScreenY() - yOffset);
+                initDialogStage.setX(event.getScreenX() - xOffset);
+                initDialogStage.setY(event.getScreenY() - yOffset);
             }
         });
+        if (page.getScene() == null) {
+            Scene scene = new Scene(page);
+            initDialogStage.setScene(scene);
+            log.debug("Scene of " + fxml + " has been newly created");
+        } else {
+            log.debug("Scene of " + fxml + " is that of anchorpane");
+            initDialogStage.setScene(page.getScene());
+        }
+        initDialogStage.centerOnScreen();
+        initDialogStage.sizeToScene();
         return (Initializable) loader.getController();
     }
 

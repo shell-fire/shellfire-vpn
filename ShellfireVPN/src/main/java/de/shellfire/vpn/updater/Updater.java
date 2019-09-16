@@ -75,7 +75,7 @@ public class Updater implements CanContinueAfterBackEndAvailable, CanContinueAft
    * @param args
    */
   public static void main(String[] args) {
-
+    System.setProperty("java.library.path", "./lib");
     ProxyConfig.perform();
 
     Updater updater = new Updater(args);
@@ -196,7 +196,6 @@ public class Updater implements CanContinueAfterBackEndAvailable, CanContinueAft
 
     @Override
     public ProgressDialogController getDialogFX() {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         return null;
     }
 
