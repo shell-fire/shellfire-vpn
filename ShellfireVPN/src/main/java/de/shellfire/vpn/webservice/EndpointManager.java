@@ -61,7 +61,7 @@ public class EndpointManager {
     public void setDialogBinding(){
         dialogTextProperty = new SimpleStringProperty();
         LoginForms.initDialog.getDynamicLabel().textProperty().bind(dialogTextProperty);
-        //initDialogFX.getDynamicLabel().textProperty().bind(dialogTextProperty);
+        log.debug("Dialog bindings initialised");
     }
     private void loadFromProperties() {
         vpnProperties = VpnProperties.getInstance();
@@ -79,10 +79,12 @@ public class EndpointManager {
         
         // Check if JavaFX application is running. True if Platform variable is set or not null
         try {
-            if(Platform.isImplicitExit()? true: true)
+            if(Platform.isImplicitExit()? true: true){
                 setDialogBinding();
+                log.debug("Dialog binding has been set");
+            }
         } catch (Exception e) {
-            log.debug("Swing Application running");
+            log.error("Swing Application running " + e);
         }
     }
 
@@ -246,9 +248,12 @@ public class EndpointManager {
 
             if (null == initDialogFX) {
                 log.debug("\nFindEndpointTaskFX: In Dialog is null \n");
+                LoginForms.loadInitializeProgressDialog();
                 initDialogFX = LoginForms.getInitDialog();
                 dialogTextProperty.set(i18n.tr("Update Check"));
                 initDialogOriginFX = true;
+                LoginForms.initDialogStage.show();
+                log.debug("Endpoint task is still null;");
             }
             //setDialogBinding();
         }
@@ -257,11 +262,8 @@ public class EndpointManager {
         @Override
         protected String call() {
             log.debug("EndpointManager: start of call method");
-            //Platform.setImplicitExit(false);
-            // creating a nullpointer error to analyse loading of dialog boxes during logintime
-            //dialogTextProperty = null;
-            //Platform.runLater(() -> initDialogFX.setDialogText(i18n.tr("Searching for backend connection...")));
-            Platform.runLater(()->dialogTextProperty.set(i18n.tr("Searching for backend connection...")));
+            //Platform.runLater(()->dialogTextProperty.set(i18n.tr("Searching for backend connection...")));
+            Platform.runLater(()->initDialogFX.setDialogText(i18n.tr("Searching for backend connection...")));
             log.debug("Find Endpoint task method, init dialog has " + initDialogFX.toString());
             boolean result = false;
 
@@ -398,8 +400,9 @@ public class EndpointManager {
         log.debug("ensureShellfireBackendAvailableFx continuation...");
         FindEndpointTaskFX taskE = new FindEndpointTaskFX(form);
         Thread t = new Thread(taskE);
+        log.debug("Starting Endpoint task");
         t.start();
-        }
+    }
 
     private boolean testEndpoint(String endPoint) {
         log.debug("testEndpoint({}) - start", endPoint);

@@ -160,7 +160,8 @@ public class LoginForms extends Application {
     public static void loadInitializeProgressDialog() {
         try {
             initDialog = (ProgressDialogController) replaceSceneWithDialogStage("ProgressDialog.fxml");
-            //initDialog.setApp(this);
+            initDialog.getProgressBar().setProgress(ProgressBar.INDETERMINATE_PROGRESS);
+//initDialog.setApp(this);
 
         } catch (Exception ex) {
             log.error("could not load progressDialog fxml \n" + ex.getMessage());
@@ -179,9 +180,6 @@ public class LoginForms extends Application {
         }
     }
     
-    public void loadProgressDialogAndInitStage(){
-        
-    }
     public void loadLoginController() {
         System.out.println("In the getLogin controller");
         try {
@@ -300,6 +298,7 @@ public class LoginForms extends Application {
             log.error(" Loading fxml has error for replaceSceneContentWithSameRoot " + ex.getMessage());
         }
         initDialogStage = new Stage();
+        initDialogStage.initStyle(StageStyle.UNDECORATED);
         page.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {

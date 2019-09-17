@@ -203,6 +203,7 @@ public class UpdaterFX implements CanContinueAfterBackEndAvailableFX {
 
   private void displayError(String msg) {
     Alert alert = new Alert(Alert.AlertType.ERROR);
+    alert.setTitle("");
     alert.setContentText(msg);
     alert.showAndWait();
   }
