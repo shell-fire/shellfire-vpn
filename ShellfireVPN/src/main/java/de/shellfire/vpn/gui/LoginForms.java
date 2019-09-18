@@ -297,8 +297,15 @@ public class LoginForms extends Application {
         } catch (Exception ex) {
             log.error(" Loading fxml has error for replaceSceneContentWithSameRoot " + ex.getMessage());
         }
+        try{
+            if (initDialogStage != null )
+                initDialogStage.hide();
+        }catch(NullPointerException ex){
+            log.error("initDialogStage was null here");
+        }finally{
         initDialogStage = new Stage();
         initDialogStage.initStyle(StageStyle.UNDECORATED);
+        }
         page.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {

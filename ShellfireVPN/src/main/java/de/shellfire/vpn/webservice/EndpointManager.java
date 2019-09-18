@@ -200,7 +200,6 @@ public class EndpointManager {
 
             log.debug("EndpoingManager: In doInBackground method");
             initDialog.setText(i18n.tr("Searching for backend connection..."));
-            //dialogTextProperty.set(i18n.tr("Searching for backend connection..."));
             boolean result = false;
 
             result = testPreferredEndpoint();
@@ -250,7 +249,8 @@ public class EndpointManager {
                 log.debug("\nFindEndpointTaskFX: In Dialog is null \n");
                 LoginForms.loadInitializeProgressDialog();
                 initDialogFX = LoginForms.getInitDialog();
-                dialogTextProperty.set(i18n.tr("Update Check"));
+                //dialogTextProperty.set(i18n.tr("Update Check"));
+                initDialogFX.setDialogText(i18n.tr("Update Check"));
                 initDialogOriginFX = true;
                 LoginForms.initDialogStage.show();
                 log.debug("Endpoint task is still null;");
@@ -308,16 +308,8 @@ public class EndpointManager {
                 log.debug("No preferred endPoint set yet, not testing ");
             } else {
                 log.debug("fx testing preferred endPoint {}", preferredEndPoint);
-                //Platform.setImplicitExit(false);
-                //Platform.runLater(() -> LoginForms.initDialog.setDialogText(i18n.tr("Testing endpoint that worked before...")));
-                Platform.runLater(() -> dialogTextProperty.set(i18n.tr("Testing endpoint that worked before...")));
-//                Platform.runLater(()->
-//                {if (null != LoginForms.initDialogStage) {
-//                    LoginForms.initDialogStage.show();
-//                    log.debug("testPreferredEndpoint(): Testing endpoint stage is shown");
-//                } else {
-//                    log.debug("testPreferredEndpoint(): Testing endpoint stage is null");
-//                }});
+                Platform.runLater(() -> initDialogFX.setDialogText(i18n.tr("Testing endpoint that worked before...")));
+                //Platform.runLater(() -> dialogTextProperty.set(i18n.tr("Testing endpoint that worked before...")));
                 log.debug("testPreferredEndpoint - Tested endpoint that worked befores");
 
                 result = testEndpoint(preferredEndPoint);
