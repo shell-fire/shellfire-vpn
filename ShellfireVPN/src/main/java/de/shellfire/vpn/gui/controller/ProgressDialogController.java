@@ -105,8 +105,8 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
     }
 
     public void callOptionCallback() {
-        if (this.optionCallback != null);
-        this.optionCallback.run();
+        if (this.optionCallback != null)
+            this.optionCallback.run();
     }
 
     public void updateProgress(double percentage) {
