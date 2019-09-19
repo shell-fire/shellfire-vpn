@@ -333,7 +333,8 @@ public class EndpointManager {
 
             for (int i = 0; i < endPointList.size() && result == false; i++) {
                 Platform.setImplicitExit(false);
-                initDialogFX.setDialogText(i18n.tr("Searching for backend connection...") + String.format("%s / %s", (i + 1), endPointList.size()));
+                String msg = String.format(" %s / %s", (i + 1), endPointList.size());
+                Platform.runLater(() -> {initDialogFX.setDialogText(i18n.tr("Searching for backend connection...") + msg);});
                 String endPoint = endPointList.get(i);
                 result = testEndpoint(endPoint);
             }
