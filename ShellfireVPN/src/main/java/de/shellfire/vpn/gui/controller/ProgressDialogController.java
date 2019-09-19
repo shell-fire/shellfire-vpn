@@ -41,6 +41,7 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
     @FXML
     private Label dynamicLabel;
     @FXML
+    // corresponds to the cancel button
     private Button leftButton;
     @FXML
     private Button rightButton;
@@ -84,6 +85,7 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
         dynamicLabel.setText(i18n.tr("Logging in..."));
         additionTextLabel.setText("<dynamic>");
         rightButton.setDisable(true);
+        leftButton.setDisable(true);
         bottomLabel.setDisable(true);
     }
 
@@ -100,13 +102,16 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
     }
 
     public void setOptionCallback(Task task) {
+        // make the button visible when a task has to be assigned to the cancel button
+        leftButton.setDisable(false);
+        leftButton.setVisible(true);
         log.debug("setOptionCallback: Runnable has been initialised " + task.toString());
         this.optionCallback = task;
     }
 
     public void callOptionCallback() {
-        if (this.optionCallback != null);
-        this.optionCallback.run();
+        if (this.optionCallback != null)
+            this.optionCallback.run();
     }
 
     public void updateProgress(double percentage) {

@@ -136,6 +136,7 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
     }
 
     public void continueAfterBackEndAvailabled() {
+        log.debug("continueAfterBackEndAvailabled: being enabled");
         this.service = WebService.getInstance();
         Storage.register(service);
         this.restoreCredentialsFromRegistry();
@@ -145,6 +146,7 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
 
         if (initDialog != null) {
             initDialog.dispose();
+            log.debug("LoginForm enabled here");
             instance.setEnabled(true);
         }
         try {
@@ -745,7 +747,7 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
         }
 
         instance = getInstance(minimize);
-
+        
         instance.setEnabled(false);
 
         boolean internetAvailable = Util.internetIsAvailable();
