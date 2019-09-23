@@ -51,6 +51,7 @@ import de.shellfire.vpn.messaging.UserType;
 import de.shellfire.vpn.service.IVpnRegistry;
 import de.shellfire.vpn.service.osx.MacRegistry;
 import de.shellfire.vpn.service.win.WinRegistry;
+import javafx.scene.control.Alert;
 import javafx.scene.image.ImageView;
 
  
@@ -115,7 +116,10 @@ public class Util {
     
     JOptionPane.showMessageDialog(null, i18n.tr("Action could not be completed, an error occured:") + "\n" + msg,
         i18n.tr("Error"), JOptionPane.ERROR_MESSAGE);
-
+    Alert alert = new Alert(Alert.AlertType.ERROR);
+    alert.setTitle(i18n.tr("Error"));
+    alert.setContentText(i18n.tr("Action could not be completed, an error occured:") + "\n" + msg);
+    alert.showAndWait();
   }
 
   public static String getStackTrace(Throwable t) {
