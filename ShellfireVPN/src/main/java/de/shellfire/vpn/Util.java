@@ -45,6 +45,7 @@ import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.FileAppender;
 import de.shellfire.vpn.gui.LoginForm;
+import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.gui.ShellfireVPNMainForm;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.messaging.UserType;
@@ -114,8 +115,8 @@ public class Util {
     }
 
     
-    JOptionPane.showMessageDialog(null, i18n.tr("Action could not be completed, an error occured:") + "\n" + msg,
-        i18n.tr("Error"), JOptionPane.ERROR_MESSAGE);
+    //JOptionPane.showMessageDialog(null, i18n.tr("Action could not be completed, an error occured:") + "\n" + msg,
+      //  i18n.tr("Error"), JOptionPane.ERROR_MESSAGE);
     Alert alert = new Alert(Alert.AlertType.ERROR);
     alert.setTitle(i18n.tr("Error"));
     alert.setContentText(i18n.tr("Action could not be completed, an error occured:") + "\n" + msg);
@@ -636,15 +637,18 @@ public class Util {
   }
 
   public static String getPathJar() throws IllegalStateException {
-    Class<?> context = LoginForm.class;
+    Class<?> context = LoginForms.class;
     String rawName = context.getName();
+    log.debug(rawName);
     String classFileName;
-    /* rawName is something like package.name.ContainingClass$ClassName. We need to turn this into ContainingClass$ClassName.class. */ {
+    /* rawName is something like package.name.ContainingClass$ClassName. We need to turn this into ContainingClass$ClassName.class. */ 
+    {
       int idx = rawName.lastIndexOf('.');
       classFileName = (idx == -1 ? rawName : rawName.substring(idx + 1)) + ".class";
     }
 
     String uri = context.getResource(classFileName).toString();
+    log.debug(uri);
     if (uri.startsWith("file:") || !uri.startsWith("jar:file:")) {
       return null;
     }

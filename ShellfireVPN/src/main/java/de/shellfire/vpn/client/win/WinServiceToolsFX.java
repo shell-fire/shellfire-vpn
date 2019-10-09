@@ -37,9 +37,9 @@ public class WinServiceToolsFX extends ServiceToolsFX{
     Alert alert = new Alert(Alert.AlertType.INFORMATION);
     alert.setContentText(
           i18n.tr("Shellfire VPN service is now being installed. Please enter your admin password in the next window."));
-
-      //LoginForms.initDialog.close();
-      installElevated();
+    alert.showAndWait();
+    LoginForms.initDialogStage.hide();
+    installElevated();
 
       loginProgressDialog = new ProgressDialogController();
       loginProgressDialog.setDialogText(i18n.tr("Installing Service..."));
@@ -152,8 +152,9 @@ private String getProcrunExe() {
     if (Util.isVistaOrLater()) {
       // restart elevated
       
-      String pathJavaw = Util.getJavaHome() + "\\bin\\javaw.exe";
-      String jarFile = Util.getPathJar();
+    String pathJavaw = Util.getJavaHome() + "\\bin\\javaw.exe";
+    String jarFile = Util.getPathJar();
+    log.debug(jarFile);
       File instDir = new File(jarFile).getParentFile();
       String arg = "installservice";
 

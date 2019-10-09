@@ -142,10 +142,12 @@ public class WinServiceTools extends ServiceTools {
     if (Util.isVistaOrLater()) {
       // restart elevated
       
-      String pathJavaw = Util.getJavaHome() + "\\bin\\javaw.exe";
-      String jarFile = Util.getPathJar();
-      File instDir = new File(jarFile).getParentFile();
-      String arg = "installservice";
+    String pathJavaw = Util.getJavaHome() + "\\bin\\javaw.exe";
+    String jarFile = Util.getPathJar();
+    log.debug(jarFile);
+    File instDir = new File(jarFile).getParentFile();
+    log.debug(instDir.getPath());
+    String arg = "installservice";
 
       // Check for execution from dev environment, will fail anyway
       if (jarFile == null) {
