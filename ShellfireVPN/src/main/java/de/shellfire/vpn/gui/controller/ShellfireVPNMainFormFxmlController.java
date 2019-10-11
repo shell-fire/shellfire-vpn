@@ -52,8 +52,8 @@ import java.util.concurrent.TimeUnit;
 import java.util.prefs.Preferences;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
-import javafx.concurrent.Worker;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -113,6 +113,12 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     private PremiumScreenController nagScreen;
     private ScheduledExecutorService currentConnectedSinceTimerFX = Executors.newSingleThreadScheduledExecutor();
     private Preferences preferences; 
+
+    private final LogViewerFxmlController logViewer;
+    String baseImageUrl = "src/main/resources";
+    Stage popUpStage = null; 
+    static SidePane currentSidePane = SidePane.CONNECTION;
+    
     @FXML
     private Pane leftMenuPane;
     @FXML
@@ -185,7 +191,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     // Access to embedded controller and variables in subviews
     @FXML
     private Parent connectionSubview;
-
+    
     @FXML
     private ConnectionSubviewController connectionSubviewController;
     @FXML
@@ -193,11 +199,8 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     @FXML
     private Label validUntilValue;
     
-    String baseImageUrl = "src/main/resources";
-    Stage popUpStage = null; 
-    static SidePane currentSidePane = SidePane.CONNECTION;
-    
-    public ShellfireVPNMainFormFxmlController() {
+    public ShellfireVPNMainFormFxmlController() throws IOException {
+        this.logViewer = LogViewerFxmlController.getInstance();
         log.debug("No argumenent controller of shellfire has been called");
     }
 
@@ -1129,12 +1132,12 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
     private void initShortCuts() {
         EventQueue ev = Toolkit.getDefaultToolkit().getSystemEventQueue();
-
+        
         ev.push(new EventQueue() {
 
             protected void dispatchEvent(AWTEvent event) {
                 if (event instanceof KeyEvent) {
-
+                    log.debug("Event noticed from AWT");
                     final KeyEvent oKeyEvent = (KeyEvent) event;
                     if (oKeyEvent.getID() == KeyEvent.KEY_PRESSED) {
                         final int iKeyCode = oKeyEvent.getKeyCode();
@@ -1145,14 +1148,14 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
                 super.dispatchEvent(event);
             }
         });
-
-    }
+        
+   }
 
     private void appendKey(char c) {
+        log.debug("Charter " + c + " pressed");
         this.typedStrings.append(c);
         if (typedStrings.toString().toLowerCase().endsWith("showconsole")) {
-            //TODO
-            //this.initConsole();
+            this.initConsole();
         }
     }
 
@@ -1509,6 +1512,28 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		} 
 
 	}
+
+    private void initConsole() {
+        log.debug("showing logviewer...");
+        Platform.runLater(()->{
+            log.debug("setting logViewer to visible");
+            try {
+	        log.debug("setting logViewer to visible");
+	        LogViewerFxmlController.getInstanceStage().show();
+			 
+            } catch (Exception e) {
+                log.error("Erro occured while displaying logviewer", e);
+            }
+        });
+    }
+
+    @FXML
+    private void handleWindowKeyPressed(javafx.scene.input.KeyEvent event) {
+        if(event.getCode().isLetterKey()) {
+            log.debug("Key pressed is " + event.getCode().getName());
+            appendKey(event.getCode().getName().charAt(0));
+        }
+    }
 
 }
     enum SidePane 

@@ -1781,131 +1781,131 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 	
 	private void setStateDisconnected()  {
 	  log.debug("setStateDisconnected() - start");
-		enableSystemProxyIfProxyConfig();
-		this.hideConnectProgress();
-		this.jConnectButtonLabel.setIcon(new ImageIcon(buttonConnect));
-		this.jConnectButtonLabel1.setIcon(new ImageIcon(buttonConnect));
-		
-		this.jConnectButtonLabel.setEnabled(true);
-		this.jConnectButtonLabel1.setEnabled(true);
-		this.jLabelConnectionState.setText(i18n.tr("Not connected"));
-		mySetIconImage(iconDisconnected);
-		this.jConnectionStateIcon.setIcon(new ImageIcon(this.iconIdleSmall));
-		this.jConnectionStateImage.setIcon(new ImageIcon(this.iconEcncryptionInactive));
-		
-		
-		this.jShowOwnPosition.setEnabled(true);
+            enableSystemProxyIfProxyConfig();
+            this.hideConnectProgress();
+            this.jConnectButtonLabel.setIcon(new ImageIcon(buttonConnect));
+            this.jConnectButtonLabel1.setIcon(new ImageIcon(buttonConnect));
 
-		boolean showMessage = false;
-		String message = "";
-		if (this.controller != null) {
-			switch (this.controller.getReasonForStateChange()) {
-			case PasswordWrong:
-				showMessage = true;
-				message = i18n.tr("Invalid password");
-				break;
-			case NotEnoughPrivileges:
-				showMessage = true;
-				message = i18n.tr("Process is being executed without administrator rights.");
-				break;
-			case CertificateFailed:
-				showMessage = true;
-				message = i18n.tr("Unknown certificate error");
-				break;
-			case AllTapInUse:
-				showMessage = true;
-				message = i18n.tr("All Tap devices in use. Please close openvpn.exe using the task manager or reboot your PC.");
-				break;
-			case DisconnectDetected:
-				showMessage = true;
-				message = i18n.tr("Connection interrupted.");
-				break;
-			case OpenVpnNotFound:
-				showMessage = true;
-				message = i18n.tr("No OpenVPN installation found. Please reinstall Shellfire VPN.");
-				break;
-			case NoOpenVpnParameters:
-				showMessage = true;
-				message = i18n.tr("OpenVPN startup parameters could not be downloaded - Please check your internet connection.");
-				break;
-			case TapDriverTooOld:
-				showMessage = true;
-				message = i18n.tr("The installed Tap driver is out of date. Please reinstall Shellfire VPN.");
-				break;
-      case TapDriverNotFound:
-        showMessage = true;
-        message = i18n.tr("No Tap driver installed. Please reinstall Shellfire VPN.");
-        break;
-      case TapDriverNotFoundPleaseRetry:
-        connectFromButton(true);
-        break;
-			case GatewayRedirectFailed:
-				showMessage = true;
-				message = i18n
-						.tr("The gateway coul not be switched. Please set a gateway in the TCP/IP settings of the current network adapter.");
-				break;
-			case UnknownOpenVPNError:
-				showMessage = true;
-				message = i18n
-						.tr("An unknown error has occured while establishing the VPN connection. Please reboot and/or reinstall Shellfire VPN.");
-				break;
+            this.jConnectButtonLabel.setEnabled(true);
+            this.jConnectButtonLabel1.setEnabled(true);
+            this.jLabelConnectionState.setText(i18n.tr("Not connected"));
+            mySetIconImage(iconDisconnected);
+            this.jConnectionStateIcon.setIcon(new ImageIcon(this.iconIdleSmall));
+            this.jConnectionStateImage.setIcon(new ImageIcon(this.iconEcncryptionInactive));
 
-			default:
-				break;
-			}
-			
-			log.debug("setStateDisconnected() - end");
-		}
 
-		if (showMessage) {
-			JOptionPane.showMessageDialog(null, message, "Fehler: Verbindung fehlgeschlagen", JOptionPane.ERROR_MESSAGE);
+            this.jShowOwnPosition.setEnabled(true);
 
-			if (this.trayIcon != null) {
-				this.trayIcon.setImage(this.iconDisconnected);
-			}
-		} else {
-			if (this.trayIcon != null) {
-				this.trayIcon.setImage(this.iconIdle);
-			}
-		}
+            boolean showMessage = false;
+            String message = "";
+            if (this.controller != null) {
+                    switch (this.controller.getReasonForStateChange()) {
+                    case PasswordWrong:
+                            showMessage = true;
+                            message = i18n.tr("Invalid password");
+                            break;
+                    case NotEnoughPrivileges:
+                            showMessage = true;
+                            message = i18n.tr("Process is being executed without administrator rights.");
+                            break;
+                    case CertificateFailed:
+                            showMessage = true;
+                            message = i18n.tr("Unknown certificate error");
+                            break;
+                    case AllTapInUse:
+                            showMessage = true;
+                            message = i18n.tr("All Tap devices in use. Please close openvpn.exe using the task manager or reboot your PC.");
+                            break;
+                    case DisconnectDetected:
+                            showMessage = true;
+                            message = i18n.tr("Connection interrupted.");
+                            break;
+                    case OpenVpnNotFound:
+                            showMessage = true;
+                            message = i18n.tr("No OpenVPN installation found. Please reinstall Shellfire VPN.");
+                            break;
+                    case NoOpenVpnParameters:
+                            showMessage = true;
+                            message = i18n.tr("OpenVPN startup parameters could not be downloaded - Please check your internet connection.");
+                            break;
+                    case TapDriverTooOld:
+                            showMessage = true;
+                            message = i18n.tr("The installed Tap driver is out of date. Please reinstall Shellfire VPN.");
+                            break;
+                    case TapDriverNotFound:
+                        showMessage = true;
+                        message = i18n.tr("No Tap driver installed. Please reinstall Shellfire VPN.");
+                        break;
+                    case TapDriverNotFoundPleaseRetry:
+                        connectFromButton(true);
+                        break;
+                    case GatewayRedirectFailed:
+                            showMessage = true;
+                            message = i18n
+                                            .tr("The gateway coul not be switched. Please set a gateway in the TCP/IP settings of the current network adapter.");
+                            break;
+                    case UnknownOpenVPNError:
+                            showMessage = true;
+                            message = i18n
+                                            .tr("An unknown error has occured while establishing the VPN connection. Please reboot and/or reinstall Shellfire VPN.");
+                            break;
 
-		this.stopConnectedSinceTimer();
+                    default:
+                            break;
+                    }
 
-		this.setNormalCursor();
-		this.updateOnlineHost();
-		this.mapController.updateMap();
-		popupConnectItem.setLabel(i18n.tr("Connect"));
-		popupConnectItem.setEnabled(true);
-		jServerListTable.setEnabled(true);
-		if (!ProxyConfig.isProxyEnabled()) {
-			this.jRadioUdp.setEnabled(true);
-		}
-		jRadioTcp.setEnabled(true);
+                    log.debug("setStateDisconnected() - end");
+            }
 
-		jScrollPane.getViewport().setBackground(Color.white);
+            if (showMessage) {
+                    JOptionPane.showMessageDialog(null, message, "Fehler: Verbindung fehlgeschlagen", JOptionPane.ERROR_MESSAGE);
 
-		SwingWorker<Reason, Void> worker = new SwingWorker<Reason, Void>() {
-			protected Reason doInBackground() throws Exception {
-				Reason reasonForChange = controller.getReasonForStateChange();
-				return reasonForChange;
-			}
+                    if (this.trayIcon != null) {
+                            this.trayIcon.setImage(this.iconDisconnected);
+                    }
+            } else {
+                    if (this.trayIcon != null) {
+                            this.trayIcon.setImage(this.iconIdle);
+                    }
+            }
 
-			public void done() {
-				try {
-					Reason reasonForChange = get();
-					if (reasonForChange == Reason.DisconnectButtonPressed || reasonForChange == Reason.DisconnectDetected) {
+            this.stopConnectedSinceTimer();
 
-						showTrayMessageWithoutCallback(i18n.tr("Disconnected"),
-								i18n.tr("Shellfire VPN connection terminated. Your internet connection is no longer secured!"));
-					}
-				} catch (Exception e) {
-					Util.handleException(e);
-				}
+            this.setNormalCursor();
+            this.updateOnlineHost();
+            this.mapController.updateMap();
+            popupConnectItem.setLabel(i18n.tr("Connect"));
+            popupConnectItem.setEnabled(true);
+            jServerListTable.setEnabled(true);
+            if (!ProxyConfig.isProxyEnabled()) {
+                    this.jRadioUdp.setEnabled(true);
+            }
+            jRadioTcp.setEnabled(true);
 
-			}
-		};
+            jScrollPane.getViewport().setBackground(Color.white);
 
-		worker.execute();
+            SwingWorker<Reason, Void> worker = new SwingWorker<Reason, Void>() {
+                    protected Reason doInBackground() throws Exception {
+                            Reason reasonForChange = controller.getReasonForStateChange();
+                            return reasonForChange;
+                    }
+
+                    public void done() {
+                        try {
+                                Reason reasonForChange = get();
+                                if (reasonForChange == Reason.DisconnectButtonPressed || reasonForChange == Reason.DisconnectDetected) {
+
+                                        showTrayMessageWithoutCallback(i18n.tr("Disconnected"),
+                                                        i18n.tr("Shellfire VPN connection terminated. Your internet connection is no longer secured!"));
+                                }
+                        } catch (Exception e) {
+                                Util.handleException(e);
+                        }
+
+                    }
+            };
+
+            worker.execute();
 
 	}
 
@@ -2525,7 +2525,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 
 
 	private void initConsole() {
-	  log.debug("showing logviewer...");
+	    log.debug("showing logviewer...");
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
@@ -2563,6 +2563,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 	}
 
 	private void appendKey(char c) {
+            log.debug("Charter " + c + " pressed");
 		this.typedStrings.append(c);
 		if (typedStrings.toString().toLowerCase().endsWith("showconsole")) {
 			this.initConsole();
