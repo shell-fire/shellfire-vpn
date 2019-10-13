@@ -8,9 +8,11 @@ package de.shellfire.vpn.gui.controller;
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.i18n.VpnI18N;
+import de.shellfire.vpn.messaging.UserType;
 import de.shellfire.vpn.webservice.WebService;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -29,10 +31,8 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import javafx.util.Pair;
+import org.apache.commons.io.input.Tailer;
 import org.apache.commons.io.input.TailerListenerAdapter;
 import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
@@ -78,7 +78,7 @@ public class LogViewerFxmlController implements Initializable {
 
         public void handle(String line) {
             //appending to a textArea
-            textArea.setText(textArea.getText() + line+"\n");
+            textArea.setText((textArea != null ? textArea.getText(): "") + line+"\n");
         }
     }  
   
@@ -88,18 +88,22 @@ public class LogViewerFxmlController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // Resize the window
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        int width = (int) (screenSize.getWidth() / 1.5);
-        int height = (int) (screenSize.getHeight() / 1.5);
+        LogListener clientListener = new LogListener(clientLogTextAruea);
+        String clientLog = Util.getLogFilePath(UserType.Client);
+        log.debug("Client is " + UserType.Client);
+        File clientLogFile = new File(clientLog);
+        Tailer.create(clientLogFile, clientListener);
 
-        splitContentPane.setPrefWidth(width);
-        splitContentPane.setPrefHeight(height);
-        //serviceLogLabel.setFont(Font.font("Arial", Util.getFontSize()));
+
+        LogListener serviceListener = new LogListener(serviceLogTextArea);
+        String serviceLog = Util.getLogFilePath(UserType.Service);
+        File serviceLogFile = new File(serviceLog);
+        Tailer.create(serviceLogFile, serviceListener);
     }    
 
     @FXML
     private void sendLogButtonAction(ActionEvent event) {
+        //sendLogToShellfire();
     }
     
     private void sendLogToShellfire() {
@@ -132,12 +136,12 @@ public class LogViewerFxmlController implements Initializable {
 //                Scene scene = new Scene(page);
 //                instanceStage.setScene(scene);
             
+                sendLogProgressDialog.setOption(2, i18n.tr("cancel"));
+                sendLogProgressDialog.setVisible(true);
             } catch (IOException ex) {
                 log.debug("connectFromButton. Error is " + ex.getMessage());
             }
         });    
-    sendLogProgressDialog.setOption(2, i18n.tr("cancel"));
-    sendLogProgressDialog.setVisible(true);
 
     Thread t = new Thread(sendLogTask);
     t.start();
@@ -180,13 +184,19 @@ public class LogViewerFxmlController implements Initializable {
         log.debug("getInstance()");
         if (instance == null) {
             log.debug("creating new instance");
+            
+            // setting the width and height of stage 
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            int width = (int) (screenSize.getWidth() / 1.5);
+            int height = (int) (screenSize.getHeight() / 1.5);
+        
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(LoginForms.class.getResource("/fxml/LogViewerFxml.fxml"));
             AnchorPane page = (AnchorPane) loader.load(); 
             instance = (LogViewerFxmlController)loader.getController();
             instanceStage = new Stage();
             instanceStage.setTitle("Log Viewer");
-            Scene scene = new Scene(page);
+            Scene scene = new Scene(page, width, height);
             instanceStage.setScene(scene);    
         }
         log.debug("returning instance");

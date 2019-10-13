@@ -189,7 +189,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
                                 log.debug("handlefButtonLogin: vpnController not visible");
                                 this.application.loadShellFireMainController();
                                 //log.debug("Shellfire Main controller is " + this.application.shellFireMainController.toString());
-                                this.application.shellFireMainController.setShellfireService(service);
+                                this.application.shellFireMainController.setShellfireService(this.service);
                                 boolean vis = true;
                                 if (minimize
                                         && service.getVpn().getAccountType() != ServerType.Free) {
