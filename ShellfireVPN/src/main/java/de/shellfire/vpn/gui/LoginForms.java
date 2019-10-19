@@ -123,7 +123,7 @@ public class LoginForms extends Application {
     /**
      * Initializing the dialog controller & stage
      */
-    public static void setLookAndFeel() {
+    private void setLookAndFeel() {
         log.debug("setLookAndFeel: first test");
         try {
             // Load the fxml file and create a new stage for the popup dialog.
@@ -143,13 +143,13 @@ public class LoginForms extends Application {
             initDialogStage.initStyle(StageStyle.UNDECORATED);
             initDialogStage.setTitle("Init");
             initDialogStage.initModality(Modality.WINDOW_MODAL);
-
+            
             initDialogStage.show();
             //initDialog = loader.getController();            
             // unbind any previous progress bar
-            initDialog.getProgressBar().progressProperty().unbind();
+            //initDialog.getProgressBar().progressProperty().unbind();
 
-            initDialog.setVisible(true);
+            //initDialog.setVisible(true);
             
             log.debug("setLookAndFeel: last test");
         } catch (Exception e) {
@@ -344,7 +344,7 @@ public class LoginForms extends Application {
             String cmd = default_args[0];
 
             if (cmd.equals("uninstallservice")) {
-                ServiceTools.getInstanceForOS().uninstall();
+                ServiceToolsFX.getInstanceForOS().uninstall();
                 //initDialog.dispose();
                 //initDialog.getScene().setRoot(null);
                 this.stage.hide();
@@ -368,7 +368,7 @@ public class LoginForms extends Application {
                 log.debug("Retrieved installation path from args parameter: " + path);
 
                 if (cmd.equals("installservice")) {
-                    ServiceTools.getInstanceForOS().install(path);
+                    ServiceToolsFX.getInstanceForOS().install(path);
                 }
 
                 System.exit(0);

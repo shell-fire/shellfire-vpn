@@ -77,8 +77,11 @@ public class LogViewerFxmlController implements Initializable {
         }
 
         public void handle(String line) {
-            //appending to a textArea
-            textArea.setText((textArea != null ? textArea.getText(): "") + line+"\n");
+            Platform.runLater(()->{
+            if(line!=null){
+                this.textArea.appendText(line + "\n");
+                this.textArea.end();
+            }});
         }
     }  
   
@@ -88,6 +91,7 @@ public class LogViewerFxmlController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+    
         LogListener clientListener = new LogListener(clientLogTextAruea);
         String clientLog = Util.getLogFilePath(UserType.Client);
         log.debug("Client is " + UserType.Client);

@@ -96,7 +96,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     private TrayIcon trayIcon;
     private StringBuffer typedStrings = new StringBuffer();
     private ProgressDialogController connectProgressDialog;
-    private MapEncryptionSubviewController mapEncryptionSubviewController;
     private ServerListSubviewController serverListSubviewController;
     private TvStreasSubviewController tvStreasSubviewController;
     private java.awt.Image iconConnecting;
@@ -642,7 +641,8 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
                 Platform.runLater(()->{this.setStateDisconnected();});
                 break;
             case Connecting:
-                Platform.runLater(() ->{ this.setStateConnecting();});
+                //Platform.runLater(() ->{ this.setStateConnecting();});
+                this.setStateConnecting();
                 break;
             case Connected:
                 this.setStateConnected();
@@ -899,6 +899,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
                                             i18n.tr("Shellfire VPN connection terminated. Your internet connection is no longer secured!"));
                     }
                     } catch (Exception e) {
+                        log.debug("Error while deconnecting: " + e.getMessage());
                             Util.handleException(e);
                     }
             }
@@ -920,13 +921,11 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
         //TODO_subview
         
-        if (null != mapEncryptionSubviewController) { // test if the controller has been initialized before doing any work.
-            if (!this.mapEncryptionSubviewController.getShowOwnPosition().isSelected()) {
-                this.mapEncryptionSubviewController.getShowOwnPosition().setDisable(true);
-            }
-        }
-        this.connectionStatusValue.setText(i18n.tr("Connection is being processed..."));
-        Platform.runLater(()->{this.globeConnectionImageView.setImage(Util.getImageIconFX(baseImageUrl + "/icons/small-globe-connecting.png"));});
+        //this.connectionStatusValue.setText(i18n.tr("Connection is being processed..."));
+        Platform.runLater(()->{
+            this.connectionStatusValue.setText(i18n.tr("Connection is being processed..."));
+            this.globeConnectionImageView.setImage(Util.getImageIconFX(baseImageUrl + "/icons/small-globe-connecting.png"));
+        });
         mySetIconImage("/icons/sfvpn2-connecting-big.png");
 
         if (this.trayIcon != null) {
@@ -949,11 +948,13 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
      * @return no return value
      */
     private void showConnectProgress() throws IOException {
-            // create an instance of progress dialog 
+            // create an instance of progress dialog
+        //TODO using tasks methods to update application thread
+        Platform.runLater(()->{
         log.debug("showConnectProgress: Entrance of method");
         if(popUpStage != null){
             popUpStage.show();
-        } 
+        }});
     }
 
     public void mySetIconImage(String imagePath) {
@@ -1287,7 +1288,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
         });
         Thread worker = new Thread(hostWorker);
-        worker.run();
+          worker.run();
 
     }
 
@@ -1515,22 +1516,21 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
     private void initConsole() {
         log.debug("showing logviewer...");
-        Platform.runLater(()->{
-            log.debug("setting logViewer to visible");
+        //Platform.runLater(()->{
             try {
 	        log.debug("setting logViewer to visible");
-	        LogViewerFxmlController.getInstanceStage().show();
-			 
+	        logViewer.getInstanceStage().show();
+                log.debug("Logviewer has been shown");
             } catch (Exception e) {
                 log.error("Erro occured while displaying logviewer", e);
             }
-        });
+        //});
     }
 
     @FXML
     private void handleWindowKeyPressed(javafx.scene.input.KeyEvent event) {
         if(event.getCode().isLetterKey()) {
-            log.debug("Key pressed is " + event.getCode().getName());
+            //log.debug("Key pressed is " + event.getCode().getName());
             appendKey(event.getCode().getName().charAt(0));
         }
     }
