@@ -68,7 +68,6 @@ public class LogViewerFxmlController implements Initializable {
     private static Logger log = Util.getLogger(LogViewerFxmlController.class.getCanonicalName());
     private static LoginForms application;
     private static LogViewerFxmlController instance;
-    SendLogTask sendLogTask = new SendLogTask();
 
     class LogListener extends TailerListenerAdapter {
 
@@ -112,34 +111,36 @@ public class LogViewerFxmlController implements Initializable {
     }
 
     private void sendLogToShellfire() {
+        final SendLogTask sendLogTask = new SendLogTask();
+        Thread t = new Thread(sendLogTask);
 
-        Platform.runLater(() -> {
-            if (sendLogProgressDialog == null) {
-                try {
-                    sendLogProgressDialog = ProgressDialogController.getInstance(i18n.tr("Upload log.."), sendLogTask, instanceStage);
-                    sendLogProgressDialog.setOption(2, i18n.tr("cancel"));
-                    sendLogProgressDialog.getRightButton().setOnAction(new EventHandler<javafx.event.ActionEvent>() {
+        if (sendLogProgressDialog == null) {
+            try {
+                sendLogProgressDialog = ProgressDialogController.getInstance(i18n.tr("Upload log.."), sendLogTask, instanceStage);
+                sendLogProgressDialog.setOption(2, i18n.tr("cancel"));
 
-                        @Override
-                        public void handle(javafx.event.ActionEvent event) {
-                            sendLogProgressDialog.getDialogStage().hide();
-                            Alert alert = new Alert(Alert.AlertType.INFORMATION, i18n.tr("Log upload cancelled."));
-                            alert.show();
-                            if (sendLogTask != null && !sendLogTask.isDone()) {
-                                sendLogTask.cancel(true);
-                            }
-                        }
-                    });
-
-                } catch (IOException ex) {
-                    log.debug("connectFromButton. Error is " + ex.getMessage());
-                }
+            } catch (IOException ex) {
+                log.debug("connectFromButton. Error is " + ex.getMessage());
             }
+        }
+        Platform.runLater(() -> {
+            sendLogProgressDialog.getRightButton().setOnAction(new EventHandler<javafx.event.ActionEvent>() {
+
+                @Override
+                public void handle(javafx.event.ActionEvent event) {
+                    sendLogProgressDialog.getDialogStage().hide();
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION, i18n.tr("Log upload cancelled."));
+                    alert.show();
+                    if (sendLogTask != null && !sendLogTask.isDone()) {
+                        sendLogTask.cancel(true);
+                    }
+                }
+            });
+
             sendLogProgressDialog.getDialogStage().show();
+            t.start();
         });
 
-        Thread t = new Thread(sendLogTask);
-        t.start();
     }
 
     public void setApp(LoginForms app) {
@@ -153,6 +154,7 @@ public class LogViewerFxmlController implements Initializable {
         @Override
         protected Void call() throws Exception {
             //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            log.debug("sending logs to shellfire");
             WebService service = WebService.getInstance();
             service.sendLogToShellfire();
             finished = true;
@@ -167,6 +169,7 @@ public class LogViewerFxmlController implements Initializable {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION, i18n.tr("Log sent."));
                 alert.show();
             }
+            finished = false;
         }
 
     }
