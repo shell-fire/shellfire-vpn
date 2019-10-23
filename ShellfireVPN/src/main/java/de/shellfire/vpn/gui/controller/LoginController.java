@@ -413,7 +413,8 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
         }
 
         if (!this.autoLoginIfActive()) {
-            this.setVisible(true);
+            this.application.getStage().show();
+            //this.setVisible(true);
             askForNewAccountAndAutoStartIfFirstStart();
         }
     }
@@ -532,7 +533,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
         if (doAutoLogin) {
             this.fAutoLogin.setSelected(true);
-            this.setVisible(false);
+            this.application.getStage().hide();
             handlefButtonLogin(null);
         }
 
