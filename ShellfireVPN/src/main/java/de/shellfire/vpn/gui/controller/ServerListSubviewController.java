@@ -225,8 +225,6 @@ public class ServerListSubviewController implements Initializable {
                         getGraphic().setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
                         setText(VpnI18N.getCountryI18n().getCountryName(country));
                     }
-                    this.setDisable(true);
-                    this.setDisabled(true);
                 }
             };
         });
