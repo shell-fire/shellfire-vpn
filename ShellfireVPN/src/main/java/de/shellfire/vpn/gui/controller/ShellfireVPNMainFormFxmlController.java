@@ -639,6 +639,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         switch (state) {
             case Disconnected:
                 Platform.runLater(()->{this.setStateDisconnected();});
+                //this.setStateDisconnected();
                 break;
             case Connecting:
                 //Platform.runLater(() ->{ this.setStateConnecting();});
@@ -752,7 +753,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
                 connectProgressDialog.addBottomText("");
                 
                 connectProgressDialog.setOptionCallback(task);
-                connectProgressDialog.getLeftButton().setOnAction(new EventHandler<javafx.event.ActionEvent>() {
+                connectProgressDialog.getRightButton().setOnAction(new EventHandler<javafx.event.ActionEvent>() {
 
                     @Override
                     public void handle(javafx.event.ActionEvent event) {
@@ -791,10 +792,12 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         this.hideConnectProgress();
         
         this.connectionSubviewController.connectButtonDisable(false);
-        this.serverListSubviewController.setConnetImage1Disable(false);
-        this.connectionStatusValue.setText(i18n.tr("Not connected"));
         mySetIconImage("/icons/sfvpn2-disconnected-big.png");
-        Platform.runLater(()->{this.globeConnectionImageView.setImage(this.iconIdleSmall);});
+        //Platform.runLater(()->{
+            this.connectionStatusValue.setText(i18n.tr("Not connected"));
+            this.serverListSubviewController.setConnetImage1Disable(false);
+            this.globeConnectionImageView.setImage(this.iconIdleSmall);
+        //});
         this.connectionSubviewController.getStatusConnectionImageView().setImage(this.iconEcncryptionInactive);
         this.connectionSubviewController.getConnectImageView().setImage(this.buttonConnect);
         this.serverListSubviewController.getConnectImage1().setImage(this.buttonConnect);
@@ -860,19 +863,22 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
             log.debug("setStateDisconnected() - end");
         }
-        if (showMessage) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setContentText(message);
-            alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
-            //alert.getDialogPane().getChildren().stream().filter(node -> node instanceof Label).forEach(node -> ((Label)node).setMinWidth(Region.USE_PREF_SIZE));
-            alert.showAndWait();
+        final boolean text = showMessage;
+        //Platform.runLater(()->{
+        if (text) {
+            
+                         //Alert alert = new Alert(Alert.AlertType.ERROR,message,ButtonType.OK);
+    
+            //alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);            
+            //alert.showAndWait();
+            
             if (this.trayIcon != null) {
                 this.trayIcon.setImage(this.iconDisconnectedAwt);
             }
         } else if (this.trayIcon != null) {
             this.trayIcon.setImage(this.iconIdleAwt);
         }
-
+        //});
         this.stopConnectedSinceTimer();
         serverListSubviewController.getServerListTableView().disableProperty().set(false);
         this.setNormalCursor();
@@ -961,7 +967,8 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         log.debug("mySetIconImage: the icon Image  path is " + imagePath);
         Platform.runLater(()->{
             this.application.getStage().getIcons().clear();
-            this.application.getStage().getIcons().add(new Image(imagePath));});
+            this.application.getStage().getIcons().add(Util.getImageIconFX(imagePath));
+        });
     }
 
     private void initTray() {
@@ -1181,12 +1188,11 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     }
 
     private void setStateConnected() {
-        Platform.runLater(() -> {this.hideConnectProgress();});
-        
-        Platform.runLater(()->{this.connectionStatusValue.setText(i18n.tr("Connected"));;});
+        Platform.runLater(() -> {this.hideConnectProgress();
+        this.connectionStatusValue.setText(i18n.tr("Connected"));});
 
         //TODO check if image not already loaddd
-        mySetIconImage("/icons/sfvpn2-connected-big.png");
+        mySetIconImage(baseImageUrl + "/icons/sfvpn2-connected-big.png");
         this.connectionSubviewController.getStatusConnectionImageView().setImage(this.iconEcncryptionActive);
         this.connectionSubviewController.getConnectImageView().setImage(this.buttonDisconnect);
         this.serverListSubviewController.getConnectImage1().setImage(this.buttonDisconnect);
@@ -1232,9 +1238,11 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	}
         
     private void hideConnectProgress() {
-        if (this.popUpStage != null) {
-            this.popUpStage.close();
-        }
+        Platform.runLater(()->{
+            if (this.popUpStage != null) {
+                this.popUpStage.close();
+            }
+        });
     }
 
     private void startConnectedSinceTimer() {
