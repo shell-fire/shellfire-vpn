@@ -6,7 +6,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
 
-import de.shellfire.vpn.client.ServiceTools;
 import de.shellfire.vpn.client.ServiceToolsFX;
 import de.shellfire.vpn.gui.controller.LicenseAcceptanceController;
 import de.shellfire.vpn.gui.controller.LoginController;
@@ -19,8 +18,6 @@ import de.shellfire.vpn.proxy.ProxyConfig;
 import de.shellfire.vpn.updater.Updater;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -35,7 +32,6 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.image.ImageView;
 
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Region;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
