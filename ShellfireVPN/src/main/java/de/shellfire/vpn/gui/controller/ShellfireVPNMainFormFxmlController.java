@@ -180,7 +180,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     private Label vpnType;
     @FXML
     private Label serverListFooterLabel;
-
+   
     // Access to embedded controller and variables in subviews
     @FXML
     private Parent connectionSubview;

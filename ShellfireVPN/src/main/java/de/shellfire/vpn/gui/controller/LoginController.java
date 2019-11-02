@@ -211,7 +211,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
                         alert.setHeaderText(i18n.tr("Error"));
                         alert.setContentText(i18n.tr("Login error:") + task.getValue().getMessage());
                         alert.showAndWait();
-                        this.fButtonLogin.setDisable(false);
+                        this.application.getStage().show();
                     }
                 } else {
                     log.debug("LoginController: Login result is null");

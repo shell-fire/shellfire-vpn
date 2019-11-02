@@ -190,6 +190,7 @@ public class LoginForms extends Application {
 
         } catch (Exception ex) {
             log.error("could not load main form fxml\n" + ex.getMessage());
+            ex.printStackTrace(System.out);
         }
         log.debug("ShellfireMainFrom initializtion method completed");
     }
