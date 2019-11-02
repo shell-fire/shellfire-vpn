@@ -576,6 +576,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
                     alert.setContentText(i18n.tr("Licence not accepted - Shellfire VPN is now exiting."));
                     alert.showAndWait();
                     Platform.exit();
+                    System.exit(0);
                 }
             }
             askForAutoStart();
@@ -691,6 +692,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
                 Util.digestProcess(p);
 
                 Platform.exit();
+                System.exit(0);
             } catch (IOException e) {
                 Util.handleException(e);
             }

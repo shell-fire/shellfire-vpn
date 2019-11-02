@@ -418,6 +418,7 @@ public class LoginForms extends Application {
             alert.setContentText(I18N.tr("No internet connection available - ShellfireVPN is being closed."));
             alert.showAndWait();
             Platform.exit();
+            System.exit(0);
         }
     }
 }
