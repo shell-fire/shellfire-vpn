@@ -53,10 +53,8 @@ import java.util.prefs.Preferences;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.Parent;
@@ -64,18 +62,15 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Region;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import javax.swing.JOptionPane;
 import org.jdesktop.application.Action;
 import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
@@ -115,7 +110,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
     private final LogViewerFxmlController logViewer;
     String baseImageUrl = "src/main/resources";
-    Stage popUpStage = null; 
     static SidePane currentSidePane = SidePane.CONNECTION;
     
     @FXML
@@ -742,17 +736,8 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         Platform.setImplicitExit(false);
         Platform.runLater(()->{
             try {
-                // Load the fxml file and create a new stage for the popup dialog.
-                FXMLLoader loader = new FXMLLoader();
-                loader.setLocation(LoginForms.class.getResource("/fxml/ProgressDialog.fxml"));
-                AnchorPane page = (AnchorPane) loader.load();
-                connectProgressDialog = (ProgressDialogController)loader.getController();
-                connectProgressDialog.setDialogText("Connecting ...");
-                connectProgressDialog.getProgressBar().setProgress(ProgressBar.INDETERMINATE_PROGRESS);
-                connectProgressDialog.addInfo("");
-                connectProgressDialog.addBottomText("");
-                
-                connectProgressDialog.setOptionCallback(task);
+
+                connectProgressDialog = ProgressDialogController.getInstance("Connecting ...", task, this.application.getStage(), true);
                 connectProgressDialog.getRightButton().setOnAction(new EventHandler<javafx.event.ActionEvent>() {
 
                     @Override
@@ -762,20 +747,9 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
                         log.debug("showConnectProgress: Cancel button clicked");
                     }
                 });
-                popUpStage = new Stage();
-                popUpStage.initStyle(StageStyle.UNDECORATED);
-                popUpStage.setTitle("Connecting");
-                popUpStage.initModality(Modality.WINDOW_MODAL);
-                popUpStage.initOwner(this.application.getStage());
-                Scene scene = new Scene(page);
-                popUpStage.setScene(scene);
-                connectProgressDialog = loader.getController();            
-                // unbind any previous progress bar
-                connectProgressDialog.getProgressBar().progressProperty().unbind();
-            
-                connectProgressDialog.setVisible(true);
             } catch (IOException ex) {
                 log.debug("connectFromButton. Error is " + ex.getMessage());
+                ex.printStackTrace(System.out);
             }
         });
         
@@ -885,7 +859,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         this.updateOnlineHost();
         if (!ProxyConfig.isProxyEnabled()) {
 			this.serverListSubviewController.getUDPRadioButton().setDisable(false);
-		}
+	}
 	this.serverListSubviewController.getTCPRadioButton().setDisable(false);
         Task<Reason> disconnectTask = new Task<Reason>() {
 
@@ -957,10 +931,11 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
             // create an instance of progress dialog
         //TODO using tasks methods to update application thread
         Platform.runLater(()->{
-        log.debug("showConnectProgress: Entrance of method");
-        if(popUpStage != null){
-            popUpStage.show();
-        }});
+                log.debug("showConnectProgress: Entrance of method");
+                if(ProgressDialogController.getDialogStage() != null){
+                    ProgressDialogController.getDialogStage().show();
+                }   
+        });
     }
 
     public void mySetIconImage(String imagePath) {
@@ -1239,11 +1214,11 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         
     private void hideConnectProgress() {
         Platform.runLater(()->{
-            if (this.popUpStage != null) {
-                this.popUpStage.close();
-            }
+            if (ProgressDialogController.getDialogStage() != null){       
+                    ProgressDialogController.getDialogStage().hide();
+                } 
         });
-    }
+                }
 
     private void startConnectedSinceTimer() {
         int delay = 1000; // milliseconds

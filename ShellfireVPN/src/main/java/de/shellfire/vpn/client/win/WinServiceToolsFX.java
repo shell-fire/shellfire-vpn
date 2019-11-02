@@ -7,7 +7,6 @@ package de.shellfire.vpn.client.win;
 
 import de.shellfire.vpn.Util; 
 import de.shellfire.vpn.client.ServiceToolsFX;
-import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.gui.controller.LoginController;
 import de.shellfire.vpn.gui.controller.ProgressDialogController;
 import de.shellfire.vpn.i18n.VpnI18N;
@@ -38,7 +37,7 @@ public class WinServiceToolsFX extends ServiceToolsFX{
     alert.setContentText(
           i18n.tr("Shellfire VPN service is now being installed. Please enter your admin password in the next window."));
     alert.showAndWait();
-    LoginForms.initDialogStage.hide();
+    ProgressDialogController.getDialogStage().hide();
     installElevated();
 
       loginProgressDialog = new ProgressDialogController();

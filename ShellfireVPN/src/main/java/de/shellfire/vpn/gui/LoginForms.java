@@ -55,7 +55,7 @@ public class LoginForms extends Application {
     // Variables to control draggin of window
     private static double xOffset = 0;
     private static double yOffset = 0;
-    public static Stage initDialogStage = null;
+    //public static Stage initDialogStage = null;
     //public HashMap<Object,Stage> controllersAndStage = new HashMap<>();
 
     public static Stage getStage() {
@@ -122,45 +122,12 @@ public class LoginForms extends Application {
     private void setLookAndFeel() {
         log.debug("setLookAndFeel: first test");
         try {
-            // Load the fxml file and create a new stage for the popup dialog.
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(LoginForms.class.getResource("/fxml/ProgressDialog.fxml"));
-            AnchorPane page = (AnchorPane) loader.load();
-            initDialog = loader.getController();
-            initDialogStage = new Stage();
-            initDialogStage.initOwner(getStage());
-            Scene scene = new Scene(page);
-            initDialogStage.setScene(scene);
-            initDialog.setDialogText("Init ...");
-            initDialog.getProgressBar().setProgress(ProgressBar.INDETERMINATE_PROGRESS);
-            initDialog.addInfo("");
-            initDialog.addBottomText("");
-            
-            initDialogStage.initStyle(StageStyle.UNDECORATED);
-            initDialogStage.setTitle("Init");
-            initDialogStage.initModality(Modality.WINDOW_MODAL);
-            
-            initDialogStage.show();
-            //initDialog = loader.getController();            
-            // unbind any previous progress bar
-            //initDialog.getProgressBar().progressProperty().unbind();
-
-            //initDialog.setVisible(true);
-            
+            initDialog = ProgressDialogController.getInstance("Init ...", null, stage,false);    
+            ProgressDialogController.getDialogStage().show();     
             log.debug("setLookAndFeel: last test");
         } catch (Exception e) {
             log.error("There is an exception caused by the setLookAndFeel method, " + e.toString());
-        }
-    }
-
-    public static void loadInitializeProgressDialog() {
-        try {
-            initDialog = (ProgressDialogController) replaceSceneWithDialogStage("ProgressDialog.fxml");
-            initDialog.getProgressBar().setProgress(ProgressBar.INDETERMINATE_PROGRESS);
-//initDialog.setApp(this);
-
-        } catch (Exception ex) {
-            log.error("could not load progressDialog fxml \n" + ex.getMessage());
+            e.printStackTrace(System.out);
         }
     }
 
@@ -278,59 +245,6 @@ public class LoginForms extends Application {
         }
         stage.centerOnScreen();
         stage.sizeToScene();
-        return (Initializable) loader.getController();
-    }
-
-    public static Initializable replaceSceneWithDialogStage(String fxml) throws Exception {
-        FXMLLoader loader = new FXMLLoader(LoginForms.class.getClassLoader().getResource(fxml));
-        loader.setLocation(LoginForms.class.getResource("/fxml/" + fxml));
-        System.out.println("replaceSCenContentWithSameRoot Loacation of loader is " + loader.getLocation());
-        AnchorPane page = null;
-        try {
-            System.out.println("ReplaceSceneContent trying to load anchor pane for " + fxml);
-            page = (AnchorPane) loader.load();
-            System.out.println("Location of Controller is " + loader.getController());
-        } catch (Exception ex) {
-            log.error(" Loading fxml has error for replaceSceneContentWithSameRoot " + ex.getMessage());
-        }
-        try{
-            if (
-                initDialogStage != null ){initDialogStage.hide();
-                log.debug("initDialogStage exist, hiding old stage");
-            }
-            else {initDialogStage = new Stage();
-            initDialogStage.initStyle(StageStyle.UNDECORATED);
-            log.debug("initDialogStage is null here so new stage created");
-            }
-        }catch(NullPointerException ex){
-            log.error("initDialogStage was null here");
-        }finally{
-        
-        }
-        page.setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                xOffset = event.getSceneX();
-                yOffset = event.getSceneY();
-            }
-        });
-        page.setOnMouseDragged(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                initDialogStage.setX(event.getScreenX() - xOffset);
-                initDialogStage.setY(event.getScreenY() - yOffset);
-            }
-        });
-        if (page.getScene() == null) {
-            Scene scene = new Scene(page);
-            initDialogStage.setScene(scene);
-            log.debug("Scene of " + fxml + " has been newly created");
-        } else {
-            log.debug("Scene of " + fxml + " is that of anchorpane");
-            initDialogStage.setScene(page.getScene());
-        }
-        initDialogStage.centerOnScreen();
-        initDialogStage.sizeToScene();
         return (Initializable) loader.getController();
     }
 
@@ -493,6 +407,7 @@ public class LoginForms extends Application {
 
         if (internetAvailable) {
             log.debug("Before the service Environment Ensure");
+            System.out.println("\n"+initDialog);
             initDialog.setDialogText(I18N.tr("Initializing ShellfireVPNService..."));
             ServiceToolsFX.getInstanceForOS().ensureServiceEnvironmentFX(instance);
             log.debug("After the service Environment Ensure");

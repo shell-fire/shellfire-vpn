@@ -24,7 +24,7 @@ import org.slf4j.Logger;
  */
 public abstract class ServiceToolsFX {
 
-    private static Logger log = Util.getLogger(ServiceTools.class.getCanonicalName());
+    private static Logger log = Util.getLogger(ServiceToolsFX.class.getCanonicalName());
     protected static String nl = "\r\n";
     protected static ProgressDialogController loginProgressDialog;
     protected static boolean init;

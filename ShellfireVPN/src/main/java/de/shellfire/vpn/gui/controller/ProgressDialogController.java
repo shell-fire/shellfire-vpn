@@ -226,8 +226,8 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
         return instanceStage;
     }
     
-    public static ProgressDialogController getInstance(String dialogText, Task task, Window owner) throws IOException{
-        if(instance == null){
+    public static ProgressDialogController getInstance(String dialogText, Task task, Window owner, boolean createNew) throws IOException{
+        if(instance == null || createNew){
             // Load the fxml file and create a new stage for the popup dialog.
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(LoginForms.class.getResource("/fxml/ProgressDialog.fxml"));
@@ -235,8 +235,7 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
             instance = (ProgressDialogController)loader.getController();
             instance.setDialogText(dialogText);
             instance.getProgressBar().setProgress(ProgressBar.INDETERMINATE_PROGRESS);
-
-            instance.setOptionCallback(task);
+            if (null != task){instance.setOptionCallback(task);}
             instanceStage = new Stage();
             instanceStage.initStyle(StageStyle.UNDECORATED);
             instanceStage.initModality(Modality.WINDOW_MODAL);

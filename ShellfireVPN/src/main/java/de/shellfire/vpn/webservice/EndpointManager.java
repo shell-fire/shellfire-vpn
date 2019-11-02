@@ -21,16 +21,11 @@ import de.shellfire.vpn.gui.ProgressDialog;
 import de.shellfire.vpn.gui.controller.LoginController;
 import de.shellfire.vpn.gui.controller.ProgressDialogController;
 import de.shellfire.vpn.i18n.VpnI18N;
-import java.util.logging.Level;
+import java.io.IOException;
 import javafx.application.Platform;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
-import javafx.stage.Stage;
+
 
 public class EndpointManager {
 
@@ -48,21 +43,12 @@ public class EndpointManager {
     private String preferredEndPoint;
     private boolean currentlyUsingDefaultList = false;
     private VpnProperties vpnProperties;
-    
-    private StringProperty dialogTextProperty ;
-    private BooleanProperty dialogStageVisibilityProperty; 
-    Stage initDialogStage = null;
 
     private EndpointManager() {
         log.debug("EndpointManager: In the constructors");
         loadFromProperties();
     }
 
-    public void setDialogBinding(){
-        dialogTextProperty = new SimpleStringProperty();
-        LoginForms.initDialog.getDynamicLabel().textProperty().bind(dialogTextProperty);
-        log.debug("Dialog bindings initialised");
-    }
     private void loadFromProperties() {
         vpnProperties = VpnProperties.getInstance();
 
@@ -80,7 +66,6 @@ public class EndpointManager {
         // Check if JavaFX application is running. True if Platform variable is set or not null
         try {
             if(Platform.isImplicitExit()? true: true){
-                setDialogBinding();
                 log.debug("Dialog binding has been set");
             }
         } catch (Exception e) {
@@ -246,14 +231,15 @@ public class EndpointManager {
             this.continueFormFX = form;
 
             if (null == initDialogFX) {
-                log.debug("\nFindEndpointTaskFX: In Dialog is null \n");
-                LoginForms.loadInitializeProgressDialog();
-                initDialogFX = LoginForms.getInitDialog();
-                //dialogTextProperty.set(i18n.tr("Update Check"));
-                initDialogFX.setDialogText(i18n.tr("Update Check"));
-                initDialogOriginFX = true;
-                LoginForms.initDialogStage.show();
-                log.debug("Endpoint task is still null;");
+                try {
+                    log.debug("\nFindEndpointTaskFX: In Dialog is null \n");
+                    initDialogFX = ProgressDialogController.getInstance("Update Check", null, LoginForms.getStage(), false);
+                    initDialogOriginFX = true;
+                    initDialogFX.getDialogStage().show();
+                    log.debug("Endpoint task is still null;");
+                } catch (IOException ex) {
+                    ex.printStackTrace(System.out);
+                }
             }
             //setDialogBinding();
         }
@@ -309,7 +295,6 @@ public class EndpointManager {
             } else {
                 log.debug("fx testing preferred endPoint {}", preferredEndPoint);
                 Platform.runLater(() -> initDialogFX.setDialogText(i18n.tr("Testing endpoint that worked before...")));
-                //Platform.runLater(() -> dialogTextProperty.set(i18n.tr("Testing endpoint that worked before...")));
                 log.debug("testPreferredEndpoint - Tested endpoint that worked befores");
 
                 result = testEndpoint(preferredEndPoint);
@@ -355,10 +340,7 @@ public class EndpointManager {
             String result = null ;
             if (isInitDialogOriginFX()) {
                 log.debug("end task is successfully set");
-                LoginForms.initDialogStage.hide();
-                //initDialogStage.hide();
-                // TODO check if logic meant to load the dialog box instead of it's
-                // calling it's visible method
+                initDialogFX.getDialogStage().hide();
             }
 
             result = String.valueOf(getValue());
@@ -371,9 +353,7 @@ public class EndpointManager {
             }
             
             if (isInitDialogOriginFX()) {
-                //nitDialogFX.setVisible(false);
-                LoginForms.initDialogStage.hide();
-                //initDialogStage.hide();
+                initDialogFX.getDialogStage().hide();
             }
 
             this.continueFormFX.continueAfterBackEndAvailabledFX();
