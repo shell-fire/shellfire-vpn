@@ -138,18 +138,18 @@
                               <Image url="@../icons/small-globe-disconnected.png" />
                            </image>
                         </ImageView>
-                        <Label fx:id="connectionStatusLabel" layoutX="77.0" layoutY="14.0" text="Verbindungsstatus" />
-                        <Label fx:id="connectionStatusValue" layoutX="77.0" layoutY="51.0" text="Getrennt" />
-                        <Label fx:id="connectedSinceLabel" layoutX="249.0" layoutY="15.0" text="Verbunden seit:" />
-                        <Label fx:id="onlineIpLabel" layoutX="384.0" layoutY="14.0" text="Online IP:" />
-                        <Label fx:id="connectedSinceValue" layoutX="247.0" layoutY="51.0" text="(nicht verbunden)" />
-                        <Label fx:id="onlineIpValue" layoutX="379.0" layoutY="50.0" prefHeight="17.0" prefWidth="107.0" text="(IP)" />
-                        <Label fx:id="vpnIdLabel" layoutX="504.0" layoutY="14.0" text="VPN Id:" />
-                        <Label fx:id="vpnType" layoutX="600.0" layoutY="14.0" text="VPN Typ:" />
-                        <Label fx:id="vpnIdValue" layoutX="504.0" layoutY="50.0" text="(vpnId)" />
-                        <Label fx:id="vpnTypeValue" layoutX="594.0" layoutY="50.0" text="(vpnTyp)" />
-                        <Label fx:id="validUntilLabel" layoutX="708.0" layoutY="14.0" prefHeight="17.0" prefWidth="83.0" text="Valid Until" />
-                        <Label fx:id="validUntilValue" layoutX="703.0" layoutY="50.0" prefHeight="17.0" prefWidth="83.0" text="(valid until)" />
+                        <Label fx:id="connectionStatusLabel" layoutX="74.0" layoutY="14.0" text="Verbindungsstatus" />
+                        <Label fx:id="connectionStatusValue" layoutX="74.0" layoutY="50.0" text="Getrennt" />
+                        <Label fx:id="connectedSinceLabel" layoutX="294.0" layoutY="14.0" text="Verbunden seit:" />
+                        <Label fx:id="onlineIpLabel" layoutX="433.0" layoutY="14.0" text="Online IP:" />
+                        <Label fx:id="connectedSinceValue" layoutX="288.0" layoutY="50.0" text="(nicht verbunden)" />
+                        <Label fx:id="onlineIpValue" layoutX="421.0" layoutY="50.0" prefHeight="17.0" prefWidth="107.0" text="(IP)" />
+                        <Label fx:id="vpnIdLabel" layoutX="542.0" layoutY="14.0" text="VPN Id:" />
+                        <Label fx:id="vpnType" layoutX="641.0" layoutY="14.0" prefHeight="17.0" prefWidth="66.0" text="VPN Type:" />
+                        <Label fx:id="vpnIdValue" layoutX="543.0" layoutY="50.0" text="(vpnId)" />
+                        <Label fx:id="vpnTypeValue" layoutX="644.0" layoutY="50.0" text="(vpnTyp)" />
+                        <Label fx:id="validUntilLabel" layoutX="728.0" layoutY="14.0" prefHeight="17.0" prefWidth="83.0" text="Valid Until" />
+                        <Label fx:id="validUntilValue" layoutX="717.0" layoutY="50.0" prefHeight="17.0" prefWidth="99.0" text="(valid until)" textAlignment="RIGHT" />
                      </children>
                   </Pane>
                   <Pane fx:id="contentDetailsPane" layoutX="2.0" layoutY="112.0" prefHeight="518.0" prefWidth="817.0" style="-fx-background-color: rgb(240,240,240);" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="1.0">

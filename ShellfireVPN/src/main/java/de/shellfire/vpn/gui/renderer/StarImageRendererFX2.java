@@ -23,9 +23,9 @@ import org.slf4j.Logger;
  */
 public class StarImageRendererFX2 extends TableCell<VpnComparisonFXTableModel, VpnEntry>{
     
-        HashMap<Integer, Image> icons = new HashMap<Integer, Image>();
-    HashMap<Integer, Image> iconsSelected = new HashMap<Integer, Image>();
-    HashMap<Integer, Image> iconsDisabled = new HashMap<Integer, Image>();
+    HashMap<Integer, Image> icons = new HashMap<>();
+    HashMap<Integer, Image> iconsSelected = new HashMap<>();
+    HashMap<Integer, Image> iconsDisabled = new HashMap<>();
     private static final Logger log = Util.getLogger(StarImageRendererFX2.class.getCanonicalName());
 
     public StarImageRendererFX2() {
