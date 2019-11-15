@@ -33,20 +33,13 @@ import java.util.Optional;
 import java.util.Properties;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
-import java.util.logging.Level;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.layout.AnchorPane;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import org.hyperic.sigar.win32.FileVersion;
 import org.hyperic.sigar.win32.Win32;
 import org.slf4j.Logger;
@@ -61,14 +54,10 @@ public class UpdaterFX implements CanContinueAfterBackEndAvailableFX {
   private static final String MAIN_EXE = "ShellfireVPN2.dat";
   private static final String UPDATER_EXE = "ShellfireVPN2.exe";
   private static I18n i18n = VpnI18N.getI18n();
-  private Stage initDialogStage ;
   
   private static WebService service = WebService.getInstance();
   private static int contentLength;
 
-//  static {
-//    setLookAndFeel();
-//  }
 
   private String[] args;
 
@@ -248,8 +237,8 @@ public class UpdaterFX implements CanContinueAfterBackEndAvailableFX {
 
     @Override
     protected void succeeded() {
-        if(initDialogStage != null)
-        initDialogStage.hide(); //To change body of generated methods, choose Tools | Templates.
+        if(updateProgressDialog.getDialogStage() != null)
+        updateProgressDialog.getDialogStage().hide(); //To change body of generated methods, choose Tools | Templates.
     }
     
     
@@ -258,23 +247,10 @@ public class UpdaterFX implements CanContinueAfterBackEndAvailableFX {
   public void performUpdate(final String path, String user) {
     try {
         final String fileName = getService().getLatestInstaller();
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(LoginForms.class.getResource("/fxml/ProgressDialog.fxml"));
-        AnchorPane page = (AnchorPane) loader.load();
-        updateProgressDialog = loader.getController();
-        initDialogStage = new Stage();
-        Scene scene = new Scene(page);
-        initDialogStage.setScene(scene);
-        updateProgressDialog.setDialogText(i18n.tr("Downloading update..."));
-        updateProgressDialog.getProgressBar().setProgress(ProgressBar.INDETERMINATE_PROGRESS);
-
-        initDialogStage.initStyle(StageStyle.UNDECORATED);
-        initDialogStage.initModality(Modality.WINDOW_MODAL);
-
-        initDialogStage.show();
-
-        updateProgressDialog.setOption(2, i18n.tr("cancel"));
         final MyWorker w1 = new MyWorker(fileName, path, user);
+        updateProgressDialog = ProgressDialogController.getInstance(i18n.tr("Downloading update..."), null, LoginForms.getStage(), false);
+        updateProgressDialog.getProgressBar().setProgress(ProgressBar.INDETERMINATE_PROGRESS);
+        updateProgressDialog.setOption(2, i18n.tr("cancel"));
         updateProgressDialog.setOptionCallback(new Task() {
 
         @Override
@@ -290,8 +266,7 @@ public class UpdaterFX implements CanContinueAfterBackEndAvailableFX {
       t.start();
       
       //work on stage here
-      initDialogStage.show();
-      //updateProgressDialog.setVisible(true);
+      updateProgressDialog.getDialogStage().show();
       try {
         w1.get();
       } catch (CancellationException e) {

@@ -42,7 +42,7 @@ import de.shellfire.vpn.proxy.ProxyConfig;
 import de.shellfire.vpn.webservice.EndpointManager;
 import de.shellfire.vpn.webservice.WebService;
 
-public class Updater implements CanContinueAfterBackEndAvailable, CanContinueAfterBackEndAvailableFX {
+public class Updater implements CanContinueAfterBackEndAvailable {
   private static Logger log = Util.getLogger(Updater.class.getCanonicalName());
   private static final String MAIN_EXE = "ShellfireVPN2.dat";
   private static final String UPDATER_EXE = "ShellfireVPN2.exe";
@@ -193,17 +193,6 @@ public class Updater implements CanContinueAfterBackEndAvailable, CanContinueAft
   private void displayInfo(String msg) {
     JOptionPane.showMessageDialog(null, msg, "Hinweis", JOptionPane.INFORMATION_MESSAGE);
   }
-
-    @Override
-    public ProgressDialogController getDialogFX() {
-        return null;
-    }
-
-    @Override
-    public void continueAfterBackEndAvailabledFX() {
-       //TODO 
-       log.debug("Updater: JavaFX implementation has to be completed");
-    }
 
   class MyWorker extends SwingWorker<String, Object> {
 
