@@ -218,7 +218,7 @@ public class EndpointManager {
         }
     }
 
-    public class FindEndpointTaskFX extends Task<Object> {
+    public class FindEndpointTaskFX extends Task<String> {
 
         /*
          * Main task. Executed in background thread of javaFX app.
@@ -356,7 +356,7 @@ public class EndpointManager {
             if (isInitDialogOriginFX()) {
                 initDialogFX.getDialogStage().hide();
             }
-
+            
             this.continueFormFX.continueAfterBackEndAvailabledFX();
         }
         
