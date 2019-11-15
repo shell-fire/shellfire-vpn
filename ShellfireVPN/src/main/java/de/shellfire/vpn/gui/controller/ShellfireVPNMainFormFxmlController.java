@@ -68,6 +68,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -840,12 +841,9 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         final boolean text = showMessage;
         //Platform.runLater(()->{
         if (text) {
-            
-                         //Alert alert = new Alert(Alert.AlertType.ERROR,message,ButtonType.OK);
-    
-            //alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);            
-            //alert.showAndWait();
-            
+            Alert alert = new Alert(Alert.AlertType.ERROR,message,ButtonType.OK);
+            alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);            
+            alert.showAndWait();
             if (this.trayIcon != null) {
                 this.trayIcon.setImage(this.iconDisconnectedAwt);
             }
@@ -1163,8 +1161,9 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     }
 
     private void setStateConnected() {
-        Platform.runLater(() -> {this.hideConnectProgress();
-        this.connectionStatusValue.setText(i18n.tr("Connected"));});
+        //Platform.runLater(() -> {this.hideConnectProgress();
+        this.hideConnectProgress();
+        Platform.runLater(() -> {this.connectionStatusValue.setText(i18n.tr("Connected"));});
 
         //TODO check if image not already loaddd
         mySetIconImage(baseImageUrl + "/icons/sfvpn2-connected-big.png");
@@ -1218,7 +1217,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
                     ProgressDialogController.getDialogStage().hide();
                 } 
         });
-                }
+    }
 
     private void startConnectedSinceTimer() {
         int delay = 1000; // milliseconds

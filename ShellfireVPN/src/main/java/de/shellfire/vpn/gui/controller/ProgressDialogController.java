@@ -219,7 +219,7 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
     
     // Removed because the dynamic label has a binding in EntityManager
     public void setDialogText(String string) {
-        dynamicLabel.setText(string);
+        this.dynamicLabel.setText(string);
     }
 
     public static Stage getDialogStage() {

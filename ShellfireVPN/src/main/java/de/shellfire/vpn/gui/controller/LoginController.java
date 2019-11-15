@@ -1,5 +1,4 @@
 package de.shellfire.vpn.gui.controller;
-
 import de.shellfire.vpn.Storage;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;

@@ -110,35 +110,35 @@ import net.miginfocom.swing.MigLayout;
  * @author bettmenn
  */
 public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleChangeListener, ConnectionStateListener {
-  private static Logger log = Util.getLogger(ShellfireVPNMainForm.class.getCanonicalName());
-  private static LogViewer logViewer = LogViewer.getInstance();
-	private ContentPaneList content;
-	private WebService shellfireService;
-	private ServerList serverList;
-	private ServerListTableModel serverListTableModel;
-	private Controller controller;
-	private TrayIcon trayIcon;
-	private Image iconDisconnected;
-	private Image iconConnected;
-	private Image iconConnecting;
-	private Image iconIdle;
-	private Image iconEcncryptionInactive;
-	private Image iconEcncryptionActive;
-	private Date connectedSince;
-	private Timer currentConnectedSinceTimer;
-	private Preferences preferences;
-	private String REG_SHOWONMAP = "show_own_position_on_map";
+    private static  Logger log = Util.getLogger(ShellfireVPNMainForm.class.getCanonicalName());
+    private static LogViewer logViewer = LogViewer.getInstance();
+    private ContentPaneList content;
+    private WebService shellfireService;
+    private ServerList serverList;
+    private ServerListTableModel serverListTableModel;
+    private Controller controller;
+    private TrayIcon trayIcon;
+    private Image iconDisconnected;
+    private Image iconConnected;
+    private Image iconConnecting;
+    private Image iconIdle;
+    private Image iconEcncryptionInactive;
+    private Image iconEcncryptionActive;
+    private Date connectedSince;
+    private Timer currentConnectedSinceTimer;
+    private Preferences preferences;
+    private String REG_SHOWONMAP = "show_own_position_on_map";
 
-	private WsGeoPosition ownPosition;
-	private MapController mapController;
-	private static I18n i18n = VpnI18N.getI18n();
-	private int nagScreenDelay;
-	private PremiumVPNNagScreen nagScreen;
-	private Timer nagScreentimer;
-	private MoveMouseListener mml;
-	private StringBuffer typedStrings = new StringBuffer();
-	private ProgressDialog connectProgressDialog;
-	private Image image;
+    private WsGeoPosition ownPosition;
+    private MapController mapController;
+    private static I18n i18n = VpnI18N.getI18n();
+    private int nagScreenDelay;
+    private PremiumVPNNagScreen nagScreen;
+    private Timer nagScreentimer;
+    private MoveMouseListener mml;
+    private StringBuffer typedStrings = new StringBuffer();
+    private ProgressDialog connectProgressDialog;
+    private Image image;
 	
 	
     private final static HashMap<String, ImageIcon> mainIconMap = new HashMap<String, ImageIcon>() {
@@ -1574,7 +1574,7 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 
 	private void updateContentPanes() {
 		this.content.updateContentPanes();
-		this.pack();
+		this.pack(); 
 	}
 
 	private void setActiveContentFromMouseEnteredEvent(MouseEvent evt) {
