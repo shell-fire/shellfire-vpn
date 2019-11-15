@@ -15,7 +15,7 @@ import de.shellfire.vpn.gui.controller.ShellfireVPNMainFormFxmlController;
 import de.shellfire.vpn.gui.controller.VpnSelectDialogController;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.proxy.ProxyConfig;
-import de.shellfire.vpn.updater.Updater;
+import de.shellfire.vpn.updater.UpdaterFX;
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
@@ -28,11 +28,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.image.ImageView;
-
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -94,9 +90,6 @@ public class LoginForms extends Application {
             this.stage.initStyle(StageStyle.UNDECORATED);
             setLookAndFeel();
             this.loadLoginController();
-            //initConnectionTest();
-            this.afterDialogDisplay();
-
         } catch (Exception ex) {
             log.error("could not start with first stage load \n");
             ex.printStackTrace(System.out);
@@ -302,7 +295,7 @@ public class LoginForms extends Application {
                 log.debug("Retrieved installation path from args parameter: " + path);
                 //initDialog.dispose();
                 //this.stage.hide();
-                new Updater().performUpdate(path, user);
+                new UpdaterFX().performUpdate(path, user);
 
                 return;
             }
@@ -315,7 +308,7 @@ public class LoginForms extends Application {
         // test Internet connection 
         boolean internetAvailable = Util.internetIsAvailable();
         if (internetAvailable) {
-            Updater updater = new Updater();
+            UpdaterFX updater = new UpdaterFX();
             if (updater.newVersionAvailable()) {
 
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -361,7 +354,6 @@ public class LoginForms extends Application {
 
         instance.setApp(this);
         log.debug("Preparing to display login menu");
-        //this.stage.show();
         this.initConnectionTest();
     }
 
