@@ -12,7 +12,6 @@ import org.xnap.commons.i18n.I18n;
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.client.ServiceTools;
 import de.shellfire.vpn.gui.LoginForm;
-import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.gui.ProgressDialog;
 import de.shellfire.vpn.i18n.VpnI18N;
 
@@ -215,10 +214,5 @@ public class WinServiceTools extends ServiceTools {
 
   }
 
-    @Override
-    public void ensureServiceEnvironmentFX(LoginForms form) {
-        log.debug("\nThis is JavaFX Thread running ensureServiceEnvironmentFX");
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
 }

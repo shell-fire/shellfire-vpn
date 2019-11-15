@@ -24,7 +24,7 @@ public abstract class ServiceTools {
 
 	
 	public abstract void ensureServiceEnvironment(LoginForm form);
-        public abstract void ensureServiceEnvironmentFX(LoginForms form);
+        //public abstract void ensureServiceEnvironmentFX(LoginForms form);
 	
 	public class WaitForServiceTask extends SwingWorker<Void, Object> {
 		/*
@@ -43,6 +43,7 @@ public abstract class ServiceTools {
 		public void done() {
 			
 			loginProgressDialog.setVisible(false);
+                        log.debug("Service Tools is done");
       this.loginForm.afterShellfireServiceEnvironmentEnsured();
 		}
 		
