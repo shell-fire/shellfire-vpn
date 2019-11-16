@@ -58,24 +58,24 @@ public class StarImageRendererFX extends TableCell<ServerListFXModel, VpnStar> {
             log.debug("StarImageRendererFX: Star Image and text could not be rendered");
             setText("Empty");
         } else {
-            //init();
-            //setStyle("-fx-font-size : " + Util.getFontSize());
             Image img = this.getIcon(item, isSelected());
             setGraphic(new ImageView(img));
             getGraphic().setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
-            log.debug("StarImageRendererFX: " + item.getNum());
+            //log.debug("StarImageRendererFX: " + item.getNum());
             setText(item.getText());
         }
+        //this.setDisable(true);
+        //this.setDisabled(true);
     }
 
     public Image getIcon(VpnStar star, boolean isSelected) {
         if (isSelected) {
             return iconsSelected.get(star.getNum());
         } //else if (!isDisabled())
-        else if (isDisabled() == false) {
-            return icons.get(star.getNum());
-        } else {
+        else if (isDisabled()) {
             return iconsDisabled.get(star.getNum());
+        } else {
+            return icons.get(star.getNum());
         }
     }
 }

@@ -21,6 +21,7 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -48,6 +49,10 @@ public class ConnectionSubviewController implements Initializable {
     private ImageView productKeyImageView;
     @FXML
     private ImageView premiumInfoImageView;
+    @FXML
+    private Button premiumButton;
+    @FXML
+    private Button connectButton;
     private LoginForms application;
     private static final Logger log = Util.getLogger(ShellfireVPNMainFormFxmlController.class.getCanonicalName());
     private static I18n i18n = VpnI18N.getI18n();
@@ -60,8 +65,7 @@ public class ConnectionSubviewController implements Initializable {
     String baseImageUrl = "src/main/resources";
     String size = "736";
     String langKey = VpnI18N.getLanguage().getKey();
-    @FXML
-    private Button connectButton;
+
     
     
     public ImageView getStatusConnectionImageView() {
@@ -80,8 +84,8 @@ public class ConnectionSubviewController implements Initializable {
         return premiumInfoImageView;
     }
     
-    public void connectImageviewDisable(boolean disable){
-        this.connectImageView.setDisable(disable);
+    public void connectButtonDisable(boolean disable){
+        this.connectButton.setDisable(disable);
     }
 
     public void setConnectImageView(ImageView connectImageView) {
@@ -107,34 +111,23 @@ public class ConnectionSubviewController implements Initializable {
             size = "1472";
         }
         log.debug("langKey: " + langKey);
-
-        //mySetIconImage("/icons/sfvpn2-idle-big.png");
-        
-
-        this.connectImageView.setId(baseImageUrl + "/buttons/button-disconnect-" + langKey + ".gif");
-        this.statusConnectionImageView.setId(baseImageUrl + "/icons/status-unencrypted-width" + size + ".gif");
         
         this.connectButton.setGraphic(connectImageView);
-        //this.connectButton.setStyle("-fx-background-image: url(../buttons/button-disconnect-" + langKey + ".gif);");
-        
-        //this.connectButton.setGraphic();   Style("-fx-background-image: url("+baseImageUrl+"../buttons/button-disconnect-" + langKey + ".gif);");
-        
+        this.connectButton.setPadding(Insets.EMPTY);
+        this.premiumButton.setGraphic(premiumInfoImageView);
+        this.premiumButton.setPadding(Insets.EMPTY);
+       
         //makes product key to be disable when disable is set to true
         this.productKeyImageView.managedProperty().bind(this.productKeyImageView.visibleProperty());
         this.premiumInfoImageView.managedProperty().bind(this.premiumInfoImageView.visibleProperty());
         this.connectImageView.managedProperty().bind(this.connectImageView.visibleProperty());
         this.productKeyImageView.setVisible(false);
         this.premiumInfoImageView.setVisible(false);
-
+        this.premiumButton.setVisible(false);
+        log.debug("After initialization of images");
     }
     
     public void updateComponents(boolean connected){
-//        try{
-//        if(this.application.shellFireMainController.getController().getCurrentConnectionState() == ConnectionState.Connected)
-//        this.statusConnectionImageView.setId(baseImageUrl + "/icons/status-encrypted-width" + size + ".gif");
-//        } catch(Exception e){
-//        log.debug("Initialize: controller is not initialize so status is disconnected " + e.getMessage());
-//        }
           if (connected){
           this.statusConnectionImageView.setImage(new Image("/icons/status-encrypted-width" + size + ".gif"));
           this.connectImageView.setImage(new Image("/buttons/button-disconnect-" + langKey + ".gif"));     
@@ -149,6 +142,8 @@ public class ConnectionSubviewController implements Initializable {
         } else {
             //this.productKeyImageView.setVisible(false);
             this.premiumInfoImageView.setVisible(true);
+
+            this.premiumButton.setVisible(true);
         }
     }
 
@@ -158,25 +153,6 @@ public class ConnectionSubviewController implements Initializable {
 
     public void productKeyDisable(boolean value) {
         this.productKeyImageView.setDisable(value);
-    }
-
-    @FXML
-    private void handleConnectImageViewMouseExited(MouseEvent event) {
-        this.application.getStage().getScene().setCursor(Cursor.DEFAULT);
-    }
-
-    @FXML
-    private void handleConnectImageViewMouseEntered(MouseEvent event) {
-        this.application.getStage().getScene().setCursor(Cursor.HAND);
-    }
-
-    @FXML
-    private void handleConnectImageViewContext(ContextMenuEvent event) {
-    }
-
-    @FXML
-    private void handleConnectImageViewClicked(MouseEvent event) {
-        this.application.shellFireMainController.connectFromButton(true);
     }
 
     @FXML
@@ -196,24 +172,6 @@ public class ConnectionSubviewController implements Initializable {
     @FXML
     private void handleProductKeyImageViewClicked(MouseEvent event) {
     }
-
-    @FXML
-    private void handlePremiumInfoImageViewMouseExited(MouseEvent event) {
-        this.application.getStage().getScene().setCursor(Cursor.DEFAULT);
-    }
-
-    @FXML
-    private void handlePremiumInfoImageViewMouseEntered(MouseEvent event) {
-        this.application.getStage().getScene().setCursor(Cursor.HAND);
-    }
-
-    @FXML
-    private void handlePremiumInfoImageViewContext(ContextMenuEvent event) {
-    }
-
-    @FXML
-    private void handlePremiumInfoImageViewClicked(MouseEvent event) {
-    }
     
     public void setApp(LoginForms app){
         this.application = app;
@@ -222,10 +180,46 @@ public class ConnectionSubviewController implements Initializable {
     public void setParentController(ShellfireVPNMainFormFxmlController shellController){
         this.mainController = shellController ;
     }
+    
+    @FXML
+    private void handleConnectButtonExited(MouseEvent event) {
+        this.application.getStage().getScene().setCursor(Cursor.DEFAULT);
+    }
 
     @FXML
-    private void handleConnectButtonClicked(ActionEvent event) {
-        this.application.shellFireMainController.connectFromButton(true);
+    private void handleConnectButtonEntered(MouseEvent event) {
+        this.application.getStage().getScene().setCursor(Cursor.HAND);
+    }
+
+    @FXML
+    private void handleConnectButtonClicked(MouseEvent event) {
+        this.application.shellFireMainController.connectFromButton(false);
+    }
+
+    @FXML
+    private void handleConnectButtonAction(ActionEvent event) {
+        handleConnectButtonClicked(null);
+    }
+
+    @FXML
+    private void premiumButtonExited(MouseEvent event) {
+        this.application.getStage().getScene().setCursor(Cursor.DEFAULT);
+    }
+
+    @FXML
+    private void premiumButtonEntered(MouseEvent event) {
+        this.application.getStage().getScene().setCursor(Cursor.HAND);        
+    }
+
+    @FXML
+    private void premiumButtonClicked(MouseEvent event) {
+        WebService service = WebService.getInstance();
+        Util.openUrl(service.getUrlPremiumInfo());
+    }
+
+    @FXML
+    private void premiumButtonOnAction(ActionEvent event) {
+        premiumButtonClicked(null);
     }
 
 }

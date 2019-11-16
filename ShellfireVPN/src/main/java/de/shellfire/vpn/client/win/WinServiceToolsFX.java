@@ -5,7 +5,8 @@
  */
 package de.shellfire.vpn.client.win;
 
-import de.shellfire.vpn.Util;
+
+import de.shellfire.vpn.Util; 
 import de.shellfire.vpn.client.ServiceToolsFX;
 import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.gui.controller.LoginController;
@@ -14,6 +15,7 @@ import de.shellfire.vpn.i18n.VpnI18N;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import javafx.concurrent.Task;
 import javafx.scene.control.Alert;
 import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
@@ -43,15 +45,17 @@ public class WinServiceToolsFX extends ServiceToolsFX{
       loginProgressDialog = new ProgressDialogController();
       loginProgressDialog.setDialogText(i18n.tr("Installing Service..."));
       loginProgressDialog.setOption(2, i18n.tr("cancel"));
-      loginProgressDialog.setOptionCallback(new Runnable() {
+      loginProgressDialog.setOptionCallback(new Task() {
 
-        @Override
-        public void run() {
-          Alert alert = new Alert(Alert.AlertType.INFORMATION);
+          @Override
+          protected Object call() throws Exception {
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
           alert.setContentText( i18n.tr("Service has not been installed correctly - Shellfire VPN is now exited"));
           System.exit(0);
-        }
+          return null; 
+          }
       });
+        
 
       loginProgressDialog.setVisible(true);
 
@@ -108,7 +112,7 @@ public class WinServiceToolsFX extends ServiceToolsFX{
       
       
       template = template.replace("$$TEMP$$", Util.getTempDir());
-      template = template.replace("$$LOGFILE$$", Util.getTempDir()+File.separator + "ProcRunLog.log");
+      template = template.replace("$$logFILE$$", Util.getTempDir()+File.separator + "ProcRunLog.log");
       template = template.replace("$$JVM_DLL$$",  Util.getJvmDll());
       template = template.replace("$$PROCRUNPATH$$", procRunPath);
       
@@ -169,7 +173,7 @@ private String getProcrunExe() {
           String command = Util.getCscriptExe() + " " + elevateVbs;
           log.debug("Calling elevateVbs with command {} in dir {}", command, instDir.getAbsolutePath());
           Process p = Runtime.getRuntime().exec(command, null, instDir);
-          Util.digestProcess(p);
+          Util.digestProcess(p); 
 
           long start = System.currentTimeMillis();
 

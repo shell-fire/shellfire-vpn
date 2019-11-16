@@ -24,7 +24,6 @@ public class FxUIManager {
     public static Pane SwitchSubview(Object controller, String view) throws IOException {
         log.debug("SwitchSubview with two object and view parameters has controller " + controller.toString());
         FXMLLoader loader = new FXMLLoader(FxUIManager.class.getResource("/fxml/" + view));
-
         loader.setController(controller);
 
         return (AnchorPane) loader.load();

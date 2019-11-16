@@ -199,7 +199,7 @@ public class SettingsDialogController implements Initializable{
             this.saveLoginData.setSelected(true); // can only be enabled from login dialog
         }
         
-        if (props.getBoolean(LoginController.REG_AUTOLOGIN, false)) {
+        if (props.getBoolean(LoginController.REG_AUTOlogIN, false)) {
           this.loginAutomatically.setSelected(true);
         } else if (props.getProperty(LoginController.REG_USER, null) == null){
             this.loginAutomatically.setDisable(true); // disable if login data not remembered, because then it makes no sense
@@ -243,7 +243,7 @@ public class SettingsDialogController implements Initializable{
       VpnProperties props = VpnProperties.getInstance();
 
         if (!this.loginAutomatically.isDisabled()) { // Not disabled means the checkbox is enabled.
-          props.setBoolean(LoginController.REG_AUTOLOGIN, this.loginAutomatically.isSelected());
+          props.setBoolean(LoginController.REG_AUTOlogIN, this.loginAutomatically.isSelected());
         }
 
         if (!this.saveLoginData.isDisabled()&& this.saveLoginData.isSelected() == false) {

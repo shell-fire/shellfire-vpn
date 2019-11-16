@@ -199,7 +199,7 @@ public class SettingsDialog extends javax.swing.JDialog {
       VpnProperties props = VpnProperties.getInstance();
 
         if (this.jAutoLogin.isEnabled()) {
-          props.setBoolean(LoginForm.REG_AUTOLOGIN, this.jAutoLogin.isSelected());
+          props.setBoolean(LoginForm.REG_AUTOlogIN, this.jAutoLogin.isSelected());
         }
 
         if (this.jRememberLoginData.isEnabled() && this.jRememberLoginData.isSelected() == false) {
@@ -255,7 +255,7 @@ public class SettingsDialog extends javax.swing.JDialog {
             this.jRememberLoginData.setEnabled(false); // can only be enabled from login dialog
         }
         
-        if (props.getBoolean(LoginForm.REG_AUTOLOGIN, false)) {
+        if (props.getBoolean(LoginForm.REG_AUTOlogIN, false)) {
           this.jAutoLogin.setSelected(true);
         } else if (props.getProperty(LoginForm.REG_USER, null) == null){
             this.jAutoLogin.setEnabled(false); // disable if login data not remembered, because then it makes no sense
