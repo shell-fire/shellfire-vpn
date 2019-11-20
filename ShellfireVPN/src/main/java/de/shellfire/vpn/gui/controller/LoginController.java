@@ -168,12 +168,10 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
                         log.debug("LoginController: loginTask - selected vpn is " + selectionRequired);
                         if (selectionRequired && rememberedVpnSelection == 0) {
                             log.debug("Condition for electionRequired && rememberedVpnSelection == 0");
-                            //this.application.vpnSelectController.displayVpnSelect();
                             this.application.vpnSelectController.setApp(this.application);
                             this.application.getStage().show();
 
                         } else {
-                            //try {
                             if (selectionRequired
                                     && rememberedVpnSelection != 0) {
                                 log.debug("Condition for electionRequired && rememberedVpnSelection == 0");
@@ -187,7 +185,6 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
                             if (!this.application.getStage().isShowing()) {
                                 log.debug("handlefButtonLogin: vpnController not visible");
                                 this.application.loadShellFireMainController();
-                                //log.debug("Shellfire Main controller is " + this.application.shellFireMainController.toString());
                                 this.application.shellFireMainController.setShellfireService(this.service);
                                 boolean vis = true;
                                 if (minimize
@@ -286,7 +283,6 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
         this.restoreCredentialsFromRegistry();
         this.restoreAutoConnectFromRegistry();
         this.restoreAutoStartFromRegistry();
-        //continueAfterBackEndAvailabledFX();
     }
 
     public void initComponents() {
@@ -379,21 +375,18 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
     @FXML
     private void handleExitImageMouseExited(MouseEvent event) {
-        //this.exitImageView.setBlendMode(BlendMode.LIGHTEN);
         this.application.getStage().getScene().setCursor(Cursor.DEFAULT);
 
     }
 
     @FXML
     private void handleExitImageMouseEntered(MouseEvent event) {
-        //this.exitImageView.setBlendMode(BlendMode.OVERLAY);
         this.application.getStage().getScene().setCursor(Cursor.HAND);
     }
 
     @Override
     public void continueAfterBackEndAvailabledFX() {
         log.debug("continueAfterBackEndAvailabledFX: being enabled");
-        //this.service = WebService.getInstance();
         Storage.register(service);
         this.restoreCredentialsFromRegistry();
         this.restoreAutoConnectFromRegistry();
@@ -402,7 +395,6 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
         if (!this.application.getStage().isShowing()) {
             log.debug("Initial progress dialog is hidden");
-            // TODO check if logic intention was properly converted from swing counterpart.
             this.application.getStage().show();
         }
         try {
@@ -413,7 +405,6 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
         if (!this.autoLoginIfActive()) {
             this.application.getStage().show();
-            //this.setVisible(true);
             askForNewAccountAndAutoStartIfFirstStart();
         }
     }
@@ -438,7 +429,6 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
             this.password = this.fPassword.getText();
             this.passwordBogus = false;
-            // perform login action when inputs are correct
             handlefButtonLogin(null);
         }
 
@@ -482,7 +472,6 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
     public boolean validate() {
 
         if ((fUsername.getText().trim().length() > 0) && (fPassword.getText().trim().length() > 0)) {
-            // TODO implement any further validation required.
             return true;
         }
         return false;
@@ -548,7 +537,6 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
     protected void setPassword(String password) {
         this.password = password;
         this.fPassword.setText(this.password);
-        //this.setPasswordBogus();
     }
 
     void setPasswordBogus() {
@@ -570,8 +558,6 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
                 if (!this.application.getLicenseAccepted()) {
                     Alert alert = new Alert(AlertType.ERROR);
-                    //alert.setTitle("Error");
-                    //alert.setHeaderText("Printer error");
                     alert.setContentText(i18n.tr("Licence not accepted - Shellfire VPN is now exiting."));
                     alert.showAndWait();
                     Platform.exit();
@@ -600,7 +586,6 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
     private void askForAutoStart() {
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setTitle(i18n.tr("Startup"));
-//String s = i18n.tr("Start Shellfire VPN on boot and connect automatically?");
         alert.setContentText(i18n.tr("Start Shellfire VPN on boot and connect automatically?"));
 
         Optional<ButtonType> result = alert.showAndWait();
@@ -658,8 +643,6 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
                         c.disconnect(Reason.GuiRestarting);
 
                     }
-
-                    //this.application.shellFireMainController.dispose();
                     this.application.shellFireMainController = null;
                 }
 

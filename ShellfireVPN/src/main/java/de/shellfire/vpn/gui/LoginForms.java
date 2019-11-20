@@ -51,8 +51,6 @@ public class LoginForms extends Application {
     // Variables to control draggin of window
     private static double xOffset = 0;
     private static double yOffset = 0;
-    //public static Stage initDialogStage = null;
-    //public HashMap<Object,Stage> controllersAndStage = new HashMap<>();
 
     public static Stage getStage() {
         return stage;
@@ -65,7 +63,6 @@ public class LoginForms extends Application {
     public static void main(String[] args) {
         System.setProperty("java.library.path", "./lib");
         default_args = args;
-        //initializations(args);
         launch(args);
     }
 
@@ -97,12 +94,9 @@ public class LoginForms extends Application {
 
         try {
             initializations(default_args);
-
             stage.sizeToScene();
             stage.getProperties().put("hostServices", this.getHostServices());
-
             afterDialogDisplay();
-            //this.stage.show();
         } catch (Exception ex) {
             log.error("could not latter message after login in start \n" + ex.getMessage());
         }
@@ -130,14 +124,12 @@ public class LoginForms extends Application {
         try {
             this.initDialog = (ProgressDialogController) replaceSceneContent("ProgressDialog.fxml");
             this.initDialog.setApp(this);
-
         } catch (Exception ex) {
             log.error("could not load progressDialog fxml \n" + ex.getMessage());
         }
     }
     
     public void loadLoginController() {
-        System.out.println("In the getLogin controller");
         try {
             this.instance = (LoginController) replaceSceneContent("login.fxml");
             this.instance.setApp(this);
@@ -185,17 +177,13 @@ public class LoginForms extends Application {
             log.error("could not load main form fxml\n" + ex.getMessage());
             ex.printStackTrace(System.out);
         }
-        log.debug("ShellfireMainFrom initializtion method completed");
     }
 
     public void loadLicenceAcceptanceScreenController() {
         log.debug("In the licence Acceptance Screen controller");
         try {
             this.licenceAcceptanceController = (LicenseAcceptanceController) replaceSceneContent("LicenseAcceptScreen.fxml");
-            //Platform.runLater(() -> progressDialog.setVisible(true));
             this.licenceAcceptanceController.setApp(this);
-            //this.stage.setTitle("Shellfire VPN 2 Login");
-
         } catch (Exception ex) {
             log.error("could not load RegisterForm fxml\n" + ex.getMessage());
         }
@@ -208,10 +196,8 @@ public class LoginForms extends Application {
         System.out.println("Loacation of loader is " + loader.getLocation());
         AnchorPane page = null;
         try {
-            System.out.println("ReplaceSceneContent trying to load anchor pane for " + fxml);
+            log.debug("ReplaceSceneContent trying to load anchor pane for " + fxml);
             page = (AnchorPane) loader.load();
-            System.out.println("Location of Controller is " + loader.getController());
-
         } catch (Exception ex) {
             log.error(" Loading fxml has error for replaceSceneContent for " + fxml + " with error " + ex.getMessage());
         }
@@ -249,13 +235,9 @@ public class LoginForms extends Application {
 
             if (cmd.equals("uninstallservice")) {
                 ServiceToolsFX.getInstanceForOS().uninstall();
-                //initDialog.dispose();
-                //initDialog.getScene().setRoot(null);
                 this.stage.hide();
                 return;
             } else if (cmd.equals("installservice")) {
-                //initDialog.dispose();
-                //initDialog.getScene().setRoot(null);
                 this.stage.hide();
                 String path = "";
 
@@ -293,18 +275,12 @@ public class LoginForms extends Application {
                 }
 
                 log.debug("Retrieved installation path from args parameter: " + path);
-                //initDialog.dispose();
-                //this.stage.hide();
                 new UpdaterFX().performUpdate(path, user);
-
                 return;
             }
         }
-        // hidding stage
         log.debug("Hiding stage");
         this.stage.hide();
-        log.debug("after dialog box , before login controller");
-
         // test Internet connection 
         boolean internetAvailable = Util.internetIsAvailable();
         if (internetAvailable) {
@@ -369,7 +345,6 @@ public class LoginForms extends Application {
     }
 
     private void showLoginProgress() {
-        //this.loginProgressDialog = new ProgressDialog(this, false, i18n.tr("Logging in..."));
         this.initDialog.setVisible(true);
     }
 
