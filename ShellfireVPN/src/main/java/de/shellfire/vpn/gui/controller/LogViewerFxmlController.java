@@ -163,7 +163,7 @@ public class LogViewerFxmlController implements Initializable {
 
         @Override
         protected void succeeded() {
-            super.succeeded(); //To change body of generated methods, choose Tools | Templates.
+            //super.succeeded(); //To change body of generated methods, choose Tools | Templates.
             if (finished == true) {
                 sendLogProgressDialog.getDialogStage().hide();
                 Alert alert = new Alert(Alert.AlertType.INFORMATION, i18n.tr("Log sent."));

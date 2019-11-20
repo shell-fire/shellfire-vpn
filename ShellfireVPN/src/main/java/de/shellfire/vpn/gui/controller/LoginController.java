@@ -434,6 +434,10 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
     }
 
+    void setAutoLogin(boolean autologin) {
+        this.fAutoLogin.setSelected(autologin);
+    }
+
     class LoginTAsk extends Task<Response<LoginResponse>> {
 
         Response<LoginResponse> loginResult = null;
@@ -594,7 +598,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
             Client.addVpnToAutoStart();
             fAutoStart.setSelected(true);
-            fAutoLogin.setSelected(true);
+            setAutoLogin(true);
             fAutoconnect.setSelected(true);
             fStoreLoginData.setSelected(true);
         }

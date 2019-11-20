@@ -376,7 +376,7 @@ public class RegisterFormController extends AnchorPane implements Initializable 
 
         @Override
         protected void succeeded() {
-            super.succeeded(); //To change body of generated methods, choose Tools | Templates.
+            //super.succeeded(); //To change body of generated methods, choose Tools | Templates.
             if (accountActive) {
                 activationSuccesful();
             }
