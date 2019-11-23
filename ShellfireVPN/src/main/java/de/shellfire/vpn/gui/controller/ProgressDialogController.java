@@ -56,8 +56,6 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
     @FXML
     private ProgressBar progressBar;
     @FXML
-    private Label additionTextLabel;
-    @FXML
     private Label bottomLabel;
     private static final Logger log = Util.getLogger(ProgressDialogController.class.getCanonicalName());
 
@@ -82,7 +80,7 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
     
     public void initComponenets() {
         dynamicLabel.setText(i18n.tr("Logging in..."));
-        additionTextLabel.setText("<dynamic>");
+        //additionTextLabel.setText("<dynamic>");
         rightButton.setDisable(true);
         leftButton.setDisable(true);
         bottomLabel.setDisable(true);
@@ -122,9 +120,6 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
         progressBar.setProgress(percentage);
     }
 
-    public void addInfo(String text) {
-        this.setTextAndShowComponent(this.additionTextLabel, text);
-    }
 
     void setTextAndShowComponent(Label lbl, String text) {
         lbl.setText(text);
