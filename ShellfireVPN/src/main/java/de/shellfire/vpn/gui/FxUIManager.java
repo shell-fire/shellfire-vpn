@@ -33,7 +33,7 @@ public class FxUIManager {
         FXMLLoader loader = new FXMLLoader(FxUIManager.class.getResource("/fxml/" + view));
 
         Pane anchorPane = (AnchorPane) loader.load();
-        log.debug("FxUIManager: SwitchSubview loading the controller");
+        log.debug("FxUIManager: SwitchSubview loading the controller to " + view);
         Object controller = loader.getController();
         return new Pair<>(anchorPane, controller);
     }

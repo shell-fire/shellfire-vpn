@@ -211,7 +211,6 @@ public class ServerListSubviewController implements Initializable {
                                 
                 @Override
                 protected void updateItem(Server item, boolean empty) {
-                    super.updateItem(item, empty); //To change body of generated methods, choose Tools | Templates.
                     if (item == null) {
                         log.debug("ServerListSubviewController: Country Image and text could not be rendered");
                         setText("Empty");

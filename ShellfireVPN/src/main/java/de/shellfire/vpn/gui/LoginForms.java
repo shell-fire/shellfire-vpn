@@ -170,7 +170,6 @@ public class LoginForms extends Application {
         log.debug("In the ShellFire Main controller");
         try {
             this.shellFireMainController = (ShellfireVPNMainFormFxmlController) replaceSceneContent("ShellfireVPNMainFormFxml.fxml");
-            this.shellFireMainController.displayMessage("Object created");
             this.shellFireMainController.setApp(this);
 
         } catch (Exception ex) {
