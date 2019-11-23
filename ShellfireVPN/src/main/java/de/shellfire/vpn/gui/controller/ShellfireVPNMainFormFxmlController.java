@@ -81,7 +81,7 @@ import org.xnap.commons.i18n.LocaleChangeListener;
 public class ShellfireVPNMainFormFxmlController extends AnchorPane implements Initializable, LocaleChangeListener, ConnectionStateListener {
 
     private static final I18n I18N = VpnI18N.getI18n();
-
+    HashMap<SidePane, Pair<Pane, Object>> leftPaneHashMap = new HashMap<>();
     private static LoginForms application;
     private static final Logger log = Util.getLogger(ShellfireVPNMainFormFxmlController.class.getCanonicalName());
     private static final I18n i18n = VpnI18N.getI18n();
@@ -444,27 +444,11 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
        @FXML
     private void handleServerListPaneClicked(MouseEvent event) {
-
-        try {
-            Pair<Pane, Object> pair = FxUIManager.SwitchSubview("serverList_subview.fxml");
-
-            this.serverListSubviewController = (ServerListSubviewController) pair.getValue();
-            this.serverListSubviewController.setShellfireService((this.shellfireService));
-            this.serverListSubviewController.initComponents();
-            this.serverListSubviewController.initPremium(isFreeAccount());
-            this.serverListSubviewController.setApp(this.application);
-            this.serverListSubviewController.setMainFormController(this);
-            this.serverListSubviewController.afterInitialization();
+            contentDetailsPane.getChildren().setAll(leftPaneHashMap.get(SidePane.SERVERLIST).getKey());
             boolean connectionStatus = getController().getCurrentConnectionState() == ConnectionState.Connected ;
             this.serverListSubviewController.updateComponents(connectionStatus);
-            contentDetailsPane.getChildren().clear();
-            contentDetailsPane.getChildren().setAll(pair.getKey());
             currentSidePane = SidePane.SERVERLIST;
             updateSidePanes(currentSidePane);
-        } catch (IOException ex) {
-            log.debug("ShellfireVPNMainFormFxmlController:  handleServerListPaneClicked has error " + ex.getMessage());
-        }
-       
     }
  
     @FXML
@@ -773,8 +757,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
             this.serverListSubviewController.setConnetImage1Disable(false);
             this.globeConnectionImageView.setImage(this.iconIdleSmall);
         //});
-        this.connectionSubviewController.getStatusConnectionImageView().setImage(this.iconEcncryptionInactive);
-        this.connectionSubviewController.getConnectImageView().setImage(this.buttonConnect);
+        this.connectionSubviewController.updateComponents(false);
         this.serverListSubviewController.getConnectImage1().setImage(this.buttonConnect);
         log.debug("ShellfireMainForm: In setStateDisconnected method ");
 
@@ -1167,8 +1150,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
         //TODO check if image not already loaddd
         mySetIconImage(baseImageUrl + "/icons/sfvpn2-connected-big.png");
-        this.connectionSubviewController.getStatusConnectionImageView().setImage(this.iconEcncryptionActive);
-        this.connectionSubviewController.getConnectImageView().setImage(this.buttonDisconnect);
+        this.connectionSubviewController.updateComponents(true);
         this.serverListSubviewController.getConnectImage1().setImage(this.buttonDisconnect);
         this.connectionSubviewController.connectButtonDisable(false);
         this.serverListSubviewController.setConnetImage1Disable(false);
@@ -1314,9 +1296,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         }
     }
 
-    public void displayMessage(String message) {
-        log.debug("ShellFireMainController: " + message);
-    }
 
     public void updateConnectedSince() {
         Date now = new Date();
@@ -1448,6 +1427,10 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
             this.serverListSubviewController.initComponents();
             this.serverListSubviewController.initPremium(isFreeAccount());
             this.serverListSubviewController.setApp(this.application);
+            this.serverListSubviewController.setMainFormController(this);
+            this.serverListSubviewController.afterInitialization();
+            leftPaneHashMap.put(SidePane.SERVERLIST, pair);
+            log.debug("Serverlist controller defined");
         } catch (IOException ex) {
             log.debug("ShellfireVPNMainFormFxmlController:  prepareControllers has error " + ex.getMessage());
         }

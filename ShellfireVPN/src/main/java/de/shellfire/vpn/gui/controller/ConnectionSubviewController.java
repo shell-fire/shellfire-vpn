@@ -127,10 +127,13 @@ public class ConnectionSubviewController implements Initializable {
     }
     
     public void updateComponents(boolean connected){
-          if (connected){
-          this.statusConnectionImageView.setImage(new Image("/icons/status-encrypted-width" + size + ".gif"));
-          this.connectImageView.setImage(new Image("/buttons/button-disconnect-" + langKey + ".gif"));     
-          }
+        if (connected){
+            this.statusConnectionImageView.setImage(new Image("/icons/status-encrypted-width" + size + ".gif"));
+            this.connectImageView.setImage(new Image("/buttons/button-disconnect-" + langKey + ".gif"));     
+        } else {
+            this.statusConnectionImageView.setImage(new Image("/icons/status-unencrypted-width" + size + ".gif"));
+            this.connectImageView.setImage(new Image("/buttons/button-connect-" + langKey + ".gif"));        
+        }
     }
     
     public void initPremium(boolean freeAccount) {
