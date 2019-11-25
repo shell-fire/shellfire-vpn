@@ -55,8 +55,8 @@ public class StarImageRendererFX extends TableCell<ServerListFXModel, VpnStar> {
     protected void updateItem(VpnStar item, boolean empty) {
         super.updateItem(item, empty);
         if (item == null) {
-            log.debug("StarImageRendererFX: Star Image and text could not be rendered");
-            setText("Empty");
+            //log.debug("StarImageRendererFX: Star Image and text could not be rendered");
+            //setText("Empty");
         } else {
             Image img = this.getIcon(item, isSelected());
             setGraphic(new ImageView(img));

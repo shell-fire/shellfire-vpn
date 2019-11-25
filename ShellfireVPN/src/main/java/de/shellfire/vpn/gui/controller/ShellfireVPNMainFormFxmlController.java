@@ -442,7 +442,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     private void handleServerListPaneContext(ContextMenuEvent event) {
     }
 
-       @FXML
+    @FXML
     private void handleServerListPaneClicked(MouseEvent event) {
             contentDetailsPane.getChildren().setAll(leftPaneHashMap.get(SidePane.SERVERLIST).getKey());
             boolean connectionStatus = getController().getCurrentConnectionState() == ConnectionState.Connected ;
@@ -1400,20 +1400,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         showNagScreenWithoutTimer();
     }
 
-    public void prepareServerController(){
-       try {
-        Pair<Pane, Object> pair = FxUIManager.SwitchSubview("serverList_subview.fxml");
-
-            this.serverListSubviewController = (ServerListSubviewController) pair.getValue();
-            this.serverListSubviewController.setShellfireService((this.shellfireService));
-            this.serverListSubviewController.initComponents();
-            this.serverListSubviewController.initPremium(isFreeAccount());
-            this.serverListSubviewController.setApp(this.application);
-             } catch (IOException ex) {
-            log.debug("ShellfireVPNMainFormFxmlController:  prepareServerController has error " + ex.getMessage());
-        }
-    }
-    
     /**
      *  Prepare controllers so that they load controllers so that controller objects can be accessed. 
      */

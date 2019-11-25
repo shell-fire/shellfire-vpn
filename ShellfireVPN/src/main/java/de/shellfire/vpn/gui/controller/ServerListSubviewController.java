@@ -212,8 +212,8 @@ public class ServerListSubviewController implements Initializable {
                 @Override
                 protected void updateItem(Server item, boolean empty) {
                     if (item == null) {
-                        log.debug("ServerListSubviewController: Country Image and text could not be rendered");
-                        setText("Empty");
+                        //log.debug("ServerListSubviewController: Country Image and text could not be rendered");
+                        //setText("Empty");
                     } else {
                         if(shellfireService.getVpn().getServer().equals(item))
                             log.debug("****The current VPN has server " + item +" and id " + shellfireService.getVpn().getVpnId() + " and the type is " + shellfireService.getVpn().getAccountType());

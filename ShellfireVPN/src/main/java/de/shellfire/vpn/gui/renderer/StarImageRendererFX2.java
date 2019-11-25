@@ -58,8 +58,8 @@ public class StarImageRendererFX2 extends TableCell<VpnComparisonFXTableModel, V
     public void updateItem(VpnEntry item, boolean empty) {
         super.updateItem(item, empty); 
         if (item == null) {
-            log.debug("StarImageRendererFX2: Star Image and text could not be rendered");
-            setText("Empty");
+            //log.debug("StarImageRendererFX2: Star Image and text could not be rendered");
+            //setText("Empty");
         } else {
             VpnStar star = new VpnStar(item.getStar()); 
             Image img = this.getIcon(star, isSelected());
