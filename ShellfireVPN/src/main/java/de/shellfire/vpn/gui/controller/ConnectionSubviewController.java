@@ -104,8 +104,6 @@ public class ConnectionSubviewController implements Initializable {
         log.debug("ScalingFactor: " + scaleFactor);
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         double width = screenSize.getWidth();
-
-        
         if (width > 3000) {
             size = "1472";
         }
@@ -121,7 +119,7 @@ public class ConnectionSubviewController implements Initializable {
         this.premiumInfoImageView.managedProperty().bind(this.premiumInfoImageView.visibleProperty());
         this.connectImageView.managedProperty().bind(this.connectImageView.visibleProperty());
         this.productKeyImageView.setVisible(false);
-        this.premiumInfoImageView.setVisible(false);
+        //this.premiumInfoImageView.setVisible(false);
         this.premiumButton.setVisible(false);
         log.debug("After initialization of images");
     }
