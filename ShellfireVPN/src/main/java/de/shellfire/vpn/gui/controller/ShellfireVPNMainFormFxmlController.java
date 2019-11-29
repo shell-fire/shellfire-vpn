@@ -108,7 +108,8 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     private PremiumScreenController nagScreen;
     private ScheduledExecutorService currentConnectedSinceTimerFX = Executors.newSingleThreadScheduledExecutor();
     private Preferences preferences; 
-
+    private boolean connectionStatus ; 
+    
     private final LogViewerFxmlController logViewer;
     String baseImageUrl = "src/main/resources";
     static SidePane currentSidePane = SidePane.CONNECTION;
@@ -412,7 +413,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
             this.connectionSubviewController = (ConnectionSubviewController) pair.getValue();
             this.connectionSubviewController.initPremium(isFreeAccount());
             this.connectionSubviewController.setApp(this.application);
-            boolean connectionStatus = getController().getCurrentConnectionState() == ConnectionState.Connected ;
             log.debug("handleConnectionPanelClicked: VPN connection status is " + connectionStatus);
             this.connectionSubviewController.updateComponents(connectionStatus);
             currentSidePane = SidePane.CONNECTION;
@@ -445,7 +445,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     @FXML
     private void handleServerListPaneClicked(MouseEvent event) {
             contentDetailsPane.getChildren().setAll(leftPaneHashMap.get(SidePane.SERVERLIST).getKey());
-            boolean connectionStatus = getController().getCurrentConnectionState() == ConnectionState.Connected ;
             this.serverListSubviewController.updateComponents(connectionStatus);
             currentSidePane = SidePane.SERVERLIST;
             updateSidePanes(currentSidePane);
@@ -477,8 +476,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
             Pair<Pane, Object> pair = FxUIManager.SwitchSubview("tvStreams_subview.fxml");
             contentDetailsPane.getChildren().clear();
             contentDetailsPane.getChildren().setAll(pair.getKey());
-            //this.tvStreasSubviewController = (TvStreasSubviewController) pair.getValue();
-            //this.tvStreasSubviewController.initializeContents();
             currentSidePane = SidePane.TVSTREAM;
             updateSidePanes(currentSidePane);
         } catch (IOException ex) {
@@ -617,14 +614,15 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         log.debug("connectionStateChanged " + state + ", reason=" + e.getReason());
         switch (state) {
             case Disconnected:
+                connectionStatus = false;
                 Platform.runLater(()->{this.setStateDisconnected();});
-                //this.setStateDisconnected();
                 break;
             case Connecting:
-                //Platform.runLater(() ->{ this.setStateConnecting();});
+                
                 this.setStateConnecting();
                 break;
             case Connected:
+                connectionStatus = true;
                 this.setStateConnected();
                 break;
         }
@@ -954,7 +952,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    //TODO
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
@@ -1144,7 +1141,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     }
 
     private void setStateConnected() {
-        //Platform.runLater(() -> {this.hideConnectProgress();
         this.hideConnectProgress();
         Platform.runLater(() -> {this.connectionStatusValue.setText(i18n.tr("Connected"));});
 
@@ -1280,10 +1276,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
         if (vpn.getAccountType() == ServerType.Free) {
             this.validUntilValue.setVisible(false);
-            //this.validUntilValue.setManaged(false);
-
             this.validUntilLabel.setVisible(false);
-            //this.validUntilLabel.setManaged(false);
         } else {
 
             this.validUntilValue.setDisable(false);
@@ -1314,7 +1307,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     }
 
     private void showSettingsDialog() {
-        Parent root;
         try {
             Pair<Pane, Object> pair = FxUIManager.SwitchSubview("menuShellfireSettings.fxml");
             Stage dialogStage = new Stage(StageStyle.UTILITY);
@@ -1424,7 +1416,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         try {
             Pair<Pane, Object> pair = FxUIManager.SwitchSubview("tvStreams_subview.fxml");
             this.tvStreasSubviewController = (TvStreasSubviewController) pair.getValue();
-            //this.tvStreasSubviewController.initializeContents();
         } catch (IOException ex) {
             log.debug("ShellfireVPNMainFormFxmlController:  handleStreamsPaneClicked has error " + ex.getMessage());
         }
@@ -1467,7 +1458,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
     private void initConsole() {
         log.debug("showing logviewer...");
-        //Platform.runLater(()->{
             try {
 	        log.debug("setting logViewer to visible");
 	        logViewer.getInstanceStage().show();
@@ -1475,13 +1465,11 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
             } catch (Exception e) {
                 log.error("Erro occured while displaying logviewer", e);
             }
-        //});
     }
 
     @FXML
     private void handleWindowKeyPressed(javafx.scene.input.KeyEvent event) {
         if(event.getCode().isLetterKey()) {
-            //log.debug("Key pressed is " + event.getCode().getName());
             appendKey(event.getCode().getName().charAt(0));
         }
     }

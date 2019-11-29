@@ -157,7 +157,6 @@ public class EndpointManager {
                 log.debug("No preferred endPoint set yet, not testing");
             } else {
                 log.debug("testing preferred endPoint {}", preferredEndPoint);
-                //initDialogFX.setDialogText(i18n.tr("Testing endpoint that worked before..."));
                 result = testEndpoint(preferredEndPoint);
             }
 
@@ -219,7 +218,6 @@ public class EndpointManager {
     }
 
     public class FindEndpointTaskFX extends Task<String> {
-
         /*
          * Main task. Executed in background thread of javaFX app.
          */
@@ -241,7 +239,6 @@ public class EndpointManager {
                     ex.printStackTrace(System.out);
                 }
             }
-            //setDialogBinding();
         }
 
         // corresponds to Swing's doInBackgraound
@@ -279,7 +276,6 @@ public class EndpointManager {
                     }
                 }
             }
-            //succeeded();
             return preferredEndPoint;
         }
         
@@ -332,7 +328,6 @@ public class EndpointManager {
         protected void failed() {
             log.debug("testEndpointlist did not worked so failed");
         }
-
         
         @Override
         protected void succeeded() {
@@ -352,11 +347,9 @@ public class EndpointManager {
             Platform.exit();
             System.exit(0);
             }
-            
             if (isInitDialogOriginFX()) {
                 initDialogFX.getDialogStage().hide();
-            }
-            
+            }   
             this.continueFormFX.continueAfterBackEndAvailabledFX();
         }
         

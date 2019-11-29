@@ -38,7 +38,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
@@ -108,10 +107,12 @@ public class ServerListSubviewController implements Initializable {
 
     @FXML
     private void handleConnectImage2MouseExited(MouseEvent event) {
+        this.application.getStage().getScene().setCursor(Cursor.DEFAULT);
     }
 
     @FXML
     private void handleConnectImage2MouseEntered(MouseEvent event) {
+        this.application.getStage().getScene().setCursor(Cursor.HAND);
     }
 
     @FXML
@@ -120,6 +121,8 @@ public class ServerListSubviewController implements Initializable {
 
     @FXML
     private void handleConnectImage2MouseClicked(MouseEvent event) {
+        WebService service = WebService.getInstance();
+        Util.openUrl(service.getUrlPremiumInfo());
     }
     
     private static I18n i18n = VpnI18N.getI18n();
@@ -211,10 +214,7 @@ public class ServerListSubviewController implements Initializable {
                                 
                 @Override
                 protected void updateItem(Server item, boolean empty) {
-                    if (item == null) {
-                        //log.debug("ServerListSubviewController: Country Image and text could not be rendered");
-                        //setText("Empty");
-                    } else {
+                    if (item !=null) {
                         if(shellfireService.getVpn().getServer().equals(item))
                             log.debug("****The current VPN has server " + item +" and id " + shellfireService.getVpn().getVpnId() + " and the type is " + shellfireService.getVpn().getAccountType());
                         // get the corresponding country of this server

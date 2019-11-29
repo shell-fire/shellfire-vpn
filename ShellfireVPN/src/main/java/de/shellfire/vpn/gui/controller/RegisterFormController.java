@@ -124,8 +124,7 @@ public class RegisterFormController extends AnchorPane implements Initializable 
     }
 
     public void initComponents() {
-        this.registerHeadingLabel.setText(i18n.tr("Registrierung"));
-        //this.emailTextField.setText(i18n.tr("Registrierung"));
+        this.registerHeadingLabel.setText(i18n.tr("Registration"));
 
         this.passwordLabel.setText(i18n.tr("Password:"));
 

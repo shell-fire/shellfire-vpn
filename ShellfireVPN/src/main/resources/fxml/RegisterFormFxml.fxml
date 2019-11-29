@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.web.*?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
@@ -12,7 +18,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.web.WebView?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="359.0" prefWidth="622.0" style="-fx-background-color: rgb(240,240,240);" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.RegisterFormController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="359.0" prefWidth="622.0" style="-fx-background-color: rgb(240,240,240);" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.RegisterFormController">
    <children>
       <AnchorPane id="AnchorPane" layoutX="5.0" layoutY="6.0" prefHeight="344.0" prefWidth="575.0" style="-fx-background-color: rgb(64,69,73);" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="8.0">
          <children>
@@ -27,11 +33,23 @@
                   <TextField fx:id="emailTextField" layoutX="156.0" layoutY="45.0" prefHeight="11.0" prefWidth="395.0" AnchorPane.leftAnchor="156.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="45.0" />
                   <PasswordField fx:id="passwordField" layoutX="156.0" layoutY="81.0" prefHeight="25.0" prefWidth="395.0" AnchorPane.leftAnchor="156.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="81.0" />
                   <PasswordField fx:id="confirmPasswordField" layoutX="156.0" layoutY="119.0" prefHeight="25.0" prefWidth="395.0" AnchorPane.leftAnchor="156.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="119.0" />
-                  <Label fx:id="emailLabel" layoutX="7.0" layoutY="49.0" text="Email-Adresse:" />
-                  <Label fx:id="passwordLabel" layoutX="7.0" layoutY="85.0" text="Passwort:" />
-                  <Label fx:id="confirmPasswordLabel" layoutX="7.0" layoutY="123.0" text="Passwort-Check:" />
+                  <Label fx:id="emailLabel" layoutX="7.0" layoutY="49.0" text="Email-Adresse:">
+                     <font>
+                        <Font size="14.0" />
+                     </font></Label>
+                  <Label fx:id="passwordLabel" layoutX="7.0" layoutY="85.0" text="Passwort:">
+                     <font>
+                        <Font size="14.0" />
+                     </font></Label>
+                  <Label fx:id="confirmPasswordLabel" layoutX="7.0" layoutY="123.0" text="Passwort-Check:">
+                     <font>
+                        <Font size="14.0" />
+                     </font></Label>
                   <CheckBox fx:id="fAutoconnect1" layoutX="132.0" layoutY="156.0" mnemonicParsing="false" onAction="#handlefAutoconnect" prefHeight="34.0" prefWidth="20.0" text="&#10;&#10;" />
-                  <CheckBox fx:id="newsLetterCheckBox" layoutX="132.0" layoutY="206.0" mnemonicParsing="false" onAction="#handlefAutoconnect" selected="true" text="Ich abonniere den Newsletter" AnchorPane.bottomAnchor="39.0" />
+                  <CheckBox fx:id="newsLetterCheckBox" layoutX="132.0" layoutY="207.0" mnemonicParsing="false" onAction="#handlefAutoconnect" selected="true" text="Ich abonniere den Newsletter" AnchorPane.bottomAnchor="35.0">
+                     <font>
+                        <Font size="14.0" />
+                     </font></CheckBox>
                   <WebView fx:id="policyWebView" layoutX="156.0" layoutY="147.0" prefHeight="60.0" prefWidth="429.0" style="-fx-background-color: rgb(240,240,240);" AnchorPane.leftAnchor="156.0" AnchorPane.rightAnchor="10.0" />
                </children>
             </AnchorPane>
