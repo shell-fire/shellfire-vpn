@@ -750,11 +750,9 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         
         this.connectionSubviewController.connectButtonDisable(false);
         mySetIconImage("/icons/sfvpn2-disconnected-big.png");
-        //Platform.runLater(()->{
-            this.connectionStatusValue.setText(i18n.tr("Not connected"));
-            this.serverListSubviewController.setConnetImage1Disable(false);
-            this.globeConnectionImageView.setImage(this.iconIdleSmall);
-        //});
+        this.connectionStatusValue.setText(i18n.tr("Not connected"));
+        this.serverListSubviewController.setConnetImage1Disable(false);
+        this.globeConnectionImageView.setImage(this.iconIdleSmall);
         this.connectionSubviewController.updateComponents(false);
         this.serverListSubviewController.getConnectImage1().setImage(this.buttonConnect);
         log.debug("ShellfireMainForm: In setStateDisconnected method ");
@@ -884,8 +882,8 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         Platform.runLater(()->{
             this.connectionStatusValue.setText(i18n.tr("Connection is being processed..."));
             this.globeConnectionImageView.setImage(Util.getImageIconFX(baseImageUrl + "/icons/small-globe-connecting.png"));
+            mySetIconImage("/icons/sfvpn2-connecting-big.png");
         });
-        mySetIconImage("/icons/sfvpn2-connecting-big.png");
 
         if (this.trayIcon != null) {
             this.trayIcon.setImage(this.iconConnecting);
@@ -921,7 +919,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         log.debug("mySetIconImage: the icon Image  path is " + imagePath);
         Platform.runLater(()->{
             this.application.getStage().getIcons().clear();
-            this.application.getStage().getIcons().add(Util.getImageIconFX(imagePath));
+            this.application.getStage().getIcons().add(new Image(imagePath));
         });
     }
 
@@ -1142,10 +1140,12 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
     private void setStateConnected() {
         this.hideConnectProgress();
-        Platform.runLater(() -> {this.connectionStatusValue.setText(i18n.tr("Connected"));});
+        Platform.runLater(() -> {
+            this.connectionStatusValue.setText(i18n.tr("Connected"));
+            mySetIconImage("/icons/sfvpn2-connected-big.png");       
+        });
 
         //TODO check if image not already loaddd
-        mySetIconImage(baseImageUrl + "/icons/sfvpn2-connected-big.png");
         this.connectionSubviewController.updateComponents(true);
         this.serverListSubviewController.getConnectImage1().setImage(this.buttonDisconnect);
         this.connectionSubviewController.connectButtonDisable(false);
