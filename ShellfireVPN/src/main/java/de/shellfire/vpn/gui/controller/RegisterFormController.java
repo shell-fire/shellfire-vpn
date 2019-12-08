@@ -15,6 +15,7 @@ import de.shellfire.vpn.webservice.model.LoginResponse;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.application.HostServices;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -33,8 +34,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
-import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
 import javax.swing.event.HyperlinkEvent;
 import org.apache.commons.validator.GenericValidator;
 import org.codefx.libfx.control.webview.WebViewHyperlinkListener;
@@ -228,9 +227,12 @@ public class RegisterFormController extends AnchorPane implements Initializable 
         }
 
         if (error) {
-            JOptionPane.showMessageDialog(null, message, i18n.tr("Error"), JOptionPane.ERROR_MESSAGE);
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText(i18n.tr("Error"));
+            alert.setContentText(message);
+            alert.showAndWait();
             if (jumpTo != null) {
-                SwingUtilities.invokeLater(new RegisterFormController.FocusRequester(jumpTo));
+                Platform.runLater(new RegisterFormController.FocusRequester(jumpTo));
             }
         }
 

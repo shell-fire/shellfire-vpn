@@ -1,4 +1,4 @@
-package de.shellfire.vpn.gui.controller;
+    package de.shellfire.vpn.gui.controller;
 import de.shellfire.vpn.Storage;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -285,6 +285,8 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
     }
 
     public void initComponents() {
+        this.headerImageView.setImage(Util.getImageIconFX("/icons/sf_en.png"));
+        this.exitImageView.setImage(Util.getImageIconFX("/icons/exit.png"));
         this.fLabelUsername.setText(i18n.tr("Email / Username:"));
         this.fLabelUsername.setFont(Font.font("Arial", Util.getFontSize()));
 
@@ -309,7 +311,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
         this.headerPanel.setStyle("-fx-background-color: rgb(18,172,229);");
 
-        this.exitImageView.setImage(Util.getImageIconFX("src/main/resources/icons/exit.png"));
+        this.exitImageView.setImage(Util.getImageIconFX("/icons/exit.png"));
 
         this.fButtonLogin.managedProperty().bind(this.fButtonLogin.visibleProperty());
 

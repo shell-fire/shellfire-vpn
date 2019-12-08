@@ -184,8 +184,8 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
     }
 
     public void initComponents() {
-
-        this.headerImageView.setImage(ShellfireVPNMainFormFxmlController.getLogo());
+        this.headerImageView.setImage(Util.getImageIconFX("/icons/sf_en.png"));
+        //this.headerImageView.setImage(ShellfireVPNMainFormFxmlController.getLogo());
         this.numAccountVpnLabel.setText(
                 i18n.tr("In deinem Shellfire Account wurden mehrere VPN gefunden. \nBitte wähle den VPN aus, den du benutzen möchtest"));
         this.backLabel.setText(i18n.tr("back"));
@@ -218,7 +218,7 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
     }
 
     public void loadIcon() {
-        this.backImageVeiw.setImage(Util.getImageIconFX("src/main/resources//icons/sfvpn2-idle.png"));
+        this.backImageVeiw.setImage(Util.getImageIconFX("/icons/sfvpn2-idle.png"));
     }
 
     private void initVpnSelectTable(LinkedList<Vpn> allVpn) {

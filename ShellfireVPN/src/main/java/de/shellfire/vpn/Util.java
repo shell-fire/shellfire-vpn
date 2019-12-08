@@ -52,6 +52,7 @@ import de.shellfire.vpn.messaging.UserType;
 import de.shellfire.vpn.service.IVpnRegistry;
 import de.shellfire.vpn.service.osx.MacRegistry;
 import de.shellfire.vpn.service.win.WinRegistry;
+import java.io.InputStream;
 import javafx.scene.control.Alert;
 import javafx.scene.image.ImageView;
 
@@ -746,7 +747,8 @@ public class Util {
 	  return getImageIconFX(resourceName,1);
   }
   public static javafx.scene.image.Image getImageIconFX(String resourceName, double d){
-	   javafx.scene.image.Image image = new javafx.scene.image.Image("file:"+resourceName);
+          InputStream stream = LoginForms.class.getResourceAsStream(resourceName);  
+	   javafx.scene.image.Image image = new javafx.scene.image.Image(stream);
 	   //log.debug("Resource is found at " + resourceName);
 	   int factor = (int) (Util.getScalingFactor() * d);
 	    double height = image.getHeight() * factor;

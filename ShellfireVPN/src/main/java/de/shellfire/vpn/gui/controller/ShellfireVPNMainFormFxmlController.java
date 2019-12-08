@@ -111,7 +111,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     private boolean connectionStatus ; 
     
     private final LogViewerFxmlController logViewer;
-    String baseImageUrl = "src/main/resources";
     static SidePane currentSidePane = SidePane.CONNECTION;
     
     @FXML
@@ -222,15 +221,15 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         mySetIconImage("/icons/sfvpn2-idle-big.png");
         
         // initializing images of the form
-        this.connectoinBackgroundImageView.setImage(Util.getImageIconFX(baseImageUrl + "/buttons/button-connect-idle.png"));
-        this.serverListBackgroundImage.setImage(Util.getImageIconFX(baseImageUrl + "/buttons/button-serverlist-idle.png"));
-        this.streamsBackgroundImageView.setImage(Util.getImageIconFX(baseImageUrl + "/buttons/button-usa-idle.png"));
-        this.globeConnectionImageView.setImage(Util.getImageIconFX(baseImageUrl + "/icons/small-globe-disconnected.png"));
+        this.connectoinBackgroundImageView.setImage(Util.getImageIconFX("/buttons/button-connect-idle.png"));
+        this.serverListBackgroundImage.setImage(Util.getImageIconFX("/buttons/button-serverlist-idle.png"));
+        this.streamsBackgroundImageView.setImage(Util.getImageIconFX("/buttons/button-usa-idle.png"));
+        this.globeConnectionImageView.setImage(Util.getImageIconFX("/icons/small-globe-disconnected.png"));
 
-        this.iconEcncryptionActive = Util.getImageIconFX(baseImageUrl + "/icons/status-encrypted-width" + size + ".gif");
-        this.iconEcncryptionInactive = Util.getImageIconFX(baseImageUrl + "/icons/status-unencrypted-width" + size + ".gif");
-        this.buttonConnect = Util.getImageIconFX(baseImageUrl + "/buttons/button-connect-" + langKey + ".gif");
-        this.buttonDisconnect = Util.getImageIconFX(baseImageUrl + "/buttons/button-disconnect-" + langKey + ".gif");
+        this.iconEcncryptionActive = Util.getImageIconFX("/icons/status-encrypted-width" + size + ".gif");
+        this.iconEcncryptionInactive = Util.getImageIconFX("/icons/status-unencrypted-width" + size + ".gif");
+        this.buttonConnect = Util.getImageIconFX("/buttons/button-connect-" + langKey + ".gif");
+        this.buttonDisconnect = Util.getImageIconFX("/buttons/button-disconnect-" + langKey + ".gif");
         // initializing text of the form 
         this.connectionStatusLabel.setText(i18n.tr("Connection status"));
         this.connectedSinceLabel.setText(i18n.tr("Connected since:"));
@@ -245,17 +244,17 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         this.serverListFooterLabel.setText(i18n.tr("Show list of all VPN servers"));
         this.streamsHeaderLabel.setText(i18n.tr("USA streams"));
         this.streamsFooterLabel.setText(i18n.tr("List of american TV streams"));
-        this.connectoinBackgroundImageView.setImage(Util.getImageIconFX(baseImageUrl + "/buttons/button-connect-active.png"));
+        this.connectoinBackgroundImageView.setImage(Util.getImageIconFX("/buttons/button-connect-active.png"));
         currentSidePane = SidePane.CONNECTION;
             
 //        log.debug(connectionSubviewController.toString());
         //      log.debug(connectionSubviewController.displayCreationMessage("Object refreence properly created"));
         this.iconConnected = Util.getImageIcon("/icons/sfvpn2-connected-big.png").getImage();
-        this.iconConnectedSmall = Util.getImageIconFX(baseImageUrl + "/icons/small-globe-connected.png");
+        this.iconConnectedSmall = Util.getImageIconFX("/icons/small-globe-connected.png");
         this.iconConnecting = Util.getImageIcon("/icons/sfvpn2-connecting-big.png").getImage();
 
         this.iconDisconnectedAwt = Util.getImageIcon("/icons/sfvpn2-disconnected-big.png").getImage();
-       this.iconIdleSmall = Util.getImageIconFX(baseImageUrl + "/icons/small-globe-disconnected.png");
+       this.iconIdleSmall = Util.getImageIconFX("/icons/small-globe-disconnected.png");
         this.iconIdleAwt = Util.getImageIcon("/icons/sfvpn2-idle-big.png").getImage();
         
         //this.serverList = this.shellfireService.getServerList();
@@ -349,9 +348,9 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
     private final static HashMap<String, Image> mainIconMap = new HashMap<String, Image>() {
         {
-            put("de", Util.getImageIconFX("src/main/resources/icons/sf.png"));
-            put("en", Util.getImageIconFX("src/main/resources/icons/sf_en.png"));
-            put("fr", Util.getImageIconFX("src/main/resources/icons/sf_fr.png"));
+            put("de", Util.getImageIconFX("/icons/sf.png"));
+            put("en", Util.getImageIconFX("/icons/sf_en.png"));
+            put("fr", Util.getImageIconFX("/icons/sf_fr.png"));
         }
     };
 
@@ -389,7 +388,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     private void handleConnectionPaneMouseExited(MouseEvent event) {
         this.application.getStage().getScene().setCursor(Cursor.DEFAULT);
            if(!currentSidePane.equals(SidePane.CONNECTION)){
-           this.connectoinBackgroundImageView.setImage(Util.getImageIconFX(baseImageUrl + "/buttons/button-connect-idle.png"));
+           this.connectoinBackgroundImageView.setImage(Util.getImageIconFX("/buttons/button-connect-idle.png"));
         }
     }
 
@@ -397,7 +396,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     private void handleConnectionPaneMouseEntered(MouseEvent event) {
       this.application.getStage().getScene().setCursor(Cursor.HAND);
               if(!currentSidePane.equals(SidePane.CONNECTION)){
-               this.connectoinBackgroundImageView.setImage(Util.getImageIconFX(baseImageUrl + "/buttons/button-connect-hover.png"));
+               this.connectoinBackgroundImageView.setImage(Util.getImageIconFX("/buttons/button-connect-hover.png"));
         }
     }
 
@@ -426,7 +425,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     private void handleServerListPaneMouseExited(MouseEvent event) {
         this.application.getStage().getScene().setCursor(Cursor.DEFAULT);
                 if(!currentSidePane.equals(SidePane.SERVERLIST)){
-               this.serverListBackgroundImage.setImage(Util.getImageIconFX(baseImageUrl + "/buttons/button-serverlist-idle.png"));
+               this.serverListBackgroundImage.setImage(Util.getImageIconFX("/buttons/button-serverlist-idle.png"));
         }
     }
 
@@ -434,7 +433,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     private void handleServerListPaneMouseEntered(MouseEvent event) {
         this.application.getStage().getScene().setCursor(Cursor.HAND);
         if(!currentSidePane.equals(SidePane.SERVERLIST)){
-               this.serverListBackgroundImage.setImage(Util.getImageIconFX(baseImageUrl + "/buttons/button-serverlist-hover.png"));
+               this.serverListBackgroundImage.setImage(Util.getImageIconFX("/buttons/button-serverlist-hover.png"));
         }
     }
 
@@ -454,7 +453,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     private void handleStreamsPaneMouseExited(MouseEvent event) {
         this.application.getStage().getScene().setCursor(Cursor.DEFAULT);
         if(!currentSidePane.equals(SidePane.TVSTREAM)){
-               this.streamsBackgroundImageView.setImage(Util.getImageIconFX(baseImageUrl + "/buttons/button-usa-idle.png"));
+               this.streamsBackgroundImageView.setImage(Util.getImageIconFX("/buttons/button-usa-idle.png"));
         }
     }
 
@@ -462,7 +461,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     private void handleStreamsPaneMouseEntered(MouseEvent event) {
         this.application.getStage().getScene().setCursor(Cursor.HAND);
         if(!currentSidePane.equals(SidePane.TVSTREAM)){
-               this.streamsBackgroundImageView.setImage(Util.getImageIconFX(baseImageUrl + "/buttons/button-usa-hover.png"));
+               this.streamsBackgroundImageView.setImage(Util.getImageIconFX("/buttons/button-usa-hover.png"));
         }
     }
 
@@ -485,17 +484,17 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
     private void updateSidePanes(SidePane pane ){
         if(pane.equals(SidePane.CONNECTION)){
-            this.streamsBackgroundImageView.setImage(Util.getImageIconFX(baseImageUrl + "/buttons/button-usa-idle.png"));
-            this.serverListBackgroundImage.setImage(Util.getImageIconFX(baseImageUrl + "/buttons/button-serverlist-idle.png"));
-            this.connectoinBackgroundImageView.setImage(Util.getImageIconFX(baseImageUrl + "/buttons/button-connect-active.png"));
+            this.streamsBackgroundImageView.setImage(Util.getImageIconFX("/buttons/button-usa-idle.png"));
+            this.serverListBackgroundImage.setImage(Util.getImageIconFX("/buttons/button-serverlist-idle.png"));
+            this.connectoinBackgroundImageView.setImage(Util.getImageIconFX("/buttons/button-connect-active.png"));
         } else if (pane.equals(SidePane.SERVERLIST)){
-            this.streamsBackgroundImageView.setImage(Util.getImageIconFX(baseImageUrl + "/buttons/button-usa-idle.png"));
-            this.serverListBackgroundImage.setImage(Util.getImageIconFX(baseImageUrl + "/buttons/button-serverlist-active.png"));
-            this.connectoinBackgroundImageView.setImage(Util.getImageIconFX(baseImageUrl + "/buttons/button-connect-idle.png"));            
+            this.streamsBackgroundImageView.setImage(Util.getImageIconFX("/buttons/button-usa-idle.png"));
+            this.serverListBackgroundImage.setImage(Util.getImageIconFX("/buttons/button-serverlist-active.png"));
+            this.connectoinBackgroundImageView.setImage(Util.getImageIconFX("/buttons/button-connect-idle.png"));            
         }else if(pane.equals(SidePane.TVSTREAM)){
-            this.streamsBackgroundImageView.setImage(Util.getImageIconFX(baseImageUrl + "/buttons/button-usa-active.png"));
-            this.serverListBackgroundImage.setImage(Util.getImageIconFX(baseImageUrl + "/buttons/button-serverlist-idle.png"));
-            this.connectoinBackgroundImageView.setImage(Util.getImageIconFX(baseImageUrl + "/buttons/button-connect-idle.png"));            
+            this.streamsBackgroundImageView.setImage(Util.getImageIconFX("/buttons/button-usa-active.png"));
+            this.serverListBackgroundImage.setImage(Util.getImageIconFX("/buttons/button-serverlist-idle.png"));
+            this.connectoinBackgroundImageView.setImage(Util.getImageIconFX("/buttons/button-connect-idle.png"));            
         }
     }
     @FXML
@@ -881,7 +880,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         //this.connectionStatusValue.setText(i18n.tr("Connection is being processed..."));
         Platform.runLater(()->{
             this.connectionStatusValue.setText(i18n.tr("Connection is being processed..."));
-            this.globeConnectionImageView.setImage(Util.getImageIconFX(baseImageUrl + "/icons/small-globe-connecting.png"));
+            this.globeConnectionImageView.setImage(Util.getImageIconFX("/icons/small-globe-connecting.png"));
             mySetIconImage("/icons/sfvpn2-connecting-big.png");
         });
 

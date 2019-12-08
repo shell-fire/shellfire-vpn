@@ -145,10 +145,8 @@ public class LoginForms extends Application {
     public void loadRegisterFormController() {
         log.debug("In the RegisterForm controller");
         try {
-            this.registerController = (RegisterFormController) replaceSceneContent("RegisterFormFxml"
-                    + ".fxml");
+            this.registerController = (RegisterFormController) replaceSceneContent("RegisterFormFxml.fxml");
             this.registerController.setApp(this);
-
         } catch (Exception ex) {
             log.error("could not load RegisterForm fxml\n" + ex.getMessage());
         }
