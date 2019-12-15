@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
@@ -8,7 +12,7 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="276.0" prefWidth="464.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.SettingsDialogController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="276.0" prefWidth="464.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.SettingsDialogController">
    <children>
       <CheckBox fx:id="saveLoginData" layoutX="28.0" layoutY="31.0" mnemonicParsing="false" onAction="#handleSaveLoginData" prefHeight="20.0" prefWidth="221.0" text="Save login data" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="215.0" AnchorPane.topAnchor="31.0">
          <padding>
@@ -22,11 +26,6 @@
       <CheckBox fx:id="showStatusSite" layoutX="29.0" layoutY="160.0" mnemonicParsing="false" onAction="#handleShowStatusSite" prefHeight="18.0" prefWidth="368.0" text="Show status site after connection has been established" AnchorPane.bottomAnchor="98.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="68.0" AnchorPane.topAnchor="160.0" />
       <Label fx:id="languageLabel" layoutX="102.0" layoutY="192.0" prefHeight="17.0" prefWidth="97.0" text="Language :" />
       <MenuButton fx:id="languageMenuButton" layoutX="187.0" layoutY="186.0" mnemonicParsing="false" onAction="#hanldeLanguageMenuButton" prefHeight="19.0" prefWidth="205.0" text="Language" AnchorPane.bottomAnchor="61.0" AnchorPane.leftAnchor="187.0" AnchorPane.rightAnchor="72.0" AnchorPane.topAnchor="186.0">
-        <items>
-            <MenuItem fx:id="englishMenuItem" mnemonicParsing="false" onAction="#handleEnglishAction" onMenuValidation="#handleEnglishLanguageValidation" text="English" />
-          <MenuItem fx:id="frenchMenuItem" mnemonicParsing="false" onAction="#handleFrenchAction" onMenuValidation="#handleFrenchLanguageValidation" text="French" />
-          <MenuItem fx:id="germanMenuItem" mnemonicParsing="false" onAction="#handleGermanAction" onMenuValidation="#handleGermanLanguageValidation" text="German" />
-        </items>
          <padding>
             <Insets bottom="1.0" top="1.0" />
          </padding>

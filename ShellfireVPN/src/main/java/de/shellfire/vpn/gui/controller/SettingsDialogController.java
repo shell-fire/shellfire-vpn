@@ -17,7 +17,6 @@ import java.util.LinkedList;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -57,13 +56,6 @@ public class SettingsDialogController implements Initializable{
     private Button saveSettingsButton;
     @FXML
     private Button cancelButton;
-    
-    @FXML
-    private MenuItem englishMenuItem;
-    @FXML
-    private MenuItem frenchMenuItem;
-    @FXML
-    private MenuItem germanMenuItem;
     
     private static final I18n I18N = VpnI18N.getI18n();
     private Language currentLanguage;
@@ -147,42 +139,6 @@ public class SettingsDialogController implements Initializable{
     }
     
     @FXML
-    private void handleEnglishAction(ActionEvent event) {
-        log.debug("SettingsDialogController: handleEnglishAction");
-        languageMenuButton.setText(I18N.tr("English"));
-        currentLanguage = availableLanguages.stream().filter(e->e.getKey().toLowerCase().equals("en")).findFirst().get();
-    }
-
-    @FXML
-    private void handleEnglishLanguageValidation(Event event) {
-        log.debug("SettingsDialogController: handleEnglishLanguageValidation");
-    }
-
-    @FXML
-    private void handleFrenchAction(ActionEvent event) {
-        log.debug("SettingsDialogController: handleFrenchAction");
-        languageMenuButton.setText(I18N.tr("French"));
-        currentLanguage = availableLanguages.stream().filter(e->e.getKey().toLowerCase().equals("fr")).findFirst().get();
-    }
-
-    @FXML
-    private void handleFrenchLanguageValidation(Event event) {
-        log.debug("SettingsDialogController: handleFrenchLanguageValidation");
-    }
-
-    @FXML
-    private void handleGermanAction(ActionEvent event) {
-        log.debug("SettingsDialogController: handleFrenchLanguageValidation");
-        languageMenuButton.setText(I18N.tr("German"));
-        currentLanguage = availableLanguages.stream().filter(e->e.getKey().toLowerCase().equals("de")).findFirst().get();
-    }
-
-    @FXML
-    private void handleGermanLanguageValidation(Event event) {
-        log.debug("SettingsDialogController: handleFrenchLanguageValidation");
-    }
-    
-    @FXML
     private void handleCancelButton(ActionEvent event) {
         // get a handle to the stage
     Stage stage = (Stage) this.cancelButton.getScene().getWindow();
@@ -224,23 +180,23 @@ public class SettingsDialogController implements Initializable{
     }
       
        private void initLanguages() {
-           log.debug("SettingsDialogController: initLanguages - method called");
+        log.debug("SettingsDialogController: initLanguages - method called");
         LinkedList<Language> languages = VpnI18N.getAvailableTranslations();
         for (Language language : languages) {
             MenuItem menu = new MenuItem(language.getName());
             menu.setOnAction((event)->{
-                log.debug("SettingsDialogController: initLanguages - onAction event for " + language.getName());
+                log.debug("SettingsDialogController: initLanguages - onAction event for " + VpnI18N.getLanguage().getName());
                 this.currentLanguage = language;
                 this.languageMenuButton.setText(currentLanguage.getName());
                 log.debug("SettingsDialogController: initLanguages - setting language for " + language.getName());
             });
             this.languageMenuButton.getItems().add(menu);
         }
-
+        languageMenuButton.setText(VpnI18N.getLanguage().getName());
     } 
        
- private void save() {
-      VpnProperties props = VpnProperties.getInstance();
+    private void save() {
+        VpnProperties props = VpnProperties.getInstance();
 
         if (!this.loginAutomatically.isDisabled()) { // Not disabled means the checkbox is enabled.
           props.setBoolean(LoginController.REG_AUTOlogIN, this.loginAutomatically.isSelected());
@@ -265,7 +221,7 @@ public class SettingsDialogController implements Initializable{
         }
         
         
-        if (this.startOnBoot.isSelected()) {
+        if (this.startOnBoot.isSelected()) { 
           Client.addVpnToAutoStart();
         } else {
           Client.removeVpnFromAutoStart();
@@ -277,18 +233,16 @@ public class SettingsDialogController implements Initializable{
         if (!currentLanguage.equals(oldLanguage)) {
           VpnI18N.setLanguage(currentLanguage);  
           log.debug("SettingsDialogController: save() - language changed to " + currentLanguage.getName());
-          Alert alert = new Alert(Alert.AlertType.NONE);
+          Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                             alert.setHeaderText(I18N.tr("Changed language settings require a restart of Shellfire VPN to take effect. Restart now?"));
                             alert.setContentText(I18N.tr("Changed language settings require a restart of ShellfireVPN to take effect."));
                             alert.showAndWait();
             Optional<ButtonType> result = alert.showAndWait();
-        if ((result.isPresent()) && (result.get() == ButtonType.OK)) {
-            alert.close();
-            //TODO LoginController.restart();
+            if ((result.isPresent()) && (result.get() == ButtonType.OK)) {
+                alert.close();
+                LoginController.restart();
+            }         
         }
-                   
-        }
-        
     }
 
 }
