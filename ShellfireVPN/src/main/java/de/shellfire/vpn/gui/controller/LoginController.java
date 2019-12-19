@@ -636,24 +636,24 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
     }
 
-    public void restart() {
+    public static void restart() {
         if (Util.isWindows()) {
 
-            if (this.application != null) {
+            if (LoginForms.instance != null) {
 
-                if (this.application.shellFireMainController != null) {
+                if (LoginForms.shellFireMainController != null) {
 
-                    Controller c = this.application.shellFireMainController.getController();
+                    Controller c = LoginForms.shellFireMainController.getController();
                     if (c != null) {
                         c.disconnect(Reason.GuiRestarting);
 
                     }
-                    this.application.shellFireMainController = null;
+                    LoginForms.shellFireMainController = null;
                 }
 
                 //TODO - investigage if commenting causes memory leaks
                 //LoginForms.instance.close();
-                this.application = null;
+                LoginForms.instance = null;
 
                 List<String> restart = new ArrayList<String>();
                 restart.add("ShellfireVPN2.exe");
@@ -702,5 +702,5 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
         return instDir;
     }
-
+    
 }

@@ -1317,7 +1317,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
             dialogStage.setResizable(false);
             dialogStage.show();
         } catch (IOException ex) {
-            log.debug("ShellfireVPNMainFormFxmlController:  showSettingsDialog has error " + ex.getMessage());
+            log.debug("ShellfireVPNMainFormFxmlController:  showSettingsDialog has error " + ex);
         }
     }
 
