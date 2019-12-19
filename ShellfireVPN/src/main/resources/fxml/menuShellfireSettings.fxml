@@ -25,11 +25,6 @@
       <CheckBox fx:id="connectAutomatically" layoutX="29.0" layoutY="135.0" mnemonicParsing="false" onAction="#handleConnectAutomatically" prefHeight="18.0" prefWidth="221.0" text="Connect automatically" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="215.0" />
       <CheckBox fx:id="showStatusSite" layoutX="29.0" layoutY="160.0" mnemonicParsing="false" onAction="#handleShowStatusSite" prefHeight="18.0" prefWidth="368.0" text="Show status site after connection has been established" AnchorPane.bottomAnchor="98.0" AnchorPane.leftAnchor="28.0" AnchorPane.rightAnchor="68.0" AnchorPane.topAnchor="160.0" />
       <Label fx:id="languageLabel" layoutX="102.0" layoutY="192.0" prefHeight="17.0" prefWidth="97.0" text="Language :" />
-      <MenuButton fx:id="languageMenuButton" layoutX="187.0" layoutY="186.0" mnemonicParsing="false" onAction="#hanldeLanguageMenuButton" prefHeight="19.0" prefWidth="205.0" text="Language" AnchorPane.bottomAnchor="61.0" AnchorPane.leftAnchor="187.0" AnchorPane.rightAnchor="72.0" AnchorPane.topAnchor="186.0">
-         <padding>
-            <Insets bottom="1.0" top="1.0" />
-         </padding>
-      </MenuButton>
       <Button fx:id="saveSettingsButton" layoutX="29.0" layoutY="235.0" mnemonicParsing="false" onAction="#handleSaveSettingsButton" prefHeight="11.0" prefWidth="127.0" text="save settings" AnchorPane.bottomAnchor="22.0" AnchorPane.leftAnchor="29.0" AnchorPane.rightAnchor="308.0" AnchorPane.topAnchor="235.0">
          <padding>
             <Insets bottom="1.0" top="1.0" />
@@ -40,5 +35,6 @@
             <Insets bottom="1.0" top="1.0" />
          </padding>
       </Button>
+      <ComboBox fx:id="languageComboBox" layoutX="186.0" layoutY="189.0" onAction="#handleLanguageComboBox" prefWidth="150.0" />
    </children>
 </AnchorPane>
