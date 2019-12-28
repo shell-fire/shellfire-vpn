@@ -27,7 +27,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
@@ -57,7 +56,7 @@ public class LogViewerFxmlController implements Initializable {
     @FXML
     private Button sendLogButton;
     @FXML
-    private TextArea clientLogTextAruea;
+    private TextArea clientLogTextArea;
     @FXML
     private TextArea serviceLogTextArea;
 
@@ -93,12 +92,15 @@ public class LogViewerFxmlController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
-        LogListener clientListener = new LogListener(clientLogTextAruea);
+        LogListener clientListener = new LogListener(clientLogTextArea);
         String clientLog = Util.getLogFilePath(UserType.Client);
         log.debug("Client is " + UserType.Client);
         File clientLogFile = new File(clientLog);
         Tailer.create(clientLogFile, clientListener);
-
+        //making the textareas non-editable
+        clientLogTextArea.setEditable(false);
+        serviceLogTextArea.setEditable(false);
+        
         LogListener serviceListener = new LogListener(serviceLogTextArea);
         String serviceLog = Util.getLogFilePath(UserType.Service);
         File serviceLogFile = new File(serviceLog);
