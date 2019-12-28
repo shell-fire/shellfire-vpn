@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
@@ -11,43 +17,46 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="453.0" prefWidth="372.0" style="-fx-background-color: rgb(64,69,73);" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.LoginController">
+<AnchorPane id="AnchorPane" prefHeight="453.0" prefWidth="372.0" style="-fx-background-color: rgb(64,69,73);" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.LoginController">
     <children>
-      <AnchorPane layoutX="4.0" layoutY="69.0" prefHeight="380.0" prefWidth="365.0" style="-fx-background-color: rgb(240,240,240);">
+      <AnchorPane layoutX="4.0" layoutY="69.0" prefHeight="380.0" prefWidth="365.0" style="-fx-background-color: rgb(240,240,240);" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="4.0">
          <children>
               <Label fx:id="label" layoutX="14.0" layoutY="8.0" minHeight="16" minWidth="69" prefHeight="35.0" prefWidth="95.0" text="Login">
                <font>
                   <Font size="24.0" />
                </font>
             </Label>
-            <Label fx:id="fLabelUsername" layoutX="14.0" layoutY="65.0" text="Email / Benutzername:" />
-            <Label fx:id="fLabelPassword" layoutX="14.0" layoutY="102.0" text="Passwort:" />
-            <TextField fx:id="fUsername" layoutX="145.0" layoutY="61.0" onContextMenuRequested="#handleUsernameContextRequested" onInputMethodTextChanged="#handleUsernameChanged" prefHeight="25.0" prefWidth="200.0" AnchorPane.rightAnchor="14.0" />
-            <PasswordField fx:id="fPassword" layoutX="146.0" layoutY="98.0" onInputMethodTextChanged="#handlePasswordFieldChanged" onKeyPressed="#handlePasswordFieldKeyPressed" prefHeight="25.0" prefWidth="200.0" AnchorPane.rightAnchor="14.0" />
-            <CheckBox fx:id="fStoreLoginData" layoutX="166.0" layoutY="139.0" mnemonicParsing="false" onAction="#handlefStoreLoginData" text="Logindaten speichern" />
-            <CheckBox fx:id="fAutoLogin" layoutX="166.0" layoutY="169.0" mnemonicParsing="false" onAction="#handlefAutoLogin" text="Automatisch verbinden" />
-            <CheckBox fx:id="fAutoStart" layoutX="166.0" layoutY="203.0" mnemonicParsing="false" onAction="#handlefAutoStart" selected="true" text="Beim Hochfahren starten" />
-            <CheckBox fx:id="fAutoconnect" layoutX="166.0" layoutY="232.0" mnemonicParsing="false" onAction="#handlefAutoconnect" selected="true" text="Automatisch verbinden" AnchorPane.bottomAnchor="131.0" />
+            <Label fx:id="fLabelUsername" layoutX="5.0" layoutY="65.0" text="Email / Benutzername:" AnchorPane.leftAnchor="3.0" />
+            <Label fx:id="fLabelPassword" layoutX="14.0" layoutY="102.0" text="Passwort:" AnchorPane.leftAnchor="3.0" />
+            <TextField fx:id="fUsername" layoutX="145.0" layoutY="61.0" onContextMenuRequested="#handleUsernameContextRequested" onInputMethodTextChanged="#handleUsernameChanged" prefHeight="25.0" prefWidth="200.0" AnchorPane.rightAnchor="8.0" />
+            <PasswordField fx:id="fPassword" layoutX="146.0" layoutY="98.0" onInputMethodTextChanged="#handlePasswordFieldChanged" onKeyPressed="#handlePasswordFieldKeyPressed" prefHeight="25.0" prefWidth="200.0" AnchorPane.rightAnchor="8.0" />
+            <CheckBox fx:id="fStoreLoginData" layoutX="162.0" layoutY="139.0" mnemonicParsing="false" onAction="#handlefStoreLoginData" text="Logindaten speichern" />
+            <CheckBox fx:id="fAutoLogin" layoutX="162.0" layoutY="169.0" mnemonicParsing="false" onAction="#handlefAutoLogin" text="Automatisch verbinden" />
+            <CheckBox fx:id="fAutoStart" layoutX="162.0" layoutY="203.0" mnemonicParsing="false" onAction="#handlefAutoStart" selected="true" text="Beim Hochfahren starten" />
+            <CheckBox fx:id="fAutoconnect" layoutX="162.0" layoutY="232.0" mnemonicParsing="false" onAction="#handlefAutoconnect" selected="true" text="Automatisch verbinden" AnchorPane.bottomAnchor="131.0" />
             <Button fx:id="fButtonLogin" layoutX="180.0" layoutY="268.0" mnemonicParsing="false" onAction="#handlefButtonLogin" onMouseClicked="#handlefButtonLoginClicked" prefHeight="25.0" prefWidth="197.0" text="Login" AnchorPane.rightAnchor="14.0" />
             <Button fx:id="fButtonOpenRegistrationForm" layoutX="180.0" layoutY="305.0" mnemonicParsing="false" onAction="#handlefButtonOpenRegistrationForm" prefHeight="25.0" prefWidth="197.0" text="Keine Zugangsdaten?" AnchorPane.rightAnchor="14.0" />
               <Button fx:id="fButtonLostUserCredential" layoutX="180.0" layoutY="338.0" onAction="#handlefButtonLostUserCredential" prefHeight="25.0" prefWidth="197.0" text="Zugangsdaten verloren?" AnchorPane.rightAnchor="14.0" />
          </children>
       </AnchorPane>
-      <Pane fx:id="headerPanel" layoutX="-1.0" layoutY="-2.0" prefHeight="68.0" prefWidth="372.0" style="-fx-background-color: rgb(18,172,229);">
+      <AnchorPane fx:id="headerPanel" layoutX="-1.0" layoutY="-2.0" prefHeight="68.0" prefWidth="372.0" style="-fx-background-color: rgb(18,172,229);" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="0.0">
          <children>
             <ImageView fx:id="headerImageView" fitHeight="60.0" fitWidth="249.0" layoutX="3.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../icons/sf_en.png" />
                </image></ImageView>
-            <Pane fx:id="exitLogoPane" layoutX="329.0" layoutY="-1.0" prefHeight="41.0" prefWidth="43.0" style="-fx-background-color: white;">
+            <Pane fx:id="exitLogoPane" layoutX="329.0" layoutY="-1.0" prefHeight="41.0" prefWidth="43.0" style="-fx-background-color: white;" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
                   <ImageView fx:id="exitImageView" fitHeight="25.0" fitWidth="25.0" layoutX="10.0" layoutY="8.0" onMouseClicked="#handleEXitButtonClicked" onMouseEntered="#handleExitImageMouseEntered" onMouseExited="#handleExitImageMouseExited" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../icons/exit.png" />
                      </image></ImageView>
                </children>
+               <padding>
+                  <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+               </padding>
             </Pane>
          </children>
-      </Pane>
+      </AnchorPane>
     </children>
 </AnchorPane>

@@ -76,7 +76,7 @@ public class SettingsDialogController implements Initializable {
         this.startOnBoot.setText(I18N.tr("Start on boot"));
         this.showStatusSite.setText(I18N.tr("Show status site after connection has been established"));
         this.languageLabel.setText(I18N.tr("Language :"));
-        this.saveSettingsButton.setText(I18N.tr("save settings"));
+        this.saveSettingsButton.setText(I18N.tr("Save settings"));
         this.cancelButton.setText(I18N.tr("cancel"));
         currentLanguage = VpnI18N.getLanguage();
         initValues();

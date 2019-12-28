@@ -233,10 +233,10 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         // initializing text of the form 
         this.connectionStatusLabel.setText(i18n.tr("Connection status"));
         this.connectedSinceLabel.setText(i18n.tr("Connected since:"));
-        this.onlineIpLabel.setText(i18n.tr("Online IP"));
+        this.onlineIpLabel.setText(i18n.tr("Online IP:"));
         this.vpnIdLabel.setText(i18n.tr("VPN Id:"));
         this.validUntilLabel.setText(i18n.tr("Valid Until:"));
-
+        this.vpnType.setText(i18n.tr("VPN type:"));
         this.connectionHeaderLabel.setText(i18n.tr("Connection"));
         this.connectionFooter.setText(i18n.tr("Connect to Shellfire VPN now"));
         this.serverListHeaderLabel.setText(i18n.tr("Server list"));
@@ -656,7 +656,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
                                 setNormalCursor();
                                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                                 alert.setHeaderText(i18n.tr("Premium server selected"));
-                                alert.setContentText(i18n.tr("Dieser Server steht nur für Shellfire VPN Premium Kunden zur Verfügung\n\nWeitere Informationen zu Shellfire VPN Premium anzeigen?"));
+                                alert.setContentText(i18n.tr("This server is only available for Shellfire VPN Premium customers\n\nShow more information about Shellfire VPN Premium?"));
                                 Optional<ButtonType> result = alert.showAndWait();
 
                                 if ((result.isPresent()) && (result.get() == ButtonType.OK)) {
@@ -683,7 +683,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
                                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                                 alert.setHeaderText(i18n.tr("PremiumPlus server selected"));
-                                alert.setContentText(i18n.tr("Dieser Server steht nur für Shellfire VPN PremiumPlus Kunden zur Verfügung\n\nWeitere Informationen zu Shellfire VPN PremiumPlus anzeigen?"));
+                                alert.setContentText(i18n.tr("This server is only available for Shellfire VPN PremiumPlus customers\n\nShow more information about Shellfire VPN PremiumPlus?"));
                                 Optional<ButtonType> result = alert.showAndWait();
 
                                 if ((result.isPresent()) && (result.get() == ButtonType.OK)) {

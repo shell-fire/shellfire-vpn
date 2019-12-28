@@ -187,13 +187,13 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
         this.headerImageView.setImage(Util.getImageIconFX("/icons/sf_en.png"));
         //this.headerImageView.setImage(ShellfireVPNMainFormFxmlController.getLogo());
         this.numAccountVpnLabel.setText(
-                i18n.tr("In deinem Shellfire Account wurden mehrere VPN gefunden. \nBitte wähle den VPN aus, den du benutzen möchtest"));
+                i18n.tr("Multiple VPN are located in your Shellfire account.\nPlease select the VPN you want to use"));
         this.backLabel.setText(i18n.tr("back"));
         this.selectVpnButton.setText(i18n.tr("select VPN"));
         this.fAutoconnect.setText(i18n.tr("Save my choice"));
         this.vpnSelectLabel.setText(i18n.tr("vpn choice"));
         this.vpnTypeLabel.setText(
-                i18n.tr("Hinweis: Die VPN Typen PPTP und L2TP/IPSec müssen \n nach der Auswahl zunächst auf OpenVPN gewechselt werden,\n damit sf vpn die Verbindung herstellen kann."));
+                i18n.tr("Note: VPN types PPTP and L2TP/IPSec\nhave to be switched to OpenVPN before\nyou can connect using sf vpn."));
     }
 
     private void rememberSelectionIfDesired(Vpn selectedVpn) {

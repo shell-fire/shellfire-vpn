@@ -40,7 +40,7 @@
             <Font size="24.0" />
          </font>
       </Label>
-      <Label fx:id="connectionTypeLabel" layoutX="3.0" layoutY="419.0" prefHeight="31.0" prefWidth="160.0" text="Connection type  " textFill="#404549" AnchorPane.bottomAnchor="91.0">
+      <Label fx:id="connectionTypeLabel" layoutX="3.0" layoutY="419.0" prefHeight="31.0" prefWidth="262.0" text="Connection type  " textFill="#404549" AnchorPane.bottomAnchor="91.0">
          <font>
             <Font name="System Bold" size="18.0" />
          </font>
