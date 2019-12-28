@@ -49,6 +49,7 @@ public class TvStreasSubviewController implements Initializable {
     @FXML
     private Label streamRequireUsIdLabel;
     private static final I18n I18N = VpnI18N.getI18n();
+    private static final I18n i18n = VpnI18N.getI18n();
     private static final Logger log = Util.getLogger(TvStreasSubviewController.class.getCanonicalName());
     private ResourceMap resourceMap ;
     /**
@@ -56,7 +57,10 @@ public class TvStreasSubviewController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+        this.streamSelectLabel.setText("     " + i18n.tr("List of US TV streams (english language)"));
+        this.streamRequireUsIdLabel.setText(i18n.tr("Using these streams usually requires a US IP address.You can get one by connecting to a Shellfire VPN server located in the USA"));
+        this.streamRequireUsIdLabel.setWrapText(true);
+        //this.streamsRequiredUsIdView.getEngine().loadContent(i18n.tr("<html style=\"-fx-background-color:grey;\"> Using these streams usually requires a US IP address.<br>You can get one by connecting to a Shellfire VPN server located in the USA.</html>"));
     }    
     
     @FXML
