@@ -123,7 +123,6 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
 
             this.shellfireService.selectVpn(selectedItem.getVpn());
             this.loadMainForm();
-            //afterLogin is called in loadMainForm method
         }
 
     }
@@ -165,12 +164,10 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
         // TODO Auto-generated method stub
-        // firstNameColumn.setCellValueFactory(cellData -> cellData.getValue().firstNameProperty());
         idTbleColumn.setCellValueFactory(cellData -> cellData.getValue().idProperty().asObject());
         typeTbleColumn.setCellValueFactory(cellData -> cellData.getValue().typeProperty());
         accArtTbleColumn.setCellValueFactory(cellData -> cellData.getValue().accountArtProperty());
 
-        //this.shellfireService = WebService.getInstance();
         initComponents();
 
         // Listen for selection changes and store the selected VPN.
@@ -178,22 +175,22 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
                 -> {
             rememberSelectionIfDesired(newValue.getVpn());
             this.shellfireService.selectVpn(newValue.getVpn());
-            //this.loadMainForm();
         });
 
     }
 
     public void initComponents() {
         this.headerImageView.setImage(Util.getImageIconFX("/icons/sf_en.png"));
-        //this.headerImageView.setImage(ShellfireVPNMainFormFxmlController.getLogo());
         this.numAccountVpnLabel.setText(
-                i18n.tr("Multiple VPN are located in your Shellfire account.\nPlease select the VPN you want to use"));
+                i18n.tr("Multiple VPN are located in your Shellfire account. Please select the VPN you want to use"));
+        this.numAccountVpnLabel.setWrapText(true);
         this.backLabel.setText(i18n.tr("back"));
         this.selectVpnButton.setText(i18n.tr("select VPN"));
         this.fAutoconnect.setText(i18n.tr("Save my choice"));
         this.vpnSelectLabel.setText(i18n.tr("vpn choice"));
         this.vpnTypeLabel.setText(
-                i18n.tr("Note: VPN types PPTP and L2TP/IPSec\nhave to be switched to OpenVPN before\nyou can connect using sf vpn."));
+                i18n.tr("Note: VPN types PPTP and L2TP/IPSec have to be switched to OpenVPN before you can connect using sf vpn."));
+        this.vpnTypeLabel.setWrapText(true);
     }
 
     private void rememberSelectionIfDesired(Vpn selectedVpn) {
