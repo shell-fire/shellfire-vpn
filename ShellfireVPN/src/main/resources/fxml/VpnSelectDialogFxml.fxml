@@ -30,7 +30,7 @@
                      </font>
                   </Label>
                   <CheckBox fx:id="fAutoconnect" layoutX="2.0" layoutY="315.0" mnemonicParsing="false" onAction="#handlefAutoconnect" selected="true" text="Auswahl merken" AnchorPane.bottomAnchor="103.0" />
-                  <Label fx:id="vpnTypeLabel" layoutX="2.0" layoutY="471.0" prefHeight="51.0" prefWidth="342.0" text="Note: VPN types PPTP and L2TP/IPSec&#10;have to be switched to OpenVPN before&#10;you can connect using sf vpn." AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="2.0" />
+                  <Label fx:id="vpnTypeLabel" layoutX="7.0" layoutY="523.0" prefHeight="51.0" prefWidth="342.0" text="Note: VPN types PPTP and L2TP/IPSec&#10;have to be switched to OpenVPN before&#10;you can connect using sf vpn." AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="7.0" />
                   <ScrollPane fx:id="vpnScrollPane" layoutX="9.0" layoutY="78.0" prefHeight="376.0" prefWidth="479.0">
                      <content>
                         <TableView fx:id="vpnListTable" prefHeight="373.0" prefWidth="476.0">
@@ -42,7 +42,7 @@
                         </TableView>
                      </content>
                   </ScrollPane>
-                  <Label fx:id="numAccountVpnLabel" layoutX="9.0" layoutY="35.0" prefHeight="34.0" prefWidth="349.0" text="Multiple VPN are located in your Shellfire account&#10;Please select the VPN you want to use" />
+                  <Label fx:id="numAccountVpnLabel" layoutX="9.0" layoutY="35.0" prefHeight="34.0" prefWidth="342.0" text="Multiple VPN are located in your Shellfire account&#10;Please select the VPN you want to use" />
                </children>
             </AnchorPane>
             <Pane fx:id="headerPanel" prefHeight="68.0" prefWidth="507.0" style="-fx-background-color: rgb(18,172,229);">
