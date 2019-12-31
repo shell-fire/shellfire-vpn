@@ -59,7 +59,7 @@ public class SettingsDialogController implements Initializable {
     @FXML
     private ComboBox<Language> languageComboBox;
 
-    private static final I18n I18N = VpnI18N.getI18n();
+    private static final I18n i18n = VpnI18N.getI18n();
     private Language currentLanguage;
     static LinkedList<Language> availableLanguages = VpnI18N.getAvailableTranslations();
 
@@ -70,14 +70,15 @@ public class SettingsDialogController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.saveLoginData.setText(I18N.tr("Save login data"));
-        this.loginAutomatically.setText(I18N.tr("Login automatically"));
-        this.saveVpnChoice.setText(I18N.tr("Save VPN choice"));
-        this.startOnBoot.setText(I18N.tr("Start on boot"));
-        this.showStatusSite.setText(I18N.tr("Show status site after connection has been established"));
-        this.languageLabel.setText(I18N.tr("Language :"));
-        this.saveSettingsButton.setText(I18N.tr("Save settings"));
-        this.cancelButton.setText(I18N.tr("cancel"));
+        this.saveLoginData.setText(i18n.tr("Save login data"));
+        this.loginAutomatically.setText(i18n.tr("Login automatically"));
+        this.saveVpnChoice.setText(i18n.tr("Save VPN choice"));
+        this.startOnBoot.setText(i18n.tr("Start on boot"));
+        this.showStatusSite.setText(i18n.tr("Show status site after connection has been established"));
+        this.languageLabel.setText(i18n.tr("Language") + ":");
+        this.saveSettingsButton.setText(i18n.tr("Save settings"));
+        this.cancelButton.setText(i18n.tr("cancel"));
+        this.connectAutomatically.setText(i18n.tr("Connect  automatically"));
         currentLanguage = VpnI18N.getLanguage();
         initValues();
     }
@@ -237,8 +238,8 @@ public class SettingsDialogController implements Initializable {
             VpnI18N.setLanguage(currentLanguage);
             log.debug("SettingsDialogController: save() - language changed to " + currentLanguage.getName());
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setHeaderText(I18N.tr("Changed language settings require a restart of Shellfire VPN to take effect. Restart now?"));
-            alert.setContentText(I18N.tr("Changed language settings require a restart of ShellfireVPN to take effect."));
+            alert.setHeaderText(i18n.tr("Changed language settings require a restart of Shellfire VPN to take effect. Restart now?"));
+            alert.setContentText(i18n.tr("Changed language settings require a restart of ShellfireVPN to take effect."));
             alert.showAndWait();
             Optional<ButtonType> result = alert.showAndWait();
             if ((result.isPresent()) && (result.get() == ButtonType.OK)) {
