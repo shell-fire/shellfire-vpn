@@ -349,7 +349,7 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
         jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Shellfire VPN 2 Login"); // NOI18N
+        setTitle("Shellfire VPN"); // NOI18N
         setResizable(false);
 
         jPanel7.setBackground(new java.awt.Color(64, 69, 73));
