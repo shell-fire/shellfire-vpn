@@ -133,7 +133,7 @@ public class LoginForms extends Application {
         try {
             this.instance = (LoginController) replaceSceneContent("login.fxml");
             this.instance.setApp(this);
-            this.stage.setTitle("Shellfire VPN 2 Login");
+            this.stage.setTitle("Shellfire VPN");
             log.debug("LoginForms: Login controller loaded");
 
         } catch (Exception ex) {
