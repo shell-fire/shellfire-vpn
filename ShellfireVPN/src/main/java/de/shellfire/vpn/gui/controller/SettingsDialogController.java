@@ -17,6 +17,7 @@ import java.util.LinkedList;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -27,6 +28,8 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.input.ContextMenuEvent;
+import javafx.scene.input.DragEvent;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.slf4j.Logger;
@@ -59,10 +62,8 @@ public class SettingsDialogController implements Initializable {
     @FXML
     private ComboBox<Language> languageComboBox;
 
-    private static final I18n i18n = VpnI18N.getI18n();
+    private static I18n i18n = VpnI18N.getI18n();
     private Language currentLanguage;
-    static LinkedList<Language> availableLanguages = VpnI18N.getAvailableTranslations();
-
     private static final Logger log = Util.getLogger(SettingsDialogController.class.getCanonicalName());
 
     public SettingsDialogController() {
@@ -79,6 +80,7 @@ public class SettingsDialogController implements Initializable {
         this.saveSettingsButton.setText(i18n.tr("Save settings"));
         this.cancelButton.setText(i18n.tr("cancel"));
         this.connectAutomatically.setText(i18n.tr("Connect  automatically"));
+        this.languageComboBox.setEditable(false);
         currentLanguage = VpnI18N.getLanguage();
         initValues();
     }
@@ -188,10 +190,11 @@ public class SettingsDialogController implements Initializable {
                                     boolean empty) {
                                 super.updateItem(item, empty);
                                 if (item != null) {
-                                    setText(item.getName());
-                                    languageComboBox.setValue(item);
+                                    setText(i18n.tr(item.getName()));
+                                    currentLanguage = item;
                                 } else {
-                                    setText(null);
+                                    //setText(null);
+                                    log.debug("Item is null here");
                                 }
                             }
                         };
@@ -250,6 +253,11 @@ public class SettingsDialogController implements Initializable {
     }
 
     @FXML
-    private void handleLanguageComboBox(ActionEvent event) {
+    private void handleLanguageComboBox(ActionEvent event) { 
+    }
+    
+    @FXML
+    private void handleLanguageShown(Event event) {
+        this.languageComboBox.getSelectionModel().select(VpnI18N.getLanguage());
     }
 }
