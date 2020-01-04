@@ -28,8 +28,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.scene.input.ContextMenuEvent;
-import javafx.scene.input.DragEvent;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import org.slf4j.Logger;
@@ -241,9 +239,8 @@ public class SettingsDialogController implements Initializable {
             VpnI18N.setLanguage(currentLanguage);
             log.debug("SettingsDialogController: save() - language changed to " + currentLanguage.getName());
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setHeaderText(i18n.tr("Changed language settings require a restart of Shellfire VPN to take effect. Restart now?"));
-            alert.setContentText(i18n.tr("Changed language settings require a restart of ShellfireVPN to take effect."));
-            alert.showAndWait();
+            alert.setHeaderText(i18n.tr("Changed language settings require a restart of Shellfire VPN to take effect."));
+            alert.setContentText(i18n.tr("Changed language settings require a restart of ShellfireVPN to take effect. Restart now?"));
             Optional<ButtonType> result = alert.showAndWait();
             if ((result.isPresent()) && (result.get() == ButtonType.OK)) {
                 alert.close();
