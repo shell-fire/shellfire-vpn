@@ -9,6 +9,8 @@ import org.xnap.commons.i18n.I18nManager;
 
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.VpnProperties;
+import java.util.HashMap;
+import java.util.Map;
 
 public class VpnI18N {
     private static Logger log = Util.getLogger(VpnI18N.class.getCanonicalName());
@@ -16,10 +18,15 @@ public class VpnI18N {
     private static final String SELECTED_LANGUAGE = "InterfaceLanguage";
     private static final String DEFAULT_LANGUAGE = "en";
     private static Language language = null;
-
+    private static Map<String,String> languageMap = new HashMap<String, String>();
     private static LinkedList<Language> availableTranslations;
     private static I18n i18n;
 
+    static {
+        languageMap.put("en", "English");
+        languageMap.put("fr", "French");
+        languageMap.put("de", "German");
+    }
     public static Language getLanguage() {
         if (VpnI18N.language == null) {
             VpnProperties props = VpnProperties.getInstance();
@@ -105,7 +112,7 @@ public class VpnI18N {
             Locale[] l = Locale.getAvailableLocales();
             for (int i = 0; i < l.length; i++) {
                 Locale cur = l[i];
-                Language curLanguage = new Language(cur.getLanguage(), cur.getDisplayLanguage(Locale.GERMAN));
+                Language curLanguage = new Language(cur.getLanguage(), cur.getDisplayLanguage(Locale.getDefault()));
                 try {
                     String className = MESSAGE_BASE + cur.getLanguage();
                     Class.forName(className);
@@ -129,4 +136,10 @@ public class VpnI18N {
         return CountryI18n.getInstance(getLanguage());
     }
 
+    public static String getLanguageFromKey(String key){
+        if(languageMap.containsKey(key))
+            return languageMap.get(key);
+        //The default language is English
+        return "English";
+    }    
 }
