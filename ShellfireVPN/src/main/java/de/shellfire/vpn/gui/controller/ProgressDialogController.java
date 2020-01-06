@@ -84,6 +84,7 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
         rightButton.setDisable(true);
         leftButton.setDisable(true);
         bottomLabel.setDisable(true);
+        this.headerImageView1.setImage(ShellfireVPNMainFormFxmlController.getLogo());
     }
 
     public Button getLeftButton() {

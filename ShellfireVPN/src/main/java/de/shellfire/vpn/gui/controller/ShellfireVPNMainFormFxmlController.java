@@ -225,7 +225,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         this.serverListBackgroundImage.setImage(Util.getImageIconFX("/buttons/button-serverlist-idle.png"));
         this.streamsBackgroundImageView.setImage(Util.getImageIconFX("/buttons/button-usa-idle.png"));
         this.globeConnectionImageView.setImage(Util.getImageIconFX("/icons/small-globe-disconnected.png"));
-
+        this.shellfireImageView.setImage(getLogo());
         this.iconEcncryptionActive = Util.getImageIconFX("/icons/status-encrypted-width" + size + ".gif");
         this.iconEcncryptionInactive = Util.getImageIconFX("/icons/status-unencrypted-width" + size + ".gif");
         this.buttonConnect = Util.getImageIconFX("/buttons/button-connect-" + langKey + ".gif");
@@ -356,8 +356,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
     public static Image getLogo() {
         Image imagelogo = ShellfireVPNMainFormFxmlController.mainIconMap.get(VpnI18N.getLanguage().getKey());
-        System.out.println("The image key is found at " + VpnI18N.getLanguage().getKey());
-
         return imagelogo;
     }
 
