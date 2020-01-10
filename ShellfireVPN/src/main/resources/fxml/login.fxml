@@ -21,15 +21,15 @@
     <children>
       <AnchorPane layoutX="4.0" layoutY="69.0" prefHeight="380.0" prefWidth="365.0" style="-fx-background-color: rgb(240,240,240);" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="4.0">
          <children>
-              <Label fx:id="label" layoutX="14.0" layoutY="8.0" minHeight="16" minWidth="69" prefHeight="35.0" prefWidth="95.0" text="Login">
+              <Label fx:id="loginLabel" layoutX="14.0" layoutY="8.0" minHeight="16" minWidth="69" prefHeight="35.0" prefWidth="229.0" text="Login">
                <font>
                   <Font size="24.0" />
                </font>
             </Label>
             <Label fx:id="fLabelUsername" layoutX="5.0" layoutY="65.0" text="Email / Benutzername:" AnchorPane.leftAnchor="3.0" />
             <Label fx:id="fLabelPassword" layoutX="14.0" layoutY="102.0" text="Passwort:" AnchorPane.leftAnchor="3.0" />
-            <TextField fx:id="fUsername" layoutX="145.0" layoutY="61.0" onContextMenuRequested="#handleUsernameContextRequested" onInputMethodTextChanged="#handleUsernameChanged" prefHeight="25.0" prefWidth="200.0" AnchorPane.rightAnchor="8.0" />
-            <PasswordField fx:id="fPassword" layoutX="146.0" layoutY="98.0" onInputMethodTextChanged="#handlePasswordFieldChanged" onKeyPressed="#handlePasswordFieldKeyPressed" prefHeight="25.0" prefWidth="200.0" AnchorPane.rightAnchor="8.0" />
+            <TextField fx:id="fUsername" layoutX="145.0" layoutY="61.0" onContextMenuRequested="#handleUsernameContextRequested" onInputMethodTextChanged="#handleUsernameChanged" prefHeight="25.0" prefWidth="200.0" AnchorPane.rightAnchor="2.0" />
+            <PasswordField fx:id="fPassword" layoutX="146.0" layoutY="98.0" onInputMethodTextChanged="#handlePasswordFieldChanged" onKeyPressed="#handlePasswordFieldKeyPressed" prefHeight="25.0" prefWidth="200.0" AnchorPane.rightAnchor="2.0" />
             <CheckBox fx:id="fStoreLoginData" layoutX="162.0" layoutY="139.0" mnemonicParsing="false" onAction="#handlefStoreLoginData" text="Logindaten speichern" />
             <CheckBox fx:id="fAutoLogin" layoutX="162.0" layoutY="169.0" mnemonicParsing="false" onAction="#handlefAutoLogin" text="Automatisch verbinden" />
             <CheckBox fx:id="fAutoStart" layoutX="162.0" layoutY="203.0" mnemonicParsing="false" onAction="#handlefAutoStart" selected="true" text="Beim Hochfahren starten" />

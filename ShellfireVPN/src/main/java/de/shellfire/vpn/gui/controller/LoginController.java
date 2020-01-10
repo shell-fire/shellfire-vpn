@@ -1,4 +1,4 @@
-    package de.shellfire.vpn.gui.controller;
+package de.shellfire.vpn.gui.controller;
 import de.shellfire.vpn.Storage;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -65,8 +65,6 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
     @FXML
     private Button fButtonLostUserCredential;
     @FXML
-    private Label label;
-    @FXML
     private Label fLabelUsername;
     @FXML
     private Label fLabelPassword;
@@ -92,7 +90,9 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
     private Pane exitLogoPane;
     @FXML
     private ImageView exitImageView;
-
+    @FXML
+    private Label loginLabel;
+    
     private static final long serialVersionUID = 1L;
     public static final String REG_PASS = "pass";
     public static final String REG_USER = "user";
@@ -111,7 +111,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
     private static boolean passwordBogus;
     public static ProgressDialogController initProgressDialog;
     public static ShellfireVPNMainFormFxmlController mainForm;
-
+    
     public LoginController() {
     }
 
@@ -300,7 +300,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
         this.fButtonLostUserCredential.setText(i18n.tr("User credentials lost?"));
 
         this.fButtonLogin.setText(i18n.tr("Login"));
-
+        this.loginLabel.setText(i18n.tr("Login"));
         this.fAutoStart.setText(i18n.tr("Start on boot"));
 
         this.fAutoconnect.setText(i18n.tr("Connect  automatically"));
