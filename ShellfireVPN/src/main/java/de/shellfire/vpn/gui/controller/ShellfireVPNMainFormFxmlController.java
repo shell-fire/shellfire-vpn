@@ -233,17 +233,21 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         // initializing text of the form 
         this.connectionStatusLabel.setText(i18n.tr("Connection status"));
         this.connectedSinceLabel.setText(i18n.tr("Connected since:"));
+        this.connectedSinceValue.setText(i18n.tr("(not connected)"));
         this.onlineIpLabel.setText(i18n.tr("Online IP:"));
         this.vpnIdLabel.setText(i18n.tr("VPN Id:"));
         this.validUntilLabel.setText(i18n.tr("Valid Until:"));
         this.vpnType.setText(i18n.tr("VPN type:"));
         this.connectionHeaderLabel.setText(i18n.tr("Connection"));
         this.connectionFooter.setText(i18n.tr("Connect to Shellfire VPN now"));
+        this.connectionFooter.setWrapText(true);
         this.serverListHeaderLabel.setText(i18n.tr("Server list"));
         this.connectionStatusValue.setText(i18n.tr("Not connected"));
         this.serverListFooterLabel.setText(i18n.tr("Show list of all VPN servers"));
+        this.serverListFooterLabel.setWrapText(true);
         this.streamsHeaderLabel.setText(i18n.tr("USA streams"));
         this.streamsFooterLabel.setText(i18n.tr("List of american TV streams"));
+        this.streamsFooterLabel.setWrapText(true);
         this.connectoinBackgroundImageView.setImage(Util.getImageIconFX("/buttons/button-connect-active.png"));
         currentSidePane = SidePane.CONNECTION;
             
