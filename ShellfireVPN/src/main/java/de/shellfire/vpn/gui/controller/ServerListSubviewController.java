@@ -20,6 +20,7 @@ import de.shellfire.vpn.webservice.Vpn;
 import de.shellfire.vpn.webservice.WebService;
 import de.shellfire.vpn.webservice.model.VpnStar;
 import java.net.URL;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.Random;
@@ -27,6 +28,7 @@ import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -187,7 +189,8 @@ public class ServerListSubviewController implements Initializable {
     public void initComponents() {
         this.serverList = this.shellfireService.getServerList();
         this.serverListData.addAll(initServerTable(this.shellfireService.getServerList().getAll()));
-        this.serverListTableView.setItems(serverListData);
+        //this.serverListTableView.setItems(serverListData);
+        //this.serverListTableView.comp
         selectCurrentVpn();
     }
       
@@ -207,7 +210,7 @@ public class ServerListSubviewController implements Initializable {
         securityColumn.setCellValueFactory(cellData -> cellData.getValue().securityProperty());
         speedColumn.setCellValueFactory(cellData -> cellData.getValue().speedProperty());
         countryColumn.setCellValueFactory(cellData -> cellData.getValue().countryProperty());
-        
+        countryColumn.setComparator(new ServerListComparator());
         countryColumn.setCellFactory(column -> {
             //Set up the Table
             return new TableCell<ServerListFXModel, Server>() {
@@ -235,7 +238,14 @@ public class ServerListSubviewController implements Initializable {
         securityColumn.setCellFactory(column -> {
             return new StarImageRendererFX() ;
         });
-               
+        
+        // Wrap the FilteredList in a SortedList. 
+        SortedList<ServerListFXModel> sortedData = new SortedList<>(serverListData);
+        // Bind the SortedList comparator to the TableView comparator.
+        sortedData.comparatorProperty().bind(serverListTableView.comparatorProperty());
+        // Add sorted (and filtered) data to the table.
+        serverListTableView.setItems(sortedData);
+        
         this.connectImage2.managedProperty().bind(this.connectImage2.visibleProperty());
         this.connectImage1.managedProperty().bind(this.connectImage1.visibleProperty());
         this.keyBuyImgeButton.managedProperty().bind(this.keyBuyImgeButton.visibleProperty());
@@ -390,4 +400,12 @@ public class ServerListSubviewController implements Initializable {
     private void connectButton1OnAction(ActionEvent event) {
         connectButton1Clicked(null);
     }
+
+    class ServerListComparator implements Comparator<Server>{
+        @Override
+        public int compare(Server o1, Server o2) {
+            return o1.getCountry().name()
+                    .compareTo(o2.getCountry().name());
+        }
+    }    
 }
