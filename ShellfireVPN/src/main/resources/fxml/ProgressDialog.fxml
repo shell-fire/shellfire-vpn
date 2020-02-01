@@ -7,9 +7,9 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="193.0" prefWidth="269.0" style="-fx-background-color: rgb(64,69,73);" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.ProgressDialogController">
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefWidth="271.0" style="-fx-background-color: rgb(64,69,73);" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.ProgressDialogController">
    <children>
-      <Pane fx:id="headerPanel1" prefHeight="68.0" prefWidth="267.0" style="-fx-background-color: rgb(18,172,229);" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <Pane fx:id="headerPanel1" style="-fx-background-color: rgb(18,172,229);" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
             <ImageView fx:id="headerImageView1" fitHeight="60.0" fitWidth="250.0" layoutX="2.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -18,14 +18,16 @@
             </ImageView>
          </children>
       </Pane>
-      <AnchorPane layoutX="1.0" layoutY="70.0" prefHeight="120.0" prefWidth="265.0" style="-fx-background-color: rgb(240,240,240);" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="70.0">
+      <VBox fillWidth="false" layoutX="2.0" layoutY="60.0" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="62.0">
          <children>
-            <Label fx:id="dynamicLabel" layoutX="11.0" layoutY="14.0" text="&lt;dynamic&gt;" AnchorPane.leftAnchor="11.0" />
-            <Button fx:id="rightButton" layoutX="155.0" layoutY="89.0" minHeight="0.0" minWidth="0.0" mnemonicParsing="false" onAction="#handleLeftButton" prefHeight="25.0" prefWidth="99.0" text="Cancel" textAlignment="RIGHT" visible="false" AnchorPane.bottomAnchor="6.0" AnchorPane.rightAnchor="12.0" />
-            <Button fx:id="leftButton" layoutX="4.0" layoutY="88.0" minHeight="0.0" minWidth="0.0" mnemonicParsing="false" onAction="#handleRightButton" prefHeight="25.0" prefWidth="99.0" text="Button" visible="false" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="10.0" />
-            <ProgressBar fx:id="progressBar" layoutY="49.0" prefHeight="18.0" prefWidth="266.0" progress="0.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="12.0" />
-            <Label fx:id="bottomLabel" layoutX="7.0" layoutY="90.0" minHeight="0.0" minWidth="0.0" text="bottomLabel" visible="false" AnchorPane.leftAnchor="7.0" />
+            <AnchorPane layoutX="1.0" layoutY="70.0" prefWidth="267.0" style="-fx-background-color: rgb(240,240,240);" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0">
+               <children>
+                  <Label fx:id="dynamicLabel" layoutX="11.0" layoutY="7.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="&lt;dynamic&gt;" AnchorPane.leftAnchor="11.0" />
+                  <ProgressBar fx:id="progressBar" layoutX="8.0" layoutY="33.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" progress="0.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" />
+                  <VBox fx:id="contentPane" layoutX="159.0" layoutY="64.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="2.0" prefWidth="100.0" AnchorPane.rightAnchor="12.0" />
+               </children>
+            </AnchorPane>
          </children>
-      </AnchorPane>
+      </VBox>
    </children>
 </AnchorPane>
