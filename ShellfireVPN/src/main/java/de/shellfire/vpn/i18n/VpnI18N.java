@@ -32,6 +32,7 @@ public class VpnI18N {
             VpnProperties props = VpnProperties.getInstance();
             log.debug("Language is null so we are working");
             String languageString = props.getProperty(SELECTED_LANGUAGE, System.getProperty("user.language"));
+            log.debug("\n\n\nThe current language is set to #{} \"\\n\\n\\n",System.getProperty("user.language"));
             Language language = new Language(languageString);
             Locale locale = language.getLocale();
             Locale.setDefault(locale);
@@ -135,11 +136,5 @@ public class VpnI18N {
     public static CountryI18n getCountryI18n() {
         return CountryI18n.getInstance(getLanguage());
     }
-
-    public static String getLanguageFromKey(String key){
-        if(languageMap.containsKey(key))
-            return languageMap.get(key);
-        //The default language is English
-        return "English";
-    }    
+    
 }

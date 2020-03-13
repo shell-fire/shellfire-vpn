@@ -48,10 +48,7 @@ public class TvStreasSubviewController implements Initializable {
     private Label streamSelectLabel;
     @FXML
     private Label streamRequireUsIdLabel;
-    private static final I18n I18N = VpnI18N.getI18n();
     private static final I18n i18n = VpnI18N.getI18n();
-    private static final Logger log = Util.getLogger(TvStreasSubviewController.class.getCanonicalName());
-    private ResourceMap resourceMap ;
     /**
      * Initializes the controller class.
      */
@@ -104,9 +101,7 @@ public class TvStreasSubviewController implements Initializable {
     }
     
     private void openUsTvStream(ActionEvent evt, Button btn) {
-		
 		String address = "http://" + btn.getText();
-
 		Util.openUrl(address);
-	}
+    }
 }

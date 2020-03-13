@@ -32,7 +32,6 @@ import org.slf4j.Logger;
 
 public class ProgressDialogController extends AnchorPane implements Initializable {
 
-    private boolean option1;
     private boolean option2;
     private Task optionCallback;
     private static I18n i18n = VpnI18N.getI18n();
@@ -124,12 +123,6 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
         if (b == true) {
             progressBar.setProgress(ProgressBar.INDETERMINATE_PROGRESS);
         }
-    }
-  
-    private void handleRightButton(ActionEvent event) {
-        this.option2 = true;
-        rightButton.setVisible(false);
-        this.optionCallback.cancel(true);
     }
 
     /**
