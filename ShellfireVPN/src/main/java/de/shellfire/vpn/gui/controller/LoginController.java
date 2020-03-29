@@ -1,4 +1,5 @@
 package de.shellfire.vpn.gui.controller;
+
 import de.shellfire.vpn.Storage;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -302,7 +303,8 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
         this.fButtonLogin.setText(i18n.tr("Login"));
         this.loginLabel.setText(i18n.tr("Login"));
         this.fAutoStart.setText(i18n.tr("Start on boot"));
-
+        this.fLabelUsername.setFont(new Font("Arial",Util.getFontSize()));
+        this.fLabelPassword.setFont(new Font("Arial",Util.getFontSize()));
         this.fAutoconnect.setText(i18n.tr("Connect  automatically"));
 
         this.fStoreLoginData.setText(i18n.tr("Save login data"));
