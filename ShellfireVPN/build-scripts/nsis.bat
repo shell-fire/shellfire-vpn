@@ -1,1 +1,0 @@
-"c:\Program Files (x86)\NSIS\makensis.exe" /DVERSION=2.3 nsis/sfvpn2.nsi 
