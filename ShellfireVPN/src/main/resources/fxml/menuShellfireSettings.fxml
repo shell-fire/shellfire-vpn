@@ -12,7 +12,7 @@
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="248.0" prefWidth="336.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.SettingsDialogController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="353.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.SettingsDialogController">
    <children>
       <CheckBox fx:id="saveLoginData" layoutX="8.0" layoutY="13.0" mnemonicParsing="false" onAction="#handleSaveLoginData" prefHeight="20.0" prefWidth="303.0" text="Save login data" AnchorPane.leftAnchor="8.0">
          <padding>
@@ -23,18 +23,18 @@
       <CheckBox fx:id="saveVpnChoice" layoutX="8.0" layoutY="66.0" mnemonicParsing="false" onAction="#handleSaveVpnChoice" prefHeight="18.0" prefWidth="282.0" text="Save VPN choice" AnchorPane.leftAnchor="8.0" />
       <CheckBox fx:id="startOnBoot" layoutX="8.0" layoutY="92.0" mnemonicParsing="false" onAction="#handleStartOnBoot" prefHeight="18.0" prefWidth="290.0" text="Start on boot" AnchorPane.leftAnchor="8.0" />
       <CheckBox fx:id="connectAutomatically" layoutX="8.0" layoutY="117.0" mnemonicParsing="false" onAction="#handleConnectAutomatically" prefHeight="18.0" prefWidth="282.0" text="Connect automatically" AnchorPane.leftAnchor="8.0" />
-      <CheckBox fx:id="showStatusSite" layoutX="8.0" layoutY="142.0" mnemonicParsing="false" onAction="#handleShowStatusSite" prefHeight="18.0" prefWidth="325.0" text="Show status site after connection has been established" AnchorPane.leftAnchor="8.0" />
-      <Label fx:id="languageLabel" alignment="TOP_RIGHT" contentDisplay="CENTER" layoutX="110.0" layoutY="174.0" prefHeight="17.0" prefWidth="68.0" text="Language :" textAlignment="RIGHT" />
-      <Button fx:id="saveSettingsButton" layoutX="4.0" layoutY="213.0" mnemonicParsing="false" onAction="#handleSaveSettingsButton" prefHeight="23.0" prefWidth="169.0" text="save settings" textAlignment="CENTER" AnchorPane.bottomAnchor="12.0" AnchorPane.leftAnchor="4.0">
+      <CheckBox fx:id="showStatusSite" layoutX="8.0" layoutY="142.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleShowStatusSite" prefHeight="21.0" prefWidth="407.0" text="Show status site after connection has been established" AnchorPane.leftAnchor="8.0" />
+      <Label fx:id="languageLabel" alignment="TOP_RIGHT" contentDisplay="CENTER" layoutX="108.0" layoutY="179.0" prefHeight="21.0" prefWidth="76.0" text="Language :" textAlignment="RIGHT" />
+      <Button fx:id="saveSettingsButton" layoutX="12.0" layoutY="215.0" mnemonicParsing="false" onAction="#handleSaveSettingsButton" prefHeight="23.0" prefWidth="169.0" text="save settings" textAlignment="CENTER" AnchorPane.bottomAnchor="12.0" AnchorPane.leftAnchor="12.0">
          <padding>
             <Insets bottom="1.0" left="2.0" right="2.0" top="1.0" />
          </padding>
       </Button>
-      <Button fx:id="cancelButton" layoutX="183.0" layoutY="213.0" mnemonicParsing="false" onAction="#handleCancelButton" prefHeight="23.0" prefWidth="150.0" text="cancel" AnchorPane.bottomAnchor="12.0" AnchorPane.rightAnchor="3.0">
+      <Button fx:id="cancelButton" layoutX="261.0" layoutY="215.0" mnemonicParsing="false" onAction="#handleCancelButton" prefHeight="23.0" prefWidth="150.0" text="cancel" AnchorPane.bottomAnchor="12.0" AnchorPane.rightAnchor="13.0">
          <padding>
             <Insets bottom="1.0" top="1.0" />
          </padding>
       </Button>
-      <ComboBox fx:id="languageComboBox" layoutX="180.0" layoutY="171.0" minHeight="23.0" onAction="#handleLanguageComboBox" onShown="#handleLanguageShown" prefHeight="23.0" prefWidth="150.0" AnchorPane.rightAnchor="3.0" />
+      <ComboBox fx:id="languageComboBox" layoutX="261.0" layoutY="178.0" minHeight="23.0" onAction="#handleLanguageComboBox" onShown="#handleLanguageShown" prefHeight="23.0" prefWidth="150.0" AnchorPane.rightAnchor="13.0" />
    </children>
 </AnchorPane>
