@@ -31,9 +31,8 @@ import java.util.Properties;
 import java.util.Set;
 
 import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
-import javax.swing.UIManager;
 
+import de.shellfire.vpn.gui.controller.ShellfireVPNMainFormFxmlController;
 import org.apache.commons.codec.binary.Base64;
 import org.slf4j.LoggerFactory;
 import org.xnap.commons.i18n.I18n;
@@ -44,9 +43,7 @@ import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.FileAppender;
-import de.shellfire.vpn.gui.LoginForm;
 import de.shellfire.vpn.gui.LoginForms;
-import de.shellfire.vpn.gui.ShellfireVPNMainForm;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.messaging.UserType;
 import de.shellfire.vpn.service.IVpnRegistry;
@@ -55,8 +52,6 @@ import de.shellfire.vpn.service.win.WinRegistry;
 import java.io.InputStream;
 import javafx.scene.control.Alert;
 import javafx.scene.image.ImageView;
-
- 
 
 public class Util {
   private static final String SHELLFIRE_VPN = "shellfire-vpn" + File.separator;
@@ -694,27 +689,6 @@ public class Util {
     return jvmDll;
   }
 
-  public static void setDefaultSize(int size) {
-
-    Set<Object> keySet = UIManager.getLookAndFeelDefaults().keySet();
-    Object[] keys = keySet.toArray(new Object[keySet.size()]);
-
-    for (Object key : keys) {
-
-      if (key != null && key.toString().toLowerCase().contains("font")) {
-
-        Font font = UIManager.getDefaults().getFont(key);
-        if (font != null) {
-          font = font.deriveFont((float) size);
-          UIManager.put(key, font);
-        }
-
-      }
-
-    }
-
-  }
-
   public static double getScalingFactor() {
 	  if (!isWindows())  {
 		  return 1;
@@ -731,7 +705,7 @@ public class Util {
   }  
   
   public static ImageIcon getImageIcon(String resourceName, double d) {
-    ImageIcon imageIcon = new javax.swing.ImageIcon(ShellfireVPNMainForm.class.getResource(resourceName));
+    ImageIcon imageIcon = new javax.swing.ImageIcon(ShellfireVPNMainFormFxmlController.class.getResource(resourceName));
     int factor = (int) (Util.getScalingFactor() * d);
     int height = imageIcon.getIconHeight() * factor;
     int width = imageIcon.getIconWidth() * factor;

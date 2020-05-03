@@ -4,20 +4,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
-import javax.swing.SwingWorker;
-
 import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
 
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.VpnProperties;
-import de.shellfire.vpn.gui.CanContinueAfterBackEndAvailable;
 import de.shellfire.vpn.gui.CanContinueAfterBackEndAvailableFX;
-import de.shellfire.vpn.gui.LoginForm;
 import de.shellfire.vpn.gui.LoginForms;
-import de.shellfire.vpn.gui.ProgressDialog;
 import de.shellfire.vpn.gui.controller.LoginController;
 import de.shellfire.vpn.gui.controller.ProgressDialogController;
 import de.shellfire.vpn.i18n.VpnI18N;
@@ -38,7 +31,6 @@ public class EndpointManager {
     private static Logger log = Util.getLogger(EndpointManager.class.getCanonicalName());
     private static EndpointManager instance;
     private List<String> endPointList;
-    private ProgressDialog initDialog;
     private ProgressDialogController initDialogFX;
     private String preferredEndPoint;
     private boolean currentlyUsingDefaultList = false;
@@ -69,7 +61,7 @@ public class EndpointManager {
                 log.debug("Dialog binding has been set");
             }
         } catch (Exception e) {
-            log.error("Swing Application running " + e);
+            log.error("Not Javafx Application running " + e);
         }
     }
 
@@ -97,126 +89,6 @@ public class EndpointManager {
         return instance;
     }
 
-    public class FindEndpointTask extends SwingWorker<String, Object> {
-
-        /*
-         * Main task. Executed in background thread.
-         */
-        private CanContinueAfterBackEndAvailable continueForm;
-        private boolean initDialogOrigin;
-
-        public FindEndpointTask(CanContinueAfterBackEndAvailable form) {
-            log.debug("\nThis is the start of the endpoint task\n");
-            this.continueForm = form;
-            initDialog = form.getDialog();
-            if (initDialog == null) {
-                initDialog = new ProgressDialog(null, true, "Update Check");
-
-                initDialogOrigin = true;
-                SwingUtilities.invokeLater(new Runnable() {
-                    public void run() {
-                        initDialog.setVisible(true);
-                    }
-                });
-            }
-        }
-
-        /*
-         * Executed in event dispatch thread
-         */
-        public void done() {
-
-            if (initDialogOrigin) {
-                initDialog.setVisible(false);
-            }
-
-            String result = null;
-            try {
-                result = get();
-            } catch (InterruptedException e) {
-                log.error("InterruptedException while trying to get() result", e);
-            } catch (ExecutionException e) {
-                log.error("ExecutionException while trying to get() result", e);
-            }
-
-            if (result == null) {
-                JOptionPane.showMessageDialog(null, i18n.tr("Could not connect to the Shellfire backend - Shellfire VPN is shutting down"));
-                System.exit(0);
-            }
-            if (initDialogOrigin) {
-                initDialog.dispose();
-            }
-
-            this.continueForm.continueAfterBackEndAvailabled();
-        }
-
-        private boolean testPreferredEndpoint() {
-            log.debug("testPreferredEndpoint() - start");
-            boolean result = false;
-            if (preferredEndPoint == null) {
-                log.debug("No preferred endPoint set yet, not testing");
-            } else {
-                log.debug("testing preferred endPoint {}", preferredEndPoint);
-                result = testEndpoint(preferredEndPoint);
-            }
-
-            log.debug("testPreferredEndpoint() - finished, returning {}", result);
-            return result;
-        }
-
-        private boolean testEndPointList(List<String> endPointList) {
-            log.debug("testEndPointList() - start");
-            boolean result = false;
-
-            for (int i = 0; i < endPointList.size() && result == false; i++) {
-                initDialog = null; 
-                initDialog.setText(i18n.tr("Searching for backend connection...") + String.format("%s / %s", (i + 1), endPointList.size()));
-                String endPoint = endPointList.get(i);
-                result = testEndpoint(endPoint);
-            }
-
-            log.debug("testEndPointList() - finished, returning {}", result);
-            return result;
-        }
-
-        @Override
-        protected String doInBackground() throws Exception {
-
-            log.debug("EndpoingManager: In doInBackground method");
-            initDialog.setText(i18n.tr("Searching for backend connection..."));
-            boolean result = false;
-
-            result = testPreferredEndpoint();
-
-            if (result) {
-                log.debug("Preferred Endpoint works, using it and skipping other tests");
-            } else {
-                log.debug("Preferred Endpoint not working or not set yet, trying other endPoints");
-                result = testEndPointList(endPointList);
-
-                if (result) {
-                    log.debug("Found a working endPoint in the list, using it");
-                } else {
-                    log.debug("Did not find an endPoint that works in the current list.");
-                    if (!currentlyUsingDefaultList) {
-                        log.debug("We're not currently using the default list, so trying the default list");
-                        String defaultList = getDefaultListCsv();
-                        setEndPointListFromCsv(defaultList);
-                        result = testEndPointList(endPointList);
-
-                        if (result) {
-                            log.debug("one of the default endPoints worked, using it");
-                        } else {
-                            log.debug("Still not found a working endPoint. know nothing else to do, giving up :-(");
-                        }
-                    }
-                }
-            }
-
-            return preferredEndPoint;
-        }
-    }
-
     public class FindEndpointTaskFX extends Task<String> {
         /*
          * Main task. Executed in background thread of javaFX app.
@@ -241,7 +113,6 @@ public class EndpointManager {
             }
         }
 
-        // corresponds to Swing's doInBackgraound
         @Override
         protected String call() {
             log.debug("EndpointManager: start of call method");
@@ -354,12 +225,6 @@ public class EndpointManager {
         }
         
 }
-
-    public void ensureShellfireBackendAvailable(CanContinueAfterBackEndAvailable form) {
-        initDialog = LoginForm.initDialog;
-        FindEndpointTask task = new FindEndpointTask(form);
-        task.execute();
-    }
 
     public void ensureShellfireBackendAvailableFx(CanContinueAfterBackEndAvailableFX form) {
         log.debug("ensureShellfireBackendAvailableFx starting...");

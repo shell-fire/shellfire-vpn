@@ -1,29 +1,5 @@
 package de.shellfire.vpn.service.osx;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Timer;
-
-import org.slf4j.Logger;
-
-import com.apple.eawt.AppEvent.SystemSleepEvent;
-import com.apple.eawt.Application;
-import com.apple.eawt.SystemSleepListener;
-
-import de.shellfire.vpn.Util;
-import de.shellfire.vpn.client.ConnectionState;
-import de.shellfire.vpn.client.ConnectionStateChangedEvent;
-import de.shellfire.vpn.client.ConnectionStateListener;
-import de.shellfire.vpn.client.ServiceTools;
-import de.shellfire.vpn.client.osx.OSXServiceTools;
-import de.shellfire.vpn.service.ConnectionMonitor;
-import de.shellfire.vpn.service.IVpnController;
-import de.shellfire.vpn.service.IVpnRegistry;
-import de.shellfire.vpn.service.ProcessWrapper;
-import de.shellfire.vpn.types.Reason;
 /*
 public class OSXVpnController implements IVpnController {
 

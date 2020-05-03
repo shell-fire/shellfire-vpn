@@ -6,10 +6,6 @@ package de.shellfire.vpn.types;
 
 import java.awt.image.BufferedImage;
 
-import javax.swing.JPanel;
-
-import org.jdesktop.swingx.mapviewer.GeoPosition;
-
 import de.shellfire.vpn.client.Controller;
 
 /**
@@ -17,12 +13,7 @@ import de.shellfire.vpn.client.Controller;
  * @author bettmenn
  */
 public interface LocatableIcon {
-    public GeoPosition getGeoPosition();
     public BufferedImage getIcon();
-
-    public JPanel getPanel();
-
-    public String getCity();
 
     public String getCountryString();
     

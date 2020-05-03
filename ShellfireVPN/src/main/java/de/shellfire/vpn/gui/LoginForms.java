@@ -3,6 +3,9 @@ package de.shellfire.vpn.gui;
 import de.shellfire.vpn.Util;
 import java.util.LinkedList;
 import java.util.List;
+
+import de.shellfire.vpn.VpnProperties;
+import de.shellfire.vpn.webservice.WebService;
 import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
 
@@ -51,6 +54,7 @@ public class LoginForms extends Application {
     // Variables to control draggin of window
     private static double xOffset = 0;
     private static double yOffset = 0;
+    public static final String REG_INSTDIR = "instdir";
 
     public static Stage getStage() {
         return stage;

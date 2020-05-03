@@ -6,6 +6,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+import de.shellfire.vpn.gui.controller.LoginController;
 import org.slf4j.Logger;
 
 import com.ice.jni.registry.NoSuchValueException;
@@ -16,7 +17,6 @@ import com.ice.jni.registry.RegistryKey;
 import com.ice.jni.registry.RegistryValue;
 
 import de.shellfire.vpn.Util;
-import de.shellfire.vpn.gui.LoginForm;
 import de.shellfire.vpn.proxy.InternetOptions;
 import de.shellfire.vpn.service.IVpnRegistry;
 
@@ -27,7 +27,7 @@ public class WinRegistry implements IVpnRegistry {
 
   private static Logger log = Util.getLogger(WinRegistry.class.getCanonicalName());
   
-  private static final String INSTDIR = LoginForm.getInstDir();
+  private static final String INSTDIR = LoginController.getInstDir();
   private static final String SHELLFIRE_VPN2_EXE = "ShellfireVPN2.exe";
   private static final String SHELLFIRE_VPN = "ShellfireVPN";
   private static final String REGKEY_CURRENTVERSION_RUN = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run\\";

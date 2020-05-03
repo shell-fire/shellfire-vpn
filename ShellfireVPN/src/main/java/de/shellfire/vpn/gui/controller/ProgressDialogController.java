@@ -124,11 +124,7 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
             progressBar.setProgress(ProgressBar.INDETERMINATE_PROGRESS);
         }
     }
-
-    /**
-     * Corresponds to Swing setText() method
-     * Text used in constructor of progressDialog swing
-     */
+    
     
     // Removed because the dynamic label has a binding in EntityManager
     public void setDialogText(String string) {

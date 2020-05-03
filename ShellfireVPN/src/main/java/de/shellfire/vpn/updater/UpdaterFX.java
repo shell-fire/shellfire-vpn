@@ -50,7 +50,7 @@ import org.xnap.commons.i18n.I18n;
  * @author TList
  */
 public class UpdaterFX implements CanContinueAfterBackEndAvailableFX {
-  private static Logger log = Util.getLogger(Updater.class.getCanonicalName());
+  private static Logger log = Util.getLogger(UpdaterFX.class.getCanonicalName());
   private static final String MAIN_EXE = "ShellfireVPN2.dat";
   private static final String UPDATER_EXE = "ShellfireVPN2.exe";
   private static I18n i18n = VpnI18N.getI18n();

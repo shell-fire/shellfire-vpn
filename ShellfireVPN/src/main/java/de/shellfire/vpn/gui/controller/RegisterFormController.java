@@ -7,7 +7,6 @@ package de.shellfire.vpn.gui.controller;
  
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.gui.LoginForms;
-import de.shellfire.vpn.gui.RegisterForm;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.webservice.Response;
 import de.shellfire.vpn.webservice.WebService;
@@ -82,7 +81,7 @@ public class RegisterFormController extends AnchorPane implements Initializable 
     @FXML
     private WebView policyWebView;
         
-    private static Logger log = Util.getLogger(RegisterForm.class.getCanonicalName());
+    private static Logger log = Util.getLogger(RegisterFormController.class.getCanonicalName());
     public static final String REG_PASS = "pass";
     public static final String REG_USER = "user";
     WebService service;
