@@ -1,7 +1,7 @@
 package de.shellfire.vpn.service;
 
 import de.shellfire.vpn.Util;
-import de.shellfire.vpn.service.osx.OSXVpnController;
+//import de.shellfire.vpn.service.osx.OSXVpnController;
 import de.shellfire.vpn.service.win.WindowsVpnController;
 
 public class VpnControllerFactory {
@@ -13,7 +13,7 @@ public class VpnControllerFactory {
       return WindowsVpnController.getInstance();
     }
     else {
-      return OSXVpnController.getInstance();
+      return null;
     }
   }
 }

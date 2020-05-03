@@ -24,7 +24,7 @@ import de.shellfire.vpn.service.IVpnController;
 import de.shellfire.vpn.service.IVpnRegistry;
 import de.shellfire.vpn.service.ProcessWrapper;
 import de.shellfire.vpn.types.Reason;
-
+/*
 public class OSXVpnController implements IVpnController {
 
   private static Logger log = Util.getLogger(OSXVpnController.class.getCanonicalName());
@@ -404,3 +404,4 @@ public class OSXVpnController implements IVpnController {
   }
 
 }
+*/
