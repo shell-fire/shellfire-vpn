@@ -3,12 +3,16 @@ package de.shellfire.vpn.webservice;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Type;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
 import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -27,11 +31,9 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.http.ssl.SSLContexts;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 
@@ -162,13 +164,8 @@ class JsonHttpRequest<RequestType, ResponseType> {
   private void setupKeyStore() { 
     try
     {
-      
       KeyStore ks = KeyStore.getInstance("JKS");
       String keyStorePath = "shellfire.keystore";
-      
-      if (!new File(keyStorePath).exists() && Util.isMacOs())  {
-    	  keyStorePath = com.apple.eio.FileManager.getPathToApplicationBundle() + "/Contents/Java/" + keyStorePath;
-      }
       
       FileInputStream fis = new FileInputStream(keyStorePath);
       char[] pass = "blubber".toCharArray();
@@ -187,7 +184,6 @@ class JsonHttpRequest<RequestType, ResponseType> {
           .setSSLSocketFactory(sslsf)
           .setDefaultRequestConfig(defaultRequestConfig)
           .build();
-      
     } catch (Exception e) {
       log.error("Error occured while setting up keystore", e);
       System.exit(0);

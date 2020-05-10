@@ -1,6 +1,5 @@
 package de.shellfire.vpn.updater;
 
-import java.awt.Frame;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -33,6 +32,7 @@ import org.xnap.commons.i18n.I18n;
 import de.shellfire.vpn.LogStreamReader;
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.client.ServiceTools;
+import de.shellfire.vpn.client.win.WinServiceTools;
 import de.shellfire.vpn.gui.CanContinueAfterBackEndAvailable;
 import de.shellfire.vpn.gui.ProgressDialog;
 import de.shellfire.vpn.i18n.VpnI18N;
@@ -149,12 +149,25 @@ public class Updater implements CanContinueAfterBackEndAvailable {
 
   private void silentRelaunchElevated() {
 
-    String exec = "";
-    if (Util.isVistaOrLater()) {
-      exec = "elevate.exe ";
-    }
+    String elevateVbs = System.getProperty("java.io.tmpdir") + "/elevate.vbs";
+    
+    String exec = Updater.UPDATER_EXE;
+    String cmds = "doupdate";;
+    String jarFile = Util.getPathJar();
+    File instDir = new File(jarFile).getParentFile();
+    WinServiceTools.writeElevationVbsFile(elevateVbs, exec, cmds);
+    
+    try {
+      String command = Util.getCscriptExe() + " " + elevateVbs;
+      log.debug("Calling elevateVbs with command {} in dir {}", command, instDir.getAbsolutePath());
+      Process p = Runtime.getRuntime().exec(command, null, instDir);
+      Util.digestProcess(p);
 
-    exec += Updater.UPDATER_EXE + " doupdate";
+    } catch (Exception e) {
+      Util.handleException(e);
+    }    
+    
+    
     try {
       executeJava(exec);
 
@@ -331,22 +344,7 @@ public class Updater implements CanContinueAfterBackEndAvailable {
   }
 
   public static long getInstalledVersion() {
-    if (Util.isWindows()) {
       return getInstalledVersionWindows();
-    } else {
-      try {
-        String file = com.apple.eio.FileManager.getPathToApplicationBundle() + "/Contents/Java/VERSION";
-        if (!(new File(file).exists())) {
-          file = "VERSION";
-        }
-
-        return Long.valueOf(Util.fileToString((file)).trim());
-      } catch (Exception e) {
-        Util.handleException(e);
-      }
-      return 0;
-    }
-
   }
 
   private static void setLookAndFeel() {
@@ -378,7 +376,7 @@ public class Updater implements CanContinueAfterBackEndAvailable {
     PrintWriter out = new PrintWriter(s.getOutputStream(), true);
     InputStream is = s.getInputStream();
 
-    String httpget = "GET " + file + "?tracked=true HTTP/1.0";
+    String httpget = "GET " + file + " HTTP/1.0";
     out.println(httpget);
     log.debug(httpget);
     String httphost = "HOST: " + host;

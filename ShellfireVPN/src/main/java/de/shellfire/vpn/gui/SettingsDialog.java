@@ -10,7 +10,6 @@
  */
 package de.shellfire.vpn.gui;
 
-import java.rmi.RemoteException;
 import java.util.LinkedList;
 
 import javax.swing.JComboBox;
@@ -18,7 +17,6 @@ import javax.swing.JOptionPane;
 
 import org.xnap.commons.i18n.I18n;
 
-import de.shellfire.vpn.Util;
 import de.shellfire.vpn.VpnProperties;
 import de.shellfire.vpn.client.Client;
 import de.shellfire.vpn.i18n.Language;

@@ -13,7 +13,6 @@ package de.shellfire.vpn.gui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Image;
-import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
@@ -50,7 +49,6 @@ import de.shellfire.vpn.webservice.Response;
 import de.shellfire.vpn.webservice.WebService;
 import de.shellfire.vpn.webservice.model.LoginResponse;
 import net.miginfocom.swing.MigLayout;
-import javax.swing.JLabel;
 
 /**
  * 
@@ -196,14 +194,6 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
 
 	private void askForNewAccountAndAutoStartIfFirstStart() {
 		if (firstStart()) {
-		  if (!Util.isWindows()) {
-		    askForLicense();
-		    
-	      if (!this.licenseAccepted) {
-          JOptionPane.showMessageDialog(null, i18n.tr("Licence not accepted - Shellfire VPN is now exiting."));
-          System.exit(0);
-        }
-  	  }
   		askForAutoStart();
   		askForNewAccount();
   	}
@@ -276,57 +266,38 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
 	}
 
 	public static void restart() {
-		if (Util.isWindows()) {
-			
-			if (LoginForm.instance != null) {
+		if (LoginForm.instance != null) {
 
-				if (instance.mainForm != null) {
-					Controller c = instance.mainForm.getController();
-					if (c != null) {
-					    c.disconnect(Reason.GuiRestarting);  
-						
-					}
-
-					instance.mainForm.dispose();
-					instance.mainForm = null;
+			if (instance.mainForm != null) {
+				Controller c = instance.mainForm.getController();
+				if (c != null) {
+				    c.disconnect(Reason.GuiRestarting);  
+					
 				}
 
-				LoginForm.instance.dispose();
-				LoginForm.instance = null;
-				
-				
-	      List<String> restart = new ArrayList<String>();
-	      restart.add("ShellfireVPN2.exe");
-	      Process p;
-	      try {
-	        p = new ProcessBuilder(restart).directory(new File(LoginForm.getInstDir())).start();
-	        Util.digestProcess(p);
-	        
-	        System.exit(0);
-	      } catch (IOException e) {
-	        Util.handleException(e);
-	      } 
-				
-				
-			}		
-		} else {
-			List<String> restart = new ArrayList<String>();
-			restart.add("/usr/bin/open");
-			restart.add("-n");
-			restart.add(com.apple.eio.FileManager.getPathToApplicationBundle());
-			Process p;
-			try {
-				p = new ProcessBuilder(restart).directory(new File(com.apple.eio.FileManager.getPathToApplicationBundle())).start();
-				Util.digestProcess(p);
-				
-				System.exit(0);
-			} catch (IOException e) {
-				Util.handleException(e);
-			} 
+				instance.mainForm.dispose();
+				instance.mainForm = null;
+			}
+
+			LoginForm.instance.dispose();
+			LoginForm.instance = null;
 			
 			
-		}
-		
+      List<String> restart = new ArrayList<String>();
+      restart.add("ShellfireVPN2.exe");
+      Process p;
+      try {
+        p = new ProcessBuilder(restart).directory(new File(LoginForm.getInstDir())).start();
+        Util.digestProcess(p);
+        
+        System.exit(0);
+      } catch (IOException e) {
+        Util.handleException(e);
+      } 
+			
+			
+		}		
+	
 
 	}
 
@@ -342,11 +313,7 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
 		String instDir = props.getProperty(REG_INSTDIR, null);
 
 		if (instDir == null) {
-			if (Util.isWindows()) {
 				instDir = new File("").getAbsolutePath();
-			} else {
-				instDir = WebService.macOsAppDirectory() + "/ShellfireVPN";
-			}
 		}
 
 		return instDir;
@@ -781,54 +748,6 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
 		  
 		instance.setEnabled(false);
 		
-		boolean internetAvailable = Util.internetIsAvailable();
-		if (internetAvailable) {
-	    Updater updater = new Updater();
-	    if (updater.newVersionAvailable()) {
-	    
-	      int answer = JOptionPane
-	          .showConfirmDialog(
-	              null,
-	              i18n.tr("A new version of Shellfire VPN is available. An update is mandatory. Would you like to update now?"),
-	              i18n.tr("New Version"),
-	              JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-
-	      if (answer == JOptionPane.YES_OPTION) {
-	        JOptionPane.showMessageDialog(
-	            null,
-	            i18n.tr("You decided, to update. Shellfire VPN is now being restarted with super user privileges to perform the update."),
-	            i18n.tr("Update is being performed"), JOptionPane.INFORMATION_MESSAGE);
-	        
-	        
-	        String installerPath = com.apple.eio.FileManager.getPathToApplicationBundle() + "/Contents/Java/ShellfireVPN2-Updater.app";
-	        log.debug("Opening updater using Desktop.open(): " +  installerPath);
-
-	        List<String> cmds = new LinkedList<String>();
-	        cmds.add("/usr/bin/open");
-	        cmds.add(installerPath);
-	        Process p;
-	        try {
-	          p = new ProcessBuilder(cmds).directory(new File(com.apple.eio.FileManager.getPathToApplicationBundle() + "/Contents/Java/")).start();
-	          Util.digestProcess(p);
-	        } catch (IOException e) {
-	          Util.handleException(e);
-	        }
-	        System.exit(0);
-	        
-	              
-	      } else {
-	        JOptionPane.showMessageDialog(
-	            null,
-	            i18n.tr("You decided not to update - Shellfire VPN is now exiting."),
-	            i18n.tr("Update rejected"), JOptionPane.ERROR_MESSAGE);
-	        System.exit(0);
-	      }
-	      
-	      return;
-	    }
-		} else {
-		  log.debug("No internet available, skipping update check");
-		}
 
     instance.init();
 	}
@@ -888,10 +807,6 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
 
     void licenseNotAccepted() {
     	this.licenseAccepted = false;
-    }
-
-    private void askForLicense() {
-        new LicenseAcceptScreen(this, true, null).setVisible(true);
     }
 
 	class LoginTask extends SwingWorker<Response<LoginResponse>, Object> {

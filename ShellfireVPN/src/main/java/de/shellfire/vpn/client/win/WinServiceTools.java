@@ -183,7 +183,7 @@ public class WinServiceTools extends ServiceTools {
     log.debug("installElevated()- finish");
   }
 
-  private boolean hasFinished(Process p) {
+  public static boolean hasFinished(Process p) {
     try {
       p.exitValue();
       return true;
@@ -193,7 +193,7 @@ public class WinServiceTools extends ServiceTools {
   }
 
 
-  private void writeElevationVbsFile(String elevationVbsFile, String exe, String cmds) {
+  public static void writeElevationVbsFile(String elevationVbsFile, String exe, String cmds) {
     log.debug("creating elevationVbsFile at {}", elevationVbsFile);
     File file = new File(elevationVbsFile);
     file.delete();

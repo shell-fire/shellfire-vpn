@@ -35,10 +35,13 @@ public class VpnComparisonTableModel extends AbstractTableModel {
 
   @Override
   public int getColumnCount() {
-    return this.header.length;
+    return this.header.length-1;
   }
 
   public String getColumnName(int columnIndex) {
+    if (columnIndex == 2)
+      columnIndex++;
+     
     return this.header[columnIndex];
   }
 
@@ -100,6 +103,10 @@ public class VpnComparisonTableModel extends AbstractTableModel {
 
   @Override
   public Object getValueAt(int rowIndex, int columnIndex) {
+    if (columnIndex == 2)
+      columnIndex++;
+
+    
     Object result = vpnAttributeList.getValueAt(rowIndex, columnIndex);
     return result;
   }

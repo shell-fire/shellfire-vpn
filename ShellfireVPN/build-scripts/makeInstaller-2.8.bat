@@ -1,7 +1,7 @@
 @echo off
 
 set folder=..\bin
-set version=2.7
+set version=2.8
 
 
 rem echo update language files
@@ -34,6 +34,8 @@ xcopy tools %folder%\tools\ /S /E
 xcopy InstallServiceTemplate.txt %folder%\
 xcopy UninstallServiceTemplate.txt %folder%\
 xcopy shellfire.keystore %folder%\
+xcopy LetsEncrypt.cer %folder%\
+xcopy shellfire-ca-2020.cer %folder%\
 
 echo creating installer...
 "c:\Program Files (x86)\NSIS\makensis.exe" /DVERSION=%version% nsis/sfvpn2.nsi 

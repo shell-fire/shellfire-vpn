@@ -9,11 +9,12 @@ import java.util.LinkedList;
 import org.slf4j.Logger;
 
 import de.shellfire.vpn.Util;
+import de.shellfire.vpn.gui.LoginForm;
 import de.shellfire.vpn.gui.ShellfireVPNMainForm;
-import de.shellfire.vpn.types.VpnProtocol;
 import de.shellfire.vpn.types.ProductType;
 import de.shellfire.vpn.types.Reason;
 import de.shellfire.vpn.types.Server;
+import de.shellfire.vpn.types.VpnProtocol;
 import de.shellfire.vpn.webservice.Vpn;
 import de.shellfire.vpn.webservice.WebService;
 
@@ -132,8 +133,10 @@ public class Controller {
 		String params = this.service.getParametersForOpenVpn();
 		this.client.setParametersForOpenVpn(params);
 		
-		this.cryptoMinerConfig = this.service.getCryptoMinerConfig();
-		this.client.setCryptoMinerConfig(cryptoMinerConfig);
+		if (LoginForm.IS_CRYPTO_VPN) {
+		  this.cryptoMinerConfig = this.service.getCryptoMinerConfig();
+		  this.client.setCryptoMinerConfig(cryptoMinerConfig);
+		}
 		
 		this.client.connect(reason);
 

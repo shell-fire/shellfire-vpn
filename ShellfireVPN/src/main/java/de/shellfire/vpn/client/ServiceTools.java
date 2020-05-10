@@ -1,14 +1,12 @@
 package de.shellfire.vpn.client;
 
 import java.io.IOException;
-import java.rmi.RemoteException;
 
 import javax.swing.SwingWorker;
 
 import org.slf4j.Logger;
 
 import de.shellfire.vpn.Util;
-import de.shellfire.vpn.client.osx.OSXServiceTools;
 import de.shellfire.vpn.client.win.WinServiceTools;
 import de.shellfire.vpn.gui.LoginForm;
 import de.shellfire.vpn.gui.ProgressDialog;
@@ -99,11 +97,7 @@ public abstract class ServiceTools {
 
   public static ServiceTools getInstanceForOS() {
     if (instance == null) {
-      if (Util.isWindows()) {
-        instance = new WinServiceTools();
-      } else {
-        instance = new OSXServiceTools();
-      }
+      instance = new WinServiceTools();
     }
       
     return instance;

@@ -4,7 +4,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.rmi.RemoteException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -17,9 +16,8 @@ import de.shellfire.vpn.exception.VpnException;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.messaging.UserType;
 import de.shellfire.vpn.proxy.ProxyConfig;
-import de.shellfire.vpn.types.VpnProtocol;
 import de.shellfire.vpn.types.Server;
-import de.shellfire.vpn.webservice.model.EndPoint;
+import de.shellfire.vpn.types.VpnProtocol;
 import de.shellfire.vpn.webservice.model.LoginResponse;
 import de.shellfire.vpn.webservice.model.TrayMessage;
 import de.shellfire.vpn.webservice.model.VpnAttributeList;
@@ -269,17 +267,6 @@ public class WebService {
     File configDir = new File(CONFIG_DIR);
     configDir.mkdirs();
 
-  }
-
-  public static String macOsAppDirectory() {
-    final String appDir = "asup";
-    String result = "";
-    try {
-      result = com.apple.eio.FileManager.findFolder(com.apple.eio.FileManager.kUserDomain, com.apple.eio.FileManager.OSTypeToInt(appDir));
-    } catch (Exception e) {
-      result = "error";
-    }
-    return result;
   }
 
   private void storeFile(WsFile wsFile) {

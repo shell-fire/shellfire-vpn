@@ -51,7 +51,6 @@ import de.shellfire.vpn.gui.ShellfireVPNMainForm;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.messaging.UserType;
 import de.shellfire.vpn.service.IVpnRegistry;
-import de.shellfire.vpn.service.osx.MacRegistry;
 import de.shellfire.vpn.service.win.WinRegistry;
 
 public class Util {
@@ -318,14 +317,10 @@ public class Util {
   }
 
   public static List<String> getPossibleExeLocations(String programFiles, String programFiles86) {
-    if (isWindows()) {
       return Arrays.asList("openvpn\\openvpn.exe", "..\\openvpn\\openvpn.exe", programFiles + "\\ShellfireVPN\\openvpn\\openvpn.exe",
           programFiles86 + "\\ShellfireVPN\\openvpn\\openvpn.exe", programFiles + "\\OpenVPN\\openvpn.exe",
           programFiles86 + "\\OpenVPN\\openvpn.exe", programFiles + "\\ShellfireVPN\\bin\\openvpn.exe",
           programFiles86 + "\\ShellfireVPN\\bin\\openvpn.exe");
-    } else {
-      return Arrays.asList("openvpn/openvpn", com.apple.eio.FileManager.getPathToApplicationBundle() + "/Contents/Java/openvpn/openvpn");
-    }
 
   }
 
@@ -536,17 +531,12 @@ public class Util {
    */
   public static IVpnRegistry getRegistry() {
     if (registry == null) {
-      if (Util.isWindows()) {
         try {
           registry = new WinRegistry();
         } catch (Exception e) {
           e.printStackTrace();
           Util.handleException(e);
         }
-
-      } else {
-        registry = new MacRegistry();
-      }
     }
 
     return registry;

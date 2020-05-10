@@ -23,7 +23,6 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.MenuItem;
 import java.awt.PopupMenu;
-import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.SystemTray;
 import java.awt.Toolkit;
@@ -94,10 +93,10 @@ import de.shellfire.vpn.gui.renderer.CountryImageRenderer;
 import de.shellfire.vpn.gui.renderer.StarImageRenderer;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.proxy.ProxyConfig;
-import de.shellfire.vpn.types.VpnProtocol;
 import de.shellfire.vpn.types.Reason;
 import de.shellfire.vpn.types.Server;
 import de.shellfire.vpn.types.ServerType;
+import de.shellfire.vpn.types.VpnProtocol;
 import de.shellfire.vpn.webservice.ServerList;
 import de.shellfire.vpn.webservice.Vpn;
 import de.shellfire.vpn.webservice.WebService;
@@ -2087,11 +2086,6 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 					setVisible(true);
 					toFront();
 					setState(Frame.NORMAL);
-
-					if (!Util.isWindows()) {
-						com.apple.eawt.Application app = com.apple.eawt.Application.getApplication();
-						app.requestForeground(true);
-					}
 				}
 			};
 
@@ -2121,11 +2115,6 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 						setVisible(true);
 						toFront();
 						setState(Frame.NORMAL);
-
-						if (!Util.isWindows()) {
-							com.apple.eawt.Application app = com.apple.eawt.Application.getApplication();
-							app.requestForeground(true);
-						}
 					}
 
 				}
@@ -2584,11 +2573,6 @@ public class ShellfireVPNMainForm extends javax.swing.JFrame implements LocaleCh
 
 	public void mySetIconImage(Image img) {
 		setIconImage(img);
-
-		if (!Util.isWindows()) {
-			com.apple.eawt.Application app = com.apple.eawt.Application.getApplication();
-			app.setDockIconImage(img);
-		}
 
 	}
 
