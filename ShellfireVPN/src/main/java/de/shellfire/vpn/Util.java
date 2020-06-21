@@ -600,6 +600,14 @@ public class Util {
   public static String getLogFilePath(UserType userType) {
     String result = getTempDir() + userType.name() + ".log";
     return result;
+  }  
+  
+  public static String getLogFilePathInstaller() {
+    String jarFile = Util.getPathJar();
+    File instDir = new File(jarFile).getParentFile();
+    
+    String result = instDir + "\\install.log"; 
+    return result;
   }
 
   public static String encodeBase64(String string) {

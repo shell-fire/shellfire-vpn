@@ -125,7 +125,7 @@ msgstr "Lizenz nicht akzeptiert - Shellfire VPN wird jetzt beendet."
 
 #: main/java/de/shellfire/vpn/gui/LoginForm.java:223
 msgid ""
-"This is the first time you start ShellfireV PN. Create a new Shellfire VPN "
+"This is the first time you start ShellfireVPN. Create a new Shellfire VPN "
 "account?"
 msgstr ""
 "Dies ist dein erster Start von Shellfire VPN. Neuen Shellfire VPN Account "

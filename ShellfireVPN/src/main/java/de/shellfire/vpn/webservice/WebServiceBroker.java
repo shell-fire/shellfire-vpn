@@ -543,13 +543,14 @@ public class WebServiceBroker {
     return sessionToken;
   }
 
-  public Boolean sendLogToShellfire(String serviceLogString, String clientLogString) throws ClientProtocolException, IOException, VpnException {
+  public Boolean sendLogToShellfire(String serviceLogString, String clientLogString, String installLogString) throws ClientProtocolException, IOException, VpnException {
     log.debug("sendLogToShellfire() - start");
     
     serviceLogString = Util.encodeBase64(serviceLogString);
     clientLogString = Util.encodeBase64(clientLogString);
+    installLogString = Util.encodeBase64(installLogString);
     
-    SendLogToShellfireRequest request = new SendLogToShellfireRequest(serviceLogString, clientLogString);
+    SendLogToShellfireRequest request = new SendLogToShellfireRequest(serviceLogString, clientLogString, installLogString);
     
     Type theType = new TypeToken<Response<Void>>() {}.getType();
     Response<Void> resp = new JsonHttpRequest<SendLogToShellfireRequest, Void>().call(request, theType);

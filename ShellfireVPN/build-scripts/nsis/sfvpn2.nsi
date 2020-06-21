@@ -5,6 +5,8 @@ SetCompressor lzma
 !include "defs.nsi"
 !include "macros.nsh"
 
+; x64.nsh for architecture detection
+!include "x64.nsh"
 
 
 ;--------------------------------
@@ -126,6 +128,12 @@ Section "${PRODUCT_NAME}" SecShellfireVPN
 
   call DownloadAndInstallJREIfNecessary
   
+  
+  ExpandEnvStrings $0 %COMSPEC%
+  DetailPrint 'Running Command: "$0" /C %SystemRoot%\System32\Wbem\wmic Path win32_process Where "CommandLine Like $\'%ShellfireVPN2.exe%$\'"  Call Terminate'
+  nsExec::ExecToLog '"$0" /C %SystemRoot%\System32\Wbem\wmic Path win32_process Where "CommandLine Like $\'%ShellfireVPN2.exe%$\'"  Call Terminate'
+  
+  
   SetShellVarContext all
   SetOverwrite on
 
@@ -155,14 +163,29 @@ Section "${PRODUCT_NAME}" SecShellfireVPN
 ; openvpn-64bit:
 
   DetailPrint "Installing 64-bit openvpn"
-  File "..\tools\openvpn\64-bit\"
+  ${If} ${AtLeastWin10}
+    DetailPrint "Installing 64-bit openvpn on win10"
+	File "..\tools\openvpn\64-bit\"
+  ${Else}
+    DetailPrint "Installing 64-bit openvpn on pre-win10 (e.g. win 7,8 etc.)"
+	File "..\tools\openvpn\64-bit\"
+  ${EndIf}
 
 goto openvpnend
 
 openvpn-32bit:
 
   DetailPrint "Installing 32-bit openvpn"
-  File "..\tools\openvpn\32-bit\"
+  ${If} ${AtLeastWin10}
+    DetailPrint "Installing 32-bit openvpn on win10"
+	File "..\tools\openvpn\32-bit\"
+  ${Else}
+    DetailPrint "Installing 32-bit openvpn on pre-win10 (e.g. win 7,8 etc.)"
+	File "..\tools\openvpn\32-bit\"
+  ${EndIf}
+
+  
+  
 openvpnend:  
 
   SetOutPath "$INSTDIR\"
@@ -246,19 +269,30 @@ Section $(ML_SecTAP) SecTAP
 	SetOverwrite on
 	SetOutPath "$INSTDIR"
 	
-	${If} ${AtLeastWinVista}
-	  DetailPrint "We are running at least win vista"
+	${If} ${AtLeastWin10}
+	  DetailPrint "We are running at least win 10"
 
 	  File /oname=tap-windows.exe "..\tools\tap\tap-windows-vista-or-later.exe"
 	
-	${Else}
+	${ElseIf} ${AtLeastWinVista}
+	  DetailPrint "We are running at least Vista, Win7, 8, but NOT Win 10"
+
+	  File /oname=tap-windows.exe "..\tools\tap\tap-windows-vista-or-later.exe"
+	
+	${Else} 
+
 	  DetailPrint "We are running XP"
 	
 	  File /oname=tap-windows.exe "..\tools\tap\tap-windows-xp.exe"
 	${EndIf}
 
+	DetailPrint "Uninstalling possibly existing TAP..."
+	nsExec::ExecToLog '"$PROGRAMFILES\TAP-Windows\uninstall.exe" /S'
+	sleep 4000
+	
 	DetailPrint "Installing TAP (may need confirmation)..."
 	nsExec::ExecToLog '"$INSTDIR\tap-windows.exe" /S /SELECT_UTILITIES=1'
+	sleep 4000
 	Pop $R0 # return value/error/timeout
 
 	WriteRegStr HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${PACKAGE_NAME}" "tap" "installed"	
@@ -303,9 +337,9 @@ Section -post
     ; be nonzero.
     IntOp $5 0 & 0
 	${If} ${AtLeastWinVista}
-	  nsExec::ExecToStack '"$INSTDIR\openvpn\tapinstall.exe" hwids ${TAP}'
+		nsExec::ExecToStack '"$PROGRAMFILES\TAP-Windows\bin\tapinstall.exe" hwids ${TAP}'
 	${Else}
-		nsExec::ExecToStack '"$INSTDIR\openvpn\devcon.exe" hwids ${TAP}'
+		nsExec::ExecToStack '"$PROGRAMFILES\TAP-Windows\bin\devcon.exe" hwids ${TAP}'
 	${Endif}
     
     Pop $R0 # return value/error/timeout
@@ -325,9 +359,9 @@ Section -post
  ;tapupdate:
     DetailPrint "TAP UPDATE"
 	${If} ${AtLeastWinVista}
-	  nsExec::ExecToLog '"$INSTDIR\openvpn\tapinstall.exe" update "$INSTDIR\openvpn\OemVista.inf" ${TAP}'
+	  nsExec::ExecToLog '"$PROGRAMFILES\TAP-Windows\bin\tapinstall.exe" update "$PROGRAMFILES\TAP-Windows\driver\OemVista.inf" ${TAP}'
 	${Else}
-	  nsExec::ExecToLog '"$INSTDIR\openvpn\devcon.exe" update "$INSTDIR\openvpn\OemWin2k.inf" ${TAP}'
+	  nsExec::ExecToLog '"$PROGRAMFILES\TAP-Windows\bin\devcon.exe" update "$PROGRAMFILES\TAP-Windows\driver\OemWin2k.inf" ${TAP}'
 	${Endif}
 	
 	
@@ -342,19 +376,30 @@ Section -post
     DetailPrint "TAP REMOVE OLD TAP"
 
 	${If} ${AtLeastWinVista}
-	  nsExec::ExecToLog '"$INSTDIR\openvpn\tapinstall.exe" remove TAP0801'
+	  nsExec::ExecToLog '"$PROGRAMFILES\TAP-Windows\bin\tapinstall.exe" remove TAP0801'
 	${Else}
-	  nsExec::ExecToLog '"$INSTDIR\openvpn\devcon.exe" remove TAP0801'
+	  nsExec::ExecToLog '"$PROGRAMFILES\TAP-Windows\bin\devcon.exe" remove TAP0801'
 	${Endif}
     
     Pop $R0 # return value/error/timeout
     DetailPrint "tapinstall remove TAP0801 returned: $R0"
 
+	${If} ${AtLeastWinVista}
+	  nsExec::ExecToLog '"$PROGRAMFILES\TAP-Windows\bin\tapinstall.exe" remove TAP0901'
+	${Else}
+	  nsExec::ExecToLog '"$PROGRAMFILES\TAP-Windows\bin\devcon.exe" remove TAP0901'
+	${Endif}
+    
+    Pop $R0 # return value/error/timeout
+    DetailPrint "tapinstall remove TAP0901 returned: $R0"
+	
+	
+	
     DetailPrint "TAP INSTALL (${TAP})"
 	${If} ${AtLeastWinVista}
-	  nsExec::ExecToLog '"$INSTDIR\openvpn\tapinstall.exe" install "$INSTDIR\openvpn\OemVista.inf" ${TAP}'
+	  nsExec::ExecToLog '"$PROGRAMFILES\TAP-Windows\bin\tapinstall.exe" install "$PROGRAMFILES\TAP-Windows\driver\OemVista.inf" ${TAP}'
 	${Else}
-	  nsExec::ExecToLog '"$INSTDIR\openvpn\devcon.exe" install "$INSTDIR\openvpn\OemWin2k.inf" ${TAP}'
+	  nsExec::ExecToLog '"$PROGRAMFILES\TAP-Windows\bin\devcon.exe" install "$PROGRAMFILES\TAP-Windows\driver\OemWin2k.inf" ${TAP}'
 	${Endif}
 
     
@@ -427,7 +472,7 @@ loop:
    IntCmp $2 0 nothingFound
       ; try to retrieve the window title of window $2, store in $3
       System::Call /NOUNLOAD 'user32::GetWindowText(i r2, t .r3, i ${NSIS_MAX_STRLEN})'
-      ; Copy the first 6 characters of $3 in $4
+      ; Copy the first 14 characters of $3 in $4
       StrCpy $4 $3 14
       ; Compare the 14 characters with "ShellfireVPN 2"
       StrCmp $4 "ShellfireVPN 2" foundVpn loop
@@ -467,6 +512,8 @@ Section "Uninstall"
 
   SetShellVarContext all
   Delete "$DESKTOP\${PRODUCT_NAME}.lnk"
+  Delete "$SMPROGRAMS\${PRODUCT_NAME}\${PRODUCT_NAME}.lnk"
+  
   RMDir /r "$SMPROGRAMS\${PRODUCT_NAME}"
   RMDir /r "$INSTDIR"
 

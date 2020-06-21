@@ -382,3 +382,4 @@ Function FileSizeNew
   Exch $0
  
 FunctionEnd
+

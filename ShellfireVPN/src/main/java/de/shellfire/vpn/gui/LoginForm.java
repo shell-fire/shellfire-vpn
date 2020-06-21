@@ -17,7 +17,6 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.prefs.Preferences;
 
@@ -210,7 +209,7 @@ public class LoginForm extends javax.swing.JFrame implements CanContinueAfterBac
 		int answer = JOptionPane
 				.showConfirmDialog(
 						null,
-						i18n.tr("This is the first time you start ShellfireV PN. Create a new Shellfire VPN account?"),
+						i18n.tr("This is the first time you start ShellfireVPN. Create a new Shellfire VPN account?"),
 						i18n.tr("Welcome: First Start"),
 						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 

@@ -560,13 +560,22 @@ public class WebService {
     } catch (IOException e) {
       log.error("Could not read clientLog", e);
     }
+    
+    String installLog = Util.getLogFilePathInstaller();
+    String installLogString = "";
+    try {
+      installLogString = Util.fileToString(installLog);
+    } catch (IOException e) {
+      log.error("Could not read installLog", e);
+    }
 
     final String finalService = serviceLogString;
     final String finalClient = clientLogString;
+    final String finalInstall = installLogString;
 
     Boolean result = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<Boolean>() {
       public Boolean run() throws Exception {
-        boolean result = shellfire.sendLogToShellfire(finalService, finalClient);
+        boolean result = shellfire.sendLogToShellfire(finalService, finalClient, finalInstall);
 
         return result;
       }

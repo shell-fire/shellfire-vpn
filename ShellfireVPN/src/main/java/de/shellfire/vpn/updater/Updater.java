@@ -112,6 +112,7 @@ public class Updater implements CanContinueAfterBackEndAvailable {
       
       // Everything else required the backend, so make sure we can access it.
       EndpointManager.getInstance().ensureShellfireBackendAvailable(this);
+      
 
     } catch (Throwable e) {
       e.printStackTrace();
@@ -167,7 +168,7 @@ public class Updater implements CanContinueAfterBackEndAvailable {
       Util.handleException(e);
     }    
     
-    
+    /*
     try {
       executeJava(exec);
 
@@ -177,6 +178,7 @@ public class Updater implements CanContinueAfterBackEndAvailable {
 
       System.exit(0);
     }
+    */
   }
 
   private void launchApp(String param) {
@@ -241,7 +243,7 @@ public class Updater implements CanContinueAfterBackEndAvailable {
     try {
       final String fileName = getService().getLatestInstaller();
 
-      updateProgressDialog = new ProgressDialog(null, false, i18n.tr("Downloading update..."));
+      updateProgressDialog = new ProgressDialog(null, true, i18n.tr("Downloading update..."));
 
       updateProgressDialog.setOption(2, i18n.tr("cancel"));
       final MyWorker w1 = new MyWorker(fileName, path, user);
@@ -411,6 +413,7 @@ public class Updater implements CanContinueAfterBackEndAvailable {
         if (contentLength > 0) {
           contentBytesRead += len;
           float percentage = (float) contentBytesRead / (float) contentLength * 100F;
+          
           updateProgressDialog.updateProgress(percentage);
         }
 
@@ -458,6 +461,8 @@ public class Updater implements CanContinueAfterBackEndAvailable {
     is.close();
     fos.close();
 
+    updateProgressDialog.setText(i18n.tr("Download Complete - launching installer"));
+    
     // launch install process
     Process p;
     if (Util.isWindows()) {
