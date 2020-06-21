@@ -43,7 +43,7 @@ public class PacProxySelector extends ProxySelector{
 
 	public static final String PAC_LOCATION_PROPERTY = "proxy.autoConfig";
 	
-	protected static final Logger LOGGER = Logger.getLogger(PacProxySelector.class.getName());
+	protected static final Logger logGER = Logger.getLogger(PacProxySelector.class.getName());
 	protected static final Pattern PAC_RESULT_PATTERN = Pattern.compile(
 		"(DIRECT|PROXY|SOCKS)(?:\\s+(\\S+):(\\d+))?(?:;|\\z)");
 	
@@ -75,18 +75,18 @@ public class PacProxySelector extends ProxySelector{
 	public static ProxySelector configureFromProperties() throws Exception{
 		String urlStr = System.getProperty(PAC_LOCATION_PROPERTY);
 		if(urlStr != null){
-			LOGGER.log(Level.CONFIG, "Found proxy.autoConfig system property: {0}", urlStr);
+			logGER.log(Level.CONFIG, "Found proxy.autoConfig system property: {0}", urlStr);
 		}else{
 			urlStr = System.getenv(PAC_LOCATION_PROPERTY);
 			if(urlStr != null){
-				LOGGER.log(Level.CONFIG, "Found proxy.autoConfig environment variable: {0}", urlStr);
+				logGER.log(Level.CONFIG, "Found proxy.autoConfig environment variable: {0}", urlStr);
 			}
 		}
 		if(urlStr != null){
 			URL url = new URL(urlStr);
 			return new PacProxySelector(new InputStreamReader(url.openStream()));
 		}
-		LOGGER.info("No Proxy Auto-Configuration setting found.  Returning ProxySelector.getDefault()...");
+		logGER.info("No Proxy Auto-Configuration setting found.  Returning ProxySelector.getDefault()...");
 		return ProxySelector.getDefault();
 	}
 	
@@ -142,7 +142,7 @@ public class PacProxySelector extends ProxySelector{
 		}
 		String pacResult = findProxyForUrl(uri);
 		List<Proxy> result = convert(pacResult);
-		LOGGER.log(Level.FINE, "Returning {0} for {1}.", new Object[]{result, uri});
+		logGER.log(Level.FINE, "Returning {0} for {1}.", new Object[]{result, uri});
 		return result;
 	}
 	
@@ -153,13 +153,13 @@ public class PacProxySelector extends ProxySelector{
 			// Considered caching, but would prevent a possibility where the function could rewrite itself.
 			Object fObj = ScriptableObject.getProperty(s, "FindProxyForURL");
 			if(!(fObj instanceof Callable)){
-				LOGGER.log(Level.WARNING, "No FindProxyForURL function found: {0}", fObj);
+				logGER.log(Level.WARNING, "No FindProxyForURL function found: {0}", fObj);
 				return null;
 			}
 			Callable f = (Callable)fObj;
 			Object scriptResultObj = f.call(c, s, s, new Object[]{uri.toString(), uri.getHost()});
 			if(scriptResultObj == null){
-				LOGGER.log(Level.WARNING, "Null result from FindProxyForURL: {0}", uri);
+				logGER.log(Level.WARNING, "Null result from FindProxyForURL: {0}", uri);
 				return null;
 			}
 			return scriptResultObj.toString();
@@ -175,7 +175,7 @@ public class PacProxySelector extends ProxySelector{
 		}
 		if(result.isEmpty()){
 			// Mozilla Firefox, as visible in nsPluginHostImpl.cpp, defaults to "DIRECT" on any unexpected returns.
-			LOGGER.warning("Empty or invalid result from FindProxyForURL.  Returning default of DIRECT...");
+			logGER.warning("Empty or invalid result from FindProxyForURL.  Returning default of DIRECT...");
 			result.add(Proxy.NO_PROXY);
 		}
 		return result;
@@ -207,13 +207,13 @@ public class PacProxySelector extends ProxySelector{
 	
 	@Override
 	public void connectFailed(URI uri, SocketAddress sa, IOException ioe){
-		LOGGER.log(Level.WARNING, "connectFailed: " + uri + ", " + sa, ioe);
+		logGER.log(Level.WARNING, "connectFailed: " + uri + ", " + sa, ioe);
 		Context c = new ContextFactory().enterContext(this.context);
 		try{
 			Scriptable s = this.scriptable;
 			Object fObj = ScriptableObject.getProperty(s, "connectFailed");
 			if(!(fObj instanceof Callable)){
-				LOGGER.log(Level.FINE, "No connectFailed function found: {0}", fObj);
+				logGER.log(Level.FINE, "No connectFailed function found: {0}", fObj);
 				return;
 			}
 			((Callable)fObj).call(c, s, s, new Object[]{
@@ -226,12 +226,12 @@ public class PacProxySelector extends ProxySelector{
 	protected static class PacFunctions{
 		
 		public static void alert(String s){
-			LOGGER.log(Level.INFO, "PAC-alert: {0}", s);
+			logGER.log(Level.INFO, "PAC-alert: {0}", s);
 		}
 		
 		public static String myIpAddress(){
-			if(LOGGER.isLoggable(Level.FINE)){
-				LOGGER.fine("myIpAddress called.");
+			if(logGER.isLoggable(Level.FINE)){
+				logGER.fine("myIpAddress called.");
 			}
 			try{
 				return InetAddress.getLocalHost().getHostAddress();
@@ -241,13 +241,13 @@ public class PacProxySelector extends ProxySelector{
 		}
 		
 		public static String dnsResolve(String name){
-			if(LOGGER.isLoggable(Level.FINE)){
-				LOGGER.log(Level.FINE, "dnsResolve called: {0}", name);
+			if(logGER.isLoggable(Level.FINE)){
+				logGER.log(Level.FINE, "dnsResolve called: {0}", name);
 			}
 			try{
 				return InetAddress.getByName(name).getHostAddress();
 			}catch(UnknownHostException uhe){
-				LOGGER.log(Level.WARNING, "dnsResolve returning null for: {0}", name);
+				logGER.log(Level.WARNING, "dnsResolve returning null for: {0}", name);
 				return null;
 			}
 		}
@@ -261,7 +261,7 @@ public class PacProxySelector extends ProxySelector{
 	 */
 	protected static class PacClassShutter implements ClassShutter{
 		public boolean visibleToScripts(String fullClassName){
-			LOGGER.log(Level.WARNING, "visibleToScripts returning false for: {0}", fullClassName);
+			logGER.log(Level.WARNING, "visibleToScripts returning false for: {0}", fullClassName);
 			return false;
 		}
 	}

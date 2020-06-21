@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="serverListAnchorPane" prefHeight="564.0" prefWidth="635.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.MapEncryptionSubviewController">
+   <children>
+      <Label fx:id="selectServerLabel" contentDisplay="CENTER" layoutX="1.0" layoutY="2.0" prefHeight="42.0" prefWidth="629.0" style="-fx-background-color: rgb(64,69,73);" text="    Server map" textFill="WHITE" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="1.0">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <RadioButton fx:id="showOwnPosition" layoutX="14.0" layoutY="57.0" mnemonicParsing="false" text="Datenroute und eigenen Standort anzeigen (falls verbunden)" />
+      <Button fx:id="goToOurLocationButton" layoutX="399.0" layoutY="53.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="231.0" text="go to our location" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="53.0" />
+      <ImageView fx:id="homeImageView" layoutX="413.0" layoutY="57.0" AnchorPane.rightAnchor="206.0" AnchorPane.topAnchor="57.0">
+         <image>
+            <Image url="@../icons/icon-home.png" />
+         </image>
+      </ImageView>
+      <AnchorPane fx:id="mapAnchorPane" layoutX="6.0" layoutY="82.0" prefHeight="479.0" prefWidth="623.0" />
+   </children>
+</AnchorPane>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.web.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="serverListAnchorPane" prefHeight="518.0" prefWidth="810.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.TvStreasSubviewController">
+   <children>
+      <Label fx:id="streamSelectLabel" contentDisplay="CENTER" layoutX="1.0" layoutY="2.0" prefHeight="42.0" prefWidth="629.0" style="-fx-background-color: rgb(64,69,73);" text="List of US TV streams (english language)" textFill="WHITE" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="1.0">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <Button fx:id="streamButton1" layoutX="5.0" layoutY="59.0" mnemonicParsing="false" onAction="#handleStreamButton1" prefHeight="42.0" prefWidth="518.0" text="abs.com" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="112.0" />
+      <Button fx:id="streamButton2" layoutX="5.0" layoutY="108.0" mnemonicParsing="false" onAction="#handleStreamButton2" prefHeight="42.0" prefWidth="518.0" text="cbs.com" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="112.0" />
+      <Button fx:id="streamButton3" layoutX="5.0" layoutY="158.0" mnemonicParsing="false" onAction="#handleStreamButton3" prefHeight="42.0" prefWidth="518.0" text="cwtv.com" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="112.0" />
+      <Button fx:id="streamButton4" layoutX="5.0" layoutY="210.0" mnemonicParsing="false" onAction="#handleStreamButton4" prefHeight="42.0" prefWidth="518.0" text="fox.com" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="112.0" />
+      <Button fx:id="streamButton5" layoutX="5.0" layoutY="261.0" mnemonicParsing="false" onAction="#handleStreamButton5" prefHeight="42.0" prefWidth="518.0" text="hulu.com" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="112.0" />
+      <Button fx:id="streamButton6" layoutX="5.0" layoutY="314.0" mnemonicParsing="false" onAction="#handleStreamButton6" prefHeight="42.0" prefWidth="518.0" text="nbc.com" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="112.0" />
+      <Button fx:id="streamButton7" layoutX="5.0" layoutY="365.0" mnemonicParsing="false" onAction="#handleStreamButton7" prefHeight="42.0" prefWidth="518.0" text="usanetwork.com" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="112.0" />
+      <Button fx:id="streamButton8" layoutX="5.0" layoutY="417.0" mnemonicParsing="false" onAction="#handleStreamButton8" prefHeight="42.0" prefWidth="518.0" text="crunchyroll.com" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="112.0" />
+      <Label fx:id="streamRequireUsIdLabel" layoutX="14.0" layoutY="466.0" prefHeight="48.0" prefWidth="533.0" text="Using these streams ususally requires a US IP address.&#10;You can get one by connecting to a Shellfire VPN server located in the USA.">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

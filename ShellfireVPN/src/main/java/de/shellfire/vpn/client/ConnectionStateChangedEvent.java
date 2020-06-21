@@ -11,7 +11,7 @@ import de.shellfire.vpn.types.Server;
 
 /**
  * 
- * @author bettmenn
+ * @author bettmenn 
  */
 public class ConnectionStateChangedEvent implements Serializable {
   private static final long serialVersionUID = 327656188288256987L;

@@ -4,14 +4,11 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.JPanel;
 
-import org.jdesktop.swingx.mapviewer.GeoPosition;
 import org.xnap.commons.i18n.I18n;
 
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.client.Controller;
-import de.shellfire.vpn.gui.ServerInMapPanel;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.webservice.model.VpnStar;
 import de.shellfire.vpn.webservice.model.WsServer;
@@ -27,7 +24,6 @@ public class Server implements LocatableIcon {
   private double latitude;
   private BufferedImage iconServerForMap;
   private Controller controller;
-  private JPanel panel;
   private static I18n i18n = VpnI18N.getI18n();
 
   public Server(WsServer wss) {
@@ -63,7 +59,7 @@ public class Server implements LocatableIcon {
   }
 
   public Country getCountry() {
-    return country;
+    return this.country;
   }
 
   public void setCountry(Country country) {
@@ -128,27 +124,10 @@ public class Server implements LocatableIcon {
   }
 
   @Override
-  public GeoPosition getGeoPosition() {
-    return new GeoPosition(this.getLatitude(), this.getLongitude());
-  }
-
-  @Override
   public BufferedImage getIcon() {
     return this.iconServerForMap;
   }
 
-  @Override
-  public JPanel getPanel() {
-    if (this.panel == null)
-      this.panel = new ServerInMapPanel(this);
-
-    return this.panel;
-  }
-
-  @Override
-  public String getCity() {
-    return null;
-  }
 
   @Override
   public String getCountryString() {

@@ -21,6 +21,7 @@ import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509KeyManager;
 import javax.net.ssl.X509TrustManager;
 
+import de.shellfire.vpn.updater.UpdaterFX;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.config.RequestConfig;
@@ -37,10 +38,8 @@ import com.google.gson.GsonBuilder;
 
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.exception.VpnException;
-import de.shellfire.vpn.gui.LoginForm;
 import de.shellfire.vpn.messaging.CompositeX509KeyManager;
 import de.shellfire.vpn.messaging.CompositeX509TrustManager;
-import de.shellfire.vpn.updater.Updater;
 import de.shellfire.vpn.webservice.model.GetActivationStatusRequest;
 import de.shellfire.vpn.webservice.model.GetAllVpnDetailsRequest;
 import de.shellfire.vpn.webservice.model.GetCertificatesForOpenVpnRequest;
@@ -260,7 +259,7 @@ class JsonHttpRequest<RequestType, ResponseType> {
       request.addHeader("x-authorization-token", WebServiceBroker.getSessionToken());
     }
 
-    long version = Updater.getInstalledVersion();
+    long version = UpdaterFX.getInstalledVersion();
     request.addHeader("x-shellfirevpn-client-version", new Long(version).toString());
 
     request.addHeader("x-shellfirevpn-client-arch", Util.getArchitecture());
@@ -272,10 +271,6 @@ class JsonHttpRequest<RequestType, ResponseType> {
       os = "osx";
     }
     request.addHeader("x-shellfirevpn-client-os", os);
-    
-    if (LoginForm.IS_CRYPTO_VPN) {
-      request.addHeader("x-shellfirevpn-crypto-mining-enabled", "true");  
-    }
     
     
     log.debug("createRequest() - finish");

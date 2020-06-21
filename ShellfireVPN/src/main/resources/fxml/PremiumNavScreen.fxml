@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="655.0" prefWidth="841.0" style="-fx-background-color: rgb(240,240,240);" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.PremiumScreenController">
+   <children>
+      <AnchorPane layoutX="4.0" prefHeight="515.0" prefWidth="668.0" style="-fx-background-color: rgb(18,172,229);" AnchorPane.bottomAnchor="12.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="12.0">
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <children>
+            <ImageView fx:id="shellfireImageView" fitHeight="64.0" fitWidth="248.0" layoutX="6.0" layoutY="6.0">
+               <image>
+                  <Image url="@../icons/sf_en.png" />
+               </image>
+            </ImageView>
+            <Label fx:id="upgradeLabel" layoutX="27.0" layoutY="71.0" prefHeight="17.0" prefWidth="237.0" text="Upgrage to Shellfire VPN now" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font>
+            </Label>
+            <AnchorPane layoutX="20.0" layoutY="89.0" prefHeight="524.0" prefWidth="782.0" style="-fx-background-color: rgb(64,69,73);" AnchorPane.bottomAnchor="12.0" AnchorPane.leftAnchor="12.0" AnchorPane.rightAnchor="12.0" AnchorPane.topAnchor="95.0">
+               <children>
+                  <AnchorPane layoutX="16.0" layoutY="18.0" prefHeight="491.0" prefWidth="763.0" style="-fx-background-color: rgb(240,240,240);" AnchorPane.bottomAnchor="15.0" AnchorPane.leftAnchor="15.0" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="18.0">
+                     <children>
+                        <ScrollPane fx:id="navigationPane" layoutX="14.0" layoutY="20.0" prefHeight="412.0" prefWidth="738.0" AnchorPane.bottomAnchor="59.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="11.0" AnchorPane.topAnchor="20.0">
+                           <content>
+                              <TableView fx:id="comparisonTableView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="408.0" prefWidth="736.0">
+                                <columns>
+                                  <TableColumn fx:id="connectionColumn" prefWidth="180.0" text="Connection " />
+                                  <TableColumn fx:id="freeColumn" prefWidth="176.0" text="Free" />
+                                    <TableColumn fx:id="premiumColumn" prefWidth="166.0" text="Premium" />
+                                    <TableColumn fx:id="premiumPlusColumn" prefWidth="213.0" text="Premium Plus" />
+                                </columns>
+                                 <padding>
+                                    <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
+                                 </padding>
+                              </TableView>
+                           </content>
+                        </ScrollPane>
+                        <Button fx:id="buyPremiumButton" defaultButton="true" layoutX="13.0" layoutY="441.0" mnemonicParsing="false" onAction="#handleBuyPremiumNow" prefHeight="16.0" prefWidth="738.0" text="Buy premium now">
+                           <padding>
+                              <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
+                           </padding>
+                        </Button>
+                        <Label fx:id="remainingTimeLabel" layoutX="14.0" layoutY="471.0" prefHeight="17.0" prefWidth="192.0" text="Remaining waiting time" />
+                        <Label fx:id="remainingTimeValue" layoutX="348.0" layoutY="472.0" prefHeight="17.0" prefWidth="40.0" text="20s" />
+                        <Button fx:id="cancelButton" cancelButton="true" graphicTextGap="3.0" layoutX="663.0" layoutY="466.0" mnemonicParsing="false" onAction="#handleCalcelButton" prefHeight="19.0" prefWidth="88.0" text="Cancel">
+                           <padding>
+                              <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
+                           </padding>
+                        </Button>
+                     </children>
+                  </AnchorPane>
+               </children>
+            </AnchorPane>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
