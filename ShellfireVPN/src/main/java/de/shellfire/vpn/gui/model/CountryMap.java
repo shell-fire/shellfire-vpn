@@ -280,9 +280,9 @@ public class CountryMap {
       URL file = CountryMap.class.getResource("/flags/"+get(country) + ".png");
       Image icon = null;
       if (file != null) {
-        icon = Util.getImageIconFX("src/main/resources/flags/"+get(country) + ".png");
+        icon = Util.getImageIconFX("/flags/"+get(country) + ".png");
       } else {
-        icon = Util.getImageIconFX("src/main/resources/flags/de.png");
+        icon = Util.getImageIconFX("/flags/de.png");
       }
       
 

@@ -22,16 +22,15 @@ import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509KeyManager;
 import javax.net.ssl.X509TrustManager;
 
+import de.shellfire.vpn.updater.UpdaterFX;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.http.ssl.SSLContexts;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 
@@ -42,7 +41,6 @@ import de.shellfire.vpn.Util;
 import de.shellfire.vpn.exception.VpnException;
 import de.shellfire.vpn.messaging.CompositeX509KeyManager;
 import de.shellfire.vpn.messaging.CompositeX509TrustManager;
-import de.shellfire.vpn.updater.Updater;
 import de.shellfire.vpn.webservice.model.GetActivationStatusRequest;
 import de.shellfire.vpn.webservice.model.GetAllVpnDetailsRequest;
 import de.shellfire.vpn.webservice.model.GetCertificatesForOpenVpnRequest;
@@ -266,7 +264,7 @@ class JsonHttpRequest<RequestType, ResponseType> {
       request.addHeader("x-authorization-token", WebServiceBroker.getSessionToken());
     }
 
-    long version = Updater.getInstalledVersion();
+    long version = UpdaterFX.getInstalledVersion();
     request.addHeader("x-shellfirevpn-client-version", new Long(version).toString());
 
     request.addHeader("x-shellfirevpn-client-arch", Util.getArchitecture());

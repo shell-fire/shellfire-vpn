@@ -31,9 +31,8 @@ import java.util.Properties;
 import java.util.Set;
 
 import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
-import javax.swing.UIManager;
 
+import de.shellfire.vpn.gui.controller.ShellfireVPNMainFormFxmlController;
 import org.apache.commons.codec.binary.Base64;
 import org.slf4j.LoggerFactory;
 import org.xnap.commons.i18n.I18n;
@@ -44,16 +43,15 @@ import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.FileAppender;
-import de.shellfire.vpn.gui.LoginForm;
-import de.shellfire.vpn.gui.ShellfireVPNMainForm;
+import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.messaging.UserType;
 import de.shellfire.vpn.service.IVpnRegistry;
 import de.shellfire.vpn.service.osx.MacRegistry;
 import de.shellfire.vpn.service.win.WinRegistry;
+import java.io.InputStream;
+import javafx.scene.control.Alert;
 import javafx.scene.image.ImageView;
-
- 
 
 public class Util {
   private static final String SHELLFIRE_VPN = "shellfire-vpn" + File.separator;
@@ -113,9 +111,12 @@ public class Util {
     }
 
     
-    JOptionPane.showMessageDialog(null, i18n.tr("Action could not be completed, an error occured:") + "\n" + msg,
-        i18n.tr("Error"), JOptionPane.ERROR_MESSAGE);
-
+    //JOptionPane.showMessageDialog(null, i18n.tr("Action could not be completed, an error occured:") + "\n" + msg,
+      //  i18n.tr("Error"), JOptionPane.ERROR_MESSAGE);
+    Alert alert = new Alert(Alert.AlertType.ERROR);
+    alert.setTitle(i18n.tr("Error"));
+    alert.setContentText(i18n.tr("Action could not be completed, an error occured:") + "\n" + msg);
+    alert.showAndWait();
   }
 
   public static String getStackTrace(Throwable t) {
@@ -632,15 +633,18 @@ public class Util {
   }
 
   public static String getPathJar() throws IllegalStateException {
-    Class<?> context = LoginForm.class;
+    Class<?> context = LoginForms.class;
     String rawName = context.getName();
+    log.debug(rawName);
     String classFileName;
-    /* rawName is something like package.name.ContainingClass$ClassName. We need to turn this into ContainingClass$ClassName.class. */ {
+    /* rawName is something like package.name.ContainingClass$ClassName. We need to turn this into ContainingClass$ClassName.class. */ 
+    {
       int idx = rawName.lastIndexOf('.');
       classFileName = (idx == -1 ? rawName : rawName.substring(idx + 1)) + ".class";
     }
 
     String uri = context.getResource(classFileName).toString();
+    log.debug(uri);
     if (uri.startsWith("file:") || !uri.startsWith("jar:file:")) {
       return null;
     }
@@ -685,27 +689,6 @@ public class Util {
     return jvmDll;
   }
 
-  public static void setDefaultSize(int size) {
-
-    Set<Object> keySet = UIManager.getLookAndFeelDefaults().keySet();
-    Object[] keys = keySet.toArray(new Object[keySet.size()]);
-
-    for (Object key : keys) {
-
-      if (key != null && key.toString().toLowerCase().contains("font")) {
-
-        Font font = UIManager.getDefaults().getFont(key);
-        if (font != null) {
-          font = font.deriveFont((float) size);
-          UIManager.put(key, font);
-        }
-
-      }
-
-    }
-
-  }
-
   public static double getScalingFactor() {
 	  if (!isWindows())  {
 		  return 1;
@@ -722,7 +705,7 @@ public class Util {
   }  
   
   public static ImageIcon getImageIcon(String resourceName, double d) {
-    ImageIcon imageIcon = new javax.swing.ImageIcon(ShellfireVPNMainForm.class.getResource(resourceName));
+    ImageIcon imageIcon = new javax.swing.ImageIcon(ShellfireVPNMainFormFxmlController.class.getResource(resourceName));
     int factor = (int) (Util.getScalingFactor() * d);
     int height = imageIcon.getIconHeight() * factor;
     int width = imageIcon.getIconWidth() * factor;
@@ -738,7 +721,8 @@ public class Util {
 	  return getImageIconFX(resourceName,1);
   }
   public static javafx.scene.image.Image getImageIconFX(String resourceName, double d){
-	   javafx.scene.image.Image image = new javafx.scene.image.Image("file:"+resourceName);
+          InputStream stream = LoginForms.class.getResourceAsStream(resourceName);  
+	   javafx.scene.image.Image image = new javafx.scene.image.Image(stream);
 	   //log.debug("Resource is found at " + resourceName);
 	   int factor = (int) (Util.getScalingFactor() * d);
 	    double height = image.getHeight() * factor;

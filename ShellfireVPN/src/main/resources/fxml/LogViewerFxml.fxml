@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.LogViewerFxmlController">
+   <children>
+      <SplitPane fx:id="splitContentPane" dividerPositions="0.4581673306772908" layoutX="2.0" layoutY="1.0" orientation="VERTICAL" prefHeight="370.0" prefWidth="600.0" AnchorPane.bottomAnchor="38.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="2.0">
+        <items>
+          <AnchorPane fx:id="clientLogPane" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+               <children>
+                  <Label fx:id="clientLogLabel" prefHeight="17.0" prefWidth="598.0" text="Client Log" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <TextArea fx:id="clientLogTextArea" layoutX="97.0" layoutY="16.0" prefHeight="145.0" prefWidth="594.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="19.0" />
+               </children>
+            </AnchorPane>
+          <AnchorPane fx:id="serviceLogPane" minHeight="0.0" minWidth="0.0" prefHeight="156.0" prefWidth="594.0">
+               <children>
+                  <Label fx:id="serviceLogLabel" prefHeight="17.0" prefWidth="591.0" text="Service Log" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <TextArea fx:id="serviceLogTextArea" layoutX="97.0" layoutY="19.0" prefHeight="172.0" prefWidth="594.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="19.0" />
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+      <Button fx:id="sendLogButton" layoutX="1.0" layoutY="371.0" minHeight="20.0" mnemonicParsing="false" onAction="#sendLogButtonAction" prefHeight="20.0" prefWidth="585.0" text="Send Log to Shellfire" textAlignment="CENTER" AnchorPane.bottomAnchor="9.0" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0">
+         <font>
+            <Font size="10.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>

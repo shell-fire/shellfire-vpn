@@ -4,11 +4,9 @@
  * and open the template in the editor.
  */
 package de.shellfire.vpn.gui.controller;
-
+ 
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.gui.LoginForms;
-import de.shellfire.vpn.gui.ProgressDialog;
-import de.shellfire.vpn.gui.RegisterForm;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.webservice.Response;
 import de.shellfire.vpn.webservice.WebService;
@@ -17,12 +15,14 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.application.HostServices;
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -33,9 +33,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
-import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
-import javax.swing.SwingWorker;
 import javax.swing.event.HyperlinkEvent;
 import org.apache.commons.validator.GenericValidator;
 import org.codefx.libfx.control.webview.WebViewHyperlinkListener;
@@ -84,16 +81,16 @@ public class RegisterFormController extends AnchorPane implements Initializable 
     @FXML
     private WebView policyWebView;
         
-    private static Logger log = Util.getLogger(RegisterForm.class.getCanonicalName());
+    private static Logger log = Util.getLogger(RegisterFormController.class.getCanonicalName());
     public static final String REG_PASS = "pass";
     public static final String REG_USER = "user";
     WebService service;
-    private ProgressDialog progressDialog;
+    private ProgressDialogController progressDialog;
     private String activationToken;
     private LoginForms application;
     private boolean isResend = false;
     private boolean accountActive = false;
-    //private RegisterForm.AccountActiveServicePollerTask poller;
+    private RegisterFormController.AccountActiveServicePollerTask poller;
     private static I18n i18n = VpnI18N.getI18n();
     
     WebViewHyperlinkListener eventPrintingListener ;
@@ -125,8 +122,7 @@ public class RegisterFormController extends AnchorPane implements Initializable 
     }
 
     public void initComponents() {
-        this.registerHeadingLabel.setText(i18n.tr("Registrierung"));
-        //this.emailTextField.setText(i18n.tr("Registrierung"));
+        this.registerHeadingLabel.setText(i18n.tr("Registration"));
 
         this.passwordLabel.setText(i18n.tr("Password:"));
 
@@ -142,7 +138,7 @@ public class RegisterFormController extends AnchorPane implements Initializable 
         WebEngine webEngine = policyWebView.getEngine();
         String webContent = "<html>" + "  <body>"
                 + i18n
-                .tr("Ich akzeptiere die <a onclick='return false;' target='_agb' href='https://www.shellfire.de/agb/'>AGB</a> und habe die <a onclick='return false;' target='_datenschutzerklaerung' href='https://www.shellfire.de/datenschutzerklaerung/'>Datenschutzerklärung</a><br />sowie das <a onclick='return false;' target='_widerrufsrecht' href='https://www.shellfire.de/widerrufsrecht/'>Widerrufsrecht</a> zur Kenntnis genommen")
+                .tr("I accept the <a onclick='return false;' target='_agb' href='https://www.shellfire.de/agb/'>Terms and Conditions</a> and have read and noted the <a onclick='return false;' target='_datenschutzerklaerung' href='https://www.shellfire.de/datenschutzerklaerung/'>Privacy Policy</a> <br /> and the <a onclick='return false;' target='_widerrufsrecht' href='https://www.shellfire.de/widerrufsrecht/'>Right of Withdrawal</a>.")
                 + "  </body>" + "</html>";
         webEngine.loadContent(webContent);        
       
@@ -154,9 +150,9 @@ public class RegisterFormController extends AnchorPane implements Initializable 
              hostServices.showDocument(event.getURL().toString());
              }
 	
-	return false;
-    };
-          WebViews.addHyperlinkListener(policyWebView, eventPrintingListener);
+            return false;
+        };
+        WebViews.addHyperlinkListener(policyWebView, eventPrintingListener);
     }
 
     @FXML
@@ -230,9 +226,12 @@ public class RegisterFormController extends AnchorPane implements Initializable 
         }
 
         if (error) {
-            JOptionPane.showMessageDialog(null, message, i18n.tr("Error"), JOptionPane.ERROR_MESSAGE);
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText(i18n.tr("Error"));
+            alert.setContentText(message);
+            alert.showAndWait();
             if (jumpTo != null) {
-                SwingUtilities.invokeLater(new RegisterFormController.FocusRequester(jumpTo));
+                Platform.runLater(new RegisterFormController.FocusRequester(jumpTo));
             }
         }
 
@@ -293,49 +292,39 @@ public class RegisterFormController extends AnchorPane implements Initializable 
     }
 
     private void hideProgress() {
-        progressDialog.setVisible(false);
+        progressDialog.getDialogStage().hide();
 
     }
-
-    class RequestNewAccountTask extends SwingWorker<Void, Void> {
-
-        /*
-     * Executed in event dispatch thread
-         */
-        public void done() {
-            hideProgress();
-
-            if (activationToken != null) {
-                waitForActivation();
-            }
-        }
+    
+    class RequestNewAccountTask extends Task <Void>{
 
         @Override
-        protected Void doInBackground() throws Exception {
-            Response<LoginResponse> registrationResult = service.registerNewFreeAccount(emailTextField.getText(), passwordField.getText(),
+        protected Void call() throws Exception {
+             Response<LoginResponse> registrationResult = service.registerNewFreeAccount(emailTextField.getText(), passwordField.getText(),
                     newsLetterCheckBox.isSelected());
-
             if (registrationResult.isSuccess()) {
                 activationToken = registrationResult.getData().getToken();
             } else {
                 if (progressDialog != null) {
-                    progressDialog.setVisible(false);
+                    progressDialog.getDialogStage().show();
                 }
-
-                //JOptionPane.showMessageDialog(null, i18n.tr("Error registering:") + " " + i18n.tr(registrationResult.getMessage()),
-                      //  i18n.tr("Error"), JOptionPane.ERROR_MESSAGE);
                 Alert alert = new Alert(Alert.AlertType.ERROR);
-                    //alert.setTitle("Error");
                     alert.setHeaderText(i18n.tr("Error"));
                     alert.setContentText(i18n.tr("Error registering:") + " " + i18n.tr(registrationResult.getMessage()));
                     alert.showAndWait();
-                    //Platform.exit();
             }
-
             return null;
         }
-    }
 
+        @Override
+        protected void succeeded() {
+            super.succeeded(); //To change body of generated methods, choose Tools | Templates.
+            hideProgress();
+            if (activationToken != null) {
+                waitForActivation();
+            }
+        } 
+    }
     // needs a swing pane for successful execution. 
     private void waitForActivation() {
 
@@ -370,4 +359,43 @@ public class RegisterFormController extends AnchorPane implements Initializable 
          */
     }
 
+    class AccountActiveServicePollerTask extends Task<Void>{
+        private boolean cont = true;
+        @Override
+        protected Void call() throws Exception {
+            while (cont && !(accountActive = service.accountActive())) {
+                Thread.sleep(3000);
+            }
+
+            return null;
+        }
+
+        public void stopIt() {
+            this.cont = false;
+        }
+
+        @Override
+        protected void succeeded() {
+            //super.succeeded(); //To change body of generated methods, choose Tools | Templates.
+            if (accountActive) {
+                activationSuccesful();
+            }
+        }
+        
+    }
+    private void activationSuccesful() {
+        this.progressDialog.getDialogStage().show();
+        //bringToFront();
+        Alert alert = new Alert(Alert.AlertType.INFORMATION,
+                i18n.tr(
+                        "Your Shellfire account has been successfully activated. Please log in with your email address and password to start Shellfire VPN."),
+                 ButtonType.OK);
+        alert.setHeaderText(i18n.tr("Registration successful."));
+        this.application.getStage().hide();
+        this.application.loadLoginController();
+        LoginForms.instance.setUsername(this.getUser());
+        LoginForms.instance.setPassword(this.getPassword());
+        LoginForms.instance.setAutoLogin(false);
+        this.application.getStage().show();    
+    }
 }

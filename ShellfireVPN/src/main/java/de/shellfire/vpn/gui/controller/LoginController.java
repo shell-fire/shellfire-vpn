@@ -66,8 +66,6 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
     @FXML
     private Button fButtonLostUserCredential;
     @FXML
-    private Label label;
-    @FXML
     private Label fLabelUsername;
     @FXML
     private Label fLabelPassword;
@@ -93,7 +91,9 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
     private Pane exitLogoPane;
     @FXML
     private ImageView exitImageView;
-
+    @FXML
+    private Label loginLabel;
+    
     private static final long serialVersionUID = 1L;
     public static final String REG_PASS = "pass";
     public static final String REG_USER = "user";
@@ -112,7 +112,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
     private static boolean passwordBogus;
     public static ProgressDialogController initProgressDialog;
     public static ShellfireVPNMainFormFxmlController mainForm;
-
+    
     public LoginController() {
     }
 
@@ -169,12 +169,10 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
                         log.debug("LoginController: loginTask - selected vpn is " + selectionRequired);
                         if (selectionRequired && rememberedVpnSelection == 0) {
                             log.debug("Condition for electionRequired && rememberedVpnSelection == 0");
-                            //this.application.vpnSelectController.displayVpnSelect();
                             this.application.vpnSelectController.setApp(this.application);
                             this.application.getStage().show();
 
                         } else {
-                            //try {
                             if (selectionRequired
                                     && rememberedVpnSelection != 0) {
                                 log.debug("Condition for electionRequired && rememberedVpnSelection == 0");
@@ -188,8 +186,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
                             if (!this.application.getStage().isShowing()) {
                                 log.debug("handlefButtonLogin: vpnController not visible");
                                 this.application.loadShellFireMainController();
-                                //log.debug("Shellfire Main controller is " + this.application.shellFireMainController.toString());
-                                this.application.shellFireMainController.setShellfireService(service);
+                                this.application.shellFireMainController.setShellfireService(this.service);
                                 boolean vis = true;
                                 if (minimize
                                         && service.getVpn().getAccountType() != ServerType.Free) {
@@ -197,7 +194,6 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
                                 }
 
                                 this.application.shellFireMainController.initializeComponents();
-                                this.application.shellFireMainController.displayMessage("Creation of object successful");
                                 this.application.shellFireMainController.setSerciceAndInitialize(this.service);
                                 this.application.shellFireMainController.prepareSubviewControllers();
                                 this.application.shellFireMainController.setApp(this.application);
@@ -211,7 +207,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
                         alert.setHeaderText(i18n.tr("Error"));
                         alert.setContentText(i18n.tr("Login error:") + task.getValue().getMessage());
                         alert.showAndWait();
-                        this.fButtonLogin.setDisable(false);
+                        this.application.getStage().show();
                     }
                 } else {
                     log.debug("LoginController: Login result is null");
@@ -287,10 +283,11 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
         this.restoreCredentialsFromRegistry();
         this.restoreAutoConnectFromRegistry();
         this.restoreAutoStartFromRegistry();
-        //continueAfterBackEndAvailabledFX();
     }
 
     public void initComponents() {
+        this.headerImageView.setImage(Util.getImageIconFX("/icons/sf_en.png"));
+        this.exitImageView.setImage(Util.getImageIconFX("/icons/exit.png"));
         this.fLabelUsername.setText(i18n.tr("Email / Username:"));
         this.fLabelUsername.setFont(Font.font("Arial", Util.getFontSize()));
 
@@ -304,9 +301,10 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
         this.fButtonLostUserCredential.setText(i18n.tr("User credentials lost?"));
 
         this.fButtonLogin.setText(i18n.tr("Login"));
-
+        this.loginLabel.setText(i18n.tr("Login"));
         this.fAutoStart.setText(i18n.tr("Start on boot"));
-
+        this.fLabelUsername.setFont(new Font("Arial",Util.getFontSize()));
+        this.fLabelPassword.setFont(new Font("Arial",Util.getFontSize()));
         this.fAutoconnect.setText(i18n.tr("Connect  automatically"));
 
         this.fStoreLoginData.setText(i18n.tr("Save login data"));
@@ -315,7 +313,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
         this.headerPanel.setStyle("-fx-background-color: rgb(18,172,229);");
 
-        this.exitImageView.setImage(Util.getImageIconFX("src/main/resources/icons/exit.png"));
+        this.exitImageView.setImage(Util.getImageIconFX("/icons/exit.png"));
 
         this.fButtonLogin.managedProperty().bind(this.fButtonLogin.visibleProperty());
 
@@ -380,21 +378,18 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
     @FXML
     private void handleExitImageMouseExited(MouseEvent event) {
-        //this.exitImageView.setBlendMode(BlendMode.LIGHTEN);
         this.application.getStage().getScene().setCursor(Cursor.DEFAULT);
 
     }
 
     @FXML
     private void handleExitImageMouseEntered(MouseEvent event) {
-        //this.exitImageView.setBlendMode(BlendMode.OVERLAY);
         this.application.getStage().getScene().setCursor(Cursor.HAND);
     }
 
     @Override
     public void continueAfterBackEndAvailabledFX() {
         log.debug("continueAfterBackEndAvailabledFX: being enabled");
-        //this.service = WebService.getInstance();
         Storage.register(service);
         this.restoreCredentialsFromRegistry();
         this.restoreAutoConnectFromRegistry();
@@ -403,7 +398,6 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
         if (!this.application.getStage().isShowing()) {
             log.debug("Initial progress dialog is hidden");
-            // TODO check if logic intention was properly converted from swing counterpart.
             this.application.getStage().show();
         }
         try {
@@ -413,7 +407,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
         }
 
         if (!this.autoLoginIfActive()) {
-            this.setVisible(true);
+            this.application.getStage().show();
             askForNewAccountAndAutoStartIfFirstStart();
         }
     }
@@ -438,10 +432,13 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
             this.password = this.fPassword.getText();
             this.passwordBogus = false;
-            // perform login action when inputs are correct
             handlefButtonLogin(null);
         }
 
+    }
+
+    void setAutoLogin(boolean autologin) {
+        this.fAutoLogin.setSelected(autologin);
     }
 
     class LoginTAsk extends Task<Response<LoginResponse>> {
@@ -482,7 +479,6 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
     public boolean validate() {
 
         if ((fUsername.getText().trim().length() > 0) && (fPassword.getText().trim().length() > 0)) {
-            // TODO implement any further validation required.
             return true;
         }
         return false;
@@ -532,7 +528,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
         if (doAutoLogin) {
             this.fAutoLogin.setSelected(true);
-            this.setVisible(false);
+            this.application.getStage().hide();
             handlefButtonLogin(null);
         }
 
@@ -548,7 +544,6 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
     protected void setPassword(String password) {
         this.password = password;
         this.fPassword.setText(this.password);
-        //this.setPasswordBogus();
     }
 
     void setPasswordBogus() {
@@ -570,11 +565,10 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
                 if (!this.application.getLicenseAccepted()) {
                     Alert alert = new Alert(AlertType.ERROR);
-                    //alert.setTitle("Error");
-                    //alert.setHeaderText("Printer error");
                     alert.setContentText(i18n.tr("Licence not accepted - Shellfire VPN is now exiting."));
                     alert.showAndWait();
                     Platform.exit();
+                    System.exit(0);
                 }
             }
             askForAutoStart();
@@ -599,7 +593,6 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
     private void askForAutoStart() {
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setTitle(i18n.tr("Startup"));
-//String s = i18n.tr("Start Shellfire VPN on boot and connect automatically?");
         alert.setContentText(i18n.tr("Start Shellfire VPN on boot and connect automatically?"));
 
         Optional<ButtonType> result = alert.showAndWait();
@@ -608,7 +601,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
             Client.addVpnToAutoStart();
             fAutoStart.setSelected(true);
-            fAutoLogin.setSelected(true);
+            setAutoLogin(true);
             fAutoconnect.setSelected(true);
             fStoreLoginData.setSelected(true);
         }
@@ -645,26 +638,24 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
     }
 
-    public void restart() {
+    public static void restart() {
         if (Util.isWindows()) {
 
-            if (this.application != null) {
+            if (LoginForms.instance != null) {
 
-                if (this.application.shellFireMainController != null) {
+                if (LoginForms.shellFireMainController != null) {
 
-                    Controller c = this.application.shellFireMainController.getController();
+                    Controller c = LoginForms.shellFireMainController.getController();
                     if (c != null) {
                         c.disconnect(Reason.GuiRestarting);
 
                     }
-
-                    //this.application.shellFireMainController.dispose();
-                    this.application.shellFireMainController = null;
+                    LoginForms.shellFireMainController = null;
                 }
 
                 //TODO - investigage if commenting causes memory leaks
                 //LoginForms.instance.close();
-                this.application = null;
+                LoginForms.instance = null;
 
                 List<String> restart = new ArrayList<String>();
                 restart.add("ShellfireVPN2.exe");
@@ -690,6 +681,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
                 Util.digestProcess(p);
 
                 Platform.exit();
+                System.exit(0);
             } catch (IOException e) {
                 Util.handleException(e);
             }
@@ -712,5 +704,5 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
         return instDir;
     }
-
+    
 }

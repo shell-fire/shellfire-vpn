@@ -6,11 +6,7 @@
 package de.shellfire.vpn.client;
 
 import de.shellfire.vpn.Util;
-import static de.shellfire.vpn.client.ServiceTools.serviceIsRunning;
-import de.shellfire.vpn.client.osx.OSXServiceTools;
-import de.shellfire.vpn.client.win.WinServiceTools;
 import de.shellfire.vpn.client.win.WinServiceToolsFX;
-import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.gui.controller.LoginController;
 import de.shellfire.vpn.gui.controller.ProgressDialogController;
 import de.shellfire.vpn.service.Service;
@@ -24,7 +20,7 @@ import org.slf4j.Logger;
  */
 public abstract class ServiceToolsFX {
 
-    private static Logger log = Util.getLogger(ServiceTools.class.getCanonicalName());
+    private static Logger log = Util.getLogger(ServiceToolsFX.class.getCanonicalName());
     protected static String nl = "\r\n";
     protected static ProgressDialogController loginProgressDialog;
     protected static boolean init;
@@ -84,8 +80,8 @@ public abstract class ServiceToolsFX {
          */
         @Override
         protected void succeeded() {
-            super.succeeded(); //To change body of generated methods, choose Tools | Templates.
-            loginProgressDialog.setVisible(false);
+            loginProgressDialog.getDialogStage().hide();
+            log.debug("ServiceToolsFX is has succeeded");
             this.loginForm.afterShellfireServiceEnvironmentEnsured();
         }
 

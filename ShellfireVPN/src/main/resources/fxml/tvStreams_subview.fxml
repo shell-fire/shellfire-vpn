@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.web.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
@@ -21,7 +22,7 @@
       <Button fx:id="streamButton6" layoutX="5.0" layoutY="314.0" mnemonicParsing="false" onAction="#handleStreamButton6" prefHeight="42.0" prefWidth="518.0" text="nbc.com" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="112.0" />
       <Button fx:id="streamButton7" layoutX="5.0" layoutY="365.0" mnemonicParsing="false" onAction="#handleStreamButton7" prefHeight="42.0" prefWidth="518.0" text="usanetwork.com" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="112.0" />
       <Button fx:id="streamButton8" layoutX="5.0" layoutY="417.0" mnemonicParsing="false" onAction="#handleStreamButton8" prefHeight="42.0" prefWidth="518.0" text="crunchyroll.com" AnchorPane.leftAnchor="5.0" AnchorPane.rightAnchor="112.0" />
-      <Label fx:id="streamRequireUsIdLabel" layoutX="5.0" layoutY="465.0" prefHeight="48.0" prefWidth="533.0" text="Using these streams ususally requires a US IP address.&#10;You can get one by connecting to a Shellfire VPN server located in the USA.">
+      <Label fx:id="streamRequireUsIdLabel" layoutX="14.0" layoutY="466.0" prefHeight="48.0" prefWidth="533.0" text="Using these streams ususally requires a US IP address.&#10;You can get one by connecting to a Shellfire VPN server located in the USA.">
          <font>
             <Font size="14.0" />
          </font>

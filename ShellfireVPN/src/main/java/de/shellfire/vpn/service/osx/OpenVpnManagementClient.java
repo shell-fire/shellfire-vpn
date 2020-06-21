@@ -13,7 +13,7 @@ import org.slf4j.Logger;
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.client.ConnectionState;
 import de.shellfire.vpn.types.Reason;
-
+/*
 public class OpenVpnManagementClient implements Runnable {
   private static Logger log = Util.getLogger(OpenVpnManagementClient.class.getCanonicalName());
   private Socket client;
@@ -99,3 +99,4 @@ public class OpenVpnManagementClient implements Runnable {
   }
 
 }
+*/

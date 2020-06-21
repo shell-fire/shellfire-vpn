@@ -20,6 +20,7 @@ import de.shellfire.vpn.webservice.Vpn;
 import de.shellfire.vpn.webservice.WebService;
 import de.shellfire.vpn.webservice.model.VpnStar;
 import java.net.URL;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.Random;
@@ -27,6 +28,7 @@ import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -38,7 +40,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
@@ -108,10 +109,12 @@ public class ServerListSubviewController implements Initializable {
 
     @FXML
     private void handleConnectImage2MouseExited(MouseEvent event) {
+        this.application.getStage().getScene().setCursor(Cursor.DEFAULT);
     }
 
     @FXML
     private void handleConnectImage2MouseEntered(MouseEvent event) {
+        this.application.getStage().getScene().setCursor(Cursor.HAND);
     }
 
     @FXML
@@ -120,6 +123,8 @@ public class ServerListSubviewController implements Initializable {
 
     @FXML
     private void handleConnectImage2MouseClicked(MouseEvent event) {
+        WebService service = WebService.getInstance();
+        Util.openUrl(service.getUrlPremiumInfo());
     }
     
     private static I18n i18n = VpnI18N.getI18n();
@@ -184,7 +189,8 @@ public class ServerListSubviewController implements Initializable {
     public void initComponents() {
         this.serverList = this.shellfireService.getServerList();
         this.serverListData.addAll(initServerTable(this.shellfireService.getServerList().getAll()));
-        this.serverListTableView.setItems(serverListData);
+        //this.serverListTableView.setItems(serverListData);
+        //this.serverListTableView.comp
         selectCurrentVpn();
     }
       
@@ -204,18 +210,14 @@ public class ServerListSubviewController implements Initializable {
         securityColumn.setCellValueFactory(cellData -> cellData.getValue().securityProperty());
         speedColumn.setCellValueFactory(cellData -> cellData.getValue().speedProperty());
         countryColumn.setCellValueFactory(cellData -> cellData.getValue().countryProperty());
-        
+        countryColumn.setComparator(new ServerListComparator());
         countryColumn.setCellFactory(column -> {
             //Set up the Table
             return new TableCell<ServerListFXModel, Server>() {
                                 
                 @Override
                 protected void updateItem(Server item, boolean empty) {
-                    super.updateItem(item, empty); //To change body of generated methods, choose Tools | Templates.
-                    if (item == null) {
-                        log.debug("ServerListSubviewController: Country Image and text could not be rendered");
-                        setText("Empty");
-                    } else {
+                    if (item !=null) {
                         if(shellfireService.getVpn().getServer().equals(item))
                             log.debug("****The current VPN has server " + item +" and id " + shellfireService.getVpn().getVpnId() + " and the type is " + shellfireService.getVpn().getAccountType());
                         // get the corresponding country of this server
@@ -225,8 +227,6 @@ public class ServerListSubviewController implements Initializable {
                         getGraphic().setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
                         setText(VpnI18N.getCountryI18n().getCountryName(country));
                     }
-                    this.setDisable(true);
-                    this.setDisabled(true);
                 }
             };
         });
@@ -238,7 +238,14 @@ public class ServerListSubviewController implements Initializable {
         securityColumn.setCellFactory(column -> {
             return new StarImageRendererFX() ;
         });
-               
+        
+        // Wrap the FilteredList in a SortedList. 
+        SortedList<ServerListFXModel> sortedData = new SortedList<>(serverListData);
+        // Bind the SortedList comparator to the TableView comparator.
+        sortedData.comparatorProperty().bind(serverListTableView.comparatorProperty());
+        // Add sorted (and filtered) data to the table.
+        serverListTableView.setItems(sortedData);
+        
         this.connectImage2.managedProperty().bind(this.connectImage2.visibleProperty());
         this.connectImage1.managedProperty().bind(this.connectImage1.visibleProperty());
         this.keyBuyImgeButton.managedProperty().bind(this.keyBuyImgeButton.visibleProperty());
@@ -393,4 +400,12 @@ public class ServerListSubviewController implements Initializable {
     private void connectButton1OnAction(ActionEvent event) {
         connectButton1Clicked(null);
     }
+
+    class ServerListComparator implements Comparator<Server>{
+        @Override
+        public int compare(Server o1, Server o2) {
+            return o1.getCountry().name()
+                    .compareTo(o2.getCountry().name());
+        }
+    }    
 }

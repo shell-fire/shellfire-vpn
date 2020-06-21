@@ -23,9 +23,9 @@ import org.slf4j.Logger;
  */
 public class StarImageRendererFX2 extends TableCell<VpnComparisonFXTableModel, VpnEntry>{
     
-        HashMap<Integer, Image> icons = new HashMap<Integer, Image>();
-    HashMap<Integer, Image> iconsSelected = new HashMap<Integer, Image>();
-    HashMap<Integer, Image> iconsDisabled = new HashMap<Integer, Image>();
+    HashMap<Integer, Image> icons = new HashMap<>();
+    HashMap<Integer, Image> iconsSelected = new HashMap<>();
+    HashMap<Integer, Image> iconsDisabled = new HashMap<>();
     private static final Logger log = Util.getLogger(StarImageRendererFX2.class.getCanonicalName());
 
     public StarImageRendererFX2() {
@@ -33,24 +33,23 @@ public class StarImageRendererFX2 extends TableCell<VpnComparisonFXTableModel, V
     }
 
     private void init() {
-        String baseUrl = "src/main/resources";
-        icons.put(1, Util.getImageIconFX(baseUrl + "/icons/stars/1star.png"));
-        icons.put(2, Util.getImageIconFX(baseUrl + "/icons/stars/2star.png"));
-        icons.put(3, Util.getImageIconFX(baseUrl + "/icons/stars/3star.png"));
-        icons.put(4, Util.getImageIconFX(baseUrl + "/icons/stars/4star.png"));
-        icons.put(5, Util.getImageIconFX(baseUrl + "/icons/stars/5star.png"));
+        icons.put(1, Util.getImageIconFX("/icons/stars/1star.png"));
+        icons.put(2, Util.getImageIconFX("/icons/stars/2star.png"));
+        icons.put(3, Util.getImageIconFX("/icons/stars/3star.png"));
+        icons.put(4, Util.getImageIconFX("/icons/stars/4star.png"));
+        icons.put(5, Util.getImageIconFX("/icons/stars/5star.png"));
 
-        iconsSelected.put(1, Util.getImageIconFX(baseUrl + "/icons/stars/1star_selected.png"));
-        iconsSelected.put(2, Util.getImageIconFX(baseUrl + "/icons/stars/2star_selected.png"));
-        iconsSelected.put(3, Util.getImageIconFX(baseUrl + "/icons/stars/3star_selected.png"));
-        iconsSelected.put(4, Util.getImageIconFX(baseUrl + "/icons/stars/4star_selected.png"));
-        iconsSelected.put(5, Util.getImageIconFX(baseUrl + "/icons/stars/5star_selected.png"));
+        iconsSelected.put(1, Util.getImageIconFX("/icons/stars/1star_selected.png"));
+        iconsSelected.put(2, Util.getImageIconFX("/icons/stars/2star_selected.png"));
+        iconsSelected.put(3, Util.getImageIconFX("/icons/stars/3star_selected.png"));
+        iconsSelected.put(4, Util.getImageIconFX("/icons/stars/4star_selected.png"));
+        iconsSelected.put(5, Util.getImageIconFX("/icons/stars/5star_selected.png"));
 
-        iconsDisabled.put(1, Util.getImageIconFX(baseUrl + "/icons/stars/1star_disabled.png"));
-        iconsDisabled.put(2, Util.getImageIconFX(baseUrl + "/icons/stars/2star_disabled.png"));
-        iconsDisabled.put(3, Util.getImageIconFX(baseUrl + "/icons/stars/3star_disabled.png"));
-        iconsDisabled.put(4, Util.getImageIconFX(baseUrl + "/icons/stars/4star_disabled.png"));
-        iconsDisabled.put(5, Util.getImageIconFX(baseUrl + "/icons/stars/5star_disabled.png"));
+        iconsDisabled.put(1, Util.getImageIconFX("/icons/stars/1star_disabled.png"));
+        iconsDisabled.put(2, Util.getImageIconFX("/icons/stars/2star_disabled.png"));
+        iconsDisabled.put(3, Util.getImageIconFX("/icons/stars/3star_disabled.png"));
+        iconsDisabled.put(4, Util.getImageIconFX("/icons/stars/4star_disabled.png"));
+        iconsDisabled.put(5, Util.getImageIconFX("/icons/stars/5star_disabled.png"));
     }
     
     
@@ -58,8 +57,8 @@ public class StarImageRendererFX2 extends TableCell<VpnComparisonFXTableModel, V
     public void updateItem(VpnEntry item, boolean empty) {
         super.updateItem(item, empty); 
         if (item == null) {
-            log.debug("StarImageRendererFX2: Star Image and text could not be rendered");
-            setText("Empty");
+            //log.debug("StarImageRendererFX2: Star Image and text could not be rendered");
+            //setText("Empty");
         } else {
             VpnStar star = new VpnStar(item.getStar()); 
             Image img = this.getIcon(star, isSelected());

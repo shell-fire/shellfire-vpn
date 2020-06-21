@@ -7,7 +7,6 @@ package de.shellfire.vpn.gui.model;
 
 import de.shellfire.vpn.Storage;
 import de.shellfire.vpn.Util;
-import de.shellfire.vpn.gui.RegisterForm;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.webservice.WebService;
 import java.util.LinkedList;
@@ -24,7 +23,7 @@ public class VpnComparisonFXHelper {
     private static final I18n i18n = VpnI18N.getI18n();
     private AttributeList vpnAttributeList;
     private String[] header = {"", i18n.tr("Free"), i18n.tr("Premium"), i18n.tr("Premium Plus")};
-    private static final Logger log = Util.getLogger(RegisterForm.class.getCanonicalName());
+    private static final Logger log = Util.getLogger(VpnComparisonFXHelper.class.getCanonicalName());
     private WebService shellfireService = null;
 
     public VpnComparisonFXHelper() {

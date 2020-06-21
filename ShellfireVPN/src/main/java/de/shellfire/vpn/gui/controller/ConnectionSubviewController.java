@@ -104,8 +104,6 @@ public class ConnectionSubviewController implements Initializable {
         log.debug("ScalingFactor: " + scaleFactor);
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         double width = screenSize.getWidth();
-
-        
         if (width > 3000) {
             size = "1472";
         }
@@ -121,16 +119,19 @@ public class ConnectionSubviewController implements Initializable {
         this.premiumInfoImageView.managedProperty().bind(this.premiumInfoImageView.visibleProperty());
         this.connectImageView.managedProperty().bind(this.connectImageView.visibleProperty());
         this.productKeyImageView.setVisible(false);
-        this.premiumInfoImageView.setVisible(false);
+        //this.premiumInfoImageView.setVisible(false);
         this.premiumButton.setVisible(false);
         log.debug("After initialization of images");
     }
     
     public void updateComponents(boolean connected){
-          if (connected){
-          this.statusConnectionImageView.setImage(new Image("/icons/status-encrypted-width" + size + ".gif"));
-          this.connectImageView.setImage(new Image("/buttons/button-disconnect-" + langKey + ".gif"));     
-          }
+        if (connected){
+            this.statusConnectionImageView.setImage(new Image("/icons/status-encrypted-width" + size + ".gif"));
+            this.connectImageView.setImage(new Image("/buttons/button-disconnect-" + langKey + ".gif"));     
+        } else {
+            this.statusConnectionImageView.setImage(new Image("/icons/status-unencrypted-width" + size + ".gif"));
+            this.connectImageView.setImage(new Image("/buttons/button-connect-" + langKey + ".gif"));        
+        }
     }
     
     public void initPremium(boolean freeAccount) {
