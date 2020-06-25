@@ -50,7 +50,7 @@ msgstr "annuler"
 #: main/java/de/shellfire/vpn/client/win/WinServiceToolsFX.java:51
 msgid "Service has not been installed correctly - Shellfire VPN is now exited"
 msgstr ""
-"Service n'a pas été installé correctement - Termination de Shellfire VPN."
+"Service n'a pas été installé correctement - Termination de Shellfire VPN"
 
 #: main/java/de/shellfire/vpn/gui/controller/LicenseAcceptanceController.java:74
 msgid "Reject"
@@ -66,7 +66,7 @@ msgstr "Accepter la licence"
 
 #: main/java/de/shellfire/vpn/gui/controller/LogViewerFxmlController.java:121
 msgid "Upload log.."
-msgstr "envoyer log.."
+msgstr "Envoyer log.."
 
 #: main/java/de/shellfire/vpn/gui/controller/LogViewerFxmlController.java:134
 msgid "Log upload cancelled."
@@ -141,9 +141,11 @@ msgstr "Bienvenue: premier lancement"
 
 #: main/java/de/shellfire/vpn/gui/controller/LoginController.java:613
 msgid ""
-"This is the first time you start ShellfireV PN. Create a new Shellfire VPN "
+"This is the first time you start Shellfire VPN. Create a new Shellfire VPN "
 "account?"
 msgstr ""
+"C'est la première fois que vous démarrez Shellfire VPN. Créer un nouveau "
+"compte Shellfire VPN ?"
 
 #: main/java/de/shellfire/vpn/gui/controller/MapEncryptionSubviewController.java:49
 msgid "Show data route and your location (when connected)"
@@ -155,7 +157,7 @@ msgstr "Carte des serveurs"
 
 #: main/java/de/shellfire/vpn/gui/controller/MapEncryptionSubviewController.java:51
 msgid "go to your location"
-msgstr "Montrer ton emplacement"
+msgstr "montrer ton emplacement"
 
 #: main/java/de/shellfire/vpn/gui/controller/ProgressDialogController.java:73
 msgid "Logging in..."
@@ -167,7 +169,7 @@ msgstr "Annuler"
 
 #: main/java/de/shellfire/vpn/gui/controller/RegisterFormController.java:125
 msgid "Registration"
-msgstr ""
+msgstr "Inscription"
 
 #: main/java/de/shellfire/vpn/gui/controller/RegisterFormController.java:129
 msgid "Password check:"
@@ -195,11 +197,17 @@ msgid ""
 "onclick='return false;' target='_widerrufsrecht' href='https://www.shellfire."
 "de/widerrufsrecht/'>Right of Withdrawal</a>."
 msgstr ""
+"J'accepte les <a onclick='return false;' target='_agb' href='https://www."
+"shellfire.de/agb/'>CGV</a> et j'ai lu et noté les <a onclick='return false;' "
+"target='_datenschutzerklaerung' href='https://www.shellfire.de/"
+"datenschutzerklaerung/'>conditions de confidentialité</a> et le <a "
+"onclick='return false;' target='_widerrufsrecht' href='https://www.shellfire."
+"de/widerrufsrecht/'>droit de rétractation</a>."
 
 #: main/java/de/shellfire/vpn/gui/controller/RegisterFormController.java:192
 #: main/java/de/shellfire/vpn/i18n/VpnI18N.java:92
 msgid "Please enter a valid email address."
-msgstr "Entre une adresse e-mail valide"
+msgstr "Entre une adresse e-mail valide."
 
 #: main/java/de/shellfire/vpn/gui/controller/RegisterFormController.java:200
 msgid "Please enter a password."
@@ -289,6 +297,8 @@ msgid ""
 "Changed language settings require a restart of ShellfireVPN to take effect. "
 "Restart now?"
 msgstr ""
+"Les changements de langue nécessitent un redémarrage de ShellfireVPN pour "
+"prendre effet. Redémarrer maintenant ?"
 
 #: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:234
 msgid "Connection status"
@@ -358,6 +368,9 @@ msgid ""
 "\n"
 "Show more information about Shellfire VPN Premium?"
 msgstr ""
+"Ce serveur est uniquement disponible pour les clients Shellfire VPN Premium\n"
+"\n"
+"Afficher plus d'informations sur Shellfire VPN Premium ?"
 
 #: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:687
 msgid "PremiumPlus server selected"
@@ -369,6 +382,10 @@ msgid ""
 "\n"
 "Show more information about Shellfire VPN PremiumPlus?"
 msgstr ""
+"Ce serveur est uniquement disponible pour les clients Shellfire VPN Premium "
+"Plus\n"
+"\n"
+"Afficher plus d'informations sur Shellfire VPN Premium Plus ?"
 
 #: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:767
 msgid "Invalid password"
@@ -519,6 +536,9 @@ msgid ""
 "Using these streams usually requires a US IP address.You can get one by "
 "connecting to a Shellfire VPN server located in the USA"
 msgstr ""
+"L'utilisation de ces streams nécessite une adresse IP américaine, que vous "
+"pouvez obtenir en vous connectant à un serveur VPN Shellfire situé aux États-"
+"Unis"
 
 #: main/java/de/shellfire/vpn/gui/controller/VpnSelectDialogController.java:118
 msgid "No VPN selected"
@@ -533,6 +553,8 @@ msgid ""
 "Multiple VPN are located in your Shellfire account. Please select the VPN "
 "you want to use"
 msgstr ""
+"Plusieurs VPN sont situés dans votre compte Shellfire. Veuillez sélectionner "
+"le VPN que vous souhaitez utiliser"
 
 #: main/java/de/shellfire/vpn/gui/controller/VpnSelectDialogController.java:188
 msgid "select VPN"
@@ -551,6 +573,8 @@ msgid ""
 "Note: VPN types PPTP and L2TP/IPSec have to be switched to OpenVPN before "
 "you can connect using sf vpn."
 msgstr ""
+"Note : les VPN de type PPTP et L2TP/IPSec passent en OpenVPN avant que vous "
+"puissiez vous connecter en utilisant sf vpn."
 
 #: main/java/de/shellfire/vpn/gui/model/VpnComparisonFXHelper.java:25
 msgid "Free"
@@ -644,7 +668,7 @@ msgstr "Erreur de téléchargement de la nouvelle version. Abandon."
 
 #: main/java/de/shellfire/vpn/updater/UpdaterFX.java:490
 msgid "Uninstalling Shellfire VPN Service"
-msgstr "Désinstaller le service Shellfire VPN..."
+msgstr "Désinstaller le service Shellfire VPN"
 
 #: main/java/de/shellfire/vpn/updater/UpdaterFX.java:492
 msgid "Install new version"
@@ -652,7 +676,7 @@ msgstr "Installer nouvelle version"
 
 #: main/java/de/shellfire/vpn/updater/UpdaterFX.java:530
 msgid "Installing Shellfire VPN Service"
-msgstr "Installation du service Shellfire VPN..."
+msgstr "Installation du service Shellfire VPN"
 
 #: main/java/de/shellfire/vpn/updater/UpdaterFX.java:566
 msgid "You chose not to update. The application will now shut down."

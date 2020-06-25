@@ -116,7 +116,7 @@ msgstr ""
 
 #: main/java/de/shellfire/vpn/gui/LoginForm.java:223
 msgid ""
-"This is the first time you start ShellfireV PN. Create a new Shellfire VPN "
+"This is the first time you start Shellfire VPN. Create a new Shellfire VPN "
 "account?"
 msgstr ""
 
@@ -1058,7 +1058,7 @@ msgstr ""
 #~ "Dies ist dein erster Start von Shellfire VPN. Neuen Shellfire VPN Account "
 #~ "anlegen?"
 #~ msgstr ""
-#~ "This is the first time you start ShellfireV PN. Create a new Shellfire "
+#~ "This is the first time you start Shellfire VPN. Create a new Shellfire "
 #~ "VPN account?"
 
 #~ msgid "Willkommen: Erster Start"
