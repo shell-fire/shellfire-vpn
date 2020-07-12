@@ -3,9 +3,9 @@ package de.shellfire.vpn.webservice;
 import java.util.Date;
 
 import de.shellfire.vpn.types.ProductType;
-import de.shellfire.vpn.types.VpnProtocol;
 import de.shellfire.vpn.types.Server;
 import de.shellfire.vpn.types.ServerType;
+import de.shellfire.vpn.types.VpnProtocol;
 import de.shellfire.vpn.webservice.model.WsVpn;
 
 

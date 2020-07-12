@@ -14,6 +14,7 @@ import de.shellfire.vpn.types.VpnProtocol;
 import de.shellfire.vpn.types.ProductType;
 import de.shellfire.vpn.types.Reason;
 import de.shellfire.vpn.types.Server;
+import de.shellfire.vpn.types.VpnProtocol;
 import de.shellfire.vpn.webservice.Vpn;
 import de.shellfire.vpn.webservice.WebService;
 

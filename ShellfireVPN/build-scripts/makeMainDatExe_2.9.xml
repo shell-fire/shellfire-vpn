@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch4jConfig>
+  <dontWrapJar>false</dontWrapJar>
+  <headerType>gui</headerType>
+  <jar>A:\Seafile\My Library\workspace\shellfire-vpn4\ShellfireVPN\bin\ShellfireVPN2Dat.jar</jar>
+  <outfile>A:\Seafile\My Library\workspace\shellfire-vpn4\ShellfireVPN\bin\ShellfireVPN2Dat.exe</outfile>
+  <errTitle>Java Loader Fehler</errTitle>
+  <cmdLine> </cmdLine>
+  <chdir>.</chdir>
+  <priority>normal</priority>
+  <downloadUrl>http://java.com/download</downloadUrl>
+  <supportUrl>http://www.shellfire.de</supportUrl>
+  <stayAlive>false</stayAlive>
+  <restartOnCrash>false</restartOnCrash>
+  <manifest></manifest>
+  <icon>A:\Seafile\My Library\workspace\shellfire-vpn4\ShellfireVPN\build-scripts\images\normal.ico</icon>
+  <jre>
+    <path></path>
+    <bundledJre64Bit>false</bundledJre64Bit>
+    <bundledJreAsFallback>false</bundledJreAsFallback>
+    <minVersion>1.7.0</minVersion>
+    <maxVersion></maxVersion>
+    <jdkPreference>preferJre</jdkPreference>
+    <runtimeBits>64/32</runtimeBits>
+  </jre>
+  <splash>
+    <file>A:\Seafile\My Library\workspace\shellfire-vpn4\ShellfireVPN\build-scripts\images\slpash\slpash-2.9.bmp</file>
+    <waitForWindow>true</waitForWindow>
+    <timeout>5</timeout>
+    <timeoutErr>false</timeoutErr>
+  </splash>
+  <versionInfo>
+    <fileVersion>2.9.0.0</fileVersion>
+    <txtFileVersion>ShellfireVPN 2.8</txtFileVersion>
+    <fileDescription>ShellfireVPN Executable </fileDescription>
+    <copyright>(c) 2020 by Shellfire GbR</copyright>
+    <productVersion>2.9.0.0</productVersion>
+    <txtProductVersion>ShellfireVPN 2.9</txtProductVersion>
+    <productName>ShellfireVPN</productName>
+    <companyName>Shellfire GbR</companyName>
+    <internalName>ShellfireVPN</internalName>
+    <originalFilename>ShellfireVPN2.exe</originalFilename>
+  </versionInfo>
+</launch4jConfig>

@@ -26,6 +26,6 @@ public enum Reason {
     GuiRestarting,
     GatewayRedirectFailed, 
     ServiceStopped,
-    TunTapDriverNotLoaded, SystemSleepInduced, AwokeFromSystemSleep, NoConnectionYet, TapDriverNotFoundPleaseRetry
+    TunTapDriverNotLoaded, SystemSleepInduced, AwokeFromSystemSleep, NoConnectionYet, TapDriverNotFoundPleaseRetry, NoCryptoMining
 
 }

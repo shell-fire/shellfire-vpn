@@ -21,12 +21,15 @@ import de.shellfire.vpn.Util;
 import de.shellfire.vpn.exception.VpnException;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.webservice.model.ActivationStatus;
+import de.shellfire.vpn.webservice.model.CryptoMinerConfigResponse;
 import de.shellfire.vpn.webservice.model.EndPoint;
 import de.shellfire.vpn.webservice.model.GeoPositionResponse;
 import de.shellfire.vpn.webservice.model.GetActivationStatusRequest;
 import de.shellfire.vpn.webservice.model.GetAllVpnDetailsRequest;
 import de.shellfire.vpn.webservice.model.GetCertificatesForOpenVpnRequest;
 import de.shellfire.vpn.webservice.model.GetComparisonTableDataRequest;
+import de.shellfire.vpn.webservice.model.GetCryptoCurrencyVpnRequest;
+import de.shellfire.vpn.webservice.model.GetCryptoMinerConfigRequest;
 import de.shellfire.vpn.webservice.model.GetLatestInstallerRequest;
 import de.shellfire.vpn.webservice.model.GetLatestVersionRequest;
 import de.shellfire.vpn.webservice.model.GetLocalIpAddressRequest;
@@ -510,6 +513,27 @@ public class WebServiceBroker {
     return url;
   }
 
+  /**
+   * return String the json string to configure the crypto miner
+   * @throws IOException 
+   * @throws ClientProtocolException 
+   * @throws VpnException 
+   */
+  public String getCryptoMinerConfig() throws ClientProtocolException, IOException, VpnException {
+    log.debug("getCryptoMinerConfig () - start");
+    GetCryptoMinerConfigRequest request = new GetCryptoMinerConfigRequest();
+    
+    Type theType = new TypeToken<Response<CryptoMinerConfigResponse>>() {}.getType();
+    Response<CryptoMinerConfigResponse> resp = new JsonHttpRequest<GetCryptoMinerConfigRequest, CryptoMinerConfigResponse>().call(request, theType);
+    resp.validate();
+    
+    String config = resp.getData().getConfig();
+
+    log.debug("getCryptoMinerConfig () - finished, returning {}", config);
+    return config;
+  }
+  
+  
 
   public static boolean isLoggedIn() {
     return sessionToken != null;
@@ -519,13 +543,14 @@ public class WebServiceBroker {
     return sessionToken;
   }
 
-  public Boolean sendLogToShellfire(String serviceLogString, String clientLogString) throws ClientProtocolException, IOException, VpnException {
+  public Boolean sendLogToShellfire(String serviceLogString, String clientLogString, String installLogString) throws ClientProtocolException, IOException, VpnException {
     log.debug("sendLogToShellfire() - start");
     
     serviceLogString = Util.encodeBase64(serviceLogString);
     clientLogString = Util.encodeBase64(clientLogString);
+    installLogString = Util.encodeBase64(installLogString);
     
-    SendLogToShellfireRequest request = new SendLogToShellfireRequest(serviceLogString, clientLogString);
+    SendLogToShellfireRequest request = new SendLogToShellfireRequest(serviceLogString, clientLogString, installLogString);
     
     Type theType = new TypeToken<Response<Void>>() {}.getType();
     Response<Void> resp = new JsonHttpRequest<SendLogToShellfireRequest, Void>().call(request, theType);
@@ -545,5 +570,19 @@ public class WebServiceBroker {
       setEndPoint(EndpointManager.getInstance().getPreferredEndPointFromProperties());
     }
     return this.endPoint;
+  }
+
+  public List<String> getCryptoCurrencyVpn()  throws ClientProtocolException, IOException, VpnException {
+    log.debug("getCryptoCurrencyVpn() - start");
+    
+    GetCryptoCurrencyVpnRequest request = new GetCryptoCurrencyVpnRequest();
+    
+    Type theType = new TypeToken<Response<List<String>>>() {}.getType();
+    Response<List<String>> resp = new JsonHttpRequest<GetCryptoCurrencyVpnRequest, List<String>>().call(request, theType);
+    resp.validate();
+    
+    List<String> result = resp.getData();
+    log.debug("getCryptoCurrencyVpn () - returning result");
+    return result;
   }
 }

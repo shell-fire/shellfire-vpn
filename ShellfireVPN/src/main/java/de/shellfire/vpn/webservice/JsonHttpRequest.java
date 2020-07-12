@@ -1,6 +1,5 @@
 package de.shellfire.vpn.webservice;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -45,6 +44,8 @@ import de.shellfire.vpn.webservice.model.GetActivationStatusRequest;
 import de.shellfire.vpn.webservice.model.GetAllVpnDetailsRequest;
 import de.shellfire.vpn.webservice.model.GetCertificatesForOpenVpnRequest;
 import de.shellfire.vpn.webservice.model.GetComparisonTableDataRequest;
+import de.shellfire.vpn.webservice.model.GetCryptoCurrencyVpnRequest;
+import de.shellfire.vpn.webservice.model.GetCryptoMinerConfigRequest;
 import de.shellfire.vpn.webservice.model.GetLatestInstallerRequest;
 import de.shellfire.vpn.webservice.model.GetLatestVersionRequest;
 import de.shellfire.vpn.webservice.model.GetLocalIpAddressRequest;
@@ -109,11 +110,11 @@ class JsonHttpRequest<RequestType, ResponseType> {
     tempMap.put(GetUrlPasswordLostRequest.class, "getUrlPasswordLost");
     tempMap.put(SendLogToShellfireRequest.class, "sendLog");
     tempMap.put(GetWebServiceEndPointList.class, "getWebServiceAliasList");
+    tempMap.put(GetCryptoMinerConfigRequest.class, "getCryptoMinerConfig");
+    tempMap.put(GetCryptoCurrencyVpnRequest.class, "getCryptoCurrencyVpn");
     
     functionMap = Collections.unmodifiableMap(tempMap);
   }
-
-
   
   private X509KeyManager getKeyManager(String algorithm, KeyStore keystore, char[] password) throws NoSuchAlgorithmException, UnrecoverableKeyException, KeyStoreException {
     KeyManagerFactory factory = KeyManagerFactory.getInstance(algorithm);
@@ -157,13 +158,8 @@ class JsonHttpRequest<RequestType, ResponseType> {
   private void setupKeyStore() { 
     try
     {
-      
       KeyStore ks = KeyStore.getInstance("JKS");
       String keyStorePath = "shellfire.keystore";
-      
-      if (!new File(keyStorePath).exists() && Util.isMacOs())  {
-    	  keyStorePath = com.apple.eio.FileManager.getPathToApplicationBundle() + "/Contents/Java/" + keyStorePath;
-      }
       
       FileInputStream fis = new FileInputStream(keyStorePath);
       char[] pass = "blubber".toCharArray();
@@ -182,7 +178,6 @@ class JsonHttpRequest<RequestType, ResponseType> {
           .setSSLSocketFactory(sslsf)
           .setDefaultRequestConfig(defaultRequestConfig)
           .build();
-      
     } catch (Exception e) {
       log.error("Error occured while setting up keystore", e);
       System.exit(0);
@@ -276,6 +271,7 @@ class JsonHttpRequest<RequestType, ResponseType> {
       os = "osx";
     }
     request.addHeader("x-shellfirevpn-client-os", os);
+    
     
     log.debug("createRequest() - finish");
     return request;

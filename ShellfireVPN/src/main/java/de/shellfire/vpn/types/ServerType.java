@@ -11,5 +11,6 @@ package de.shellfire.vpn.types;
 public enum ServerType {
     Free,
     Premium,
-    PremiumPlus
+    PremiumPlus,
+    CryptoPlus
 }

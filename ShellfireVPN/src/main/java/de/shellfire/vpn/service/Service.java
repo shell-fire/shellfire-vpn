@@ -8,7 +8,6 @@ import de.shellfire.vpn.Util;
 import de.shellfire.vpn.messaging.Message;
 import de.shellfire.vpn.messaging.MessageBroker;
 import de.shellfire.vpn.messaging.MessageType;
-import de.shellfire.vpn.messaging.UserType;
 
 public class Service {
 

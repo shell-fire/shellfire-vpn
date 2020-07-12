@@ -1,1 +1,1 @@
-c:\cygwin\bin\bash.exe -li /cygdrive/c/bin/msgfmt.sh
+c:\cygwin\bin\bash.exe -li /cygdrive/c/cygwin/bin/msgfmt.sh

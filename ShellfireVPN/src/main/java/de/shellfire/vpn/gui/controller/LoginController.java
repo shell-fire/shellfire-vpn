@@ -610,7 +610,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
     private void askForNewAccount() {
         Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.setTitle(i18n.tr("Welcome: First Start"));
-        alert.setContentText(i18n.tr("This is the first time you start ShellfireV PN. Create a new Shellfire VPN account?"));
+        alert.setContentText(i18n.tr("This is the first time you start Shellfire VPN. Create a new Shellfire VPN account?"));
 
         Optional<ButtonType> result = alert.showAndWait();
 
@@ -695,11 +695,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
         String instDir = props.getProperty(REG_INSTDIR, null);
 
         if (instDir == null) {
-            if (Util.isWindows()) {
-                instDir = new File("").getAbsolutePath();
-            } else {
-                instDir = WebService.macOsAppDirectory() + "/ShellfireVPN";
-            }
+          instDir = new File("").getAbsolutePath();
         }
 
         return instDir;

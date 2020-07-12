@@ -276,9 +276,13 @@ FunctionEnd
 !insertmacro IsNT ""
 !insertmacro IsNT "un."
 
-; !define LVM_GETITEMCOUNT 0x1004
+!ifndef LVM_GETITEMCOUNT 
+!define LVM_GETITEMCOUNT 0x1004
+!endif
+!ifndef LVM_GETITEMTEXT 
 !define LVM_GETITEMTEXT 0x102D
- 
+!endif
+
 Function DumpLog
   Exch $5
   Push $0
@@ -378,3 +382,4 @@ Function FileSizeNew
   Exch $0
  
 FunctionEnd
+

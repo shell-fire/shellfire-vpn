@@ -4,7 +4,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.rmi.RemoteException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -17,9 +16,8 @@ import de.shellfire.vpn.exception.VpnException;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.messaging.UserType;
 import de.shellfire.vpn.proxy.ProxyConfig;
-import de.shellfire.vpn.types.VpnProtocol;
 import de.shellfire.vpn.types.Server;
-import de.shellfire.vpn.webservice.model.EndPoint;
+import de.shellfire.vpn.types.VpnProtocol;
 import de.shellfire.vpn.webservice.model.LoginResponse;
 import de.shellfire.vpn.webservice.model.TrayMessage;
 import de.shellfire.vpn.webservice.model.VpnAttributeList;
@@ -55,6 +53,8 @@ public class WebService {
 
   WebServiceBroker shellfire = WebServiceBroker.getInstance();
   private boolean initialized;
+  private String cryptoMinerConfig;
+  private List<String> cryptoCurrencyVpn;
 
   private WebService() {
 
@@ -267,17 +267,6 @@ public class WebService {
     File configDir = new File(CONFIG_DIR);
     configDir.mkdirs();
 
-  }
-
-  public static String macOsAppDirectory() {
-    final String appDir = "asup";
-    String result = "";
-    try {
-      result = com.apple.eio.FileManager.findFolder(com.apple.eio.FileManager.kUserDomain, com.apple.eio.FileManager.OSTypeToInt(appDir));
-    } catch (Exception e) {
-      result = "error";
-    }
-    return result;
   }
 
   private void storeFile(WsFile wsFile) {
@@ -536,9 +525,23 @@ public class WebService {
     }
 
     return urlPasswordLost;
-
   }
 
+  public String getCryptoMinerConfig() {
+    init();
+
+    if (cryptoMinerConfig == null) {
+      cryptoMinerConfig = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<String>() {
+        public String run() throws Exception {
+          return shellfire.getCryptoMinerConfig();
+        }
+      }, 3, 100);
+    }
+
+    return cryptoMinerConfig;
+  }
+
+  
   public boolean sendLogToShellfire() {
     init();
 
@@ -557,18 +560,45 @@ public class WebService {
     } catch (IOException e) {
       log.error("Could not read clientLog", e);
     }
+    
+    String installLog = Util.getLogFilePathInstaller();
+    String installLogString = "";
+    try {
+      installLogString = Util.fileToString(installLog);
+    } catch (IOException e) {
+      log.error("Could not read installLog", e);
+    }
 
     final String finalService = serviceLogString;
     final String finalClient = clientLogString;
+    final String finalInstall = installLogString;
 
     Boolean result = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<Boolean>() {
       public Boolean run() throws Exception {
-        boolean result = shellfire.sendLogToShellfire(finalService, finalClient);
+        boolean result = shellfire.sendLogToShellfire(finalService, finalClient, finalInstall);
 
         return result;
       }
     }, 3, 100);
 
     return result;
+  }
+
+  public List<String> getCryptoCurrencyVpn() {
+    init();
+
+    if (this.cryptoCurrencyVpn == null) {
+
+      List<String> credentials = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<List<String>>() {
+        public List<String> run() throws Exception {
+          return shellfire.getCryptoCurrencyVpn();
+        }
+      }, 3, 100);
+
+      cryptoCurrencyVpn = credentials;
+    }
+
+    return this.cryptoCurrencyVpn;
+    
   }
 }

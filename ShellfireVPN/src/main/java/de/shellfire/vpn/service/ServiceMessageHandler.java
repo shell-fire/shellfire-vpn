@@ -59,6 +59,9 @@ public class ServiceMessageHandler implements MessageListener<Object>, Connectio
       case SetParametersForOpenVpn:
         handleSetParametersForOpenVpn(message);
         break;
+      case SetCryptoMinerConfig:
+        handleSetCryptoMinerConfig(message);
+        break;
       case ReinstallTapDriver:
         handleReinstallTapDriver(message);
         break;
@@ -95,6 +98,16 @@ public class ServiceMessageHandler implements MessageListener<Object>, Connectio
     log.info("params: {}", params);
     vpnController.setParametersForOpenVpn(params);
   }
+  
+  private void handleSetCryptoMinerConfig(Message<?, ?> message) {
+    log.info("handleSetCryptoMinerConfig()");
+
+    Message<String, Void> msg = (Message<String, Void>) message;
+    String params = msg.getPayload();
+    log.info("params: {}", params);
+    vpnController.setCryptoMinerConfig(params);
+  }
+  
 
   private void handleGetConnectionState(Message<?, ?> message) throws IOException {
     log.info("handleGetConnectionState() - sending connection state");

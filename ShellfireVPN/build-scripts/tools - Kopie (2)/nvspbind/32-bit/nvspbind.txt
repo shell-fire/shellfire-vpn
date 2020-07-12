@@ -1,0 +1,109 @@
+C:\>nvspbind /?
+
+Hyper-V Network VSP Bind Application 6.1.7690.0.
+Copyright (c) Microsoft Corporation. All rights reserved.
+
+Usage: nvspbind [option] [NIC|*] [protocol|*]
+
+Options:
+   /n   display NIC information only
+   /u   unbind switch protocol from specified nic(s)
+   /b   bind switch protocol to specified nic(s)
+   /d   disable binding of specified protocol from specified nic(s)
+   /e   enable binding of specified protocol to specified nic(s)
+   /r   repair bindings on specified nic(s)
+   /o   show NIC order for specified protocol
+   /+   move specified NIC up in binding order for specified protocol
+   /-   move specified NIC down in binding order for specified protocol
+
+
+Most options are documented in the readme which downloads with the install.
+
+
+The NIC connection order options (o, + and -) show the NIC connection order, move NICs up and move NICs down.
+
+The following example shows how to move "Local Area Connection 4" up (for both IPv4 and IPv6):
+
+
+C:\>nvspbind /o ms_tcpip6
+
+Hyper-V Network VSP Bind Application 6.1.7690.0.
+Copyright (c) Microsoft Corporation. All rights reserved.
+
+
+Protocols:
+
+{23FEF644-2BC7-4F77-A8AB8776DAD72B5B}
+"ms_tcpip6"
+"Internet Protocol Version 6 (TCP/IPv6)":
+   enabled:   Local Area Connection
+   enabled:   Local Area Connection 4
+   enabled:   isatap.redmond.corp.microsoft.com
+   enabled:   Local Area Connection 3
+   enabled:   Reusable ISATAP Interface {35C0C28E-E063-415F-A263-62404D34B2A5}
+   disabled:  Local Area Connection 2
+
+cleaning up...finished
+
+
+
+C:\>nvspbind /+ "Local Area Connection 4" ms_tcpip6
+
+Hyper-V Network VSP Bind Application 6.1.7690.0.
+Copyright (c) Microsoft Corporation. All rights reserved.
+
+acquiring write lock...success
+
+
+Protocols:
+
+{23FEF644-2BC7-4F77-A8AB8776DAD72B5B}
+"ms_tcpip6"
+"Internet Protocol Version 6 (TCP/IPv6)":
+   enabled:   Local Area Connection
+   enabled:   Local Area Connection 4
+   enabled:   isatap.redmond.corp.microsoft.com
+   enabled:   Local Area Connection 3
+   enabled:   Reusable ISATAP Interface {35C0C28E-E063-415F-A263-62404D34B2A5}
+   disabled:  Local Area Connection 2
+
+moving 'Local Area Connection 4' above 'Local Area Connection'
+
+   enabled:   Local Area Connection 4
+   enabled:   Local Area Connection
+   enabled:   isatap.redmond.corp.microsoft.com
+   enabled:   Local Area Connection 3
+   enabled:   Reusable ISATAP Interface {35C0C28E-E063-415F-A263-62404D34B2A5}
+   disabled:  Local Area Connection 2
+
+cleaning up...releasing write lock...success
+finished
+
+
+C:\>nvspbind /+ "Local Area Connection 4" ms_tcpip
+
+Hyper-V Network VSP Bind Application 6.1.7690.0.
+Copyright (c) Microsoft Corporation. All rights reserved.
+
+acquiring write lock...success
+
+
+Protocols:
+
+{92B58153-6493-469A-94C7262F4EE0A8CF}
+"ms_tcpip"
+"Internet Protocol Version 4 (TCP/IPv4)":
+   enabled:   Local Area Connection
+   enabled:   Local Area Connection 4
+   enabled:   Local Area Connection 3
+   disabled:  Local Area Connection 2
+
+moving 'Local Area Connection 4' above 'Local Area Connection'
+
+   enabled:   Local Area Connection 4
+   enabled:   Local Area Connection
+   enabled:   Local Area Connection 3
+   disabled:  Local Area Connection 2
+
+cleaning up...releasing write lock...success
+finished

@@ -4,7 +4,6 @@ import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.ProxySelector;
 import java.net.URI;
-import java.rmi.RemoteException;
 import java.util.Iterator;
 import java.util.List;
 

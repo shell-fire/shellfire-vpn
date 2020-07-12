@@ -15,7 +15,7 @@ public enum MessageType {
   EnableAutoStart,
   DisableAutoStart,
   AutoStartEnabled,
-  
+  SetCryptoMinerConfig,
 
   Error,
   ConnectionStateChanged

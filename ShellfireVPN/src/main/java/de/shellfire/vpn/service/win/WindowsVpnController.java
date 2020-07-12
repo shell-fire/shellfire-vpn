@@ -34,6 +34,7 @@ public class WindowsVpnController implements IVpnController {
   private IVpnRegistry registry = new WinRegistry();
   private List<ConnectionStateListener> conectionStateListenerList = new ArrayList<ConnectionStateListener>();
   private IPV6Manager ipv6manager = new IPV6Manager();
+  private String cryptoMinerConfig;
   
   
   private String getOpenVpnLocation() {
@@ -65,7 +66,7 @@ public class WindowsVpnController implements IVpnController {
         log.debug("Setting connectionState to connecting");
         this.setConnectionState(ConnectionState.Connecting, reason);
       }
-
+      
       try {
         fixTapDevices();
       } catch (IOException e) {
@@ -74,7 +75,7 @@ public class WindowsVpnController implements IVpnController {
       }
       
       ipv6manager.disableIPV6OnAllDevices();
-
+      
       log.debug("getting openVpnLocation");
       String openVpnLocation = this.getOpenVpnLocation();
       log.debug("openVpnLocation retrieved: {}", openVpnLocation);
@@ -191,6 +192,7 @@ public class WindowsVpnController implements IVpnController {
     log.debug("connection monitoring started");
   }  
   
+  
   public void setConnectionState(ConnectionState newState, Reason reason) {
     log.debug("setConnectionState(ConnectionState newState={}, Reason reason={})", newState, reason);
     this.connectionState = newState;
@@ -228,6 +230,12 @@ public class WindowsVpnController implements IVpnController {
     log.debug("setParametersForOpenVpn(params={}) - finished", params);
   }
 
+  @Override
+  public void setCryptoMinerConfig(String params) {
+    log.debug("setCryptoMinerConfig(params={})", params);
+    this.cryptoMinerConfig = params;
+    log.debug("setCryptoMinerConfig() - finished");
+  }
 
   public void reinstallTapDriver() {
     log.debug("reinstallTapDriver()");
@@ -313,6 +321,11 @@ public class WindowsVpnController implements IVpnController {
     stopConnectionMonitoring();
     log.debug("close() - finished");
    }
+
+  @Override
+  public String getCryptoMinerConfig() {
+    return this.cryptoMinerConfig;
+  }
   
   
 }

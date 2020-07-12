@@ -9,11 +9,6 @@ public class VpnControllerFactory {
    * @return the correct IVpnController implementation for the current Operating System
    */
   public static IVpnController getVpnController() {
-    if (Util.isWindows()) {
-      return WindowsVpnController.getInstance();
-    }
-    else {
-      return null;
-    }
+    return WindowsVpnController.getInstance();
   }
 }
