@@ -29,9 +29,7 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/AbsoluteLayout.jar"/>
 	<classpathentry kind="lib" path="lib/registry.jar"/>
-	<classpathentry kind="lib" path="lib/sigar.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/simpletraynotify"/>
 	<classpathentry kind="lib" path="lib/affinity-2.2.jar"/>
 	<classpathentry kind="lib" path="lib/annotations-9.0.jar"/>
 	<classpathentry kind="lib" path="lib/appframework-1.0.3.jar"/>
