@@ -316,11 +316,10 @@ public class UpdaterFX implements CanContinueAfterBackEndAvailableFX {
   }
 
   private boolean askIfUpdateShouldBePerformed() {
-    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+    Alert alert = new Alert(Alert.AlertType.CONFIRMATION, i18n.tr("Update verfügbar. Ohne Durchführung des Updates ist der weitere Betrieb von Shellfire VPN leider nicht möglich.\n\nJetzt Updaten?"), ButtonType.YES, ButtonType.NO);
     alert.setTitle("Update available");
-    alert.setContentText("Update verfügbar. Ohne Durchführung des Updates ist der weitere Betrieb von Shellfire VPN leider nicht möglich.\n\nJetzt Updaten?");
     Optional<ButtonType> result = alert.showAndWait();
-    return (result.get() == ButtonType.OK);
+    return ((result.isPresent()) && (result.get() == ButtonType.YES));
   }
 
   public boolean newVersionAvailable() {

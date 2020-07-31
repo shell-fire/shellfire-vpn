@@ -238,11 +238,10 @@ public class SettingsDialogController implements Initializable {
         if (!currentLanguage.equals(oldLanguage)) {
             VpnI18N.setLanguage(currentLanguage);
             log.debug("SettingsDialogController: save() - language changed to " + currentLanguage.getName());
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, i18n.tr("Changed language settings require a restart of ShellfireVPN to take effect. Restart now?"), ButtonType.YES, ButtonType.NO);
             alert.setHeaderText(i18n.tr("Changed language settings require a restart of Shellfire VPN to take effect."));
-            alert.setContentText(i18n.tr("Changed language settings require a restart of ShellfireVPN to take effect. Restart now?"));
             Optional<ButtonType> result = alert.showAndWait();
-            if ((result.isPresent()) && (result.get() == ButtonType.OK)) {
+            if ((result.isPresent()) && (result.get() == ButtonType.YES)) {
                 alert.close();
                 LoginController.restart();
             }
