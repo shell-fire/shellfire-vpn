@@ -6,6 +6,10 @@
 	<version>3.0.1-SNAPSHOT</version>
 	<name>Shellfire VPN</name>
 	<description>The Shellfire VPN Client</description>
+	<properties>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>net.openhft</groupId>
