@@ -288,13 +288,12 @@ public class LoginForms extends Application {
             UpdaterFX updater = new UpdaterFX();
             if (updater.newVersionAvailable()) {
 
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, I18N.tr("A new version of Shellfire VPN is available. An update is mandatory. Would you like to update now?"), ButtonType.YES, ButtonType.NO);
                 alert.setHeaderText(I18N.tr("New Version"));
-                alert.setContentText(I18N.tr("A new version of Shellfire VPN is available. An update is mandatory. Would you like to update now?"));
 
                 alert.showAndWait();
                 Optional<ButtonType> result = alert.showAndWait();
-                if (result.get() == ButtonType.OK) {
+                if ((result.isPresent()) && (result.get() == ButtonType.YES)) {
                     Alert ialert = new Alert(Alert.AlertType.INFORMATION);
                     ialert.setHeaderText(I18N.tr("Update is being performed"));
                     ialert.setContentText(I18N.tr("You decided, to update. Shellfire VPN is now being restarted with super user privileges to perform the update."));

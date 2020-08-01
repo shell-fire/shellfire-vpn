@@ -591,13 +591,12 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
     }
 
     private void askForAutoStart() {
-        Alert alert = new Alert(AlertType.CONFIRMATION);
+        Alert alert = new Alert(AlertType.CONFIRMATION, i18n.tr("Start Shellfire VPN on boot and connect automatically?"), ButtonType.YES, ButtonType.NO);
         alert.setTitle(i18n.tr("Startup"));
-        alert.setContentText(i18n.tr("Start Shellfire VPN on boot and connect automatically?"));
 
         Optional<ButtonType> result = alert.showAndWait();
 
-        if ((result.isPresent()) && (result.get() == ButtonType.OK)) {
+        if ((result.isPresent()) && (result.get() == ButtonType.YES)) {
 
             Client.addVpnToAutoStart();
             fAutoStart.setSelected(true);
@@ -608,13 +607,11 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
     }
 
     private void askForNewAccount() {
-        Alert alert = new Alert(AlertType.CONFIRMATION);
+        Alert alert = new Alert(AlertType.CONFIRMATION, i18n.tr("This is the first time you start Shellfire VPN. Create a new Shellfire VPN account?"), ButtonType.YES, ButtonType.NO);
         alert.setTitle(i18n.tr("Welcome: First Start"));
-        alert.setContentText(i18n.tr("This is the first time you start Shellfire VPN. Create a new Shellfire VPN account?"));
-
         Optional<ButtonType> result = alert.showAndWait();
 
-        if ((result.isPresent()) && (result.get() == ButtonType.OK)) {
+        if ((result.isPresent()) && (result.get() == ButtonType.YES)) {
             requestRegistration();
         }
     }

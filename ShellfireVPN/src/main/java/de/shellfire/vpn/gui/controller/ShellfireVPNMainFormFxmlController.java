@@ -604,12 +604,11 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
                         if (server.getServerType() == ServerType.Premium || server.getServerType() == ServerType.PremiumPlus) {
                             if (failIfPremiumServerForFreeUser) {
                                 setNormalCursor();
-                                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, i18n.tr("This server is only available for Shellfire VPN Premium customers\n\nShow more information about Shellfire VPN Premium?"), ButtonType.YES, ButtonType.NO);
                                 alert.setHeaderText(i18n.tr("Premium server selected"));
-                                alert.setContentText(i18n.tr("This server is only available for Shellfire VPN Premium customers\n\nShow more information about Shellfire VPN Premium?"));
                                 Optional<ButtonType> result = alert.showAndWait();
 
-                                if ((result.isPresent()) && (result.get() == ButtonType.OK)) {
+                                if ((result.isPresent()) && (result.get() == ButtonType.YES)) {
 
                                     //showNagScreenWithoutTimer();
                                 }
@@ -631,12 +630,11 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
                             if (failIfPremiumServerForFreeUser) {
                                 setNormalCursor();
 
-                                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, i18n.tr("This server is only available for Shellfire VPN PremiumPlus customers\n\nShow more information about Shellfire VPN PremiumPlus?"), ButtonType.YES, ButtonType.NO);
                                 alert.setHeaderText(i18n.tr("PremiumPlus server selected"));
-                                alert.setContentText(i18n.tr("This server is only available for Shellfire VPN PremiumPlus customers\n\nShow more information about Shellfire VPN PremiumPlus?"));
                                 Optional<ButtonType> result = alert.showAndWait();
 
-                                if ((result.isPresent()) && (result.get() == ButtonType.OK)) {
+                                if ((result.isPresent()) && (result.get() == ButtonType.YES)) {
 
                                     showNagScreenWithoutTimer();
                                 }
@@ -767,9 +765,8 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
             log.debug("setStateDisconnected() - end");
         }
         final boolean text = showMessage;
-        //Platform.runLater(()->{
         if (text) {
-            Alert alert = new Alert(Alert.AlertType.ERROR,message,ButtonType.OK);
+            Alert alert = new Alert(Alert.AlertType.ERROR, message, ButtonType.OK);
             alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);            
             alert.showAndWait();
             if (this.trayIcon != null) {
@@ -778,7 +775,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         } else if (this.trayIcon != null) {
             this.trayIcon.setImage(this.iconIdleAwt);
         }
-        //});
         this.stopConnectedSinceTimer();
         serverListSubviewController.getServerListTableView().disableProperty().set(false);
         this.setNormalCursor();
@@ -1377,12 +1373,11 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     }
     private void askForDisconnectedAndQuit() {
 
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, i18n.tr("Disconnect and close Shellfire VPN?"), ButtonType.YES, ButtonType.NO);
         alert.setHeaderText(i18n.tr("Currently Connected"));
-        alert.setContentText(i18n.tr("Disconnect and close Shellfire VPN?"));
         Optional<ButtonType> result = alert.showAndWait();
 
-        if ((result.isPresent()) && (result.get() == ButtonType.OK)) {
+        if ((result.isPresent()) && (result.get() == ButtonType.YES)) {
             this.controller.disconnect(Reason.ApplicationExit);
             enableSystemProxyIfProxyConfig();
             Platform.exit();
