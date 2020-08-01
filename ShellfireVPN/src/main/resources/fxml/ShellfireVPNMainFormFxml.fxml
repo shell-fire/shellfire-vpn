@@ -67,28 +67,6 @@
                         <Insets top="1.0" />
                      </padding>
                   </AnchorPane>
-                  <AnchorPane fx:id="streamsPane" layoutX="-2.0" layoutY="220.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onContextMenuRequested="#handleStreamsPaneContext" onMouseClicked="#handleStreamsPaneClicked" onMouseEntered="#handleStreamsPaneMouseEntered" onMouseExited="#handleStreamsPaneMouseExited" prefHeight="75.0" prefWidth="248.0" style="-fx-background-color: black;" AnchorPane.leftAnchor="-2.0" AnchorPane.rightAnchor="2.0">
-                     <children>
-                        <ImageView fx:id="streamsBackgroundImageView" blendMode="LIGHTEN" fitHeight="73.0" fitWidth="250.0">
-                           <image>
-                              <Image url="@../buttons/button-usa-idle.png" />
-                           </image>
-                        </ImageView>
-                        <Label fx:id="streamsHeaderLabel" layoutX="56.0" prefHeight="25.0" prefWidth="188.0" style="-fx-font-style: bold;" text="USA streams" textFill="#f0f0f0">
-                           <font>
-                              <Font size="16.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="streamsFooterLabel" graphicTextGap="2.0" layoutX="51.0" layoutY="29.0" text="List of American TV streams" textFill="#f0f0f0" AnchorPane.leftAnchor="51.0" AnchorPane.rightAnchor="5.0" AnchorPane.topAnchor="29.0">
-                           <font>
-                              <Font size="15.0" />
-                           </font>
-                           <padding>
-                              <Insets bottom="2.0" />
-                           </padding>
-                        </Label>
-                     </children>
-                  </AnchorPane>
                   <ImageView fx:id="shellfireImageView" fitHeight="64.0" fitWidth="252.0" layoutX="-4.0" layoutY="-4.0" AnchorPane.topAnchor="0.0">
                      <image>
                         <Image url="@../icons/sf_en.png" />
