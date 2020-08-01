@@ -24,6 +24,7 @@ import de.shellfire.vpn.webservice.WebService;
  */
 public class Controller {
 
+
     private static Logger log = Util.getLogger(Controller.class.getCanonicalName());
     private static Controller instance;
     private final ShellfireVPNMainFormFxmlController viewFX;
