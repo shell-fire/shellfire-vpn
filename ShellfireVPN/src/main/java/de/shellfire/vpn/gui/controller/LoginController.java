@@ -205,7 +205,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
                     } else {
                         Alert alert = new Alert(AlertType.ERROR);
                         alert.setHeaderText(i18n.tr("Error"));
-                        alert.setContentText(i18n.tr("Login error:") + task.getValue().getMessage());
+                        alert.setContentText(i18n.tr("Login error: wrong username/password"));
                         alert.showAndWait();
                         this.application.getStage().show();
                     }
