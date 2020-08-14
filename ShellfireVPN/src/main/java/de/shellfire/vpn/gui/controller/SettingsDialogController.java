@@ -124,9 +124,7 @@ public class SettingsDialogController implements Initializable {
     @FXML
     private void handleSaveSettingsButton(ActionEvent event) {
         log.debug("Save button has been clicked");
-        // get a handle to the stage
         Stage stage = (Stage) this.saveSettingsButton.getScene().getWindow();
-        // do what you have to do
         stage.hide();
         log.debug("About to call the save function");
         save();
@@ -134,9 +132,7 @@ public class SettingsDialogController implements Initializable {
 
     @FXML
     private void handleCancelButton(ActionEvent event) {
-        // get a handle to the stage
         Stage stage = (Stage) this.cancelButton.getScene().getWindow();
-        // do what you have to do
         stage.hide();
     }
 
@@ -191,7 +187,6 @@ public class SettingsDialogController implements Initializable {
                                     setText(i18n.tr(item.getName()));
                                     currentLanguage = item;
                                 } else {
-                                    //setText(null);
                                     log.debug("Item is null here");
                                 }
                             }
