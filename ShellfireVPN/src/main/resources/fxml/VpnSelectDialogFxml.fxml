@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="677.0" prefWidth="522.0" style="-fx-background-color: rgb(240,240,240);" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.VpnSelectDialogController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="677.0" prefWidth="522.0" style="-fx-background-color: rgb(240,240,240);" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.VpnSelectDialogController">
    <children>
       <AnchorPane id="AnchorPane" layoutX="8.0" layoutY="9.0" prefHeight="661.0" prefWidth="507.0" style="-fx-background-color: rgb(64,69,73);">
          <children>
@@ -40,9 +41,9 @@
                   <Image url="@../icons/sf_en.png" />
                </image></ImageView>
 
-                  <Pane fx:id="backLabelPane" layoutX="417.0" layoutY="20.0" onMouseClicked="#handleBackLabel" onMouseEntered="#backPaneMouseEntered" onMouseExited="#backPaneMouseExited" prefHeight="32.0" prefWidth="77.0" style="-fx-background-color: rgb(0,0,0);">
+                  <Pane fx:id="backLabelPane" layoutX="417.0" layoutY="20.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#handleBackLabel" onMouseEntered="#backPaneMouseEntered" onMouseExited="#backPaneMouseExited" prefHeight="32.0" prefWidth="70.0" style="-fx-background-color: rgb(0,0,0);">
                      <children>
-                        <Label fx:id="backLabel" alignment="CENTER" layoutX="27.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseEntered="#handleMouseEntered" onMouseExited="#backLabelMousexited" prefHeight="31.0" prefWidth="47.0" style="-fx-background-color: rgb(0,0,0);" text="zurÃ¼ck" textAlignment="CENTER" textFill="#eee5e5" />
+                        <Label fx:id="backLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="26.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseEntered="#handleMouseEntered" onMouseExited="#backLabelMousexited" prefHeight="31.0" prefWidth="40.0" style="-fx-background-color: rgb(0,0,0);" text="back" textAlignment="CENTER" textFill="#eee5e5" wrapText="true" />
                         <ImageView fx:id="backImageVeiw" layoutX="4.0" layoutY="7.0">
                            <image>
                               <Image url="@../icons/exit.png" />
