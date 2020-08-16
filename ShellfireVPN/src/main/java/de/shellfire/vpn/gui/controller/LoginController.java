@@ -682,9 +682,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
             } catch (IOException e) {
                 Util.handleException(e);
             }
-
         }
-
     }
 
     public static String getInstDir() {

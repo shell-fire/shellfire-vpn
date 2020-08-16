@@ -237,9 +237,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         this.serverListFooterLabel.setWrapText(true);
         this.connectoinBackgroundImageView.setImage(Util.getImageIconFX("/buttons/button-connect-active.png"));
         currentSidePane = SidePane.CONNECTION;
-            
-//        log.debug(connectionSubviewController.toString());
-        //      log.debug(connectionSubviewController.displayCreationMessage("Object refreence properly created"));
+
         this.iconConnected = Util.getImageIcon("/icons/sfvpn2-connected-big.png").getImage();
         this.iconConnectedSmall = Util.getImageIconFX("/icons/small-globe-connected.png");
         this.iconConnecting = Util.getImageIcon("/icons/sfvpn2-connecting-big.png").getImage();
@@ -247,12 +245,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         this.iconDisconnectedAwt = Util.getImageIcon("/icons/sfvpn2-disconnected-big.png").getImage();
        this.iconIdleSmall = Util.getImageIconFX("/icons/small-globe-disconnected.png");
         this.iconIdleAwt = Util.getImageIcon("/icons/sfvpn2-idle-big.png").getImage();
-        
-        //this.serverList = this.shellfireService.getServerList();
-        //this.updateLoginDetail();
-        // this.initTray();
-        //Storage.register(this);
-        //this.initConnection();
     }
 
     public void initializeComponents() {
@@ -309,31 +301,14 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
         this.shellfireService = service;
         this.initController();
-        //this.application.getStage().show();
-        /*
-        // continue here, cursor
-        //CustomLayout.register();
-        //this.setFont(TitiliumFont.getFont());
-        //this.loadIcons();
-        //this.setLookAndFeel();
-        //initComponents();
-         */
         this.initTray();
 
         //TODO
         //this.initLayeredPaneSize();
-        //this.initContent();
         Storage.register(this);
 
         this.initShortCuts();
-        //TODO_subview uncomment initPrimium and add corresponding logic
-        //connectionSubviewController.initPremium(isFreeAccount());
         this.initConnection();
-
-        //setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        //pack();
-        //this.setLocationRelativeTo(null);
-        //setVisible(true);
         this.application.getStage().show();
     }
 
@@ -432,10 +407,10 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
     @FXML
     private void handleServerListPaneClicked(MouseEvent event) {
-            contentDetailsPane.getChildren().setAll(leftPaneHashMap.get(SidePane.SERVERLIST).getKey());
-            this.serverListSubviewController.updateComponents(connectionStatus);
-            currentSidePane = SidePane.SERVERLIST;
-            updateSidePanes(currentSidePane);
+        contentDetailsPane.getChildren().setAll(leftPaneHashMap.get(SidePane.SERVERLIST).getKey());
+        this.serverListSubviewController.updateComponents(connectionStatus);
+        currentSidePane = SidePane.SERVERLIST;
+        updateSidePanes(currentSidePane);
     }
 
     private void updateSidePanes(SidePane pane ){
@@ -501,7 +476,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
     @FXML
     private void handleHideImageViewClicked(MouseEvent event) {
-        //this.application.getStage().
         this.application.getStage().toBack();
     }
 
