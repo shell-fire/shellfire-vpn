@@ -77,12 +77,12 @@ public class LogViewerFxmlController implements Initializable {
         }
 
         public void handle(String line) {
-            Platform.runLater(() -> {
-                if (line != null) {
+            if (line != null) {
+                Platform.runLater(() -> {
                     this.textArea.appendText(line + "\n");
                     this.textArea.end();
-                }
-            });
+                });
+            }
         }
     }
 
