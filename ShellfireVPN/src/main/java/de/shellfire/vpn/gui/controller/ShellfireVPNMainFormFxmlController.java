@@ -538,7 +538,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         switch (state) {
             case Disconnected:
                 connectionStatus = false;
-                Platform.runLater(()->{this.setStateDisconnected();});
+                Platform.runLater(()->this.setStateDisconnected());
                 break;
             case Connecting:
                 
@@ -908,14 +908,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
             statusItem.addActionListener(statusListener);
 
             ActionListener openListener = (ActionEvent e) -> {
-                Platform.runLater(() -> {
-                    mouseClickedFX();
-                });
-
-                if (!Util.isWindows()) {
-                    com.apple.eawt.Application app = com.apple.eawt.Application.getApplication();
-                    app.requestForeground(true);
-                }
+                mouseClickedFX();
             };
 
             MenuItem openItem = new MenuItem(i18n.tr("Shellfire VPN to front"));
@@ -942,16 +935,10 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
                 @Override
                 public void mouseClicked(java.awt.event.MouseEvent e) {
                     if (e.getClickCount() == 2) {
-                        Platform.runLater(() -> {
                             mouseClickedFX();
-                        });
                         //TODO
                         //setState(Frame.NORMAL);
 
-                        if (!Util.isWindows()) {
-                            com.apple.eawt.Application app = com.apple.eawt.Application.getApplication();
-                            app.requestForeground(true);
-                        }
                     };
 
                 }
@@ -993,19 +980,13 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     }
 
     public void mouseClickedFX() {
-
-        
-
-        if(this.application.getStage().isIconified())
-            this.application.getStage().setIconified(false);
-        else {
-            this.application.getStage().toFront();
-        }
-        if (!Util.isWindows()) {
-            com.apple.eawt.Application app = com.apple.eawt.Application.getApplication();
-            app.requestForeground(true);
-        }
-
+        Platform.runLater(()-> {
+            if(this.application.getStage().isIconified())
+                this.application.getStage().setIconified(false);
+            else {
+                this.application.getStage().toFront();
+            }
+        });
     }
 
     private void initShortCuts() {
@@ -1085,7 +1066,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         showTrayMessageWithoutCallback(i18n.tr("Connection successful"),
 				i18n.tr("You are now connected to Shellfire VPN. Your internet connection is encrypted."));
         showStatusUrlIfEnabled();
-	disableSystemProxyIfProxyConfig();
+	    disableSystemProxyIfProxyConfig();
     }
     
     private void showStatusUrlIfEnabled() {

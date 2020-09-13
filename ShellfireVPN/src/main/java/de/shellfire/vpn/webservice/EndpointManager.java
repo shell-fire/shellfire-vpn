@@ -116,7 +116,6 @@ public class EndpointManager {
         @Override
         protected String call() {
             log.debug("EndpointManager: start of call method");
-            //Platform.runLater(()->dialogTextProperty.set(i18n.tr("Searching for backend connection...")));
             Platform.runLater(()->initDialogFX.setDialogText(i18n.tr("Searching for backend connection...")));
             log.debug("Find Endpoint task method, init dialog has " + initDialogFX.toString());
             boolean result = false;
