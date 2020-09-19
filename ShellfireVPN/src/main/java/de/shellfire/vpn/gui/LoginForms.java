@@ -92,7 +92,7 @@ public class LoginForms extends Application {
             log.error("could not start with first stage load \n");
             ex.printStackTrace(System.out);
         }
-
+        Platform.setImplicitExit(false);
         try {
             initializations(default_args);
             stage.sizeToScene();
@@ -328,21 +328,6 @@ public class LoginForms extends Application {
         instance.setApp(this);
         log.debug("Preparing to display login menu");
         this.initConnectionTest();
-    }
-
-    public LoginController getLoginInstance() {
-        if (this.instance == null) {
-            loadLoginController();
-        }
-        return this.instance;
-    }
-
-    public LoginController getLoginInstance(boolean minimize) {
-        return this.instance;
-    }
-
-    private void showLoginProgress() {
-        this.initDialog.setVisible(true);
     }
 
     public void licenseAccepted() {

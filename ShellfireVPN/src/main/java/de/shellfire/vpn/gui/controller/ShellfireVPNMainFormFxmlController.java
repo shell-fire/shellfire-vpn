@@ -262,7 +262,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     }
 
     public void setShellfireService(WebService shellfireService) {
-        log.debug("In setShellfireService method");
         this.shellfireService = shellfireService;
         log.debug("ShellfireVPNMainFormFxmlController:" + "service initialized");
     }
@@ -303,8 +302,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         this.initController();
         this.initTray();
 
-        //TODO
-        //this.initLayeredPaneSize();
         Storage.register(this);
 
         this.initShortCuts();
@@ -340,12 +337,9 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
             this.setSelectedProtocol(selectedProtocol);
         }
 
-        Server server = vpn.getServer();
-
         if (autoConnect) {
             this.connectFromButton(false);
         }
-
     }
 
     @FXML
@@ -358,9 +352,9 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
     @FXML
     private void handleConnectionPaneMouseEntered(MouseEvent event) {
-      this.application.getStage().getScene().setCursor(Cursor.HAND);
-              if(!currentSidePane.equals(SidePane.CONNECTION)){
-               this.connectoinBackgroundImageView.setImage(Util.getImageIconFX("/buttons/button-connect-hover.png"));
+        this.application.getStage().getScene().setCursor(Cursor.HAND);
+        if(!currentSidePane.equals(SidePane.CONNECTION)){
+            this.connectoinBackgroundImageView.setImage(Util.getImageIconFX("/buttons/button-connect-hover.png"));
         }
     }
 
@@ -762,7 +756,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
             @Override
             protected Reason call() throws Exception {
                 Reason reasonForChange = controller.getReasonForStateChange();
-		return reasonForChange;
+		        return reasonForChange;
             }
 
             @Override
@@ -845,7 +839,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     private void initTray() {
         if (!Util.isWindows()) {
             this.hideImageView.setVisible(false);
-
         }
 
         if (SystemTray.isSupported()) {
@@ -875,16 +868,13 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
                             showNagScreenWithoutTimer();
                         }
                     });
-
                 }
             };
 
             MenuItem nagItem = new MenuItem(i18n.tr("Shellfire VPN premium infos"));
             nagItem.addActionListener(nagListener);
 
-            ActionListener helpListener = (ActionEvent e) -> {
-                openHelp();
-            };
+            ActionListener helpListener = (ActionEvent e) -> openHelp();
 
             MenuItem helpItem = new MenuItem(i18n.tr("Help"));
             helpItem.addActionListener(helpListener);
