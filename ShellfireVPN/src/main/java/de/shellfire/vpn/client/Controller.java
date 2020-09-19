@@ -48,13 +48,6 @@ public class Controller {
         return instance;
     }
 
-    public void connectFX(Server server, Reason reason) {
-            // Continue from here after MainForm UI Modelling
-        //VpnProtocol procotol = this.viewFX.getSelectedProtocol();
-
-        //this.connect(server, procotol, reason);
-    }
-
     public void connect(Server server, VpnProtocol protocol, Reason reason) {
         log.debug("connect(Server, Protocol, Reason) - setting connecting");
         connectionStateChanged(ConnectionState.Connecting, reason);
@@ -211,9 +204,7 @@ public class Controller {
      * error
      */
     private boolean switchProtocolTo(VpnProtocol protocol) {
-        boolean switchWorked = this.service.setProtocolTo(protocol);
-
-        return switchWorked;
+        return this.service.setProtocolTo(protocol);
     }
 
     public Server connectedTo() {
@@ -238,7 +229,6 @@ public class Controller {
 
     public void connectionStateChanged(ConnectionState newState, Reason reason) {
         ConnectionStateChangedEvent event = new ConnectionStateChangedEvent(reason, newState);
-
         connectionStateChanged(event);
     }
 

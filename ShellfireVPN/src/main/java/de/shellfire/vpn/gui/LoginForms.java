@@ -45,11 +45,8 @@ public class LoginForms extends Application {
     public LicenseAcceptanceController licenceAcceptanceController;
     public static VpnSelectDialogController vpnSelectController;
     public static ShellfireVPNMainFormFxmlController shellFireMainController;
-    private boolean minimize;
     public static LoginController instance;
-    public final static boolean isJavaFX = true;
     private static final I18n I18N = VpnI18N.getI18n();
-    //private AnchorPane page;
     private boolean licenseAccepted;
     // Variables to control draggin of window
     private static double xOffset = 0;
@@ -375,7 +372,6 @@ public class LoginForms extends Application {
 
         if (internetAvailable) {
             log.debug("Before the service Environment Ensure");
-            System.out.println("\n"+initDialog);
             initDialog.setDialogText(I18N.tr("Initializing ShellfireVPNService..."));
             ServiceToolsFX.getInstanceForOS().ensureServiceEnvironmentFX(instance);
             log.debug("After the service Environment Ensure");

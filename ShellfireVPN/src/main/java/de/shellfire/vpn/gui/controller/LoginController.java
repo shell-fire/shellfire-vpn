@@ -435,7 +435,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
             handlefButtonLogin(null);
         }
 
-    }
+                  }
 
     void setAutoLogin(boolean autologin) {
         this.fAutoLogin.setSelected(autologin);
