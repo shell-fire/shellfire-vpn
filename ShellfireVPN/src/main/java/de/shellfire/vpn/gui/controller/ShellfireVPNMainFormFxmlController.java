@@ -532,7 +532,8 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         switch (state) {
             case Disconnected:
                 connectionStatus = false;
-                Platform.runLater(()->this.setStateDisconnected());
+                //Platform.runLater(()->this.setStateDisconnected());
+                this.setStateDisconnected();
                 break;
             case Connecting:
                 
@@ -664,8 +665,10 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         this.hideConnectProgress();
         
         this.connectionSubviewController.connectButtonDisable(false);
-        mySetIconImage("/icons/sfvpn2-disconnected-big.png");
-        this.connectionStatusValue.setText(i18n.tr("Not connected"));
+        Platform.runLater(()->{
+            mySetIconImage("/icons/sfvpn2-disconnected-big.png");
+            this.connectionStatusValue.setText(i18n.tr("Not connected"));
+        });
         this.serverListSubviewController.setConnetImage1Disable(false);
         this.globeConnectionImageView.setImage(this.iconIdleSmall);
         this.connectionSubviewController.updateComponents(false);
@@ -734,12 +737,15 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         }
         final boolean text = showMessage;
         if (text) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, message, ButtonType.OK);
-            alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);            
-            alert.showAndWait();
-            if (this.trayIcon != null) {
-                this.trayIcon.setImage(this.iconDisconnectedAwt);
-            }
+            final String finalMessage = message;
+            Platform.runLater(()-> {
+                Alert alert = new Alert(Alert.AlertType.ERROR, finalMessage, ButtonType.OK);
+                alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+                alert.showAndWait();
+                if (this.trayIcon != null) {
+                    this.trayIcon.setImage(this.iconDisconnectedAwt);
+                }
+            });
         } else if (this.trayIcon != null) {
             this.trayIcon.setImage(this.iconIdleAwt);
         }
