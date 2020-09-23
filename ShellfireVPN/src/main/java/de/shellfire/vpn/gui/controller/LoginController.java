@@ -139,7 +139,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
                     if (service.isLoggedIn()) {
                         log.debug("LoginController: handlefLogginButton - service is loggedIn " + loginResult.getMessage());
                         if (fStoreLoginData.isSelected()) {
-                            storeCredentialsInRegistry(this.username, this.password);
+                            storeCredentialsInVpnProperties(this.username, this.password);
                             log.debug("LoginController: Login Data stored, username is " + this.username + " and passwd is " + this.password);
                         } else {
                             removeCredentialsFromRegistry();
@@ -329,6 +329,12 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
                 this.password = this.fPassword.getText();
                 passwordBogus = false;
             }
+        });
+        
+        // Listeners for changes in username field
+        fUsername.focusedProperty().addListener((ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue) -> {
+          // password field in focus
+           this.username= this.fUsername.getText();
         });
 
         fButtonLogin.setOnMouseClicked(e -> {
@@ -621,7 +627,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
         props.setBoolean(LoginController.REG_FIRST_START, b);
     }
 
-    private void storeCredentialsInRegistry(String user, String password) {
+    private void storeCredentialsInVpnProperties(String user, String password) {
         VpnProperties props = VpnProperties.getInstance();
         props.setProperty(REG_USER, CryptFactory.encrypt(user));
         props.setProperty(REG_PASS, CryptFactory.encrypt(password));
