@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.ResourceBundle;
 import javafx.util.Pair;
 import de.shellfire.vpn.Util;
+import de.shellfire.vpn.VpnProperties;
 import de.shellfire.vpn.client.Client;
 import de.shellfire.vpn.client.ConnectionState;
 import de.shellfire.vpn.client.ConnectionStateChangedEvent;
@@ -1072,18 +1073,12 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	}
 
 	private boolean showStatusUrl() {
-            Preferences prefs = this.getPreferences();
-
-            boolean showStatus = prefs.getBoolean(LoginController.REG_SHOWSTATUSURL, false);
+	  VpnProperties props = VpnProperties.getInstance();
+            boolean showStatus = props.getBoolean(LoginController.REG_SHOWSTATUSURL, false);
             return showStatus;
 	}
     	
-        private Preferences getPreferences() {
-            if (preferences == null) {
-                    preferences = Preferences.userNodeForPackage(this.getClass());
-            }
-            return preferences;
-	}
+
         
     private void hideConnectProgress() {
         Platform.runLater(()->{
