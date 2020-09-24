@@ -111,7 +111,7 @@ public class WinRegistry implements IVpnRegistry {
   }
 
   public static void addAutoStart(String name, String dir, String fileName, String params) {
-    String value = "\"" + dir + fileName + "\" "  + params;
+    String value = "\"" + dir + "\\" + fileName + "\" "  + params;
     
     setStringValue(Registry.HKEY_CURRENT_USER, REGKEY_CURRENTVERSION_RUN, name, value);
   }
