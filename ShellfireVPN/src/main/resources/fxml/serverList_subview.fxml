@@ -63,9 +63,9 @@
             <Image url="@../buttons/button-serial-fr.gif" />
          </image>
       </ImageView>
-      <ImageView fx:id="connectImage2" fitHeight="46.0" fitWidth="200.0" layoutX="439.0" layoutY="487.0" onContextMenuRequested="#handleConnectImage2ContextRequested" onMouseClicked="#handleConnectImage2MouseClicked" onMouseEntered="#handleConnectImage2MouseEntered" onMouseExited="#handleConnectImage2MouseExited" AnchorPane.bottomAnchor="7.0" AnchorPane.rightAnchor="2.0">
+      <ImageView fx:id="connectImage2" fitHeight="46.0" fitWidth="240.0" layoutX="531.0" layoutY="465.0" onContextMenuRequested="#handleConnectImage2ContextRequested" onMouseClicked="#handleConnectImage2MouseClicked" onMouseEntered="#handleConnectImage2MouseEntered" onMouseExited="#handleConnectImage2MouseExited" AnchorPane.bottomAnchor="7.0" AnchorPane.rightAnchor="11.0">
          <image>
-            <Image url="@../buttons/button-connect-de.gif" />
+            <Image url="@../buttons/button-premium-infos.gif" />
          </image>
       </ImageView>
       <Button fx:id="connectButton1" ellipsisString="" layoutX="14.0" layoutY="467.0" mnemonicParsing="false" onAction="#connectButton1OnAction" onMouseClicked="#connectButton1Clicked" onMouseEntered="#connectButton1Entered" onMouseExited="#connectButton1Exited" prefHeight="40.0" prefWidth="184.0" />
