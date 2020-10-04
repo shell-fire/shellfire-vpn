@@ -856,8 +856,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
             ActionListener exitListener = new ActionListener() {
 
                 public void actionPerformed(ActionEvent e) {
-                    // TODO
-                    //exitHandler();
+                    exitHandler();
                 }
             };
 
