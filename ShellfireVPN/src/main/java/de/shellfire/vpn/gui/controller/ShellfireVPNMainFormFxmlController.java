@@ -339,7 +339,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         }
 
         if (autoConnect) {
-            this.connectFromButton(false);
+            this.connectFromButton();
         }
     }
 
@@ -548,8 +548,8 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
     }
 
-    public void connectFromButton(final boolean failIfPremiumServerForFreeUser) {
-        log.debug("connectFromButton(" + failIfPremiumServerForFreeUser + ")");
+    public void connectFromButton() {
+        log.debug("connectFromButton()");
         this.setWaitCursor();
         
         Task<ConnectionState> task = new Task<ConnectionState>() {
@@ -572,52 +572,37 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
                         Server server = this.serverListSubviewController.getSelectedServer();
                         if (server.getServerType() == ServerType.Premium || server.getServerType() == ServerType.PremiumPlus) {
-                            if (failIfPremiumServerForFreeUser) {
-                                setNormalCursor();
-                                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, i18n.tr("This server is only available for Shellfire VPN Premium customers\n\nShow more information about Shellfire VPN Premium?"), ButtonType.YES, ButtonType.NO);
-                                alert.setHeaderText(i18n.tr("Premium server selected"));
-                                Optional<ButtonType> result = alert.showAndWait();
+                              setNormalCursor();
+                              Alert alert = new Alert(Alert.AlertType.CONFIRMATION, i18n.tr("This server is only available for Shellfire VPN Premium customers\n\nShow more information about Shellfire VPN Premium?"), ButtonType.YES, ButtonType.NO);
+                              alert.setHeaderText(i18n.tr("Premium server selected"));
+                              Optional<ButtonType> result = alert.showAndWait();
 
-                                if ((result.isPresent()) && (result.get() == ButtonType.YES)) {
+                              if ((result.isPresent()) && (result.get() == ButtonType.YES)) {
+                                Util.openUrl(shellfireService.getUrlPremiumInfo());
+                              }
 
-                                    //showNagScreenWithoutTimer();
-                                }
+                              return;
+                      }
 
-                                return;
-                            } else {
-                                server = this.serverListSubviewController.getRandomFreeServer();
-                                setSelectedServer(server);
-                            }
-
-                        }
-
-                        delayedConnect(server, this.serverListSubviewController.getSelectedProtocol(), Reason.ConnectButtonPressed);
+                        controller.connect(serverListSubviewController.getSelectedServer(), serverListSubviewController.getSelectedProtocol(), Reason.ConnectButtonPressed);
                     } else if (isPremiumAccount()) {
                         log.debug("ServerList Subview controller  has the object " + serverListSubviewController.toString());
                         Server server = this.serverListSubviewController.getSelectedServer();
 
                         if (server.getServerType() == ServerType.PremiumPlus) {
-                            if (failIfPremiumServerForFreeUser) {
-                                setNormalCursor();
+                            setNormalCursor();
 
-                                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, i18n.tr("This server is only available for Shellfire VPN PremiumPlus customers\n\nShow more information about Shellfire VPN PremiumPlus?"), ButtonType.YES, ButtonType.NO);
-                                alert.setHeaderText(i18n.tr("PremiumPlus server selected"));
-                                Optional<ButtonType> result = alert.showAndWait();
-
-                                if ((result.isPresent()) && (result.get() == ButtonType.YES)) {
-
-                                    showNagScreenWithoutTimer();
-                                }
-
-                                return;
-                            } else {
-                                server = this.serverListSubviewController.getRandomPremiumServer();
-                                setSelectedServer(server);
+                            Alert alert = new Alert(Alert.AlertType.CONFIRMATION, i18n.tr("This server is only available for Shellfire VPN PremiumPlus customers\n\nShow more information about Shellfire VPN PremiumPlus?"), ButtonType.YES, ButtonType.NO);
+                            alert.setHeaderText(i18n.tr("PremiumPlus server selected"));
+                            Optional<ButtonType> result = alert.showAndWait();
+                            if ((result.isPresent()) && (result.get() == ButtonType.YES)) {
+                              Util.openUrl(shellfireService.getUrlPremiumInfo());
                             }
+                            return;
                                                                                                                                                                                                
                         }
 
-                        controller.connect(this.serverListSubviewController.getSelectedServer(), this.serverListSubviewController.getSelectedProtocol(), Reason.ConnectButtonPressed);
+                        controller.connect(serverListSubviewController.getSelectedServer(), serverListSubviewController.getSelectedProtocol(), Reason.ConnectButtonPressed);
                     } else {
                         controller.connect(serverListSubviewController.getSelectedServer(), serverListSubviewController.getSelectedProtocol(), Reason.ConnectButtonPressed);
                     }
@@ -717,7 +702,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
                     message = i18n.tr("No Tap driver installed. Please reinstall Shellfire VPN.");
                     break;
                 case TapDriverNotFoundPleaseRetry:
-                    connectFromButton(true);
+                    connectFromButton();
                     break;
                 case GatewayRedirectFailed:
                     showMessage = true;
@@ -771,7 +756,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
                 try {
                     Reason reasonForChange = get();
                     if (reasonForChange == Reason.DisconnectButtonPressed || reasonForChange == Reason.DisconnectDetected) {
-
                             showTrayMessageWithoutCallback(i18n.tr("Disconnected"),
                                             i18n.tr("Shellfire VPN connection terminated. Your internet connection is no longer secured!"));
                     }
@@ -872,7 +856,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            showNagScreenWithoutTimer();
+                          Util.openUrl(shellfireService.getUrlPremiumInfo());
                         }
                     });
                 }
@@ -1236,7 +1220,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         LinkedList<VpnTrayMessage> messages = new LinkedList<VpnTrayMessage>();
         if (controller.getCurrentConnectionState() == ConnectionState.Connected) {
             ActionListener premiumInfoClicked = (ActionEvent e) -> {
-                showNagScreenWithoutTimer();
+              Util.openUrl(shellfireService.getUrlPremiumInfo());
             };
 
             if (this.shellfireService.getVpn().getAccountType() == ServerType.Free) {
@@ -1259,12 +1243,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
     }
 
-    private void showNagScreenWithoutTimer() {
-        log.debug("ShellfireVPNMainFormFxmlController:  showNagScreenWithoutTimer method entered");
-        WebService service = WebService.getInstance();
-        Util.openUrl(service.getUrlPremiumInfo());
-        setNormalCursor();
-    }
 
     private boolean isPremiumAccount() {
         return this.shellfireService.getVpn().getAccountType() == ServerType.Premium;
@@ -1275,12 +1253,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         int num = this.shellfireService.getServerList().getServerNumberByServer(server);
         this.serverListSubviewController.setSelectedServer(num);
 
-    }
-
-    private void delayedConnect(Server selectedServer, VpnProtocol protocol, Reason reason) {
-        popupConnectItem.setLabel(i18n.tr("Connecting..."));
-        popupConnectItem.setEnabled(false);
-        showNagScreenWithoutTimer();
     }
 
     /**
@@ -1331,12 +1303,8 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         }
     }
     
-    	private void showTrayMessageWithoutCallback(String header, String content) {
-		// This will run only on windows systems so it is ok to leave just this test
-		if (Util.isWindows()) {
+ 	private void showTrayMessageWithoutCallback(String header, String content) {
 			trayIcon.displayMessage(header, content, MessageType.INFO);
-		} 
-
 	}
 
     private void initConsole() {

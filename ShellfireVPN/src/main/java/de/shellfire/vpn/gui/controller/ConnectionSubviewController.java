@@ -191,13 +191,8 @@ public class ConnectionSubviewController implements Initializable {
     }
 
     @FXML
-    private void handleConnectButtonClicked(MouseEvent event) {
-        this.application.shellFireMainController.connectFromButton(false);
-    }
-
-    @FXML
     private void handleConnectButtonAction(ActionEvent event) {
-        handleConnectButtonClicked(null);
+      this.application.shellFireMainController.connectFromButton();
     }
 
     @FXML

@@ -69,7 +69,6 @@
 	<classpathentry kind="lib" path="lib/org.mozilla.javascript-1.7.5.v201504281450.jar"/>
 	<classpathentry kind="lib" path="lib/platform.jar"/>
 	<classpathentry kind="lib" path="lib/sigar-1.0.jar"/>
-	<classpathentry kind="lib" path="lib/simpletraynotify-0.0.1-SNAPSHOT.jar"/>
 	<classpathentry kind="lib" path="lib/slf4j-api-1.7.18.jar"/>
 	<classpathentry kind="lib" path="lib/snappy-java-1.1.1.6.jar"/>
 	<classpathentry kind="lib" path="lib/swing-layout-1.0.3.jar"/>
@@ -77,5 +76,6 @@
 	<classpathentry kind="lib" path="lib/swingx-1.6.jar"/>
 	<classpathentry kind="lib" path="lib/swingx-core-1.6.2.jar"/>
 	<classpathentry kind="lib" path="lib/tools.jar"/>
+	<classpathentry kind="lib" path="lib/simpletraynotify-0.0.1-SNAPSHOT.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

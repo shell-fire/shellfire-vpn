@@ -29,7 +29,7 @@
                   <Image url="@../buttons/button-serial-en.gif" />
                </image>
             </ImageView>
-            <Button id="connect-button" fx:id="connectButton" layoutX="18.0" layoutY="453.0" mnemonicParsing="false" onAction="#handleConnectButtonAction" onMouseClicked="#handleConnectButtonClicked" onMouseEntered="#handleConnectButtonEntered" onMouseExited="#handleConnectButtonExited" prefHeight="46.0" prefWidth="200.0" />
+            <Button id="connect-button" fx:id="connectButton" layoutX="18.0" layoutY="453.0" mnemonicParsing="false" onAction="#handleConnectButtonAction" onMouseEntered="#handleConnectButtonEntered" onMouseExited="#handleConnectButtonExited" prefHeight="46.0" prefWidth="200.0" />
             <Button fx:id="premiumButton" ellipsisString="" layoutX="550.0" layoutY="456.0" mnemonicParsing="false" onAction="#premiumButtonOnAction" onMouseClicked="#premiumButtonClicked" onMouseEntered="#premiumButtonEntered" onMouseExited="#premiumButtonExited" prefHeight="46.0" prefWidth="240.0" />
          </children>
       </Pane>
