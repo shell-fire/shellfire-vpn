@@ -392,13 +392,9 @@ public class ServerListSubviewController implements Initializable {
     }
 
     @FXML
-    private void connectButton1Clicked(MouseEvent event) {
-        this.application.shellFireMainController.connectFromButton(false);
-    }
-
-    @FXML
     private void connectButton1OnAction(ActionEvent event) {
-        connectButton1Clicked(null);
+      log.debug("connectButton1OnAction");
+      this.application.shellFireMainController.connectFromButton();
     }
 
     class ServerListComparator implements Comparator<Server>{
