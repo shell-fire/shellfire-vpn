@@ -15,7 +15,6 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.ServerListSubviewController">
    <children>
       <AnchorPane fx:id="serverListAnchorPane" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -48,7 +47,7 @@
                   <Font name="System Bold" size="18.0" />
                </font>
             </Label>
-            <RadioButton fx:id="UDPRadioButton" layoutX="3.0" layoutY="459.0" mnemonicParsing="false" prefHeight="15.0" prefWidth="112.0" text="UDP (fast)" AnchorPane.bottomAnchor="58.0">
+            <RadioButton fx:id="UDPRadioButton" layoutX="3.0" layoutY="459.0" mnemonicParsing="false" prefHeight="15.0" prefWidth="112.0" text="UDP (fast)" AnchorPane.bottomAnchor="68.0">
                <toggleGroup>
                   <ToggleGroup fx:id="networkTypeToggleGroup" />
                </toggleGroup>
@@ -56,7 +55,7 @@
                   <Font size="14.0" />
                </font>
             </RadioButton>
-            <RadioButton fx:id="TCPRadioButton" layoutX="138.0" layoutY="483.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="374.0" selected="true" text="TCP (works with safe firewalls and proxies)" toggleGroup="$networkTypeToggleGroup" AnchorPane.bottomAnchor="54.0">
+            <RadioButton fx:id="TCPRadioButton" layoutX="138.0" layoutY="483.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="374.0" selected="true" text="TCP (works with safe firewalls and proxies)" toggleGroup="$networkTypeToggleGroup" AnchorPane.bottomAnchor="64.0">
                <font>
                   <Font size="14.0" />
                </font>
