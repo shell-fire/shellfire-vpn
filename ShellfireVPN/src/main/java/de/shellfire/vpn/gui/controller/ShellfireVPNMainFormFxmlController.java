@@ -471,8 +471,21 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
     @FXML
     private void handleHideImageViewClicked(MouseEvent event) {
-        this.application.getStage().toBack();
+      hide(this.application.getStage());
     }
+    
+    private void hide(final Stage stage) {
+      Platform.runLater(new Runnable() {
+          @Override
+          public void run() {
+              if (SystemTray.isSupported()) {
+                  stage.hide();
+              } else {
+                  System.exit(0);
+              }
+          }
+      });
+  }
 
     @FXML
     private void handleMinimizeImageViewExited(MouseEvent event) {
@@ -828,10 +841,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     }
 
     private void initTray() {
-        if (!Util.isWindows()) {
-            this.hideImageView.setVisible(false);
-        }
-
         if (SystemTray.isSupported()) {
 
             SystemTray tray = SystemTray.getSystemTray();
@@ -906,6 +915,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
                 public void actionPerformed(ActionEvent e) {
                     setVisible(true);
                     toFront();
+
                     //setState(Frame.NORMAL);
                 }
             };
@@ -915,14 +925,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
                 @Override
                 public void mouseClicked(java.awt.event.MouseEvent e) {
                   log.debug("mouseClicked action performed");
-
-                  
-                    if (e.getClickCount() == 2) {
-                            mouseClickedFX();
-                        //TODO
-                        //setState(Frame.NORMAL);
-
-                    };
+                  mouseClickedFX();
 
                 }
 
@@ -968,9 +971,9 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
     public void mouseClickedFX() {
         Platform.runLater(()-> {
-            if(this.application.getStage().isIconified())
-                this.application.getStage().setIconified(false);
-            else {
+            if(!this.application.getStage().isShowing()) {
+                this.application.getStage().show();
+        } else {
                 this.application.getStage().toFront();
             }
         });
