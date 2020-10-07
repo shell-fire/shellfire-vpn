@@ -881,8 +881,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
             ActionListener popupConnectListener = new ActionListener() {
 
                 public void actionPerformed(ActionEvent e) {
-                    // TODO
-                    //connectFromButton(false);
+                    connectFromButton();
                 }
             };
 
@@ -915,8 +914,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
                 public void actionPerformed(ActionEvent e) {
                     setVisible(true);
                     toFront();
-
-                    //setState(Frame.NORMAL);
                 }
             };
 
@@ -924,29 +921,24 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
                 @Override
                 public void mouseClicked(java.awt.event.MouseEvent e) {
-                  log.debug("mouseClicked action performed");
                   mouseClickedFX();
 
                 }
 
                 @Override
                 public void mousePressed(java.awt.event.MouseEvent e) {
-                  log.debug("mousePressed action performed");
                 }
 
                 @Override
                 public void mouseReleased(java.awt.event.MouseEvent e) {
-                  log.debug("mouseReleased action performed");
                 }
 
                 @Override
                 public void mouseEntered(java.awt.event.MouseEvent e) {
-                  log.debug("mouseEntered action performed");
                 }
 
                 @Override
                 public void mouseExited(java.awt.event.MouseEvent e) {
-                  log.debug("mouseEntered action performed");
                 }
 
             };
@@ -956,7 +948,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
             trayIcon.addActionListener(actionListener);
             trayIcon.addMouseListener(mouseListener);
 
-            //TODO
             startNagScreenTimer();
             try {
                 tray.add(trayIcon);
