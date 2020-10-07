@@ -30,7 +30,7 @@
                               <Image url="@../buttons/button-connect-idle.png" />
                            </image>
                         </ImageView>
-                        <Label fx:id="connectionHeaderLabel" layoutX="56.0" layoutY="5.0" prefHeight="25.0" prefWidth="188.0" style="-fx-font-style: bold;" text="Connection" textFill="#f0f0f0">
+                        <Label fx:id="connectionHeaderLabel" layoutX="56.0" layoutY="5.0" prefHeight="25.0" prefWidth="188.0" style="-fx-font-weight: bold;" text="Connection" textFill="#f0f0f0">
                            <font>
                               <Font size="16.0" />
                            </font>
@@ -52,7 +52,7 @@
                               <Image url="@../buttons/button-serverlist-idle.png" />
                            </image>
                         </ImageView>
-                        <Label fx:id="serverListHeaderLabel" layoutX="55.0" layoutY="-1.0" prefHeight="25.0" prefWidth="188.0" style="-fx-font-style: bold;" text="Server list" textFill="#f0f0f0">
+                        <Label fx:id="serverListHeaderLabel" layoutX="55.0" layoutY="-1.0" prefHeight="25.0" prefWidth="188.0" style="-fx-font-weight: bold;" text="Server list" textFill="#f0f0f0">
                            <font>
                               <Font size="16.0" />
                            </font>
