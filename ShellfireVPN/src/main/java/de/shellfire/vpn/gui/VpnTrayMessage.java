@@ -8,7 +8,7 @@ import net.java.simpletraynotify.ScreenPositionVertical;
 import net.java.simpletraynotify.SimpleNotifyFrame;
 import net.java.simpletraynotify.TrayNotifier;
 
-public class VpnTrayMessage implements Runnable {
+public class VpnTrayMessage {
 
     private final String caption;
     private final String text;
@@ -34,25 +34,13 @@ public class VpnTrayMessage implements Runnable {
         
         frame.enableActionButton(buttonText, listener, true);
     }
-    
 
-    @Override
-    public void run() {
-        TrayNotifier trayNotifier = new TrayNotifier(frame);
-        trayNotifier.setNumPixelsFromScreenHorizontal(30);
-        trayNotifier.setNumPixelsFromScreenVertical(30);
-
-        if (Util.isWindows()) {
-        	// tray items in windows are usually on the lower right side of the screen
-        	trayNotifier.setBaseHorizontal(ScreenPositionHorizontal.Bottom);
-            trayNotifier.setBaseVertical(ScreenPositionVertical.Right);
-        } else {
-        	// and in macos, on top!
-            trayNotifier.setBaseHorizontal(ScreenPositionHorizontal.Top);
-            trayNotifier.setBaseVertical(ScreenPositionVertical.Right);
-        	
-        }
-        trayNotifier.setShowDuration(10F);
-        trayNotifier.run();
+    public String getCaption() {
+      return this.caption;
     }
+
+    public String getText() {
+      return this.text;
+    }
+
 }

@@ -914,6 +914,9 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
                 @Override
                 public void mouseClicked(java.awt.event.MouseEvent e) {
+                  log.debug("mouseClicked action performed");
+
+                  
                     if (e.getClickCount() == 2) {
                             mouseClickedFX();
                         //TODO
@@ -925,18 +928,22 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
                 @Override
                 public void mousePressed(java.awt.event.MouseEvent e) {
+                  log.debug("mousePressed action performed");
                 }
 
                 @Override
                 public void mouseReleased(java.awt.event.MouseEvent e) {
+                  log.debug("mouseReleased action performed");
                 }
 
                 @Override
                 public void mouseEntered(java.awt.event.MouseEvent e) {
+                  log.debug("mouseEntered action performed");
                 }
 
                 @Override
                 public void mouseExited(java.awt.event.MouseEvent e) {
+                  log.debug("mouseEntered action performed");
                 }
 
             };
@@ -1218,15 +1225,12 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     private void showTrayIconNagScreen() {
         LinkedList<VpnTrayMessage> messages = new LinkedList<VpnTrayMessage>();
         if (controller.getCurrentConnectionState() == ConnectionState.Connected) {
-            ActionListener premiumInfoClicked = (ActionEvent e) -> {
-              Util.openUrl(shellfireService.getUrlPremiumInfo());
-            };
 
             if (this.shellfireService.getVpn().getAccountType() == ServerType.Free) {
                 List<TrayMessage> trayMessages = this.shellfireService.getTrayMessages();
 
-                trayMessages.forEach((msg) -> {
-                    messages.add(new VpnTrayMessage(msg.getHeader(), msg.getText(), msg.getButtontext(), premiumInfoClicked));
+                trayMessages.forEach(msg -> {
+                    messages.add(new VpnTrayMessage(msg.getHeader(), msg.getText()));
                 });
             }
         } else {
@@ -1237,7 +1241,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
             Random generator = new Random((new Date()).getTime());
             int num = generator.nextInt(messages.size());
             VpnTrayMessage msgToShow = messages.get(num);
-            msgToShow.run();
+            showTrayMessageWithoutCallback(msgToShow.getCaption(), msgToShow.getText());
         }
 
     }
@@ -1303,6 +1307,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     }
     
  	private void showTrayMessageWithoutCallback(String header, String content) {
+ 	  log.debug("showTrayMessageWithoutCallback(String header="+header+", String content)");
 			trayIcon.displayMessage(header, content, MessageType.INFO);
 	}
 
@@ -1313,7 +1318,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	        logViewer.getInstanceStage().show();
                 log.debug("Logviewer has been shown");
             } catch (Exception e) {
-                log.error("Erro occured while displaying logviewer", e);
+                log.error("Error occured while displaying logviewer", e);
             }
     }
 

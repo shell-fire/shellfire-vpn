@@ -23,7 +23,6 @@ public class TrayMessage  implements java.io.Serializable {
            java.lang.String buttontext) {
            this.header = header;
            this.text = text;
-           this.buttontext = buttontext;
     }
 
 
@@ -67,22 +66,4 @@ public class TrayMessage  implements java.io.Serializable {
     }
 
 
-    /**
-     * Gets the buttontext value for this TrayMessage.
-     * 
-     * @return buttontext
-     */
-    public java.lang.String getButtontext() {
-        return buttontext;
-    }
-
-
-    /**
-     * Sets the buttontext value for this TrayMessage.
-     * 
-     * @param buttontext
-     */
-    public void setButtontext(java.lang.String buttontext) {
-        this.buttontext = buttontext;
-    }
 }
