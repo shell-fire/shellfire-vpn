@@ -105,7 +105,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     private java.awt.Image iconConnected;
     private java.awt.Image iconDisconnectedAwt;
     private java.awt.Image iconIdleAwt;
-    private PremiumScreenController nagScreen;
     private ScheduledExecutorService currentConnectedSinceTimerFX = Executors.newSingleThreadScheduledExecutor();
     private Preferences preferences; 
     private boolean connectionStatus ; 
@@ -546,11 +545,9 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         switch (state) {
             case Disconnected:
                 connectionStatus = false;
-                //Platform.runLater(()->this.setStateDisconnected());
                 this.setStateDisconnected();
                 break;
             case Connecting:
-                
                 this.setStateConnecting();
                 break;
             case Connected:
@@ -922,7 +919,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
                 @Override
                 public void mouseClicked(java.awt.event.MouseEvent e) {
                   mouseClickedFX();
-
                 }
 
                 @Override
@@ -954,9 +950,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
             } catch (AWTException e) {
                 System.err.println("TrayIcon could not be added.");
             }
-
-            //TODO
-            //pack();
         }
     }
 
@@ -1026,7 +1019,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
             mySetIconImage("/icons/sfvpn2-connected-big.png");       
         });
 
-        //TODO check if image not already loaddd
         this.connectionSubviewController.updateComponents(true);
         this.serverListSubviewController.getConnectImage1().setImage(this.buttonDisconnect);
         this.connectionSubviewController.connectButtonDisable(false);
@@ -1199,11 +1191,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
     @Action
     public void openHelp() {
-        org.jdesktop.application.ResourceMap resourceMap = org.jdesktop.application.Application.getInstance().getContext()
-                .getResourceMap(ShellfireVPNMainFormFxmlController.class);
-
         Util.openUrl(shellfireService.getUrlHelp());
-
     }
 
     private void startNagScreenTimer() {        
