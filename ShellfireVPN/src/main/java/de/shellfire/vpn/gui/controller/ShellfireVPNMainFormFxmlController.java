@@ -81,7 +81,6 @@ import org.xnap.commons.i18n.LocaleChangeListener;
 
 public class ShellfireVPNMainFormFxmlController extends AnchorPane implements Initializable, LocaleChangeListener, ConnectionStateListener {
 
-    private static final I18n I18N = VpnI18N.getI18n();
     HashMap<SidePane, Pair<Pane, Object>> leftPaneHashMap = new HashMap<>();
     private static LoginForms application;
     private static final Logger log = Util.getLogger(ShellfireVPNMainFormFxmlController.class.getCanonicalName());
@@ -89,6 +88,8 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     private Controller controller;
     private WebService shellfireService;
     private MenuItem popupConnectItem;
+    private MenuItem abortItem;
+    private MenuItem disconnectItem;
     private PopupMenu popup;
     private TrayIcon trayIcon;
     private StringBuffer typedStrings = new StringBuffer();
@@ -670,6 +671,11 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         this.connectionSubviewController.updateComponents(false);
         this.serverListSubviewController.getConnectImage1().setImage(this.buttonConnect);
         log.debug("ShellfireMainForm: In setStateDisconnected method ");
+        popup.remove(disconnectItem);
+        popup.remove(abortItem);
+        popupConnectItem.setLabel(i18n.tr("connect"));
+        popupConnectItem.setEnabled(true);
+        popup.insert(popupConnectItem, 0);
 
         boolean showMessage = false;
         String message = "";
@@ -808,6 +814,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
         popupConnectItem.setLabel(i18n.tr("Connecting..."));
         popupConnectItem.setEnabled(false);
+        popup.insert(abortItem, 0);
         serverListSubviewController.getServerListTableView().disableProperty().set(true);
         serverListSubviewController.getUDPRadioButton().setDisable(true);
         serverListSubviewController.getTCPRadioButton().setDisable(true);
@@ -898,9 +905,24 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
             MenuItem openItem = new MenuItem(i18n.tr("Shellfire VPN to front"));
             openItem.addActionListener(openListener);
+
+            abortItem = new MenuItem(i18n.tr("abort"));
+            ActionListener abortListener = (ActionEvent e) -> {
+                connectProgressDialog.getRightButton().fire();
+            };
+
+            abortItem.addActionListener(abortListener);
+
+            disconnectItem = new MenuItem(i18n.tr("disconnect"));
+            ActionListener disconnectListener = (ActionEvent e) -> {
+                controller.disconnect(Reason.DisconnectButtonPressed);
+            };
+
+            disconnectItem.addActionListener(disconnectListener);
             popup = new PopupMenu();
-            popup.add(openItem);
             popup.add(popupConnectItem);
+            popup.addSeparator();
+            popup.add(openItem);
             popup.add(statusItem);
             popup.add(helpItem);
             popup.add(nagItem);
@@ -1040,6 +1062,9 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 				i18n.tr("You are now connected to Shellfire VPN. Your internet connection is encrypted."));
         showStatusUrlIfEnabled();
 	    disableSystemProxyIfProxyConfig();
+	    popup.remove(popupConnectItem);
+	    popup.remove(abortItem);
+	    popup.insert(disconnectItem, 0);
     }
     
     private void showStatusUrlIfEnabled() {
@@ -1050,8 +1075,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
 	private boolean showStatusUrl() {
 	  VpnProperties props = VpnProperties.getInstance();
-            boolean showStatus = props.getBoolean(LoginController.REG_SHOWSTATUSURL, false);
-            return showStatus;
+	    return props.getBoolean(LoginController.REG_SHOWSTATUSURL, false);
 	}
     	
 
