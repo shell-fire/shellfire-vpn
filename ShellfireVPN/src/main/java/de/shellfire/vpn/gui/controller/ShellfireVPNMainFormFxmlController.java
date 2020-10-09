@@ -673,7 +673,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         log.debug("ShellfireMainForm: In setStateDisconnected method ");
         popup.remove(disconnectItem);
         popup.remove(abortItem);
-        popupConnectItem.setLabel(i18n.tr("connect"));
+        popupConnectItem.setLabel(i18n.tr("Connect"));
         popupConnectItem.setEnabled(true);
         popup.add(popupConnectItem);
 

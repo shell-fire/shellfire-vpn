@@ -77,7 +77,7 @@ public class SettingsDialogController implements Initializable {
         this.languageLabel.setText(i18n.tr("Language") + ":");
         this.saveSettingsButton.setText(i18n.tr("Save settings"));
         this.cancelButton.setText(i18n.tr("cancel"));
-        this.connectAutomatically.setText(i18n.tr("Connect  automatically"));
+        this.connectAutomatically.setText(i18n.tr("Connect automatically"));
         this.languageComboBox.setEditable(false);
         currentLanguage = VpnI18N.getLanguage();
         initValues();

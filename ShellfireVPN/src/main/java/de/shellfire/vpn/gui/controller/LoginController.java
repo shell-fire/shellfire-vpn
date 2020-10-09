@@ -305,7 +305,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
         this.fAutoStart.setText(i18n.tr("Start on boot"));
         this.fLabelUsername.setFont(new Font("Arial",Util.getFontSize()));
         this.fLabelPassword.setFont(new Font("Arial",Util.getFontSize()));
-        this.fAutoconnect.setText(i18n.tr("Connect  automatically"));
+        this.fAutoconnect.setText(i18n.tr("Connect automatically"));
 
         this.fStoreLoginData.setText(i18n.tr("Save login data"));
 
