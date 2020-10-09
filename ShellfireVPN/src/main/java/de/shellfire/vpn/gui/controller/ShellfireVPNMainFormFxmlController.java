@@ -931,6 +931,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
             ActionListener actionListener = new ActionListener() {
 
                 public void actionPerformed(ActionEvent e) {
+                  log.debug("trayIcon actionPerformed");
                     setVisible(true);
                     toFront();
                 }
@@ -940,6 +941,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
                 @Override
                 public void mouseClicked(java.awt.event.MouseEvent e) {
+                  log.debug("trayIcon mouseClicked");
                   mouseClickedFX();
                 }
 
@@ -982,7 +984,14 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         } else {
                 this.application.getStage().toFront();
             }
-        });
+        
+        
+        ((Stage)  this.application.getStage()).setIconified(false);
+        setVisible(true);
+        toFront();
+
+       });
+        
     }
 
     private void initShortCuts() {
