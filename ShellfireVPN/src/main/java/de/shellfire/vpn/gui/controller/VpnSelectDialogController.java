@@ -116,7 +116,7 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
         if (selectedItem == null) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText(i18n.tr("No VPN selected"));
-            alert.setContentText(i18n.tr("Please select a VPN from the list to proceed"));
+            alert.setContentText(i18n.tr("Please select a VPN from the list to proceed."));
             alert.showAndWait();
         } else {
             rememberSelectionIfDesired(selectedItem.getVpn());
@@ -182,12 +182,12 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
     public void initComponents() {
         this.headerImageView.setImage(Util.getImageIconFX("/icons/sf_en.png"));
         this.numAccountVpnLabel.setText(
-                i18n.tr("Multiple VPN are located in your Shellfire account. Please select the VPN you want to use"));
+                i18n.tr("Multiple VPN are located in your Shellfire account. Please select the VPN you want to use."));
         this.numAccountVpnLabel.setWrapText(true);
         this.backLabel.setText(i18n.tr("back"));
-        this.selectVpnButton.setText(i18n.tr("select VPN"));
+        this.selectVpnButton.setText(i18n.tr("Select VPN"));
         this.fAutoconnect.setText(i18n.tr("Save my choice"));
-        this.vpnSelectLabel.setText(i18n.tr("vpn choice"));
+        this.vpnSelectLabel.setText(i18n.tr("Choose VPN"));
         this.vpnTypeLabel.setText(
                 i18n.tr("Note: VPN types PPTP and L2TP/IPSec have to be switched to OpenVPN before you can connect using sf vpn."));
         this.vpnTypeLabel.setWrapText(true);

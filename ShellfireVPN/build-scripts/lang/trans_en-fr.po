@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ShellfireVPN2\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-09 21:22+0200\n"
+"POT-Creation-Date: 2020-10-09 21:32+0200\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Florian Gattung <fgattung@gmail.com>\n"
 "Language-Team: Shellfire Team <hosting@shellfire.de>\n"
@@ -114,8 +114,8 @@ msgstr "Lancement au démarrage"
 
 #: main/java/de/shellfire/vpn/gui/controller/LoginController.java:308
 #: main/java/de/shellfire/vpn/gui/controller/SettingsDialogController.java:80
-msgid "Connect  automatically"
-msgstr "Connexion VPN automatique"
+msgid "Connect automatically"
+msgstr "Connexion automatique"
 
 #: main/java/de/shellfire/vpn/gui/controller/LoginController.java:310
 #: main/java/de/shellfire/vpn/gui/controller/SettingsDialogController.java:72
@@ -238,7 +238,7 @@ msgstr ""
 
 #: main/java/de/shellfire/vpn/gui/controller/RegisterFormController.java:313
 msgid "Error registering:"
-msgstr "erreur d'immatriculation:"
+msgstr "Erreur d'immatriculation:"
 
 #: main/java/de/shellfire/vpn/gui/controller/RegisterFormController.java:391
 msgid ""
@@ -326,7 +326,7 @@ msgstr "Valable jusqu'au:"
 
 #: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:231
 msgid "VPN type:"
-msgstr "Modes VPN"
+msgstr "Modes VPN:"
 
 #: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:232
 msgid "Connection"
@@ -386,7 +386,7 @@ msgstr "Connexion"
 
 #: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:686
 msgid "Invalid password"
-msgstr "mot de passe incorrect"
+msgstr "Mot de passe incorrect"
 
 #: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:690
 msgid "Process is being executed without administrator rights."
@@ -394,7 +394,7 @@ msgstr "Le logiciel est exécuté sans droits de l'administrateur."
 
 #: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:694
 msgid "Unknown certificate error"
-msgstr "erreur inconnue de certificat"
+msgstr "Erreur inconnue de certificat"
 
 #: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:698
 msgid ""
@@ -447,7 +447,7 @@ msgstr ""
 
 #: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:775
 msgid "Disconnected"
-msgstr "déconnecté"
+msgstr "Déconnecté"
 
 #: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:776
 msgid ""
@@ -465,7 +465,7 @@ msgstr "Connexion..."
 
 #: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:861
 msgid "Exit"
-msgstr "terminer"
+msgstr "Terminer"
 
 #: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:877
 msgid "Shellfire VPN Premium Infos"
@@ -489,7 +489,7 @@ msgstr "Annuler"
 
 #: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:916
 msgid "Disconnect"
-msgstr "déconnexion"
+msgstr "Déconnexion"
 
 #: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:1049
 msgid "Connected"
@@ -517,7 +517,7 @@ msgstr "Configuration Shellfire VPN"
 
 #: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:1252
 msgid "You are not connected to Shellfire VPN."
-msgstr "Tu n'est pas connecté à Shellfire VPN"
+msgstr "Tu n'est pas connecté à Shellfire VPN."
 
 #: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:1312
 msgid "Disconnect and close Shellfire VPN?"
@@ -545,35 +545,35 @@ msgid "No VPN selected"
 msgstr "Auccun VPN choisi"
 
 #: main/java/de/shellfire/vpn/gui/controller/VpnSelectDialogController.java:119
-msgid "Please select a VPN from the list to proceed"
-msgstr "Choisis und VPN de la liste avant de continuer"
+msgid "Please select a VPN from the list to proceed."
+msgstr "Choisis und VPN de la liste avant de continuer."
 
 #: main/java/de/shellfire/vpn/gui/controller/VpnSelectDialogController.java:185
 msgid ""
 "Multiple VPN are located in your Shellfire account. Please select the VPN "
-"you want to use"
+"you want to use."
 msgstr ""
 "Plusieurs VPN sont situés dans votre compte Shellfire. Veuillez sélectionner "
-"le VPN que vous souhaitez utiliser"
+"le VPN que vous souhaitez utiliser."
 
 #: main/java/de/shellfire/vpn/gui/controller/VpnSelectDialogController.java:188
-msgid "select VPN"
+msgid "Select VPN"
 msgstr "Choisir VPN"
 
 #: main/java/de/shellfire/vpn/gui/controller/VpnSelectDialogController.java:189
 msgid "Save my choice"
-msgstr "retenir ton choix"
+msgstr "Retenir ton choix"
 
 #: main/java/de/shellfire/vpn/gui/controller/VpnSelectDialogController.java:190
-msgid "vpn choice"
-msgstr "choix vpn"
+msgid "Choose VPN"
+msgstr "Choisir VPN"
 
 #: main/java/de/shellfire/vpn/gui/controller/VpnSelectDialogController.java:192
 msgid ""
 "Note: VPN types PPTP and L2TP/IPSec have to be switched to OpenVPN before "
 "you can connect using sf vpn."
 msgstr ""
-"Note : les VPN de type PPTP et L2TP/IPSec passent en OpenVPN avant que vous "
+"Note: les VPN de type PPTP et L2TP/IPSec passent en OpenVPN avant que vous "
 "puissiez vous connecter en utilisant sf vpn."
 
 #: main/java/de/shellfire/vpn/gui/model/VpnComparisonFXHelper.java:25
@@ -654,7 +654,7 @@ msgid "Main application could not be started. The launcher will now shut down."
 msgstr "Le logiciel n'a pas pu être lancé. Lancement terminé."
 
 #: main/java/de/shellfire/vpn/updater/UpdaterFX.java:231
-msgid "I/O error during download of the newest version. Aborting"
+msgid "I/O error during download of the newest version. Aborting."
 msgstr "Erreur i/o pendant le téléchargement de la nouvelle version. Abandon."
 
 #: main/java/de/shellfire/vpn/updater/UpdaterFX.java:259
@@ -716,6 +716,29 @@ msgstr "Impossible de télécharger les données VPN."
 #: main/java/de/shellfire/vpn/webservice/WebService.java:299
 msgid "unknown"
 msgstr "inconnu"
+
+#~ msgid "I/O error during download of the newest version. Aborting"
+#~ msgstr ""
+#~ "Erreur i/o pendant le téléchargement de la nouvelle version. Abandon."
+
+#~ msgid "Please select a VPN from the list to proceed"
+#~ msgstr "Choisis und VPN de la liste avant de continuer"
+
+#~ msgid ""
+#~ "Multiple VPN are located in your Shellfire account. Please select the VPN "
+#~ "you want to use"
+#~ msgstr ""
+#~ "Plusieurs VPN sont situés dans votre compte Shellfire. Veuillez "
+#~ "sélectionner le VPN que vous souhaitez utiliser"
+
+#~ msgid "select VPN"
+#~ msgstr "Choisir VPN"
+
+#~ msgid "vpn choice"
+#~ msgstr "choix vpn"
+
+#~ msgid "Connect  automatically"
+#~ msgstr "Connexion VPN automatique"
 
 #~ msgid "Login error:"
 #~ msgstr "Connexion échouée:"

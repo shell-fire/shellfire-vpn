@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-09 21:21+0200\n"
-"PO-Revision-Date: 2020-10-09 21:21+0200\n"
+"POT-Creation-Date: 2020-10-09 21:33+0200\n"
+"PO-Revision-Date: 2020-10-09 21:33+0200\n"
 "Last-Translator: Florian Gattung <fgattung@gmail.com>\n"
 "Language-Team: \n"
 "Language: en_DE\n"
@@ -112,7 +112,7 @@ msgstr "Beim Hochfahren starten"
 
 #: main/java/de/shellfire/vpn/gui/controller/LoginController.java:308
 #: main/java/de/shellfire/vpn/gui/controller/SettingsDialogController.java:80
-msgid "Connect  automatically"
+msgid "Connect automatically"
 msgstr "Automatisch verbinden"
 
 #: main/java/de/shellfire/vpn/gui/controller/LoginController.java:310
@@ -547,19 +547,19 @@ msgid "No VPN selected"
 msgstr "Kein Vpn ausgewählt"
 
 #: main/java/de/shellfire/vpn/gui/controller/VpnSelectDialogController.java:119
-msgid "Please select a VPN from the list to proceed"
-msgstr "Bitte wähle einen VPN aus der Liste um fortzufahren"
+msgid "Please select a VPN from the list to proceed."
+msgstr "Bitte wähle einen VPN aus der Liste um fortzufahren."
 
 #: main/java/de/shellfire/vpn/gui/controller/VpnSelectDialogController.java:185
 msgid ""
 "Multiple VPN are located in your Shellfire account. Please select the VPN "
-"you want to use"
+"you want to use."
 msgstr ""
 "In deinem Shellfire Konto gibt es mehrere VPN. Bitte wähle den VPN, den du "
-"verwenden möchtest"
+"verwenden möchtest."
 
 #: main/java/de/shellfire/vpn/gui/controller/VpnSelectDialogController.java:188
-msgid "select VPN"
+msgid "Select VPN"
 msgstr "VPN auswählen"
 
 #: main/java/de/shellfire/vpn/gui/controller/VpnSelectDialogController.java:189
@@ -567,8 +567,8 @@ msgid "Save my choice"
 msgstr "Auswahl merken"
 
 #: main/java/de/shellfire/vpn/gui/controller/VpnSelectDialogController.java:190
-msgid "vpn choice"
-msgstr "vpn auswahl"
+msgid "Choose VPN"
+msgstr "VPN auswählen"
 
 #: main/java/de/shellfire/vpn/gui/controller/VpnSelectDialogController.java:192
 msgid ""
@@ -656,8 +656,8 @@ msgid "Main application could not be started. The launcher will now shut down."
 msgstr "Hauptanwendung konnte nicht gestartet werden. Launcher wird beendet."
 
 #: main/java/de/shellfire/vpn/updater/UpdaterFX.java:231
-msgid "I/O error during download of the newest version. Aborting"
-msgstr "I/O Fehler während des Downloades der neuen Version. Abbruch"
+msgid "I/O error during download of the newest version. Aborting."
+msgstr "I/O Fehler während des Downloades der neuen Version. Abbruch."
 
 #: main/java/de/shellfire/vpn/updater/UpdaterFX.java:259
 msgid "Update aborted, shutting down application."
@@ -721,6 +721,28 @@ msgstr "VPN-Daten konnten nicht geladen werden."
 #: main/java/de/shellfire/vpn/webservice/WebService.java:299
 msgid "unknown"
 msgstr "unbekannt"
+
+#~ msgid "I/O error during download of the newest version. Aborting"
+#~ msgstr "I/O Fehler während des Downloades der neuen Version. Abbruch"
+
+#~ msgid "Please select a VPN from the list to proceed"
+#~ msgstr "Bitte wähle einen VPN aus der Liste um fortzufahren"
+
+#~ msgid ""
+#~ "Multiple VPN are located in your Shellfire account. Please select the VPN "
+#~ "you want to use"
+#~ msgstr ""
+#~ "In deinem Shellfire Konto gibt es mehrere VPN. Bitte wähle den VPN, den "
+#~ "du verwenden möchtest"
+
+#~ msgid "select VPN"
+#~ msgstr "VPN auswählen"
+
+#~ msgid "vpn choice"
+#~ msgstr "vpn auswahl"
+
+#~ msgid "Connect  automatically"
+#~ msgstr "Automatisch verbinden"
 
 #~ msgid "Login error:"
 #~ msgstr "Login fehlgeschlagen:"

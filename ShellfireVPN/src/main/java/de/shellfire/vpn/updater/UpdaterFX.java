@@ -228,7 +228,7 @@ public class UpdaterFX implements CanContinueAfterBackEndAvailableFX {
         return "";
       } catch (IOException e1) {
         e1.printStackTrace();
-        displayError(i18n.tr("I/O error during download of the newest version. Aborting"));
+        displayError(i18n.tr("I/O error during download of the newest version. Aborting."));
         System.exit(0);
 
       }
