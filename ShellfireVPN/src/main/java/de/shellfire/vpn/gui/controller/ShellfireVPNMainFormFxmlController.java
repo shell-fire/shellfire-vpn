@@ -675,7 +675,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         popup.remove(abortItem);
         popupConnectItem.setLabel(i18n.tr("connect"));
         popupConnectItem.setEnabled(true);
-        popup.insert(popupConnectItem, 0);
+        popup.add(popupConnectItem);
 
         boolean showMessage = false;
         String message = "";
@@ -814,7 +814,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
         popupConnectItem.setLabel(i18n.tr("Connecting..."));
         popupConnectItem.setEnabled(false);
-        popup.insert(abortItem, 0);
+        popup.add(abortItem);
         serverListSubviewController.getServerListTableView().disableProperty().set(true);
         serverListSubviewController.getUDPRadioButton().setDisable(true);
         serverListSubviewController.getTCPRadioButton().setDisable(true);
@@ -920,13 +920,13 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
             disconnectItem.addActionListener(disconnectListener);
             popup = new PopupMenu();
-            popup.add(popupConnectItem);
-            popup.addSeparator();
             popup.add(openItem);
             popup.add(statusItem);
             popup.add(helpItem);
             popup.add(nagItem);
             popup.add(defaultItem);
+            popup.addSeparator();
+            popup.add(popupConnectItem);
 
             ActionListener actionListener = new ActionListener() {
 
@@ -1064,7 +1064,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	    disableSystemProxyIfProxyConfig();
 	    popup.remove(popupConnectItem);
 	    popup.remove(abortItem);
-	    popup.insert(disconnectItem, 0);
+	    popup.add(disconnectItem);
     }
     
     private void showStatusUrlIfEnabled() {
