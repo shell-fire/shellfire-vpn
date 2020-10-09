@@ -874,7 +874,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
                 }
             };
 
-            MenuItem nagItem = new MenuItem(i18n.tr("Shellfire VPN premium infos"));
+            MenuItem nagItem = new MenuItem(i18n.tr("Shellfire VPN Premium Infos"));
             nagItem.addActionListener(nagListener);
 
             ActionListener helpListener = (ActionEvent e) -> openHelp();
@@ -906,14 +906,14 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
             MenuItem openItem = new MenuItem(i18n.tr("Shellfire VPN to front"));
             openItem.addActionListener(openListener);
 
-            abortItem = new MenuItem(i18n.tr("abort"));
+            abortItem = new MenuItem(i18n.tr("Abort"));
             ActionListener abortListener = (ActionEvent e) -> {
                 connectProgressDialog.getRightButton().fire();
             };
 
             abortItem.addActionListener(abortListener);
 
-            disconnectItem = new MenuItem(i18n.tr("disconnect"));
+            disconnectItem = new MenuItem(i18n.tr("Disconnect"));
             ActionListener disconnectListener = (ActionEvent e) -> {
                 controller.disconnect(Reason.DisconnectButtonPressed);
             };
