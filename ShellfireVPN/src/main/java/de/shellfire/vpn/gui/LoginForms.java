@@ -1,14 +1,18 @@
 package de.shellfire.vpn.gui;
 
-import de.shellfire.vpn.Util;
+import java.io.File;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
+import java.nio.channels.FileLock;
+import java.nio.file.StandardOpenOption;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
-import de.shellfire.vpn.VpnProperties;
-import de.shellfire.vpn.webservice.WebService;
 import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
 
+import de.shellfire.vpn.Util;
 import de.shellfire.vpn.client.ServiceToolsFX;
 import de.shellfire.vpn.gui.controller.LicenseAcceptanceController;
 import de.shellfire.vpn.gui.controller.LoginController;
@@ -19,18 +23,15 @@ import de.shellfire.vpn.gui.controller.VpnSelectDialogController;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.proxy.ProxyConfig;
 import de.shellfire.vpn.updater.UpdaterFX;
-import java.io.File;
-import java.io.IOException;
-import java.util.Optional;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
-import javafx.scene.input.MouseEvent;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -46,7 +47,7 @@ public class LoginForms extends Application {
     public static VpnSelectDialogController vpnSelectController;
     public static ShellfireVPNMainFormFxmlController shellFireMainController;
     public static LoginController instance;
-    private static final I18n I18N = VpnI18N.getI18n();
+    private static final I18n i18n = VpnI18N.getI18n();
     private boolean licenseAccepted;
     // Variables to control draggin of window
     private static double xOffset = 0;
@@ -64,7 +65,38 @@ public class LoginForms extends Application {
     public static void main(String[] args) {
         System.setProperty("java.library.path", "./lib");
         default_args = args;
+        
+        preventDuplicateStart();
+        
         launch(args);
+    }
+
+    private static void preventDuplicateStart() {
+      String userHome = System.getProperty("user.home");
+      File file = new File(userHome, "my.lock");
+      try {
+          FileChannel fc = FileChannel.open(file.toPath(),
+                  StandardOpenOption.CREATE,
+                  StandardOpenOption.WRITE);
+          FileLock lock = fc.tryLock();
+          if (lock == null) {
+            
+            Platform.runLater(()-> {
+              Alert alert = new Alert(Alert.AlertType.ERROR, i18n.tr("Shellfire VPN is already running."), ButtonType.OK);
+              alert.setHeaderText(i18n.tr("Already running"));
+              alert.showAndWait();
+            });
+            
+            try {
+              Thread.sleep(5000);
+            } catch (InterruptedException e) {
+            }
+            System.exit(0);
+          }
+
+      } catch (IOException e) {
+          throw new Error(e);
+      }      
     }
 
     public static void initializations(String args[]) {
@@ -285,15 +317,15 @@ public class LoginForms extends Application {
             UpdaterFX updater = new UpdaterFX();
             if (updater.newVersionAvailable()) {
 
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, I18N.tr("A new version of Shellfire VPN is available. An update is mandatory. Would you like to update now?"), ButtonType.YES, ButtonType.NO);
-                alert.setHeaderText(I18N.tr("New Version"));
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION, i18n.tr("A new version of Shellfire VPN is available. An update is mandatory. Would you like to update now?"), ButtonType.YES, ButtonType.NO);
+                alert.setHeaderText(i18n.tr("New Version"));
 
                 alert.showAndWait();
                 Optional<ButtonType> result = alert.showAndWait();
                 if ((result.isPresent()) && (result.get() == ButtonType.YES)) {
                     Alert ialert = new Alert(Alert.AlertType.INFORMATION);
-                    ialert.setHeaderText(I18N.tr("Update is being performed"));
-                    ialert.setContentText(I18N.tr("You decided, to update. Shellfire VPN is now being restarted with super user privileges to perform the update."));
+                    ialert.setHeaderText(i18n.tr("Update is being performed"));
+                    ialert.setContentText(i18n.tr("You decided, to update. Shellfire VPN is now being restarted with super user privileges to perform the update."));
                     String installerPath = com.apple.eio.FileManager.getPathToApplicationBundle() + "/Contents/Java/ShellfireVPN2-Updater.app";
                     log.debug("Opening updater using Desktop.open(): " + installerPath);
                     List<String> cmds = new LinkedList<String>();
@@ -310,8 +342,8 @@ public class LoginForms extends Application {
                     System.exit(0);
                 } else {
                     Alert falert = new Alert(Alert.AlertType.ERROR);
-                    falert.setHeaderText(I18N.tr("Update rejected"));
-                    falert.setContentText(I18N.tr("You decided not to update - Shellfire VPN is now exiting."));
+                    falert.setHeaderText(i18n.tr("Update rejected"));
+                    falert.setContentText(i18n.tr("You decided not to update - Shellfire VPN is now exiting."));
                     falert.showAndWait();
                     Platform.exit();
                     System.exit(0);
@@ -357,14 +389,14 @@ public class LoginForms extends Application {
 
         if (internetAvailable) {
             log.debug("Before the service Environment Ensure");
-            initDialog.setDialogText(I18N.tr("Initializing ShellfireVPNService..."));
+            initDialog.setDialogText(i18n.tr("Initializing ShellfireVPNService..."));
             ServiceToolsFX.getInstanceForOS().ensureServiceEnvironmentFX(instance);
             log.debug("After the service Environment Ensure");
         } else {
             log.debug("Connection not available");
             Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setHeaderText(I18N.tr("No internet"));
-            alert.setContentText(I18N.tr("No internet connection available - ShellfireVPN is being closed."));
+            alert.setHeaderText(i18n.tr("No internet"));
+            alert.setContentText(i18n.tr("No internet connection available - ShellfireVPN is being closed."));
             alert.showAndWait();
             Platform.exit();
             System.exit(0);
