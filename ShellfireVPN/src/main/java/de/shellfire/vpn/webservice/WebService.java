@@ -561,9 +561,10 @@ public class WebService {
       log.error("Could not read clientLog", e);
     }
     
-    String installLog = Util.getLogFilePathInstaller();
+    String installLog;
     String installLogString = "";
     try {
+      installLog = Util.getLogFilePathInstaller();
       installLogString = Util.fileToString(installLog);
     } catch (IOException e) {
       log.error("Could not read installLog", e);

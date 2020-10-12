@@ -610,6 +610,9 @@ public class Util {
   
   public static String getLogFilePathInstaller() {
     String jarFile = Util.getPathJar();
+    if (jarFile == null) {
+      return "";
+    }
     File instDir = new File(jarFile).getParentFile();
     
     String result = instDir + "\\install.log"; 
