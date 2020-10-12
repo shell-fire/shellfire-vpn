@@ -214,7 +214,11 @@ public class ProcessWrapper extends Thread {
     private void checkDisconnected(String line)  {
         if (this.lineContainsAnElementOfList(line, ProcessWrapper.processDisconnectedList)) {
             log.debug("disconnect detected from line {}", line);
-            this.setStatus(ConnectionState.Connecting, Reason.DisconnectDetected);
+            
+            if (!this.vpnController.isExpectingDisconnect()) {
+              this.setStatus(ConnectionState.Connecting, Reason.DisconnectDetected);  
+            }
+            
         }
     }
     

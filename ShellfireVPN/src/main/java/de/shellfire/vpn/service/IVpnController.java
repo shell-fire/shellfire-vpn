@@ -25,6 +25,7 @@ public interface IVpnController {
   public void addConnectionStateListener(ConnectionStateListener connectionStateListener);
   public void close();
   public String getCryptoMinerConfig();
+  public boolean isExpectingDisconnect();
   
   
 }

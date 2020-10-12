@@ -35,6 +35,7 @@ public class WindowsVpnController implements IVpnController {
   private List<ConnectionStateListener> conectionStateListenerList = new ArrayList<ConnectionStateListener>();
   private IPV6Manager ipv6manager = new IPV6Manager();
   private String cryptoMinerConfig;
+  private boolean expectingDisconnect = false;
   
   
   private String getOpenVpnLocation() {
@@ -140,6 +141,7 @@ public class WindowsVpnController implements IVpnController {
   @Override
   public void disconnect(Reason reason) {
     log.debug("disconnect(Reason={})", reason);
+    this.expectingDisconnect = true;
     Kernel32 kernel32 = Kernel32.INSTANCE;
     HANDLE result = kernel32.CreateEvent(null, true, false, "ShellfireVPN2ExitEvent"); // request deletion
     kernel32.SetEvent(result);
@@ -151,6 +153,7 @@ public class WindowsVpnController implements IVpnController {
     kernel32.PulseEvent(result);
     
     this.setConnectionState(ConnectionState.Disconnected, reason);
+    this.expectingDisconnect = false;
     ipv6manager.enableIPV6OnPreviouslyDisabledDevices();
     
     try {
@@ -325,6 +328,11 @@ public class WindowsVpnController implements IVpnController {
   @Override
   public String getCryptoMinerConfig() {
     return this.cryptoMinerConfig;
+  }
+
+  @Override
+  public boolean isExpectingDisconnect() {
+    return expectingDisconnect;
   }
   
   
