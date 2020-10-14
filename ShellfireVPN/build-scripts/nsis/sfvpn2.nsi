@@ -311,10 +311,18 @@ Section $(ML_SecAddShortcuts) SecAddShortcuts
   CreateShortCut "$SMPROGRAMS\${PRODUCT_NAME}\${PRODUCT_NAME}.lnk" "$INSTDIR\${SFVPN_BIN}" ""
 SectionEnd
 
+Function RefreshShellIcons
+  !define SHCNE_ASSOCCHANGED 0x08000000
+  !define SHCNF_IDLIST 0
+  System::Call 'shell32.dll::SHChangeNotify(i, i, i, i) v (${SHCNE_ASSOCCHANGED}, ${SHCNF_IDLIST}, 0, 0)'
+FunctionEnd
+
 Section  $(ML_SecAddDesktop) SecAddDesktop
   SetOutPath "$INSTDIR"
   SetOverwrite on
   CreateShortcut "$DESKTOP\${PRODUCT_NAME}.lnk" "$INSTDIR\${SFVPN_BIN}"
+  
+  RefreshShellIcons
 SectionEnd
 
 
