@@ -11,6 +11,8 @@ import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.webservice.Response;
 import de.shellfire.vpn.webservice.WebService;
 import de.shellfire.vpn.webservice.model.LoginResponse;
+
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.application.HostServices;
@@ -273,7 +275,9 @@ public class RegisterFormController extends AnchorPane implements Initializable 
     @FXML
     private void handleRegisterButton(ActionEvent event) {
         if (validateForm()) {
-        
+            this.showRequestProgress();
+            RequestNewAccountTask task = new RequestNewAccountTask();
+            task.run();
         }
     }
 
@@ -293,7 +297,6 @@ public class RegisterFormController extends AnchorPane implements Initializable 
 
     private void hideProgress() {
         progressDialog.getDialogStage().hide();
-
     }
     
     class RequestNewAccountTask extends Task <Void>{
@@ -381,8 +384,8 @@ public class RegisterFormController extends AnchorPane implements Initializable 
                 activationSuccesful();
             }
         }
-        
     }
+
     private void activationSuccesful() {
         this.progressDialog.getDialogStage().show();
         //bringToFront();
@@ -397,5 +400,14 @@ public class RegisterFormController extends AnchorPane implements Initializable 
         LoginForms.instance.setPassword(this.getPassword());
         LoginForms.instance.setAutoLogin(false);
         this.application.getStage().show();    
+    }
+
+    private void showRequestProgress() {
+        try {
+            this.progressDialog = ProgressDialogController.getInstance(i18n.tr("Requesting activation key..."), null, LoginForms.getStage(), false);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        this.progressDialog.getDialogStage().show();
     }
 }
