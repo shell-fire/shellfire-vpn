@@ -187,8 +187,8 @@ public class LogViewerFxmlController implements Initializable {
 
             // setting the width and height of stage 
             Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-            int width = (int) (screenSize.getWidth() / 1.5);
-            int height = (int) (screenSize.getHeight() / 1.5);
+            int width = (int) (screenSize.getWidth() / 2);
+            int height = (int) (screenSize.getHeight() / 2);
 
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(LoginForms.class.getResource("/fxml/LogViewerFxml.fxml"));
