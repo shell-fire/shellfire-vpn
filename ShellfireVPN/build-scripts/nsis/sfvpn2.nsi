@@ -163,38 +163,21 @@ Section "${PRODUCT_NAME}" SecShellfireVPN
 ; openvpn-64bit:
 
   DetailPrint "Installing 64-bit openvpn"
-  ${If} ${AtLeastWin10}
-    DetailPrint "Installing 64-bit openvpn on win10"
-	File "..\tools\openvpn\64-bit\"
-  ${Else}
-    DetailPrint "Installing 64-bit openvpn on pre-win10 (e.g. win 7,8 etc.)"
-	File "..\tools\openvpn\64-bit\"
-  ${EndIf}
+  File "..\tools\openvpn\64-bit\"
 
 goto openvpnend
 
 openvpn-32bit:
 
   DetailPrint "Installing 32-bit openvpn"
-  ${If} ${AtLeastWin10}
-    DetailPrint "Installing 32-bit openvpn on win10"
-	File "..\tools\openvpn\32-bit\"
-  ${Else}
-    DetailPrint "Installing 32-bit openvpn on pre-win10 (e.g. win 7,8 etc.)"
-	File "..\tools\openvpn\32-bit\"
-  ${EndIf}
-
-  
+  File "..\tools\openvpn\32-bit\"
   
 openvpnend:  
 
   SetOutPath "$INSTDIR\"
- File "..\tools\prunsrv\"
+  File "..\tools\prunsrv\"
 
 	SetOutPath "$INSTDIR\nvspbind\"
-
-	${If} ${AtLeastWinVista}
-	  DetailPrint "We are running at least win vista"
 
 	  ; Check if we are running on a 64 bit system.
 	  System::Call "kernel32::GetCurrentProcess() i .s"
@@ -208,18 +191,11 @@ openvpnend:
 
 	goto nvspbindend
 
-	nvspbind-32bit:
+nvspbind-32bit:
 
 	  DetailPrint "Installing 32-bit nvspbind"
 	  File "..\tools\nvspbind\32-bit\"
-	nvspbindend:  
-	  
-	${Else}
-	  DetailPrint "We are running XP - installing nvspbind for windows xp"
-	
-	  File "..\tools\nvspbind\xp\"
-	${EndIf}
-
+nvspbindend:  
 	
   SetOutPath "$INSTDIR"  
   DetailPrint "Installing Service"
@@ -269,22 +245,8 @@ Section $(ML_SecTAP) SecTAP
 	SetOverwrite on
 	SetOutPath "$INSTDIR"
 	
-	${If} ${AtLeastWin10}
-	  DetailPrint "We are running at least win 10"
-
-	  File /oname=tap-windows.exe "..\tools\tap\tap-windows-vista-or-later.exe"
+	File /oname=tap-windows.exe "..\tools\tap\tap-windows-latest-stable.exe"
 	
-	${ElseIf} ${AtLeastWinVista}
-	  DetailPrint "We are running at least Vista, Win7, 8, but NOT Win 10"
-
-	  File /oname=tap-windows.exe "..\tools\tap\tap-windows-vista-or-later.exe"
-	
-	${Else} 
-
-	  DetailPrint "We are running XP"
-	
-	  File /oname=tap-windows.exe "..\tools\tap\tap-windows-xp.exe"
-	${EndIf}
 
 	DetailPrint "Uninstalling possibly existing TAP..."
 	nsExec::ExecToLog '"$PROGRAMFILES\TAP-Windows\uninstall.exe" /S'
@@ -339,11 +301,7 @@ Section -post
     ; If tapinstall error occurred, $5 will
     ; be nonzero.
     IntOp $5 0 & 0
-	${If} ${AtLeastWinVista}
-		nsExec::ExecToStack '"$PROGRAMFILES\TAP-Windows\bin\tapinstall.exe" hwids ${TAP}'
-	${Else}
-		nsExec::ExecToStack '"$PROGRAMFILES\TAP-Windows\bin\devcon.exe" hwids ${TAP}'
-	${Endif}
+	nsExec::ExecToStack '"$PROGRAMFILES\TAP-Windows\bin\tapinstall.exe" hwids ${TAP}'
     
     Pop $R0 # return value/error/timeout
     IntOp $5 $5 | $R0
@@ -361,13 +319,7 @@ Section -post
 
  ;tapupdate:
     DetailPrint "TAP UPDATE"
-	${If} ${AtLeastWinVista}
-	  nsExec::ExecToLog '"$PROGRAMFILES\TAP-Windows\bin\tapinstall.exe" update "$PROGRAMFILES\TAP-Windows\driver\OemVista.inf" ${TAP}'
-	${Else}
-	  nsExec::ExecToLog '"$PROGRAMFILES\TAP-Windows\bin\devcon.exe" update "$PROGRAMFILES\TAP-Windows\driver\OemWin2k.inf" ${TAP}'
-	${Endif}
-	
-	
+	nsExec::ExecToLog '"$PROGRAMFILES\TAP-Windows\bin\tapinstall.exe" update "$PROGRAMFILES\TAP-Windows\driver\OemVista.inf" ${TAP}'
     
     Pop $R0 # return value/error/timeout
     Call CheckReboot
@@ -378,33 +330,18 @@ Section -post
  tapinstall:
     DetailPrint "TAP REMOVE OLD TAP"
 
-	${If} ${AtLeastWinVista}
-	  nsExec::ExecToLog '"$PROGRAMFILES\TAP-Windows\bin\tapinstall.exe" remove TAP0801'
-	${Else}
-	  nsExec::ExecToLog '"$PROGRAMFILES\TAP-Windows\bin\devcon.exe" remove TAP0801'
-	${Endif}
+    nsExec::ExecToLog '"$PROGRAMFILES\TAP-Windows\bin\tapinstall.exe" remove TAP0801'
     
     Pop $R0 # return value/error/timeout
     DetailPrint "tapinstall remove TAP0801 returned: $R0"
 
-	${If} ${AtLeastWinVista}
-	  nsExec::ExecToLog '"$PROGRAMFILES\TAP-Windows\bin\tapinstall.exe" remove TAP0901'
-	${Else}
-	  nsExec::ExecToLog '"$PROGRAMFILES\TAP-Windows\bin\devcon.exe" remove TAP0901'
-	${Endif}
+    nsExec::ExecToLog '"$PROGRAMFILES\TAP-Windows\bin\tapinstall.exe" remove TAP0901'
     
     Pop $R0 # return value/error/timeout
     DetailPrint "tapinstall remove TAP0901 returned: $R0"
 	
-	
-	
     DetailPrint "TAP INSTALL (${TAP})"
-	${If} ${AtLeastWinVista}
-	  nsExec::ExecToLog '"$PROGRAMFILES\TAP-Windows\bin\tapinstall.exe" install "$PROGRAMFILES\TAP-Windows\driver\OemVista.inf" ${TAP}'
-	${Else}
-	  nsExec::ExecToLog '"$PROGRAMFILES\TAP-Windows\bin\devcon.exe" install "$PROGRAMFILES\TAP-Windows\driver\OemWin2k.inf" ${TAP}'
-	${Endif}
-
+	nsExec::ExecToLog '"$PROGRAMFILES\TAP-Windows\bin\tapinstall.exe" install "$PROGRAMFILES\TAP-Windows\driver\OemVista.inf" ${TAP}'
     
     Pop $R0 # return value/error/timeout
     Call CheckReboot
