@@ -233,99 +233,18 @@ public class LoginForms extends Application {
 
 	public void afterDialogDisplay() {
 		if (default_args.length > 0) {
-
-			String cmd = default_args[0];
-
-			if (cmd.equals("uninstallservice")) {
-				ServiceToolsFX.getInstanceForOS().uninstall();
-				this.stage.hide();
-				return;
-			} else if (cmd.equals("installservice")) {
-				this.stage.hide();
-				String path = "";
-
-				if (default_args.length > 1) {
-					for (int i = 1; i < default_args.length; i++) {
-						path += default_args[i];
-
-						if (i + 1 < default_args.length) {
-							path += " ";
-						}
-					}
-				}
-
-				log.debug("Retrieved installation path from args parameter: " + path);
-
-				if (cmd.equals("installservice")) {
-					ServiceToolsFX.getInstanceForOS().install(path);
-				}
-
-				System.exit(0);
-				return;
-			} else if (cmd.equals("doupdate")) {
-				String path = "";
-				String user = "";
-				if (default_args.length > 2) {
-					user = default_args[1];
-
-					for (int i = 2; i < default_args.length; i++) {
-						path += default_args[i];
-
-						if (i + 1 < default_args.length) {
-							path += " ";
-						}
-					}
-				}
-
-				log.debug("Retrieved installation path from args parameter: " + path);
-				new UpdaterFX().performUpdate(path, user);
-				return;
-			}
+			handleCommandLine();
+			return;
 		}
 		log.debug("Hiding stage");
 		this.stage.hide();
+		
 		// test Internet connection
 		boolean internetAvailable = Util.internetIsAvailable();
 		if (internetAvailable) {
 			UpdaterFX updater = new UpdaterFX();
 			if (updater.newVersionAvailable()) {
-
-				Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
-						i18n.tr("A new version of Shellfire VPN is available. An update is mandatory. Would you like to update now?"),
-						ButtonType.YES, ButtonType.NO);
-				alert.setHeaderText(i18n.tr("New Version"));
-
-				alert.showAndWait();
-				Optional<ButtonType> result = alert.showAndWait();
-				if ((result.isPresent()) && (result.get() == ButtonType.YES)) {
-					Alert ialert = new Alert(Alert.AlertType.INFORMATION);
-					ialert.setHeaderText(i18n.tr("Update is being performed"));
-					ialert.setContentText(i18n.tr(
-							"You decided, to update. Shellfire VPN is now being restarted with super user privileges to perform the update."));
-					String installerPath = com.apple.eio.FileManager.getPathToApplicationBundle()
-							+ "/Contents/Java/ShellfireVPN2-Updater.app";
-					log.debug("Opening updater using Desktop.open(): " + installerPath);
-					List<String> cmds = new LinkedList<String>();
-					cmds.add("/usr/bin/open");
-					cmds.add(installerPath);
-					Process p;
-					try {
-						p = new ProcessBuilder(cmds)
-								.directory(new File(com.apple.eio.FileManager.getPathToApplicationBundle() + "/Contents/Java/")).start();
-						Util.digestProcess(p);
-					} catch (IOException e) {
-						Util.handleException(e);
-					}
-					Platform.exit();
-					System.exit(0);
-				} else {
-					Alert falert = new Alert(Alert.AlertType.ERROR);
-					falert.setHeaderText(i18n.tr("Update rejected"));
-					falert.setContentText(i18n.tr("You decided not to update - Shellfire VPN is now exiting."));
-					falert.showAndWait();
-					Platform.exit();
-					System.exit(0);
-				}
+				enforceMandatoryUpdateOrExit();
 				return;
 			} else {
 				log.debug("LoginForms: No update available");
@@ -338,6 +257,95 @@ public class LoginForms extends Application {
 		instance.setApp(this);
 		log.debug("Preparing to display login menu");
 		LoginForms.initConnectionTest();
+	}
+
+	private void enforceMandatoryUpdateOrExit() {
+		Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
+				i18n.tr("A new version of Shellfire VPN is available. An update is mandatory. Would you like to update now?"),
+				ButtonType.YES, ButtonType.NO);
+		alert.setHeaderText(i18n.tr("New Version"));
+
+		alert.showAndWait();
+		Optional<ButtonType> result = alert.showAndWait();
+		if ((result.isPresent()) && (result.get() == ButtonType.YES)) {
+			Alert ialert = new Alert(Alert.AlertType.INFORMATION);
+			ialert.setHeaderText(i18n.tr("Update is being performed"));
+			ialert.setContentText(i18n.tr(
+					"You decided, to update. Shellfire VPN is now being restarted with super user privileges to perform the update."));
+			String installerPath = com.apple.eio.FileManager.getPathToApplicationBundle()
+					+ "/Contents/Java/ShellfireVPN2-Updater.app";
+			log.debug("Opening updater using Desktop.open(): " + installerPath);
+			List<String> cmds = new LinkedList<String>();
+			cmds.add("/usr/bin/open");
+			cmds.add(installerPath);
+			Process p;
+			try {
+				p = new ProcessBuilder(cmds)
+						.directory(new File(com.apple.eio.FileManager.getPathToApplicationBundle() + "/Contents/Java/")).start();
+				Util.digestProcess(p);
+			} catch (IOException e) {
+				Util.handleException(e);
+			}
+			Platform.exit();
+			System.exit(0);
+		} else {
+			Alert falert = new Alert(Alert.AlertType.ERROR);
+			falert.setHeaderText(i18n.tr("Update rejected"));
+			falert.setContentText(i18n.tr("You decided not to update - Shellfire VPN is now exiting."));
+			falert.showAndWait();
+			Platform.exit();
+			System.exit(0);
+		}
+	}
+
+	private void handleCommandLine() {
+		String cmd = default_args[0];
+
+		if (cmd.equals("uninstallservice")) {
+			ServiceToolsFX.getInstanceForOS().uninstall();
+			this.stage.hide();
+			return;
+		} else if (cmd.equals("installservice")) {
+			this.stage.hide();
+			String path = "";
+
+			if (default_args.length > 1) {
+				for (int i = 1; i < default_args.length; i++) {
+					path += default_args[i];
+
+					if (i + 1 < default_args.length) {
+						path += " ";
+					}
+				}
+			}
+
+			log.debug("Retrieved installation path from args parameter: " + path);
+
+			if (cmd.equals("installservice")) {
+				ServiceToolsFX.getInstanceForOS().install(path);
+			}
+
+			System.exit(0);
+			return;
+		} else if (cmd.equals("doupdate")) {
+			String path = "";
+			String user = "";
+			if (default_args.length > 2) {
+				user = default_args[1];
+
+				for (int i = 2; i < default_args.length; i++) {
+					path += default_args[i];
+
+					if (i + 1 < default_args.length) {
+						path += " ";
+					}
+				}
+			}
+
+			log.debug("Retrieved installation path from args parameter: " + path);
+			new UpdaterFX().performUpdate(path, user);
+			return;
+		}
 	}
 
 	public void licenseAccepted() {

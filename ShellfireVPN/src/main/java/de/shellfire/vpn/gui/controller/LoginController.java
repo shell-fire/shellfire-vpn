@@ -391,7 +391,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
 	@FXML
 	private void handleExitImageMouseEntered(MouseEvent event) {
-		this.application.getStage().getScene().setCursor(Cursor.HAND);
+		LoginForms.getStage().getScene().setCursor(Cursor.HAND);
 	}
 
 	@Override
@@ -401,27 +401,22 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 		this.restoreCredentialsFromRegistry();
 		this.restoreAutoConnectFromRegistry();
 		this.restoreAutoStartFromRegistry();
-		this.application.setLicenseAccepted(false);
+		LoginController.application.setLicenseAccepted(false);
 
-		if (!this.application.getStage().isShowing()) {
+		if (!LoginForms.getStage().isShowing()) {
 			log.debug("Initial progress dialog is hidden");
-			this.application.getStage().show();
-		}
-		try {
-			// Connection.initRmi();
-		} catch (Exception e) {
-			Util.handleException(e);
+			LoginForms.getStage().show();
 		}
 
 		if (!this.autoLoginIfActive()) {
-			this.application.getStage().show();
+			LoginForms.getStage().show();
 			askForNewAccountAndAutoStartIfFirstStart();
 		}
 	}
 
 	@Override
 	public ProgressDialogController getProgressDialogFX() {
-		return this.application.initDialog;
+		return LoginForms.initDialog;
 	}
 
 	@FXML

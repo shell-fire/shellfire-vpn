@@ -209,8 +209,7 @@ public class EndpointManager {
 				initDialogFX.getDialogStage().hide();
 			}
 
-			result = String.valueOf(getValue());
-
+			result = getValue();
 			if (result == null) {
 				Alert alert = new Alert(Alert.AlertType.ERROR);
 				alert.setContentText(i18n.tr("Could not connect to the Shellfire backend - Shellfire VPN is shutting down"));
