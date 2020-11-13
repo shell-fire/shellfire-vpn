@@ -12,6 +12,7 @@ import de.shellfire.vpn.gui.model.ServerListFXModel;
 import de.shellfire.vpn.gui.renderer.StarImageRendererFX;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.types.Country;
+import de.shellfire.vpn.types.Reason;
 import de.shellfire.vpn.types.Server;
 import de.shellfire.vpn.types.ServerType;
 import de.shellfire.vpn.types.VpnProtocol;
@@ -19,6 +20,8 @@ import de.shellfire.vpn.webservice.ServerList;
 import de.shellfire.vpn.webservice.Vpn;
 import de.shellfire.vpn.webservice.WebService;
 import de.shellfire.vpn.webservice.model.VpnStar;
+
+import java.io.IOException;
 import java.net.URL;
 import java.util.Comparator;
 import java.util.Date;
@@ -30,6 +33,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
@@ -394,7 +398,11 @@ public class ServerListSubviewController implements Initializable {
     @FXML
     private void connectButton1OnAction(ActionEvent event) {
       log.debug("connectButton1OnAction");
-      this.application.shellFireMainController.connectFromButton();
+      Platform.runLater(()->{
+          application.shellFireMainController.connectFromButton();
+    });
+
+      
     }
 
     class ServerListComparator implements Comparator<Server>{

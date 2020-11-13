@@ -339,7 +339,10 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
         }
 
         if (autoConnect) {
+          Platform.runLater(()->{
             this.connectFromButton();
+          });
+            
         }
     }
 
@@ -718,7 +721,10 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
                     message = i18n.tr("No Tap driver installed. Please reinstall Shellfire VPN.");
                     break;
                 case TapDriverNotFoundPleaseRetry:
-                    connectFromButton();
+                    Platform.runLater(()->{
+                      connectFromButton();
+                    });  
+
                     break;
                 case GatewayRedirectFailed:
                     showMessage = true;
@@ -885,7 +891,10 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
             ActionListener popupConnectListener = new ActionListener() {
 
                 public void actionPerformed(ActionEvent e) {
+                  Platform.runLater(()->{
                     connectFromButton();
+                  });  
+                  
                 }
             };
 
