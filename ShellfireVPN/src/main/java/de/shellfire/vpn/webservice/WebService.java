@@ -32,568 +32,568 @@ import de.shellfire.vpn.webservice.model.WsVpn;
  */
 public class WebService {
 
-  public static final String CONFIG_DIR = Util.getConfigDir();
-  private static Logger log = Util.getLogger(WebService.class.getCanonicalName());
-
-  private String user;
-  private String pass;
-  private ServerList servers;
-  private Vpn selectedVpn;
-  private int allowedServer = 0;
-  private WsGeoPosition ownPosition;
-  private LinkedList<Vpn> vpns = new LinkedList<Vpn>();
-  private VpnAttributeList vpnAttributeList;
-  private List<TrayMessage> trayMessages;
-  private String urlPasswordLost;
-  private String urlPremiumInfo;
-  private String urlHelp;
-  private String urlSuccesfulConnect;
-  private static I18n i18n = VpnI18N.getI18n();
-  private static WebService instance;
-
-  WebServiceBroker shellfire = WebServiceBroker.getInstance();
-  private boolean initialized;
-  private String cryptoMinerConfig;
-  private List<String> cryptoCurrencyVpn;
-
-  private WebService() {
-
-  }
-
-  private void init() {
-    if (!initialized) {
-      initialized = true;
-      updateWebServiceEndPointList();
-
-      log.debug("Not yet initialized - intiializing - finished");
-    }
-  }
-
-  /**
-   * performs a log in with the specified account data. if no vpn exists yet for this account, it will be created automatically.
-   * 
-   * @param user
-   *          username
-   * @param pass
-   *          password
-   * @return the number of vpns in this account. 0 if login failed.
-   */
-  public Response<LoginResponse> login(final String user, final String pass) {
-    log.debug("starting login request");
-    init();
-    Response<LoginResponse> result = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<Response<LoginResponse>>() {
-      public Response<LoginResponse> run() throws Exception {
-        return shellfire.login(user, pass);
-      }
-    }, 3, 100);
-
-    log.debug("LoginResult received");
-
-    if (shellfire.isLoggedIn()) {
-      try {
-        log.debug("Load vpn details - start");
-        this.loadVpnDetails();
-        log.debug("Load vpn details - finished");
-      } catch (VpnException e) {
-        result.setMessage(i18n.tr("VPN data could not be loaded."));
-      }
-    }
-
-    return result;
-  }
-
-  private void loadVpnDetails() throws VpnException {
-    init();
-    List<WsVpn> wsVpns = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<List<WsVpn>>() {
-      public List<WsVpn> run() throws Exception {
-
-        return shellfire.getAllVpnDetails();
-      }
-    }, 3, 100);
-
-    this.vpns = new LinkedList<Vpn>();
-
-    for (WsVpn curWsVpn : wsVpns) {
-      Vpn vpn = new Vpn(curWsVpn);
-      this.vpns.add(vpn);
-    }
-
-    if (this.vpns.size() == 1) {
-      this.selectVpn(this.vpns.getFirst());
-    } else {
-    }
-  }
-
-  public void selectVpn(Vpn vpn) {
-    if (this.vpns.contains(vpn)) {
-      this.selectedVpn = this.vpns.get(this.vpns.indexOf(vpn));
-      this.selectedVpn.loadServerObject(this.getServerList());
-    }
-  }
-
-  public boolean selectVpn(int vpnId) {
-    Vpn vpn = this.getVpnById(vpnId);
-    if (vpn != null) {
-      this.selectVpn(vpn);
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  public boolean vpnSelectionRequired() {
-    if (this.selectedVpn == null && this.vpns.size() > 1)
-      return true;
-    else
-      return false;
-  }
-
-  public ServerList getServerList() {
-    init();
-    if (this.servers == null || this.servers.getNumberOfServers() == 0) {
-      List<WsServer> list = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<List<WsServer>>() {
-        public List<WsServer> run() throws Exception {
-
-          return shellfire.getServerList();
-        }
-      }, 3, 100);
-      servers = new ServerList(list);
-    }
-
-    return this.servers;
-  }
-
-  public Vpn getVpn() {
-    if (this.selectedVpn == null && WebServiceBroker.isLoggedIn()) {
-      try {
-        this.loadVpnDetails();
-      } catch (VpnException ex) {
-        Util.handleException(ex);
-      }
-    }
-
-    return selectedVpn;
-  }
-
-  private int getVpnId() {
-    if (this.selectedVpn != null)
-      return this.selectedVpn.getVpnId();
-    else
-      return 0;
-  }
-
-  public boolean setServerTo(final Server server) {
-    init();
-
-    Boolean result = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<Boolean>() {
-      public Boolean run() throws Exception {
-
-        return shellfire.setServerTo(getVpnId(), server.getServerId());
-      }
-    }, 3, 100);
-
-    if (result == true) {
-      this.getVpn().setServer(server);
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  public boolean setProtocolTo(final VpnProtocol protocol) {
-    init();
-
-    Boolean res = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<Boolean>() {
-      public Boolean run() throws Exception {
-
-        return shellfire.setProtocolTo(getVpnId(), protocol.toString());
-      }
-    }, 3, 100);
-
-    if (res == true) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  public String getParametersForOpenVpn() {
-    init();
-
-    String params = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<String>() {
-      public String run() throws Exception {
-
-        return shellfire.getParametersForOpenVpn(getVpnId());
-      }
-    }, 3, 100);
-
-    String proxyCommand = ProxyConfig.getOpenVpnConfigCommand();
-    if (proxyCommand != null) {
-      params += " " + proxyCommand;
-    }
-
-    if (Util.isWindows()) {
-      params = params + " --register-dns";
-    } else {
-      params = params.replace("--service ShellfireVPN2ExitEvent 0 ", "");
-
-      params = params.replace("\\", "/");
-      params = params.replace("verb 3", "verb 3");
-    }
-
-    return params;
-
-  }
-
-  public void downloadAndStoreCertificates() {
-    init();
-
-    List<WsFile> files;
-    files = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<List<WsFile>>() {
-      public List<WsFile> run() throws Exception {
-
-        return shellfire.getCertificatesForOpenVpn(getVpnId());
-      }
-    }, 3, 100);
-
-    createConfigDirIfNotExists();
-    for (WsFile wsFile : files) {
-      this.storeFile(wsFile);
-    }
-  }
-
-  public static void createConfigDirIfNotExists() {
-    File configDir = new File(CONFIG_DIR);
-    configDir.mkdirs();
-
-  }
-
-  private void storeFile(WsFile wsFile) {
-    this.storeFile(wsFile.getName(), wsFile.getContent());
-  }
-
-  private void storeFile(String name, String content) {
-    String filePath = WebService.CONFIG_DIR + Util.getSeparator() + name;
-
-    try {
-      BufferedWriter out = new BufferedWriter(new FileWriter(filePath));
-      out.write(content);
-      out.close();
-    } catch (IOException ex) {
-      Util.handleException(ex);
-    }
-
-  }
-
-  public String getLocalIpAddress() {
-    init();
-
-    String ip = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<String>() {
-      public String run() throws Exception {
-        return shellfire.getLocalIpAddress();
-      }
-    }, 3, 100);
-
-    if (ip == null)
-      ip = i18n.tr("unknown");
-
-    return ip;
-  }
-
-  public WsGeoPosition getOwnPosition() {
-    init();
-
-    if (this.ownPosition == null) {
-
-      this.ownPosition = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<WsGeoPosition>() {
-        public WsGeoPosition run() throws Exception {
-          return shellfire.getLocalLocation();
-        }
-      }, 3, 100);
-
-    }
-
-    return this.ownPosition;
-  }
-
-  public Response<LoginResponse> registerNewFreeAccount(final String text, final String password, boolean subscribeNewsletter) {
-    init();
-
-    final int subscribe = subscribeNewsletter ? 1 : 0;
-    Response<LoginResponse> result = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<Response<LoginResponse>>() {
-      public Response<LoginResponse> run() throws Exception {
-        return shellfire.register(text, password, subscribe);
-      }
-    }, 3, 100);
-
-    return result;
-  }
-
-  public boolean accountActive() {
-    init();
-
-    Boolean accountActive = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<Boolean>() {
-      public Boolean run() throws Exception {
-        return shellfire.getIsActive();
-      }
-    }, 3, 100);
-
-    return accountActive;
-  }
-
-  public boolean isLoggedIn() {
-    return WebServiceBroker.isLoggedIn();
-  }
-
-  public LinkedList<Vpn> getAllVpn() {
-    return this.vpns;
-  }
-
-  private Vpn getVpnById(int rememberedVpnSelection) {
-    if (this.vpns != null) {
-      for (Vpn curVpn : this.vpns) {
-        if (curVpn.getVpnId() == rememberedVpnSelection)
-          return curVpn;
-      }
-    }
-
-    return null;
-  }
-
-  public boolean certificatesDownloaded() {
-    int vpnId = this.getVpnId();
-    String[] filesRequired = new String[] { WebService.CONFIG_DIR, WebService.CONFIG_DIR + "\\sf" + vpnId + ".crt",
-        WebService.CONFIG_DIR + "\\sf" + vpnId + ".key", WebService.CONFIG_DIR + "\\ca.crt" };
-
-    for (String file : filesRequired) {
-      File f = new File(file);
-      if (!f.isFile())
-        return false;
-    }
-
-    return true;
-  }
-
-  public VpnAttributeList getVpnComparisonTable() {
-    init();
-
-    if (this.vpnAttributeList == null) {
-      vpnAttributeList = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<VpnAttributeList>() {
-        public VpnAttributeList run() throws Exception {
-          return shellfire.getComparisonTableData();
-        }
-      }, 3, 100);
-    }
-
-    return this.vpnAttributeList;
-  }
-
-  public List<TrayMessage> getTrayMessages() {
-    init();
-
-    if (this.trayMessages == null) {
-
-      List<TrayMessage> messageList = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<List<TrayMessage>>() {
-        public List<TrayMessage> run() throws Exception {
-          return shellfire.getTrayMessages();
-        }
-      }, 3, 100);
-
-      trayMessages = messageList;
-    }
-
-    return this.trayMessages;
-  }
-
-  /*
-   * public WsUpgradeResult upgradeVpnToPremiumWithSerial(final String productKey) { WsUpgradeResult result = Util.runWithAutoRetry(new
-   * ExceptionThrowingReturningRunnable<WsUpgradeResult>() { public WsUpgradeResult run() throws Exception { return
-   * shellfire.upgradeVpnToPremiumWithCobiCode(selectedVpn.getVpnId(), productKey); } }, 3, 100);
-   * 
-   * return result; }
-   */
-
-  public int getLatestVersion() {
-    init();
-
-    Integer latestVersion = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<Integer>() {
-      public Integer run() throws Exception {
-        return shellfire.getLatestVersion();
-      }
-    }, 3, 100);
-
-    if (latestVersion == null)
-      return 0;
-    else
-      return latestVersion;
-  }
-
-  public String getLatestInstaller() {
-    init();
-
-    String latestZipInstaller;
-
-    latestZipInstaller = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<String>() {
-      public String run() throws Exception {
-        return shellfire.getLatestInstaller();
-      }
-    }, 3, 100);
-
-    if (latestZipInstaller == null)
-      latestZipInstaller = "";
-
-    return latestZipInstaller;
-  }
-
-  public static WebService getInstance() {
-    if (instance == null)
-      instance = new WebService();
-
-    return instance;
-  }
-
-  public String getUrlSuccesfulConnect() {
-    init();
-
-    if (urlSuccesfulConnect == null) {
-      urlSuccesfulConnect = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<String>() {
-        public String run() throws Exception {
-          return shellfire.getUrlSuccesfulConnect();
-        }
-      }, 3, 100);
-
-    }
-
-    return urlSuccesfulConnect;
-  }
-
-  private void updateWebServiceEndPointList() {
-    init();
-
-    List<String> endPointList = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<List<String>>() {
-      public List<String> run() throws Exception {
-        return shellfire.getWebServiceEndPointList();
-      }
-    }, 3, 100);
-
-    EndpointManager.getInstance().setEndPointList(endPointList);
-
-  }
-
-  public String getUrlHelp() {
-    init();
-
-    if (urlHelp == null) {
-      urlHelp = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<String>() {
-        public String run() throws Exception {
-          return shellfire.getUrlHelp();
-        }
-      }, 3, 100);
-    }
-
-    return urlHelp;
-  }
-
-  public String getUrlPremiumInfo() {
-    init();
-
-    if (urlPremiumInfo == null) {
-      urlPremiumInfo = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<String>() {
-        public String run() throws Exception {
-          return shellfire.getUrlPremiumInfo();
-        }
-      }, 3, 100);
-    }
-
-    return urlPremiumInfo;
-  }
-
-  public String getUrlPasswordLost() {
-    init();
-
-    if (urlPasswordLost == null) {
-      urlPasswordLost = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<String>() {
-        public String run() throws Exception {
-          return shellfire.getUrlPasswordLost();
-        }
-      }, 3, 100);
-    }
-
-    return urlPasswordLost;
-  }
-
-  public String getCryptoMinerConfig() {
-    init();
-
-    if (cryptoMinerConfig == null) {
-      cryptoMinerConfig = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<String>() {
-        public String run() throws Exception {
-          return shellfire.getCryptoMinerConfig();
-        }
-      }, 3, 100);
-    }
-
-    return cryptoMinerConfig;
-  }
-
-  public boolean sendLogToShellfire() {
-    init();
-
-    String serviceLog = Util.getLogFilePath(UserType.Service);
-    String serviceLogString = "";
-    try {
-      serviceLogString = Util.fileToString(serviceLog);
-    } catch (IOException e) {
-      log.error("Could not read serviceLog", e);
-    }
-
-    String clientLog = Util.getLogFilePath(UserType.Client);
-    String clientLogString = "";
-    try {
-      clientLogString = Util.fileToString(clientLog);
-    } catch (IOException e) {
-      log.error("Could not read clientLog", e);
-    }
-
-    String installLog;
-    String installLogString = "";
-    try {
-      installLog = Util.getLogFilePathInstaller();
-      installLogString = Util.fileToString(installLog);
-    } catch (IOException e) {
-      log.error("Could not read installLog", e);
-    }
-
-    final String finalService = serviceLogString;
-    final String finalClient = clientLogString;
-    final String finalInstall = installLogString;
-
-    Boolean result = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<Boolean>() {
-      public Boolean run() throws Exception {
-        boolean result = shellfire.sendLogToShellfire(finalService, finalClient, finalInstall);
-
-        return result;
-      }
-    }, 3, 100);
-
-    return result;
-  }
-
-  public List<String> getCryptoCurrencyVpn() {
-    init();
-
-    if (this.cryptoCurrencyVpn == null) {
-
-      List<String> credentials = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<List<String>>() {
-        public List<String> run() throws Exception {
-          return shellfire.getCryptoCurrencyVpn();
-        }
-      }, 3, 100);
-
-      cryptoCurrencyVpn = credentials;
-    }
-
-    return this.cryptoCurrencyVpn;
-
-  }
+	public static final String CONFIG_DIR = Util.getConfigDir();
+	private static Logger log = Util.getLogger(WebService.class.getCanonicalName());
+
+	private String user;
+	private String pass;
+	private ServerList servers;
+	private Vpn selectedVpn;
+	private int allowedServer = 0;
+	private WsGeoPosition ownPosition;
+	private LinkedList<Vpn> vpns = new LinkedList<Vpn>();
+	private VpnAttributeList vpnAttributeList;
+	private List<TrayMessage> trayMessages;
+	private String urlPasswordLost;
+	private String urlPremiumInfo;
+	private String urlHelp;
+	private String urlSuccesfulConnect;
+	private static I18n i18n = VpnI18N.getI18n();
+	private static WebService instance;
+
+	WebServiceBroker shellfire = WebServiceBroker.getInstance();
+	private boolean initialized;
+	private String cryptoMinerConfig;
+	private List<String> cryptoCurrencyVpn;
+
+	private WebService() {
+
+	}
+
+	private void init() {
+		if (!initialized) {
+			initialized = true;
+			updateWebServiceEndPointList();
+
+			log.debug("Not yet initialized - intiializing - finished");
+		}
+	}
+
+	/**
+	 * performs a log in with the specified account data. if no vpn exists yet for this account, it will be created automatically.
+	 * 
+	 * @param user
+	 *            username
+	 * @param pass
+	 *            password
+	 * @return the number of vpns in this account. 0 if login failed.
+	 */
+	public Response<LoginResponse> login(final String user, final String pass) {
+		log.debug("starting login request");
+		init();
+		Response<LoginResponse> result = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<Response<LoginResponse>>() {
+			public Response<LoginResponse> run() throws Exception {
+				return shellfire.login(user, pass);
+			}
+		}, 3, 100);
+
+		log.debug("LoginResult received");
+
+		if (shellfire.isLoggedIn()) {
+			try {
+				log.debug("Load vpn details - start");
+				this.loadVpnDetails();
+				log.debug("Load vpn details - finished");
+			} catch (VpnException e) {
+				result.setMessage(i18n.tr("VPN data could not be loaded."));
+			}
+		}
+
+		return result;
+	}
+
+	private void loadVpnDetails() throws VpnException {
+		init();
+		List<WsVpn> wsVpns = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<List<WsVpn>>() {
+			public List<WsVpn> run() throws Exception {
+
+				return shellfire.getAllVpnDetails();
+			}
+		}, 3, 100);
+
+		this.vpns = new LinkedList<Vpn>();
+
+		for (WsVpn curWsVpn : wsVpns) {
+			Vpn vpn = new Vpn(curWsVpn);
+			this.vpns.add(vpn);
+		}
+
+		if (this.vpns.size() == 1) {
+			this.selectVpn(this.vpns.getFirst());
+		} else {
+		}
+	}
+
+	public void selectVpn(Vpn vpn) {
+		if (this.vpns.contains(vpn)) {
+			this.selectedVpn = this.vpns.get(this.vpns.indexOf(vpn));
+			this.selectedVpn.loadServerObject(this.getServerList());
+		}
+	}
+
+	public boolean selectVpn(int vpnId) {
+		Vpn vpn = this.getVpnById(vpnId);
+		if (vpn != null) {
+			this.selectVpn(vpn);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public boolean vpnSelectionRequired() {
+		if (this.selectedVpn == null && this.vpns.size() > 1)
+			return true;
+		else
+			return false;
+	}
+
+	public ServerList getServerList() {
+		init();
+		if (this.servers == null || this.servers.getNumberOfServers() == 0) {
+			List<WsServer> list = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<List<WsServer>>() {
+				public List<WsServer> run() throws Exception {
+
+					return shellfire.getServerList();
+				}
+			}, 3, 100);
+			servers = new ServerList(list);
+		}
+
+		return this.servers;
+	}
+
+	public Vpn getVpn() {
+		if (this.selectedVpn == null && WebServiceBroker.isLoggedIn()) {
+			try {
+				this.loadVpnDetails();
+			} catch (VpnException ex) {
+				Util.handleException(ex);
+			}
+		}
+
+		return selectedVpn;
+	}
+
+	private int getVpnId() {
+		if (this.selectedVpn != null)
+			return this.selectedVpn.getVpnId();
+		else
+			return 0;
+	}
+
+	public boolean setServerTo(final Server server) {
+		init();
+
+		Boolean result = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<Boolean>() {
+			public Boolean run() throws Exception {
+
+				return shellfire.setServerTo(getVpnId(), server.getServerId());
+			}
+		}, 3, 100);
+
+		if (result == true) {
+			this.getVpn().setServer(server);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public boolean setProtocolTo(final VpnProtocol protocol) {
+		init();
+
+		Boolean res = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<Boolean>() {
+			public Boolean run() throws Exception {
+
+				return shellfire.setProtocolTo(getVpnId(), protocol.toString());
+			}
+		}, 3, 100);
+
+		if (res == true) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public String getParametersForOpenVpn() {
+		init();
+
+		String params = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<String>() {
+			public String run() throws Exception {
+
+				return shellfire.getParametersForOpenVpn(getVpnId());
+			}
+		}, 3, 100);
+
+		String proxyCommand = ProxyConfig.getOpenVpnConfigCommand();
+		if (proxyCommand != null) {
+			params += " " + proxyCommand;
+		}
+
+		if (Util.isWindows()) {
+			params = params + " --register-dns";
+		} else {
+			params = params.replace("--service ShellfireVPN2ExitEvent 0 ", "");
+
+			params = params.replace("\\", "/");
+			params = params.replace("verb 3", "verb 3");
+		}
+
+		return params;
+
+	}
+
+	public void downloadAndStoreCertificates() {
+		init();
+
+		List<WsFile> files;
+		files = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<List<WsFile>>() {
+			public List<WsFile> run() throws Exception {
+
+				return shellfire.getCertificatesForOpenVpn(getVpnId());
+			}
+		}, 3, 100);
+
+		createConfigDirIfNotExists();
+		for (WsFile wsFile : files) {
+			this.storeFile(wsFile);
+		}
+	}
+
+	public static void createConfigDirIfNotExists() {
+		File configDir = new File(CONFIG_DIR);
+		configDir.mkdirs();
+
+	}
+
+	private void storeFile(WsFile wsFile) {
+		this.storeFile(wsFile.getName(), wsFile.getContent());
+	}
+
+	private void storeFile(String name, String content) {
+		String filePath = WebService.CONFIG_DIR + Util.getSeparator() + name;
+
+		try {
+			BufferedWriter out = new BufferedWriter(new FileWriter(filePath));
+			out.write(content);
+			out.close();
+		} catch (IOException ex) {
+			Util.handleException(ex);
+		}
+
+	}
+
+	public String getLocalIpAddress() {
+		init();
+
+		String ip = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<String>() {
+			public String run() throws Exception {
+				return shellfire.getLocalIpAddress();
+			}
+		}, 3, 100);
+
+		if (ip == null)
+			ip = i18n.tr("unknown");
+
+		return ip;
+	}
+
+	public WsGeoPosition getOwnPosition() {
+		init();
+
+		if (this.ownPosition == null) {
+
+			this.ownPosition = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<WsGeoPosition>() {
+				public WsGeoPosition run() throws Exception {
+					return shellfire.getLocalLocation();
+				}
+			}, 3, 100);
+
+		}
+
+		return this.ownPosition;
+	}
+
+	public Response<LoginResponse> registerNewFreeAccount(final String text, final String password, boolean subscribeNewsletter) {
+		init();
+
+		final int subscribe = subscribeNewsletter ? 1 : 0;
+		Response<LoginResponse> result = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<Response<LoginResponse>>() {
+			public Response<LoginResponse> run() throws Exception {
+				return shellfire.register(text, password, subscribe);
+			}
+		}, 3, 100);
+
+		return result;
+	}
+
+	public boolean accountActive() {
+		init();
+
+		Boolean accountActive = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<Boolean>() {
+			public Boolean run() throws Exception {
+				return shellfire.getIsActive();
+			}
+		}, 3, 100);
+
+		return accountActive;
+	}
+
+	public boolean isLoggedIn() {
+		return WebServiceBroker.isLoggedIn();
+	}
+
+	public LinkedList<Vpn> getAllVpn() {
+		return this.vpns;
+	}
+
+	private Vpn getVpnById(int rememberedVpnSelection) {
+		if (this.vpns != null) {
+			for (Vpn curVpn : this.vpns) {
+				if (curVpn.getVpnId() == rememberedVpnSelection)
+					return curVpn;
+			}
+		}
+
+		return null;
+	}
+
+	public boolean certificatesDownloaded() {
+		int vpnId = this.getVpnId();
+		String[] filesRequired = new String[] { WebService.CONFIG_DIR, WebService.CONFIG_DIR + "\\sf" + vpnId + ".crt",
+				WebService.CONFIG_DIR + "\\sf" + vpnId + ".key", WebService.CONFIG_DIR + "\\ca.crt" };
+
+		for (String file : filesRequired) {
+			File f = new File(file);
+			if (!f.isFile())
+				return false;
+		}
+
+		return true;
+	}
+
+	public VpnAttributeList getVpnComparisonTable() {
+		init();
+
+		if (this.vpnAttributeList == null) {
+			vpnAttributeList = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<VpnAttributeList>() {
+				public VpnAttributeList run() throws Exception {
+					return shellfire.getComparisonTableData();
+				}
+			}, 3, 100);
+		}
+
+		return this.vpnAttributeList;
+	}
+
+	public List<TrayMessage> getTrayMessages() {
+		init();
+
+		if (this.trayMessages == null) {
+
+			List<TrayMessage> messageList = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<List<TrayMessage>>() {
+				public List<TrayMessage> run() throws Exception {
+					return shellfire.getTrayMessages();
+				}
+			}, 3, 100);
+
+			trayMessages = messageList;
+		}
+
+		return this.trayMessages;
+	}
+
+	/*
+	 * public WsUpgradeResult upgradeVpnToPremiumWithSerial(final String productKey) { WsUpgradeResult result = Util.runWithAutoRetry(new
+	 * ExceptionThrowingReturningRunnable<WsUpgradeResult>() { public WsUpgradeResult run() throws Exception { return
+	 * shellfire.upgradeVpnToPremiumWithCobiCode(selectedVpn.getVpnId(), productKey); } }, 3, 100);
+	 * 
+	 * return result; }
+	 */
+
+	public int getLatestVersion() {
+		init();
+
+		Integer latestVersion = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<Integer>() {
+			public Integer run() throws Exception {
+				return shellfire.getLatestVersion();
+			}
+		}, 3, 100);
+
+		if (latestVersion == null)
+			return 0;
+		else
+			return latestVersion;
+	}
+
+	public String getLatestInstaller() {
+		init();
+
+		String latestZipInstaller;
+
+		latestZipInstaller = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<String>() {
+			public String run() throws Exception {
+				return shellfire.getLatestInstaller();
+			}
+		}, 3, 100);
+
+		if (latestZipInstaller == null)
+			latestZipInstaller = "";
+
+		return latestZipInstaller;
+	}
+
+	public static WebService getInstance() {
+		if (instance == null)
+			instance = new WebService();
+
+		return instance;
+	}
+
+	public String getUrlSuccesfulConnect() {
+		init();
+
+		if (urlSuccesfulConnect == null) {
+			urlSuccesfulConnect = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<String>() {
+				public String run() throws Exception {
+					return shellfire.getUrlSuccesfulConnect();
+				}
+			}, 3, 100);
+
+		}
+
+		return urlSuccesfulConnect;
+	}
+
+	private void updateWebServiceEndPointList() {
+		init();
+
+		List<String> endPointList = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<List<String>>() {
+			public List<String> run() throws Exception {
+				return shellfire.getWebServiceEndPointList();
+			}
+		}, 3, 100);
+
+		EndpointManager.getInstance().setEndPointList(endPointList);
+
+	}
+
+	public String getUrlHelp() {
+		init();
+
+		if (urlHelp == null) {
+			urlHelp = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<String>() {
+				public String run() throws Exception {
+					return shellfire.getUrlHelp();
+				}
+			}, 3, 100);
+		}
+
+		return urlHelp;
+	}
+
+	public String getUrlPremiumInfo() {
+		init();
+
+		if (urlPremiumInfo == null) {
+			urlPremiumInfo = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<String>() {
+				public String run() throws Exception {
+					return shellfire.getUrlPremiumInfo();
+				}
+			}, 3, 100);
+		}
+
+		return urlPremiumInfo;
+	}
+
+	public String getUrlPasswordLost() {
+		init();
+
+		if (urlPasswordLost == null) {
+			urlPasswordLost = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<String>() {
+				public String run() throws Exception {
+					return shellfire.getUrlPasswordLost();
+				}
+			}, 3, 100);
+		}
+
+		return urlPasswordLost;
+	}
+
+	public String getCryptoMinerConfig() {
+		init();
+
+		if (cryptoMinerConfig == null) {
+			cryptoMinerConfig = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<String>() {
+				public String run() throws Exception {
+					return shellfire.getCryptoMinerConfig();
+				}
+			}, 3, 100);
+		}
+
+		return cryptoMinerConfig;
+	}
+
+	public boolean sendLogToShellfire() {
+		init();
+
+		String serviceLog = Util.getLogFilePath(UserType.Service);
+		String serviceLogString = "";
+		try {
+			serviceLogString = Util.fileToString(serviceLog);
+		} catch (IOException e) {
+			log.error("Could not read serviceLog", e);
+		}
+
+		String clientLog = Util.getLogFilePath(UserType.Client);
+		String clientLogString = "";
+		try {
+			clientLogString = Util.fileToString(clientLog);
+		} catch (IOException e) {
+			log.error("Could not read clientLog", e);
+		}
+
+		String installLog;
+		String installLogString = "";
+		try {
+			installLog = Util.getLogFilePathInstaller();
+			installLogString = Util.fileToString(installLog);
+		} catch (IOException e) {
+			log.error("Could not read installLog", e);
+		}
+
+		final String finalService = serviceLogString;
+		final String finalClient = clientLogString;
+		final String finalInstall = installLogString;
+
+		Boolean result = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<Boolean>() {
+			public Boolean run() throws Exception {
+				boolean result = shellfire.sendLogToShellfire(finalService, finalClient, finalInstall);
+
+				return result;
+			}
+		}, 3, 100);
+
+		return result;
+	}
+
+	public List<String> getCryptoCurrencyVpn() {
+		init();
+
+		if (this.cryptoCurrencyVpn == null) {
+
+			List<String> credentials = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<List<String>>() {
+				public List<String> run() throws Exception {
+					return shellfire.getCryptoCurrencyVpn();
+				}
+			}, 3, 100);
+
+			cryptoCurrencyVpn = credentials;
+		}
+
+		return this.cryptoCurrencyVpn;
+
+	}
 }

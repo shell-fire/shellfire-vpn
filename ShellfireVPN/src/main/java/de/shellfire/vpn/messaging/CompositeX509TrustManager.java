@@ -22,47 +22,47 @@ import javax.net.ssl.X509TrustManager;
  */
 public class CompositeX509TrustManager implements X509TrustManager {
 
-  private final List<X509TrustManager> trustManagers;
+	private final List<X509TrustManager> trustManagers;
 
-  public CompositeX509TrustManager(List trustManagers) {
-    this.trustManagers = trustManagers;
-  }
+	public CompositeX509TrustManager(List trustManagers) {
+		this.trustManagers = trustManagers;
+	}
 
-  @Override
-  public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-    for (X509TrustManager trustManager : trustManagers) {
-      try {
-        trustManager.checkClientTrusted(chain, authType);
-        return; // someone trusts them. success!
-      } catch (CertificateException e) {
-        // maybe someone else will trust them
-      }
-    }
-    throw new CertificateException("None of the TrustManagers trust this certificate chain");
-  }
+	@Override
+	public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+		for (X509TrustManager trustManager : trustManagers) {
+			try {
+				trustManager.checkClientTrusted(chain, authType);
+				return; // someone trusts them. success!
+			} catch (CertificateException e) {
+				// maybe someone else will trust them
+			}
+		}
+		throw new CertificateException("None of the TrustManagers trust this certificate chain");
+	}
 
-  @Override
-  public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
-    for (X509TrustManager trustManager : trustManagers) {
-      try {
-        trustManager.checkServerTrusted(chain, authType);
-        return; // someone trusts them. success!
-      } catch (CertificateException e) {
-        // maybe someone else will trust them
-      }
-    }
-    throw new CertificateException("None of the TrustManagers trust this certificate chain");
-  }
+	@Override
+	public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+		for (X509TrustManager trustManager : trustManagers) {
+			try {
+				trustManager.checkServerTrusted(chain, authType);
+				return; // someone trusts them. success!
+			} catch (CertificateException e) {
+				// maybe someone else will trust them
+			}
+		}
+		throw new CertificateException("None of the TrustManagers trust this certificate chain");
+	}
 
-  @Override
-  public X509Certificate[] getAcceptedIssuers() {
-    List<X509Certificate> certificates = new LinkedList<X509Certificate>();
-    for (X509TrustManager trustManager : trustManagers) {
-      certificates.addAll(Arrays.asList(trustManager.getAcceptedIssuers()));
-    }
-    X509Certificate[] result = new X509Certificate[certificates.size()];
-    certificates.toArray(result);
-    return result;
-  }
+	@Override
+	public X509Certificate[] getAcceptedIssuers() {
+		List<X509Certificate> certificates = new LinkedList<X509Certificate>();
+		for (X509TrustManager trustManager : trustManagers) {
+			certificates.addAll(Arrays.asList(trustManager.getAcceptedIssuers()));
+		}
+		X509Certificate[] result = new X509Certificate[certificates.size()];
+		certificates.toArray(result);
+		return result;
+	}
 
 }

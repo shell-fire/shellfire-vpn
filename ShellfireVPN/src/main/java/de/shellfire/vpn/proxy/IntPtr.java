@@ -6,10 +6,10 @@ import com.sun.jna.Structure;
 
 public class IntPtr extends Structure {
 
-  @Override
-  protected List getFieldOrder() {
-    // TODO Auto-generated method stub
-    return null;
-  }
+	@Override
+	protected List getFieldOrder() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 }

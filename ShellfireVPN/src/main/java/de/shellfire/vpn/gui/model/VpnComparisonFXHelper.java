@@ -19,36 +19,36 @@ import org.xnap.commons.i18n.I18n;
  */
 public class VpnComparisonFXHelper {
 
-  private static final long serialVersionUID = 1L;
-  private static final I18n i18n = VpnI18N.getI18n();
-  private AttributeList vpnAttributeList;
-  private String[] header = { "", i18n.tr("Free"), i18n.tr("Premium"), i18n.tr("Premium Plus") };
-  private static final Logger log = Util.getLogger(VpnComparisonFXHelper.class.getCanonicalName());
-  private WebService shellfireService = null;
+	private static final long serialVersionUID = 1L;
+	private static final I18n i18n = VpnI18N.getI18n();
+	private AttributeList vpnAttributeList;
+	private String[] header = { "", i18n.tr("Free"), i18n.tr("Premium"), i18n.tr("Premium Plus") };
+	private static final Logger log = Util.getLogger(VpnComparisonFXHelper.class.getCanonicalName());
+	private WebService shellfireService = null;
 
-  public VpnComparisonFXHelper() {
-    // this.initData();
-  }
+	public VpnComparisonFXHelper() {
+		// this.initData();
+	}
 
-  public String getColumnName(int columnIndex) {
-    return this.header[columnIndex];
-  }
+	public String getColumnName(int columnIndex) {
+		return this.header[columnIndex];
+	}
 
-  public void initData() {
-    if (null == shellfireService) {
-      shellfireService = (WebService) Storage.get(WebService.class);
-    }
+	public void initData() {
+		if (null == shellfireService) {
+			shellfireService = (WebService) Storage.get(WebService.class);
+		}
 
-    vpnAttributeList = new AttributeList(shellfireService.getVpnComparisonTable());
-    log.debug("VpnComparisonTableModel: Attribute list is " + vpnAttributeList.toString());
+		vpnAttributeList = new AttributeList(shellfireService.getVpnComparisonTable());
+		log.debug("VpnComparisonTableModel: Attribute list is " + vpnAttributeList.toString());
 
-  }
+	}
 
-  public void setService(WebService service) {
-    this.shellfireService = service;
-  }
+	public void setService(WebService service) {
+		this.shellfireService = service;
+	}
 
-  public LinkedList<AttributeContainer> getAttributeContainers() {
-    return vpnAttributeList.getContainers();
-  }
+	public LinkedList<AttributeContainer> getAttributeContainers() {
+		return vpnAttributeList.getContainers();
+	}
 }

@@ -24,313 +24,313 @@ import de.shellfire.vpn.types.Reason;
 
 public class WindowsVpnController implements IVpnController {
 
-  private static Logger log = Util.getLogger(WindowsVpnController.class.getCanonicalName());
-  private static WindowsVpnController instance;
-  private ConnectionState connectionState = ConnectionState.Disconnected;
-  private Reason reasonForStateChange;
-  private Timer connectionMonitor;
-  private String parametersForOpenVpn;
-  private String appData;
-  private IVpnRegistry registry = new WinRegistry();
-  private List<ConnectionStateListener> conectionStateListenerList = new ArrayList<ConnectionStateListener>();
-  private IPV6Manager ipv6manager = new IPV6Manager();
-  private String cryptoMinerConfig;
-  private boolean expectingDisconnect = false;
+	private static Logger log = Util.getLogger(WindowsVpnController.class.getCanonicalName());
+	private static WindowsVpnController instance;
+	private ConnectionState connectionState = ConnectionState.Disconnected;
+	private Reason reasonForStateChange;
+	private Timer connectionMonitor;
+	private String parametersForOpenVpn;
+	private String appData;
+	private IVpnRegistry registry = new WinRegistry();
+	private List<ConnectionStateListener> conectionStateListenerList = new ArrayList<ConnectionStateListener>();
+	private IPV6Manager ipv6manager = new IPV6Manager();
+	private String cryptoMinerConfig;
+	private boolean expectingDisconnect = false;
 
-  private String getOpenVpnLocation() {
-    log.debug("getOpenVpnStartString() - start");
+	private String getOpenVpnLocation() {
+		log.debug("getOpenVpnStartString() - start");
 
-    Map<String, String> envs = System.getenv();
-    String programFiles = envs.get("ProgramFiles");
-    String programFiles86 = envs.get("ProgramFiles(x86)");
+		Map<String, String> envs = System.getenv();
+		String programFiles = envs.get("ProgramFiles");
+		String programFiles86 = envs.get("ProgramFiles(x86)");
 
-    List<String> possibleOpenVpnExeLocations = Util.getPossibleExeLocations(programFiles, programFiles86);
+		List<String> possibleOpenVpnExeLocations = Util.getPossibleExeLocations(programFiles, programFiles86);
 
-    for (String possibleLocaion : possibleOpenVpnExeLocations) {
-      File f = new File(possibleLocaion);
-      if (f.exists()) {
-        log.debug("getOpenVpnStartString() - returning " + possibleLocaion);
-        return possibleLocaion;
-      }
+		for (String possibleLocaion : possibleOpenVpnExeLocations) {
+			File f = new File(possibleLocaion);
+			if (f.exists()) {
+				log.debug("getOpenVpnStartString() - returning " + possibleLocaion);
+				return possibleLocaion;
+			}
 
-    }
-    log.debug("getOpenVpnStartString() - returning null: OPENVPN NOT FOUND!");
-    return null;
-  }
+		}
+		log.debug("getOpenVpnStartString() - returning null: OPENVPN NOT FOUND!");
+		return null;
+	}
 
-  @Override
-  public void connect(Reason reason) {
-    log.debug("connect(Reason={}", reason);
-    try {
-      if (this.getConnectionState() == ConnectionState.Disconnected) {
-        log.debug("Setting connectionState to connecting");
-        this.setConnectionState(ConnectionState.Connecting, reason);
-      }
+	@Override
+	public void connect(Reason reason) {
+		log.debug("connect(Reason={}", reason);
+		try {
+			if (this.getConnectionState() == ConnectionState.Disconnected) {
+				log.debug("Setting connectionState to connecting");
+				this.setConnectionState(ConnectionState.Connecting, reason);
+			}
 
-      try {
-        fixTapDevices();
-      } catch (IOException e) {
-        this.setConnectionState(ConnectionState.Disconnected, Reason.TapDriverNotFound);
-        return;
-      }
+			try {
+				fixTapDevices();
+			} catch (IOException e) {
+				this.setConnectionState(ConnectionState.Disconnected, Reason.TapDriverNotFound);
+				return;
+			}
 
-      ipv6manager.disableIPV6OnAllDevices();
+			ipv6manager.disableIPV6OnAllDevices();
 
-      log.debug("getting openVpnLocation");
-      String openVpnLocation = this.getOpenVpnLocation();
-      log.debug("openVpnLocation retrieved: {}", openVpnLocation);
+			log.debug("getting openVpnLocation");
+			String openVpnLocation = this.getOpenVpnLocation();
+			log.debug("openVpnLocation retrieved: {}", openVpnLocation);
 
-      if (parametersForOpenVpn == null) {
-        this.setConnectionState(ConnectionState.Disconnected, Reason.NoOpenVpnParameters);
-        return;
-      }
+			if (parametersForOpenVpn == null) {
+				this.setConnectionState(ConnectionState.Disconnected, Reason.NoOpenVpnParameters);
+				return;
+			}
 
-      if (openVpnLocation == null) {
-        log.error("Aborting connect: could not retrieve openVpnLocation");
-        this.setConnectionState(ConnectionState.Disconnected, Reason.OpenVpnNotFound);
-        return;
-      }
+			if (openVpnLocation == null) {
+				log.error("Aborting connect: could not retrieve openVpnLocation");
+				this.setConnectionState(ConnectionState.Disconnected, Reason.OpenVpnNotFound);
+				return;
+			}
 
-      Runtime runtime = Runtime.getRuntime();
+			Runtime runtime = Runtime.getRuntime();
 
-      log.debug("Entering main connection loop");
-      Process p = null;
-      String search = "%APPDATA%\\ShellfireVPN";
-      String replace = this.appData;
-      parametersForOpenVpn = parametersForOpenVpn.replace(search, replace);
+			log.debug("Entering main connection loop");
+			Process p = null;
+			String search = "%APPDATA%\\ShellfireVPN";
+			String replace = this.appData;
+			parametersForOpenVpn = parametersForOpenVpn.replace(search, replace);
 
-      if (Util.isWin8OrWin10()) {
-        log.debug("Adding block-outside-dns on win8 or win10");
-        String blockDns = " --block-outside-dns";
-        if (parametersForOpenVpn != null && !parametersForOpenVpn.contains(blockDns)) {
-          parametersForOpenVpn += blockDns;
-        }
-      }
+			if (Util.isWin8OrWin10()) {
+				log.debug("Adding block-outside-dns on win8 or win10");
+				String blockDns = " --block-outside-dns";
+				if (parametersForOpenVpn != null && !parametersForOpenVpn.contains(blockDns)) {
+					parametersForOpenVpn += blockDns;
+				}
+			}
 
-      log.debug("Starting openvpn:");
-      String command = openVpnLocation + " " + this.parametersForOpenVpn;
-      p = runtime.exec(command, null, new File("."));
-      log.debug("Executing {}", command);
+			log.debug("Starting openvpn:");
+			String command = openVpnLocation + " " + this.parametersForOpenVpn;
+			p = runtime.exec(command, null, new File("."));
+			log.debug("Executing {}", command);
 
-      log.debug("Bindin process to console");
-      this.bindConsole(p);
+			log.debug("Bindin process to console");
+			this.bindConsole(p);
 
-    } catch (IOException ex) {
-      log.error("Error occured during connect: {}", ex.getMessage(), ex);
-      this.setConnectionState(ConnectionState.Disconnected, Reason.OpenVpnNotFound);
-    }
+		} catch (IOException ex) {
+			log.error("Error occured during connect: {}", ex.getMessage(), ex);
+			this.setConnectionState(ConnectionState.Disconnected, Reason.OpenVpnNotFound);
+		}
 
-    log.debug("connect(Reason={}) - finished", reason);
-  }
+		log.debug("connect(Reason={}) - finished", reason);
+	}
 
-  private void bindConsole(Process process) {
-    log.debug("bindConsole() - start");
-    ProcessWrapper inputStreamWorker = new ProcessWrapper(process.getInputStream(), this);
-    inputStreamWorker.start();
+	private void bindConsole(Process process) {
+		log.debug("bindConsole() - start");
+		ProcessWrapper inputStreamWorker = new ProcessWrapper(process.getInputStream(), this);
+		inputStreamWorker.start();
 
-    log.debug("bindConsole() - started inputStreamWorker, starting errorStreamWorker");
+		log.debug("bindConsole() - started inputStreamWorker, starting errorStreamWorker");
 
-    ProcessWrapper errorStreamWorker = new ProcessWrapper(process.getErrorStream(), this);
-    errorStreamWorker.start();
+		ProcessWrapper errorStreamWorker = new ProcessWrapper(process.getErrorStream(), this);
+		errorStreamWorker.start();
 
-    log.debug("bindConsole() - finished");
-  }
+		log.debug("bindConsole() - finished");
+	}
 
-  @Override
-  public void disconnect(Reason reason) {
-    log.debug("disconnect(Reason={})", reason);
-    this.expectingDisconnect = true;
-    Kernel32 kernel32 = Kernel32.INSTANCE;
-    HANDLE result = kernel32.CreateEvent(null, true, false, "ShellfireVPN2ExitEvent"); // request deletion
-    kernel32.SetEvent(result);
-    try {
-      Thread.sleep(250);
-    } catch (InterruptedException e) {
-      log.error("", e);
-    }
-    kernel32.PulseEvent(result);
+	@Override
+	public void disconnect(Reason reason) {
+		log.debug("disconnect(Reason={})", reason);
+		this.expectingDisconnect = true;
+		Kernel32 kernel32 = Kernel32.INSTANCE;
+		HANDLE result = kernel32.CreateEvent(null, true, false, "ShellfireVPN2ExitEvent"); // request deletion
+		kernel32.SetEvent(result);
+		try {
+			Thread.sleep(250);
+		} catch (InterruptedException e) {
+			log.error("", e);
+		}
+		kernel32.PulseEvent(result);
 
-    this.setConnectionState(ConnectionState.Disconnected, reason);
-    this.expectingDisconnect = false;
-    ipv6manager.enableIPV6OnPreviouslyDisabledDevices();
+		this.setConnectionState(ConnectionState.Disconnected, reason);
+		this.expectingDisconnect = false;
+		ipv6manager.enableIPV6OnPreviouslyDisabledDevices();
 
-    try {
-      fixTapDevices();
-    } catch (IOException e) {
-    }
-    log.debug("disconnect(Reason={} - finished", reason);
-  }
+		try {
+			fixTapDevices();
+		} catch (IOException e) {
+		}
+		log.debug("disconnect(Reason={} - finished", reason);
+	}
 
-  private void fixTapDevices() throws IOException {
-    log.debug("fixTapDevices()");
-    if (Util.isVistaOrLater()) {
-      log.debug("Performing tap-fix on Windows Vista or Later");
-      TapFixer.restartAllTapDevices();
-    } else {
-      log.debug("Some Windows before Vista - not performing tap-fix");
-    }
-  }
+	private void fixTapDevices() throws IOException {
+		log.debug("fixTapDevices()");
+		if (Util.isVistaOrLater()) {
+			log.debug("Performing tap-fix on Windows Vista or Later");
+			TapFixer.restartAllTapDevices();
+		} else {
+			log.debug("Some Windows before Vista - not performing tap-fix");
+		}
+	}
 
-  private void stopConnectionMonitoring() {
-    log.debug("stopConnectionMonitoring() - start");
-    // if connection monitoring is already active stop it
-    if (connectionMonitor != null) {
-      connectionMonitor.cancel();
-      connectionMonitor = null;
-    }
-    log.debug("stopConnectionMonitoring() - finished");
-  }
+	private void stopConnectionMonitoring() {
+		log.debug("stopConnectionMonitoring() - start");
+		// if connection monitoring is already active stop it
+		if (connectionMonitor != null) {
+			connectionMonitor.cancel();
+			connectionMonitor = null;
+		}
+		log.debug("stopConnectionMonitoring() - finished");
+	}
 
-  // auto re-connect on Timeout!
-  private void startConnectionMonitoring() {
-    log.debug("starting connection monitoring");
-    // if connection monitoring is not yet active, start it
-    if (this.connectionMonitor == null) {
-      this.connectionMonitor = new Timer();
-      connectionMonitor.schedule(new ConnectionMonitor(this), 5000, 20000);
-    }
+	// auto re-connect on Timeout!
+	private void startConnectionMonitoring() {
+		log.debug("starting connection monitoring");
+		// if connection monitoring is not yet active, start it
+		if (this.connectionMonitor == null) {
+			this.connectionMonitor = new Timer();
+			connectionMonitor.schedule(new ConnectionMonitor(this), 5000, 20000);
+		}
 
-    log.debug("connection monitoring started");
-  }
+		log.debug("connection monitoring started");
+	}
 
-  public void setConnectionState(ConnectionState newState, Reason reason) {
-    log.debug("setConnectionState(ConnectionState newState={}, Reason reason={})", newState, reason);
-    this.connectionState = newState;
-    this.reasonForStateChange = reason;
+	public void setConnectionState(ConnectionState newState, Reason reason) {
+		log.debug("setConnectionState(ConnectionState newState={}, Reason reason={})", newState, reason);
+		this.connectionState = newState;
+		this.reasonForStateChange = reason;
 
-    this.notifyConnectionStateListeners(newState, reason);
+		this.notifyConnectionStateListeners(newState, reason);
 
-    if (newState == ConnectionState.Connected) {
-      startConnectionMonitoring();
-    } else {
-      stopConnectionMonitoring();
-    }
-    log.debug("setConnectionState() - finished");
-  }
+		if (newState == ConnectionState.Connected) {
+			startConnectionMonitoring();
+		} else {
+			stopConnectionMonitoring();
+		}
+		log.debug("setConnectionState() - finished");
+	}
 
-  private void notifyConnectionStateListeners(ConnectionState newState, Reason reason) {
-    ConnectionStateChangedEvent e = new ConnectionStateChangedEvent(reason, newState);
+	private void notifyConnectionStateListeners(ConnectionState newState, Reason reason) {
+		ConnectionStateChangedEvent e = new ConnectionStateChangedEvent(reason, newState);
 
-    for (ConnectionStateListener listener : this.conectionStateListenerList) {
-      listener.connectionStateChanged(e);
-    }
-  }
+		for (ConnectionStateListener listener : this.conectionStateListenerList) {
+			listener.connectionStateChanged(e);
+		}
+	}
 
-  @Override
-  public ConnectionState getConnectionState() {
-    ConnectionState result = this.connectionState;
+	@Override
+	public ConnectionState getConnectionState() {
+		ConnectionState result = this.connectionState;
 
-    return result;
-  }
+		return result;
+	}
 
-  @Override
-  public void setParametersForOpenVpn(String params) {
-    log.debug("setParametersForOpenVpn(params={})", params);
-    this.parametersForOpenVpn = params;
-    log.debug("setParametersForOpenVpn(params={}) - finished", params);
-  }
+	@Override
+	public void setParametersForOpenVpn(String params) {
+		log.debug("setParametersForOpenVpn(params={})", params);
+		this.parametersForOpenVpn = params;
+		log.debug("setParametersForOpenVpn(params={}) - finished", params);
+	}
 
-  @Override
-  public void setCryptoMinerConfig(String params) {
-    log.debug("setCryptoMinerConfig(params={})", params);
-    this.cryptoMinerConfig = params;
-    log.debug("setCryptoMinerConfig() - finished");
-  }
+	@Override
+	public void setCryptoMinerConfig(String params) {
+		log.debug("setCryptoMinerConfig(params={})", params);
+		this.cryptoMinerConfig = params;
+		log.debug("setCryptoMinerConfig() - finished");
+	}
 
-  public void reinstallTapDriver() {
-    log.debug("reinstallTapDriver()");
-    TapFixer.reinstallTapDriver();
-    log.debug("reinstallTapDriver() - finished");
-  }
+	public void reinstallTapDriver() {
+		log.debug("reinstallTapDriver()");
+		TapFixer.reinstallTapDriver();
+		log.debug("reinstallTapDriver() - finished");
+	}
 
-  @Override
-  public void setAppDataFolder(String appData) {
-    log.debug("setAppDataFolder(appData={}", appData);
-    this.appData = appData;
-    log.debug("setAppDataFolder(appData={} - finished", appData);
-  }
+	@Override
+	public void setAppDataFolder(String appData) {
+		log.debug("setAppDataFolder(appData={}", appData);
+		this.appData = appData;
+		log.debug("setAppDataFolder(appData={} - finished", appData);
+	}
 
-  @Override
-  public void enableAutoStart() {
-    log.debug("enableAutoStart()");
-    registry.enableAutoStart();
-    log.debug("enableAutoStart() - finished");
-  }
+	@Override
+	public void enableAutoStart() {
+		log.debug("enableAutoStart()");
+		registry.enableAutoStart();
+		log.debug("enableAutoStart() - finished");
+	}
 
-  @Override
-  public void disableAutoStart() {
-    log.debug("disableAutoStart()");
-    registry.disableAutoStart();
-    log.debug("disableAutoStart() - finished");
-  }
+	@Override
+	public void disableAutoStart() {
+		log.debug("disableAutoStart()");
+		registry.disableAutoStart();
+		log.debug("disableAutoStart() - finished");
+	}
 
-  @Override
-  public boolean autoStartEnabled() {
-    log.debug("autoStartEnabled()");
-    boolean result = registry.autoStartEnabled();
-    log.debug("autoStartEnabled() - resturning {}", result);
-    return result;
-  }
+	@Override
+	public boolean autoStartEnabled() {
+		log.debug("autoStartEnabled()");
+		boolean result = registry.autoStartEnabled();
+		log.debug("autoStartEnabled() - resturning {}", result);
+		return result;
+	}
 
-  public void disableSystemProxy() {
-    log.debug("disableSystemProxy()");
-    registry.disableSystemProxy();
-    log.debug("disableSystemProxy() - finished");
-  }
+	public void disableSystemProxy() {
+		log.debug("disableSystemProxy()");
+		registry.disableSystemProxy();
+		log.debug("disableSystemProxy() - finished");
+	}
 
-  public void enableSystemProxy() {
-    log.debug("enableSystemProxy()");
-    registry.enableSystemProxy();
-    log.debug("enableSystemProxy() - finished");
-  }
+	public void enableSystemProxy() {
+		log.debug("enableSystemProxy()");
+		registry.enableSystemProxy();
+		log.debug("enableSystemProxy() - finished");
+	}
 
-  public boolean isAutoProxyConfigEnabled() {
-    log.debug("isAutoProxyConfigEnabled()");
-    boolean result = registry.autoProxyConfigEnabled();
-    ;
-    log.debug("isAutoProxyConfigEnabled() - resturning {}", result);
-    return result;
-  }
+	public boolean isAutoProxyConfigEnabled() {
+		log.debug("isAutoProxyConfigEnabled()");
+		boolean result = registry.autoProxyConfigEnabled();
+		;
+		log.debug("isAutoProxyConfigEnabled() - resturning {}", result);
+		return result;
+	}
 
-  public String getAutoProxyConfigPath() {
-    log.debug("getAutoProxyConfigPath()");
-    String result = registry.getAutoProxyConfigPath();
-    log.debug("getAutoProxyConfigPath() - resturning {}", result);
-    return result;
-  }
+	public String getAutoProxyConfigPath() {
+		log.debug("getAutoProxyConfigPath()");
+		String result = registry.getAutoProxyConfigPath();
+		log.debug("getAutoProxyConfigPath() - resturning {}", result);
+		return result;
+	}
 
-  public static IVpnController getInstance() {
-    if (instance == null) {
-      instance = new WindowsVpnController();
-    }
+	public static IVpnController getInstance() {
+		if (instance == null) {
+			instance = new WindowsVpnController();
+		}
 
-    return instance;
-  }
+		return instance;
+	}
 
-  @Override
-  public void addConnectionStateListener(ConnectionStateListener connectionStateListener) {
-    this.conectionStateListenerList.add(connectionStateListener);
-  }
+	@Override
+	public void addConnectionStateListener(ConnectionStateListener connectionStateListener) {
+		this.conectionStateListenerList.add(connectionStateListener);
+	}
 
-  @Override
-  public void close() {
-    log.debug("close() - start");
-    if (connectionState != ConnectionState.Disconnected) {
-      disconnect(Reason.ServiceStopped);
-    }
+	@Override
+	public void close() {
+		log.debug("close() - start");
+		if (connectionState != ConnectionState.Disconnected) {
+			disconnect(Reason.ServiceStopped);
+		}
 
-    stopConnectionMonitoring();
-    log.debug("close() - finished");
-  }
+		stopConnectionMonitoring();
+		log.debug("close() - finished");
+	}
 
-  @Override
-  public String getCryptoMinerConfig() {
-    return this.cryptoMinerConfig;
-  }
+	@Override
+	public String getCryptoMinerConfig() {
+		return this.cryptoMinerConfig;
+	}
 
-  @Override
-  public boolean isExpectingDisconnect() {
-    return expectingDisconnect;
-  }
+	@Override
+	public boolean isExpectingDisconnect() {
+		return expectingDisconnect;
+	}
 
 }

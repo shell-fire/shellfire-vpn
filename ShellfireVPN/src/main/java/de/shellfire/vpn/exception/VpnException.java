@@ -10,10 +10,10 @@ package de.shellfire.vpn.exception;
  */
 public class VpnException extends Exception {
 
-  private static final long serialVersionUID = 6158572667272705838L;
+	private static final long serialVersionUID = 6158572667272705838L;
 
-  public VpnException(String string) {
-    super(string);
-  }
+	public VpnException(String string) {
+		super(string);
+	}
 
 }

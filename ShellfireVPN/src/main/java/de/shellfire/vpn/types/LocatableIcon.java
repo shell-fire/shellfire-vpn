@@ -13,11 +13,11 @@ import de.shellfire.vpn.client.Controller;
  * @author bettmenn
  */
 public interface LocatableIcon {
-  public BufferedImage getIcon();
+	public BufferedImage getIcon();
 
-  public String getCountryString();
+	public String getCountryString();
 
-  public Controller getController();
+	public Controller getController();
 
-  public void setController(Controller controller);
+	public void setController(Controller controller);
 }

@@ -1,18 +1,18 @@
 package de.shellfire.vpn.webservice.model;
 
 public class GetCertificatesForOpenVpnRequest {
-  private int productId;
+	private int productId;
 
-  public GetCertificatesForOpenVpnRequest(int productId) {
-    this.productId = productId;
-  }
+	public GetCertificatesForOpenVpnRequest(int productId) {
+		this.productId = productId;
+	}
 
-  public void setProductId(int vpnProductId) {
-    this.productId = vpnProductId;
-  }
+	public void setProductId(int vpnProductId) {
+		this.productId = vpnProductId;
+	}
 
-  public int getProductId() {
-    return productId;
+	public int getProductId() {
+		return productId;
 
-  }
+	}
 }

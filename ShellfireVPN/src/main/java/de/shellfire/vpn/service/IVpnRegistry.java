@@ -2,18 +2,18 @@ package de.shellfire.vpn.service;
 
 public interface IVpnRegistry {
 
-  void enableAutoStart();
+	void enableAutoStart();
 
-  void disableAutoStart();
+	void disableAutoStart();
 
-  boolean autoStartEnabled();
+	boolean autoStartEnabled();
 
-  void disableSystemProxy();
+	void disableSystemProxy();
 
-  void enableSystemProxy();
+	void enableSystemProxy();
 
-  boolean autoProxyConfigEnabled();
+	boolean autoProxyConfigEnabled();
 
-  String getAutoProxyConfigPath();
+	String getAutoProxyConfigPath();
 
 }

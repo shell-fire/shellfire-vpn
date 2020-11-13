@@ -9,6 +9,6 @@ package de.shellfire.vpn.client;
  * @author bettmenn
  */
 public enum ConnectionState {
-  Disconnected, Connecting, Connected
+	Disconnected, Connecting, Connected
 
 }

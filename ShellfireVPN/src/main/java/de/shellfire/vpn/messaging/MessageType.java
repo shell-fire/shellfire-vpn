@@ -5,7 +5,7 @@ package de.shellfire.vpn.messaging;
  */
 public enum MessageType {
 
-  Ping, Connect, Disconnect, GetConnectionState, SetParametersForOpenVpn, ReinstallTapDriver, SetAppDataFolder, EnableAutoStart, DisableAutoStart, AutoStartEnabled, SetCryptoMinerConfig,
+	Ping, Connect, Disconnect, GetConnectionState, SetParametersForOpenVpn, ReinstallTapDriver, SetAppDataFolder, EnableAutoStart, DisableAutoStart, AutoStartEnabled, SetCryptoMinerConfig,
 
-  Error, ConnectionStateChanged
+	Error, ConnectionStateChanged
 }

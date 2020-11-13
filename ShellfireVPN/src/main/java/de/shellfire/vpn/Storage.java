@@ -13,17 +13,17 @@ import java.util.HashMap;
 @SuppressWarnings("rawtypes")
 public class Storage {
 
-  private static HashMap<Class, Object> objects = new HashMap<Class, Object>();
+	private static HashMap<Class, Object> objects = new HashMap<Class, Object>();
 
-  public static void register(Object o) {
-    Class c = o.getClass();
-    Storage.objects.put(c, o);
-  }
+	public static void register(Object o) {
+		Class c = o.getClass();
+		Storage.objects.put(c, o);
+	}
 
-  public static Object get(Class c) {
-    Object o = Storage.objects.get(c);
+	public static Object get(Class c) {
+		Object o = Storage.objects.get(c);
 
-    return o;
-  }
+		return o;
+	}
 
 }

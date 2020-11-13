@@ -15,9 +15,9 @@ import javafx.util.Callback;
  */
 public class PremiumRowFormatter implements Callback<TableColumn<?, ?>, TableCell<?, ?>> {
 
-  @Override
-  public TableCell<?, ?> call(TableColumn<?, ?> param) {
-    return null;
-  }
+	@Override
+	public TableCell<?, ?> call(TableColumn<?, ?> param) {
+		return null;
+	}
 
 }

@@ -32,73 +32,73 @@ import org.xnap.commons.i18n.I18n;
  */
 public class LicenseAcceptanceController extends AnchorPane implements Initializable {
 
-  @FXML
-  private Button declineButton;
-  @FXML
-  private Button acceptButton;
-  @FXML
-  private Pane headerPanel;
-  @FXML
-  private ImageView headerImageView;
-  @FXML
-  private Label acceptLicenceLabel;
-  @FXML
-  private ScrollPane licenceMessageScrollPane;
-  @FXML
-  private TextArea licenceTextArea;
+	@FXML
+	private Button declineButton;
+	@FXML
+	private Button acceptButton;
+	@FXML
+	private Pane headerPanel;
+	@FXML
+	private ImageView headerImageView;
+	@FXML
+	private Label acceptLicenceLabel;
+	@FXML
+	private ScrollPane licenceMessageScrollPane;
+	@FXML
+	private TextArea licenceTextArea;
 
-  private LoginForms application;
-  private static I18n i18n = VpnI18N.getI18n();
-  private static Logger log = Util.getLogger(LoginForms.class.getCanonicalName());
+	private LoginForms application;
+	private static I18n i18n = VpnI18N.getI18n();
+	private static Logger log = Util.getLogger(LoginForms.class.getCanonicalName());
 
-  @FXML
-  private void handleDeclineButtonButton(ActionEvent event) {
-    this.application.licenseNotAccepted();
-    // TODO add handline logic after licence is declined
-  }
+	@FXML
+	private void handleDeclineButtonButton(ActionEvent event) {
+		this.application.licenseNotAccepted();
+		// TODO add handline logic after licence is declined
+	}
 
-  @FXML
-  private void handleAcceptButton(ActionEvent event) {
-    this.application.licenseAccepted();
-    // TODO add handline logic after licence is accepted
-  }
+	@FXML
+	private void handleAcceptButton(ActionEvent event) {
+		this.application.licenseAccepted();
+		// TODO add handline logic after licence is accepted
+	}
 
-  @Override
-  public void initialize(URL location, ResourceBundle resources) {
+	@Override
+	public void initialize(URL location, ResourceBundle resources) {
 
-    // Initialise compoenents with appropriate language
-    initComponents();
-  }
+		// Initialise compoenents with appropriate language
+		initComponents();
+	}
 
-  public void initComponents() {
-    declineButton.setText(i18n.tr("Reject"));
-    acceptButton.setText(i18n.tr("Accept"));
-    acceptLicenceLabel.setText(i18n.tr("Accept licence"));
-  }
+	public void initComponents() {
+		declineButton.setText(i18n.tr("Reject"));
+		acceptButton.setText(i18n.tr("Accept"));
+		acceptLicenceLabel.setText(i18n.tr("Accept licence"));
+	}
 
-  private void initLicense() {
-    Language lang = VpnI18N.getLanguage();
-    String name = "de";
-    if (lang != null && lang.getName() != null)
-      name = lang.getKey();
+	private void initLicense() {
+		Language lang = VpnI18N.getLanguage();
+		String name = "de";
+		if (lang != null && lang.getName() != null)
+			name = lang.getKey();
 
-    log.debug("Name: " + name);
-    String text = "License";
-    String filename = com.apple.eio.FileManager.getPathToApplicationBundle() + "/Contents/Java/openvpn/license_" + name + ".txt";
-    try {
-      text = Util.fileToString(filename);
-    } catch (FileNotFoundException ex) {
-      log.debug("Could not find licence file at " + filename);
-    } catch (IOException ex) {
-      log.debug("Could not open licence file at " + filename);
-    }
+		log.debug("Name: " + name);
+		String text = "License";
+		String filename = com.apple.eio.FileManager.getPathToApplicationBundle() + "/Contents/Java/openvpn/license_" + name + ".txt";
+		try {
+			text = Util.fileToString(filename);
+		} catch (FileNotFoundException ex) {
+			log.debug("Could not find licence file at " + filename);
+		} catch (IOException ex) {
+			log.debug("Could not open licence file at " + filename);
+		}
 
-    licenceTextArea.setText(text);
-    licenceTextArea.positionCaret(0);
+		licenceTextArea.setText(text);
+		licenceTextArea.positionCaret(0);
 
-  }
+	}
 
-  public void setApp(LoginForms applic) {
-    this.application = applic;
-  }
+	public void setApp(LoginForms applic) {
+		this.application = applic;
+	}
 }
