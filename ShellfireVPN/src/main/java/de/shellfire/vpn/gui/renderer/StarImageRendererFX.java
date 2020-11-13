@@ -5,15 +5,17 @@
  */
 package de.shellfire.vpn.gui.renderer;
 
+import java.util.HashMap;
+
+import org.slf4j.Logger;
+
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.gui.model.ServerListFXModel;
 import de.shellfire.vpn.webservice.model.VpnStar;
-import java.util.HashMap;
+import javafx.geometry.NodeOrientation;
 import javafx.scene.control.TableCell;
 import javafx.scene.image.Image;
-import javafx.geometry.NodeOrientation;
 import javafx.scene.image.ImageView;
-import org.slf4j.Logger;
 
 /**
  *

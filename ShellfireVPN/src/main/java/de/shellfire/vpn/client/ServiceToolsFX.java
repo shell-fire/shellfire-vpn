@@ -5,14 +5,16 @@
  */
 package de.shellfire.vpn.client;
 
+import java.io.IOException;
+
+import org.slf4j.Logger;
+
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.client.win.WinServiceToolsFX;
 import de.shellfire.vpn.gui.controller.LoginController;
 import de.shellfire.vpn.gui.controller.ProgressDialogController;
 import de.shellfire.vpn.service.Service;
-import java.io.IOException;
 import javafx.concurrent.Task;
-import org.slf4j.Logger;
 
 /**
  *

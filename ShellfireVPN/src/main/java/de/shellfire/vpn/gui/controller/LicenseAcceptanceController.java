@@ -5,14 +5,18 @@
  */
 package de.shellfire.vpn.gui.controller;
 
-import de.shellfire.vpn.Util;
-import de.shellfire.vpn.gui.LoginForms;
-import de.shellfire.vpn.i18n.Language;
-import de.shellfire.vpn.i18n.VpnI18N;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import org.slf4j.Logger;
+import org.xnap.commons.i18n.I18n;
+
+import de.shellfire.vpn.Util;
+import de.shellfire.vpn.gui.LoginForms;
+import de.shellfire.vpn.i18n.Language;
+import de.shellfire.vpn.i18n.VpnI18N;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -23,8 +27,6 @@ import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import org.slf4j.Logger;
-import org.xnap.commons.i18n.I18n;
 
 /**
  *

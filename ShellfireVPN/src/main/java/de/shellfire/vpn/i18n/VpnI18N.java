@@ -1,7 +1,10 @@
 package de.shellfire.vpn.i18n;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Locale;
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.I18nFactory;
@@ -9,8 +12,6 @@ import org.xnap.commons.i18n.I18nManager;
 
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.VpnProperties;
-import java.util.HashMap;
-import java.util.Map;
 
 public class VpnI18N {
 	private static Logger log = Util.getLogger(VpnI18N.class.getCanonicalName());

@@ -1,7 +1,6 @@
 package de.shellfire.vpn;
 
 import java.awt.Desktop;
-import java.awt.Font;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.io.BufferedReader;
@@ -11,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -29,11 +29,9 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
-import java.util.Set;
 
 import javax.swing.ImageIcon;
 
-import de.shellfire.vpn.gui.controller.ShellfireVPNMainFormFxmlController;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.LoggerFactory;
@@ -46,11 +44,11 @@ import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.FileAppender;
 import de.shellfire.vpn.gui.LoginForms;
+import de.shellfire.vpn.gui.controller.ShellfireVPNMainFormFxmlController;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.messaging.UserType;
 import de.shellfire.vpn.service.IVpnRegistry;
 import de.shellfire.vpn.service.win.WinRegistry;
-import java.io.InputStream;
 import javafx.scene.control.Alert;
 import javafx.scene.image.ImageView;
 

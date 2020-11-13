@@ -5,6 +5,16 @@
 */
 package de.shellfire.vpn.gui.controller;
 
+import java.net.URL;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.Random;
+import java.util.ResourceBundle;
+
+import org.slf4j.Logger;
+import org.xnap.commons.i18n.I18n;
+
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.gui.model.CountryMap;
@@ -12,7 +22,6 @@ import de.shellfire.vpn.gui.model.ServerListFXModel;
 import de.shellfire.vpn.gui.renderer.StarImageRendererFX;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.types.Country;
-import de.shellfire.vpn.types.Reason;
 import de.shellfire.vpn.types.Server;
 import de.shellfire.vpn.types.ServerType;
 import de.shellfire.vpn.types.VpnProtocol;
@@ -20,20 +29,11 @@ import de.shellfire.vpn.webservice.ServerList;
 import de.shellfire.vpn.webservice.Vpn;
 import de.shellfire.vpn.webservice.WebService;
 import de.shellfire.vpn.webservice.model.VpnStar;
-
-import java.io.IOException;
-import java.net.URL;
-import java.util.Comparator;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.Random;
-import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
@@ -51,8 +51,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import org.slf4j.Logger;
-import org.xnap.commons.i18n.I18n;
 
 /**
  * FXML Controller class

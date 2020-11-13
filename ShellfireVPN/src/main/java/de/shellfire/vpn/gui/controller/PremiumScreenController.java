@@ -5,6 +5,14 @@
  */
 package de.shellfire.vpn.gui.controller;
 
+import java.net.URL;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.ResourceBundle;
+
+import org.slf4j.Logger;
+import org.xnap.commons.i18n.I18n;
+
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.gui.model.AttributeContainer;
@@ -15,10 +23,6 @@ import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.webservice.WebService;
 import de.shellfire.vpn.webservice.model.VpnEntry;
 import de.shellfire.vpn.webservice.model.VpnStar;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -37,8 +41,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-import org.slf4j.Logger;
-import org.xnap.commons.i18n.I18n;
 
 /**
  *

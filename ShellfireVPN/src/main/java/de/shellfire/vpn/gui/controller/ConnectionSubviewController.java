@@ -5,11 +5,6 @@
  */
 package de.shellfire.vpn.gui.controller;
 
-import de.shellfire.vpn.Util;
-import de.shellfire.vpn.client.Controller;
-import de.shellfire.vpn.gui.LoginForms;
-import de.shellfire.vpn.i18n.VpnI18N;
-import de.shellfire.vpn.webservice.WebService;
 import java.awt.Dimension;
 import java.awt.MenuItem;
 import java.awt.PopupMenu;
@@ -18,6 +13,14 @@ import java.awt.TrayIcon;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import org.slf4j.Logger;
+import org.xnap.commons.i18n.I18n;
+
+import de.shellfire.vpn.Util;
+import de.shellfire.vpn.client.Controller;
+import de.shellfire.vpn.gui.LoginForms;
+import de.shellfire.vpn.i18n.VpnI18N;
+import de.shellfire.vpn.webservice.WebService;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -30,8 +33,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import org.slf4j.Logger;
-import org.xnap.commons.i18n.I18n;
 
 /**
  * FXML Controller class

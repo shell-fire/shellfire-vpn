@@ -7,7 +7,6 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import de.shellfire.vpn.gui.controller.LoginController;
 import org.slf4j.Logger;
 
 import com.ice.jni.registry.NoSuchValueException;
@@ -18,6 +17,7 @@ import com.ice.jni.registry.RegistryKey;
 import com.ice.jni.registry.RegistryValue;
 
 import de.shellfire.vpn.Util;
+import de.shellfire.vpn.gui.controller.LoginController;
 import de.shellfire.vpn.proxy.InternetOptions;
 import de.shellfire.vpn.service.IVpnRegistry;
 

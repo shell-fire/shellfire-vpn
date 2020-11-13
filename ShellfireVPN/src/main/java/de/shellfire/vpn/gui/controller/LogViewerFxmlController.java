@@ -5,17 +5,23 @@
  */
 package de.shellfire.vpn.gui.controller;
 
-import de.shellfire.vpn.Util;
-import de.shellfire.vpn.gui.LoginForms;
-import de.shellfire.vpn.i18n.VpnI18N;
-import de.shellfire.vpn.messaging.UserType;
-import de.shellfire.vpn.webservice.WebService;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import org.apache.commons.io.input.Tailer;
+import org.apache.commons.io.input.TailerListenerAdapter;
+import org.slf4j.Logger;
+import org.xnap.commons.i18n.I18n;
+
+import de.shellfire.vpn.Util;
+import de.shellfire.vpn.gui.LoginForms;
+import de.shellfire.vpn.i18n.VpnI18N;
+import de.shellfire.vpn.messaging.UserType;
+import de.shellfire.vpn.webservice.WebService;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -31,10 +37,6 @@ import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
-import org.apache.commons.io.input.Tailer;
-import org.apache.commons.io.input.TailerListenerAdapter;
-import org.slf4j.Logger;
-import org.xnap.commons.i18n.I18n;
 
 /**
  * FXML Controller class
@@ -119,14 +121,14 @@ public class LogViewerFxmlController implements Initializable {
 		if (sendLogProgressDialog == null) {
 			try {
 				sendLogProgressDialog = ProgressDialogController.getInstance(i18n.tr("Upload log.."), sendLogTask, instanceStage, true);
-				sendLogProgressDialog.setOption(2, i18n.tr("cancel"));
+				sendLogProgressDialog.setButtonText(ProgressButtonType.Right, i18n.tr("Cancel"));
 
 			} catch (IOException ex) {
 				log.debug("connectFromButton. Error is " + ex.getMessage());
 			}
 		}
 		Platform.runLater(() -> {
-			sendLogProgressDialog.getRightButton().setOnAction(new EventHandler<javafx.event.ActionEvent>() {
+			sendLogProgressDialog.getButton(ProgressButtonType.Right).setOnAction(new EventHandler<javafx.event.ActionEvent>() {
 
 				@Override
 				public void handle(javafx.event.ActionEvent event) {

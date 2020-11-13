@@ -5,13 +5,15 @@
  */
 package de.shellfire.vpn.gui;
 
-import de.shellfire.vpn.Util;
 import java.io.IOException;
+
+import org.slf4j.Logger;
+
+import de.shellfire.vpn.Util;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.util.Pair;
-import org.slf4j.Logger;
 
 /**
  *

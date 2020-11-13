@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.gui.controller.ShellfireVPNMainFormFxmlController;
-import de.shellfire.vpn.types.VpnProtocol;
 import de.shellfire.vpn.types.ProductType;
 import de.shellfire.vpn.types.Reason;
 import de.shellfire.vpn.types.Server;

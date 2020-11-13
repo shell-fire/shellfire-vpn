@@ -5,13 +5,15 @@
  */
 package de.shellfire.vpn.gui.model;
 
+import java.util.LinkedList;
+
+import org.slf4j.Logger;
+import org.xnap.commons.i18n.I18n;
+
 import de.shellfire.vpn.Storage;
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.webservice.WebService;
-import java.util.LinkedList;
-import org.slf4j.Logger;
-import org.xnap.commons.i18n.I18n;
 
 /**
  *

@@ -5,16 +5,6 @@
  */
 package de.shellfire.vpn.updater;
 
-import de.shellfire.vpn.LogStreamReader;
-import de.shellfire.vpn.Util;
-import de.shellfire.vpn.client.ServiceToolsFX;
-import de.shellfire.vpn.gui.CanContinueAfterBackEndAvailableFX;
-import de.shellfire.vpn.gui.LoginForms;
-import de.shellfire.vpn.gui.controller.ProgressDialogController;
-import de.shellfire.vpn.i18n.VpnI18N;
-import de.shellfire.vpn.proxy.ProxyConfig;
-import de.shellfire.vpn.webservice.EndpointManager;
-import de.shellfire.vpn.webservice.WebService;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -35,15 +25,28 @@ import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
+
+import org.hyperic.sigar.win32.FileVersion;
+import org.hyperic.sigar.win32.Win32;
+import org.slf4j.Logger;
+import org.xnap.commons.i18n.I18n;
+
+import de.shellfire.vpn.LogStreamReader;
+import de.shellfire.vpn.Util;
+import de.shellfire.vpn.client.ServiceToolsFX;
+import de.shellfire.vpn.gui.CanContinueAfterBackEndAvailableFX;
+import de.shellfire.vpn.gui.LoginForms;
+import de.shellfire.vpn.gui.controller.ProgressButtonType;
+import de.shellfire.vpn.gui.controller.ProgressDialogController;
+import de.shellfire.vpn.i18n.VpnI18N;
+import de.shellfire.vpn.proxy.ProxyConfig;
+import de.shellfire.vpn.webservice.EndpointManager;
+import de.shellfire.vpn.webservice.WebService;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ProgressBar;
-import org.hyperic.sigar.win32.FileVersion;
-import org.hyperic.sigar.win32.Win32;
-import org.slf4j.Logger;
-import org.xnap.commons.i18n.I18n;
 
 /**
  *
@@ -253,8 +256,8 @@ public class UpdaterFX implements CanContinueAfterBackEndAvailableFX {
 			updateProgressDialog = ProgressDialogController.getInstance(i18n.tr("Downloading update..."), null, LoginForms.getStage(),
 					false);
 			updateProgressDialog.getProgressBar().setProgress(ProgressBar.INDETERMINATE_PROGRESS);
-			updateProgressDialog.setOption(2, i18n.tr("cancel"));
-			updateProgressDialog.setOptionCallback(new Task() {
+			updateProgressDialog.setButtonText(ProgressButtonType.Right, i18n.tr("cancel"));
+			updateProgressDialog.setOptionCallback(ProgressButtonType.Right, new Task() {
 
 				@Override
 				protected Object call() throws Exception {

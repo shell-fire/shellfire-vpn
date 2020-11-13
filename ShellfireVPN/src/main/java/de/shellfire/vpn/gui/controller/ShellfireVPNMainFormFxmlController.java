@@ -1,10 +1,42 @@
 package de.shellfire.vpn.gui.controller;
 
-import de.shellfire.vpn.Storage;
+import java.awt.AWTEvent;
+import java.awt.AWTException;
+import java.awt.Dimension;
+import java.awt.EventQueue;
+import java.awt.MenuItem;
+import java.awt.PopupMenu;
+import java.awt.SystemTray;
+import java.awt.Toolkit;
+import java.awt.TrayIcon;
+import java.awt.TrayIcon.MessageType;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Optional;
+import java.util.Random;
 import java.util.ResourceBundle;
-import javafx.util.Pair;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+import java.util.prefs.Preferences;
+
+import org.jdesktop.application.Action;
+import org.slf4j.Logger;
+import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.LocaleChangeEvent;
+import org.xnap.commons.i18n.LocaleChangeListener;
+
+import de.shellfire.vpn.Storage;
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.VpnProperties;
 import de.shellfire.vpn.client.Client;
@@ -25,32 +57,6 @@ import de.shellfire.vpn.types.VpnProtocol;
 import de.shellfire.vpn.webservice.Vpn;
 import de.shellfire.vpn.webservice.WebService;
 import de.shellfire.vpn.webservice.model.TrayMessage;
-import java.awt.AWTEvent;
-import java.awt.AWTException;
-import java.awt.Dimension;
-import java.awt.EventQueue;
-import java.awt.MenuItem;
-import java.awt.PopupMenu;
-import java.awt.SystemTray;
-import java.awt.Toolkit;
-import java.awt.TrayIcon;
-import java.awt.TrayIcon.MessageType;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseListener;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
-import java.util.prefs.Preferences;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
@@ -63,21 +69,17 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
-import org.jdesktop.application.Action;
-import org.slf4j.Logger;
-import org.xnap.commons.i18n.I18n;
-import org.xnap.commons.i18n.LocaleChangeEvent;
-import org.xnap.commons.i18n.LocaleChangeListener;
+import javafx.util.Pair;
 
 public class ShellfireVPNMainFormFxmlController extends AnchorPane implements Initializable, LocaleChangeListener, ConnectionStateListener {
 
@@ -646,7 +648,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 			try {
 
 				connectProgressDialog = ProgressDialogController.getInstance("Connecting ...", task, this.application.getStage(), true);
-				connectProgressDialog.getRightButton().setOnAction(new EventHandler<javafx.event.ActionEvent>() {
+				connectProgressDialog.getButton(ProgressButtonType.Right).setOnAction(new EventHandler<javafx.event.ActionEvent>() {
 
 					@Override
 					public void handle(javafx.event.ActionEvent event) {
@@ -933,7 +935,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
 			abortItem = new MenuItem(i18n.tr("Abort"));
 			ActionListener abortListener = (ActionEvent e) -> {
-				connectProgressDialog.getRightButton().fire();
+				connectProgressDialog.getButton(ProgressButtonType.Right).fire();
 			};
 
 			abortItem.addActionListener(abortListener);

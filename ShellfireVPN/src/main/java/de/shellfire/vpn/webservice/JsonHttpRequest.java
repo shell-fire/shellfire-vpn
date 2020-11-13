@@ -21,7 +21,6 @@ import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509KeyManager;
 import javax.net.ssl.X509TrustManager;
 
-import de.shellfire.vpn.updater.UpdaterFX;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.config.RequestConfig;
@@ -40,6 +39,7 @@ import de.shellfire.vpn.Util;
 import de.shellfire.vpn.exception.VpnException;
 import de.shellfire.vpn.messaging.CompositeX509KeyManager;
 import de.shellfire.vpn.messaging.CompositeX509TrustManager;
+import de.shellfire.vpn.updater.UpdaterFX;
 import de.shellfire.vpn.webservice.model.GetActivationStatusRequest;
 import de.shellfire.vpn.webservice.model.GetAllVpnDetailsRequest;
 import de.shellfire.vpn.webservice.model.GetCertificatesForOpenVpnRequest;

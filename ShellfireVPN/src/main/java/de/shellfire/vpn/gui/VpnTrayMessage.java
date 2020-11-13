@@ -3,10 +3,7 @@ package de.shellfire.vpn.gui;
 import java.awt.event.ActionListener;
 
 import de.shellfire.vpn.Util;
-import net.java.simpletraynotify.ScreenPositionHorizontal;
-import net.java.simpletraynotify.ScreenPositionVertical;
 import net.java.simpletraynotify.SimpleNotifyFrame;
-import net.java.simpletraynotify.TrayNotifier;
 
 public class VpnTrayMessage {
 

@@ -1,8 +1,8 @@
 package de.shellfire.vpn.webservice;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
@@ -14,7 +14,6 @@ import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.gui.controller.LoginController;
 import de.shellfire.vpn.gui.controller.ProgressDialogController;
 import de.shellfire.vpn.i18n.VpnI18N;
-import java.io.IOException;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.scene.control.Alert;

@@ -8,7 +8,6 @@ import javax.swing.ImageIcon;
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.types.Country;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 
 public class CountryMap {
 

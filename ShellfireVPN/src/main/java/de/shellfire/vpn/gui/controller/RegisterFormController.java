@@ -5,16 +5,24 @@
  */
 package de.shellfire.vpn.gui.controller;
 
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
+
+import javax.swing.event.HyperlinkEvent;
+
+import org.apache.commons.validator.GenericValidator;
+import org.codefx.libfx.control.webview.WebViewHyperlinkListener;
+import org.codefx.libfx.control.webview.WebViews;
+import org.slf4j.Logger;
+import org.xnap.commons.i18n.I18n;
+
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.webservice.Response;
 import de.shellfire.vpn.webservice.WebService;
 import de.shellfire.vpn.webservice.model.LoginResponse;
-
-import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
 import javafx.application.HostServices;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -35,12 +43,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
-import javax.swing.event.HyperlinkEvent;
-import org.apache.commons.validator.GenericValidator;
-import org.codefx.libfx.control.webview.WebViewHyperlinkListener;
-import org.codefx.libfx.control.webview.WebViews;
-import org.slf4j.Logger;
-import org.xnap.commons.i18n.I18n;
 
 /**
  * FXML Controller class
