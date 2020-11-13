@@ -43,163 +43,163 @@ import org.xnap.commons.i18n.I18n;
  */
 public class LogViewerFxmlController implements Initializable {
 
-    @FXML
-    private SplitPane splitContentPane;
-    @FXML
-    private AnchorPane clientLogPane;
-    @FXML
-    private Label clientLogLabel;
-    @FXML
-    private AnchorPane serviceLogPane;
-    @FXML
-    private Label serviceLogLabel;
-    @FXML
-    private Button sendLogButton;
-    @FXML
-    private TextArea clientLogTextArea;
-    @FXML
-    private TextArea serviceLogTextArea;
+  @FXML
+  private SplitPane splitContentPane;
+  @FXML
+  private AnchorPane clientLogPane;
+  @FXML
+  private Label clientLogLabel;
+  @FXML
+  private AnchorPane serviceLogPane;
+  @FXML
+  private Label serviceLogLabel;
+  @FXML
+  private Button sendLogButton;
+  @FXML
+  private TextArea clientLogTextArea;
+  @FXML
+  private TextArea serviceLogTextArea;
 
-    private static I18n i18n = VpnI18N.getI18n();
-    // The Stage for the logViewer
-    protected static Stage instanceStage;
-    protected static ProgressDialogController sendLogProgressDialog;
-    private static Logger log = Util.getLogger(LogViewerFxmlController.class.getCanonicalName());
-    private static LoginForms application;
-    private static LogViewerFxmlController instance;
+  private static I18n i18n = VpnI18N.getI18n();
+  // The Stage for the logViewer
+  protected static Stage instanceStage;
+  protected static ProgressDialogController sendLogProgressDialog;
+  private static Logger log = Util.getLogger(LogViewerFxmlController.class.getCanonicalName());
+  private static LoginForms application;
+  private static LogViewerFxmlController instance;
 
-    class LogListener extends TailerListenerAdapter {
+  class LogListener extends TailerListenerAdapter {
 
-        private TextArea textArea;
+    private TextArea textArea;
 
-        public LogListener(TextArea textArea) {
-            this.textArea = textArea;
-        }
-
-        public void handle(String line) {
-            if (line != null) {
-                Platform.runLater(() -> {
-                    this.textArea.appendText(line + "\n");
-                    this.textArea.end();
-                });
-            }
-        }
+    public LogListener(TextArea textArea) {
+      this.textArea = textArea;
     }
 
-    /**
-     * Initializes the controller class.
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-
-        LogListener clientListener = new LogListener(clientLogTextArea);
-        String clientLog = Util.getLogFilePath(UserType.Client);
-        log.debug("Client is " + UserType.Client);
-        File clientLogFile = new File(clientLog);
-        Tailer.create(clientLogFile, clientListener);
-        //making the textareas non-editable
-        clientLogTextArea.setEditable(false);
-        serviceLogTextArea.setEditable(false);
-        
-        LogListener serviceListener = new LogListener(serviceLogTextArea);
-        String serviceLog = Util.getLogFilePath(UserType.Service);
-        File serviceLogFile = new File(serviceLog);
-        Tailer.create(serviceLogFile, serviceListener);
-    }
-
-    @FXML
-    private void sendLogButtonAction(ActionEvent event) {
-        sendLogToShellfire();
-    }
-
-    private void sendLogToShellfire() {
-        final SendLogTask sendLogTask = new SendLogTask();
-        Thread t = new Thread(sendLogTask);
-
-        if (sendLogProgressDialog == null) {
-            try {
-                sendLogProgressDialog = ProgressDialogController.getInstance(i18n.tr("Upload log.."), sendLogTask, instanceStage, true);
-                sendLogProgressDialog.setOption(2, i18n.tr("cancel"));
-
-            } catch (IOException ex) {
-                log.debug("connectFromButton. Error is " + ex.getMessage());
-            }
-        }
+    public void handle(String line) {
+      if (line != null) {
         Platform.runLater(() -> {
-            sendLogProgressDialog.getRightButton().setOnAction(new EventHandler<javafx.event.ActionEvent>() {
-
-                @Override
-                public void handle(javafx.event.ActionEvent event) {
-                    sendLogProgressDialog.getDialogStage().hide();
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION, i18n.tr("Log upload cancelled."));
-                    alert.show();
-                    if (sendLogTask != null && !sendLogTask.isDone()) {
-                        sendLogTask.cancel(true);
-                    }
-                }
-            });
-
-            sendLogProgressDialog.getDialogStage().show();
-            t.start();
+          this.textArea.appendText(line + "\n");
+          this.textArea.end();
         });
-
+      }
     }
+  }
 
-    public void setApp(LoginForms app) {
-        this.application = app;
+  /**
+   * Initializes the controller class.
+   */
+  @Override
+  public void initialize(URL url, ResourceBundle rb) {
+
+    LogListener clientListener = new LogListener(clientLogTextArea);
+    String clientLog = Util.getLogFilePath(UserType.Client);
+    log.debug("Client is " + UserType.Client);
+    File clientLogFile = new File(clientLog);
+    Tailer.create(clientLogFile, clientListener);
+    // making the textareas non-editable
+    clientLogTextArea.setEditable(false);
+    serviceLogTextArea.setEditable(false);
+
+    LogListener serviceListener = new LogListener(serviceLogTextArea);
+    String serviceLog = Util.getLogFilePath(UserType.Service);
+    File serviceLogFile = new File(serviceLog);
+    Tailer.create(serviceLogFile, serviceListener);
+  }
+
+  @FXML
+  private void sendLogButtonAction(ActionEvent event) {
+    sendLogToShellfire();
+  }
+
+  private void sendLogToShellfire() {
+    final SendLogTask sendLogTask = new SendLogTask();
+    Thread t = new Thread(sendLogTask);
+
+    if (sendLogProgressDialog == null) {
+      try {
+        sendLogProgressDialog = ProgressDialogController.getInstance(i18n.tr("Upload log.."), sendLogTask, instanceStage, true);
+        sendLogProgressDialog.setOption(2, i18n.tr("cancel"));
+
+      } catch (IOException ex) {
+        log.debug("connectFromButton. Error is " + ex.getMessage());
+      }
     }
-
-    public class SendLogTask extends Task<Void> {
-
-        private boolean finished = false;
+    Platform.runLater(() -> {
+      sendLogProgressDialog.getRightButton().setOnAction(new EventHandler<javafx.event.ActionEvent>() {
 
         @Override
-        protected Void call() throws Exception {
-            //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            log.debug("sending logs to shellfire");
-            WebService service = WebService.getInstance();
-            service.sendLogToShellfire();
-            finished = true;
-            return null;
+        public void handle(javafx.event.ActionEvent event) {
+          sendLogProgressDialog.getDialogStage().hide();
+          Alert alert = new Alert(Alert.AlertType.INFORMATION, i18n.tr("Log upload cancelled."));
+          alert.show();
+          if (sendLogTask != null && !sendLogTask.isDone()) {
+            sendLogTask.cancel(true);
+          }
         }
+      });
 
-        @Override
-        protected void succeeded() {
-            //super.succeeded(); //To change body of generated methods, choose Tools | Templates.
-            if (finished == true) {
-                sendLogProgressDialog.getDialogStage().hide();
-                Alert alert = new Alert(Alert.AlertType.INFORMATION, i18n.tr("Log sent."));
-                alert.show();
-            }
-            finished = false;
-        }
+      sendLogProgressDialog.getDialogStage().show();
+      t.start();
+    });
 
+  }
+
+  public void setApp(LoginForms app) {
+    this.application = app;
+  }
+
+  public class SendLogTask extends Task<Void> {
+
+    private boolean finished = false;
+
+    @Override
+    protected Void call() throws Exception {
+      // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+      log.debug("sending logs to shellfire");
+      WebService service = WebService.getInstance();
+      service.sendLogToShellfire();
+      finished = true;
+      return null;
     }
 
-    public static Stage getInstanceStage() {
-        return instanceStage;
+    @Override
+    protected void succeeded() {
+      // super.succeeded(); //To change body of generated methods, choose Tools | Templates.
+      if (finished == true) {
+        sendLogProgressDialog.getDialogStage().hide();
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, i18n.tr("Log sent."));
+        alert.show();
+      }
+      finished = false;
     }
 
-    public static LogViewerFxmlController getInstance() throws IOException {
-        log.debug("getInstance()");
-        if (instance == null) {
-            log.debug("creating new instance");
+  }
 
-            // setting the width and height of stage 
-            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-            int width = (int) (screenSize.getWidth() / 2);
-            int height = (int) (screenSize.getHeight() / 2);
+  public static Stage getInstanceStage() {
+    return instanceStage;
+  }
 
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(LoginForms.class.getResource("/fxml/LogViewerFxml.fxml"));
-            AnchorPane page = (AnchorPane) loader.load();
-            instance = (LogViewerFxmlController) loader.getController();
-            instanceStage = new Stage();
-            instanceStage.setTitle("Log Viewer");
-            Scene scene = new Scene(page, width, height);
-            instanceStage.setScene(scene);
-        }
-        log.debug("returning instance");
-        return instance;
+  public static LogViewerFxmlController getInstance() throws IOException {
+    log.debug("getInstance()");
+    if (instance == null) {
+      log.debug("creating new instance");
+
+      // setting the width and height of stage
+      Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+      int width = (int) (screenSize.getWidth() / 2);
+      int height = (int) (screenSize.getHeight() / 2);
+
+      FXMLLoader loader = new FXMLLoader();
+      loader.setLocation(LoginForms.class.getResource("/fxml/LogViewerFxml.fxml"));
+      AnchorPane page = (AnchorPane) loader.load();
+      instance = (LogViewerFxmlController) loader.getController();
+      instanceStage = new Stage();
+      instanceStage.setTitle("Log Viewer");
+      Scene scene = new Scene(page, width, height);
+      instanceStage.setScene(scene);
     }
+    log.debug("returning instance");
+    return instance;
+  }
 }

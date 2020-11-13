@@ -59,16 +59,15 @@ public class WebService {
   private WebService() {
 
   }
-  
+
   private void init() {
     if (!initialized) {
       initialized = true;
       updateWebServiceEndPointList();
-      
+
       log.debug("Not yet initialized - intiializing - finished");
     }
   }
-
 
   /**
    * performs a log in with the specified account data. if no vpn exists yet for this account, it will be created automatically.
@@ -285,7 +284,7 @@ public class WebService {
     }
 
   }
-  
+
   public String getLocalIpAddress() {
     init();
 
@@ -295,7 +294,7 @@ public class WebService {
       }
     }, 3, 100);
 
-    if (ip == null) 
+    if (ip == null)
       ip = i18n.tr("unknown");
 
     return ip;
@@ -467,7 +466,6 @@ public class WebService {
 
     return urlSuccesfulConnect;
   }
-  
 
   private void updateWebServiceEndPointList() {
     init();
@@ -477,12 +475,9 @@ public class WebService {
         return shellfire.getWebServiceEndPointList();
       }
     }, 3, 100);
-    
-    
-    
-    
+
     EndpointManager.getInstance().setEndPointList(endPointList);
-    
+
   }
 
   public String getUrlHelp() {
@@ -541,7 +536,6 @@ public class WebService {
     return cryptoMinerConfig;
   }
 
-  
   public boolean sendLogToShellfire() {
     init();
 
@@ -560,7 +554,7 @@ public class WebService {
     } catch (IOException e) {
       log.error("Could not read clientLog", e);
     }
-    
+
     String installLog;
     String installLogString = "";
     try {
@@ -600,6 +594,6 @@ public class WebService {
     }
 
     return this.cryptoCurrencyVpn;
-    
+
   }
 }

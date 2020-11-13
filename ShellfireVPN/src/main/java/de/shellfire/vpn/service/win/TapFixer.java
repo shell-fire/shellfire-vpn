@@ -14,7 +14,7 @@ import org.slf4j.Logger;
 import de.shellfire.vpn.Util;
 
 public class TapFixer {
-  
+
   private static Logger log = Util.getLogger(TapFixer.class.getCanonicalName());
 
   private static String getTapPath() {
@@ -25,52 +25,51 @@ public class TapFixer {
     String programW6432 = envs.get("ProgramW6432");
     log.debug("programFiles: " + programFiles);
     log.debug("programFiles86: " + programFiles86);
-    
+
     String delTapAll = programFiles + "\\TAP-Windows\\bin\\deltapall.bat";
     String delTapAll86 = programFiles + "\\TAP-Windows\\bin\\deltapall.bat";
-    
+
     String result = "";
-    
+
     if (new File(delTapAll).exists()) {
       result = programFiles + "\\TAP-Windows";
     } else if (new File(delTapAll86).exists()) {
       result = programFiles86 + "\\TAP-Windows";
     } else {
-      result = programW6432  + "\\TAP-Windows";
+      result = programW6432 + "\\TAP-Windows";
     }
-    
+
     log.debug("getTapPath() - returning " + result);
     return result;
   }
-  
+
   public static void reinstallTapDriver() {
     log.debug("reinstallTapDriver() - start");
-    
+
     List<String> delTapAll = new LinkedList<String>();
     delTapAll.add(getTapPath());
-    delTapAll.add(getTapPath()+ "\\bin\\deltapall.bat");
+    delTapAll.add(getTapPath() + "\\bin\\deltapall.bat");
 
     List<String> addTap = new LinkedList<String>();
     addTap.add(getTapPath());
-    addTap.add(getTapPath()+ "\\bin\\addtap.bat");
-
+    addTap.add(getTapPath() + "\\bin\\addtap.bat");
 
     if (!Util.isVistaOrLater()) {
       delTapAll.add(0, Util.getCmdExe());
       delTapAll.add(1, "/C");
-      
+
       addTap.add(0, Util.getCmdExe());
       addTap.add(1, "/C");
     }
-    
+
     log.debug("delTapAll: " + delTapAll);
     String delResult = Util.runCommandAndReturnOutput(delTapAll);
     log.debug(delResult);
-    
+
     log.debug("addTap: " + addTap);
     String addResult = Util.runCommandAndReturnOutput(addTap);
     log.debug(addResult);
-    
+
     log.debug("reinstallTapDriver() - finished");
   }
 
@@ -79,17 +78,17 @@ public class TapFixer {
     String[] disable;
     String[] enable;
     if (Util.isVistaOrLater()) {
-      disable = new String[] {getTapPath() + "\\bin\\tapinstall.exe", "disable", "tap0901"};
-      enable = new String[] {getTapPath() + "\\bin\\tapinstall.exe", "enable", "tap0901"};
+      disable = new String[] { getTapPath() + "\\bin\\tapinstall.exe", "disable", "tap0901" };
+      enable = new String[] { getTapPath() + "\\bin\\tapinstall.exe", "enable", "tap0901" };
     } else {
-      disable = new String[] {getTapPath() + "\\bin\\devcon.exe", "disable", "tap0901"};
-      enable = new String[] {getTapPath() + "\\bin\\devcon.exe", "enable", "tap0901"};
+      disable = new String[] { getTapPath() + "\\bin\\devcon.exe", "disable", "tap0901" };
+      enable = new String[] { getTapPath() + "\\bin\\devcon.exe", "enable", "tap0901" };
     }
-    
+
     log.debug("TapFixer disabling tap device");
     log.debug("{}", disable);
     String disableResult = Util.runCommandAndReturnOutput(disable);
-    
+
     if (disableResult != null && disableResult.toLowerCase().contains("no matching devices found")) {
       TapFixer.reinstallTapDriver();
     }

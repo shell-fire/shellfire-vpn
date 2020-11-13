@@ -16,14 +16,14 @@ public class Service {
   private static Service service;
   private static boolean stop = false;
   private final static String MAN = "Run with atg \"start\" or \"stop\" to control the service";
-  
+
   public static void main(String[] args) {
     if (args == null || args.length == 0) {
       log.debug(MAN);
       return;
     }
     String arg = args[0];
-    
+
     if ("start".equals(arg)) {
       start(args);
     } else if ("stop".equals(arg)) {
@@ -56,7 +56,8 @@ public class Service {
       while (!stop) {
         // 50 ms is enough to not use ANY cpu during sleep.
         Util.sleep(50);
-      };
+      }
+      ;
 
       log.debug("Stop received, exiting");
 

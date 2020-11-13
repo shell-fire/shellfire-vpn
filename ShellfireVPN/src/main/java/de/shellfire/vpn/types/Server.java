@@ -42,7 +42,7 @@ public class Server implements LocatableIcon {
     this.serverType = Enum.valueOf(ServerType.class, wss.getServertype());
     this.longitude = wss.getLongitude();
     this.latitude = wss.getLatitude();
-    
+
     try {
       this.iconServerForMap = ImageIO.read(getClass().getResourceAsStream("/icons/sf-server-map-32x32.png"));
     } catch (IOException e) {
@@ -127,7 +127,6 @@ public class Server implements LocatableIcon {
   public BufferedImage getIcon() {
     return this.iconServerForMap;
   }
-
 
   @Override
   public String getCountryString() {

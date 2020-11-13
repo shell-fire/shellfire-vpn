@@ -5,6 +5,7 @@ public class SetServerToRequest {
     this.productId = productId;
     this.serverId = serverId;
   }
+
   public int productId;
   public int serverId;
 

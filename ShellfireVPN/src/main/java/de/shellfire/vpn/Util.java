@@ -68,7 +68,7 @@ public class Util {
   public static UserType userType = null;
   private static Properties properties;
   private static String configDir;
-   private static Logger log = Util.getLogger(Util.class.getCanonicalName());
+  private static Logger log = Util.getLogger(Util.class.getCanonicalName());
   static {
     semaphore = new Object();
     Security.setProperty("networkaddress.cache.ttl", "1");
@@ -111,9 +111,8 @@ public class Util {
       msg = ex.getLocalizedMessage();
     }
 
-    
-    //JOptionPane.showMessageDialog(null, i18n.tr("Action could not be completed, an error occured:") + "\n" + msg,
-      //  i18n.tr("Error"), JOptionPane.ERROR_MESSAGE);
+    // JOptionPane.showMessageDialog(null, i18n.tr("Action could not be completed, an error occured:") + "\n" + msg,
+    // i18n.tr("Error"), JOptionPane.ERROR_MESSAGE);
     Alert alert = new Alert(Alert.AlertType.ERROR);
     alert.setTitle(i18n.tr("Error"));
     alert.setContentText(i18n.tr("Action could not be completed, an error occured:") + "\n" + msg);
@@ -322,10 +321,10 @@ public class Util {
   }
 
   public static List<String> getPossibleExeLocations(String programFiles, String programFiles86) {
-      return Arrays.asList("openvpn\\openvpn.exe", "..\\openvpn\\openvpn.exe", programFiles + "\\ShellfireVPN\\openvpn\\openvpn.exe",
-          programFiles86 + "\\ShellfireVPN\\openvpn\\openvpn.exe", programFiles + "\\OpenVPN\\openvpn.exe",
-          programFiles86 + "\\OpenVPN\\openvpn.exe", programFiles + "\\ShellfireVPN\\bin\\openvpn.exe",
-          programFiles86 + "\\ShellfireVPN\\bin\\openvpn.exe");
+    return Arrays.asList("openvpn\\openvpn.exe", "..\\openvpn\\openvpn.exe", programFiles + "\\ShellfireVPN\\openvpn\\openvpn.exe",
+        programFiles86 + "\\ShellfireVPN\\openvpn\\openvpn.exe", programFiles + "\\OpenVPN\\openvpn.exe",
+        programFiles86 + "\\OpenVPN\\openvpn.exe", programFiles + "\\ShellfireVPN\\bin\\openvpn.exe",
+        programFiles86 + "\\ShellfireVPN\\bin\\openvpn.exe");
 
   }
 
@@ -499,7 +498,7 @@ public class Util {
   }
 
   public static boolean internetIsAvailable() {
-      log.debug("Testing if connection exists");
+    log.debug("Testing if connection exists");
     Boolean networkIsAvailable = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<Boolean>() {
       public Boolean run() throws Exception {
         List<String> siteList = new ArrayList<String>();
@@ -537,12 +536,12 @@ public class Util {
    */
   public static IVpnRegistry getRegistry() {
     if (registry == null) {
-        try {
-          registry = new WinRegistry();
-        } catch (Exception e) {
-          e.printStackTrace();
-          Util.handleException(e);
-        }
+      try {
+        registry = new WinRegistry();
+      } catch (Exception e) {
+        e.printStackTrace();
+        Util.handleException(e);
+      }
     }
 
     return registry;
@@ -606,16 +605,16 @@ public class Util {
   public static String getLogFilePath(UserType userType) {
     String result = getTempDir() + userType.name() + ".log";
     return result;
-  }  
-  
+  }
+
   public static String getLogFilePathInstaller() {
     String jarFile = Util.getPathJar();
     if (jarFile == null) {
       return "";
     }
     File instDir = new File(jarFile).getParentFile();
-    
-    String result = instDir + "\\install.log"; 
+
+    String result = instDir + "\\install.log";
     return result;
   }
 
@@ -644,7 +643,7 @@ public class Util {
     String rawName = context.getName();
     log.debug(rawName);
     String classFileName;
-    /* rawName is something like package.name.ContainingClass$ClassName. We need to turn this into ContainingClass$ClassName.class. */ 
+    /* rawName is something like package.name.ContainingClass$ClassName. We need to turn this into ContainingClass$ClassName.class. */
     {
       int idx = rawName.lastIndexOf('.');
       classFileName = (idx == -1 ? rawName : rawName.substring(idx + 1)) + ".class";
@@ -723,19 +722,21 @@ public class Util {
     return imageIcon;
   }
 
-  public static javafx.scene.image.Image getImageIconFX(String resourceName){
-	  return getImageIconFX(resourceName,1);
+  public static javafx.scene.image.Image getImageIconFX(String resourceName) {
+    return getImageIconFX(resourceName, 1);
   }
-  public static javafx.scene.image.Image getImageIconFX(String resourceName, double d){
-          InputStream stream = LoginForms.class.getResourceAsStream(resourceName);  
-	   javafx.scene.image.Image image = new javafx.scene.image.Image(stream);
-	   //log.debug("Resource is found at " + resourceName);
-	   int factor = (int) (Util.getScalingFactor() * d);
-	    double height = image.getHeight() * factor;
-	    double width = image.getWidth() * factor;
-	    
-	    return scaleImageFx(image,width,height,false);
+
+  public static javafx.scene.image.Image getImageIconFX(String resourceName, double d) {
+    InputStream stream = LoginForms.class.getResourceAsStream(resourceName);
+    javafx.scene.image.Image image = new javafx.scene.image.Image(stream);
+    // log.debug("Resource is found at " + resourceName);
+    int factor = (int) (Util.getScalingFactor() * d);
+    double height = image.getHeight() * factor;
+    double width = image.getWidth() * factor;
+
+    return scaleImageFx(image, width, height, false);
   }
+
   public static int getFontSize() {
     float baseSize = 12;
     if (!isWindows()) {
@@ -772,31 +773,31 @@ public class Util {
 
   }
 
-  public static String fileMd5Sum(String filePath)  {
+  public static String fileMd5Sum(String filePath) {
     try {
       FileInputStream fis = new FileInputStream(new File(filePath));
       String md5 = DigestUtils.md5Hex(fis);
       fis.close();
       return md5;
-    } catch(IOException e)
-    {
+    } catch (IOException e) {
       log.error("Error occured while trying to compute md5 sum of file", e);
     }
-    
+
     return null;
   }
 
   // do not mix this order around, must remain in the end of class so that log file can be deleted on startup
   private static I18n i18n = VpnI18N.getI18n();
   private static String jvmDll;
-  
-  public static javafx.scene.image.Image scaleImageFx(javafx.scene.image.Image source, double targetWidth, double targetHeight, boolean preserveRatio) {
-	    ImageView imageView = new ImageView(source);
-	    imageView.setPreserveRatio(preserveRatio);
-	    imageView.setFitWidth(targetWidth);
-	    imageView.setFitHeight(targetHeight);
-	    //System.out.println("Image width is " + String.valueOf(targetWidth) + " and height is " + String.valueOf(targetHeight));
-	    return imageView.snapshot(null, null);
-	}
+
+  public static javafx.scene.image.Image scaleImageFx(javafx.scene.image.Image source, double targetWidth, double targetHeight,
+      boolean preserveRatio) {
+    ImageView imageView = new ImageView(source);
+    imageView.setPreserveRatio(preserveRatio);
+    imageView.setFitWidth(targetWidth);
+    imageView.setFitHeight(targetHeight);
+    // System.out.println("Image width is " + String.valueOf(targetWidth) + " and height is " + String.valueOf(targetHeight));
+    return imageView.snapshot(null, null);
+  }
 
 }

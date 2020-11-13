@@ -7,35 +7,32 @@
 
 package de.shellfire.vpn.webservice.model;
 
-public class VpnAttributeList  implements java.io.Serializable {
-    private VpnAttributeContainer[] containers;
+public class VpnAttributeList implements java.io.Serializable {
+  private VpnAttributeContainer[] containers;
 
-    public VpnAttributeList() {
-    }
+  public VpnAttributeList() {
+  }
 
-    public VpnAttributeList(
-           VpnAttributeContainer[] containers) {
-           this.containers = containers;
-    }
+  public VpnAttributeList(VpnAttributeContainer[] containers) {
+    this.containers = containers;
+  }
 
+  /**
+   * Gets the containers value for this VpnAttributeList.
+   * 
+   * @return containers
+   */
+  public VpnAttributeContainer[] getContainers() {
+    return containers;
+  }
 
-    /**
-     * Gets the containers value for this VpnAttributeList.
-     * 
-     * @return containers
-     */
-    public VpnAttributeContainer[] getContainers() {
-        return containers;
-    }
-
-
-    /**
-     * Sets the containers value for this VpnAttributeList.
-     * 
-     * @param containers
-     */
-    public void setContainers(VpnAttributeContainer[] containers) {
-        this.containers = containers;
-    }
+  /**
+   * Sets the containers value for this VpnAttributeList.
+   * 
+   * @param containers
+   */
+  public void setContainers(VpnAttributeContainer[] containers) {
+    this.containers = containers;
+  }
 
 }

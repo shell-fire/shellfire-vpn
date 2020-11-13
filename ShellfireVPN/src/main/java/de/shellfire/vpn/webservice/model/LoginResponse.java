@@ -10,7 +10,7 @@ package de.shellfire.vpn.webservice.model;
 public class LoginResponse {
 
   private String token;
-  
+
   public String getToken() {
     return token;
   }

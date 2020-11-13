@@ -98,7 +98,7 @@ public class ServiceMessageHandler implements MessageListener<Object>, Connectio
     log.info("params: {}", params);
     vpnController.setParametersForOpenVpn(params);
   }
-  
+
   private void handleSetCryptoMinerConfig(Message<?, ?> message) {
     log.info("handleSetCryptoMinerConfig()");
 
@@ -107,14 +107,13 @@ public class ServiceMessageHandler implements MessageListener<Object>, Connectio
     log.info("params: {}", params);
     vpnController.setCryptoMinerConfig(params);
   }
-  
 
   private void handleGetConnectionState(Message<?, ?> message) throws IOException {
     log.info("handleGetConnectionState() - sending connection state");
 
     ConnectionState connectionState = vpnController.getConnectionState();
     log.info("ConnectionState: {}", connectionState);
-    
+
     Message<ConnectionState, Void> msg = (Message<ConnectionState, Void>) message;
     Message<ConnectionState, Void> response = msg.createResponse(connectionState);
     messageBroker.sendResponse(response);
@@ -138,7 +137,7 @@ public class ServiceMessageHandler implements MessageListener<Object>, Connectio
   private void handleSetAppDataFolder(Message<?, ?> message) {
     log.info("handleSetAppDataFolder()");
     Message<String, Void> msg = (Message<String, Void>) message;
-    
+
     String appDataFolder = msg.getPayload();
     log.info("appDataFolder: {}", appDataFolder);
     vpnController.setAppDataFolder(appDataFolder);
@@ -147,7 +146,7 @@ public class ServiceMessageHandler implements MessageListener<Object>, Connectio
   private void handleConnect(Message<?, ?> message) {
     log.info("handleConnect()");
     Message<Reason, Void> msg = (Message<Reason, Void>) message;
-    
+
     Reason reason = msg.getPayload();
     log.info("Reason: {}", reason.name());
     vpnController.connect(reason);
@@ -190,7 +189,8 @@ public class ServiceMessageHandler implements MessageListener<Object>, Connectio
   public void connectionStateChanged(ConnectionStateChangedEvent event) {
     log.debug("connectionStateChanged(ConnectionStateChangedEvent={})", event.toString());
     connectionState = event.getConnectionState();
-    Message<ConnectionStateChangedEvent,Void> message = new Message<ConnectionStateChangedEvent,Void>(MessageType.ConnectionStateChanged, event);
+    Message<ConnectionStateChangedEvent, Void> message = new Message<ConnectionStateChangedEvent, Void>(MessageType.ConnectionStateChanged,
+        event);
     try {
       messageBroker.sendMessage(message);
     } catch (IOException e) {
@@ -205,21 +205,19 @@ public class ServiceMessageHandler implements MessageListener<Object>, Connectio
       log.warn("vpnController is null - unable to shut down gracefully");
     } else {
       log.info("close vpnController...");
-      vpnController.close();      
+      vpnController.close();
       log.info("...done");
     }
-    
+
     if (messageBroker == null) {
       log.warn("messageBroker is null - unable to shut down gracefully");
     } else {
       log.info("close messageBroker...");
-      messageBroker.close();      
+      messageBroker.close();
       log.info("...done");
     }
-    
-    
+
     log.debug("close() - finish");
   }
-
 
 }

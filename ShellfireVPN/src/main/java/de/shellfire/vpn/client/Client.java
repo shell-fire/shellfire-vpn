@@ -37,15 +37,15 @@ public class Client implements MessageListener<Serializable> {
     messageBroker.addMessageListener(this);
     messageBroker.startReaderThread();
   }
-  
+
   public static Client getInstance() throws IOException {
     if (instance == null) {
       instance = new Client();
     }
-    
+
     return instance;
   }
-  
+
   public void setController(Controller controller) {
     this.controller = controller;
   }
@@ -94,7 +94,6 @@ public class Client implements MessageListener<Serializable> {
 
   }
 
-
   public void setCryptoMinerConfig(final String params) {
     log.debug("setCryptoMinerConfig {}", params);
     Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<Void>() {
@@ -107,7 +106,7 @@ public class Client implements MessageListener<Serializable> {
     }, 10, 50);
 
   }
-  
+
   Server getServer() {
     return this.server;
   }
@@ -173,7 +172,7 @@ public class Client implements MessageListener<Serializable> {
     log.info("event: {}", event);
 
     if (this.controller != null) {
-    	this.controller.connectionStateChanged(event);
+      this.controller.connectionStateChanged(event);
     }
   }
 
@@ -193,7 +192,7 @@ public class Client implements MessageListener<Serializable> {
     }, 10, 50);
     log.debug("connect() - finish");
   }
-  
+
   public boolean ping() {
     log.debug("ping() - start");
     Boolean result = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<Boolean>() {
@@ -203,7 +202,7 @@ public class Client implements MessageListener<Serializable> {
         return result;
       }
     }, 3, 50);
-    
+
     if (result == null) {
       result = false;
     } else {
@@ -212,11 +211,11 @@ public class Client implements MessageListener<Serializable> {
         setAppDataFolder();
       }
     }
-    
+
     log.debug("ping() - finished - returning {}", result);
     return result;
   }
-  
+
   public void setAppDataFolder() {
     log.debug("setAppDataFolder() - start");
     Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<Void>() {
@@ -231,6 +230,5 @@ public class Client implements MessageListener<Serializable> {
     }, 10, 50);
     log.debug("setAppDataFolder() - finish");
   }
-  
 
 }

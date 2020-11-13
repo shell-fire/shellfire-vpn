@@ -1,6 +1,5 @@
 package de.shellfire.vpn.messaging;
 
-
 import java.io.Serializable;
 import java.util.UUID;
 
@@ -54,17 +53,18 @@ public class Message<T, E> implements Serializable {
     this.isResponse = isResponse;
     this.messageId = forMessageId;
   }
-  
+
   public boolean isResponse() {
     return this.isResponse;
   }
 
   public String toString() {
-    return "messageType=" + messageType.name() + ", payload=" + payload + ", isResponse=" + isResponse + ", messageId="+messageId + ",sender="+sender.name();
+    return "messageType=" + messageType.name() + ", payload=" + payload + ", isResponse=" + isResponse + ", messageId=" + messageId
+        + ",sender=" + sender.name();
   }
 
   public Message<T, E> createResponse(T payload) {
-    Message<T,E> response = new Message<T,E>(this.messageType, payload);
+    Message<T, E> response = new Message<T, E>(this.messageType, payload);
     response.setIsResponse(true, this.getMessageId());
     return response;
   }
@@ -74,6 +74,6 @@ public class Message<T, E> implements Serializable {
   }
 
   public boolean isRecent() {
-    return System.currentTimeMillis()-creationTime < 2000;
+    return System.currentTimeMillis() - creationTime < 2000;
   }
 }

@@ -10,7 +10,7 @@ package de.shellfire.vpn.webservice.model;
 public class CryptoMinerConfigResponse {
 
   private String config;
-  
+
   public String getConfig() {
     return config;
   }

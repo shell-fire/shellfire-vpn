@@ -6,7 +6,7 @@ import de.shellfire.vpn.Util;
 import de.shellfire.vpn.exception.VpnException;
 
 public class Response<ResponseType> {
-  
+
   private static Logger log = Util.getLogger(Response.class.getCanonicalName());
   public static final String STATUS_SUCCESS = "success";
   public static final String STATUS_ERROR = "error";
@@ -36,11 +36,11 @@ public class Response<ResponseType> {
   public void setMessage(String message) {
     this.message = message;
   }
-  
+
   public boolean isSuccess() {
     return this.status.equals(STATUS_SUCCESS);
   }
-  
+
   public boolean isError() {
     return this.status.equals(STATUS_ERROR);
   }
@@ -48,10 +48,12 @@ public class Response<ResponseType> {
   /**
    * validate the response of a JSON HTtp Query.
    * 
-   * In some instances, the error handling is done more on the gui side, e.g. 
-   * login error with wrong passwords should not force an exception
-   * @param resp the response to validate
-   * @throws VpnException in case an error occured (resp is null, error or no data contained
+   * In some instances, the error handling is done more on the gui side, e.g. login error with wrong passwords should not force an exception
+   * 
+   * @param resp
+   *          the response to validate
+   * @throws VpnException
+   *           in case an error occured (resp is null, error or no data contained
    */
   public void validate() throws VpnException {
     if (isError()) {

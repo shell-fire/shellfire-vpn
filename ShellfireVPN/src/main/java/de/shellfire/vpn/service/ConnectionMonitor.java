@@ -8,14 +8,14 @@ import de.shellfire.vpn.Util;
 import de.shellfire.vpn.types.Reason;
 
 public class ConnectionMonitor extends TimerTask {
-  
+
   private static Logger log = Util.getLogger(ConnectionMonitor.class.getCanonicalName());
   private IVpnController vpnController;
-  
+
   public ConnectionMonitor(IVpnController vpnController) {
     this.vpnController = vpnController;
   }
-  
+
   @Override
   public void run() {
     try {
@@ -34,9 +34,9 @@ public class ConnectionMonitor extends TimerTask {
             log.debug("Connection Monitoring Detected Timeout - even with IP address. disconnecting & reconnecting");
             reconnect = true;
           }
-          
+
         }
-        
+
         if (reconnect) {
           vpnController.disconnect(Reason.ConnectionTimeout);
           log.debug("Connection Monitoring: disconnected - sleeping 1 second");
@@ -48,6 +48,6 @@ public class ConnectionMonitor extends TimerTask {
     } catch (Exception e) {
       log.error("Error in Connection Monitoring {}", e.getMessage(), e);
     }
-    
+
   }
 }

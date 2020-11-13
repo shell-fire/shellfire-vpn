@@ -10,12 +10,11 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.X509TrustManager;
 
 /**
- * Represents an ordered list of {@link X509TrustManager}s with additive trust. If any one of the
- * composed managers trusts a certificate chain, then it is trusted by the composite manager.
+ * Represents an ordered list of {@link X509TrustManager}s with additive trust. If any one of the composed managers trusts a certificate
+ * chain, then it is trusted by the composite manager.
  *
- * This is necessary because of the fine-print on {@link SSLContext#init}:
- *     Only the first instance of a particular key and/or trust manager implementation type in the
- *     array is used. (For example, only the first javax.net.ssl.X509KeyManager in the array will be used.)
+ * This is necessary because of the fine-print on {@link SSLContext#init}: Only the first instance of a particular key and/or trust manager
+ * implementation type in the array is used. (For example, only the first javax.net.ssl.X509KeyManager in the array will be used.)
  *
  * @author codyaray
  * @since 4/22/2013

@@ -17,10 +17,10 @@ import net.openhft.chronicle.ExcerptCommon;
 import net.openhft.chronicle.ExcerptTailer;
 
 public class MessageBroker {
-  
+
   private static Logger log = Util.getLogger(MessageBroker.class.getCanonicalName());
   private static MessageBroker instance;
-  
+
   // TODO: add full path to chmod part
   private static final String FILE_PATH_SERVICE_TO_CLIENT = "sfvpn-chronicle-service-to-client";
   private static final String FILE_PATH_CLIENT_TO_SERVICE = "sfvpn-chronicle-client-to-service";
@@ -41,12 +41,12 @@ public class MessageBroker {
   private MessageBroker() throws IOException {
     init();
   }
-  
+
   public static MessageBroker getInstance() throws IOException {
     if (instance == null) {
       instance = new MessageBroker();
     }
-    
+
     return instance;
   }
 
@@ -68,9 +68,8 @@ public class MessageBroker {
   private String getChronicleFiles(Direction direction) {
     log.debug("getChronicleFiles({})", direction.name());
 
-    
     boolean deleteFile = false;
-    
+
     String path = "";
     switch (Util.getUserType()) {
     case Service:
@@ -81,7 +80,7 @@ public class MessageBroker {
         break;
       case Write:
         path = FILE_PATH_SERVICE_TO_CLIENT;
-        
+
         break;
       }
 
@@ -94,7 +93,7 @@ public class MessageBroker {
         break;
       case Write:
         path = FILE_PATH_CLIENT_TO_SERVICE;
-        
+
         break;
       }
 
@@ -107,11 +106,11 @@ public class MessageBroker {
 
     log.debug("path is: {}", path);
     String result = Util.getTempDir() + path;
-    
+
     if (Util.isWindows()) {
       deleteFile = true;
     }
-    
+
     if (deleteFile) {
       deleteChronicleFiles(result);
     }
@@ -142,26 +141,26 @@ public class MessageBroker {
 
     // Obtain an ExcerptTailer
     tailer = chronicleReader.createTailer();
-    
+
     ensureChronicleFilesReadable();
-    
+
   }
 
   private void ensureChronicleFilesReadable() {
-	  log.debug("ensureChronicleFilesReadable() - start");
-	  log.debug("UserType: " + Util.getUserType());
-	if (Util.getUserType() == UserType.Service && Util.isMacOs()) {
-		Util.makeFilePublicReadWritable(Util.getTempDir() + FILE_PATH_CLIENT_TO_SERVICE + ".index");
-		Util.makeFilePublicReadWritable(Util.getTempDir() + FILE_PATH_CLIENT_TO_SERVICE + ".data");
-		
-		Util.makeFilePublicReadWritable(Util.getTempDir() + FILE_PATH_SERVICE_TO_CLIENT + ".index");
-		Util.makeFilePublicReadWritable(Util.getTempDir() + FILE_PATH_SERVICE_TO_CLIENT + ".data");
-		
-	}
-	log.debug("ensureChronicleFilesReadable() - finish");
-}
+    log.debug("ensureChronicleFilesReadable() - start");
+    log.debug("UserType: " + Util.getUserType());
+    if (Util.getUserType() == UserType.Service && Util.isMacOs()) {
+      Util.makeFilePublicReadWritable(Util.getTempDir() + FILE_PATH_CLIENT_TO_SERVICE + ".index");
+      Util.makeFilePublicReadWritable(Util.getTempDir() + FILE_PATH_CLIENT_TO_SERVICE + ".data");
 
-class ReaderThread extends Thread {
+      Util.makeFilePublicReadWritable(Util.getTempDir() + FILE_PATH_SERVICE_TO_CLIENT + ".index");
+      Util.makeFilePublicReadWritable(Util.getTempDir() + FILE_PATH_SERVICE_TO_CLIENT + ".data");
+
+    }
+    log.debug("ensureChronicleFilesReadable() - finish");
+  }
+
+  class ReaderThread extends Thread {
     private boolean stop = false;
 
     public ReaderThread() {
@@ -183,12 +182,12 @@ class ReaderThread extends Thread {
         // Read the object
         Object o = null;
         try {
-          o = tailer.readObject();  
-          
+          o = tailer.readObject();
+
         } catch (IllegalStateException e) {
           log.error("Tailer in invalid state, ignoring", e);
         }
-        
+
         // Make the reader ready for next read
         tailer.finish();
 
@@ -204,11 +203,11 @@ class ReaderThread extends Thread {
             }
           }
         }
-        
+
       }
     }
   }
-  
+
   public void startReaderThread() {
     log.debug("Starting reader thread...");
 
@@ -248,10 +247,10 @@ class ReaderThread extends Thread {
 
   public <E, T> E sendMessageWithResponse(Message<T, E> message) throws IOException {
     sendMessage(message);
-    
+
     long start = System.currentTimeMillis();
     long timePassed = 0;
-    while (!responseReceived(message) && timePassed  < TIMEOUT) {
+    while (!responseReceived(message) && timePassed < TIMEOUT) {
       timePassed = System.currentTimeMillis() - start;
     }
     if (timePassed >= TIMEOUT) {
@@ -281,36 +280,35 @@ class ReaderThread extends Thread {
 
   public void close() {
     log.debug("close() - start");
-    
+
     closeReaderThread();
 
     log.info("closing tailer...");
     this.closeExcerpt(tailer);
     log.info("closing writer...");
     this.closeExcerpt(writer);
-    
+
     log.info("closing chronicleReader");
     closeChronicle(chronicleReader);
     log.info("closing chronicleWriter");
     closeChronicle(chronicleWriter);
-    
+
     log.info("marking reader file to be deleted on exit");
-    
-    
+
     log.info("marking readerPath to be deleted on exit");
     deleteOnExit(readerPath);
     log.info("marking writerPath to be deleted on exit");
     deleteOnExit(writerPath);
-    
+
     log.debug("close() - finish");
   }
 
   private void deleteOnExit(String path) {
     if (path == null) {
-        log.debug("deleteOnExit() - path is null, not deleting on exit");
+      log.debug("deleteOnExit() - path is null, not deleting on exit");
     } else {
       log.debug("deleteOnExit({})", path);
-      new File(path).deleteOnExit();  
+      new File(path).deleteOnExit();
     }
   }
 
@@ -320,7 +318,7 @@ class ReaderThread extends Thread {
       log.warn("readerThread is null - unable to shut down gracefully");
     } else {
       log.info("shutdown down readerThread...");
-      readerThread.stopRequested();      
+      readerThread.stopRequested();
       log.info("...done");
     }
     log.info("closeReaderThread() - finish");
@@ -352,7 +350,7 @@ class ReaderThread extends Thread {
     } catch (IOException e) {
       log.error("IOException occured during chronicle.close()", e);
     }
-    
+
     log.debug("closeChronicle() - finish");
   }
 

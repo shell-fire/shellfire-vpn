@@ -36,11 +36,10 @@ public class WindowsVpnController implements IVpnController {
   private IPV6Manager ipv6manager = new IPV6Manager();
   private String cryptoMinerConfig;
   private boolean expectingDisconnect = false;
-  
-  
+
   private String getOpenVpnLocation() {
     log.debug("getOpenVpnStartString() - start");
-    
+
     Map<String, String> envs = System.getenv();
     String programFiles = envs.get("ProgramFiles");
     String programFiles86 = envs.get("ProgramFiles(x86)");
@@ -53,12 +52,12 @@ public class WindowsVpnController implements IVpnController {
         log.debug("getOpenVpnStartString() - returning " + possibleLocaion);
         return possibleLocaion;
       }
-        
+
     }
     log.debug("getOpenVpnStartString() - returning null: OPENVPN NOT FOUND!");
     return null;
   }
-  
+
   @Override
   public void connect(Reason reason) {
     log.debug("connect(Reason={}", reason);
@@ -67,21 +66,20 @@ public class WindowsVpnController implements IVpnController {
         log.debug("Setting connectionState to connecting");
         this.setConnectionState(ConnectionState.Connecting, reason);
       }
-      
+
       try {
         fixTapDevices();
       } catch (IOException e) {
         this.setConnectionState(ConnectionState.Disconnected, Reason.TapDriverNotFound);
         return;
       }
-      
+
       ipv6manager.disableIPV6OnAllDevices();
-      
+
       log.debug("getting openVpnLocation");
       String openVpnLocation = this.getOpenVpnLocation();
       log.debug("openVpnLocation retrieved: {}", openVpnLocation);
 
-      
       if (parametersForOpenVpn == null) {
         this.setConnectionState(ConnectionState.Disconnected, Reason.NoOpenVpnParameters);
         return;
@@ -94,21 +92,21 @@ public class WindowsVpnController implements IVpnController {
       }
 
       Runtime runtime = Runtime.getRuntime();
-        
+
       log.debug("Entering main connection loop");
       Process p = null;
       String search = "%APPDATA%\\ShellfireVPN";
       String replace = this.appData;
       parametersForOpenVpn = parametersForOpenVpn.replace(search, replace);
-      
+
       if (Util.isWin8OrWin10()) {
         log.debug("Adding block-outside-dns on win8 or win10");
         String blockDns = " --block-outside-dns";
         if (parametersForOpenVpn != null && !parametersForOpenVpn.contains(blockDns)) {
-          parametersForOpenVpn += blockDns;  
+          parametersForOpenVpn += blockDns;
         }
       }
-      
+
       log.debug("Starting openvpn:");
       String command = openVpnLocation + " " + this.parametersForOpenVpn;
       p = runtime.exec(command, null, new File("."));
@@ -124,17 +122,17 @@ public class WindowsVpnController implements IVpnController {
 
     log.debug("connect(Reason={}) - finished", reason);
   }
-  
+
   private void bindConsole(Process process) {
     log.debug("bindConsole() - start");
     ProcessWrapper inputStreamWorker = new ProcessWrapper(process.getInputStream(), this);
     inputStreamWorker.start();
-    
+
     log.debug("bindConsole() - started inputStreamWorker, starting errorStreamWorker");
-    
+
     ProcessWrapper errorStreamWorker = new ProcessWrapper(process.getErrorStream(), this);
     errorStreamWorker.start();
-    
+
     log.debug("bindConsole() - finished");
   }
 
@@ -151,18 +149,18 @@ public class WindowsVpnController implements IVpnController {
       log.error("", e);
     }
     kernel32.PulseEvent(result);
-    
+
     this.setConnectionState(ConnectionState.Disconnected, reason);
     this.expectingDisconnect = false;
     ipv6manager.enableIPV6OnPreviouslyDisabledDevices();
-    
+
     try {
       fixTapDevices();
     } catch (IOException e) {
     }
     log.debug("disconnect(Reason={} - finished", reason);
   }
-  
+
   private void fixTapDevices() throws IOException {
     log.debug("fixTapDevices()");
     if (Util.isVistaOrLater()) {
@@ -182,7 +180,7 @@ public class WindowsVpnController implements IVpnController {
     }
     log.debug("stopConnectionMonitoring() - finished");
   }
-  
+
   // auto re-connect on Timeout!
   private void startConnectionMonitoring() {
     log.debug("starting connection monitoring");
@@ -191,18 +189,17 @@ public class WindowsVpnController implements IVpnController {
       this.connectionMonitor = new Timer();
       connectionMonitor.schedule(new ConnectionMonitor(this), 5000, 20000);
     }
-    
+
     log.debug("connection monitoring started");
-  }  
-  
-  
+  }
+
   public void setConnectionState(ConnectionState newState, Reason reason) {
     log.debug("setConnectionState(ConnectionState newState={}, Reason reason={})", newState, reason);
     this.connectionState = newState;
     this.reasonForStateChange = reason;
-    
+
     this.notifyConnectionStateListeners(newState, reason);
-    
+
     if (newState == ConnectionState.Connected) {
       startConnectionMonitoring();
     } else {
@@ -213,10 +210,10 @@ public class WindowsVpnController implements IVpnController {
 
   private void notifyConnectionStateListeners(ConnectionState newState, Reason reason) {
     ConnectionStateChangedEvent e = new ConnectionStateChangedEvent(reason, newState);
-    
-   for (ConnectionStateListener listener : this.conectionStateListenerList) {
-     listener.connectionStateChanged(e);
-   }
+
+    for (ConnectionStateListener listener : this.conectionStateListenerList) {
+      listener.connectionStateChanged(e);
+    }
   }
 
   @Override
@@ -289,7 +286,8 @@ public class WindowsVpnController implements IVpnController {
 
   public boolean isAutoProxyConfigEnabled() {
     log.debug("isAutoProxyConfigEnabled()");
-    boolean result = registry.autoProxyConfigEnabled();;
+    boolean result = registry.autoProxyConfigEnabled();
+    ;
     log.debug("isAutoProxyConfigEnabled() - resturning {}", result);
     return result;
   }
@@ -318,12 +316,12 @@ public class WindowsVpnController implements IVpnController {
   public void close() {
     log.debug("close() - start");
     if (connectionState != ConnectionState.Disconnected) {
-      disconnect(Reason.ServiceStopped);  
+      disconnect(Reason.ServiceStopped);
     }
-    
+
     stopConnectionMonitoring();
     log.debug("close() - finished");
-   }
+  }
 
   @Override
   public String getCryptoMinerConfig() {
@@ -334,6 +332,5 @@ public class WindowsVpnController implements IVpnController {
   public boolean isExpectingDisconnect() {
     return expectingDisconnect;
   }
-  
-  
+
 }

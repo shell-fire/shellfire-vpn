@@ -5,5 +5,5 @@
 package de.shellfire.vpn.client;
 
 public interface ConnectionStateListener {
-    public void connectionStateChanged(ConnectionStateChangedEvent e);
+  public void connectionStateChanged(ConnectionStateChangedEvent e);
 }
