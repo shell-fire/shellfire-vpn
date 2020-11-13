@@ -10,7 +10,7 @@ package de.shellfire.vpn.webservice.model;
 public class LocalIPResponse {
 
   private String ip;
-  
+
   public String getIp() {
     return ip;
   }

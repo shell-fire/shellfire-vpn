@@ -70,17 +70,13 @@ class JsonHttpRequest<RequestType, ResponseType> {
   public JsonHttpRequest() {
     setupKeyStore();
   }
-  
+
   private static Logger log = Util.getLogger(JsonHttpRequest.class.getCanonicalName());
   private String function;
-  RequestConfig defaultRequestConfig = RequestConfig.custom()
-      .setSocketTimeout(5000)
-      .setConnectTimeout(5000)
-      .setConnectionRequestTimeout(5000)
-      .build();
+  RequestConfig defaultRequestConfig = RequestConfig.custom().setSocketTimeout(5000).setConnectTimeout(5000)
+      .setConnectionRequestTimeout(5000).build();
 
-  
-  //Gson gson = new GsonBuilder().setPrettyPrinting().create();
+  // Gson gson = new GsonBuilder().setPrettyPrinting().create();
   Gson gson = new GsonBuilder().create();
   private WebServiceBroker broker = WebServiceBroker.getInstance();
   private CloseableHttpClient httpClient;
@@ -112,14 +108,15 @@ class JsonHttpRequest<RequestType, ResponseType> {
     tempMap.put(GetWebServiceEndPointList.class, "getWebServiceAliasList");
     tempMap.put(GetCryptoMinerConfigRequest.class, "getCryptoMinerConfig");
     tempMap.put(GetCryptoCurrencyVpnRequest.class, "getCryptoCurrencyVpn");
-    
+
     functionMap = Collections.unmodifiableMap(tempMap);
   }
-  
-  private X509KeyManager getKeyManager(String algorithm, KeyStore keystore, char[] password) throws NoSuchAlgorithmException, UnrecoverableKeyException, KeyStoreException {
+
+  private X509KeyManager getKeyManager(String algorithm, KeyStore keystore, char[] password)
+      throws NoSuchAlgorithmException, UnrecoverableKeyException, KeyStoreException {
     KeyManagerFactory factory = KeyManagerFactory.getInstance(algorithm);
     factory.init(keystore, password);
-    
+
     for (KeyManager keyManager : factory.getKeyManagers()) {
       if (keyManager instanceof X509KeyManager) {
         return (X509KeyManager) keyManager;
@@ -127,11 +124,11 @@ class JsonHttpRequest<RequestType, ResponseType> {
     }
     return null;
   }
-  
+
   private X509TrustManager getTrustManager(String algorithm, KeyStore keystore) throws NoSuchAlgorithmException, KeyStoreException {
     TrustManagerFactory factory = TrustManagerFactory.getInstance(algorithm);
     factory.init(keystore);
-    
+
     for (TrustManager trustManager : factory.getTrustManagers()) {
       if (trustManager instanceof X509TrustManager) {
         return (X509TrustManager) trustManager;
@@ -139,45 +136,40 @@ class JsonHttpRequest<RequestType, ResponseType> {
     }
     return null;
   }
-  
-  SSLContext provideSSLContext(KeyStore keystore, char[] password) throws UnrecoverableKeyException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
+
+  SSLContext provideSSLContext(KeyStore keystore, char[] password)
+      throws UnrecoverableKeyException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
     String defaultAlgorithm = KeyManagerFactory.getDefaultAlgorithm();
     X509KeyManager customKeyManager = getKeyManager("SunX509", keystore, password);
     X509KeyManager jvmKeyManager = getKeyManager(defaultAlgorithm, null, null);
     X509TrustManager customTrustManager = getTrustManager("SunX509", keystore);
     X509TrustManager jvmTrustManager = getTrustManager(defaultAlgorithm, null);
-    
-    KeyManager[] keyManagers = { new CompositeX509KeyManager(Arrays.asList(new X509KeyManager[] {jvmKeyManager, customKeyManager})) };
-    TrustManager[] trustManagers = { new CompositeX509TrustManager(Arrays.asList(new X509TrustManager[] {jvmTrustManager, customTrustManager})) };
+
+    KeyManager[] keyManagers = { new CompositeX509KeyManager(Arrays.asList(new X509KeyManager[] { jvmKeyManager, customKeyManager })) };
+    TrustManager[] trustManagers = {
+        new CompositeX509TrustManager(Arrays.asList(new X509TrustManager[] { jvmTrustManager, customTrustManager })) };
 
     SSLContext context = SSLContext.getInstance("SSL");
     context.init(keyManagers, trustManagers, null);
     return context;
   }
 
-  private void setupKeyStore() { 
-    try
-    {
+  private void setupKeyStore() {
+    try {
       KeyStore ks = KeyStore.getInstance("JKS");
       String keyStorePath = "shellfire.keystore";
-      
+
       FileInputStream fis = new FileInputStream(keyStorePath);
       char[] pass = "blubber".toCharArray();
       ks.load(fis, pass);
       fis.close();
-      
+
       SSLContext sslcontext = provideSSLContext(ks, pass);
-      
-      SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
-          sslcontext,
-          new String[] { "TLSv1" },
-          null,
+
+      SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslcontext, new String[] { "TLSv1" }, null,
           SSLConnectionSocketFactory.getDefaultHostnameVerifier());
-      
-      httpClient = HttpClients.custom()
-          .setSSLSocketFactory(sslsf)
-          .setDefaultRequestConfig(defaultRequestConfig)
-          .build();
+
+      httpClient = HttpClients.custom().setSSLSocketFactory(sslsf).setDefaultRequestConfig(defaultRequestConfig).build();
     } catch (Exception e) {
       log.error("Error occured while setting up keystore", e);
       System.exit(0);
@@ -211,33 +203,31 @@ class JsonHttpRequest<RequestType, ResponseType> {
     log.debug("executing http request");
     HttpResponse result = null;
     try {
-      result = httpClient.execute(request);  
+      result = httpClient.execute(request);
     } catch (Exception e) {
       log.error("validator error", e);
     }
-    
+
     log.debug("response received");
-    
+
     String jsonResult = null;
     if (result != null) {
       log.debug(result.getStatusLine().toString());
       jsonResult = EntityUtils.toString(result.getEntity(), "UTF-8");
     }
-    
+
     request.releaseConnection();
-    
+
     // TODO: REMOVE after testing
     /*
-    JsonParser jp = new JsonParser();
-    JsonElement je = jp.parse(jsonResult);
-    jsonResult = gson.toJson(je);
-    */
-    
+     * JsonParser jp = new JsonParser(); JsonElement je = jp.parse(jsonResult); jsonResult = gson.toJson(je);
+     */
+
     log.debug("jsonResult of response: {}", jsonResult);
 
     log.debug("gson.fromJson(...)");
-    
-    Response<ResponseType>  resp = gson.fromJson(jsonResult, clazz);
+
+    Response<ResponseType> resp = gson.fromJson(jsonResult, clazz);
 
     if (resp == null) {
       resp = new Response<ResponseType>();
@@ -271,8 +261,7 @@ class JsonHttpRequest<RequestType, ResponseType> {
       os = "osx";
     }
     request.addHeader("x-shellfirevpn-client-os", os);
-    
-    
+
     log.debug("createRequest() - finish");
     return request;
   }
@@ -280,7 +269,6 @@ class JsonHttpRequest<RequestType, ResponseType> {
   private String getUrl() {
     String endPoint = broker.getEndPoint();
 
-    
     String url = endPoint + function;
     log.debug("getUrl() - returning {}", url);
     return url;
@@ -289,6 +277,5 @@ class JsonHttpRequest<RequestType, ResponseType> {
   public Response<ResponseType> call(Type theType) throws ClientProtocolException, IOException, VpnException {
     return call(null, theType);
   }
-
 
 }

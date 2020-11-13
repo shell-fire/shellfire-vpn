@@ -9,6 +9,5 @@ package de.shellfire.vpn.types;
  * @author bettmenn
  */
 public enum VpnProtocol {
-    UDP,
-    TCP
+  UDP, TCP
 }

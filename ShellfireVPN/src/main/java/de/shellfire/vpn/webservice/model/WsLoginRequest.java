@@ -12,12 +12,12 @@ public class WsLoginRequest {
   public String language;
   public String email;
   public String password;
-  
+
   public WsLoginRequest(String language, String email, String pass) {
     super();
     this.language = language;
     this.email = email;
     this.password = pass;
   }
-  
+
 }

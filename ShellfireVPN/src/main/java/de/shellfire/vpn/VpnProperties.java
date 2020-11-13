@@ -31,13 +31,13 @@ public class VpnProperties extends Properties {
 
       is = new FileInputStream(propertiesFile);
       load(is);
-      
+
       log.debug("getProperties() - finished");
     } catch (IOException e) {
       log.error("Exception occured during getPropertes()", e);
       Util.handleException(e);
     } finally {
-      if  (is != null) {
+      if (is != null) {
         try {
           is.close();
         } catch (IOException e) {
@@ -55,41 +55,40 @@ public class VpnProperties extends Properties {
 
     return instance;
   }
-  
+
   public void setBoolean(String key, boolean value) {
     setProperty(key, Boolean.toString(value));
   }
-  
+
   public boolean getBoolean(String key) {
     return getBoolean(key, false);
   }
-  
+
   public boolean getBoolean(String key, boolean defaultValue) {
     return Boolean.parseBoolean(getProperty(key, Boolean.toString(defaultValue)));
   }
-  
+
   public void setInt(String key, int value) {
     setProperty(key, Integer.toString(value));
   }
-  
+
   public int getInt(String key) {
     return getInt(key, 0);
   }
-  
+
   public int getInt(String key, int defaultValue) {
     return Integer.parseInt(getProperty(key, Integer.toString(defaultValue)));
   }
-  
+
   public Object setProperty(String key, String value) {
     Object res = null;
-    
+
     if (value == null) {
       res = super.remove(key);
+    } else {
+      res = super.setProperty(key, value);
     }
-    else {
-       res = super.setProperty(key, value);  
-    }
-    
+
     saveProperties();
     return res;
   }
@@ -97,17 +96,17 @@ public class VpnProperties extends Properties {
   public static String getPropertiesFilePath() {
     return Util.getConfigDir() + "ShellfireVPN.properties";
   }
-  
+
   private void saveProperties() {
     try {
       File f = new File(getPropertiesFilePath());
       OutputStream out = new FileOutputStream(f);
       store(out, String.format("Properties created on %s %s", Util.isoToday, Util.timeFormat.format(new Date())));
-      } catch (IOException e) {
+    } catch (IOException e) {
       log.error("Exception occured during getPropertes()", e);
       Util.handleException(e);
     }
-    
+
   }
 
 }

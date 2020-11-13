@@ -54,10 +54,9 @@ public class UpdaterFX implements CanContinueAfterBackEndAvailableFX {
   private static final String MAIN_EXE = "ShellfireVPN2.dat";
   private static final String UPDATER_EXE = "ShellfireVPN2.exe";
   private static I18n i18n = VpnI18N.getI18n();
-  
+
   private static WebService service = WebService.getInstance();
   private static int contentLength;
-
 
   private String[] args;
 
@@ -94,7 +93,7 @@ public class UpdaterFX implements CanContinueAfterBackEndAvailableFX {
         cmd = args[0];
 
         if (cmd.equals("uninstallservice")) {
-            ServiceToolsFX.getInstanceForOS().uninstall();
+          ServiceToolsFX.getInstanceForOS().uninstall();
           return;
         } else if (cmd.equals("installservice")) {
 
@@ -115,9 +114,12 @@ public class UpdaterFX implements CanContinueAfterBackEndAvailableFX {
           return;
         }
       }
-      com.sun.javafx.application.PlatformImpl.startup(()->{});
+      com.sun.javafx.application.PlatformImpl.startup(() -> {
+      });
       // Everything else required the backend, so make sure we can access it.
-        Platform.runLater(()-> {EndpointManager.getInstance().ensureShellfireBackendAvailableFx(this);});
+      Platform.runLater(() -> {
+        EndpointManager.getInstance().ensureShellfireBackendAvailableFx(this);
+      });
 
     } catch (Throwable e) {
       e.printStackTrace();
@@ -204,16 +206,16 @@ public class UpdaterFX implements CanContinueAfterBackEndAvailableFX {
     alert.showAndWait();
   }
 
-    @Override
-    public ProgressDialogController getDialogFX() {
-        return null;
-    } 
- 
- class MyWorker extends Task<String> {
+  @Override
+  public ProgressDialogController getDialogFX() {
+    return null;
+  }
+
+  class MyWorker extends Task<String> {
     private String filename;
     private String installPath;
-    private String user;  
-    
+    private String user;
+
     public MyWorker(String filename, String path, String user) {
       this.filename = filename;
       this.installPath = path;
@@ -232,40 +234,39 @@ public class UpdaterFX implements CanContinueAfterBackEndAvailableFX {
         System.exit(0);
 
       }
-      return "";   
+      return "";
     }
 
     @Override
     protected void succeeded() {
-        if(updateProgressDialog.getDialogStage() != null)
-        updateProgressDialog.getDialogStage().hide(); //To change body of generated methods, choose Tools | Templates.
+      if (updateProgressDialog.getDialogStage() != null)
+        updateProgressDialog.getDialogStage().hide(); // To change body of generated methods, choose Tools | Templates.
     }
-    
-    
+
   }
 
   public void performUpdate(final String path, String user) {
     try {
-        final String fileName = getService().getLatestInstaller();
-        final MyWorker w1 = new MyWorker(fileName, path, user);
-        updateProgressDialog = ProgressDialogController.getInstance(i18n.tr("Downloading update..."), null, LoginForms.getStage(), false);
-        updateProgressDialog.getProgressBar().setProgress(ProgressBar.INDETERMINATE_PROGRESS);
-        updateProgressDialog.setOption(2, i18n.tr("cancel"));
-        updateProgressDialog.setOptionCallback(new Task() {
+      final String fileName = getService().getLatestInstaller();
+      final MyWorker w1 = new MyWorker(fileName, path, user);
+      updateProgressDialog = ProgressDialogController.getInstance(i18n.tr("Downloading update..."), null, LoginForms.getStage(), false);
+      updateProgressDialog.getProgressBar().setProgress(ProgressBar.INDETERMINATE_PROGRESS);
+      updateProgressDialog.setOption(2, i18n.tr("cancel"));
+      updateProgressDialog.setOptionCallback(new Task() {
 
         @Override
         protected Object call() throws Exception {
-            w1.cancel(true);
-            displayError(i18n.tr("Update aborted, shutting down application."));
-            System.exit(0);
-            return null;
+          w1.cancel(true);
+          displayError(i18n.tr("Update aborted, shutting down application."));
+          System.exit(0);
+          return null;
         }
-        
-        }); 
-        Thread t = new Thread(w1);
+
+      });
+      Thread t = new Thread(w1);
       t.start();
-      
-      //work on stage here
+
+      // work on stage here
       updateProgressDialog.getDialogStage().show();
       try {
         w1.get();
@@ -282,7 +283,7 @@ public class UpdaterFX implements CanContinueAfterBackEndAvailableFX {
       this.displayError(i18n.tr("Error while downloading new version. Aborting."));
       System.exit(0);
     } catch (IOException ex) {
-        log.error("Unable to access file ", ex);
+      log.error("Unable to access file ", ex);
     }
 
   }
@@ -316,7 +317,9 @@ public class UpdaterFX implements CanContinueAfterBackEndAvailableFX {
   }
 
   private boolean askIfUpdateShouldBePerformed() {
-    Alert alert = new Alert(Alert.AlertType.CONFIRMATION, i18n.tr("Update available. Without the update, it is not possible to run Shellfire VPN.\n\nUpdate now?"), ButtonType.YES, ButtonType.NO);
+    Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
+        i18n.tr("Update available. Without the update, it is not possible to run Shellfire VPN.\n\nUpdate now?"), ButtonType.YES,
+        ButtonType.NO);
     alert.setTitle("Update available");
     Optional<ButtonType> result = alert.showAndWait();
     return ((result.isPresent()) && (result.get() == ButtonType.YES));
@@ -578,4 +581,3 @@ public class UpdaterFX implements CanContinueAfterBackEndAvailableFX {
   }
 
 }
-

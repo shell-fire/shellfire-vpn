@@ -15,24 +15,23 @@ import de.shellfire.vpn.Util;
  */
 public class OpenSansFont {
 
-    public static Font getFont() {
-        Font font = null;
-        String fName = "/fonts/OpenSans-Semibold.ttf";
-        
-        try {
+  public static Font getFont() {
+    Font font = null;
+    String fName = "/fonts/OpenSans-Semibold.ttf";
 
-        
-            InputStream is = OpenSansFont.class.getResourceAsStream(fName);
-            if (is == null)
-                throw new Exception("is not available");
-            
-            font = Font.createFont(Font.TRUETYPE_FONT, is).deriveFont((float)Util.getFontSize());
-            
-        } catch (Exception ex) {
-            ex.printStackTrace();
-            System.err.println(fName + " not loaded.  Using serif font.");
-            font = new Font("serif", Font.PLAIN, Util.getFontSize());
-        }
-        return font;
+    try {
+
+      InputStream is = OpenSansFont.class.getResourceAsStream(fName);
+      if (is == null)
+        throw new Exception("is not available");
+
+      font = Font.createFont(Font.TRUETYPE_FONT, is).deriveFont((float) Util.getFontSize());
+
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      System.err.println(fName + " not loaded.  Using serif font.");
+      font = new Font("serif", Font.PLAIN, Util.getFontSize());
     }
+    return font;
+  }
 }

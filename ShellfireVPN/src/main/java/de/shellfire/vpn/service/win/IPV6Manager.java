@@ -18,19 +18,19 @@ import org.slf4j.Logger;
 import de.shellfire.vpn.Util;
 
 public class IPV6Manager {
-  
+
   private static final String LIB_PREFIX = "lib/";
   private static final String LIB_SUFFIX_X86 = "_x86.dll";
   private static final String LIB_SUFFIX_AMD64 = "_amd64.dll";
-  private final static String[] GET_ADAPTER_LIST = new String[] {Util.getWmicExe(), "nic", "get", "NetConnectionID"};
-  
+  private final static String[] GET_ADAPTER_LIST = new String[] { Util.getWmicExe(), "nic", "get", "NetConnectionID" };
+
   Pattern p = Pattern.compile(".*\\{(.*)\\}");
 
   private static Logger log = Util.getLogger(IPV6Manager.class.getCanonicalName());
   private final static String IPV6_MANAGE = "%s /%s \"%s\" ms_tcpip6";
   private static String nvspBindLocation;
   private static LinkedList<String> disabledAdapterList;
-  
+
   private final static String SUCCESS = "finished (0)";
 
   static void loadLibSpecial(String libName, boolean doLoad) {
@@ -40,7 +40,7 @@ public class IPV6Manager {
     String x86lib = LIB_PREFIX + libName + LIB_SUFFIX_X86;
     String amd64lib = LIB_PREFIX + libName + LIB_SUFFIX_AMD64;
     String lib = null;
-    
+
     if (jvmArch.equals("32")) {
       lib = x86lib;
     } else if (jvmArch.equals("64")) {
@@ -49,9 +49,9 @@ public class IPV6Manager {
       lib = x86lib;
       log.warn("Could not determin architecture of jvm - trying to load 32 bit version");
     }
-    
+
     Path libPath = FileSystems.getDefault().getPath(lib);
-    Path libPathDest = FileSystems.getDefault().getPath(libName+".dll");
+    Path libPathDest = FileSystems.getDefault().getPath(libName + ".dll");
     try {
       log.info("copying {} to {}", libPath, libPathDest);
       Files.copy(libPath, libPathDest, REPLACE_EXISTING);
@@ -60,13 +60,12 @@ public class IPV6Manager {
     }
     if (doLoad) {
       log.debug("Now loading library {}", libName);
-      System.loadLibrary(libName);  
+      System.loadLibrary(libName);
     }
-      
+
     log.debug("loadLibSpecial {} - finished", libName);
   }
 
-  
   public void enableIPV6OnPreviouslyDisabledDevices() {
     log.debug("enableIPV6OnPreviouslyDisabledDevices() - start");
 
@@ -74,13 +73,13 @@ public class IPV6Manager {
       log.warn("Not performing IPV6 fix on Windows XP");
       return;
     }
-    
+
     String nvspbind = getNvspBindLocation();
     if (nvspbind == null) {
       log.warn("nvspbind not found - did not enable ipv6 on any devices");
     } else {
       if (disabledAdapterList == null) {
-          log.warn("no adapters have been disabled yet. doing nothing.");  
+        log.warn("no adapters have been disabled yet. doing nothing.");
       } else {
         for (String adapter : disabledAdapterList) {
           String[] enableCommand = String.format(IPV6_MANAGE, nvspBindLocation, "e", adapter).split(" ");
@@ -90,11 +89,12 @@ public class IPV6Manager {
           }
         }
       }
-      
+
     }
 
-    log.debug("enableIPV6OnPreviouslyDisabledDevices() - finish");  }
-  
+    log.debug("enableIPV6OnPreviouslyDisabledDevices() - finish");
+  }
+
   public void enableIPV6OnAllDevices() {
     log.debug("enableIPV6() - start");
 
@@ -123,7 +123,7 @@ public class IPV6Manager {
       log.warn("Not performing IPV6 fix on Windows XP");
       return;
     }
-    
+
     String nvspbind = getNvspBindLocation();
     if (nvspbind != null) {
       List<String> adapterList = getAdapterList();
@@ -146,9 +146,9 @@ public class IPV6Manager {
 
   private List<String> getAdapterList() {
     log.debug("getAdapterList() - start");
-    
-    String output = Util.runCommandAndReturnOutput( GET_ADAPTER_LIST);
-    
+
+    String output = Util.runCommandAndReturnOutput(GET_ADAPTER_LIST);
+
     List<String> result = new LinkedList<String>();
     String[] lines = output.split("\\n");
     for (String line : lines) {
@@ -158,11 +158,11 @@ public class IPV6Manager {
         result.add(line);
       }
     }
-    
+
     log.debug("getAdapterList() - finished, returning {}", result);
     return result;
   }
- 
+
   private String getNvspBindLocation() {
     if (nvspBindLocation == null) {
       Map<String, String> envs = System.getenv();

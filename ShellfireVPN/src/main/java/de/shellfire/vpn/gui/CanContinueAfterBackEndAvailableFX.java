@@ -12,7 +12,7 @@ import de.shellfire.vpn.gui.controller.ProgressDialogController;
  * @author Tcheutchoua
  */
 public interface CanContinueAfterBackEndAvailableFX {
-     void continueAfterBackEndAvailabledFX();
+  void continueAfterBackEndAvailabledFX();
 
   ProgressDialogController getDialogFX();
 }

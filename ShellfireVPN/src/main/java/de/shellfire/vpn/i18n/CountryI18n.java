@@ -23,11 +23,10 @@ public class CountryI18n {
     } catch (Exception e) {
       Util.handleException(e);
     }
-    
 
   }
 
-  public static CountryI18n getInstance(Language language)  {
+  public static CountryI18n getInstance(Language language) {
     if (instanceMap.get(language) == null) {
       instanceMap.put(language, new CountryI18n(language));
     }

@@ -4,5 +4,5 @@ public class EndPoint {
   public int aliasId;
   public String host;
   public int port;
-  
+
 }

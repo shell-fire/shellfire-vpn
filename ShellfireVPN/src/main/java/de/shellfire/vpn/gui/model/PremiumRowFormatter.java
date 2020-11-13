@@ -13,11 +13,11 @@ import javafx.util.Callback;
  *
  * @author Tcheutchoua Steve
  */
-public class PremiumRowFormatter implements Callback<TableColumn<?, ?>, TableCell<?, ?>>  {
+public class PremiumRowFormatter implements Callback<TableColumn<?, ?>, TableCell<?, ?>> {
 
-    @Override
-    public TableCell<?, ?> call(TableColumn<?, ?> param) {
-        return null; 
-    }
-    
+  @Override
+  public TableCell<?, ?> call(TableColumn<?, ?> param) {
+    return null;
+  }
+
 }

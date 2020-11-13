@@ -9,7 +9,6 @@ import java.util.LinkedList;
 import de.shellfire.vpn.webservice.model.VpnAttributeContainer;
 import de.shellfire.vpn.webservice.model.VpnAttributeList;
 
-
 /**
  * 
  * @author bettmenn
@@ -21,15 +20,14 @@ class AttributeList {
   public AttributeList() {
 
   }
-  
+
   public AttributeList(VpnAttributeList vpnComparisonTable) {
     VpnAttributeContainer[] cnts = vpnComparisonTable.getContainers();
     for (int i = 0; i < cnts.length; i++) {
       AttributeContainer cnt = new AttributeContainer(cnts[i]);
       containers.add(cnt);
     }
-    
-    
+
   }
 
   public void add(AttributeContainer attributeContainer) {
@@ -77,8 +75,8 @@ class AttributeList {
           } else if (columnIndex == 2) {
             return line.getPremium();
           } else if (columnIndex == 3) {
-          return line.getPremiumPlus();
-        }
+            return line.getPremiumPlus();
+          }
         }
       }
 

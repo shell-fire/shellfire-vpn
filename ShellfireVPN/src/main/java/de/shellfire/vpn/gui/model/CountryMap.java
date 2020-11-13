@@ -11,11 +11,11 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class CountryMap {
-  
+
   private static final EnumMap<Country, String> countryMap = new EnumMap<Country, String>(Country.class);
   private static final EnumMap<Country, ImageIcon> iconMap = new EnumMap<Country, ImageIcon>(Country.class);
   private static final EnumMap<Country, Image> iconMapFX = new EnumMap<Country, Image>(Country.class);
-  
+
   static {
     countryMap.put(Country.Afghanistan, "af");
     countryMap.put(Country.Egypt, "eg");
@@ -251,45 +251,40 @@ public class CountryMap {
     countryMap.put(Country.Serbia, "rs");
 
   }
-  
-  
-  
+
   public static String get(Country country) {
     return countryMap.get(country);
   }
 
   public static ImageIcon getIcon(Country country) {
     if (iconMap.get(country) == null) {
-      URL file = CountryMap.class.getResource("/flags/"+get(country) + ".png");
+      URL file = CountryMap.class.getResource("/flags/" + get(country) + ".png");
       ImageIcon icon = null;
       if (file != null) {
-        icon = Util.getImageIcon("/flags/"+get(country) + ".png");
+        icon = Util.getImageIcon("/flags/" + get(country) + ".png");
       } else {
         icon = Util.getImageIcon("/flags/de.png");
       }
-      
 
       iconMap.put(country, icon);
     }
-    
+
     return iconMap.get(country);
   }
-  
-  public static Image getIconFX(Country country){
-      if (iconMapFX.get(country) == null) {
-      URL file = CountryMap.class.getResource("/flags/"+get(country) + ".png");
+
+  public static Image getIconFX(Country country) {
+    if (iconMapFX.get(country) == null) {
+      URL file = CountryMap.class.getResource("/flags/" + get(country) + ".png");
       Image icon = null;
       if (file != null) {
-        icon = Util.getImageIconFX("/flags/"+get(country) + ".png");
+        icon = Util.getImageIconFX("/flags/" + get(country) + ".png");
       } else {
         icon = Util.getImageIconFX("/flags/de.png");
       }
-      
 
       iconMapFX.put(country, icon);
     }
-    
+
     return iconMapFX.get(country);
   }
 }
-

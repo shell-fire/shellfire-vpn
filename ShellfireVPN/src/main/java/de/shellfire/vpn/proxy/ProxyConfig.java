@@ -19,43 +19,39 @@ public class ProxyConfig {
   private static boolean proxyEnabled;
 
   public static void performWindows() {
-      log.debug("ProxyConfig - In performWindows method");
-	   System.setProperty("java.net.useSystemProxies", "true");
-	    //Proxy proxy = null;
-	    //proxy = getProxy();
-           Proxy proxy = getProxy();
-	    if (proxy != null && proxy.type() == Proxy.Type.HTTP) {
-	      InetSocketAddress addr = (InetSocketAddress) proxy.address();
-	      if (addr != null) {
-	        host = addr.getHostName();
-	        port = addr.getPort();
+    log.debug("ProxyConfig - In performWindows method");
+    System.setProperty("java.net.useSystemProxies", "true");
+    // Proxy proxy = null;
+    // proxy = getProxy();
+    Proxy proxy = getProxy();
+    if (proxy != null && proxy.type() == Proxy.Type.HTTP) {
+      InetSocketAddress addr = (InetSocketAddress) proxy.address();
+      if (addr != null) {
+        host = addr.getHostName();
+        port = addr.getPort();
 
-	        System.setProperty("java.net.useSystemProxies", "false");
-	        proxyEnabled = true;
-	        
-	        log.debug("setting proxy to: " + host + ":" + port);
-	        System.setProperty("http.proxyHost", host);
-	        System.setProperty("http.proxyPort", ""+port);
-	        System.setProperty("http.proxySet", "true");
-	        
-	      }
+        System.setProperty("java.net.useSystemProxies", "false");
+        proxyEnabled = true;
 
-	    }
+        log.debug("setting proxy to: " + host + ":" + port);
+        System.setProperty("http.proxyHost", host);
+        System.setProperty("http.proxyPort", "" + port);
+        System.setProperty("http.proxySet", "true");
 
-	    
-	    System.setProperty("java.net.useSystemProxies", "false");
-	  
-	  
+      }
+
+    }
+
+    System.setProperty("java.net.useSystemProxies", "false");
+
   }
-  
-  
-  
+
   public static void perform() {
-	  if (Util.isWindows()) {
-		  performWindows();
-                  log.debug("In the ProxyConfig class");
-	  }
-   }
+    if (Util.isWindows()) {
+      performWindows();
+      log.debug("In the ProxyConfig class");
+    }
+  }
 
   public static String getHost() {
     return host;
@@ -64,11 +60,11 @@ public class ProxyConfig {
   public static int getPort() {
     return port;
   }
-  
+
   public static String getOpenVpnConfigCommand() {
     if (host == null)
       return "";
-    else 
+    else
       return "--http-proxy " + host + " " + port;
   }
 
@@ -91,32 +87,31 @@ public class ProxyConfig {
     return null;
   }
 
-    private static ProxySelector getSelector(){
-      if (proxyAutoConfigEnabled())
-        return getPacProxySelector();
-      else
-          log.debug("Returning default Proxy selector");
-        return ProxySelector.getDefault();
+  private static ProxySelector getSelector() {
+    if (proxyAutoConfigEnabled())
+      return getPacProxySelector();
+    else
+      log.debug("Returning default Proxy selector");
+    return ProxySelector.getDefault();
   }
 
-    private static boolean proxyAutoConfigEnabled() {
-      return Client.isAutoProxyConfigEnabled();
+  private static boolean proxyAutoConfigEnabled() {
+    return Client.isAutoProxyConfigEnabled();
+  }
+
+  private static ProxySelector getPacProxySelector() {
+    System.setProperty(PacProxySelector.PAC_LOCATION_PROPERTY, Client.getAutoProxyConfigPath());
+    try {
+      return PacProxySelector.configureFromProperties();
+    } catch (Exception e) {
+      Util.handleException(e);
     }
 
-    private static ProxySelector getPacProxySelector() {
-      System.setProperty(PacProxySelector.PAC_LOCATION_PROPERTY, Client.getAutoProxyConfigPath());
-      try {
-        return PacProxySelector.configureFromProperties();
-      } catch (Exception e) {
-        Util.handleException(e);
-      }
-       
-      
-      return ProxySelector.getDefault();
-    }
+    return ProxySelector.getDefault();
+  }
 
-    public static boolean isProxyEnabled() {
-        return proxyEnabled;
-    }
+  public static boolean isProxyEnabled() {
+    return proxyEnabled;
+  }
 
 }

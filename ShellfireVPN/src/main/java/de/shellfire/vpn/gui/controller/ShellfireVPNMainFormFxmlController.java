@@ -777,7 +777,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
     this.serverListSubviewController.getTCPRadioButton().setDisable(false);
     Task<Reason> disconnectTask = new Task<Reason>() {
 
-
       @Override
       protected Reason call() throws Exception {
         Reason reasonForChange = controller.getReasonForStateChange();
@@ -790,11 +789,14 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
           Reason reasonForChange = get();
           if (reasonForChange == Reason.DisconnectButtonPressed && !disconnectDetectExpected) {
             disconnectDetectExpected = true;
-            showTrayMessageWithoutCallback(i18n.tr("Disconnected"), i18n.tr("Shellfire VPN connection terminated. Your internet connection is no longer secured!"));
+            showTrayMessageWithoutCallback(i18n.tr("Disconnected"),
+                i18n.tr("Shellfire VPN connection terminated. Your internet connection is no longer secured!"));
           } else if (reasonForChange == Reason.DisconnectDetected && !disconnectDetectExpected) {
-            showTrayMessageWithoutCallback(i18n.tr("Disconnected"), i18n.tr("Shellfire VPN connection terminated. Your internet connection is no longer secured!"));
+            showTrayMessageWithoutCallback(i18n.tr("Disconnected"),
+                i18n.tr("Shellfire VPN connection terminated. Your internet connection is no longer secured!"));
           } else if (reasonForChange == Reason.DisconnectDetected && disconnectDetectExpected) {
-            log.debug("succeeeded() - Reason=DisconnectDetected and disconnectDetectExpected - not showing tray, but setting disconnectDetected=false");
+            log.debug(
+                "succeeeded() - Reason=DisconnectDetected and disconnectDetectExpected - not showing tray, but setting disconnectDetected=false");
             disconnectDetectExpected = false;
           }
         } catch (Exception e) {

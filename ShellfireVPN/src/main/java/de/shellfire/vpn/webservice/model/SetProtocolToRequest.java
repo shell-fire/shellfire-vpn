@@ -25,6 +25,5 @@ public class SetProtocolToRequest {
   public void setProtocol(String protocol) {
     this.proto = protocol;
   }
-  
 
 }

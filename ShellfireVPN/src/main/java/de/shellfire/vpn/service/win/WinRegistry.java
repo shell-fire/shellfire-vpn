@@ -1,4 +1,5 @@
 package de.shellfire.vpn.service.win;
+
 import static java.nio.file.StandardCopyOption.REPLACE_EXISTING;
 
 import java.io.IOException;
@@ -26,7 +27,7 @@ public class WinRegistry implements IVpnRegistry {
   private static final String LIB_ICE_JNI_REGISTRY_X86 = "lib/ICE_JNIRegistry_x86.dll";
 
   private static Logger log = Util.getLogger(WinRegistry.class.getCanonicalName());
-  
+
   private static final String INSTDIR = LoginController.getInstDir();
   private static final String SHELLFIRE_VPN2_EXE = "ShellfireVPN2.exe";
   private static final String SHELLFIRE_VPN = "ShellfireVPN";
@@ -39,7 +40,7 @@ public class WinRegistry implements IVpnRegistry {
   }
 
   public static void setStringValue(RegistryKey hkey, String path, String name, String value) {
-    log.debug("setStringValue(RegistryKey "+hkey+", String "+path+", String "+name+", String "+value+")");
+    log.debug("setStringValue(RegistryKey " + hkey + ", String " + path + ", String " + name + ", String " + value + ")");
     try {
       RegistryKey key = hkey.openSubKey(path, RegistryKey.ACCESS_WRITE);
       RegStringValue rv = new RegStringValue(key, name, value);
@@ -111,8 +112,8 @@ public class WinRegistry implements IVpnRegistry {
   }
 
   public static void addAutoStart(String name, String dir, String fileName, String params) {
-    String value = "\"" + dir + "\\" + fileName + "\" "  + params;
-    
+    String value = "\"" + dir + "\\" + fileName + "\" " + params;
+
     setStringValue(Registry.HKEY_CURRENT_USER, REGKEY_CURRENTVERSION_RUN, name, value);
   }
 
@@ -181,14 +182,12 @@ public class WinRegistry implements IVpnRegistry {
     InternetOptions.refreshSystemProxySettings();
   }
 
-
   public void enableSystemProxy() {
     setSystemProxy(1);
     InternetOptions.refreshSystemProxySettings();
 
   }
 
-  
   static {
     if (Util.isWindows()) {
       log.debug("LOADING ICE JNI");
@@ -197,29 +196,27 @@ public class WinRegistry implements IVpnRegistry {
       String lib = LIB_ICE_JNI_REGISTRY_X86;
       if (jvmArch.equals("32")) {
         lib = LIB_ICE_JNI_REGISTRY_X86;
-        
+
       } else if (jvmArch.equals("64")) {
         lib = LIB_ICE_JNI_REGISTRY_AMD64;
       } else {
         log.warn("Could not determin architecture of jvm - trying to load 32 bit ICE JNI");
       }
       Path libPath = FileSystems.getDefault().getPath(lib);
-      Path libPathDest = FileSystems.getDefault().getPath(ICE_JNI_REGISTRY_DLL+".DLL");
+      Path libPathDest = FileSystems.getDefault().getPath(ICE_JNI_REGISTRY_DLL + ".DLL");
       try {
         Files.copy(libPath, libPathDest, REPLACE_EXISTING);
       } catch (IOException e) {
         // Util.handleException(e);
       }
-      
 
       log.debug("Loading: {}", ICE_JNI_REGISTRY_DLL);
-      System.loadLibrary(ICE_JNI_REGISTRY_DLL);  
-      
+      System.loadLibrary(ICE_JNI_REGISTRY_DLL);
+
       log.debug("DONE LOADING ICE JNI");
     } else {
       log.debug("NOT WINDOWS - NOT LOADING ICE JNI");
     }
   }
-
 
 }

@@ -10,7 +10,7 @@ package de.shellfire.vpn.webservice.model;
 public class OpenVpnParamResponse {
 
   private String params;
-  
+
   public String getParams() {
     return params;
   }

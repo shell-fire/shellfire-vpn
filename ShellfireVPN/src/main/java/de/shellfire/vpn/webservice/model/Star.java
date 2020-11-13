@@ -7,59 +7,53 @@
 
 package de.shellfire.vpn.webservice.model;
 
-public class Star  implements java.io.Serializable {
-    private int numStars;
+public class Star implements java.io.Serializable {
+  private int numStars;
 
-    private java.lang.String text;
+  private java.lang.String text;
 
-    public Star() {
-    }
+  public Star() {
+  }
 
-    public Star(
-           int numStars,
-           java.lang.String text) {
-           this.numStars = numStars;
-           this.text = text;
-    }
+  public Star(int numStars, java.lang.String text) {
+    this.numStars = numStars;
+    this.text = text;
+  }
 
+  /**
+   * Gets the numStars value for this Star.
+   * 
+   * @return numStars
+   */
+  public int getNumStars() {
+    return numStars;
+  }
 
-    /**
-     * Gets the numStars value for this Star.
-     * 
-     * @return numStars
-     */
-    public int getNumStars() {
-        return numStars;
-    }
+  /**
+   * Sets the numStars value for this Star.
+   * 
+   * @param numStars
+   */
+  public void setNumStars(int numStars) {
+    this.numStars = numStars;
+  }
 
+  /**
+   * Gets the text value for this Star.
+   * 
+   * @return text
+   */
+  public java.lang.String getText() {
+    return text;
+  }
 
-    /**
-     * Sets the numStars value for this Star.
-     * 
-     * @param numStars
-     */
-    public void setNumStars(int numStars) {
-        this.numStars = numStars;
-    }
-
-
-    /**
-     * Gets the text value for this Star.
-     * 
-     * @return text
-     */
-    public java.lang.String getText() {
-        return text;
-    }
-
-
-    /**
-     * Sets the text value for this Star.
-     * 
-     * @param text
-     */
-    public void setText(java.lang.String text) {
-        this.text = text;
-    }
+  /**
+   * Sets the text value for this Star.
+   * 
+   * @param text
+   */
+  public void setText(java.lang.String text) {
+    this.text = text;
+  }
 
 }

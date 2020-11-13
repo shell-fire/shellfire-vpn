@@ -10,5 +10,5 @@ public class ComparisonTableResponse {
   public void setComparisonTable(VpnAttributeList comparisonTable) {
     this.comparisonTable = comparisonTable;
   }
-  
+
 }
