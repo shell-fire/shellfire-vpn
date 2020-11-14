@@ -1006,13 +1006,13 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
 	public void mouseClickedFX() {
 		Platform.runLater(() -> {
-			if (!this.application.getStage().isShowing()) {
-				this.application.getStage().show();
+			if (!LoginForms.getStage().isShowing()) {
+				LoginForms.getStage().show();
 			} else {
-				this.application.getStage().toFront();
+				LoginForms.getStage().toFront();
 			}
 
-			((Stage) this.application.getStage()).setIconified(false);
+			((Stage) LoginForms.getStage()).setIconified(false);
 			setVisible(true);
 			toFront();
 

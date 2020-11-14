@@ -20,6 +20,7 @@ import org.xnap.commons.i18n.I18n;
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.i18n.VpnI18N;
+import de.shellfire.vpn.types.Reason;
 import de.shellfire.vpn.webservice.Response;
 import de.shellfire.vpn.webservice.WebService;
 import de.shellfire.vpn.webservice.model.LoginResponse;
@@ -27,6 +28,7 @@ import javafx.application.HostServices;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
@@ -334,22 +336,72 @@ public class RegisterFormController extends AnchorPane implements Initializable 
 
 	// needs a swing pane for successful execution.
 	private void waitForActivation() {
+		
+		
+		// What does this do?
+		// - displayed indefinite ProgrssBar, wait for user background action = click email link to perform
+		// - automatically disappear and continue process when this is done 
+		// -> this is the job of "poller", which polls regularly the backend for activation-status
+		// offer 2 buttons:
+		// left button: change email address -> basically back to previous form
+		// rigth button: request email again in case not arrived (under same email address)
+		// some additional texts here and there
+		// 
+		// as this is the only use case really for such a generic progress bar, it might be easier to just 
+		// specifically design this one in the FX Editor and use a dedicated controller, rather then the generic ProgressBarController...
+		
+		
+/*
+		Platform.runLater(() -> {
+			try {
 
-		/*
-		 * this.progressDialog = new ProgressDialog(this, false,
-		 * i18n.tr("You have just received an email from the Shellfire VPN system, please follow the instructions in this email."));
-		 * this.progressDialog.addInfo(i18n.tr("Waiting for account activation..."));
-		 * this.progressDialog.addBottomText(i18n.tr("No email received?")); this.progressDialog.setOption(1, i18n.tr("Request new email"),
-		 * 30); this.progressDialog.setOption(2, i18n.tr("Change email address"), 30); this.progressDialog.setOptionCallback(new Runnable()
-		 * {
-		 * 
-		 * @Override public void run() { if (poller != null) { poller.stopIt(); } if (progressDialog.isOption1()) {
-		 * progressDialog.setVisible(false); isResend = true; jButtonRequestRegKeyActionPerformed(null); } else if
-		 * (progressDialog.isOption2()) { progressDialog.setVisible(false); isResend = false; JOptionPane.showMessageDialog(null,
-		 * i18n.tr("Please select a different email address and try again."), i18n.tr("Change email address"),
-		 * JOptionPane.INFORMATION_MESSAGE); } } }); this.progressDialog.setVisible(true); poller = new
-		 * RegisterForm.AccountActiveServicePollerTask(); poller.execute();
-		 */
+				task =
+
+						progressDialog = ProgressDialogController.getInstance(
+								i18n.tr("You have just received an email from the Shellfire VPN system, please follow the instructions in this email."),
+								task, this.application.getStage(), true);
+				connectProgressDialog.getButton(ProgressButtonType.Right).setOnAction(new EventHandler<javafx.event.ActionEvent>() {
+
+					@Override
+					public void handle(javafx.event.ActionEvent event) {
+						controller.disconnect(Reason.DisconnectButtonPressed);
+						task.cancel(true);
+						log.debug("showConnectProgress: Cancel button clicked");
+					}
+				});
+			} catch (IOException ex) {
+				log.debug("connectFromButton. Error is " + ex.getMessage());
+				ex.printStackTrace(System.out);
+			}
+		});
+
+		this.progressDialog.addInfo(i18n.tr("Waiting for account activation..."));
+		this.progressDialog.addBottomText(i18n.tr("No email received?"));
+		this.progressDialog.setOption(ProgressButtonType.Left, i18n.tr("Request new email"), 30);
+		this.progressDialog.setOption(ProgressButtonType.Right, i18n.tr("Change email address"), 30);
+		this.progressDialog.setOptionCallback(new Runnable() {
+
+			@Override
+			public void run() {
+				if (poller != null) {
+					poller.stopIt();
+				}
+				if (progressDialog.isOption1()) {
+					progressDialog.setVisible(false);
+					isResend = true;
+					jButtonRequestRegKeyActionPerformed(null);
+				} else if (progressDialog.isOption2()) {
+					progressDialog.setVisible(false);
+					isResend = false;
+					JOptionPane.showMessageDialog(null, i18n.tr("Please select a different email address and try again."),
+							i18n.tr("Change email address"), JOptionPane.INFORMATION_MESSAGE);
+				}
+			}
+		});
+		this.progressDialog.setVisible(true);
+		poller = new RegisterForm.AccountActiveServicePollerTask();
+		poller.execute();
+*/
 	}
 
 	class AccountActiveServicePollerTask extends Task<Void> {
