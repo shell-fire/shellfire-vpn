@@ -36,7 +36,6 @@ import de.shellfire.vpn.Util;
 import de.shellfire.vpn.client.ServiceToolsFX;
 import de.shellfire.vpn.gui.CanContinueAfterBackEndAvailableFX;
 import de.shellfire.vpn.gui.LoginForms;
-import de.shellfire.vpn.gui.controller.ProgressButtonType;
 import de.shellfire.vpn.gui.controller.ProgressDialogController;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.proxy.ProxyConfig;
@@ -256,8 +255,8 @@ public class UpdaterFX implements CanContinueAfterBackEndAvailableFX {
 			updateProgressDialog = ProgressDialogController.getInstance(i18n.tr("Downloading update..."), null, LoginForms.getStage(),
 					false);
 			updateProgressDialog.getProgressBar().setProgress(ProgressBar.INDETERMINATE_PROGRESS);
-			updateProgressDialog.setButtonText(ProgressButtonType.Right, i18n.tr("cancel"));
-			updateProgressDialog.setOptionCallback(ProgressButtonType.Right, new Task() {
+			updateProgressDialog.setButtonText(i18n.tr("cancel"));
+			updateProgressDialog.setOptionCallback(new Task() {
 
 				@Override
 				protected Object call() throws Exception {

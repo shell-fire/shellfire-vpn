@@ -15,7 +15,6 @@ import org.xnap.commons.i18n.I18n;
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.client.ServiceToolsFX;
 import de.shellfire.vpn.gui.LoginForms;
-import de.shellfire.vpn.gui.controller.ProgressButtonType;
 import de.shellfire.vpn.gui.controller.LoginController;
 import de.shellfire.vpn.gui.controller.ProgressDialogController;
 import de.shellfire.vpn.i18n.VpnI18N;
@@ -46,8 +45,8 @@ public class WinServiceToolsFX extends ServiceToolsFX {
 			try {
 				loginProgressDialog = ProgressDialogController.getInstance(i18n.tr("Installing Service..."), null, LoginForms.getStage(),
 						true);
-				loginProgressDialog.setButtonText(ProgressButtonType.Right, i18n.tr("cancel"));
-				loginProgressDialog.setOptionCallback(ProgressButtonType.Right, new Task() {
+				loginProgressDialog.setButtonText(i18n.tr("cancel"));
+				loginProgressDialog.setOptionCallback(new Task() {
 
 					@Override
 					protected Object call() throws Exception {

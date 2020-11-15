@@ -121,14 +121,14 @@ public class LogViewerFxmlController implements Initializable {
 		if (sendLogProgressDialog == null) {
 			try {
 				sendLogProgressDialog = ProgressDialogController.getInstance(i18n.tr("Upload log.."), sendLogTask, instanceStage, true);
-				sendLogProgressDialog.setButtonText(ProgressButtonType.Right, i18n.tr("Cancel"));
+				sendLogProgressDialog.setButtonText(i18n.tr("Cancel"));
 
 			} catch (IOException ex) {
 				log.debug("connectFromButton. Error is " + ex.getMessage());
 			}
 		}
 		Platform.runLater(() -> {
-			sendLogProgressDialog.getButton(ProgressButtonType.Right).setOnAction(new EventHandler<javafx.event.ActionEvent>() {
+			sendLogProgressDialog.getButton().setOnAction(new EventHandler<javafx.event.ActionEvent>() {
 
 				@Override
 				public void handle(javafx.event.ActionEvent event) {

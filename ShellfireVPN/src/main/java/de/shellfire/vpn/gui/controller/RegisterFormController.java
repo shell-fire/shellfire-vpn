@@ -360,7 +360,7 @@ public class RegisterFormController extends AnchorPane implements Initializable 
 						progressDialog = ProgressDialogController.getInstance(
 								i18n.tr("You have just received an email from the Shellfire VPN system, please follow the instructions in this email."),
 								task, this.application.getStage(), true);
-				connectProgressDialog.getButton(ProgressButtonType.Right).setOnAction(new EventHandler<javafx.event.ActionEvent>() {
+				connectProgressDialog.getButton().setOnAction(new EventHandler<javafx.event.ActionEvent>() {
 
 					@Override
 					public void handle(javafx.event.ActionEvent event) {

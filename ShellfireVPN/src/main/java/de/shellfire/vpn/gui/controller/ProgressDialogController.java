@@ -2,8 +2,6 @@ package de.shellfire.vpn.gui.controller;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.ResourceBundle;
 
 import org.slf4j.Logger;
@@ -30,8 +28,6 @@ import javafx.stage.Window;
 
 public class ProgressDialogController extends AnchorPane implements Initializable {
 
-	
-	private boolean option2;
 	private static I18n i18n = VpnI18N.getI18n();
 	private static LoginForms application;
 	private static Stage instanceStage;
@@ -49,8 +45,8 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
 	private Pane contentPane;
 	private static final Logger log = Util.getLogger(ProgressDialogController.class.getCanonicalName());
 	
-	private Map<ProgressButtonType, Task> optionCallbackMap = new HashMap<ProgressButtonType, Task>();
-	private Map<ProgressButtonType, Button> buttonMap = new HashMap<ProgressButtonType, Button>();
+	private Task optionCallback;
+	private Button button;
 
 	public ProgressDialogController() {
 		log.debug("ProgressDialogController: In netbeans");
@@ -71,32 +67,29 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
 
 	public void initComponents() {
 		dynamicLabel.setText(i18n.tr("Logging in..."));
-		// additionTextLabel.setText("<dynamic>");
 		this.headerImageView1.setImage(ShellfireVPNMainFormFxmlController.getLogo());
 		log.debug("\n " + com.sun.javafx.runtime.VersionInfo.getRuntimeVersion());
 	}
 
-	public Button getButton(ProgressButtonType buttonType) {
-		ensureButtonExists(buttonType);
-		return buttonMap.get(buttonType);
+	public Button getButton() {
+		ensureButtonExists();
+		return button;
 	}
 	
 	public ProgressBar getProgressBar() {
 		return progressBar;
 	}
 
-	public void setOptionCallback(ProgressButtonType buttonType, Task task) {
+	public void setOptionCallback(Task task) {
 		// make the button visible when a task has to be assigned to the respective button
-		ensureButtonExists(buttonType);
+		ensureButtonExists();
 		log.debug("setOptionCallback: Runnable has been initialised " + task.toString());
-		this.optionCallbackMap.put(buttonType, task);
+		this.optionCallback = task;
 	}
 
-	public void callOptionCallback(ProgressButtonType buttonType) {
-		Task callBack = optionCallbackMap.get(buttonType);
-		
-		if (callBack != null)
-			callBack.run();
+	public void callOptionCallback() {
+		if (optionCallback != null)
+			optionCallback.run();
 	}
 
 	public void updateProgress(double percentage) {
@@ -108,9 +101,8 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
 		return dynamicLabel;
 	}
 
-	public void setButtonText(ProgressButtonType buttonType, String text) {
-		ensureButtonExists(buttonType);
-		Button button = buttonMap.get(buttonType);
+	public void setButtonText(String text) {
+		ensureButtonExists();
 		button.setText(text);
 	}
 
@@ -140,7 +132,7 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
 			instance.setDialogText(dialogText);
 			instance.getProgressBar().setProgress(ProgressBar.INDETERMINATE_PROGRESS);
 			if (null != task) {
-				instance.setOptionCallback(ProgressButtonType.Right, task);
+				instance.setOptionCallback(task);
 			}
 			instanceStage = new Stage();
 			instanceStage.initStyle(StageStyle.UNDECORATED);
@@ -155,12 +147,11 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
 	}
 	
 
-	private void ensureButtonExists(ProgressButtonType buttonType) {
-		if (buttonMap.get(buttonType) == null) {
-			Button button = new Button(i18n.tr("Cancel"));
-			buttonMap.put(buttonType, button);
+	private void ensureButtonExists() {
+		if (this.button == null) {
+			this.button = new Button(i18n.tr("Cancel"));
 			button.setPrefWidth(100);
-			contentPane.getChildren().add(button);
+			contentPane.getChildren().add(this.button);
 			Pane spacePane = new Pane();
 			spacePane.setPrefHeight(3);
 			spacePane.setMinHeight(3);

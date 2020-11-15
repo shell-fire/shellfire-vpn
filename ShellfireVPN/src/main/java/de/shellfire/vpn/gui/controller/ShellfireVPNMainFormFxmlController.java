@@ -648,7 +648,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 			try {
 				
 				connectProgressDialog = ProgressDialogController.getInstance(i18n.tr("Connection is being processed..."), task, this.application.getStage(), true);
-				connectProgressDialog.getButton(ProgressButtonType.Right).setOnAction(new EventHandler<javafx.event.ActionEvent>() {
+				connectProgressDialog.getButton().setOnAction(new EventHandler<javafx.event.ActionEvent>() {
 
 					@Override
 					public void handle(javafx.event.ActionEvent event) {
@@ -930,7 +930,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
 			abortItem = new MenuItem(i18n.tr("Abort"));
 			ActionListener abortListener = (ActionEvent e) -> {
-				connectProgressDialog.getButton(ProgressButtonType.Right).fire();
+				connectProgressDialog.getButton().fire();
 			};
 
 			abortItem.addActionListener(abortListener);
