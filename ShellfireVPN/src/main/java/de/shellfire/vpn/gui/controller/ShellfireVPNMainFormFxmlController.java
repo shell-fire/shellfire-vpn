@@ -646,8 +646,8 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		Platform.setImplicitExit(false);
 		Platform.runLater(() -> {
 			try {
-
-				connectProgressDialog = ProgressDialogController.getInstance("Connecting ...", task, this.application.getStage(), true);
+				
+				connectProgressDialog = ProgressDialogController.getInstance(i18n.tr("Connection is being processed..."), task, this.application.getStage(), true);
 				connectProgressDialog.getButton(ProgressButtonType.Right).setOnAction(new EventHandler<javafx.event.ActionEvent>() {
 
 					@Override
@@ -820,9 +820,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		this.connectionSubviewController.connectButtonDisable(true);
 		this.serverListSubviewController.setConnetImage1Disable(true);
 
-		// TODO_subview
-
-		// this.connectionStatusValue.setText(i18n.tr("Connection is being processed..."));
 		Platform.runLater(() -> {
 			this.connectionStatusValue.setText(i18n.tr("Connection is being processed..."));
 			this.globeConnectionImageView.setImage(Util.getImageIconFX("/icons/small-globe-connecting.png"));
@@ -833,10 +830,8 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 			this.trayIcon.setImage(this.iconConnecting);
 		}
 		this.setWaitCursor();
-		// TODO find FX equivalant variable
-		// this.jConnectionStateIcon.setIcon(new ImageIcon(this.iconConnectingSmall));
 
-		popupConnectItem.setLabel(i18n.tr("Connecting..."));
+		popupConnectItem.setLabel(i18n.tr("Connection is being processed..."));
 		popupConnectItem.setEnabled(false);
 		popup.add(abortItem);
 		serverListSubviewController.getServerListTableView().disableProperty().set(true);
