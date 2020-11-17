@@ -20,7 +20,6 @@ import org.xnap.commons.i18n.I18n;
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.i18n.VpnI18N;
-import de.shellfire.vpn.types.Reason;
 import de.shellfire.vpn.webservice.Response;
 import de.shellfire.vpn.webservice.WebService;
 import de.shellfire.vpn.webservice.model.LoginResponse;
@@ -28,7 +27,6 @@ import javafx.application.HostServices;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
@@ -91,7 +89,7 @@ public class RegisterFormController extends AnchorPane implements Initializable 
 	public static final String REG_PASS = "pass";
 	public static final String REG_USER = "user";
 	WebService service;
-	private ProgressDialogController progressDialog;
+	private ProgressDialogRegisterController progressDialog;
 	private String activationToken;
 	private LoginForms application;
 	private boolean isResend = false;
@@ -300,9 +298,6 @@ public class RegisterFormController extends AnchorPane implements Initializable 
 		}
 	}
 
-	private void hideProgress() {
-		progressDialog.getDialogStage().hide();
-	}
 
 	class RequestNewAccountTask extends Task<Void> {
 
@@ -327,7 +322,6 @@ public class RegisterFormController extends AnchorPane implements Initializable 
 		@Override
 		protected void succeeded() {
 			super.succeeded(); // To change body of generated methods, choose Tools | Templates.
-			hideProgress();
 			if (activationToken != null) {
 				waitForActivation();
 			}
@@ -337,7 +331,10 @@ public class RegisterFormController extends AnchorPane implements Initializable 
 	// needs a swing pane for successful execution.
 	private void waitForActivation() {
 		
-		
+				poller = new RegisterFormController.AccountActiveServicePollerTask();
+				Thread t = new Thread(poller);
+				t.start();
+				
 		// What does this do?
 		// - displayed indefinite ProgrssBar, wait for user background action = click email link to perform
 		// - automatically disappear and continue process when this is done 
@@ -422,7 +419,6 @@ public class RegisterFormController extends AnchorPane implements Initializable 
 
 		@Override
 		protected void succeeded() {
-			// super.succeeded(); //To change body of generated methods, choose Tools | Templates.
 			if (accountActive) {
 				activationSuccesful();
 			}
@@ -446,8 +442,7 @@ public class RegisterFormController extends AnchorPane implements Initializable 
 
 	private void showRequestProgress() {
 		try {
-			this.progressDialog = ProgressDialogController.getInstance(i18n.tr("Requesting activation key..."), null, LoginForms.getStage(),
-					false);
+			this.progressDialog = ProgressDialogRegisterController.getInstance(LoginForms.getStage());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
