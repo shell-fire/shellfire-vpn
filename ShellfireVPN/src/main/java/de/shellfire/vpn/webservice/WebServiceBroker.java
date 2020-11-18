@@ -322,13 +322,13 @@ public class WebServiceBroker {
 	/*
 	 * Response to registration is in same format as login -> either error status with messages or a token to login with.
 	 */
-	public Response<LoginResponse> register(String email, String password, int subscribeToNewsletter)
+	public Response<LoginResponse> register(String email, String password, int subscribeToNewsletter, int resend)
 			throws ClientProtocolException, IOException, VpnException {
-		log.debug("register ({}, {}, {}) - start", email, password, subscribeToNewsletter);
+		log.debug("register ({}, {}, {}, {}) - start", email, password, subscribeToNewsletter, resend);
 
 		String lang = getLangKey();
 
-		RegisterRequest request = new RegisterRequest(lang, email, password, subscribeToNewsletter);
+		RegisterRequest request = new RegisterRequest(lang, email, password, subscribeToNewsletter, resend);
 
 		Type theType = new TypeToken<Response<LoginResponse>>() {
 		}.getType();

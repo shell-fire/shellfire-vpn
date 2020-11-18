@@ -92,12 +92,12 @@ public class RegisterFormController extends AnchorPane implements Initializable 
 	private ProgressDialogRegisterController progressDialog;
 	private String activationToken;
 	private LoginForms application;
-	private boolean isResend = false;
 	private boolean accountActive = false;
 	private RegisterFormController.AccountActiveServicePollerTask poller;
 	private static I18n i18n = VpnI18N.getI18n();
 
 	WebViewHyperlinkListener eventPrintingListener;
+	private boolean isResend;
 
 	public RegisterFormController() {
 		System.out.println("*********No arg constructor was used");
@@ -168,7 +168,7 @@ public class RegisterFormController extends AnchorPane implements Initializable 
 	}
 
 	private String getUser() {
-		return emailLabel.getText();
+		return emailTextField.getText();
 	}
 
 	// application has been declared final,
@@ -276,7 +276,7 @@ public class RegisterFormController extends AnchorPane implements Initializable 
 	}
 
 	@FXML
-	private void handleRegisterButton(ActionEvent event) {
+	protected void handleRegisterButton(ActionEvent event) {
 		if (validateForm()) {
 			this.showRequestProgress();
 			RequestNewAccountTask task = new RequestNewAccountTask();
@@ -304,12 +304,12 @@ public class RegisterFormController extends AnchorPane implements Initializable 
 		@Override
 		protected Void call() throws Exception {
 			Response<LoginResponse> registrationResult = service.registerNewFreeAccount(emailTextField.getText(), passwordField.getText(),
-					newsLetterCheckBox.isSelected());
+					newsLetterCheckBox.isSelected(), isResend);
 			if (registrationResult.isSuccess()) {
 				activationToken = registrationResult.getData().getToken();
 			} else {
 				if (progressDialog != null) {
-					progressDialog.getDialogStage().show();
+					ProgressDialogRegisterController.getDialogStage().show();
 				}
 				Alert alert = new Alert(Alert.AlertType.ERROR);
 				alert.setHeaderText(i18n.tr("Error"));
@@ -321,7 +321,7 @@ public class RegisterFormController extends AnchorPane implements Initializable 
 
 		@Override
 		protected void succeeded() {
-			super.succeeded(); // To change body of generated methods, choose Tools | Templates.
+			super.succeeded();
 			if (activationToken != null) {
 				waitForActivation();
 			}
@@ -330,75 +330,13 @@ public class RegisterFormController extends AnchorPane implements Initializable 
 
 	// needs a swing pane for successful execution.
 	private void waitForActivation() {
-		
-				poller = new RegisterFormController.AccountActiveServicePollerTask();
-				Thread t = new Thread(poller);
-				t.start();
-				
-		// What does this do?
-		// - displayed indefinite ProgrssBar, wait for user background action = click email link to perform
-		// - automatically disappear and continue process when this is done 
-		// -> this is the job of "poller", which polls regularly the backend for activation-status
-		// offer 2 buttons:
-		// left button: change email address -> basically back to previous form
-		// rigth button: request email again in case not arrived (under same email address)
-		// some additional texts here and there
-		// 
-		// as this is the only use case really for such a generic progress bar, it might be easier to just 
-		// specifically design this one in the FX Editor and use a dedicated controller, rather then the generic ProgressBarController...
-		
-		
-/*
-		Platform.runLater(() -> {
-			try {
+		if (poller != null) {
+			poller.stopIt();
+		}
 
-				task =
-
-						progressDialog = ProgressDialogController.getInstance(
-								i18n.tr("You have just received an email from the Shellfire VPN system, please follow the instructions in this email."),
-								task, this.application.getStage(), true);
-				connectProgressDialog.getButton().setOnAction(new EventHandler<javafx.event.ActionEvent>() {
-
-					@Override
-					public void handle(javafx.event.ActionEvent event) {
-						controller.disconnect(Reason.DisconnectButtonPressed);
-						task.cancel(true);
-						log.debug("showConnectProgress: Cancel button clicked");
-					}
-				});
-			} catch (IOException ex) {
-				log.debug("connectFromButton. Error is " + ex.getMessage());
-				ex.printStackTrace(System.out);
-			}
-		});
-
-		this.progressDialog.addInfo(i18n.tr("Waiting for account activation..."));
-		this.progressDialog.addBottomText(i18n.tr("No email received?"));
-		this.progressDialog.setOption(ProgressButtonType.Left, i18n.tr("Request new email"), 30);
-		this.progressDialog.setOption(ProgressButtonType.Right, i18n.tr("Change email address"), 30);
-		this.progressDialog.setOptionCallback(new Runnable() {
-
-			@Override
-			public void run() {
-				if (poller != null) {
-					poller.stopIt();
-				}
-				if (progressDialog.isOption1()) {
-					progressDialog.setVisible(false);
-					isResend = true;
-					jButtonRequestRegKeyActionPerformed(null);
-				} else if (progressDialog.isOption2()) {
-					progressDialog.setVisible(false);
-					isResend = false;
-					JOptionPane.showMessageDialog(null, i18n.tr("Please select a different email address and try again."),
-							i18n.tr("Change email address"), JOptionPane.INFORMATION_MESSAGE);
-				}
-			}
-		});
-		this.progressDialog.setVisible(true);
-		poller = new RegisterForm.AccountActiveServicePollerTask();
-		poller.execute();
-*/
+		poller = new RegisterFormController.AccountActiveServicePollerTask();
+		Thread t = new Thread(poller);
+		t.start();
 	}
 
 	class AccountActiveServicePollerTask extends Task<Void> {
@@ -427,7 +365,7 @@ public class RegisterFormController extends AnchorPane implements Initializable 
 
 	private void activationSuccesful() {
 		this.progressDialog.getDialogStage().show();
-		// bringToFront();
+
 		Alert alert = new Alert(Alert.AlertType.INFORMATION,
 				i18n.tr("Your Shellfire account has been successfully activated. Please log in with your email address and password to start Shellfire VPN."),
 				ButtonType.OK);
@@ -438,14 +376,31 @@ public class RegisterFormController extends AnchorPane implements Initializable 
 		LoginForms.instance.setPassword(this.getPassword());
 		LoginForms.instance.setAutoLogin(false);
 		this.application.getStage().show();
+		this.application.getStage().setAlwaysOnTop(true);
+		this.application.getStage().setAlwaysOnTop(false);
+		this.application.getStage().toFront();
 	}
 
 	private void showRequestProgress() {
 		try {
-			this.progressDialog = ProgressDialogRegisterController.getInstance(LoginForms.getStage());
+			this.progressDialog = ProgressDialogRegisterController.getInstance(LoginForms.getStage(), this);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		this.progressDialog.getDialogStage().show();
+		ProgressDialogRegisterController.getDialogStage().show();
+	}
+
+	public void requestEmailAgain() {
+		this.isResend = true;
+		handleRegisterButton(null);
+		
+	}
+
+	public void stopWaitForActivationAndHide() {
+		if (poller != null) {
+			poller.stopIt();
+		}
+		this.isResend = false;
+		ProgressDialogRegisterController.getDialogStage().hide();
 	}
 }
