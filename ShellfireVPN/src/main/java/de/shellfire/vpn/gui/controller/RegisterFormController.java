@@ -6,6 +6,7 @@
 package de.shellfire.vpn.gui.controller;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -15,6 +16,7 @@ import org.apache.commons.validator.GenericValidator;
 import org.codefx.libfx.control.webview.WebViewHyperlinkListener;
 import org.codefx.libfx.control.webview.WebViews;
 import org.slf4j.Logger;
+import org.w3c.dom.Document;
 import org.xnap.commons.i18n.I18n;
 
 import de.shellfire.vpn.Util;
@@ -25,6 +27,8 @@ import de.shellfire.vpn.webservice.WebService;
 import de.shellfire.vpn.webservice.model.LoginResponse;
 import javafx.application.HostServices;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -98,6 +102,7 @@ public class RegisterFormController extends AnchorPane implements Initializable 
 
 	WebViewHyperlinkListener eventPrintingListener;
 	private boolean isResend;
+	private WebEngine webEngine;
 
 	public RegisterFormController() {
 		System.out.println("*********No arg constructor was used");
@@ -139,13 +144,15 @@ public class RegisterFormController extends AnchorPane implements Initializable 
 		this.registerBackLabel.setText(i18n.tr("back"));
 
 		// Load web content to webView
-		WebEngine webEngine = policyWebView.getEngine();
-		String webContent = "<html>" + "  <body>"
+		webEngine = policyWebView.getEngine();
+		
+		String webContent = "<html>" + "  <body style='background-color: rgb(240,240,240);font-family:System; font-size:14px'>"
 				+ i18n.tr(
-						"I accept the <a onclick='return false;' target='_agb' href='https://www.shellfire.de/agb/'>Terms and Conditions</a> and have read and noted the <a onclick='return false;' target='_datenschutzerklaerung' href='https://www.shellfire.de/datenschutzerklaerung/'>Privacy Policy</a> <br /> and the <a onclick='return false;' target='_widerrufsrecht' href='https://www.shellfire.de/widerrufsrecht/'>Right of Withdrawal</a>.")
+						"I accept the <a onclick='return false;' target='_agb' href='https://www.shellfire.de/agb/'>Terms and Conditions</a> and have read and noted the <a onclick='return false;' target='_datenschutzerklaerung' href='https://www.shellfire.de/datenschutzerklaerung/'>Privacy Policy</a> and the <a onclick='return false;' target='_widerrufsrecht' href='https://www.shellfire.de/widerrufsrecht/'>Right of Withdrawal</a>.")
 				+ "  </body>" + "</html>";
 		webEngine.loadContent(webContent);
 
+		
 		HostServices hostServices = (HostServices) this.application.getStage().getProperties().get("hostServices");
 
 		eventPrintingListener = event -> {
