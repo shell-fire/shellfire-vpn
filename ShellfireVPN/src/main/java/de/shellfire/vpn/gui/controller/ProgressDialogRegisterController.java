@@ -163,7 +163,7 @@ public class ProgressDialogRegisterController extends AnchorPane implements Init
 						instance.changeEmailAddressButton.setDisable(false);
 					}
 					
-				}, 5000);
+				}, 30000);
 			});
 
 			
