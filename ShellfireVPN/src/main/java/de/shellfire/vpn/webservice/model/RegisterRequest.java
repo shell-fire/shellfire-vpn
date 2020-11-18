@@ -6,12 +6,14 @@ public class RegisterRequest {
 	private String password;
 	private String email;
 	private String language;
+	private int resend;
 
-	public RegisterRequest(String lang, String email, String password, int subscribeToNewsletter) {
+	public RegisterRequest(String lang, String email, String password, int subscribeToNewsletter, int resend) {
 		this.language = lang;
 		this.email = email;
 		this.password = password;
 		this.newsletter = subscribeToNewsletter;
+		this.resend = resend;
 	}
 
 	public int getSubscribeToNewsletter() {
@@ -20,6 +22,14 @@ public class RegisterRequest {
 
 	public void setSubscribeToNewsletter(int subscribeToNewsletter) {
 		this.newsletter = subscribeToNewsletter;
+	}
+
+	public int getResend() {
+		return resend;
+	}
+
+	public void setResend(int resend) {
+		this.resend = resend;
 	}
 
 	public String getPassword() {

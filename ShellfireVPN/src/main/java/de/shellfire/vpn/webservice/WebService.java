@@ -317,12 +317,18 @@ public class WebService {
 	}
 
 	public Response<LoginResponse> registerNewFreeAccount(final String text, final String password, boolean subscribeNewsletter) {
+		return registerNewFreeAccount(text, password, subscribeNewsletter, false);
+	}
+			
+	
+	public Response<LoginResponse> registerNewFreeAccount(final String text, final String password, boolean subscribeNewsletter, boolean isResend) {
 		init();
 
 		final int subscribe = subscribeNewsletter ? 1 : 0;
+		final int resend = isResend ? 1 : 0;
 		Response<LoginResponse> result = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<Response<LoginResponse>>() {
 			public Response<LoginResponse> run() throws Exception {
-				return shellfire.register(text, password, subscribe);
+				return shellfire.register(text, password, subscribe, resend);
 			}
 		}, 3, 100);
 

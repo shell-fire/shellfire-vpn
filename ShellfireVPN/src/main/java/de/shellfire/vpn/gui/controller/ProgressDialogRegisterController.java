@@ -57,6 +57,7 @@ public class ProgressDialogRegisterController extends AnchorPane implements Init
 	
 	@FXML
 	private Pane contentPane;
+	private RegisterFormController registerFormController;
 	private static final Logger log = Util.getLogger(ProgressDialogRegisterController.class.getCanonicalName());
 
 	public ProgressDialogRegisterController() {
@@ -123,33 +124,33 @@ public class ProgressDialogRegisterController extends AnchorPane implements Init
 	@FXML
 	private void onChangeEmailAddressButtonAction() {
 		Platform.runLater(() -> {
-			Alert alert = new Alert(Alert.AlertType.ERROR);
-			alert.setHeaderText(i18n.tr("Error"));
-			alert.setContentText("onChangeEmailAddressButtonAction");
+			registerFormController.stopWaitForActivationAndHide();
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			alert.setHeaderText(i18n.tr("Please enter a different email-address and try again."));
 			alert.showAndWait();
-
 		});
 	}	
 	
 	@FXML
 	private void onRequestNewEmailButtonAction() {
 		Platform.runLater(() -> {
-			Alert alert = new Alert(Alert.AlertType.ERROR);
-			alert.setHeaderText(i18n.tr("Error"));
-			alert.setContentText("onRequestNewEmailButtonAction");
+			registerFormController.requestEmailAgain();
+			Alert alert = new Alert(Alert.AlertType.INFORMATION);
+			alert.setHeaderText(i18n.tr("We sent you the email again."));
 			alert.showAndWait();
-
 		});
 	}	
 
-	/** call with Poller task */
-	public static ProgressDialogRegisterController getInstance(Window owner) throws IOException {
+	/** call with Poller task 
+	 * @param registerFormController */
+	public static ProgressDialogRegisterController getInstance(Window owner, RegisterFormController registerFormController) throws IOException {
 		if (instance == null) {
 			// Load the fxml file and create a new stage for the popup dialog.
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(LoginForms.class.getResource("/fxml/ProgressDialogRegister.fxml"));
 			AnchorPane page = (AnchorPane) loader.load();
 			instance = (ProgressDialogRegisterController) loader.getController();
+			instance.setRegisterForm(registerFormController);
 			instanceStage.initOwner(owner);
 			Scene scene = new Scene(page);
 			instanceStage.setScene(scene);
@@ -162,13 +163,18 @@ public class ProgressDialogRegisterController extends AnchorPane implements Init
 						instance.changeEmailAddressButton.setDisable(false);
 					}
 					
-				}, 30000);
+				}, 5000);
 			});
 
 			
 			log.debug("ProgressDialogRegisterController instance and Stage created");
 		}
 		return instance;
+	}
+
+	private void setRegisterForm(RegisterFormController registerFormController) {
+		this.registerFormController = registerFormController;
+		
 	}
 
 }
