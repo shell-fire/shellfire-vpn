@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.concurrent.ExecutionException;
 
 import org.apache.commons.io.input.Tailer;
 import org.apache.commons.io.input.TailerListenerAdapter;
@@ -151,32 +152,40 @@ public class LogViewerFxmlController implements Initializable {
 		this.application = app;
 	}
 
-	public class SendLogTask extends Task<Void> {
-
-		private boolean finished = false;
+	public class SendLogTask extends Task<Boolean> {
 
 		@Override
-		protected Void call() throws Exception {
+		protected Boolean call() throws Exception {
 			// throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools |
 			// Templates.
 			log.debug("sending logs to shellfire");
 			WebService service = WebService.getInstance();
-			service.sendLogToShellfire();
-			finished = true;
-			return null;
+			
+			return service.sendLogToShellfire();
 		}
 
 		@Override
 		protected void succeeded() {
-			// super.succeeded(); //To change body of generated methods, choose Tools | Templates.
-			if (finished == true) {
-				sendLogProgressDialog.getDialogStage().hide();
+			Boolean result = false;
+			
+			try {
+				result = get();
+			} catch (InterruptedException e) {
+				log.error("Could not retrieve result", e);
+			} catch (ExecutionException e) {
+				log.error("Could not retrieve result", e);
+				e.printStackTrace();
+			}
+			
+			sendLogProgressDialog.getDialogStage().hide();
+			if (result == true) {
 				Alert alert = new Alert(Alert.AlertType.INFORMATION, i18n.tr("Log sent."));
 				alert.show();
+			} else {
+				Alert alert = new Alert(Alert.AlertType.ERROR, i18n.tr("Could not sent log."));
+				alert.show();
 			}
-			finished = false;
 		}
-
 	}
 
 	public static Stage getInstanceStage() {
