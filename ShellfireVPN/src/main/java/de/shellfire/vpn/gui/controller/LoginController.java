@@ -282,10 +282,8 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 		this.headerImageView.setImage(Util.getImageIconFX("/icons/sf_en.png"));
 		this.exitImageView.setImage(Util.getImageIconFX("/icons/exit.png"));
 		this.fLabelUsername.setText(i18n.tr("Email / Username:"));
-		this.fLabelUsername.setFont(Font.font("Arial", Util.getFontSize()));
 
 		this.fLabelPassword.setText(i18n.tr("Password:"));
-		this.fLabelPassword.setFont(Font.font("Arial", Util.getFontSize()));
 
 		this.fAutoLogin.setText(i18n.tr("Login automatically"));
 
@@ -296,8 +294,6 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 		this.fButtonLogin.setText(i18n.tr("Login"));
 		this.loginLabel.setText(i18n.tr("Login"));
 		this.fAutoStart.setText(i18n.tr("Start on boot"));
-		this.fLabelUsername.setFont(new Font("Arial", Util.getFontSize()));
-		this.fLabelPassword.setFont(new Font("Arial", Util.getFontSize()));
 		this.fAutoconnect.setText(i18n.tr("Connect automatically"));
 
 		this.fStoreLoginData.setText(i18n.tr("Save login data"));

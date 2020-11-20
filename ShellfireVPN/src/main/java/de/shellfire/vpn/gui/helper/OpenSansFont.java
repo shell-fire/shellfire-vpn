@@ -25,12 +25,12 @@ public class OpenSansFont {
 			if (is == null)
 				throw new Exception("is not available");
 
-			font = Font.createFont(Font.TRUETYPE_FONT, is).deriveFont((float) Util.getFontSize());
+			font = Font.createFont(Font.TRUETYPE_FONT, is);
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			System.err.println(fName + " not loaded.  Using serif font.");
-			font = new Font("serif", Font.PLAIN, Util.getFontSize());
+			font = new Font("serif", Font.PLAIN, 12);
 		}
 		return font;
 	}

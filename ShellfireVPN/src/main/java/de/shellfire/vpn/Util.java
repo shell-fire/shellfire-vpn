@@ -739,16 +739,6 @@ public class Util {
 		return scaleImageFx(image, width, height, false);
 	}
 
-	public static int getFontSize() {
-		float baseSize = 12;
-		if (!isWindows()) {
-			return (int) baseSize;
-		}
-
-		int screenRes = Toolkit.getDefaultToolkit().getScreenResolution();
-		int fontSize = (int) Math.round(baseSize * screenRes / 72.0);
-		return fontSize;
-	}
 
 	public static void chmod(String filePath, String permissions) {
 		String[] params = new String[] { "/bin/chmod", "-R", permissions, filePath };

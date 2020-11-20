@@ -27,7 +27,7 @@ public class OxygenFont {
 				if (is == null)
 					throw new Exception("is not available");
 
-				regular = Font.createFont(Font.TRUETYPE_FONT, is).deriveFont(new Float(Util.getFontSize()));
+				regular = Font.createFont(Font.TRUETYPE_FONT, is);
 
 			} catch (Exception ex) {
 				ex.printStackTrace();
@@ -39,11 +39,4 @@ public class OxygenFont {
 		return regular;
 	}
 
-	public static Font getFontLargeBold() {
-		if (largeBold == null) {
-			largeBold = getFont().deriveFont(Font.BOLD, (float) (Util.getFontSize() * 1.25));
-		}
-
-		return largeBold;
-	}
 }
