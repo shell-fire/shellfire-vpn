@@ -121,7 +121,7 @@ public class LogViewerFxmlController implements Initializable {
 
 		if (sendLogProgressDialog == null) {
 			try {
-				sendLogProgressDialog = ProgressDialogController.getInstance(i18n.tr("Upload log.."), sendLogTask, instanceStage, true);
+				sendLogProgressDialog = ProgressDialogController.getInstance(i18n.tr("Uploading log.."), sendLogTask, instanceStage, true);
 				sendLogProgressDialog.setButtonText(i18n.tr("Cancel"));
 
 			} catch (IOException ex) {
@@ -137,6 +137,7 @@ public class LogViewerFxmlController implements Initializable {
 					Alert alert = new Alert(Alert.AlertType.INFORMATION, i18n.tr("Log upload cancelled."));
 					alert.show();
 					if (sendLogTask != null && !sendLogTask.isDone()) {
+						log.debug("Calling sendLogTask.cancel(true) to cancel uploading");
 						sendLogTask.cancel(true);
 					}
 				}
@@ -161,7 +162,9 @@ public class LogViewerFxmlController implements Initializable {
 			log.debug("sending logs to shellfire");
 			WebService service = WebService.getInstance();
 			
-			return service.sendLogToShellfire();
+			Boolean result = service.sendLogToShellfire(); 
+			log.debug("sendLogToShellfire - result: " + result);
+			return result;
 		}
 
 		@Override
@@ -178,13 +181,20 @@ public class LogViewerFxmlController implements Initializable {
 			}
 			
 			sendLogProgressDialog.getDialogStage().hide();
-			if (result == true) {
-				Alert alert = new Alert(Alert.AlertType.INFORMATION, i18n.tr("Log sent."));
-				alert.show();
-			} else {
+			if (result == null || result == false) {
 				Alert alert = new Alert(Alert.AlertType.ERROR, i18n.tr("Could not sent log."));
 				alert.show();
+			} else {
+				Alert alert = new Alert(Alert.AlertType.INFORMATION, i18n.tr("Log sent."));
+				alert.show();
 			}
+		}
+		
+		public boolean cancel(boolean mayInterruptIfRunning) {
+			WebService.getInstance().cancelSendLogToShellfire();
+			
+			return super.cancel(mayInterruptIfRunning);
+			
 		}
 	}
 

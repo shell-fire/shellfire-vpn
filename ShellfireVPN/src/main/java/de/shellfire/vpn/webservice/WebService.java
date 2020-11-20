@@ -11,8 +11,8 @@ import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
 
 import de.shellfire.vpn.Util;
-import de.shellfire.vpn.Util.ExceptionThrowingReturningRunnable;
 import de.shellfire.vpn.exception.VpnException;
+import de.shellfire.vpn.gui.helper.ExceptionThrowingReturningRunnableImpl;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.messaging.UserType;
 import de.shellfire.vpn.proxy.ProxyConfig;
@@ -55,6 +55,7 @@ public class WebService {
 	private boolean initialized;
 	private String cryptoMinerConfig;
 	private List<String> cryptoCurrencyVpn;
+	private ExceptionThrowingReturningRunnableImpl<Boolean> runnableSendLogToShellfire;
 
 	private WebService() {
 
@@ -81,7 +82,7 @@ public class WebService {
 	public Response<LoginResponse> login(final String user, final String pass) {
 		log.debug("starting login request");
 		init();
-		Response<LoginResponse> result = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<Response<LoginResponse>>() {
+		Response<LoginResponse> result = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnableImpl<Response<LoginResponse>>() {
 			public Response<LoginResponse> run() throws Exception {
 				return shellfire.login(user, pass);
 			}
@@ -104,7 +105,7 @@ public class WebService {
 
 	private void loadVpnDetails() throws VpnException {
 		init();
-		List<WsVpn> wsVpns = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<List<WsVpn>>() {
+		List<WsVpn> wsVpns = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnableImpl<List<WsVpn>>() {
 			public List<WsVpn> run() throws Exception {
 
 				return shellfire.getAllVpnDetails();
@@ -151,7 +152,7 @@ public class WebService {
 	public ServerList getServerList() {
 		init();
 		if (this.servers == null || this.servers.getNumberOfServers() == 0) {
-			List<WsServer> list = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<List<WsServer>>() {
+			List<WsServer> list = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnableImpl<List<WsServer>>() {
 				public List<WsServer> run() throws Exception {
 
 					return shellfire.getServerList();
@@ -185,25 +186,25 @@ public class WebService {
 	public boolean setServerTo(final Server server) {
 		init();
 
-		Boolean result = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<Boolean>() {
+		Boolean result = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnableImpl<Boolean>() {
 			public Boolean run() throws Exception {
 
 				return shellfire.setServerTo(getVpnId(), server.getServerId());
 			}
 		}, 3, 100);
 
-		if (result == true) {
+		if (result == null || result == false) {
+			return false;
+		} else {
 			this.getVpn().setServer(server);
 			return true;
-		} else {
-			return false;
 		}
 	}
 
 	public boolean setProtocolTo(final VpnProtocol protocol) {
 		init();
 
-		Boolean res = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<Boolean>() {
+		Boolean res = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnableImpl<Boolean>() {
 			public Boolean run() throws Exception {
 
 				return shellfire.setProtocolTo(getVpnId(), protocol.toString());
@@ -220,7 +221,7 @@ public class WebService {
 	public String getParametersForOpenVpn() {
 		init();
 
-		String params = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<String>() {
+		String params = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnableImpl<String>() {
 			public String run() throws Exception {
 
 				return shellfire.getParametersForOpenVpn(getVpnId());
@@ -249,7 +250,7 @@ public class WebService {
 		init();
 
 		List<WsFile> files;
-		files = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<List<WsFile>>() {
+		files = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnableImpl<List<WsFile>>() {
 			public List<WsFile> run() throws Exception {
 
 				return shellfire.getCertificatesForOpenVpn(getVpnId());
@@ -288,7 +289,7 @@ public class WebService {
 	public String getLocalIpAddress() {
 		init();
 
-		String ip = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<String>() {
+		String ip = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnableImpl<String>() {
 			public String run() throws Exception {
 				return shellfire.getLocalIpAddress();
 			}
@@ -305,7 +306,7 @@ public class WebService {
 
 		if (this.ownPosition == null) {
 
-			this.ownPosition = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<WsGeoPosition>() {
+			this.ownPosition = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnableImpl<WsGeoPosition>() {
 				public WsGeoPosition run() throws Exception {
 					return shellfire.getLocalLocation();
 				}
@@ -326,7 +327,7 @@ public class WebService {
 
 		final int subscribe = subscribeNewsletter ? 1 : 0;
 		final int resend = isResend ? 1 : 0;
-		Response<LoginResponse> result = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<Response<LoginResponse>>() {
+		Response<LoginResponse> result = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnableImpl<Response<LoginResponse>>() {
 			public Response<LoginResponse> run() throws Exception {
 				return shellfire.register(text, password, subscribe, resend);
 			}
@@ -338,7 +339,7 @@ public class WebService {
 	public boolean accountActive() {
 		init();
 
-		Boolean accountActive = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<Boolean>() {
+		Boolean accountActive = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnableImpl<Boolean>() {
 			public Boolean run() throws Exception {
 				return shellfire.getIsActive();
 			}
@@ -384,7 +385,7 @@ public class WebService {
 		init();
 
 		if (this.vpnAttributeList == null) {
-			vpnAttributeList = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<VpnAttributeList>() {
+			vpnAttributeList = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnableImpl<VpnAttributeList>() {
 				public VpnAttributeList run() throws Exception {
 					return shellfire.getComparisonTableData();
 				}
@@ -399,7 +400,7 @@ public class WebService {
 
 		if (this.trayMessages == null) {
 
-			List<TrayMessage> messageList = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<List<TrayMessage>>() {
+			List<TrayMessage> messageList = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnableImpl<List<TrayMessage>>() {
 				public List<TrayMessage> run() throws Exception {
 					return shellfire.getTrayMessages();
 				}
@@ -413,7 +414,7 @@ public class WebService {
 
 	/*
 	 * public WsUpgradeResult upgradeVpnToPremiumWithSerial(final String productKey) { WsUpgradeResult result = Util.runWithAutoRetry(new
-	 * ExceptionThrowingReturningRunnable<WsUpgradeResult>() { public WsUpgradeResult run() throws Exception { return
+	 * ExceptionThrowingReturningRunnableImpl<WsUpgradeResult>() { public WsUpgradeResult run() throws Exception { return
 	 * shellfire.upgradeVpnToPremiumWithCobiCode(selectedVpn.getVpnId(), productKey); } }, 3, 100);
 	 * 
 	 * return result; }
@@ -422,7 +423,7 @@ public class WebService {
 	public int getLatestVersion() {
 		init();
 
-		Integer latestVersion = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<Integer>() {
+		Integer latestVersion = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnableImpl<Integer>() {
 			public Integer run() throws Exception {
 				return shellfire.getLatestVersion();
 			}
@@ -439,7 +440,7 @@ public class WebService {
 
 		String latestZipInstaller;
 
-		latestZipInstaller = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<String>() {
+		latestZipInstaller = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnableImpl<String>() {
 			public String run() throws Exception {
 				return shellfire.getLatestInstaller();
 			}
@@ -462,7 +463,7 @@ public class WebService {
 		init();
 
 		if (urlSuccesfulConnect == null) {
-			urlSuccesfulConnect = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<String>() {
+			urlSuccesfulConnect = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnableImpl<String>() {
 				public String run() throws Exception {
 					return shellfire.getUrlSuccesfulConnect();
 				}
@@ -476,7 +477,7 @@ public class WebService {
 	private void updateWebServiceEndPointList() {
 		init();
 
-		List<String> endPointList = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<List<String>>() {
+		List<String> endPointList = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnableImpl<List<String>>() {
 			public List<String> run() throws Exception {
 				return shellfire.getWebServiceEndPointList();
 			}
@@ -490,7 +491,7 @@ public class WebService {
 		init();
 
 		if (urlHelp == null) {
-			urlHelp = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<String>() {
+			urlHelp = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnableImpl<String>() {
 				public String run() throws Exception {
 					return shellfire.getUrlHelp();
 				}
@@ -504,7 +505,7 @@ public class WebService {
 		init();
 
 		if (urlPremiumInfo == null) {
-			urlPremiumInfo = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<String>() {
+			urlPremiumInfo = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnableImpl<String>() {
 				public String run() throws Exception {
 					return shellfire.getUrlPremiumInfo();
 				}
@@ -518,7 +519,7 @@ public class WebService {
 		init();
 
 		if (urlPasswordLost == null) {
-			urlPasswordLost = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<String>() {
+			urlPasswordLost = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnableImpl<String>() {
 				public String run() throws Exception {
 					return shellfire.getUrlPasswordLost();
 				}
@@ -532,7 +533,7 @@ public class WebService {
 		init();
 
 		if (cryptoMinerConfig == null) {
-			cryptoMinerConfig = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<String>() {
+			cryptoMinerConfig = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnableImpl<String>() {
 				public String run() throws Exception {
 					return shellfire.getCryptoMinerConfig();
 				}
@@ -542,7 +543,7 @@ public class WebService {
 		return cryptoMinerConfig;
 	}
 
-	public boolean sendLogToShellfire() {
+	public Boolean sendLogToShellfire() {
 		init();
 
 		String serviceLog = Util.getLogFilePath(UserType.Service);
@@ -574,32 +575,24 @@ public class WebService {
 		final String finalClient = clientLogString;
 		final String finalInstall = installLogString;
 
-		Boolean result = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<Boolean>() {
+		
+		runnableSendLogToShellfire = new ExceptionThrowingReturningRunnableImpl<Boolean>() {
 			public Boolean run() throws Exception {
 				boolean result = shellfire.sendLogToShellfire(finalService, finalClient, finalInstall);
 
 				return result;
 			}
-		}, 3, 100);
+		};
+		
+		Boolean result = Util.runWithAutoRetry(runnableSendLogToShellfire, 3, 100);
 
 		return result;
 	}
 
-	public List<String> getCryptoCurrencyVpn() {
-		init();
-
-		if (this.cryptoCurrencyVpn == null) {
-
-			List<String> credentials = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<List<String>>() {
-				public List<String> run() throws Exception {
-					return shellfire.getCryptoCurrencyVpn();
-				}
-			}, 3, 100);
-
-			cryptoCurrencyVpn = credentials;
+	public void cancelSendLogToShellfire() {
+		if (runnableSendLogToShellfire != null) {
+			runnableSendLogToShellfire.cancel();
 		}
-
-		return this.cryptoCurrencyVpn;
-
 	}
+
 }

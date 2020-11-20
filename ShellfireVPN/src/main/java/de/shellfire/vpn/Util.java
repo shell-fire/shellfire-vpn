@@ -45,6 +45,7 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.FileAppender;
 import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.gui.controller.ShellfireVPNMainFormFxmlController;
+import de.shellfire.vpn.gui.helper.ExceptionThrowingReturningRunnableImpl;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.messaging.UserType;
 import de.shellfire.vpn.service.IVpnRegistry;
@@ -364,18 +365,21 @@ public class Util {
 
 	public interface ExceptionThrowingReturningRunnable<T> {
 		public T run() throws Exception;
+
+		public boolean isCancellled();
+		public void cancel();
 	}
 
-	public static <T> T runWithAutoRetry(ExceptionThrowingReturningRunnable<T> runnable, int maxTries, int delayMs) {
+	public static <T> T runWithAutoRetry(ExceptionThrowingReturningRunnableImpl<T> runnable, int maxTries, int delayMs) {
 		return runWithAutoRetry(runnable, maxTries, delayMs, null);
 	}
 
-	public static <T> T runWithAutoRetry(ExceptionThrowingReturningRunnable<T> runnable, int maxTries, int delayMs, Class clazzToIgnore) {
+	public static <T> T runWithAutoRetry(ExceptionThrowingReturningRunnableImpl<T> runnable, int maxTries, int delayMs, Class clazzToIgnore) {
 		int numTries = 0;
 		Exception e = null;
 		T result;
 
-		while (numTries++ < maxTries) {
+		while (numTries++ < maxTries && !runnable.isCancellled()) {
 			if (numTries > 1)
 				log.debug("runWithAutoRetry(try " + numTries + " / " + maxTries);
 
@@ -497,7 +501,7 @@ public class Util {
 
 	public static boolean internetIsAvailable() {
 		log.debug("Testing if connection exists");
-		Boolean networkIsAvailable = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<Boolean>() {
+		Boolean networkIsAvailable = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnableImpl<Boolean>() {
 			public Boolean run() throws Exception {
 				List<String> siteList = new ArrayList<String>();
 				siteList.add("www.google.de");

@@ -189,7 +189,6 @@ class JsonHttpRequest<RequestType, ResponseType> {
 		log.debug("gson.toJson(payload)");
 		String params = gson.toJson(payload);
 
-		// TODO: anonymize the password
 		String logParams = "";
 		if (params != null) {
 			logParams = params.substring(0, Math.min(400, params.length()));
@@ -201,12 +200,19 @@ class JsonHttpRequest<RequestType, ResponseType> {
 		request.setEntity(body);
 
 		log.debug("executing http request");
+		
+		
 		HttpResponse result = null;
+
+		result = httpClient.execute(request);
+
+		/*
 		try {
 			result = httpClient.execute(request);
 		} catch (Exception e) {
 			log.error("validator error", e);
 		}
+		*/
 
 		log.debug("response received");
 
@@ -217,11 +223,6 @@ class JsonHttpRequest<RequestType, ResponseType> {
 		}
 
 		request.releaseConnection();
-
-		// TODO: REMOVE after testing
-		/*
-		 * JsonParser jp = new JsonParser(); JsonElement je = jp.parse(jsonResult); jsonResult = gson.toJson(je);
-		 */
 
 		log.debug("jsonResult of response: {}", jsonResult);
 

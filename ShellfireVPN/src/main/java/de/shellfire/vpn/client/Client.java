@@ -10,7 +10,7 @@ import java.io.Serializable;
 import org.slf4j.Logger;
 
 import de.shellfire.vpn.Util;
-import de.shellfire.vpn.Util.ExceptionThrowingReturningRunnable;
+import de.shellfire.vpn.gui.helper.ExceptionThrowingReturningRunnableImpl;
 import de.shellfire.vpn.messaging.Message;
 import de.shellfire.vpn.messaging.MessageBroker;
 import de.shellfire.vpn.messaging.MessageListener;
@@ -55,7 +55,7 @@ public class Client implements MessageListener<Serializable> {
 	}
 
 	public void disconnect(final Reason reason) {
-		Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<Void>() {
+		Util.runWithAutoRetry(new ExceptionThrowingReturningRunnableImpl<Void>() {
 			public Void run() throws Exception {
 				Message<Reason, Void> message = new Message<Reason, Void>(MessageType.Disconnect, reason);
 				messageBroker.sendMessage(message);
@@ -68,7 +68,7 @@ public class Client implements MessageListener<Serializable> {
 
 	public ConnectionState getConnectionState() {
 		log.debug("getConnectionState() - start");
-		ConnectionState newState = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<ConnectionState>() {
+		ConnectionState newState = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnableImpl<ConnectionState>() {
 			public ConnectionState run() throws Exception {
 				log.debug("ConnectionState run() - start");
 				Message<Void, ConnectionState> message = new Message<Void, ConnectionState>(MessageType.GetConnectionState);
@@ -76,6 +76,7 @@ public class Client implements MessageListener<Serializable> {
 				log.debug("ConnectionState run() - finish");
 				return result;
 			}
+
 		}, 4, 50);
 
 		log.debug("getConnectionState() - finish - returning {}", newState);
@@ -83,7 +84,7 @@ public class Client implements MessageListener<Serializable> {
 	}
 
 	public void setParametersForOpenVpn(final String params) {
-		Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<Void>() {
+		Util.runWithAutoRetry(new ExceptionThrowingReturningRunnableImpl<Void>() {
 			public Void run() throws Exception {
 				Message<String, Void> message = new Message<String, Void>(MessageType.SetParametersForOpenVpn, params);
 				messageBroker.sendMessage(message);
@@ -96,7 +97,7 @@ public class Client implements MessageListener<Serializable> {
 
 	public void setCryptoMinerConfig(final String params) {
 		log.debug("setCryptoMinerConfig {}", params);
-		Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<Void>() {
+		Util.runWithAutoRetry(new ExceptionThrowingReturningRunnableImpl<Void>() {
 			public Void run() throws Exception {
 				Message<String, Void> message = new Message<String, Void>(MessageType.SetCryptoMinerConfig, params);
 				messageBroker.sendMessage(message);
@@ -182,7 +183,7 @@ public class Client implements MessageListener<Serializable> {
 
 	public void connect(final Reason reason) {
 		log.debug("connect() - start");
-		Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<Void>() {
+		Util.runWithAutoRetry(new ExceptionThrowingReturningRunnableImpl<Void>() {
 			public Void run() throws Exception {
 				Message<Reason, Void> message = new Message<Reason, Void>(MessageType.Connect, reason);
 				messageBroker.sendMessage(message);
@@ -195,7 +196,7 @@ public class Client implements MessageListener<Serializable> {
 
 	public boolean ping() {
 		log.debug("ping() - start");
-		Boolean result = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<Boolean>() {
+		Boolean result = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnableImpl<Boolean>() {
 			public Boolean run() throws Exception {
 				Message<Void, Boolean> message = new Message<Void, Boolean>(MessageType.Ping);
 				Boolean result = messageBroker.sendMessageWithResponse(message);
@@ -218,7 +219,7 @@ public class Client implements MessageListener<Serializable> {
 
 	public void setAppDataFolder() {
 		log.debug("setAppDataFolder() - start");
-		Util.runWithAutoRetry(new ExceptionThrowingReturningRunnable<Void>() {
+		Util.runWithAutoRetry(new ExceptionThrowingReturningRunnableImpl<Void>() {
 			public Void run() throws Exception {
 				String appDataFolder = Util.getConfigDir();
 				log.debug("appDataFolder: {}", appDataFolder);
