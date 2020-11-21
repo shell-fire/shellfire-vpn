@@ -22,6 +22,7 @@
     <maxVersion></maxVersion>
     <jdkPreference>preferJre</jdkPreference>
     <runtimeBits>64/32</runtimeBits>
+	<maxHeapSize>512</maxHeapSize>
   </jre>
   <splash>
     <file>A:\Seafile\My Library\workspace\shellfire-vpn4\ShellfireVPN\build-scripts\images\slpash\slpash-3.0.bmp</file>
