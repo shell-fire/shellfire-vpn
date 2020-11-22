@@ -199,16 +199,8 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		// setting the scaling factor to adjust sizes
-		double scaleFactor = Util.getScalingFactor();
-		log.debug("ScalingFactor: " + scaleFactor);
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		double width = screenSize.getWidth();
 
 		String size = "736";
-		if (width > 3000) {
-			size = "1472";
-		}
 
 		String langKey = VpnI18N.getLanguage().getKey();
 		log.debug("langKey: " + langKey);

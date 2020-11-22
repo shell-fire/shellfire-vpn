@@ -697,30 +697,12 @@ public class Util {
 		return jvmDll;
 	}
 
-	public static double getScalingFactor() {
-		if (!isWindows()) {
-			return 1;
-		}
-		int screenRes = Toolkit.getDefaultToolkit().getScreenResolution();
-		int factor = (int) Math.round(screenRes / 72.0);
-
-		return factor;
-	}
-
 	public static ImageIcon getImageIcon(String resourceName) {
 		return getImageIcon(resourceName, 1);
 	}
 
 	public static ImageIcon getImageIcon(String resourceName, double d) {
 		ImageIcon imageIcon = new javax.swing.ImageIcon(ShellfireVPNMainFormFxmlController.class.getResource(resourceName));
-		int factor = (int) (Util.getScalingFactor() * d);
-		int height = imageIcon.getIconHeight() * factor;
-		int width = imageIcon.getIconWidth() * factor;
-
-		Image image = imageIcon.getImage(); // transform it
-		Image newimg = image.getScaledInstance(width, height, java.awt.Image.SCALE_SMOOTH);
-		imageIcon = new ImageIcon(newimg); // transform it back
-
 		return imageIcon;
 	}
 
@@ -731,12 +713,7 @@ public class Util {
 	public static javafx.scene.image.Image getImageIconFX(String resourceName, double d) {
 		InputStream stream = LoginForms.class.getResourceAsStream(resourceName);
 		javafx.scene.image.Image image = new javafx.scene.image.Image(stream);
-		// log.debug("Resource is found at " + resourceName);
-		int factor = (int) (Util.getScalingFactor() * d);
-		double height = image.getHeight() * factor;
-		double width = image.getWidth() * factor;
-
-		return scaleImageFx(image, width, height, false);
+		return image;
 	}
 
 
@@ -781,15 +758,5 @@ public class Util {
 	// do not mix this order around, must remain in the end of class so that log file can be deleted on startup
 	private static I18n i18n = VpnI18N.getI18n();
 	private static String jvmDll;
-
-	public static javafx.scene.image.Image scaleImageFx(javafx.scene.image.Image source, double targetWidth, double targetHeight,
-			boolean preserveRatio) {
-		ImageView imageView = new ImageView(source);
-		imageView.setPreserveRatio(preserveRatio);
-		imageView.setFitWidth(targetWidth);
-		imageView.setFitHeight(targetHeight);
-		// System.out.println("Image width is " + String.valueOf(targetWidth) + " and height is " + String.valueOf(targetHeight));
-		return imageView.snapshot(null, null);
-	}
 
 }

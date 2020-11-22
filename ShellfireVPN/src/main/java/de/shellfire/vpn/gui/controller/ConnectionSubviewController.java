@@ -101,14 +101,6 @@ public class ConnectionSubviewController implements Initializable {
 	 */
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
-		// setting the scaling factor to adjust sizes
-		double scaleFactor = Util.getScalingFactor();
-		log.debug("ScalingFactor: " + scaleFactor);
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		double width = screenSize.getWidth();
-		if (width > 3000) {
-			size = "1472";
-		}
 		log.debug("langKey: " + langKey);
 
 		this.connectButton.setGraphic(connectImageView);
