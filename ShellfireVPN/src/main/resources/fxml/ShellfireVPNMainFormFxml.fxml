@@ -14,16 +14,16 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="674.0" prefWidth="1080.0" style="-fx-background-color: rgb(64,69,73);" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.ShellfireVPNMainFormFxmlController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="0.0" prefWidth="0.0" style="-fx-background-color: rgb(64,69,73);" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.ShellfireVPNMainFormFxmlController">
    <children>
       <AnchorPane layoutX="4.0" onKeyPressed="#handleWindowKeyPressed" prefHeight="515.0" prefWidth="668.0" AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="4.0">
          <opaqueInsets>
             <Insets />
          </opaqueInsets>
          <children>
-            <AnchorPane fx:id="leftMenuPane" layoutX="1.0" layoutY="1.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: rgb(49,57,64);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <AnchorPane fx:id="leftMenuPane" layoutX="1.0" layoutY="1.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: rgb(49,57,64);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="820.0" AnchorPane.topAnchor="0.0">
                <children>
-                  <AnchorPane fx:id="leftConnectionPane" layoutY="60.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onContextMenuRequested="#handleConnectionPaneContext" onMouseClicked="#handleConnectionPaneClicked" onMouseEntered="#handleConnectionPaneMouseEntered" onMouseExited="#handleConnectionPaneMouseExited" prefHeight="75.0" prefWidth="248.0" style="-fx-background-color: black;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                  <AnchorPane fx:id="leftConnectionPane" layoutY="60.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onContextMenuRequested="#handleConnectionPaneContext" onMouseClicked="#handleConnectionPaneClicked" onMouseEntered="#handleConnectionPaneMouseEntered" onMouseExited="#handleConnectionPaneMouseExited" prefHeight="0.0" style="-fx-background-color: black;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                      <children>
                         <ImageView fx:id="connectoinBackgroundImageView" blendMode="LIGHTEN" fitHeight="73.0" fitWidth="252.0" layoutX="-5.0" layoutY="5.0" style="--fx-border-color: yellow;">
                            <image>
@@ -111,7 +111,7 @@
                <children>
                   <AnchorPane fx:id="contentHeaderPane" layoutX="2.0" prefHeight="117.0" prefWidth="817.0" style="-fx-background-color: rgb(255,255,255);" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <ImageView fx:id="globeConnectionImageView" layoutX="5.0" layoutY="14.0">
+                        <ImageView fx:id="globeConnectionImageView" fitHeight="56.0" fitWidth="56.0" layoutX="5.0" layoutY="14.0">
                            <image>
                               <Image url="@../icons/small-globe-disconnected.png" />
                            </image>

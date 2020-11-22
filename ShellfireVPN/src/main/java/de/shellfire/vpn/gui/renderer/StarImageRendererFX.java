@@ -60,8 +60,12 @@ public class StarImageRendererFX extends TableCell<ServerListFXModel, VpnStar> {
 			// setText("Empty");
 		} else {
 			Image img = this.getIcon(item, isSelected());
-			setGraphic(new ImageView(img));
+			ImageView imageView = new ImageView(img);
+			imageView.setFitHeight(14);
+			imageView.setFitWidth(82);
+			setGraphic(imageView);
 			getGraphic().setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
+			
 			// log.debug("StarImageRendererFX: " + item.getNum());
 			setText(item.getText());
 		}

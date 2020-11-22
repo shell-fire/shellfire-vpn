@@ -226,7 +226,10 @@ public class ServerListSubviewController implements Initializable {
 						// get the corresponding country of this server
 						Country country = item.getCountry();
 						// Attach the imageview to the cell
-						setGraphic(new ImageView(CountryMap.getIconFX(country)));
+						ImageView imageView = new ImageView(CountryMap.getIconFX(country));
+						imageView.setFitHeight(14);
+						imageView.setFitWidth(18);
+						setGraphic(imageView);
 						getGraphic().setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
 						setText(VpnI18N.getCountryI18n().getCountryName(country));
 					}
