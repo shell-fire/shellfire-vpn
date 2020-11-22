@@ -18,7 +18,7 @@
                <children>
                   <Pane fx:id="leftConnectionPane" layoutY="60.0" onContextMenuRequested="#handleConnectionPaneContext" onMouseClicked="#handleConnectionPaneClicked" onMouseEntered="#handleConnectionPaneMouseEntered" onMouseExited="#handleConnectionPaneMouseExited" prefHeight="68.0" prefWidth="248.0" style="-fx-background-image: ..\icons\sf_en.png; -fx-border-color: black;">
                      <children>
-                        <ImageView fx:id="connectoinBackgroundImageView" blendMode="LIGHTEN" fitHeight="58.0" fitWidth="248.0" layoutY="9.0" style="--fx-border-color: yellow;">
+                        <ImageView fx:id="connectionBackgroundImageView" blendMode="LIGHTEN" fitHeight="58.0" fitWidth="248.0" layoutY="9.0" style="--fx-border-color: yellow;">
                            <image>
                               <Image url="@../buttons/button-connect-idle.png" />
                            </image>

@@ -118,7 +118,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 		this.fButtonLogin.setDisable(true);
 		log.debug("Login attempt with valid user input");
 		try {
-			LoginTAsk task = new LoginTAsk();
+			LoginTask task = new LoginTask();
 			task.run();
 			task.setOnSucceeded((WorkerStateEvent wEvent) -> {
 				log.info("Login task completed successfully");
@@ -433,7 +433,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 		this.fAutoLogin.setSelected(autologin);
 	}
 
-	class LoginTAsk extends Task<Response<LoginResponse>> {
+	class LoginTask extends Task<Response<LoginResponse>> {
 
 		Response<LoginResponse> loginResult = null;
 
