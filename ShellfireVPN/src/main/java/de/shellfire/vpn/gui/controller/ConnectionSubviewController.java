@@ -65,8 +65,13 @@ public class ConnectionSubviewController implements Initializable {
 	private TrayIcon trayIcon;
 	private ShellfireVPNMainFormFxmlController mainController;
 	String baseImageUrl = "src/main/resources";
-	String size = "736";
+
 	String langKey = VpnI18N.getLanguage().getKey();
+	private Image imageStatusEncrypted = imageStatusEncrypted = new Image("/icons/status-encrypted-width736.gif");
+	private Image imageButtonDisconnect = new Image("/buttons/button-disconnect-" + langKey + ".gif");
+	private Image imageStatusUnencrypted = new Image("/icons/status-unencrypted-width736.gif");
+	private Image imageButtonConnect = new Image("/buttons/button-connect-" + langKey + ".gif");
+	private boolean initialized;
 
 	public ImageView getStatusConnectionImageView() {
 		return statusConnectionImageView;
@@ -101,30 +106,33 @@ public class ConnectionSubviewController implements Initializable {
 	 */
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
-		log.debug("langKey: " + langKey);
-
-		this.connectButton.setGraphic(connectImageView);
-		this.connectButton.setPadding(Insets.EMPTY);
-		this.premiumButton.setGraphic(premiumInfoImageView);
-		this.premiumButton.setPadding(Insets.EMPTY);
-
-		// makes product key to be disable when disable is set to true
-		this.productKeyImageView.managedProperty().bind(this.productKeyImageView.visibleProperty());
-		this.premiumInfoImageView.managedProperty().bind(this.premiumInfoImageView.visibleProperty());
-		this.connectImageView.managedProperty().bind(this.connectImageView.visibleProperty());
-		this.productKeyImageView.setVisible(false);
-		// this.premiumInfoImageView.setVisible(false);
-		this.premiumButton.setVisible(false);
-		log.debug("After initialization of images");
+		if (!this.initialized) {
+			log.debug("langKey: " + langKey);
+			
+			this.connectButton.setGraphic(connectImageView);
+			this.connectButton.setPadding(Insets.EMPTY);
+			this.premiumButton.setGraphic(premiumInfoImageView);
+			this.premiumButton.setPadding(Insets.EMPTY);
+			
+			// makes product key to be disable when disable is set to true
+			this.productKeyImageView.managedProperty().bind(this.productKeyImageView.visibleProperty());
+			this.premiumInfoImageView.managedProperty().bind(this.premiumInfoImageView.visibleProperty());
+			this.connectImageView.managedProperty().bind(this.connectImageView.visibleProperty());
+			this.productKeyImageView.setVisible(false);
+			// this.premiumInfoImageView.setVisible(false);
+			this.premiumButton.setVisible(false);
+			log.debug("After initialization of images");
+		}
+		this.initialized = true;
 	}
 
 	public void updateComponents(boolean connected) {
 		if (connected) {
-			this.statusConnectionImageView.setImage(new Image("/icons/status-encrypted-width" + size + ".gif"));
-			this.connectImageView.setImage(new Image("/buttons/button-disconnect-" + langKey + ".gif"));
+			this.statusConnectionImageView.setImage(imageStatusEncrypted);
+			this.connectImageView.setImage(imageButtonDisconnect);
 		} else {
-			this.statusConnectionImageView.setImage(new Image("/icons/status-unencrypted-width" + size + ".gif"));
-			this.connectImageView.setImage(new Image("/buttons/button-connect-" + langKey + ".gif"));
+			this.statusConnectionImageView.setImage(imageStatusUnencrypted);
+			this.connectImageView.setImage(imageButtonConnect);
 		}
 	}
 

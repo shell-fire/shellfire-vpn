@@ -187,6 +187,10 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	private Label validUntilLabel;
 	@FXML
 	private Label validUntilValue;
+	private Image imageIconFxButtonServerListIdle = Util.getImageIconFX("/buttons/button-serverlist-idle.png");
+	private Image imageIconFxButtonConnectActive = Util.getImageIconFX("/buttons/button-connect-active.png");
+	private Image imageIconFxButtonServerListActive = Util.getImageIconFX("/buttons/button-serverlist-active.png");
+	private Image imageIconFxButtonConnectIdle = Util.getImageIconFX("/buttons/button-connect-idle.png");
 
 	public ShellfireVPNMainFormFxmlController() throws IOException {
 		this.logViewer = LogViewerFxmlController.getInstance();
@@ -244,17 +248,19 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	}
 
 	public void initializeComponents() {
-		// Notice that you manipulate the javaObjects out of the initialize if not it will raise an InvocationTargetException
-		this.updateLoginDetail();
-
-		// Bind visibility of buttons to their manage properties so that they are easilty rendered visible or invisible
-		this.validUntilLabel.managedProperty().bind(this.validUntilLabel.visibleProperty());
-		this.validUntilValue.managedProperty().bind(this.validUntilValue.visibleProperty());
-
-		this.connectionSubviewController.initPremium(isFreeAccount());
-		this.connectionSubviewController.setApp(this.application);
-		this.connectionSubviewController.updateComponents(false);
-		this.updateOnlineHost();
+	    Platform.runLater(() -> {
+	    	// Notice that you manipulate the javaObjects out of the initialize if not it will raise an InvocationTargetException
+	    	this.updateLoginDetail();
+	    	
+	    	// Bind visibility of buttons to their manage properties so that they are easilty rendered visible or invisible
+	    	this.validUntilLabel.managedProperty().bind(this.validUntilLabel.visibleProperty());
+	    	this.validUntilValue.managedProperty().bind(this.validUntilValue.visibleProperty());
+	    	
+	    	this.connectionSubviewController.initPremium(isFreeAccount());
+	    	this.connectionSubviewController.setApp(this.application);
+	    	this.connectionSubviewController.updateComponents(false);
+	    	this.updateOnlineHost();
+	    });
 	}
 
 	public void setShellfireService(WebService shellfireService) {
@@ -268,7 +274,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	 * @param WebService
 	 *            service
 	 */
-	public void setSerciceAndInitialize(WebService service) {
+	public void setServiceAndInitialize(WebService service) {
 		log.debug("Shellfire service has a size of " + service.getAllVpn().size());
 		if (!service.isLoggedIn()) {
 			try {
@@ -323,8 +329,10 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	}
 
 	public void afterLogin(boolean autoConnect) {
+		log.debug("afterLogin(autoConnect=" + autoConnect + ")");
 		Vpn vpn = this.shellfireService.getVpn();
-		log.debug("Starting the connection after login");
+		
+		log.debug("afterLogin() - if proxy enabled, enforce TCP");
 		if (ProxyConfig.isProxyEnabled()) {
 			this.setSelectedProtocol(VpnProtocol.TCP);
 			this.serverListSubviewController.getUDPRadioButton().setDisable(true);
@@ -333,12 +341,16 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 			this.setSelectedProtocol(selectedProtocol);
 		}
 
+		
+		log.debug("afterLogin() - if autoConnect do it");
 		if (autoConnect) {
 			Platform.runLater(() -> {
 				this.connectFromButton();
 			});
 
 		}
+		
+		log.debug("afterLogin() - finished");
 	}
 
 	@FXML
@@ -361,21 +373,14 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	private void handleConnectionPaneContext(ContextMenuEvent event) {
 	}
 
+		
+	
 	@FXML
 	private void handleConnectionPaneClicked(MouseEvent event) {
-		try {
-			Pair<Pane, Object> pair = FxUIManager.SwitchSubview("connection_subview.fxml");
-			contentDetailsPane.getChildren().setAll(pair.getKey());
-			this.connectionSubviewController = (ConnectionSubviewController) pair.getValue();
-			this.connectionSubviewController.initPremium(isFreeAccount());
-			this.connectionSubviewController.setApp(this.application);
-			log.debug("handleConnectionPanelClicked: VPN connection status is " + connectionStatus);
-			this.connectionSubviewController.updateComponents(connectionStatus);
-			currentSidePane = SidePane.CONNECTION;
-			updateSidePanes(currentSidePane);
-		} catch (IOException ex) {
-			log.debug("ShellfireVPNMainFormFxmlController:  handleConnectionPaneClicked has error " + ex.getMessage());
-		}
+		contentDetailsPane.getChildren().setAll(leftPaneHashMap.get(SidePane.CONNECTION).getKey());
+		this.connectionSubviewController.updateComponents(connectionStatus);
+		currentSidePane = SidePane.CONNECTION;
+		updateSidePanes(currentSidePane);
 	}
 
 	@FXML
@@ -408,11 +413,11 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
 	private void updateSidePanes(SidePane pane) {
 		if (pane.equals(SidePane.CONNECTION)) {
-			this.serverListBackgroundImage.setImage(Util.getImageIconFX("/buttons/button-serverlist-idle.png"));
-			this.connectionBackgroundImageView.setImage(Util.getImageIconFX("/buttons/button-connect-active.png"));
+			this.serverListBackgroundImage.setImage(imageIconFxButtonServerListIdle);
+			this.connectionBackgroundImageView.setImage(imageIconFxButtonConnectActive);
 		} else if (pane.equals(SidePane.SERVERLIST)) {
-			this.serverListBackgroundImage.setImage(Util.getImageIconFX("/buttons/button-serverlist-active.png"));
-			this.connectionBackgroundImageView.setImage(Util.getImageIconFX("/buttons/button-connect-idle.png"));
+			this.serverListBackgroundImage.setImage(imageIconFxButtonServerListActive);
+			this.connectionBackgroundImageView.setImage(imageIconFxButtonConnectIdle);
 		}
 	}
 
@@ -1181,7 +1186,9 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	}
 
 	private void updateLoginDetail() {
+		log.debug("updateLoginDetail() - getVpn()");
 		Vpn vpn = this.shellfireService.getVpn();
+		log.debug("updateLoginDetail() - vpn loaded()");
 		log.debug("ShellfireMainFormController: vpn id and server are %s and %s " + vpn.getServerId(), vpn.getServer());
 		this.vpnIdValue.setText("sf" + vpn.getVpnId());
 		this.vpnTypeValue.setText(vpn.getAccountType().toString());
@@ -1285,13 +1292,14 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
 	}
 
+	
 	/**
 	 * Prepare controllers so that they load controllers so that controller objects can be accessed.
 	 */
 	public void prepareSubviewControllers() {
 
-		// load the serverList pane
 		try {
+			// load the serverList pane
 			Pair<Pane, Object> pair = FxUIManager.SwitchSubview("serverList_subview.fxml");
 			this.serverListSubviewController = (ServerListSubviewController) pair.getValue();
 			this.serverListSubviewController.setShellfireService((this.shellfireService));
@@ -1302,9 +1310,27 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 			this.serverListSubviewController.afterInitialization();
 			leftPaneHashMap.put(SidePane.SERVERLIST, pair);
 			log.debug("Serverlist controller defined");
+			
+			// load connection pane
+			Pair<Pane, Object> pairConnection = FxUIManager.SwitchSubview("connection_subview.fxml");
+			this.connectionSubviewController = (ConnectionSubviewController) pairConnection.getValue();
+			contentDetailsPane.getChildren().setAll(leftPaneHashMap.get(SidePane.SERVERLIST).getKey());
+			this.connectionSubviewController = (ConnectionSubviewController) pairConnection.getValue();
+			this.connectionSubviewController.initPremium(isFreeAccount());
+			this.connectionSubviewController.setApp(this.application);
+			log.debug("handleConnectionPanelClicked: VPN connection status is " + connectionStatus);
+			this.connectionSubviewController.updateComponents(connectionStatus);
+
+			leftPaneHashMap.put(SidePane.CONNECTION, pairConnection);
+			handleConnectionPaneClicked(null);
+			log.debug("connection controller defined");
+
+			
+			
 		} catch (IOException ex) {
-			log.debug("ShellfireVPNMainFormFxmlController:  prepareControllers has error " + ex.getMessage());
+			log.error("ShellfireVPNMainFormFxmlController:  prepareControllers has error", ex);
 		}
+		
 	}
 
 	private void exitHandler() {

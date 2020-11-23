@@ -136,6 +136,7 @@ public class ServerListSubviewController implements Initializable {
 	private static final Logger log = Util.getLogger(ServerListSubviewController.class.getCanonicalName());
 	private ObservableList<ServerListFXModel> serverListData = FXCollections.observableArrayList();
 	private ShellfireVPNMainFormFxmlController mainFormController;
+	private Image buttonDisconnect = new Image("/buttons/button-disconnect-" + VpnI18N.getLanguage().getKey() + ".gif");
 
 	/**
 	 * Constructor used to initialize serverListTable data from Webservice
@@ -278,7 +279,7 @@ public class ServerListSubviewController implements Initializable {
 	 */
 	public void updateComponents(boolean isConnected) {
 		if (isConnected) {
-			this.connectImage1.setImage(new Image("/buttons/button-disconnect-" + VpnI18N.getLanguage().getKey() + ".gif"));
+			this.connectImage1.setImage(buttonDisconnect);
 			serverListTableView.disableProperty().set(isConnected);
 			TCPRadioButton.disableProperty().set(isConnected);
 			UDPRadioButton.disableProperty().set(isConnected);

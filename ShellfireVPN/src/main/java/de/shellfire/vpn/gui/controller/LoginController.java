@@ -31,6 +31,9 @@ import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventDispatchChain;
+import javafx.event.EventDispatcher;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
@@ -51,7 +54,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.text.Font;
 
 public class LoginController extends AnchorPane implements Initializable, CanContinueAfterBackEndAvailableFX {
 
@@ -113,13 +115,20 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 	// Event Listener on Button[#fButtonLogin].onAction
 	@FXML
 	public void handlefButtonLogin(ActionEvent event) {
+		
+
 		this.fButtonLogin.setDisable(true);
 		log.debug("Login attempt made");
 		this.fButtonLogin.setDisable(true);
 		log.debug("Login attempt with valid user input");
 		try {
+			
+			
 			LoginTask task = new LoginTask();
 			task.run();
+			
+			
+			
 			task.setOnSucceeded((WorkerStateEvent wEvent) -> {
 				log.info("Login task completed successfully");
 				Response<LoginResponse> loginResult = null;
@@ -187,7 +196,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 								}
 
 								this.application.shellFireMainController.initializeComponents();
-								this.application.shellFireMainController.setSerciceAndInitialize(this.service);
+								this.application.shellFireMainController.setServiceAndInitialize(this.service);
 								this.application.shellFireMainController.prepareSubviewControllers();
 								this.application.shellFireMainController.setApp(this.application);
 								this.application.shellFireMainController.afterLogin(fAutoconnect.isSelected());
@@ -201,10 +210,12 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 						alert.setContentText(i18n.tr("Login error: wrong username/password"));
 						alert.showAndWait();
 						this.application.getStage().show();
+
 					}
 				} else {
 					log.debug("LoginController: Login result is null");
 				}
+
 			});
 			this.fButtonLogin.setDisable(false);
 		} catch (Exception ex) {

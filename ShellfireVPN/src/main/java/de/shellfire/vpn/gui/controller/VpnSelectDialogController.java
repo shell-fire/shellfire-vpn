@@ -262,7 +262,7 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
 		this.application.loadShellFireMainController();
 		this.application.shellFireMainController.setShellfireService(this.shellfireService);
 		this.application.shellFireMainController.initializeComponents();
-		this.application.shellFireMainController.setSerciceAndInitialize(this.shellfireService);
+		this.application.shellFireMainController.setServiceAndInitialize(this.shellfireService);
 		this.application.shellFireMainController.prepareSubviewControllers();
 		this.application.shellFireMainController.afterLogin(autoConnect);
 	}
