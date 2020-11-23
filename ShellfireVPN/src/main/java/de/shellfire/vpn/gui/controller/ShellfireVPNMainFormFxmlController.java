@@ -97,17 +97,20 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	private StringBuffer typedStrings = new StringBuffer();
 	private ProgressDialogController connectProgressDialog;
 	private ServerListSubviewController serverListSubviewController;
-	private java.awt.Image iconConnecting;
 	private Date connectedSince;
 	private Image iconEcncryptionActive;
 	private Image iconEcncryptionInactive;
-	private Image iconConnectedSmall;
-	private Image iconIdleSmall;
+	private java.awt.Image iconConnected = Util.getImageIcon("/icons/sfvpn2-connected-big.png").getImage();
+	private Image iconConnectedSmall = Util.getImageIconFX("/icons/small-globe-connected.png");
+	private java.awt.Image iconConnecting = Util.getImageIcon("/icons/sfvpn2-connecting-big.png").getImage();
+
+	private java.awt.Image iconDisconnectedAwt = Util.getImageIcon("/icons/sfvpn2-disconnected-big.png").getImage();
+	private Image iconIdleSmall = Util.getImageIconFX("/icons/small-globe-disconnected.png");
+	private java.awt.Image iconIdleAwt = Util.getImageIcon("/icons/sfvpn2-idle-big.png").getImage();
+
+	
 	private Image buttonConnect;
 	private Image buttonDisconnect;
-	private java.awt.Image iconConnected;
-	private java.awt.Image iconDisconnectedAwt;
-	private java.awt.Image iconIdleAwt;
 	private ScheduledExecutorService currentConnectedSinceTimerFX = Executors.newSingleThreadScheduledExecutor();
 	private Preferences preferences;
 	private boolean connectionStatus;
@@ -237,14 +240,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		this.serverListFooterLabel.setWrapText(true);
 		this.connectionBackgroundImageView.setImage(Util.getImageIconFX("/buttons/button-connect-active.png"));
 		currentSidePane = SidePane.CONNECTION;
-
-		this.iconConnected = Util.getImageIcon("/icons/sfvpn2-connected-big.png").getImage();
-		this.iconConnectedSmall = Util.getImageIconFX("/icons/small-globe-connected.png");
-		this.iconConnecting = Util.getImageIcon("/icons/sfvpn2-connecting-big.png").getImage();
-
-		this.iconDisconnectedAwt = Util.getImageIcon("/icons/sfvpn2-disconnected-big.png").getImage();
-		this.iconIdleSmall = Util.getImageIconFX("/icons/small-globe-disconnected.png");
-		this.iconIdleAwt = Util.getImageIcon("/icons/sfvpn2-idle-big.png").getImage();
 	}
 
 	public void initializeComponents() {

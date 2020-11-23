@@ -27,6 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
@@ -68,6 +69,7 @@ public class Util {
 	private static Properties properties;
 	private static String configDir;
 	private static Logger log = Util.getLogger(Util.class.getCanonicalName());
+	private static HashMap<String, javafx.scene.image.Image> imageIconCacheMap = new HashMap<String, javafx.scene.image.Image>();
 	static {
 		semaphore = new Object();
 		Security.setProperty("networkaddress.cache.ttl", "1");
@@ -707,7 +709,15 @@ public class Util {
 	}
 
 	public static javafx.scene.image.Image getImageIconFX(String resourceName) {
-		return getImageIconFX(resourceName, 1);
+		javafx.scene.image.Image imageIcon = imageIconCacheMap.get(resourceName);
+		if (imageIcon != null) {
+			return imageIcon;
+		}
+		
+		imageIcon = getImageIconFX(resourceName, 1);
+		imageIconCacheMap.put(resourceName, imageIcon);
+		
+		return imageIcon;
 	}
 
 	public static javafx.scene.image.Image getImageIconFX(String resourceName, double d) {
