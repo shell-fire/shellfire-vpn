@@ -74,6 +74,7 @@ public class StarImageRendererFX extends TableCell<ServerListFXModel, VpnStar> {
 	}
 
 	public Image getIcon(VpnStar star, boolean isSelected) {
+		
 		if (isSelected) {
 			return iconsSelected.get(star.getNum());
 		} // else if (!isDisabled())

@@ -358,11 +358,11 @@ public class ServerListSubviewController implements Initializable {
 
 	public Server getSelectedServer() {
 		log.debug("getSelectedServer: About to test server model to load");
-		if (null == this.serverListTableView.getSelectionModel().getSelectedItem()) {
+		ServerListFXModel serverModel = this.serverListTableView.getSelectionModel().getSelectedItem();
+		if (null == serverModel) {
 			log.debug("Return default server 18");
 			return this.shellfireService.getServerList().getServer(18);
 		} else {
-			ServerListFXModel serverModel = this.serverListTableView.getSelectionModel().getSelectedItem();
 			// The getCountry method of ServerListFXModel returns the server object
 			log.debug("getSelectedServer() - returning: " + serverModel.getCountry());
 			return serverModel.getCountry();
