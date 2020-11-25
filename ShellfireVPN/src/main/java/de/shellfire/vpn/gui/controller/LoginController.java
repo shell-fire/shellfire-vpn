@@ -128,7 +128,9 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 			task.run();
 			
 			
-			
+			// TODO: this large onSucceeded is the issue, because it occupies time on the main thread
+			// should also run asyncronously. either in LoginTask, or in separate Task
+			// should both be coupled to a ProgressDialog to show the user what is going on....
 			task.setOnSucceeded((WorkerStateEvent wEvent) -> {
 				log.info("Login task completed successfully");
 				Response<LoginResponse> loginResult = null;
@@ -460,12 +462,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 			return loginResult;
 		}
 
-		private void setAutoConnectInRegistry(boolean autoConnect) {
-			VpnProperties props = VpnProperties.getInstance();
-			props.setBoolean(REG_AUTOCONNECT, autoConnect);
-		}
-
-	}
+}
 
 	public void hideLoginProgress() {
 		this.setDisable(true);
