@@ -115,109 +115,50 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 	// Event Listener on Button[#fButtonLogin].onAction
 	@FXML
 	public void handlefButtonLogin(ActionEvent event) {
-		
 
 		this.fButtonLogin.setDisable(true);
 		log.debug("Login attempt made");
 		this.fButtonLogin.setDisable(true);
 		log.debug("Login attempt with valid user input");
 		try {
-			
-			
+
 			LoginTask task = new LoginTask();
 			task.run();
+
+			// TODO: LoginTask and MainFormLoaderTask -> attach to and equip with ProgressDialog 
 			
-			
-			// TODO: this large onSucceeded is the issue, because it occupies time on the main thread
-			// should also run asyncronously. either in LoginTask, or in separate Task
-			// should both be coupled to a ProgressDialog to show the user what is going on....
 			task.setOnSucceeded((WorkerStateEvent wEvent) -> {
 				log.info("Login task completed successfully");
+				
 				Response<LoginResponse> loginResult = null;
 				try {
 					loginResult = task.getValue();
-				} catch (Exception e) {
-					log.debug("Error while checking User registration " + e.getMessage());
-				}
-				if (loginResult != null) {
-					log.debug("LoginController: handlefLogginButton - Login result is " + loginResult.getMessage());
-					if (service.isLoggedIn()) {
-						log.debug("LoginController: handlefLogginButton - service is loggedIn " + loginResult.getMessage());
-						if (fStoreLoginData.isSelected()) {
-							storeCredentialsInVpnProperties(this.username, this.password);
-							log.debug(
-									"LoginController: Login Data stored, username is " + this.username + " and passwd is " + this.password);
-						} else {
-							removeCredentialsFromRegistry();
-						}
-						if (fAutoStart.isSelected()) {
-							Client.addVpnToAutoStart();
-							log.debug("LoginController: Autostart Data stored");
-						} else {
-							Client.removeVpnFromAutoStart();
-						}
-						if (fAutoconnect.isSelected()) {
-							setAutoConnectInRegistry(true);
-							log.debug("LoginController: Autoconnect Data stored");
-						} else {
-							setAutoConnectInRegistry(false);
-						}
-
-						// We initialise the vpn selection form but we do not display it yet.
-						this.application.loadVPNSelect();
-						this.application.vpnSelectController.setService(this.service);
-						this.application.vpnSelectController.setAutoConnect(fAutoconnect.isSelected());
-
-						// prepare the other necessary controllers
-						int rememberedVpnSelection = this.application.vpnSelectController.rememberedVpnSelection();
-						this.application.getStage().hide();
-						boolean selectionRequired = service.vpnSelectionRequired();
-						log.debug("LoginController: loginTask - selected vpn is " + selectionRequired);
-						if (selectionRequired && rememberedVpnSelection == 0) {
-							log.debug("Condition for electionRequired && rememberedVpnSelection == 0");
-							this.application.vpnSelectController.setApp(this.application);
-							this.application.getStage().show();
-
-						} else {
-							if (selectionRequired && rememberedVpnSelection != 0) {
-								log.debug("Condition for electionRequired && rememberedVpnSelection == 0");
-								if (!service.selectVpn(rememberedVpnSelection)) {
-									log.debug("vpn selection was not remembered");
-									this.application.vpnSelectController.setApp(application);
-									log.debug("condition for !service.selectVpn(rememberedVpnSelection");
-									this.application.getStage().show();
-								}
-							}
-							if (!this.application.getStage().isShowing()) {
-								log.debug("handlefButtonLogin: vpnController not visible");
-								this.application.loadShellFireMainController();
-								this.application.shellFireMainController.setShellfireService(this.service);
-								boolean vis = true;
-								if (minimize && service.getVpn().getAccountType() != ServerType.Free) {
-									vis = false;
-								}
-
-								this.application.shellFireMainController.initializeComponents();
-								this.application.shellFireMainController.setServiceAndInitialize(this.service);
-								this.application.shellFireMainController.prepareSubviewControllers();
-								this.application.shellFireMainController.setApp(this.application);
-								this.application.shellFireMainController.afterLogin(fAutoconnect.isSelected());
-							} else {
-								log.debug("handlefButtonLogin: vpnController is visible");
-							}
-						}
-					} else {
+					
+					if (loginResult == null) {
+						log.error("LoginController: Login result is null");
+						Alert alert = new Alert(AlertType.ERROR);
+						alert.setHeaderText(i18n.tr("Error"));
+						alert.setContentText(i18n.tr("Login error: unknown error"));
+						alert.showAndWait();
+						this.application.getStage().show();
+					} else if (!service.isLoggedIn()) {
+						log.error("LoginController: Not logged in!");
+						log.debug("LoginController: Login result is " + loginResult.getMessage());
 						Alert alert = new Alert(AlertType.ERROR);
 						alert.setHeaderText(i18n.tr("Error"));
 						alert.setContentText(i18n.tr("Login error: wrong username/password"));
 						alert.showAndWait();
 						this.application.getStage().show();
-
+						
+					} else {
+						MainFormLoaderTask loaderTask = new MainFormLoaderTask(loginResult);
+						loaderTask.run();
 					}
-				} else {
-					log.debug("LoginController: Login result is null");
+					
+				} catch (Exception e) {
+					log.error("Error while checking User registration", e);
 				}
-
+					
 			});
 			this.fButtonLogin.setDisable(false);
 		} catch (Exception ex) {
@@ -448,10 +389,9 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
 	class LoginTask extends Task<Response<LoginResponse>> {
 
-		Response<LoginResponse> loginResult = null;
-
 		@Override
 		protected Response<LoginResponse> call() throws Exception {
+			Response<LoginResponse> loginResult = null;
 			log.debug("Starting login background task");
 			String user = getUser();
 			String password = getPassword();
@@ -462,7 +402,88 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 			return loginResult;
 		}
 
-}
+	}
+	
+	class MainFormLoaderTask extends Task<Boolean> {
+
+		private Response<LoginResponse> loginResult;
+
+		public MainFormLoaderTask(Response<LoginResponse> loginResult) {
+			this.loginResult = loginResult;
+		}
+
+		@Override
+		protected Boolean call() throws Exception {
+			log.debug("Starting LoaderTask");
+			log.debug("LoginController: handlefLogginButton - service is loggedIn " + loginResult.getMessage());
+			if (fStoreLoginData.isSelected()) {
+				storeCredentialsInVpnProperties(username, password);
+				log.debug(
+						"LoginController: Login Data stored, username is " + username + " and passwd is " + password);
+			} else {
+				removeCredentialsFromRegistry();
+			}
+			if (fAutoStart.isSelected()) {
+				Client.addVpnToAutoStart();
+				log.debug("LoginController: Autostart Data stored");
+			} else {
+				Client.removeVpnFromAutoStart();
+			}
+			if (fAutoconnect.isSelected()) {
+				setAutoConnectInRegistry(true);
+				log.debug("LoginController: Autoconnect Data stored");
+			} else {
+				setAutoConnectInRegistry(false);
+			}
+
+			// We initialise the vpn selection form but we do not display it yet.
+			application.loadVPNSelect();
+			application.vpnSelectController.setService(service);
+			application.vpnSelectController.setAutoConnect(fAutoconnect.isSelected());
+
+			// prepare the other necessary controllers
+			int rememberedVpnSelection = application.vpnSelectController.rememberedVpnSelection();
+			application.getStage().hide();
+			boolean selectionRequired = service.vpnSelectionRequired();
+			log.debug("LoginController: loginTask - selected vpn is " + selectionRequired);
+			if (selectionRequired && rememberedVpnSelection == 0) {
+				log.debug("Condition for electionRequired && rememberedVpnSelection == 0");
+				application.vpnSelectController.setApp(application);
+				application.getStage().show();
+
+			} else {
+				if (selectionRequired && rememberedVpnSelection != 0) {
+					log.debug("Condition for electionRequired && rememberedVpnSelection == 0");
+					if (!service.selectVpn(rememberedVpnSelection)) {
+						log.debug("vpn selection was not remembered");
+						application.vpnSelectController.setApp(application);
+						log.debug("condition for !service.selectVpn(rememberedVpnSelection");
+						application.getStage().show();
+					}
+				}
+				if (!application.getStage().isShowing()) {
+					log.debug("handlefButtonLogin: vpnController not visible");
+					application.loadShellFireMainController();
+					application.shellFireMainController.setShellfireService(service);
+					boolean vis = true;
+					if (minimize && service.getVpn().getAccountType() != ServerType.Free) {
+						vis = false;
+					}
+
+					application.shellFireMainController.initializeComponents();
+					application.shellFireMainController.setServiceAndInitialize(service);
+					application.shellFireMainController.prepareSubviewControllers();
+					application.shellFireMainController.setApp(application);
+					application.shellFireMainController.afterLogin(fAutoconnect.isSelected());
+				} else {
+					log.debug("handlefButtonLogin: vpnController is visible");
+				}
+			}
+			
+			return true;
+		}
+		
+	}
 
 	public void hideLoginProgress() {
 		this.setDisable(true);
