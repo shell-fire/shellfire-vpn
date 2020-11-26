@@ -16,6 +16,7 @@ import org.xnap.commons.i18n.I18n;
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.VpnProperties;
 import de.shellfire.vpn.client.Client;
+import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.i18n.Language;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.webservice.Vpn;
@@ -153,7 +154,7 @@ public class SettingsDialogController implements Initializable {
 			this.loginAutomatically.setDisable(true); // disable if login data not remembered, because then it makes no sense
 		}
 
-		if (props.getInt(VpnSelectDialogController.REG_REMEMBERSELECTION, 0) != 0) {
+		if (props.getInt(LoginForms.REG_REMEMBERSELECTION, 0) != 0) {
 			this.saveVpnChoice.setSelected(true);
 		} else if (props.getProperty(LoginController.REG_USER, null) == null) {
 			this.saveVpnChoice.setDisable(true); // disable if login data not remembered, because then it makes no sense
@@ -210,7 +211,7 @@ public class SettingsDialogController implements Initializable {
 		}
 
 		if (!this.saveVpnChoice.isDisabled() && !this.saveVpnChoice.isSelected()) {
-			props.remove(VpnSelectDialogController.REG_REMEMBERSELECTION);
+			props.remove(LoginForms.REG_REMEMBERSELECTION);
 		}
 
 		props.setBoolean(LoginController.REG_AUTOCONNECT, this.connectAutomatically.isSelected());
@@ -219,7 +220,7 @@ public class SettingsDialogController implements Initializable {
 		if (this.saveVpnChoice.isSelected()) {
 			WebService service = WebService.getInstance();
 			Vpn vpn = service.getVpn();
-			props.setInt(VpnSelectDialogController.REG_REMEMBERSELECTION, vpn.getVpnId());
+			props.setInt(LoginForms.REG_REMEMBERSELECTION, vpn.getVpnId());
 		}
 
 		if (this.startOnBoot.isSelected()) {

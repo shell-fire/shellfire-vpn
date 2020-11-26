@@ -105,6 +105,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 	private static Logger log = Util.getLogger(LoginController.class.getCanonicalName());
 	private String username;
 	private String password;
+	private ProgressDialogController loginProgressDialog;
 	private static boolean passwordBogus;
 	public static ProgressDialogController initProgressDialog;
 	public static ShellfireVPNMainFormFxmlController mainForm;
@@ -117,23 +118,29 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 	public void handlefButtonLogin(ActionEvent event) {
 
 		this.fButtonLogin.setDisable(true);
-		log.debug("Login attempt made");
-		this.fButtonLogin.setDisable(true);
 		log.debug("Login attempt with valid user input");
+
 		try {
+			Platform.runLater(() -> {
+				try {
+					//loginProgressDialog = ProgressDialogController.getInstance(i18n.tr("Logging in..."), null, LoginForms.getStage(), true);
+					loginProgressDialog = ProgressDialogController.getInstance(i18n.tr("Logging in..."), null, null, true);
+				} catch (IOException e) {
+					log.error("Error in ProgressDialogController.getInstancet()", e);
+				}
+				loginProgressDialog.show();
+			});
+			LoginTask loginTask = new LoginTask();
+			Thread loginTaskThread = new Thread(loginTask);
+			loginTaskThread.start();
 
-			LoginTask task = new LoginTask();
-			task.run();
-
-			// TODO: LoginTask and MainFormLoaderTask -> attach to and equip with ProgressDialog 
-			
-			task.setOnSucceeded((WorkerStateEvent wEvent) -> {
+			loginTask.setOnSucceeded((WorkerStateEvent wEvent) -> {
 				log.info("Login task completed successfully");
-				
+
 				Response<LoginResponse> loginResult = null;
 				try {
-					loginResult = task.getValue();
-					
+					loginResult = loginTask.getValue();
+
 					if (loginResult == null) {
 						log.error("LoginController: Login result is null");
 						Alert alert = new Alert(AlertType.ERROR);
@@ -149,16 +156,20 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 						alert.setContentText(i18n.tr("Login error: wrong username/password"));
 						alert.showAndWait();
 						this.application.getStage().show();
-						
+
 					} else {
+						loginProgressDialog.setDialogText(i18n.tr("Loading..."));
 						MainFormLoaderTask loaderTask = new MainFormLoaderTask(loginResult);
-						loaderTask.run();
+						
+						// TODO: in loaderTask.call(), separate background processing / gui loading etc. from 
+						// needed gui manipulating, which needs to be in the onSucceed method...
+						loaderTask.call();
 					}
-					
+
 				} catch (Exception e) {
 					log.error("Error while checking User registration", e);
 				}
-					
+
 			});
 			this.fButtonLogin.setDisable(false);
 		} catch (Exception ex) {
@@ -309,10 +320,6 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 		this.minimize = minimize;
 	}
 
-	public void showLoginProgress() {
-		// TODO implement loginprogrss
-	}
-
 	@FXML
 	private void handleUsernameChanged(InputMethodEvent event) {
 		this.username = fUsername.getText();
@@ -403,7 +410,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 		}
 
 	}
-	
+
 	class MainFormLoaderTask extends Task<Boolean> {
 
 		private Response<LoginResponse> loginResult;
@@ -418,8 +425,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 			log.debug("LoginController: handlefLogginButton - service is loggedIn " + loginResult.getMessage());
 			if (fStoreLoginData.isSelected()) {
 				storeCredentialsInVpnProperties(username, password);
-				log.debug(
-						"LoginController: Login Data stored, username is " + username + " and passwd is " + password);
+				log.debug("LoginController: Login Data stored, username is " + username + " and passwd is " + password);
 			} else {
 				removeCredentialsFromRegistry();
 			}
@@ -436,33 +442,31 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 				setAutoConnectInRegistry(false);
 			}
 
-			// We initialise the vpn selection form but we do not display it yet.
-			application.loadVPNSelect();
-			application.vpnSelectController.setService(service);
-			application.vpnSelectController.setAutoConnect(fAutoconnect.isSelected());
-
 			// prepare the other necessary controllers
-			int rememberedVpnSelection = application.vpnSelectController.rememberedVpnSelection();
-			application.getStage().hide();
+			int rememberedVpnSelection = application.rememberedVpnSelection();
+			
 			boolean selectionRequired = service.vpnSelectionRequired();
-			log.debug("LoginController: loginTask - selected vpn is " + selectionRequired);
+			log.debug("LoginController: loginTask - selectedRequired is " + selectionRequired);
+			application.getStage().hide();
 			if (selectionRequired && rememberedVpnSelection == 0) {
-				log.debug("Condition for electionRequired && rememberedVpnSelection == 0");
+				log.debug("Selection is required and no vpn remembered (yet) - showing dialog");
+				application.loadVPNSelect();
+				application.vpnSelectController.setService(service);
+				application.vpnSelectController.setAutoConnect(fAutoconnect.isSelected());
 				application.vpnSelectController.setApp(application);
 				application.getStage().show();
 
 			} else {
 				if (selectionRequired && rememberedVpnSelection != 0) {
-					log.debug("Condition for electionRequired && rememberedVpnSelection == 0");
+					log.debug("selection required and vpn already remembered - selecting remembered vpn automatically");
 					if (!service.selectVpn(rememberedVpnSelection)) {
-						log.debug("vpn selection was not remembered");
+						log.debug("not possible to select remembered vpn");
 						application.vpnSelectController.setApp(application);
-						log.debug("condition for !service.selectVpn(rememberedVpnSelection");
 						application.getStage().show();
 					}
 				}
 				if (!application.getStage().isShowing()) {
-					log.debug("handlefButtonLogin: vpnController not visible");
+					log.debug("handlefButtonLogin: vpnController not visible - not needed, continue with main controller");
 					application.loadShellFireMainController();
 					application.shellFireMainController.setShellfireService(service);
 					boolean vis = true;
@@ -479,10 +483,10 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 					log.debug("handlefButtonLogin: vpnController is visible");
 				}
 			}
-			
+
 			return true;
 		}
-		
+
 	}
 
 	public void hideLoginProgress() {

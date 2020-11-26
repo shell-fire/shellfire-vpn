@@ -10,6 +10,7 @@ import org.xnap.commons.i18n.I18n;
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.i18n.VpnI18N;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +19,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
@@ -158,6 +160,14 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
 			spacePane.setMaxHeight(3);
 			contentPane.getChildren().add(spacePane);
 		}
+	}
+
+	public void show() {
+		Platform.runLater(() -> {
+			getDialogStage().show();
+		});
+
+		
 	}
 
 }

@@ -65,7 +65,6 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
 
 	private WebService shellfireService;
 	private boolean autoConnect;
-	public static final String REG_REMEMBERSELECTION = "SelectedVpnId";
 	private static I18n i18n = VpnI18N.getI18n();
 
 	private LoginForms application;
@@ -196,19 +195,13 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
 			int vpnId = selectedVpn.getVpnId();
 			log.debug("Remembering Vpn ID:" + vpnId);
 
-			props.setInt(REG_REMEMBERSELECTION, vpnId);
+			props.setInt(LoginForms.REG_REMEMBERSELECTION, vpnId);
 		} else {
 			log.debug("Forgetting vpn selections");
-			props.setInt(REG_REMEMBERSELECTION, 0);
+			props.setInt(LoginForms.REG_REMEMBERSELECTION, 0);
 		}
 	}
 
-	public int rememberedVpnSelection() {
-		VpnProperties props = VpnProperties.getInstance();
-		int remembered = props.getInt(REG_REMEMBERSELECTION, 0);
-
-		return remembered;
-	}
 
 	public void loadIcon() {
 		this.backImageVeiw.setImage(Util.getImageIconFX("/icons/sfvpn2-idle.png"));

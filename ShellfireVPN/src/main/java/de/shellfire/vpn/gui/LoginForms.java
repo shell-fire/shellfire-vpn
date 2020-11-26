@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
 
 import de.shellfire.vpn.Util;
+import de.shellfire.vpn.VpnProperties;
 import de.shellfire.vpn.client.ServiceToolsFX;
 import de.shellfire.vpn.gui.controller.LicenseAcceptanceController;
 import de.shellfire.vpn.gui.controller.LoginController;
@@ -53,6 +54,7 @@ public class LoginForms extends Application {
 	private static double xOffset = 0;
 	private static double yOffset = 0;
 	public static final String REG_INSTDIR = "instdir";
+	public static final String REG_REMEMBERSELECTION = "SelectedVpnId";
 
 	public static Stage getStage() {
 		return stage;
@@ -170,6 +172,12 @@ public class LoginForms extends Application {
 
 	}
 
+	public int rememberedVpnSelection() {
+		VpnProperties props = VpnProperties.getInstance();
+		int remembered = props.getInt(REG_REMEMBERSELECTION, 0);
+
+		return remembered;
+	}
 	public void loadShellFireMainController() {
 		log.debug("In the ShellFire Main controller");
 		try {
