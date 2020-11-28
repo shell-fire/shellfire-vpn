@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
@@ -62,7 +63,10 @@
                   </ImageView>
                   <Pane fx:id="backLabelPane" layoutX="507.0" layoutY="5.0" onMouseClicked="#handleBackLabel" prefHeight="51.0" prefWidth="101.0">
                      <children>
-                        <Label fx:id="registerBackLabel" alignment="CENTER_RIGHT" layoutX="18.0" layoutY="14.0" onMouseClicked="#handleBackLabelClicked" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited" prefHeight="31.0" prefWidth="69.0" style="-fx-background-color: rgb(0,0,0);" text="zurück" textAlignment="RIGHT" textFill="#eee5e5" />
+                        <Label fx:id="registerBackLabel" alignment="CENTER_RIGHT" layoutX="18.0" layoutY="14.0" onMouseClicked="#handleBackLabelClicked" onMouseEntered="#handleMouseEntered" onMouseExited="#handleMouseExited" prefHeight="31.0" prefWidth="69.0" style="-fx-background-color: rgb(0,0,0);" text="zurück" textAlignment="RIGHT" textFill="#eee5e5">
+                           <padding>
+                              <Insets right="5.0" />
+                           </padding></Label>
                         <ImageView fx:id="backImageVeiw" layoutX="23.0" layoutY="19.0" onMouseClicked="#handleBackLabelImgClicked" onMouseEntered="#handleMouseImgEntered" onMouseExited="#handleMouseImgExited">
                            <image>
                               <Image url="@../icons/exit.png" />

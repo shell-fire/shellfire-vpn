@@ -196,7 +196,7 @@ public class ConnectionSubviewController implements Initializable {
 	private void handleConnectButtonAction(ActionEvent event) {
 
 		Platform.runLater(() -> {
-			this.application.shellFireMainController.connectFromButton();
+			this.application.shellfireVpnMainController.connectFromButton();
 		});
 
 	}

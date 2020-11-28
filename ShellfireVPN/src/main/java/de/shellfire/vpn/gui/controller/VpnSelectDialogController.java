@@ -241,7 +241,7 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
 	public void displayVpnSelect() {
 		this.application.getStage().show();
 		log.debug("VpnSelectDialogController: displayVpnSelect(); displaying the select window");
-		this.application.shellFireMainController.afterLogin(autoConnect);
+		this.application.shellfireVpnMainController.afterLogin(autoConnect);
 	}
 
 	private void loadMainForm() {
@@ -253,10 +253,10 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
 		}
 		this.application.toString();
 		this.application.loadShellFireMainController();
-		this.application.shellFireMainController.setShellfireService(this.shellfireService);
-		this.application.shellFireMainController.initializeComponents();
-		this.application.shellFireMainController.setServiceAndInitialize(this.shellfireService);
-		this.application.shellFireMainController.prepareSubviewControllers();
-		this.application.shellFireMainController.afterLogin(autoConnect);
+		this.application.shellfireVpnMainController.setShellfireService(this.shellfireService);
+		this.application.shellfireVpnMainController.initializeComponents();
+		this.application.shellfireVpnMainController.setServiceAndInitialize(this.shellfireService);
+		this.application.shellfireVpnMainController.prepareSubviewControllers();
+		this.application.shellfireVpnMainController.afterLogin(autoConnect);
 	}
 }

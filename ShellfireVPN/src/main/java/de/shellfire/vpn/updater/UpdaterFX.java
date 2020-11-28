@@ -255,7 +255,7 @@ public class UpdaterFX implements CanContinueAfterBackEndAvailableFX {
 			updateProgressDialog = ProgressDialogController.getInstance(i18n.tr("Downloading update..."), null, LoginForms.getStage(),
 					false);
 			updateProgressDialog.getProgressBar().setProgress(ProgressBar.INDETERMINATE_PROGRESS);
-			updateProgressDialog.setButtonText(i18n.tr("cancel"));
+			updateProgressDialog.setButtonText(i18n.tr("Cancel"));
 			updateProgressDialog.setOptionCallback(new Task() {
 
 				@Override

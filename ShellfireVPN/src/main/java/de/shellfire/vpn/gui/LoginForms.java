@@ -39,6 +39,8 @@ import javafx.stage.StageStyle;
 
 public class LoginForms extends Application {
 
+	private static FXMLLoader loader = new FXMLLoader();
+	// private static FXMLLoader loader = new FXMLLoader(LoginForms.class.getResource("/fxml/login.fxml"));
 	private static final Logger log = Util.getLogger(LoginForms.class.getCanonicalName());
 	public static Stage stage;
 	public static String[] default_args;
@@ -46,7 +48,7 @@ public class LoginForms extends Application {
 	public RegisterFormController registerController;
 	public LicenseAcceptanceController licenceAcceptanceController;
 	public static VpnSelectDialogController vpnSelectController;
-	public static ShellfireVPNMainFormFxmlController shellFireMainController;
+	public static ShellfireVPNMainFormFxmlController shellfireVpnMainController = null;
 	public static LoginController instance;
 	private static final I18n i18n = VpnI18N.getI18n();
 	private boolean licenseAccepted;
@@ -69,7 +71,7 @@ public class LoginForms extends Application {
 		default_args = args;
 
 		preventDuplicateStart();
-
+		
 		launch(args);
 	}
 
@@ -110,6 +112,8 @@ public class LoginForms extends Application {
 			minimize = false;
 		}
 		ProxyConfig.perform();
+		
+		
 	}
 
 	@Override
@@ -134,6 +138,11 @@ public class LoginForms extends Application {
 		} catch (Exception ex) {
 			log.error("could not latter message after login in start \n" + ex.getMessage());
 		}
+		
+		/*Platform.runLater(() -> {
+			loadShellFireMainController(true);
+		});
+*/
 
 	}
 
@@ -162,7 +171,7 @@ public class LoginForms extends Application {
 	}
 
 	public void loadVPNSelect() {
-		log.debug("In the VPN controller");
+		log.debug("loadVPNSelect() - start");
 		try {
 			this.vpnSelectController = (VpnSelectDialogController) replaceSceneContent("VpnSelectDialogFxml.fxml");
 			this.vpnSelectController.setApp(this);
@@ -178,16 +187,28 @@ public class LoginForms extends Application {
 
 		return remembered;
 	}
+	
 	public void loadShellFireMainController() {
-		log.debug("In the ShellFire Main controller");
+		loadShellFireMainController(false);
+	}
+		
+	public void loadShellFireMainController(boolean loadOnly) {
+		log.debug("loadShellFireMainController - start()");
 		try {
-			this.shellFireMainController = (ShellfireVPNMainFormFxmlController) replaceSceneContent("ShellfireVPNMainFormFxml.fxml");
-			this.shellFireMainController.setApp(this);
+			if (shellfireVpnMainController == null) {
+				this.shellfireVpnMainController = (ShellfireVPNMainFormFxmlController) replaceSceneContent("ShellfireVPNMainFormFxml.fxml");	
+			}
+			
+			if (!loadOnly) {
+				this.shellfireVpnMainController.setApp(this);
+			}
 
 		} catch (Exception ex) {
 			log.error("could not load main form fxml\n" + ex.getMessage());
 			ex.printStackTrace(System.out);
 		}
+		
+		log.debug("loadShellFireMainController - end()");
 	}
 
 	public void loadLicenceAcceptanceScreenController() {
@@ -202,16 +223,20 @@ public class LoginForms extends Application {
 	}
 
 	public static Initializable replaceSceneContent(String fxml) throws Exception {
-		FXMLLoader loader = new FXMLLoader(LoginForms.class.getClassLoader().getResource(fxml));
+		log.debug("replaceSceneContent fxml=" + fxml + " - start");
+		loader = new FXMLLoader(LoginForms.class.getClassLoader().getResource("/fxml/" + fxml));
 		loader.setLocation(LoginForms.class.getResource("/fxml/" + fxml));
-		System.out.println("Loacation of loader is " + loader.getLocation());
+		
+		log.debug("Location of loader is " + loader.getLocation());
 		AnchorPane page = null;
 		try {
 			log.debug("ReplaceSceneContent trying to load anchor pane for " + fxml);
 			page = (AnchorPane) loader.load();
+			log.debug("AnchorPane loaded");
 		} catch (Exception ex) {
-			log.error(" Loading fxml has error for replaceSceneContent for " + fxml + " with error " + ex.getMessage());
+			log.error("Loading fxml has error for replaceSceneContent for " + fxml, ex);
 		}
+		log.debug("replaceSceneContent() - start setOnMouse...");
 		page.setOnMousePressed(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
@@ -226,16 +251,22 @@ public class LoginForms extends Application {
 				stage.setY(event.getScreenY() - yOffset);
 			}
 		});
+		log.debug("replaceSceneContent() - finished setOnMouse...");
 		if (page.getScene() == null) {
 			Scene scene = new Scene(page);
+			log.debug("replaceSceneContent() - stage.setScene() - start...");
 			stage.setScene(scene);
 			log.debug("Scene of " + fxml + " has been newly created");
 		} else {
 			log.debug("Scene of " + fxml + " is that of anchorpane");
 			stage.setScene(page.getScene());
 		}
+		log.debug("replaceSceneContent() - stage.centerOnScreen() - start...");
 		stage.centerOnScreen();
+		log.debug("replaceSceneContent() - stage.sizeToScene() - start...");
 		stage.sizeToScene();
+		
+		log.debug("replaceSceneContent fxml=" + fxml + " - returning");
 		return (Initializable) loader.getController();
 	}
 

@@ -407,7 +407,7 @@ public class ServerListSubviewController implements Initializable {
 	private void connectButton1OnAction(ActionEvent event) {
 		log.debug("connectButton1OnAction");
 		Platform.runLater(() -> {
-			application.shellFireMainController.connectFromButton();
+			application.shellfireVpnMainController.connectFromButton();
 		});
 
 	}

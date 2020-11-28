@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.concurrent.ExecutionException;
 
 import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
@@ -136,7 +137,6 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
 			loginTask.setOnSucceeded((WorkerStateEvent wEvent) -> {
 				log.info("Login task completed successfully");
-
 				Response<LoginResponse> loginResult = null;
 				try {
 					loginResult = loginTask.getValue();
@@ -160,10 +160,66 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 					} else {
 						loginProgressDialog.setDialogText(i18n.tr("Loading..."));
 						MainFormLoaderTask loaderTask = new MainFormLoaderTask(loginResult);
+						loaderTask.setOnSucceeded((WorkerStateEvent wEvent2) -> {
+							Boolean selectionRequired = null;
+							try {
+								selectionRequired = loaderTask.get();
+							} catch (InterruptedException | ExecutionException e) {
+								log.error("Could not get() result from loaderTask", e);
+							}
+							// prepare the other necessary controllers
+							int rememberedVpnSelection = application.rememberedVpnSelection();
+
+							if (selectionRequired == null) {
+								selectionRequired = false;
+							}
+							application.getStage().hide();
+							if (selectionRequired && rememberedVpnSelection == 0) {
+								log.debug("Selection is required and no vpn remembered (yet) - showing dialog");
+								application.loadVPNSelect();
+								application.vpnSelectController.setService(service);
+								application.vpnSelectController.setAutoConnect(fAutoconnect.isSelected());
+								application.vpnSelectController.setApp(application);
+								application.getStage().show();
+
+							} else {
+								if (selectionRequired && rememberedVpnSelection != 0) {
+									log.debug("selection required and vpn already remembered - selecting remembered vpn automatically");
+									if (!service.selectVpn(rememberedVpnSelection)) {
+										log.debug("not possible to select remembered vpn");
+										application.vpnSelectController.setApp(application);
+										application.getStage().show();
+									}
+								}
+								if (!application.getStage().isShowing()) {
+									log.debug("handlefButtonLogin: vpnController not visible - not needed, continue with main controller");
+									application.loadShellFireMainController();
+									application.shellfireVpnMainController.setShellfireService(service);
+									boolean vis = true;
+									if (minimize && service.getVpn().getAccountType() != ServerType.Free) {
+										vis = false;
+									}
+
+									application.shellfireVpnMainController.initializeComponents();
+									application.shellfireVpnMainController.setServiceAndInitialize(service);
+									application.shellfireVpnMainController.prepareSubviewControllers();
+									application.shellfireVpnMainController.setApp(application);
+									application.shellfireVpnMainController.afterLogin(fAutoconnect.isSelected());
+								} else {
+									log.debug("handlefButtonLogin: vpnController is visible");
+								}
+							}
+
+						});
+						
+						
 						
 						// TODO: in loaderTask.call(), separate background processing / gui loading etc. from 
 						// needed gui manipulating, which needs to be in the onSucceed method...
-						loaderTask.call();
+						//loaderTask.call();
+						Thread loaderTaskThread = new Thread(loaderTask);
+						loaderTaskThread.setDaemon(true);
+						loaderTaskThread.start();
 					}
 
 				} catch (Exception e) {
@@ -441,51 +497,15 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 			} else {
 				setAutoConnectInRegistry(false);
 			}
-
-			// prepare the other necessary controllers
-			int rememberedVpnSelection = application.rememberedVpnSelection();
-			
 			boolean selectionRequired = service.vpnSelectionRequired();
-			log.debug("LoginController: loginTask - selectedRequired is " + selectionRequired);
-			application.getStage().hide();
-			if (selectionRequired && rememberedVpnSelection == 0) {
-				log.debug("Selection is required and no vpn remembered (yet) - showing dialog");
-				application.loadVPNSelect();
-				application.vpnSelectController.setService(service);
-				application.vpnSelectController.setAutoConnect(fAutoconnect.isSelected());
-				application.vpnSelectController.setApp(application);
-				application.getStage().show();
+			log.debug("LoginController: loginTask - selectionRequired is " + selectionRequired);
+			
+			return selectionRequired;
+			
 
-			} else {
-				if (selectionRequired && rememberedVpnSelection != 0) {
-					log.debug("selection required and vpn already remembered - selecting remembered vpn automatically");
-					if (!service.selectVpn(rememberedVpnSelection)) {
-						log.debug("not possible to select remembered vpn");
-						application.vpnSelectController.setApp(application);
-						application.getStage().show();
-					}
-				}
-				if (!application.getStage().isShowing()) {
-					log.debug("handlefButtonLogin: vpnController not visible - not needed, continue with main controller");
-					application.loadShellFireMainController();
-					application.shellFireMainController.setShellfireService(service);
-					boolean vis = true;
-					if (minimize && service.getVpn().getAccountType() != ServerType.Free) {
-						vis = false;
-					}
-
-					application.shellFireMainController.initializeComponents();
-					application.shellFireMainController.setServiceAndInitialize(service);
-					application.shellFireMainController.prepareSubviewControllers();
-					application.shellFireMainController.setApp(application);
-					application.shellFireMainController.afterLogin(fAutoconnect.isSelected());
-				} else {
-					log.debug("handlefButtonLogin: vpnController is visible");
-				}
-			}
-
-			return true;
 		}
+		
+		
 
 	}
 
@@ -668,14 +688,14 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
 			if (LoginForms.instance != null) {
 
-				if (LoginForms.shellFireMainController != null) {
+				if (LoginForms.shellfireVpnMainController != null) {
 
-					Controller c = LoginForms.shellFireMainController.getController();
+					Controller c = LoginForms.shellfireVpnMainController.getController();
 					if (c != null) {
 						c.disconnect(Reason.GuiRestarting);
 
 					}
-					LoginForms.shellFireMainController = null;
+					LoginForms.shellfireVpnMainController = null;
 				}
 
 				// TODO - investigage if commenting causes memory leaks

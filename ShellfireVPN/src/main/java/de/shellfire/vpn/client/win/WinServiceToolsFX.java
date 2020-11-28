@@ -45,7 +45,7 @@ public class WinServiceToolsFX extends ServiceToolsFX {
 			try {
 				loginProgressDialog = ProgressDialogController.getInstance(i18n.tr("Installing Service..."), null, LoginForms.getStage(),
 						true);
-				loginProgressDialog.setButtonText(i18n.tr("cancel"));
+				loginProgressDialog.setButtonText(i18n.tr("Cancel"));
 				loginProgressDialog.setOptionCallback(new Task() {
 
 					@Override
