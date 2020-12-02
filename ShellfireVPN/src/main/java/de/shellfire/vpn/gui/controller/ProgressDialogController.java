@@ -170,4 +170,11 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
 		
 	}
 
+	public void hide() {
+		Platform.runLater(() -> {
+			getDialogStage().hide();
+		});
+		
+	}
+
 }

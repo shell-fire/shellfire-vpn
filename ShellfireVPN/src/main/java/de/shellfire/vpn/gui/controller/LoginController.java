@@ -147,6 +147,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 						alert.setHeaderText(i18n.tr("Error"));
 						alert.setContentText(i18n.tr("Login error: unknown error"));
 						alert.showAndWait();
+						loginProgressDialog.hide();
 						this.application.getStage().show();
 					} else if (!service.isLoggedIn()) {
 						log.error("LoginController: Not logged in!");
@@ -155,6 +156,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 						alert.setHeaderText(i18n.tr("Error"));
 						alert.setContentText(i18n.tr("Login error: wrong username/password"));
 						alert.showAndWait();
+						loginProgressDialog.hide();
 						this.application.getStage().show();
 
 					} else {
