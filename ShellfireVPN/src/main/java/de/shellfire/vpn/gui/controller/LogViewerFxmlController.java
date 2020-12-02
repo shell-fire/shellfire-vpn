@@ -121,7 +121,7 @@ public class LogViewerFxmlController implements Initializable {
 
 		if (sendLogProgressDialog == null) {
 			try {
-				sendLogProgressDialog = ProgressDialogController.getInstance(i18n.tr("Uploading log.."), sendLogTask, instanceStage, true);
+				sendLogProgressDialog = ProgressDialogController.getInstance(i18n.tr("Uploading log..."), sendLogTask, instanceStage, true);
 				sendLogProgressDialog.setButtonText(i18n.tr("Cancel"));
 
 			} catch (IOException ex) {
