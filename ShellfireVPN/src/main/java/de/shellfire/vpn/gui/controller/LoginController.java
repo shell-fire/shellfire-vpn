@@ -175,6 +175,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 							if (selectionRequired == null) {
 								selectionRequired = false;
 							}
+							loginProgressDialog.hide();
 							application.getStage().hide();
 							if (selectionRequired && rememberedVpnSelection == 0) {
 								log.debug("Selection is required and no vpn remembered (yet) - showing dialog");
