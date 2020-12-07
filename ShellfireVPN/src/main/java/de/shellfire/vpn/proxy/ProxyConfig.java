@@ -47,10 +47,8 @@ public class ProxyConfig {
 	}
 
 	public static void perform() {
-		if (Util.isWindows()) {
-			performWindows();
-			log.debug("In the ProxyConfig class");
-		}
+		performWindows();
+		log.debug("In the ProxyConfig class");
 	}
 
 	public static String getHost() {

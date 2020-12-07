@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-09 21:33+0200\n"
-"PO-Revision-Date: 2020-10-09 21:33+0200\n"
+"POT-Creation-Date: 2020-12-02 21:15+0100\n"
+"PO-Revision-Date: 2020-12-02 21:21+0100\n"
 "Last-Translator: Florian Gattung <fgattung@gmail.com>\n"
 "Language-Team: \n"
 "Language: en_DE\n"
@@ -16,9 +16,10 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 
 #: main/java/de/shellfire/vpn/Util.java:118
-#: main/java/de/shellfire/vpn/gui/controller/LoginController.java:207
-#: main/java/de/shellfire/vpn/gui/controller/RegisterFormController.java:230
-#: main/java/de/shellfire/vpn/gui/controller/RegisterFormController.java:312
+#: main/java/de/shellfire/vpn/gui/controller/LoginController.java:147
+#: main/java/de/shellfire/vpn/gui/controller/LoginController.java:156
+#: main/java/de/shellfire/vpn/gui/controller/RegisterFormController.java:238
+#: main/java/de/shellfire/vpn/gui/controller/RegisterFormController.java:318
 msgid "Error"
 msgstr "Fehler"
 
@@ -26,7 +27,7 @@ msgstr "Fehler"
 msgid "Action could not be completed, an error occured:"
 msgstr "Vorgang konnte nicht ausgeführt werden, da ein Fehler aufgetreten ist:"
 
-#: main/java/de/shellfire/vpn/client/win/WinServiceToolsFX.java:39
+#: main/java/de/shellfire/vpn/client/win/WinServiceToolsFX.java:41
 msgid ""
 "Shellfire VPN service is now being installed. Please enter your admin "
 "password in the next window."
@@ -34,105 +35,176 @@ msgstr ""
 "Der Shellfire VPN Service wird jetzt installiert. Gib dazu bitte im "
 "nachfolgenden Fenster dein Admin-Passwort ein."
 
-#: main/java/de/shellfire/vpn/client/win/WinServiceToolsFX.java:44
+#: main/java/de/shellfire/vpn/client/win/WinServiceToolsFX.java:46
 msgid "Installing Service..."
 msgstr "Installiere Service.."
 
-#: main/java/de/shellfire/vpn/client/win/WinServiceToolsFX.java:45
-#: main/java/de/shellfire/vpn/gui/controller/LogViewerFxmlController.java:122
-#: main/java/de/shellfire/vpn/gui/controller/SettingsDialogController.java:79
-#: main/java/de/shellfire/vpn/updater/UpdaterFX.java:253
-msgid "cancel"
-msgstr "abbrechen"
+#: main/java/de/shellfire/vpn/client/win/WinServiceToolsFX.java:48
+#: main/java/de/shellfire/vpn/gui/controller/LogViewerFxmlController.java:125
+#: main/java/de/shellfire/vpn/gui/controller/ProgressDialogController.java:154
+#: main/java/de/shellfire/vpn/gui/controller/SettingsDialogController.java:82
+#: main/java/de/shellfire/vpn/updater/UpdaterFX.java:258
+msgid "Cancel"
+msgstr "Abbrechen"
 
-#: main/java/de/shellfire/vpn/client/win/WinServiceToolsFX.java:51
+#: main/java/de/shellfire/vpn/client/win/WinServiceToolsFX.java:54
 msgid "Service has not been installed correctly - Shellfire VPN is now exited"
 msgstr ""
 "Service wurde nicht korrekt installiert - Shellfire VPN wird jetzt beendet"
 
-#: main/java/de/shellfire/vpn/gui/controller/LicenseAcceptanceController.java:74
+#: main/java/de/shellfire/vpn/gui/LoginForms.java:87
+msgid "Shellfire VPN is already running."
+msgstr "Shellfire VPN ist bereits gestartet."
+
+#: main/java/de/shellfire/vpn/gui/LoginForms.java:88
+msgid "Already running"
+msgstr "Bereits gestartet"
+
+#: main/java/de/shellfire/vpn/gui/LoginForms.java:303
+msgid ""
+"A new version of Shellfire VPN is available. An update is mandatory. Would "
+"you like to update now?"
+msgstr ""
+"Es ist eine neue Version von Shellfire VPN verfügbar. Ein Update ist "
+"zwingend erforderlich. Möchtest du jetzt updaten?"
+
+#: main/java/de/shellfire/vpn/gui/LoginForms.java:305
+msgid "New Version"
+msgstr "Neue Version"
+
+#: main/java/de/shellfire/vpn/gui/LoginForms.java:311
+msgid "Update is being performed"
+msgstr "Update wird durchgeführt"
+
+#: main/java/de/shellfire/vpn/gui/LoginForms.java:313
+msgid ""
+"You decided, to update. Shellfire VPN is now being restarted with super user "
+"privileges to perform the update."
+msgstr ""
+"Du hast dich entschieden, zu updaten. Shellfire VPN wird jetzt mit Admin-"
+"Privilegien neugestartet um das Update durchzuführen."
+
+#: main/java/de/shellfire/vpn/gui/LoginForms.java:332
+msgid "Update rejected"
+msgstr "Update abgelehnt"
+
+#: main/java/de/shellfire/vpn/gui/LoginForms.java:333
+msgid "You decided not to update - Shellfire VPN is now exiting."
+msgstr ""
+"Du hast dich entschieden, nicht zu updaten. Shellfire VPN wird jetzt beendet."
+
+#: main/java/de/shellfire/vpn/gui/LoginForms.java:413
+msgid "Initializing ShellfireVPNService..."
+msgstr "Initialisiere ShellfireVPNService..."
+
+#: main/java/de/shellfire/vpn/gui/LoginForms.java:419
+msgid "No internet"
+msgstr "Kein Internet"
+
+#: main/java/de/shellfire/vpn/gui/LoginForms.java:420
+msgid "No internet connection available - ShellfireVPN is being closed."
+msgstr "Keine Internet-Verbindung verfügbar - ShellfireVPN wird beendet."
+
+#: main/java/de/shellfire/vpn/gui/controller/LicenseAcceptanceController.java:76
 msgid "Reject"
 msgstr "Ablehnen"
 
-#: main/java/de/shellfire/vpn/gui/controller/LicenseAcceptanceController.java:75
+#: main/java/de/shellfire/vpn/gui/controller/LicenseAcceptanceController.java:77
 msgid "Accept"
 msgstr "Akzeptieren"
 
-#: main/java/de/shellfire/vpn/gui/controller/LicenseAcceptanceController.java:76
+#: main/java/de/shellfire/vpn/gui/controller/LicenseAcceptanceController.java:78
 msgid "Accept licence"
 msgstr "Lizenz akzeptieren"
 
-#: main/java/de/shellfire/vpn/gui/controller/LogViewerFxmlController.java:121
-msgid "Upload log.."
-msgstr "Log hochladen.."
+#: main/java/de/shellfire/vpn/gui/controller/LogViewerFxmlController.java:124
+msgid "Uploading log..."
+msgstr "Uploade log..."
 
-#: main/java/de/shellfire/vpn/gui/controller/LogViewerFxmlController.java:134
+#: main/java/de/shellfire/vpn/gui/controller/LogViewerFxmlController.java:137
 msgid "Log upload cancelled."
 msgstr "Log-Upload abgebrochen."
 
-#: main/java/de/shellfire/vpn/gui/controller/LogViewerFxmlController.java:171
+#: main/java/de/shellfire/vpn/gui/controller/LogViewerFxmlController.java:185
+msgid "Could not sent log."
+msgstr "Log konnte nicht hochgeladen werden."
+
+#: main/java/de/shellfire/vpn/gui/controller/LogViewerFxmlController.java:188
 msgid "Log sent."
 msgstr "Log wurde gesendet."
 
-#: main/java/de/shellfire/vpn/gui/controller/LoginController.java:208
+#: main/java/de/shellfire/vpn/gui/controller/LoginController.java:128
+#: main/java/de/shellfire/vpn/gui/controller/ProgressDialogController.java:71
+msgid "Logging in..."
+msgstr "Einloggen..."
+
+#: main/java/de/shellfire/vpn/gui/controller/LoginController.java:148
+msgid "Login error: unknown error"
+msgstr "Fehler beim Einloggen: Unbekannter Fehler"
+
+#: main/java/de/shellfire/vpn/gui/controller/LoginController.java:157
 msgid "Login error: wrong username/password"
 msgstr "Fehler beim Einloggen: Falscher Benutzername/Passwort"
 
-#: main/java/de/shellfire/vpn/gui/controller/LoginController.java:291
+#: main/java/de/shellfire/vpn/gui/controller/LoginController.java:163
+msgid "Loading..."
+msgstr "Lade..."
+
+#: main/java/de/shellfire/vpn/gui/controller/LoginController.java:308
 msgid "Email / Username:"
 msgstr "Email / Benutzername:"
 
-#: main/java/de/shellfire/vpn/gui/controller/LoginController.java:294
-#: main/java/de/shellfire/vpn/gui/controller/RegisterFormController.java:127
+#: main/java/de/shellfire/vpn/gui/controller/LoginController.java:310
+#: main/java/de/shellfire/vpn/gui/controller/RegisterFormController.java:132
 msgid "Password:"
 msgstr "Passwort:"
 
-#: main/java/de/shellfire/vpn/gui/controller/LoginController.java:297
-#: main/java/de/shellfire/vpn/gui/controller/SettingsDialogController.java:73
+#: main/java/de/shellfire/vpn/gui/controller/LoginController.java:312
+#: main/java/de/shellfire/vpn/gui/controller/SettingsDialogController.java:76
 msgid "Login automatically"
 msgstr "Automatisch einloggen"
 
-#: main/java/de/shellfire/vpn/gui/controller/LoginController.java:299
+#: main/java/de/shellfire/vpn/gui/controller/LoginController.java:314
 msgid "No user credentials?"
 msgstr "Keine Zugangsdaten?"
 
-#: main/java/de/shellfire/vpn/gui/controller/LoginController.java:301
+#: main/java/de/shellfire/vpn/gui/controller/LoginController.java:316
 msgid "User credentials lost?"
 msgstr "Zugangsdaten verloren?"
 
-#: main/java/de/shellfire/vpn/gui/controller/LoginController.java:303
-#: main/java/de/shellfire/vpn/gui/controller/LoginController.java:304
+#: main/java/de/shellfire/vpn/gui/controller/LoginController.java:318
+#: main/java/de/shellfire/vpn/gui/controller/LoginController.java:319
 msgid "Login"
 msgstr "Login"
 
-#: main/java/de/shellfire/vpn/gui/controller/LoginController.java:305
-#: main/java/de/shellfire/vpn/gui/controller/SettingsDialogController.java:75
+#: main/java/de/shellfire/vpn/gui/controller/LoginController.java:320
+#: main/java/de/shellfire/vpn/gui/controller/SettingsDialogController.java:78
 msgid "Start on boot"
 msgstr "Beim Hochfahren starten"
 
-#: main/java/de/shellfire/vpn/gui/controller/LoginController.java:308
-#: main/java/de/shellfire/vpn/gui/controller/SettingsDialogController.java:80
+#: main/java/de/shellfire/vpn/gui/controller/LoginController.java:321
+#: main/java/de/shellfire/vpn/gui/controller/SettingsDialogController.java:83
 msgid "Connect automatically"
 msgstr "Automatisch verbinden"
 
-#: main/java/de/shellfire/vpn/gui/controller/LoginController.java:310
-#: main/java/de/shellfire/vpn/gui/controller/SettingsDialogController.java:72
+#: main/java/de/shellfire/vpn/gui/controller/LoginController.java:323
+#: main/java/de/shellfire/vpn/gui/controller/SettingsDialogController.java:75
 msgid "Save login data"
 msgstr "Logindaten speichern"
 
-#: main/java/de/shellfire/vpn/gui/controller/LoginController.java:574
+#: main/java/de/shellfire/vpn/gui/controller/LoginController.java:616
 msgid "Licence not accepted - Shellfire VPN is now exiting."
 msgstr "Lizenz nicht akzeptiert - Shellfire VPN wird jetzt beendet."
 
-#: main/java/de/shellfire/vpn/gui/controller/LoginController.java:600
+#: main/java/de/shellfire/vpn/gui/controller/LoginController.java:642
 msgid "Start Shellfire VPN on boot and connect automatically?"
 msgstr "Shellfire VPN beim Hochfahren starten und automatisch verbinden?"
 
-#: main/java/de/shellfire/vpn/gui/controller/LoginController.java:601
+#: main/java/de/shellfire/vpn/gui/controller/LoginController.java:644
 msgid "Startup"
 msgstr "Autostart"
 
-#: main/java/de/shellfire/vpn/gui/controller/LoginController.java:616
+#: main/java/de/shellfire/vpn/gui/controller/LoginController.java:660
 msgid ""
 "This is the first time you start Shellfire VPN. Create a new Shellfire VPN "
 "account?"
@@ -140,81 +212,96 @@ msgstr ""
 "Dies ist dein erster Start von Shellfire VPN. Neuen Shellfire VPN Account "
 "anlegen?"
 
-#: main/java/de/shellfire/vpn/gui/controller/LoginController.java:617
+#: main/java/de/shellfire/vpn/gui/controller/LoginController.java:662
 msgid "Welcome: First Start"
 msgstr "Willkommen: Erster Start"
 
-#: main/java/de/shellfire/vpn/gui/controller/MapEncryptionSubviewController.java:49
+#: main/java/de/shellfire/vpn/gui/controller/MapEncryptionSubviewController.java:51
 msgid "Show data route and your location (when connected)"
 msgstr "Datenroute und eigenen Standort anzeigen (falls verbunden)"
 
-#: main/java/de/shellfire/vpn/gui/controller/MapEncryptionSubviewController.java:50
+#: main/java/de/shellfire/vpn/gui/controller/MapEncryptionSubviewController.java:52
 msgid "Server map"
 msgstr "Server Übersichtskarte"
 
-#: main/java/de/shellfire/vpn/gui/controller/MapEncryptionSubviewController.java:51
+#: main/java/de/shellfire/vpn/gui/controller/MapEncryptionSubviewController.java:53
 msgid "go to your location"
 msgstr "gehe zu eigenem Standort"
 
-#: main/java/de/shellfire/vpn/gui/controller/ProgressDialogController.java:73
-msgid "Logging in..."
-msgstr "Einloggen..."
+#: main/java/de/shellfire/vpn/gui/controller/ProgressDialogRegisterController.java:79
+msgid "Waiting for account activation..."
+msgstr "Warte auf Aktivierung des Accounts..."
 
-#: main/java/de/shellfire/vpn/gui/controller/ProgressDialogController.java:163
-msgid "Cancel"
-msgstr "Abbrechen"
+#: main/java/de/shellfire/vpn/gui/controller/ProgressDialogRegisterController.java:80
+msgid "We have just sent you an email - please follow the instructions in it."
+msgstr ""
+"Wir haben dir gerade eine E-Mail geschickt - bitte befolge die Anweisungen "
+"darin."
 
-#: main/java/de/shellfire/vpn/gui/controller/RegisterFormController.java:125
+#: main/java/de/shellfire/vpn/gui/controller/ProgressDialogRegisterController.java:81
+msgid "No email received?"
+msgstr "Keine Email erhalten?"
+
+#: main/java/de/shellfire/vpn/gui/controller/ProgressDialogRegisterController.java:127
+msgid "Please enter a different email-address and try again."
+msgstr "Bitte gib eine andere E-Mail-Adresse ein und versuche es erneut."
+
+#: main/java/de/shellfire/vpn/gui/controller/ProgressDialogRegisterController.java:137
+msgid "We sent you the email again."
+msgstr "Wir haben dir die E-Mail nochmal geschickt."
+
+#: main/java/de/shellfire/vpn/gui/controller/RegisterFormController.java:130
 msgid "Registration"
 msgstr "Registrierung"
 
-#: main/java/de/shellfire/vpn/gui/controller/RegisterFormController.java:129
+#: main/java/de/shellfire/vpn/gui/controller/RegisterFormController.java:134
 msgid "Password check:"
 msgstr "Passwort-Check:"
 
-#: main/java/de/shellfire/vpn/gui/controller/RegisterFormController.java:131
+#: main/java/de/shellfire/vpn/gui/controller/RegisterFormController.java:136
 msgid "Register now"
 msgstr "Jetzt Registrieren"
 
-#: main/java/de/shellfire/vpn/gui/controller/RegisterFormController.java:133
+#: main/java/de/shellfire/vpn/gui/controller/RegisterFormController.java:138
 msgid "I subscribe to the newsletter"
 msgstr "Ich abonniere den Newsletter"
 
-#: main/java/de/shellfire/vpn/gui/controller/RegisterFormController.java:135
-#: main/java/de/shellfire/vpn/gui/controller/VpnSelectDialogController.java:187
+#: main/java/de/shellfire/vpn/gui/controller/RegisterFormController.java:140
+#: main/java/de/shellfire/vpn/gui/controller/VpnSelectDialogController.java:182
 msgid "back"
 msgstr "zurück"
 
-#: main/java/de/shellfire/vpn/gui/controller/RegisterFormController.java:141
+#: main/java/de/shellfire/vpn/gui/controller/RegisterFormController.java:147
 msgid ""
 "I accept the <a onclick='return false;' target='_agb' href='https://www."
-"shellfire.de/agb/'>Terms and Conditions</a> and have read and noted the <a "
-"onclick='return false;' target='_datenschutzerklaerung' href='https://www."
-"shellfire.de/datenschutzerklaerung/'>Privacy Policy</a> <br /> and the <a "
-"onclick='return false;' target='_widerrufsrecht' href='https://www.shellfire."
-"de/widerrufsrecht/'>Right of Withdrawal</a>."
+"shellfire.net/terms-and-conditions/'>Terms and Conditions</a> and have read "
+"and noted the <a onclick='return false;' target='_datenschutzerklaerung' "
+"href='https://www.shellfire.net/privacy-statement/'>Privacy Policy</a> and "
+"the <a onclick='return false;' target='_widerrufsrecht' href='https://www."
+"shellfire.net/right-of-withdrawal/'>Right of Withdrawal</a>."
 msgstr ""
-"Ich akzeptiere die <a onclick='return false;' target='_agb' href='https://"
-"www.shellfire.de/agb/'>AGB</a> habe die <a onclick='return false;' "
-"target='_datenschutzerklaerung' href='https://www.shellfire.de/"
-"datenschutzerklaerung/'>Datenschutzerklärung</a> gelesen <br /> und nehme "
-"das <a onclick='return false;' target='_widerrufsrecht' href='https://www."
-"shellfire.de/widerrufsrecht/'>Widerrufsrecht</a> zu Kenntnis."
+"Ich akzeptiere die <a onclick='return false;' target='_agb' href=\"https://"
+"www.shellfire.de/agb/\">Allgemeinen Geschäftsbedingungen (AGB)</a>, habe die "
+"<a onclick='return false;' target='_datenschutzerklaerung' href=\"https://"
+"www.shellfire.de/datenschutzerklaerung/\">Datenschutzerklärung</a> und die "
+"<a onclick='return false;' target='_widerrufsrecht' href=\"https://www."
+"shellfire.de/widerrufsrecht/\">Widerrufsbelehrung</a> gelesen und erkläre "
+"mich mit ihr einverstanden."
 
-#: main/java/de/shellfire/vpn/gui/controller/RegisterFormController.java:192
-#: main/java/de/shellfire/vpn/i18n/VpnI18N.java:92
+#: main/java/de/shellfire/vpn/gui/controller/RegisterFormController.java:199
+#: main/java/de/shellfire/vpn/i18n/VpnI18N.java:91
 msgid "Please enter a valid email address."
 msgstr "Bitte gib eine gültige Email-Adresse ein."
 
-#: main/java/de/shellfire/vpn/gui/controller/RegisterFormController.java:200
+#: main/java/de/shellfire/vpn/gui/controller/RegisterFormController.java:207
 msgid "Please enter a password."
 msgstr "Bitte gib ein Passwort ein."
 
-#: main/java/de/shellfire/vpn/gui/controller/RegisterFormController.java:206
+#: main/java/de/shellfire/vpn/gui/controller/RegisterFormController.java:213
 msgid "Your password must contain at least 5 characters."
 msgstr "Dein Passwort muss mindestens 5 Zeichen lang sein."
 
-#: main/java/de/shellfire/vpn/gui/controller/RegisterFormController.java:212
+#: main/java/de/shellfire/vpn/gui/controller/RegisterFormController.java:219
 msgid ""
 "Please enter the password again into the password check field for your "
 "safety."
@@ -222,11 +309,11 @@ msgstr ""
 "Bitte gib dein Passwort zur Sicherheit noch einmal im Feld Passwort-Check "
 "ein."
 
-#: main/java/de/shellfire/vpn/gui/controller/RegisterFormController.java:218
+#: main/java/de/shellfire/vpn/gui/controller/RegisterFormController.java:225
 msgid "Password and password check do not match."
 msgstr "Passwort und Passwort-Check stimmen nicht überein."
 
-#: main/java/de/shellfire/vpn/gui/controller/RegisterFormController.java:224
+#: main/java/de/shellfire/vpn/gui/controller/RegisterFormController.java:232
 msgid ""
 "You must accept the terms and conditions, privacy policy and right of "
 "withdrawal to complete your registration."
@@ -234,11 +321,11 @@ msgstr ""
 "Die AGB, Datenschutzerklärung und Widerrufstrecht müssen akzeptiert werden, "
 "um die Registrierung abzuschließen."
 
-#: main/java/de/shellfire/vpn/gui/controller/RegisterFormController.java:313
+#: main/java/de/shellfire/vpn/gui/controller/RegisterFormController.java:319
 msgid "Error registering:"
 msgstr "Fehler bei Registrierung:"
 
-#: main/java/de/shellfire/vpn/gui/controller/RegisterFormController.java:391
+#: main/java/de/shellfire/vpn/gui/controller/RegisterFormController.java:373
 msgid ""
 "Your Shellfire account has been successfully activated. Please log in with "
 "your email address and password to start Shellfire VPN."
@@ -246,43 +333,43 @@ msgstr ""
 "Dein Shellfire Account wurde soeben erfolgreich aktiviert. Logge dich jetzt "
 "mit Email-Adresse und Passwort ein, um Shellfire VPN zu starten."
 
-#: main/java/de/shellfire/vpn/gui/controller/RegisterFormController.java:393
+#: main/java/de/shellfire/vpn/gui/controller/RegisterFormController.java:375
 msgid "Registration successful."
 msgstr "Registrierung erfolgreich."
 
-#: main/java/de/shellfire/vpn/gui/controller/ServerListSubviewController.java:202
+#: main/java/de/shellfire/vpn/gui/controller/ServerListSubviewController.java:205
 msgid "Select a Server for your connection"
 msgstr "Wähle einen Server für deine Verbindung"
 
-#: main/java/de/shellfire/vpn/gui/controller/ServerListSubviewController.java:203
+#: main/java/de/shellfire/vpn/gui/controller/ServerListSubviewController.java:206
 msgid "Connection type"
 msgstr "Verbindungstyp"
 
-#: main/java/de/shellfire/vpn/gui/controller/ServerListSubviewController.java:204
+#: main/java/de/shellfire/vpn/gui/controller/ServerListSubviewController.java:207
 msgid "TCP (works with safe firewalls and proxies.)"
 msgstr "TCP (funktioniert auch bei sicheren Firewalls und Proxy-Servern.)"
 
-#: main/java/de/shellfire/vpn/gui/controller/ServerListSubviewController.java:205
+#: main/java/de/shellfire/vpn/gui/controller/ServerListSubviewController.java:208
 msgid "UDP (fast)"
 msgstr "UDP (schnell)"
 
-#: main/java/de/shellfire/vpn/gui/controller/SettingsDialogController.java:74
+#: main/java/de/shellfire/vpn/gui/controller/SettingsDialogController.java:77
 msgid "Save VPN choice"
 msgstr "VPN Auswahl merken"
 
-#: main/java/de/shellfire/vpn/gui/controller/SettingsDialogController.java:76
+#: main/java/de/shellfire/vpn/gui/controller/SettingsDialogController.java:79
 msgid "Show status site after connection has been established"
 msgstr "Zeige Status-Seite nach Verbindungsaufbau"
 
-#: main/java/de/shellfire/vpn/gui/controller/SettingsDialogController.java:77
+#: main/java/de/shellfire/vpn/gui/controller/SettingsDialogController.java:80
 msgid "Language"
 msgstr "Sprache"
 
-#: main/java/de/shellfire/vpn/gui/controller/SettingsDialogController.java:78
+#: main/java/de/shellfire/vpn/gui/controller/SettingsDialogController.java:81
 msgid "Save settings"
 msgstr "Einstellungen Speichern"
 
-#: main/java/de/shellfire/vpn/gui/controller/SettingsDialogController.java:236
+#: main/java/de/shellfire/vpn/gui/controller/SettingsDialogController.java:238
 msgid ""
 "Changed language settings require a restart of ShellfireVPN to take effect. "
 "Restart now?"
@@ -290,60 +377,60 @@ msgstr ""
 "Geänderte Spracheinstellungen machen einen Neustart von ShellfireVPN "
 "erforderlich. Jetzt neu starten?"
 
-#: main/java/de/shellfire/vpn/gui/controller/SettingsDialogController.java:237
+#: main/java/de/shellfire/vpn/gui/controller/SettingsDialogController.java:240
 msgid ""
 "Changed language settings require a restart of Shellfire VPN to take effect."
 msgstr ""
 "Geänderte Spracheinstellungen werden erst nach einem Neustart von Shellfire "
 "VPN aktiv."
 
-#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:225
+#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:227
 msgid "Connection status"
 msgstr "Verbindungsstatus"
 
-#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:226
+#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:228
 msgid "Connected since:"
 msgstr "Verbunden seit:"
 
-#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:227
+#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:229
 msgid "(not connected)"
 msgstr "(nicht verbunden)"
 
-#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:228
+#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:230
 msgid "Online IP:"
 msgstr "Online IP:"
 
-#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:229
+#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:231
 msgid "VPN Id:"
 msgstr "VPN Id:"
 
-#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:230
+#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:232
 msgid "Valid Until:"
 msgstr "Gültig bis:"
 
-#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:231
+#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:233
 msgid "VPN type:"
 msgstr "VPN Typ:"
 
-#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:232
+#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:234
 msgid "Connection"
 msgstr "Verbindung"
 
-#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:233
+#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:235
 msgid "Connect to Shellfire VPN now"
 msgstr "Jetzt zu Shellfire VPN verbinden"
 
-#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:235
+#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:237
 msgid "Server list"
 msgstr "Server Liste"
 
-#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:236
-#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:667
-#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:1252
+#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:238
+#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:673
+#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:1267
 msgid "Not connected"
 msgstr "Nicht verbunden"
 
-#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:237
+#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:239
 msgid "Show list of all VPN servers"
 msgstr "Liste aller VPN Server anzeigen"
 
@@ -357,11 +444,11 @@ msgstr ""
 "\n"
 "Mehr Informationen zu Shellfire VPN Premium anzeigen?"
 
-#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:588
+#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:589
 msgid "Premium server selected"
 msgstr "Premium Server ausgewählt"
 
-#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:606
+#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:609
 msgid ""
 "This server is only available for Shellfire VPN PremiumPlus customers\n"
 "\n"
@@ -371,28 +458,34 @@ msgstr ""
 "\n"
 "Mehr Informationen zu Shellfire VPN PremiumPlus anzeigen?"
 
-#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:607
+#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:611
 msgid "PremiumPlus server selected"
 msgstr "PremiumPlus Server ausgewählt"
 
-#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:676
-#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:892
+#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:642
+#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:816
+#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:826
+msgid "Connection is being processed..."
+msgstr "Verbindung wird hergestellt..."
+
+#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:682
+#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:906
 msgid "Connect"
 msgstr "Verbinden"
 
-#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:686
+#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:692
 msgid "Invalid password"
 msgstr "Passwort Falsch"
 
-#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:690
+#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:696
 msgid "Process is being executed without administrator rights."
 msgstr "Prozess wird ohne Administrator-Rechte ausgeführt."
 
-#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:694
+#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:700
 msgid "Unknown certificate error"
 msgstr "Unbekannter Zertifikate-Fehler"
 
-#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:698
+#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:704
 msgid ""
 "All Tap devices in use. Please close openvpn.exe using the task manager or "
 "reboot your PC."
@@ -400,17 +493,17 @@ msgstr ""
 "Alle Tap-Geräte in Verwendung. Bitte alle openvpn.exe Prozesse im Task "
 "Manager schließen oder PC neu starten."
 
-#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:702
+#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:708
 msgid "Connection interrupted."
 msgstr "Verbindung wurde unterbrochen."
 
-#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:706
+#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:712
 msgid "No OpenVPN installation found. Please reinstall Shellfire VPN."
 msgstr ""
 "OpenVPN Installation wurde nicht gefunden. Bitte Shellfire VPN neu "
 "installieren."
 
-#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:710
+#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:716
 msgid ""
 "OpenVPN startup parameters could not be downloaded - Please check your "
 "internet connection."
@@ -418,18 +511,18 @@ msgstr ""
 "OpenVPN Startparameter konnten nicht geladen werden - Bitte überprüfe deine "
 "Internet-Verbindung."
 
-#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:714
+#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:720
 msgid ""
 "The installed Tap driver is out of date. Please reinstall Shellfire VPN."
 msgstr ""
 "Der installierte Tap Treiber ist zu alt. Bitte installiere Shellfire VPN neu."
 
-#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:718
+#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:724
 msgid "No Tap driver installed. Please reinstall Shellfire VPN."
 msgstr ""
 "Es wurde kein Tap Treiber installiert. Bitte installiere Shellfire VPN neu."
 
-#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:726
+#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:735
 msgid ""
 "The gateway coul not be switched. Please set a gateway in the TCP/IP "
 "settings of the current network adapter."
@@ -437,7 +530,7 @@ msgstr ""
 "Das Gateway konnte nicht umgeleitet werden. Bitte bei den TCP/IP "
 "Einstellungen der aktuellen Netzwerkverbindung ein Gateway einstellen."
 
-#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:731
+#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:740
 msgid ""
 "An unknown error has occured while establishing the VPN connection. Please "
 "reboot and/or reinstall Shellfire VPN."
@@ -445,11 +538,13 @@ msgstr ""
 "Es ist ein unbekannter Fehler mit der VPN Verbindung aufgetreten. Bitte "
 "versuche einen Reboot und/oder Shellfire VPN neu zu installieren."
 
-#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:775
+#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:785
+#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:788
 msgid "Disconnected"
 msgstr "Getrennt"
 
-#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:776
+#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:786
+#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:789
 msgid ""
 "Shellfire VPN connection terminated. Your internet connection is no longer "
 "secured!"
@@ -457,51 +552,43 @@ msgstr ""
 "Shellfire VPN Verbindung getrennt. Deine Internet-Verbindung ist nicht mehr "
 "geschützt!"
 
-#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:803
-msgid "Connection is being processed..."
-msgstr "Verbindung wird hergestellt..."
-
-#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:815
-msgid "Connecting..."
-msgstr "Verbinde..."
-
-#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:861
+#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:872
 msgid "Exit"
 msgstr "Beenden"
 
-#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:877
+#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:888
 msgid "Shellfire VPN Premium Infos"
 msgstr "Shellfire VPN Premium Infos"
 
-#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:882
+#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:893
 msgid "Help"
 msgstr "Hilfe"
 
-#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:899
+#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:913
 msgid "Show VPN state in your browser"
 msgstr "Zeige VPN Status im Browser"
 
-#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:906
+#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:920
 msgid "Shellfire VPN to front"
 msgstr "Shellfire VPN in den Vordergrund"
 
-#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:909
+#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:923
 msgid "Abort"
 msgstr "Abbrechen"
 
-#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:916
+#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:930
 msgid "Disconnect"
 msgstr "Trennen"
 
-#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:1049
+#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:1062
 msgid "Connected"
 msgstr "Verbunden"
 
-#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:1070
+#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:1083
 msgid "Connection successful"
 msgstr "Verbindung Erfolgreich"
 
-#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:1071
+#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:1084
 msgid ""
 "You are now connected to Shellfire VPN. Your internet connection is "
 "encrypted."
@@ -509,31 +596,31 @@ msgstr ""
 "Du bist jetzt mit Shellfire VPN verbunden. Deine Internet-Verbindung ist "
 "verschlüsselt."
 
-#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:1185
+#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:1199
 msgid "d/MM/yyyy"
 msgstr "d.MM.yyyy"
 
-#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:1214
+#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:1229
 msgid "Shellfire VPN settings"
 msgstr "Shellfire VPN Einstellungen"
 
-#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:1252
+#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:1267
 msgid "You are not connected to Shellfire VPN."
 msgstr "Du bist nicht zu Shellfire VPN verbunden."
 
-#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:1312
+#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:1346
 msgid "Disconnect and close Shellfire VPN?"
 msgstr "Verbindung trennen und Shellfire VPN schließen?"
 
-#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:1313
+#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:1348
 msgid "Currently Connected"
 msgstr "Verbindung besteht"
 
-#: main/java/de/shellfire/vpn/gui/controller/TvStreasSubviewController.java:57
+#: main/java/de/shellfire/vpn/gui/controller/TvStreasSubviewController.java:58
 msgid "List of US TV streams (english language)"
 msgstr "Liste von TV Streams aus den USA (englischsprachig)"
 
-#: main/java/de/shellfire/vpn/gui/controller/TvStreasSubviewController.java:58
+#: main/java/de/shellfire/vpn/gui/controller/TvStreasSubviewController.java:60
 msgid ""
 "Using these streams usually requires a US IP address.You can get one by "
 "connecting to a Shellfire VPN server located in the USA"
@@ -542,15 +629,15 @@ msgstr ""
 "kannst eine US IP Adresse bekommen, in dem du dich zu einem Shellfire VPN "
 "Server verbindest, der sich in den USA befindet"
 
-#: main/java/de/shellfire/vpn/gui/controller/VpnSelectDialogController.java:118
+#: main/java/de/shellfire/vpn/gui/controller/VpnSelectDialogController.java:114
 msgid "No VPN selected"
 msgstr "Kein Vpn ausgewählt"
 
-#: main/java/de/shellfire/vpn/gui/controller/VpnSelectDialogController.java:119
+#: main/java/de/shellfire/vpn/gui/controller/VpnSelectDialogController.java:115
 msgid "Please select a VPN from the list to proceed."
 msgstr "Bitte wähle einen VPN aus der Liste um fortzufahren."
 
-#: main/java/de/shellfire/vpn/gui/controller/VpnSelectDialogController.java:185
+#: main/java/de/shellfire/vpn/gui/controller/VpnSelectDialogController.java:180
 msgid ""
 "Multiple VPN are located in your Shellfire account. Please select the VPN "
 "you want to use."
@@ -558,19 +645,19 @@ msgstr ""
 "In deinem Shellfire Konto gibt es mehrere VPN. Bitte wähle den VPN, den du "
 "verwenden möchtest."
 
-#: main/java/de/shellfire/vpn/gui/controller/VpnSelectDialogController.java:188
+#: main/java/de/shellfire/vpn/gui/controller/VpnSelectDialogController.java:183
 msgid "Select VPN"
 msgstr "VPN auswählen"
 
-#: main/java/de/shellfire/vpn/gui/controller/VpnSelectDialogController.java:189
+#: main/java/de/shellfire/vpn/gui/controller/VpnSelectDialogController.java:184
 msgid "Save my choice"
 msgstr "Auswahl merken"
 
-#: main/java/de/shellfire/vpn/gui/controller/VpnSelectDialogController.java:190
+#: main/java/de/shellfire/vpn/gui/controller/VpnSelectDialogController.java:185
 msgid "Choose VPN"
 msgstr "VPN auswählen"
 
-#: main/java/de/shellfire/vpn/gui/controller/VpnSelectDialogController.java:192
+#: main/java/de/shellfire/vpn/gui/controller/VpnSelectDialogController.java:187
 msgid ""
 "Note: VPN types PPTP and L2TP/IPSec have to be switched to OpenVPN before "
 "you can connect using sf vpn."
@@ -578,19 +665,19 @@ msgstr ""
 "Achtung: Die VPN Typen PPTP und L2TP/IPSec müssen zu OpenVPN geändert "
 "werden, bevor du dich mit Shellfire VPN zu ihnen verbinden kannst."
 
-#: main/java/de/shellfire/vpn/gui/model/VpnComparisonFXHelper.java:25
+#: main/java/de/shellfire/vpn/gui/model/VpnComparisonFXHelper.java:27
 msgid "Free"
 msgstr "Free"
 
-#: main/java/de/shellfire/vpn/gui/model/VpnComparisonFXHelper.java:25
+#: main/java/de/shellfire/vpn/gui/model/VpnComparisonFXHelper.java:27
 msgid "Premium"
 msgstr "Premium"
 
-#: main/java/de/shellfire/vpn/gui/model/VpnComparisonFXHelper.java:25
+#: main/java/de/shellfire/vpn/gui/model/VpnComparisonFXHelper.java:27
 msgid "Premium Plus"
 msgstr "Premium Plus"
 
-#: main/java/de/shellfire/vpn/i18n/VpnI18N.java:87
+#: main/java/de/shellfire/vpn/i18n/VpnI18N.java:88
 msgid "German"
 msgstr "Deutsch"
 
@@ -598,15 +685,15 @@ msgstr "Deutsch"
 msgid "English"
 msgstr "Englisch"
 
-#: main/java/de/shellfire/vpn/i18n/VpnI18N.java:89
+#: main/java/de/shellfire/vpn/i18n/VpnI18N.java:88
 msgid "French"
 msgstr "Französisch"
 
-#: main/java/de/shellfire/vpn/i18n/VpnI18N.java:90
+#: main/java/de/shellfire/vpn/i18n/VpnI18N.java:89
 msgid "Please enter username and password."
 msgstr "Bitte gib einen Benutzernamen und ein Passwort ein."
 
-#: main/java/de/shellfire/vpn/i18n/VpnI18N.java:91
+#: main/java/de/shellfire/vpn/i18n/VpnI18N.java:90
 msgid ""
 "Login failed. Please log in using your Shellfire customer Id (K400...), "
 "email address or VPN username (sf...)."
@@ -614,7 +701,7 @@ msgstr ""
 "Login fehlgeschlagen. Bitte mit Shellfire Kundennummer (K400...), "
 "Emailadresse oder VPN Benutzernamen (sf...) einloggen."
 
-#: main/java/de/shellfire/vpn/i18n/VpnI18N.java:92
+#: main/java/de/shellfire/vpn/i18n/VpnI18N.java:91
 msgid "An account is already registered for this email address."
 msgstr "Ein Account mit dieser Email-Adresse existiert bereits."
 
@@ -630,45 +717,45 @@ msgstr "bis 10.000 kbit/sec"
 msgid "up to 768 kbit/sec"
 msgstr "bis 768 kbit/sec"
 
-#: main/java/de/shellfire/vpn/types/Server.java:151
+#: main/java/de/shellfire/vpn/types/Server.java:150
 msgid "256 bit"
 msgstr "256 bit"
 
-#: main/java/de/shellfire/vpn/types/Server.java:153
+#: main/java/de/shellfire/vpn/types/Server.java:152
 msgid "192 bit"
 msgstr "192 bit"
 
-#: main/java/de/shellfire/vpn/types/Server.java:156
+#: main/java/de/shellfire/vpn/types/Server.java:155
 msgid "128 bit"
 msgstr "128 bit"
 
-#: main/java/de/shellfire/vpn/updater/DownloadProgressDialog.java:57
-#: main/java/de/shellfire/vpn/updater/UpdaterFX.java:251
+#: main/java/de/shellfire/vpn/updater/DownloadProgressDialog.java:56
+#: main/java/de/shellfire/vpn/updater/UpdaterFX.java:255
 msgid "Downloading update..."
 msgstr "Downloading Update..."
 
-#: main/java/de/shellfire/vpn/updater/UpdaterFX.java:169
+#: main/java/de/shellfire/vpn/updater/UpdaterFX.java:173
 msgid "Update could not be processed. Launcher is being shut down."
 msgstr "Update konnte nicht durchgeführt werden. Launcher wird beendet."
 
-#: main/java/de/shellfire/vpn/updater/UpdaterFX.java:186
+#: main/java/de/shellfire/vpn/updater/UpdaterFX.java:191
 msgid "Main application could not be started. The launcher will now shut down."
 msgstr "Hauptanwendung konnte nicht gestartet werden. Launcher wird beendet."
 
-#: main/java/de/shellfire/vpn/updater/UpdaterFX.java:231
+#: main/java/de/shellfire/vpn/updater/UpdaterFX.java:236
 msgid "I/O error during download of the newest version. Aborting."
 msgstr "I/O Fehler während des Downloades der neuen Version. Abbruch."
 
-#: main/java/de/shellfire/vpn/updater/UpdaterFX.java:259
+#: main/java/de/shellfire/vpn/updater/UpdaterFX.java:264
 msgid "Update aborted, shutting down application."
 msgstr "Update abgebrochen. Anwendung wird beendet."
 
-#: main/java/de/shellfire/vpn/updater/UpdaterFX.java:278
-#: main/java/de/shellfire/vpn/updater/UpdaterFX.java:282
+#: main/java/de/shellfire/vpn/updater/UpdaterFX.java:283
+#: main/java/de/shellfire/vpn/updater/UpdaterFX.java:287
 msgid "Error while downloading new version. Aborting."
 msgstr "Fehler während des Downloades der neuen Version. Abbruch."
 
-#: main/java/de/shellfire/vpn/updater/UpdaterFX.java:319
+#: main/java/de/shellfire/vpn/updater/UpdaterFX.java:325
 msgid ""
 "Update available. Without the update, it is not possible to run Shellfire "
 "VPN.\n"
@@ -680,34 +767,34 @@ msgstr ""
 "\n"
 "Jetzt updaten?"
 
-#: main/java/de/shellfire/vpn/updater/UpdaterFX.java:489
+#: main/java/de/shellfire/vpn/updater/UpdaterFX.java:496
 msgid "Uninstalling Shellfire VPN Service"
 msgstr "Shellfire VPN Service deinstallieren"
 
-#: main/java/de/shellfire/vpn/updater/UpdaterFX.java:491
+#: main/java/de/shellfire/vpn/updater/UpdaterFX.java:498
 msgid "Install new version"
 msgstr "Neue Version installieren"
 
-#: main/java/de/shellfire/vpn/updater/UpdaterFX.java:529
+#: main/java/de/shellfire/vpn/updater/UpdaterFX.java:536
 msgid "Installing Shellfire VPN Service"
 msgstr "Shellfire VPN Service installieren"
 
-#: main/java/de/shellfire/vpn/updater/UpdaterFX.java:565
+#: main/java/de/shellfire/vpn/updater/UpdaterFX.java:572
 msgid "You chose not to update. The application will now shut down."
 msgstr ""
 "Du hast dich entschieden, das Update nicht durchzuführen. Die Anwendung wird "
 "sich beenden."
 
-#: main/java/de/shellfire/vpn/webservice/EndpointManager.java:119
-#: main/java/de/shellfire/vpn/webservice/EndpointManager.java:188
+#: main/java/de/shellfire/vpn/webservice/EndpointManager.java:117
+#: main/java/de/shellfire/vpn/webservice/EndpointManager.java:187
 msgid "Searching for backend connection..."
 msgstr "Suche Verbindung zu Shellfire Backend..."
 
-#: main/java/de/shellfire/vpn/webservice/EndpointManager.java:163
+#: main/java/de/shellfire/vpn/webservice/EndpointManager.java:161
 msgid "Testing endpoint that worked before..."
 msgstr "Teste zuvor funktionierenden Endpunkt..."
 
-#: main/java/de/shellfire/vpn/webservice/EndpointManager.java:215
+#: main/java/de/shellfire/vpn/webservice/EndpointManager.java:214
 msgid ""
 "Could not connect to the Shellfire backend - Shellfire VPN is shutting down"
 msgstr ""
@@ -721,6 +808,33 @@ msgstr "VPN-Daten konnten nicht geladen werden."
 #: main/java/de/shellfire/vpn/webservice/WebService.java:299
 msgid "unknown"
 msgstr "unbekannt"
+
+#~ msgid "Uploading log.."
+#~ msgstr "Uploade log..."
+
+#~ msgid "cancel"
+#~ msgstr "abbrechen"
+
+#~ msgid "Upload log.."
+#~ msgstr "Log hochladen.."
+
+#~ msgid ""
+#~ "I accept the <a onclick='return false;' target='_agb' href='https://www."
+#~ "shellfire.de/agb/'>Terms and Conditions</a> and have read and noted the "
+#~ "<a onclick='return false;' target='_datenschutzerklaerung' href='https://"
+#~ "www.shellfire.de/datenschutzerklaerung/'>Privacy Policy</a> <br /> and "
+#~ "the <a onclick='return false;' target='_widerrufsrecht' href='https://www."
+#~ "shellfire.de/widerrufsrecht/'>Right of Withdrawal</a>."
+#~ msgstr ""
+#~ "Ich akzeptiere die <a onclick='return false;' target='_agb' href='https://"
+#~ "www.shellfire.de/agb/'>AGB</a> habe die <a onclick='return false;' "
+#~ "target='_datenschutzerklaerung' href='https://www.shellfire.de/"
+#~ "datenschutzerklaerung/'>Datenschutzerklärung</a> gelesen <br /> und nehme "
+#~ "das <a onclick='return false;' target='_widerrufsrecht' href='https://www."
+#~ "shellfire.de/widerrufsrecht/'>Widerrufsrecht</a> zu Kenntnis."
+
+#~ msgid "Connecting..."
+#~ msgstr "Verbinde..."
 
 #~ msgid "I/O error during download of the newest version. Aborting"
 #~ msgstr "I/O Fehler während des Downloades der neuen Version. Abbruch"
@@ -758,43 +872,6 @@ msgstr "unbekannt"
 
 #~ msgid "Remaining waiting time:"
 #~ msgstr "Verbleibende Wartezeit:"
-
-#~ msgid "Initializing ShellfireVPNService..."
-#~ msgstr "Initialisiere ShellfireVPNService..."
-
-#~ msgid "No internet connection available - ShellfireVPN is being closed."
-#~ msgstr "Keine Internet-Verbindung verfügbar - ShellfireVPN wird beendet."
-
-#~ msgid "No internet"
-#~ msgstr "Kein Internet"
-
-#~ msgid ""
-#~ "A new version of Shellfire VPN is available. An update is mandatory. "
-#~ "Would you like to update now?"
-#~ msgstr ""
-#~ "Es ist eine neue Version von Shellfire VPN verfügbar. Ein Update ist "
-#~ "zwingend erforderlich. Möchtest du jetzt updaten?"
-
-#~ msgid "New Version"
-#~ msgstr "Neue Version"
-
-#~ msgid ""
-#~ "You decided, to update. Shellfire VPN is now being restarted with super "
-#~ "user privileges to perform the update."
-#~ msgstr ""
-#~ "Du hast dich entschieden, zu updaten. Shellfire VPN wird jetzt mit Admin-"
-#~ "Privilegien neugestartet um das Update durchzuführen."
-
-#~ msgid "Update is being performed"
-#~ msgstr "Update wird durchgeführt"
-
-#~ msgid "You decided not to update - Shellfire VPN is now exiting."
-#~ msgstr ""
-#~ "Du hast dich entschieden, nicht zu updaten. Shellfire VPN wird jetzt "
-#~ "beendet."
-
-#~ msgid "Update rejected"
-#~ msgstr "Update abgelehnt"
 
 #~ msgid "Your location"
 #~ msgstr "Eigener Standort"
@@ -838,12 +915,6 @@ msgstr "unbekannt"
 #~ msgstr ""
 #~ "Das Shellfire VPN System hat dir soeben eine Email geschickt, bitte folge "
 #~ "den Anweisungen dort."
-
-#~ msgid "Waiting for account activation..."
-#~ msgstr "Warte auf Aktivierung des Accounts..."
-
-#~ msgid "No email received?"
-#~ msgstr "Keine Email erhalten?"
 
 #~ msgid "Request new email"
 #~ msgstr "Email neu anfordern"

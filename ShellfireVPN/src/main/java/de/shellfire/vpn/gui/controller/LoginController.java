@@ -608,17 +608,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
 	private void askForNewAccountAndAutoStartIfFirstStart() {
 		if (firstStart()) {
-			if (!Util.isWindows()) {
-				askForLicense();
 
-				if (!this.application.getLicenseAccepted()) {
-					Alert alert = new Alert(AlertType.ERROR);
-					alert.setContentText(i18n.tr("Licence not accepted - Shellfire VPN is now exiting."));
-					alert.showAndWait();
-					Platform.exit();
-					System.exit(0);
-				}
-			}
 			askForAutoStart();
 			askForNewAccount();
 		}
@@ -632,10 +622,6 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 		String autoLogin = props.getProperty(LoginController.REG_AUTOlogIN, null);
 
 		return firstStart && autoLogin == null;
-	}
-
-	public void askForLicense() {
-		this.application.loadLicenceAcceptanceScreenController();
 	}
 
 	private void askForAutoStart() {
@@ -718,22 +704,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 				}
 
 			}
-		} else {
-			List<String> restart = new ArrayList<String>();
-			restart.add("/usr/bin/open");
-			restart.add("-n");
-			restart.add(com.apple.eio.FileManager.getPathToApplicationBundle());
-			Process p;
-			try {
-				p = new ProcessBuilder(restart).directory(new File(com.apple.eio.FileManager.getPathToApplicationBundle())).start();
-				Util.digestProcess(p);
-
-				Platform.exit();
-				System.exit(0);
-			} catch (IOException e) {
-				Util.handleException(e);
-			}
-		}
+		} 
 	}
 
 	public static String getInstDir() {

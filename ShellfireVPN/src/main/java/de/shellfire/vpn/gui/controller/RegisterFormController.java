@@ -144,7 +144,7 @@ public class RegisterFormController extends AnchorPane implements Initializable 
 		
 		String webContent = "<html>" + "  <body style='background-color: rgb(240,240,240);font-family:System; font-size:14px'>"
 				+ i18n.tr(
-						"I accept the <a onclick='return false;' target='_agb' href='https://www.shellfire.de/agb/'>Terms and Conditions</a> and have read and noted the <a onclick='return false;' target='_datenschutzerklaerung' href='https://www.shellfire.de/datenschutzerklaerung/'>Privacy Policy</a> and the <a onclick='return false;' target='_widerrufsrecht' href='https://www.shellfire.de/widerrufsrecht/'>Right of Withdrawal</a>.")
+						"I accept the <a onclick='return false;' target='_agb' href='https://www.shellfire.net/terms-and-conditions/'>Terms and Conditions</a> and have read and noted the <a onclick='return false;' target='_datenschutzerklaerung' href='https://www.shellfire.net/privacy-statement/'>Privacy Policy</a> and the <a onclick='return false;' target='_widerrufsrecht' href='https://www.shellfire.net/right-of-withdrawal/'>Right of Withdrawal</a>.")
 				+ "  </body>" + "</html>";
 		webEngine.loadContent(webContent);
 

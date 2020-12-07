@@ -26,7 +26,7 @@ public abstract class ServiceToolsFX {
 	protected static String nl = "\r\n";
 	protected static ProgressDialogController loginProgressDialog;
 	protected static boolean init;
-	private static ServiceToolsFX instance;
+	private static WinServiceToolsFX instance;
 
 	public abstract void ensureServiceEnvironmentFX(LoginController form);
 
@@ -102,15 +102,9 @@ public abstract class ServiceToolsFX {
 
 	}
 
-	public static ServiceToolsFX getInstanceForOS() {
+	public static WinServiceToolsFX getInstanceForOS() {
 		if (instance == null) {
-			if (Util.isWindows()) {
-				instance = new WinServiceToolsFX();
-			} else {
-				instance = new WinServiceToolsFX();
-				;
-				log.error("Please run javafx on windows");
-			}
+			instance = new WinServiceToolsFX();
 		}
 
 		return instance;

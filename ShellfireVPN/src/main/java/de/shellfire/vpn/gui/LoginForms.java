@@ -15,7 +15,6 @@ import org.xnap.commons.i18n.I18n;
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.VpnProperties;
 import de.shellfire.vpn.client.ServiceToolsFX;
-import de.shellfire.vpn.gui.controller.LicenseAcceptanceController;
 import de.shellfire.vpn.gui.controller.LoginController;
 import de.shellfire.vpn.gui.controller.ProgressDialogController;
 import de.shellfire.vpn.gui.controller.RegisterFormController;
@@ -46,7 +45,6 @@ public class LoginForms extends Application {
 	public static String[] default_args;
 	public static ProgressDialogController initDialog;
 	public RegisterFormController registerController;
-	public LicenseAcceptanceController licenceAcceptanceController;
 	public static VpnSelectDialogController vpnSelectController;
 	public static ShellfireVPNMainFormFxmlController shellfireVpnMainController = null;
 	public static LoginController instance;
@@ -138,12 +136,6 @@ public class LoginForms extends Application {
 		} catch (Exception ex) {
 			log.error("could not latter message after login in start \n" + ex.getMessage());
 		}
-		
-		/*Platform.runLater(() -> {
-			loadShellFireMainController(true);
-		});
-*/
-
 	}
 
 	public void loadLoginController() {
@@ -211,16 +203,6 @@ public class LoginForms extends Application {
 		log.debug("loadShellFireMainController - end()");
 	}
 
-	public void loadLicenceAcceptanceScreenController() {
-		log.debug("In the licence Acceptance Screen controller");
-		try {
-			this.licenceAcceptanceController = (LicenseAcceptanceController) replaceSceneContent("LicenseAcceptScreen.fxml");
-			this.licenceAcceptanceController.setApp(this);
-		} catch (Exception ex) {
-			log.error("could not load RegisterForm fxml\n" + ex.getMessage());
-		}
-
-	}
 
 	public static Initializable replaceSceneContent(String fxml) throws Exception {
 		log.debug("replaceSceneContent fxml=" + fxml + " - start");
@@ -277,20 +259,7 @@ public class LoginForms extends Application {
 		}
 		log.debug("Hiding stage");
 		this.stage.hide();
-		
-		// test Internet connection
-		boolean internetAvailable = Util.internetIsAvailable();
-		if (internetAvailable) {
-			UpdaterFX updater = new UpdaterFX();
-			if (updater.newVersionAvailable()) {
-				enforceMandatoryUpdateOrExit();
-				return;
-			} else {
-				log.debug("LoginForms: No update available");
-			}
-		} else {
-			log.debug("No internet available, skipping update check");
-		}
+
 		log.debug("giving control to login");
 
 		instance.setApp(this);
@@ -298,44 +267,6 @@ public class LoginForms extends Application {
 		LoginForms.initConnectionTest();
 	}
 
-	private void enforceMandatoryUpdateOrExit() {
-		Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
-				i18n.tr("A new version of Shellfire VPN is available. An update is mandatory. Would you like to update now?"),
-				ButtonType.YES, ButtonType.NO);
-		alert.setHeaderText(i18n.tr("New Version"));
-
-		alert.showAndWait();
-		Optional<ButtonType> result = alert.showAndWait();
-		if ((result.isPresent()) && (result.get() == ButtonType.YES)) {
-			Alert ialert = new Alert(Alert.AlertType.INFORMATION);
-			ialert.setHeaderText(i18n.tr("Update is being performed"));
-			ialert.setContentText(i18n.tr(
-					"You decided, to update. Shellfire VPN is now being restarted with super user privileges to perform the update."));
-			String installerPath = com.apple.eio.FileManager.getPathToApplicationBundle()
-					+ "/Contents/Java/ShellfireVPN2-Updater.app";
-			log.debug("Opening updater using Desktop.open(): " + installerPath);
-			List<String> cmds = new LinkedList<String>();
-			cmds.add("/usr/bin/open");
-			cmds.add(installerPath);
-			Process p;
-			try {
-				p = new ProcessBuilder(cmds)
-						.directory(new File(com.apple.eio.FileManager.getPathToApplicationBundle() + "/Contents/Java/")).start();
-				Util.digestProcess(p);
-			} catch (IOException e) {
-				Util.handleException(e);
-			}
-			Platform.exit();
-			System.exit(0);
-		} else {
-			Alert falert = new Alert(Alert.AlertType.ERROR);
-			falert.setHeaderText(i18n.tr("Update rejected"));
-			falert.setContentText(i18n.tr("You decided not to update - Shellfire VPN is now exiting."));
-			falert.showAndWait();
-			Platform.exit();
-			System.exit(0);
-		}
-	}
 
 	private void handleCommandLine() {
 		String cmd = default_args[0];

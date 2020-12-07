@@ -34,6 +34,7 @@ import org.xnap.commons.i18n.I18n;
 import de.shellfire.vpn.LogStreamReader;
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.client.ServiceToolsFX;
+import de.shellfire.vpn.client.win.WinServiceToolsFX;
 import de.shellfire.vpn.gui.CanContinueAfterBackEndAvailableFX;
 import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.gui.controller.ProgressDialogController;
@@ -116,8 +117,7 @@ public class UpdaterFX implements CanContinueAfterBackEndAvailableFX {
 					return;
 				}
 			}
-			com.sun.javafx.application.PlatformImpl.startup(() -> {
-			});
+			com.sun.javafx.application.PlatformImpl.startup(() -> {});
 			// Everything else required the backend, so make sure we can access it.
 			Platform.runLater(() -> {
 				EndpointManager.getInstance().ensureShellfireBackendAvailableFx(this);
@@ -157,24 +157,26 @@ public class UpdaterFX implements CanContinueAfterBackEndAvailableFX {
 		thread2.start();
 	}
 
-	private void silentRelaunchElevated() {
+	  private void silentRelaunchElevated() {
+		    String elevateVbs = System.getProperty("java.io.tmpdir") + "/elevate.vbs";
+		    
+		    String exec = UpdaterFX.UPDATER_EXE;
+		    String cmds = "doupdate";;
+		    String jarFile = Util.getPathJar();
+		    File instDir = new File(jarFile).getParentFile();
+		    ServiceToolsFX.getInstanceForOS().writeElevationVbsFile(elevateVbs, exec, cmds);
+		    
+		    try {
+		      String command = Util.getCscriptExe() + " " + elevateVbs;
+		      log.debug("Calling elevateVbs with command {} in dir {}", command, instDir.getAbsolutePath());
+		      Process p = Runtime.getRuntime().exec(command, null, instDir);
+		      Util.digestProcess(p);
 
-		String exec = "";
-		if (Util.isVistaOrLater()) {
-			exec = "elevate.exe ";
-		}
+		    } catch (Exception e) {
+		      Util.handleException(e);
+		    }    
 
-		exec += UpdaterFX.UPDATER_EXE + " doupdate";
-		try {
-			executeJava(exec);
-
-		} catch (IOException e) {
-
-			this.displayError(i18n.tr("Update could not be processed. Launcher is being shut down.") + ("\r\n") + e.getMessage());
-
-			System.exit(0);
-		}
-	}
+		  }
 
 	private void launchApp(String param) {
 		String exec = UpdaterFX.MAIN_EXE;
@@ -243,7 +245,7 @@ public class UpdaterFX implements CanContinueAfterBackEndAvailableFX {
 		@Override
 		protected void succeeded() {
 			if (updateProgressDialog.getDialogStage() != null)
-				updateProgressDialog.getDialogStage().hide(); // To change body of generated methods, choose Tools | Templates.
+				updateProgressDialog.getDialogStage().hide();
 		}
 
 	}
@@ -292,23 +294,6 @@ public class UpdaterFX implements CanContinueAfterBackEndAvailableFX {
 
 	}
 
-	private static void extractZipFileToCurrentFolder(ZipFile zipFile) throws FileNotFoundException, IOException {
-		Enumeration<? extends ZipEntry> entries;
-		entries = zipFile.entries();
-
-		while (entries.hasMoreElements()) {
-			ZipEntry entry = (ZipEntry) entries.nextElement();
-
-			if (entry.isDirectory()) {
-				(new File(entry.getName())).mkdir();
-				continue;
-			}
-
-			copyInputStream(zipFile.getInputStream(entry), new BufferedOutputStream(new FileOutputStream(entry.getName())));
-		}
-
-	}
-
 	public static final void copyInputStream(InputStream in, OutputStream out) throws IOException {
 		byte[] buffer = new byte[1024];
 		int len;
@@ -319,7 +304,7 @@ public class UpdaterFX implements CanContinueAfterBackEndAvailableFX {
 		in.close();
 		out.close();
 	}
-
+	
 	private boolean askIfUpdateShouldBePerformed() {
 		Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
 				i18n.tr("Update available. Without the update, it is not possible to run Shellfire VPN.\n\nUpdate now?"), ButtonType.YES,
@@ -401,7 +386,7 @@ public class UpdaterFX implements CanContinueAfterBackEndAvailableFX {
 		PrintWriter out = new PrintWriter(s.getOutputStream(), true);
 		InputStream is = s.getInputStream();
 
-		String httpget = "GET " + file + "?tracked=true HTTP/1.0";
+		String httpget = "GET " + file + " HTTP/1.0";
 		out.println(httpget);
 		log.debug(httpget);
 		String httphost = "HOST: " + host;
@@ -485,28 +470,12 @@ public class UpdaterFX implements CanContinueAfterBackEndAvailableFX {
 
 		// launch install process
 		Process p;
-		if (Util.isWindows()) {
-			String start = "";
+		String start = "";
 
-			start += "\"" + f.getAbsolutePath() + "\"";
-			log.debug(start);
-			p = Runtime.getRuntime().exec(start);
-		} else {
-			updateProgressDialog.setIndeterminate(true);
-			updateProgressDialog.setDialogText(i18n.tr("Uninstalling Shellfire VPN Service"));
-			ServiceToolsFX.getInstanceForOS().uninstall(installPath + "/Contents/Java/");
-			updateProgressDialog.setDialogText(i18n.tr("Install new version"));
+		start += "\"" + f.getAbsolutePath() + "\"";
+		log.debug(start);
+		p = Runtime.getRuntime().exec(start);
 
-			List<String> unzip = new ArrayList<String>();
-			unzip.add("/usr/bin/unzip");
-			unzip.add("-o"); // overwrite without prompt
-			unzip.add("-q"); // be quiet
-			unzip.add(f.getAbsolutePath());
-			unzip.add("-d");
-			unzip.add(installPath);
-			log.debug(Util.listToString(unzip));
-			p = new ProcessBuilder(unzip).start();
-		}
 
 		LogStreamReader isr = new LogStreamReader(p.getInputStream(), false);
 		Thread thread = new Thread(isr, "InputStreamReader");
@@ -515,34 +484,7 @@ public class UpdaterFX implements CanContinueAfterBackEndAvailableFX {
 		LogStreamReader esr = new LogStreamReader(p.getErrorStream(), true);
 		Thread thread2 = new Thread(esr, "ErrorStreamReader");
 		thread2.start();
-
-		if (!Util.isWindows()) {
-			try {
-				p.waitFor();
-
-				List<String> chown = new ArrayList<String>();
-				chown.add("/usr/sbin/chown");
-				chown.add("-R");
-				chown.add(user + ":staff");
-				chown.add(installPath);
-				log.debug(Util.listToString(chown));
-				p = new ProcessBuilder(chown).start();
-				Util.digestProcess(p);
-				p.waitFor();
-
-			} catch (InterruptedException e) {
-				log.error("Error occured during update");
-			}
-			updateProgressDialog.setDialogText(i18n.tr("Installing Shellfire VPN Service"));
-			ServiceToolsFX.getInstanceForOS().install(installPath + "/Contents/Java/");
-
-			List<String> restart = new ArrayList<String>();
-			restart.add("/usr/bin/open");
-			restart.add(installPath);
-			log.debug(Util.listToString(restart));
-			new ProcessBuilder(restart).start();
-		}
-
+		
 		// shutdown to ensure proper installation is possible
 		System.exit(0);
 

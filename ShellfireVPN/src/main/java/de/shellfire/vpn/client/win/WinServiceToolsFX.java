@@ -114,7 +114,7 @@ public class WinServiceToolsFX extends ServiceToolsFX {
 			String procRunPath = instDir + getProcrunExe();
 
 			template = template.replace("$$TEMP$$", Util.getTempDir());
-			template = template.replace("$$logFILE$$", Util.getTempDir() + File.separator + "ProcRunLog.log");
+			template = template.replace("$$LOGFILE$$", Util.getTempDir() + File.separator + "ProcRunLog.log");
 			template = template.replace("$$JVM_DLL$$", Util.getJvmDll());
 			template = template.replace("$$PROCRUNPATH$$", procRunPath);
 
@@ -208,7 +208,7 @@ public class WinServiceToolsFX extends ServiceToolsFX {
 		}
 	}
 
-	private void writeElevationVbsFile(String elevationVbsFile, String exe, String cmds) {
+	public void writeElevationVbsFile(String elevationVbsFile, String exe, String cmds) {
 		log.debug("creating elevationVbsFile at {}", elevationVbsFile);
 		File file = new File(elevationVbsFile);
 		file.delete();
