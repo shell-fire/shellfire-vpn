@@ -221,9 +221,10 @@ public class ServerListSubviewController implements Initializable {
 				@Override
 				protected void updateItem(Server item, boolean empty) {
 					if (item != null) {
-						if (shellfireService.getVpn().getServer().equals(item))
+						if (shellfireService.getVpn().getServer().equals(item)) {
 							log.debug("****The current VPN has server " + item + " and id " + shellfireService.getVpn().getVpnId()
 									+ " and the type is " + shellfireService.getVpn().getAccountType());
+						}
 						// get the corresponding country of this server
 						Country country = item.getCountry();
 						// Attach the imageview to the cell

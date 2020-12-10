@@ -474,8 +474,13 @@ public class WebServiceBroker {
 		log.debug("getUrlSuccesfulConnect () - start");
 		GetUrlSuccesfulConnectRequest request = new GetUrlSuccesfulConnectRequest();
 
+		log.debug("created SuccesfulConnectRequest");
 		Type theType = new TypeToken<Response<UrlResponse>>() {}.getType();
-		Response<UrlResponse> resp = new JsonHttpRequest<GetUrlSuccesfulConnectRequest, UrlResponse>().call(request, theType);
+		log.debug("retrieved type");
+		JsonHttpRequest<GetUrlSuccesfulConnectRequest, UrlResponse> httpRequest = new JsonHttpRequest<GetUrlSuccesfulConnectRequest, UrlResponse>();
+		log.debug("created HttpReqesut");
+		Response<UrlResponse> resp = httpRequest.call(request, theType);
+		log.debug("http requested called()");
 		resp.validate();
 
 		String url = resp.getData().getUrl();

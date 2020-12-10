@@ -346,22 +346,7 @@ public class UpdaterFX implements CanContinueAfterBackEndAvailableFX {
 	}
 
 	public static long getInstalledVersion() {
-		if (Util.isWindows()) {
-			return getInstalledVersionWindows();
-		} else {
-			try {
-				String file = com.apple.eio.FileManager.getPathToApplicationBundle() + "/Contents/Java/VERSION";
-				if (!(new File(file).exists())) {
-					file = "VERSION";
-				}
-
-				return Long.valueOf(Util.fileToString((file)).trim());
-			} catch (Exception e) {
-				Util.handleException(e);
-			}
-			return 0;
-		}
-
+		return getInstalledVersionWindows();
 	}
 
 	private static void downloadAndRunExeFileFromUrl(String url, String installPath, String user) throws IOException {

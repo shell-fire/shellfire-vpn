@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.gui.model.ServerListFXModel;
+import de.shellfire.vpn.webservice.WebService;
 import de.shellfire.vpn.webservice.model.VpnStar;
 import javafx.geometry.NodeOrientation;
 import javafx.scene.control.TableCell;
@@ -59,7 +60,13 @@ public class StarImageRendererFX extends TableCell<ServerListFXModel, VpnStar> {
 			// log.debug("StarImageRendererFX: Star Image and text could not be rendered");
 			// setText("Empty");
 		} else {
-			Image img = this.getIcon(item, isSelected());
+			boolean isSelected = false;
+			if (WebService.getInstance().getVpn().getServer().equals(item)) {
+				isSelected = true;
+			}
+
+			
+			Image img = this.getIcon(item, isSelected);
 			ImageView imageView = new ImageView(img);
 			imageView.setFitHeight(14);
 			imageView.setFitWidth(82);

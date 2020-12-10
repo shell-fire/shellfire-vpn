@@ -30,7 +30,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.prefs.Preferences;
 
-import org.jdesktop.application.Action;
 import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.LocaleChangeEvent;
@@ -1237,7 +1236,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		}
 	}
 
-	@Action
 	public void openHelp() {
 		Util.openUrl(shellfireService.getUrlHelp());
 	}
