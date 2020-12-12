@@ -156,9 +156,7 @@ class JsonHttpRequest<RequestType, ResponseType> {
 
 	private void setupKeyStore() {
 		try {
-			log.debug("setupKeyStore() - start");
 			KeyStore ks = KeyStore.getInstance("JKS");
-			log.debug("retrieved instanec");
 			String keyStorePath = "shellfire.keystore";
 
 			FileInputStream fis = new FileInputStream(keyStorePath);
@@ -166,14 +164,11 @@ class JsonHttpRequest<RequestType, ResponseType> {
 			ks.load(fis, pass);
 			fis.close();
 
-			log.debug("create SSL Context");
 			SSLContext sslcontext = provideSSLContext(ks, pass);
 
-			log.debug("create ConnectionFactory");
 			SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslcontext, new String[] { "TLSv1" }, null,
 					SSLConnectionSocketFactory.getDefaultHostnameVerifier());
 
-			log.debug("HttpClients.custom()");
 			httpClient = HttpClients.custom().setSSLSocketFactory(sslsf).setDefaultRequestConfig(defaultRequestConfig).build();
 		} catch (Exception e) {
 			log.error("Error occured while setting up keystore", e);
