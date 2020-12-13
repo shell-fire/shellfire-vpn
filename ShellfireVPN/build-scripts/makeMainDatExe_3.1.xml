@@ -25,18 +25,18 @@
 	<maxHeapSize>512</maxHeapSize>
   </jre>
   <splash>
-    <file>A:\Seafile\My Library\workspace\shellfire-vpn4\ShellfireVPN\build-scripts\images\slpash\slpash-3.0.bmp</file>
+    <file>A:\Seafile\My Library\workspace\shellfire-vpn4\ShellfireVPN\build-scripts\images\slpash\slpash-3.1.bmp</file>
     <waitForWindow>true</waitForWindow>
     <timeout>5</timeout>
     <timeoutErr>false</timeoutErr>
   </splash>
   <versionInfo>
-    <fileVersion>3.0.0.0</fileVersion>
-    <txtFileVersion>ShellfireVPN 3.0</txtFileVersion>
+    <fileVersion>3.1.0.0</fileVersion>
+    <txtFileVersion>ShellfireVPN 3.1</txtFileVersion>
     <fileDescription>ShellfireVPN Executable </fileDescription>
     <copyright>(c) 2020 by Shellfire GbR</copyright>
-    <productVersion>3.0.0.0</productVersion>
-    <txtProductVersion>ShellfireVPN 3.0</txtProductVersion>
+    <productVersion>3.1.0.0</productVersion>
+    <txtProductVersion>ShellfireVPN 3.1</txtProductVersion>
     <productName>ShellfireVPN</productName>
     <companyName>Shellfire GbR</companyName>
     <internalName>ShellfireVPN</internalName>
