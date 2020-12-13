@@ -334,7 +334,7 @@ public class UpdaterFX implements CanContinueAfterBackEndAvailableFX {
 		return version;
 	}
 
-	private static long getInstalledVersionWindows() {
+	public static long getInstalledVersion() {
 		FileVersion info = Win32.getFileVersion(UPDATER_EXE);
 
 		if (info == null) {
@@ -343,10 +343,6 @@ public class UpdaterFX implements CanContinueAfterBackEndAvailableFX {
 		long version = info.getFileMajor() * 1000 + info.getFileMinor();
 		return version;
 
-	}
-
-	public static long getInstalledVersion() {
-		return getInstalledVersionWindows();
 	}
 
 	private static void downloadAndRunExeFileFromUrl(String url, String installPath, String user) throws IOException {
