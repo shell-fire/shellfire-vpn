@@ -258,8 +258,10 @@ public class WebService {
 		}, 3, 100);
 
 		createConfigDirIfNotExists();
-		for (WsFile wsFile : files) {
-			this.storeFile(wsFile);
+		if (files != null) {
+			for (WsFile wsFile : files) {
+				this.storeFile(wsFile);
+			}
 		}
 	}
 

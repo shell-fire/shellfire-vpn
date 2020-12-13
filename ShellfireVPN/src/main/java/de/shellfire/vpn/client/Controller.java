@@ -7,15 +7,21 @@ package de.shellfire.vpn.client;
 import java.util.LinkedList;
 
 import org.slf4j.Logger;
+import org.xnap.commons.i18n.I18n;
 
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.gui.controller.ShellfireVPNMainFormFxmlController;
+import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.types.ProductType;
 import de.shellfire.vpn.types.Reason;
 import de.shellfire.vpn.types.Server;
 import de.shellfire.vpn.types.VpnProtocol;
 import de.shellfire.vpn.webservice.Vpn;
 import de.shellfire.vpn.webservice.WebService;
+import javafx.application.Platform;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.layout.Region;
 
 /**
  *
@@ -33,7 +39,8 @@ public class Controller {
 	protected Server lastServerConnectedTo;
 	private Boolean sleepBeingHandled = false;
 	private Reason reasonForStateChange = Reason.None;
-
+	private static final I18n i18n = VpnI18N.getI18n();
+	
 	private Controller(ShellfireVPNMainFormFxmlController viewFX, WebService service) {
 		this.viewFX = viewFX;
 		this.service = service;
@@ -103,8 +110,14 @@ public class Controller {
 					if (success) {
 						connect(downloadAndStoreCertificates, reason);
 					} else {
+						// show alert that action could not be performed.
+						Platform.runLater(() -> {
+							Alert alert = new Alert(Alert.AlertType.ERROR, i18n.tr("An unknown error occured"), ButtonType.OK);
+							alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+							alert.show();
+						});
+						
 						// inform view that we are disconnected right now
-
 						connectionStateChanged(getCurrentConnectionState(), Reason.ConnectionFailed);
 					}
 				}
