@@ -40,11 +40,10 @@ public class WinServiceToolsFX extends ServiceToolsFX {
 			alert.setContentText(
 					i18n.tr("Shellfire VPN service is now being installed. Please enter your admin password in the next window."));
 			alert.showAndWait();
-			ProgressDialogController.getDialogStage().hide();
+			loginProgressDialog.hide();
 			installElevated();
 			try {
-				loginProgressDialog = ProgressDialogController.getInstance(i18n.tr("Installing Service..."), null, LoginForms.getStage(),
-						true);
+				loginProgressDialog = ProgressDialogController.getInstance(i18n.tr("Installing Service..."), null, LoginForms.getStage(), true);
 				loginProgressDialog.setButtonText(i18n.tr("Cancel"));
 				loginProgressDialog.setOptionCallback(new Task() {
 

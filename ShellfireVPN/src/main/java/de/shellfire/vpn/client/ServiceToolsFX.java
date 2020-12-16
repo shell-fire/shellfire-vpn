@@ -82,7 +82,7 @@ public abstract class ServiceToolsFX {
 		 */
 		@Override
 		protected void succeeded() {
-			ProgressDialogController.getDialogStage().hide();
+			loginProgressDialog.hide();
 			log.debug("ServiceToolsFX is has succeeded");
 			this.loginForm.afterShellfireServiceEnvironmentEnsured();
 		}

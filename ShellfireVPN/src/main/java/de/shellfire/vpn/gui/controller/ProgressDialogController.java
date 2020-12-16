@@ -11,6 +11,7 @@ import de.shellfire.vpn.Util;
 import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.i18n.VpnI18N;
 import javafx.application.Platform;
+import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -32,7 +33,7 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
 
 	private static I18n i18n = VpnI18N.getI18n();
 	private static LoginForms application;
-	private static Stage instanceStage;
+	private Stage instanceStage;
 	private static ProgressDialogController instance;
 
 	@FXML
@@ -94,10 +95,7 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
 			optionCallback.run();
 	}
 
-	public void updateProgress(double percentage) {
-		// just set the update progress property
-		progressBar.setProgress(percentage);
-	}
+
 
 	public Label getDynamicLabel() {
 		return dynamicLabel;
@@ -119,7 +117,7 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
 		this.dynamicLabel.setText(string);
 	}
 
-	public static Stage getDialogStage() {
+	public Stage getDialogStage() {
 		instanceStage.sizeToScene();
 		return instanceStage;
 	}
@@ -136,18 +134,24 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
 			if (null != task) {
 				instance.setOptionCallback(task);
 			}
-			instanceStage = new Stage();
+			Stage instanceStage = new Stage();
 			instanceStage.initStyle(StageStyle.UNDECORATED);
 			instanceStage.initModality(Modality.WINDOW_MODAL);
 			instanceStage.initOwner(owner);
 			Scene scene = new Scene(page);
 			instanceStage.setScene(scene);
 			instance.getProgressBar().progressProperty().unbind();
+			
+			instance.setInstanceAndStage(instanceStage);
 			log.debug("ProgressDialogController instance and Stage created");
 		}
 		return instance;
 	}
 	
+
+	private void setInstanceAndStage(Stage instanceStage2) {
+		this.instanceStage = instanceStage2;
+	}
 
 	private void ensureButtonExists() {
 		if (this.button == null) {
@@ -175,6 +179,10 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
 			getDialogStage().hide();
 		});
 		
+	}
+
+	public void bindProgressProperty(ReadOnlyDoubleProperty progressProperty) {
+		this.progressBar.progressProperty().bind(progressProperty);
 	}
 
 }

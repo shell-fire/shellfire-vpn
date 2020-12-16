@@ -840,8 +840,8 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		// TODO using tasks methods to update application thread
 		Platform.runLater(() -> {
 			log.debug("showConnectProgress: Entrance of method");
-			if (ProgressDialogController.getDialogStage() != null) {
-				ProgressDialogController.getDialogStage().show();
+			if (connectProgressDialog != null) {
+				connectProgressDialog.show();
 			}
 		});
 	}
@@ -1101,8 +1101,8 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
 	private void hideConnectProgress() {
 		Platform.runLater(() -> {
-			if (ProgressDialogController.getDialogStage() != null) {
-				ProgressDialogController.getDialogStage().hide();
+			if (connectProgressDialog != null) {
+				connectProgressDialog.hide();
 			}
 		});
 	}
