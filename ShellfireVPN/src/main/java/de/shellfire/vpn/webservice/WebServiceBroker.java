@@ -243,6 +243,17 @@ public class WebServiceBroker {
 		resp.validate();
 
 		String result = resp.getData().getParams();
+	
+		log.debug("result - before remote replace {}", result);
+		if (result != null) {
+			result = result.replace("remote2", "remote");
+			result = result.replace("remote3", "remote");
+			result = result.replace("remote4", "remote");
+		}
+		
+
+		log.debug("result - after remote replace {}", result);
+		
 		log.debug("getParametersForOpenVpn () - returning result: {}", result);
 		return result;
 	}

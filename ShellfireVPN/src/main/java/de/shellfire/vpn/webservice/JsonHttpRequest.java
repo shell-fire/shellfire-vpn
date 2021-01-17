@@ -252,6 +252,7 @@ class JsonHttpRequest<RequestType, ResponseType> {
 
 		long version = UpdaterFX.getInstalledVersion();
 		request.addHeader("x-shellfirevpn-client-version", new Long(version).toString());
+		request.addHeader("x-shellfirevpn-client-feature-multiple-remotes", "false");
 
 		request.addHeader("x-shellfirevpn-client-arch", Util.getArchitecture());
 
