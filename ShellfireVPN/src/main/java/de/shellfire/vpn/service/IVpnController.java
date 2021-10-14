@@ -19,6 +19,8 @@ public interface IVpnController {
 	public void reinstallTapDriver();
 
 	public void setAppDataFolder(String appData);
+	
+	public void setWireguardConfigFilePath(String wireguardConfigFilePath);
 
 	public boolean autoStartEnabled();
 

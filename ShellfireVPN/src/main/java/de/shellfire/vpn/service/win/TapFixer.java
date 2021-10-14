@@ -54,7 +54,18 @@ public class TapFixer {
 		addTap.add(getTapPath());
 		addTap.add(getTapPath() + "\\bin\\addtap.bat");
 
-		if (!Util.isVistaOrLater()) {
+		if (Util.isVistaOrLater()) {
+			delTapAll.add(0, Util.POWERSHELL_EXE);
+			delTapAll.add(1, "start-process");
+			delTapAll.add("-Verb");
+			delTapAll.add("RunAs");
+
+			addTap.add(0, Util.POWERSHELL_EXE);
+			addTap.add(1, "start-process");
+			addTap.add("-Verb");
+			addTap.add("RunAs");
+
+		} else {
 			delTapAll.add(0, Util.getCmdExe());
 			delTapAll.add(1, "/C");
 

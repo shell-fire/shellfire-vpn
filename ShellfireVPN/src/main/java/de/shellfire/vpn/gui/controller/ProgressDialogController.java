@@ -13,6 +13,8 @@ import de.shellfire.vpn.i18n.VpnI18N;
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -163,6 +165,16 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
 			spacePane.setMinHeight(3);
 			spacePane.setMaxHeight(3);
 			contentPane.getChildren().add(spacePane);
+			
+			EventHandler<ActionEvent> handler = new EventHandler<ActionEvent>() {
+
+				@Override
+				public void handle(ActionEvent arg0) {
+					callOptionCallback();
+				}
+				
+			};
+			button.setOnAction(handler);
 		}
 	}
 

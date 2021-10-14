@@ -41,7 +41,7 @@ public class ConnectionMonitor extends TimerTask {
 					vpnController.disconnect(Reason.ConnectionTimeout);
 					log.debug("Connection Monitoring: disconnected - sleeping 1 second");
 					Thread.sleep(1000);
-					log.debug("Connection Monitoring: after sleeping for 1second, reconnecting");
+					log.debug("Connection Monitoring: after sleeping for 1 second, reconnecting");
 					vpnController.connect(Reason.ConnectionTimeout);
 				}
 			}

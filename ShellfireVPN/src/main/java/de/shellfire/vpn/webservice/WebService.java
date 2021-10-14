@@ -123,6 +123,12 @@ public class WebService {
 			this.selectVpn(this.vpns.getFirst());
 		} else {
 		}
+		
+		if (this.selectedVpn != null) {
+			log.debug("reloading already selectedVpn");
+			this.selectVpn(this.getVpnById(this.selectedVpn.getVpnId()));
+			
+		}
 	}
 
 	public void selectVpn(Vpn vpn) {
@@ -211,6 +217,23 @@ public class WebService {
 			}
 		}, 3, 100);
 
+		if (res == true) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public boolean setWireGuardPublicKeyUser(final String pubKey) {
+		init();
+
+		Boolean res = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnableImpl<Boolean>() {
+			public Boolean run() throws Exception {
+				Boolean result = shellfire.setWireGuardPublicKeyUser(getVpnId(), pubKey);
+				loadVpnDetails();
+				return result;
+			}
+		}, 3, 100);
 		if (res == true) {
 			return true;
 		} else {
@@ -556,6 +579,8 @@ public class WebService {
 		} catch (IOException e) {
 			log.error("Could not read clientLog", e);
 		}
+		
+		String wireguardLogString = Util.getWireGuardLog();
 
 		String installLog;
 		String installLogString = "";
@@ -568,12 +593,13 @@ public class WebService {
 
 		final String finalService = serviceLogString;
 		final String finalClient = clientLogString;
+		final String finalWireguard = wireguardLogString;
 		final String finalInstall = installLogString;
 
 		
 		runnableSendLogToShellfire = new ExceptionThrowingReturningRunnableImpl<Boolean>() {
 			public Boolean run() throws Exception {
-				boolean result = shellfire.sendLogToShellfire(finalService, finalClient, finalInstall);
+				boolean result = shellfire.sendLogToShellfire(finalService, finalClient, finalWireguard, finalInstall);
 
 				return result;
 			}

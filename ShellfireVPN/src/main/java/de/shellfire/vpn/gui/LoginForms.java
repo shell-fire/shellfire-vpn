@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
 import java.nio.file.StandardOpenOption;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -50,6 +51,7 @@ public class LoginForms extends Application {
 	public static LoginController instance;
 	private static final I18n i18n = VpnI18N.getI18n();
 	private boolean licenseAccepted;
+	private boolean startMinimized = false;
 	// Variables to control draggin of window
 	private static double xOffset = 0;
 	private static double yOffset = 0;
@@ -67,8 +69,12 @@ public class LoginForms extends Application {
 	public static void main(String[] args) {
 		System.setProperty("java.library.path", "./lib");
 		default_args = args;
-
-		preventDuplicateStart();
+		if (args.length == 0 || !args[0].equals("installservice")) {
+			log.debug("preventing duplicate start");
+			preventDuplicateStart();
+		} else {
+			log.debug("not preventing duplicate start, because called with parameter installservice");
+		}
 		
 		launch(args);
 	}
@@ -116,7 +122,7 @@ public class LoginForms extends Application {
 
 	@Override
 	public void start(Stage primaryStage) {
-
+		log.debug("LoginForms.start() - start");
 		try {
 			LoginForms.stage = primaryStage;
 			LoginForms.stage.initStyle(StageStyle.UNDECORATED);
@@ -129,13 +135,19 @@ public class LoginForms extends Application {
 		}
 		Platform.setImplicitExit(false);
 		try {
+			log.debug("LoginForms.start() - calling initializations");
 			initializations(default_args);
+			log.debug("LoginForms.start() - sizeToScene()");
 			stage.sizeToScene();
+			log.debug("LoginForms.start() - put(hostServices)");
 			stage.getProperties().put("hostServices", this.getHostServices());
+			log.debug("LoginForms.start() - afterDialogDisplay");
 			afterDialogDisplay();
 		} catch (Exception ex) {
-			log.error("could not latter message after login in start \n" + ex.getMessage());
+			log.error("could not load message after login in start \n" + ex.getMessage());
 		}
+		
+		log.debug("LoginForms.start() - return");
 	}
 
 	public void loadLoginController() {
@@ -193,6 +205,13 @@ public class LoginForms extends Application {
 			
 			if (!loadOnly) {
 				this.shellfireVpnMainController.setApp(this);
+			}
+			
+			if (this.startMinimized) {
+				log.debug("this.startMinimized is true, calling shellfireVpnMainController.minimizeToTray();");
+				this.shellfireVpnMainController.minimizeToTray();
+			} else {
+				log.debug("this.startMinimized is false, NOT calling shellfireVpnMainController.minimizeToTray();");
 			}
 
 		} catch (Exception ex) {
@@ -253,9 +272,16 @@ public class LoginForms extends Application {
 	}
 
 	public void afterDialogDisplay() {
+		log.debug("LoginForms.afterDialogDisplay() - start");
 		if (default_args.length > 0) {
+			log.debug("LoginForms.afterDialogDisplay() - has command line, call handleCommandLine()");
 			handleCommandLine();
-			return;
+			log.debug("LoginForms.afterDialogDisplay() - returned from handleCommanLine, returning;");
+			if (!startMinimized) {
+				return;
+			} else {
+				log.debug("afterDialogDisplay - we need to start minimized, not returning");
+			}
 		}
 		log.debug("Hiding stage");
 		this.stage.hide();
@@ -265,6 +291,8 @@ public class LoginForms extends Application {
 		instance.setApp(this);
 		log.debug("Preparing to display login menu");
 		LoginForms.initConnectionTest();
+		
+		log.debug("LoginForms.afterDialogDisplay() - return");
 	}
 
 
@@ -315,6 +343,11 @@ public class LoginForms extends Application {
 			log.debug("Retrieved installation path from args parameter: " + path);
 			new UpdaterFX().performUpdate(path, user);
 			return;
+		} else if (cmd.equals("minimize")) {
+			log.debug("handleCommandLine detected that mainForm should be started minimized");
+			this.startMinimized  = true;
+		} else {
+			log.debug("handleCommandLine called not not supported command: {}", cmd);
 		}
 	}
 

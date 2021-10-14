@@ -54,7 +54,7 @@ public class Controller {
 	}
 
 	public void connect(Server server, VpnProtocol protocol, Reason reason) {
-		log.debug("connect(Server, Protocol, Reason) - setting connecting");
+		log.debug("connect(Server {}, Protocol {}, Reason {}) - setting connecting", server.toString(), protocol.toString(), reason.toString());
 		connectionStateChanged(ConnectionState.Connecting, reason);
 
 		try {
@@ -80,31 +80,40 @@ public class Controller {
 					boolean success = true;
 					boolean downloadAndStoreCertificates = false;
 
-					if (!service.certificatesDownloaded()) {
+					if (protocol != VpnProtocol.WireGuard && !service.certificatesDownloaded()) {
 						downloadAndStoreCertificates = true;
 					}
-
+					
 					// change server if required, protocol will be unchanged
 					// here
 					if (vpn.getServerId() != server.getServerId()) {
 						success &= switchServerTo(server);
-						downloadAndStoreCertificates = true;
+						
+						if (protocol != VpnProtocol.WireGuard) {
+							downloadAndStoreCertificates = true;
+						}
 					}
 
-					if (vpn.getProductType() != ProductType.OpenVpn) {
-						downloadAndStoreCertificates = true;
-						vpn.setProductType(ProductType.OpenVpn);
-					}
-
-					if (vpn.getProtocol() != protocol) {
-						boolean switchProtocolSuccesful = switchProtocolTo(protocol);
-
-						if (switchProtocolSuccesful) {
-							success &= switchProtocolSuccesful;
-							vpn.setProtocol(protocol);
+					if (protocol == VpnProtocol.WireGuard) {
+						if (vpn.getProductType() != ProductType.WireGuard) {
+							vpn.setProductType(ProductType.WireGuard);
+						}
+					} else {
+						if (vpn.getProductType() != ProductType.OpenVpn) {
+							downloadAndStoreCertificates = true;
+							vpn.setProductType(ProductType.OpenVpn);
 						}
 
-						downloadAndStoreCertificates = true;
+						if (vpn.getProtocol() != protocol) {
+							boolean switchProtocolSuccesful = switchProtocolTo(protocol);
+
+							if (switchProtocolSuccesful) {
+								success &= switchProtocolSuccesful;
+								vpn.setProtocol(protocol);
+							}
+
+							downloadAndStoreCertificates = true;
+						}
 					}
 
 					if (success) {
@@ -136,12 +145,57 @@ public class Controller {
 
 		Vpn vpn = this.service.getVpn();
 		this.client.setVpn(vpn);
+		
+		if (vpn.getProductType() == ProductType.WireGuard) {
+			try {
+				String vpnName = "sf"+vpn.getVpnId();
+				String 	pubKey = Util.getWireGuardPublicKeyUser(vpnName);
+				service.setWireGuardPublicKeyUser(pubKey);
 
-		String params = this.service.getParametersForOpenVpn();
+				// wireguard settings of vpn may have changed, so reload the object
+				vpn = this.service.getVpn();
+				
+				Server server = this.service.getServerList().getServerByServerId(vpn.getServerId());
+				
+				String configPath = updateWireGuardConfig(vpnName, server, vpn);
+				
+				this.client.setWireguardConfigFilePath(configPath);
+				
+			} catch (Exception e) {
+				Util.handleException(e);
+				log.debug("Could not wireguard get public-key - not updating on server-side, aborting connect ");
+				this.client.disconnect(Reason.WireGuardError);
+				return;
+			}
+			
+			
+		} else {
+			String params = this.service.getParametersForOpenVpn();
+			this.client.setParametersForOpenVpn(params);
+		}
 
-		this.client.setParametersForOpenVpn(params);
 		this.client.connect(reason);
+	}
 
+	private String updateWireGuardConfig(String vpnName, Server server, Vpn vpn) throws Exception {
+		String configContent = "[Interface]" + "\n"
+			+ "PrivateKey = " + Util.getWireGuardPrivateKeyUser(vpnName) + "\n"
+			+ "Address = " + vpn.getWireguardIp() + "\n"
+			+ "DNS = 8.8.8.8" + "\n"
+			+ "\n"
+			+ "[Peer]" + "\n"
+			+ "# Server " + server.getServerId() + " / " + server.getCountryString() + "\n"
+			+ "PublicKey = " + server.getWireguardPublicKey() + "\n"
+			+ "AllowedIPs = 0.0.0.0/0" + "\n"
+			+ "Endpoint = " + vpn.getListenHost() + ":51820";
+		
+		String pathToConfig = Util.getWireGuardFileNameConfig(vpnName);
+		log.debug("Generated Wireguard config file will be stored at: {} - content:", pathToConfig);
+		log.debug(configContent);
+		
+		Util.stringToFile(configContent, pathToConfig);
+		
+		return pathToConfig;
 	}
 
 	public ConnectionState getCurrentConnectionState() {

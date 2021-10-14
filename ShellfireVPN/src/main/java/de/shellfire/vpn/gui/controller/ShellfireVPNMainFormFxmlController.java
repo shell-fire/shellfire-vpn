@@ -330,6 +330,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		if (ProxyConfig.isProxyEnabled()) {
 			this.setSelectedProtocol(VpnProtocol.TCP);
 			this.serverListSubviewController.getUDPRadioButton().setDisable(true);
+			this.serverListSubviewController.getWireguardRadioButton().setDisable(true);
 		} else {
 			VpnProtocol selectedProtocol = vpn.getProtocol();
 			this.setSelectedProtocol(selectedProtocol);
@@ -722,6 +723,10 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 				showMessage = true;
 				message = i18n.tr("No Tap driver installed. Please reinstall Shellfire VPN.");
 				break;
+			case WireGuardError:
+					showMessage = true;
+					message = i18n.tr("WireGuard error. Please contact support for assistance or try another connection type.");
+					break;
 			case TapDriverNotFoundPleaseRetry:
 				Platform.runLater(() -> {
 					connectFromButton();
@@ -765,6 +770,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		this.updateOnlineHost();
 		if (!ProxyConfig.isProxyEnabled()) {
 			this.serverListSubviewController.getUDPRadioButton().setDisable(false);
+			this.serverListSubviewController.getWireguardRadioButton().setDisable(false);
 		}
 		this.serverListSubviewController.getTCPRadioButton().setDisable(false);
 		Task<Reason> disconnectTask = new Task<Reason>() {
@@ -826,6 +832,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		popupConnectItem.setEnabled(false);
 		popup.add(abortItem);
 		serverListSubviewController.getServerListTableView().disableProperty().set(true);
+		serverListSubviewController.getWireguardRadioButton().setDisable(true);
 		serverListSubviewController.getUDPRadioButton().setDisable(true);
 		serverListSubviewController.getTCPRadioButton().setDisable(true);
 	}
@@ -1077,6 +1084,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		this.startConnectedSinceTimer();
 
 		this.updateOnlineHost();
+		serverListSubviewController.getWireguardRadioButton().disableProperty().set(true);
 		serverListSubviewController.getUDPRadioButton().disableProperty().set(true);
 		serverListSubviewController.getTCPRadioButton().disableProperty().set(true);
 		showTrayMessageWithoutCallback(i18n.tr("Connection successful"),
@@ -1142,33 +1150,39 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	}
 
 	private void updateOnlineHost() {
-		Task<String> hostWorker = new Task<String>() {
-			@Override
-			protected String call() throws Exception {
-				String host = shellfireService.getLocalIpAddress();
-				log.debug("ShellfireMainFormController: Ip address in task" + host);
-				return host;
-			}
-		};
-		hostWorker.valueProperty().addListener((observable, oldValue, newValue) -> {
-			if (newValue != null) {
-				String host = hostWorker.getValue();
-				onlineIpValue.setText(host);
-				log.debug("ShellfireMainFormController: Ip address is " + host);
-			}
+		Platform.runLater(() -> {
+			Task<String> hostWorker = new Task<String>() {
+				@Override
+				protected String call() throws Exception {
+					String host = shellfireService.getLocalIpAddress();
+					log.debug("ShellfireMainFormController: Ip address in task" + host);
+					return host;
+				}
+			};
+			hostWorker.valueProperty().addListener((observable, oldValue, newValue) -> {
+				if (newValue != null) {
+					String host = hostWorker.getValue();
+					onlineIpValue.setText(host);
+					log.debug("ShellfireMainFormController: Ip address is " + host);
+				}
+
+			});
+			Thread worker = new Thread(hostWorker);
+			worker.run();
 
 		});
-		Thread worker = new Thread(hostWorker);
-		worker.run();
 
 	}
 
 	public void setSelectedProtocol(VpnProtocol protocol) {
 		if (protocol == null) {
-			protocol = VpnProtocol.UDP;
+			protocol = VpnProtocol.WireGuard;
 		}
 
 		switch (protocol) {
+		case WireGuard:
+			this.serverListSubviewController.getWireguardRadioButton().setSelected(true);
+			break;
 		case UDP:
 			this.serverListSubviewController.getUDPRadioButton().setSelected(true);
 			break;
@@ -1375,6 +1389,26 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		if (event.getCode().isLetterKey()) {
 			appendKey(event.getCode().getName().charAt(0));
 		}
+	}
+
+	public void minimizeToTray() {
+		log.debug("ShellfireVPNMainController.minimizeToTray() - start");
+		if (leftMenuPane != null) {
+			Scene scene = leftMenuPane.getScene();
+			if (scene != null) {
+				Stage stage = (Stage)scene.getWindow();
+				if (stage != null) {
+					hide(stage);
+				} else {
+					log.debug("stage is null, cannot hide()");
+				}
+			} else {
+				log.debug("scene is null, cannot hide()");
+			}
+		} else {
+			log.debug("leftMenuPane is null, cannot hide()");
+		}
+		log.debug("ShellfireVPNMainController.minimizeToTray() - return");
 	}
 
 }

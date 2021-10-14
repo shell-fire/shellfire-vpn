@@ -15,6 +15,7 @@ public class WsVpn {
 	String sPassword;
 	String eAccountType;
 	String sListenHost;
+	String sWireguardIP;
 	String eProtocol;
 	long iPremiumUntil;
 
@@ -73,6 +74,16 @@ public class WsVpn {
 	public void setListenHost(String sListenHost) {
 		this.sListenHost = sListenHost;
 	}
+	
+	public String getWireguardIP() {
+		return sWireguardIP;
+	}
+
+	public void setWireguardIP(String sWireguardIP) {
+		this.sWireguardIP = sWireguardIP;
+	}
+	
+	
 
 	public String getProtocol() {
 		return eProtocol;

@@ -68,6 +68,8 @@ public class ServerListSubviewController implements Initializable {
 	@FXML
 	private Label connectionTypeLabel;
 	@FXML
+	private RadioButton WireguardRadioButton;
+	@FXML
 	private RadioButton UDPRadioButton;
 	@FXML
 	private RadioButton TCPRadioButton;
@@ -88,25 +90,7 @@ public class ServerListSubviewController implements Initializable {
 	@FXML
 	private TableColumn<ServerListFXModel, VpnStar> speedColumn;
 	@FXML
-	private ImageView keyBuyImgeButton;
-	@FXML
 	private Button connectButton1;
-
-	@FXML
-	private void handleKeyBuyImgeButtonExited(MouseEvent event) {
-	}
-
-	@FXML
-	private void handleKeyBuyImgeButtonEnterd(MouseEvent event) {
-	}
-
-	@FXML
-	private void handleKeyBuyImgeButtonContextRequested(ContextMenuEvent event) {
-	}
-
-	@FXML
-	private void handleKeyBuyImgeButtonClicked(MouseEvent event) {
-	}
 
 	@FXML
 	private void handleConnectImage2MouseExited(MouseEvent event) {
@@ -165,6 +149,10 @@ public class ServerListSubviewController implements Initializable {
 		return serverListTableView;
 	}
 
+	public RadioButton getWireguardRadioButton() {
+		return WireguardRadioButton;
+	}
+
 	public RadioButton getUDPRadioButton() {
 		return UDPRadioButton;
 	}
@@ -204,8 +192,9 @@ public class ServerListSubviewController implements Initializable {
 	public void initialize(URL url, ResourceBundle rb) {
 		this.selectServerLabel.setText(i18n.tr("Select a Server for your connection"));
 		this.connectionTypeLabel.setText(i18n.tr("Connection type"));
-		this.TCPRadioButton.setText(i18n.tr("TCP (works with safe firewalls and proxies.)"));
-		this.UDPRadioButton.setText(i18n.tr("UDP (fast)"));
+		this.TCPRadioButton.setText(i18n.tr("OpenVPN TCP (works with secure firewalls and proxies.)"));
+		this.UDPRadioButton.setText(i18n.tr("OpenVPN UDP (fast)"));
+		this.WireguardRadioButton.setText(i18n.tr("Wireguard (fastest)"));
 		this.connectButton1.setGraphic(connectImage1);
 		this.connectButton1.setPadding(Insets.EMPTY);
 		nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
@@ -221,10 +210,29 @@ public class ServerListSubviewController implements Initializable {
 				@Override
 				protected void updateItem(Server item, boolean empty) {
 					if (item != null) {
-						if (shellfireService.getVpn().getServer().equals(item)) {
-							log.debug("****The current VPN has server " + item + " and id " + shellfireService.getVpn().getVpnId()
-									+ " and the type is " + shellfireService.getVpn().getAccountType());
+						if (shellfireService == null) {
+							log.debug("shellfireService is null, setting it");
+							setShellfireService(WebService.getInstance());
 						}
+						
+						Vpn vpn = shellfireService.getVpn();
+						if (vpn == null) {
+							log.debug("vpn retrieved from service is null, cannot check if current server to log details.");
+						} else {
+							Server server = vpn.getServer();
+							if (server == null) {
+								log.debug("server retrieved from vpn is null, cannot check if current server to log details");
+								log.debug("vpn details: {}", vpn.toString());
+							} else {
+								if (server.equals(item)) {
+									log.debug("****The current VPN has server " + item + " and id " + shellfireService.getVpn().getVpnId()
+											+ " and the type is " + shellfireService.getVpn().getAccountType());
+								} else {
+									log.debug("server not equal to item");
+								}
+							}
+						}
+						
 						// get the corresponding country of this server
 						Country country = item.getCountry();
 						// Attach the imageview to the cell
@@ -254,10 +262,6 @@ public class ServerListSubviewController implements Initializable {
 		// Add sorted (and filtered) data to the table.
 		serverListTableView.setItems(sortedData);
 
-		this.connectImage2.managedProperty().bind(this.connectImage2.visibleProperty());
-		this.connectImage1.managedProperty().bind(this.connectImage1.visibleProperty());
-		this.keyBuyImgeButton.managedProperty().bind(this.keyBuyImgeButton.visibleProperty());
-		this.keyBuyImgeButton.setVisible(false);
 		this.connectImage2.setVisible(false);
 	}
 
@@ -284,6 +288,7 @@ public class ServerListSubviewController implements Initializable {
 			serverListTableView.disableProperty().set(isConnected);
 			TCPRadioButton.disableProperty().set(isConnected);
 			UDPRadioButton.disableProperty().set(isConnected);
+			WireguardRadioButton.disableProperty().set(isConnected);
 		}
 	}
 
@@ -348,7 +353,9 @@ public class ServerListSubviewController implements Initializable {
 	}
 
 	public VpnProtocol getSelectedProtocol() {
-		if (this.UDPRadioButton.isSelected()) {
+		if (this.WireguardRadioButton.isSelected()) {
+			return VpnProtocol.WireGuard;
+		} else if (this.UDPRadioButton.isSelected()) {
 			return VpnProtocol.UDP;
 		} else if (this.TCPRadioButton.isSelected()) {
 			return VpnProtocol.TCP;

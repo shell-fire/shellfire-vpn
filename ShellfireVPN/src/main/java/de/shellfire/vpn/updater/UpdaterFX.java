@@ -175,7 +175,7 @@ public class UpdaterFX implements CanContinueAfterBackEndAvailableFX {
 			exec += " " + param;
 		}
 		try {
-			log.debug("exec: " + exec);
+			log.debug("UpdaterFX - calling: exec={} ", exec);
 			executeJava(exec);
 		} catch (IOException e) {
 
@@ -454,13 +454,18 @@ public class UpdaterFX implements CanContinueAfterBackEndAvailableFX {
 	}
 	@Override
 	public void continueAfterBackEndAvailabledFX() {
+		log.debug("UpdaterFX.continueAfterBackEndAvailabledFX() called");
 		try {
 			String cmd = "";
+			boolean launchApp = false;
 			if (args.length > 0) {
 				cmd = args[0];
 				if (cmd.equals("doupdate") && newVersionAvailable()) {
 					// assumes we have been restarted with elevated privileges
 					performUpdate(cmd, System.getProperty("user.name"));
+				} else if (cmd.equals("minimize")) {
+					log.debug("minimize command line argument given, need to pass on from UpdaterFX to LoginForm");
+					launchApp = true;
 				}
 			} else if (newVersionAvailable()) {
 				if (askIfUpdateShouldBePerformed()) {
@@ -475,6 +480,11 @@ public class UpdaterFX implements CanContinueAfterBackEndAvailableFX {
 					System.exit(0);
 				}
 			} else {
+				launchApp = true;
+			}
+			
+			if (launchApp) {
+				log.debug("launchApp is true, calling launchApp({}", cmd);
 				launchApp(cmd);
 			}
 

@@ -47,6 +47,9 @@ public class ServiceMessageHandler implements MessageListener<Object>, Connectio
 			case SetAppDataFolder:
 				handleSetAppDataFolder(message);
 				break;
+			case SetWireguardConfigFilePath:
+				handleSetWireguardConfigFilePath(message);
+				break;
 			case Error:
 				handleError(message);
 				break;
@@ -141,6 +144,16 @@ public class ServiceMessageHandler implements MessageListener<Object>, Connectio
 		String appDataFolder = msg.getPayload();
 		log.info("appDataFolder: {}", appDataFolder);
 		vpnController.setAppDataFolder(appDataFolder);
+	}
+	
+
+	private void handleSetWireguardConfigFilePath(Message<?, ?> message) {
+		log.info("handleSetWireguardConfigFilePath()");
+		Message<String, Void> msg = (Message<String, Void>) message;
+
+		String wireguardConfigFilePath = msg.getPayload();
+		log.info("handleSetWireguardConfigFilePath: {}", wireguardConfigFilePath);
+		vpnController.setWireguardConfigFilePath(wireguardConfigFilePath);
 	}
 
 	private void handleConnect(Message<?, ?> message) {

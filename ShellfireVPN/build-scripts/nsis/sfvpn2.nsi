@@ -174,6 +174,35 @@ openvpn-32bit:
   
 openvpnend:  
 
+
+
+
+
+
+
+
+
+  SetOutPath "$INSTDIR\wireguard\"
+  
+  ; Check if we are running on a 64 bit system.
+  System::Call "kernel32::GetCurrentProcess() i .s"
+  System::Call "kernel32::IsWow64Process(i s, *i .r0)"
+  IntCmp $0 0 wireguard-32bit
+
+; wireguard-64bit:
+
+  DetailPrint "Installing 64-bit wireguard"
+  File "..\tools\wireguard\64-bit\"
+
+goto wireguardend
+
+wireguard-32bit:
+
+  DetailPrint "Installing 32-bit wireguard"
+  File "..\tools\wireguard\32-bit\"
+  
+wireguardend:  
+
   SetOutPath "$INSTDIR\"
   File "..\tools\prunsrv\"
 
@@ -191,6 +220,23 @@ openvpnend:
 
 	goto nvspbindend
 
+
+	SetOutPath "$INSTDIR\nvspbind\"
+
+	  ; Check if we are running on a 64 bit system.
+	  System::Call "kernel32::GetCurrentProcess() i .s"
+	  System::Call "kernel32::IsWow64Process(i s, *i .r0)"
+	  IntCmp $0 0 nvspbind-32bit
+
+	; nvspbind-64bit:
+
+	  DetailPrint "Installing 64-bit nvspbind"
+	  File "..\tools\nvspbind\64-bit\"
+
+	  
+	goto nvspbindend
+
+	
 nvspbind-32bit:
 
 	  DetailPrint "Installing 32-bit nvspbind"
@@ -203,6 +249,15 @@ nvspbindend:
   DetailPrint 'Running Command: "$0" /C "$INSTDIR\ShellfireVPN2.exe" installservice"' 
   nsExec::ExecToLog '"$0" /C "$INSTDIR\ShellfireVPN2.exe" installservice'
 
+  ;
+  ; Add and remove a Wireguard tunnel, to ensure wintun driver is installed.
+  ; Specially needed for win7, see this lengthy discussion: https://github.com/tailscale/tailscale/issues/1051
+  ;
+  DetailPrint "Adding and removing a WireGuard tunnel to ensure wintun driver is installed..."
+  nsExec::ExecToLog '"$0" /C "$INSTDIR\wireguard\forcewintun.exe"'
+  DetailPrint "... done"
+  
+  
   Var /GLOBAL langstr 
   
   StrCmp $language "1031" 0 lang_node

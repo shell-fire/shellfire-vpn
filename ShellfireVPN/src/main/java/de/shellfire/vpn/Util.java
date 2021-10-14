@@ -1,9 +1,8 @@
 package de.shellfire.vpn;
 
 import java.awt.Desktop;
-import java.awt.Image;
-import java.awt.Toolkit;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -12,6 +11,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
@@ -29,6 +29,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 import javax.swing.ImageIcon;
@@ -49,10 +50,10 @@ import de.shellfire.vpn.gui.controller.ShellfireVPNMainFormFxmlController;
 import de.shellfire.vpn.gui.helper.ExceptionThrowingReturningRunnableImpl;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.messaging.UserType;
+import de.shellfire.vpn.service.CryptFactory;
 import de.shellfire.vpn.service.IVpnRegistry;
 import de.shellfire.vpn.service.win.WinRegistry;
 import javafx.scene.control.Alert;
-import javafx.scene.image.ImageView;
 
 public class Util {
 	private static final String SHELLFIRE_VPN = "shellfire-vpn" + File.separator;
@@ -68,6 +69,15 @@ public class Util {
 	public static UserType userType = null;
 	private static Properties properties;
 	private static String configDir;
+
+	private static Map<String, String> envs = System.getenv();
+	private static String programFiles = envs.get("ProgramFiles");
+	private static String programFiles86 = envs.get("ProgramFiles(x86)");
+	private static String programW6432 = envs.get("ProgramW6432");
+
+	
+	public static final String POWERSHELL_EXE = "%SystemRoot%\\system32\\WindowsPowerShell\\v1.0\\powershell.exe";
+	
 	private static Logger log = Util.getLogger(Util.class.getCanonicalName());
 	private static HashMap<String, javafx.scene.image.Image> imageIconCacheMap = new HashMap<String, javafx.scene.image.Image>();
 	static {
@@ -139,13 +149,21 @@ public class Util {
 	}
 
 	public static String runCommandAndReturnOutput(List<String> command) {
-		String[] array = new String[command.size()];
-		command.toArray(array);
-		return runCommandAndReturnOutput(array);
+		return runCommandAndReturnOutput(null, command);
 	}
 
+	public static String runCommandAndReturnOutput(String writeToProc, List<String> command) {
+		String[] array = new String[command.size()];
+		command.toArray(array);
+		return runCommandAndReturnOutput(writeToProc, array);
+	}
+	
 	public static String runCommandAndReturnOutput(String... command) {
-		log.debug("Running command: {}", Arrays.asList(command));
+		return runCommandAndReturnOutput(null, command);
+	}
+	
+	public static String runCommandAndReturnOutput(String writeToProc, String... command) {
+		log.debug("Running command: {} and then writing to stdIn {}", Arrays.asList(command), writeToProc);
 		final StringBuffer result = new StringBuffer();
 		try {
 			ProcessBuilder pb = new ProcessBuilder(command);
@@ -154,6 +172,13 @@ public class Util {
 
 			final BufferedReader stdInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
 
+			if (writeToProc != null) {
+				final BufferedWriter stdOutput = new BufferedWriter(new OutputStreamWriter(proc.getOutputStream()));
+				stdOutput.write(writeToProc);
+				stdOutput.flush();
+				stdOutput.close();
+			}
+			
 			String newLine = "";
 			try {
 				while ((newLine = stdInput.readLine()) != null) {
@@ -163,7 +188,7 @@ public class Util {
 			} catch (IOException e) {
 				Util.handleException(e);
 			}
-
+			
 			proc.waitFor();
 
 		} catch (IOException e) {
@@ -321,12 +346,135 @@ public class Util {
 		return Util.configDir;
 	}
 
-	public static List<String> getPossibleExeLocations(String programFiles, String programFiles86) {
-		return Arrays.asList("openvpn\\openvpn.exe", "..\\openvpn\\openvpn.exe", programFiles + "\\ShellfireVPN\\openvpn\\openvpn.exe",
-				programFiles86 + "\\ShellfireVPN\\openvpn\\openvpn.exe", programFiles + "\\OpenVPN\\openvpn.exe",
-				programFiles86 + "\\OpenVPN\\openvpn.exe", programFiles + "\\ShellfireVPN\\bin\\openvpn.exe",
-				programFiles86 + "\\ShellfireVPN\\bin\\openvpn.exe");
+	public static String getOpenVpnLocation() {
+		log.debug("getOpenVpnLocation() - start");
 
+		List<String> possibleOpenVpnExeLocations = Util.getPossibleOpenVpnExeLocations(programFiles, programFiles86, programW6432);
+
+		for (String possibleLocation : possibleOpenVpnExeLocations) {
+			File f = new File(possibleLocation);
+			if (f.exists()) {
+				log.debug("getOpenVpnLocation() - returning " + possibleLocation);
+				return possibleLocation;
+			}
+
+		}
+		log.debug("getOpenVpnLocation() - returning null: OPENVPN NOT FOUND!");
+		return null;
+	}
+	
+
+	public static String getWireGuardExeLocation() {
+		log.debug("getWireGuardExeLocation() - start");
+
+		List<String> possibleWireGuardVpnExeLocations = Util.getPossibleWireGuardExeLocations(programFiles, programFiles86, programW6432);
+
+		for (String possibleLocation : possibleWireGuardVpnExeLocations) {
+			File f = new File(possibleLocation);
+			if (f.exists()) {
+				log.debug("getWireGuardExeLocation() - returning " + possibleLocation);
+				return possibleLocation;
+			}
+
+		}
+		log.debug("getWireGuardExeLocation() - returning null: WIREGUARD NOT FOUND!");
+		return null;
+	}	
+
+	public static String getWGExeLocation() throws Exception {
+		log.debug("getWGExeLocation() - start");
+
+		List<String> possibleWireGuardVpnExeLocations = Util.getPossibleWGExeLocations(programFiles, programFiles86, programW6432);
+
+		for (String possibleLocation : possibleWireGuardVpnExeLocations) {
+			File f = new File(possibleLocation);
+			if (f.exists()) {
+				log.debug("getWireGuardExeLocation() - returning " + possibleLocation);
+				return possibleLocation;
+			} else {
+				log.debug("getWireGuardExeLocation() does not exist: " + possibleLocation);
+			}
+
+		}
+		log.debug("getWGExeLocation() - returning null: WIREGUARD NOT FOUND!");
+		throw new Exception("WireGuard Not found");
+	}	
+	
+	public static String getWireGuardLog() {
+		log.debug("getWireGuardLog() - start");
+		
+		String wireGuardLogPath = Util.getLogFilePathWireguard();
+		
+		String[] cmdDumpLog = {
+				Util.getWireGuardExeLocation(),
+				"/dumplog",
+				wireGuardLogPath
+		};
+		
+		Util.runCommandAndReturnOutput(cmdDumpLog);
+
+		String result = null;
+		
+		File wireGuardLogFile = new File(wireGuardLogPath);
+		if (wireGuardLogFile.exists()) {
+			try {
+				result = Util.fileToString(wireGuardLogPath);
+			} catch (IOException e) {
+				log.error("Could not read wireguard.log file from " + wireGuardLogPath, e);
+			}
+		}
+		
+		log.debug("getWireGuardLog() - return");
+		
+		return result;
+		
+	}
+
+	public static List<String> getPossibleOpenVpnExeLocations(String programFiles, String programFiles86, String programW6432) {
+		return Arrays.asList(
+				"openvpn\\openvpn.exe", 
+				"..\\openvpn\\openvpn.exe", 
+				
+				programFiles + "\\ShellfireVPN\\openvpn\\openvpn.exe", 
+				programFiles86 + "\\ShellfireVPN\\openvpn\\openvpn.exe", 
+				programW6432 + "\\ShellfireVPN\\openvpn\\openvpn.exe", 
+				
+				programFiles + "\\OpenVPN\\openvpn.exe"
+				,programFiles86 + "\\OpenVPN\\openvpn.exe",
+				programW6432 + "\\OpenVPN\\openvpn.exe", 
+				
+				programFiles + "\\ShellfireVPN\\bin\\openvpn.exe", 
+				programFiles86 + "\\ShellfireVPN\\bin\\openvpn.exe", 
+				programW6432 + "\\ShellfireVPN\\bin\\openvpn.exe"
+			);
+	}
+	public static List<String> getPossibleWireGuardExeLocations(String programFiles, String programFiles86, String programW6432) {
+		return Arrays.asList(
+				"wireguard\\wireguard.exe", 
+				"..\\wireguard\\wireguard.exe", 
+
+				programFiles + "\\ShellfireVPN\\wireguard\\wireguard.exe",
+				programFiles86 + "\\ShellfireVPN\\wireguard\\wireguard.exe",
+				programW6432 + "\\ShellfireVPN\\wireguard\\wireguard.exe",
+				
+				programFiles + "\\WireGuard\\wireguard.exe", 
+				programFiles86 + "\\WireGuard\\wireguard.exe", 
+				programW6432 + "\\WireGuard\\wireguard.exe"
+			);
+	}
+	public static List<String> getPossibleWGExeLocations(String programFiles, String programFiles86, String programW6432) {
+		return Arrays.asList(
+				"wireguard\\wg.exe", 
+				"..\\wireguard\\wg.exe", 
+
+				programFiles + "\\ShellfireVPN\\wireguard\\wg.exe",
+				programFiles86 + "\\ShellfireVPN\\wireguard\\wg.exe",
+				programW6432 + "\\ShellfireVPN\\wireguard\\wg.exe",
+				
+				programFiles + "\\WireGuard\\wg.exe", 
+				programFiles86 + "\\WireGuard\\wg.exe", 
+				programW6432 + "\\WireGuard\\wg.exe"
+			);		
 	}
 
 	public static String getSeparator() {
@@ -610,6 +758,11 @@ public class Util {
 		String result = getTempDir() + userType.name() + ".log";
 		return result;
 	}
+	
+	private static String getLogFilePathWireguard() {
+		String result = getTempDir() + "wireguard.log";
+		return result;
+	}
 
 	public static String getLogFilePathInstaller() {
 		String jarFile = Util.getPathJar();
@@ -763,6 +916,63 @@ public class Util {
 		}
 
 		return null;
+	}
+	public static String getWireGuardFileNameConfig(String vpnName) {
+		String filePath = Util.getConfigDir() + "\\wg-" + vpnName + ".conf";
+		
+		return filePath;
+	}
+	
+	public static String getWireGuardPublicKeyUser(String vpnName) throws Exception {
+		VpnProperties props = VpnProperties.getInstance();
+		String pubKey = props.getProperty("wg-pubkey-"+vpnName, null);
+		
+		if (pubKey == null) {
+			Util.generateWireGuardKeyPair(vpnName);
+			
+			pubKey = props.getProperty("wg-pubkey-"+vpnName, null);
+			
+			if (pubKey == null) {
+				throw new Exception("Could not retrieve keypair for "+vpnName+", pubKey still null after Util.generateWireGuardKeyPair()");
+			}
+		}
+
+		return pubKey;
+	}
+	
+	public static String getWireGuardPrivateKeyUser(String vpnName) throws Exception {
+		VpnProperties props = VpnProperties.getInstance();
+		String privKey = props.getProperty("wg-privkey-"+vpnName, null);
+		
+		if (privKey == null) {
+			Util.generateWireGuardKeyPair(vpnName);
+			
+			privKey = props.getProperty("wg-privkey-"+vpnName, null);
+			
+			if (privKey == null) {
+				throw new Exception("Could not retrieve keypair for "+vpnName+", privKey still null after Util.generateWireGuardKeyPair()");
+			}
+		}
+
+		privKey = CryptFactory.decrypt(privKey);
+		return privKey;
+	}
+
+	private static void generateWireGuardKeyPair(String vpnName) throws Exception {
+		log.debug("generateWireGuardKeyPair vpnName={} - start", vpnName);
+		String wgPath = Util.getWGExeLocation();
+		
+		String[] cmdPrivKey = {wgPath, "genkey"};
+		String privKey = Util.runCommandAndReturnOutput(cmdPrivKey).trim();		
+		
+		VpnProperties props = VpnProperties.getInstance();
+		props.setProperty("wg-privkey-"+vpnName, CryptFactory.encrypt(privKey));
+		
+		String[] cmdPubKey = {wgPath, "pubkey"};
+		String pubKey = Util.runCommandAndReturnOutput(privKey+"\n", cmdPubKey).trim();
+		props.setProperty("wg-pubkey-"+vpnName, pubKey);
+		
+		log.debug("generateWireGuardKeyPair - done - stored keypair in VpnProperties privKey={}/pubKey={}", privKey, pubKey);
 	}
 
 	// do not mix this order around, must remain in the end of class so that log file can be deleted on startup

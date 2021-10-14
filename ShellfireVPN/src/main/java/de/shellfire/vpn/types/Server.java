@@ -22,6 +22,7 @@ public class Server implements LocatableIcon {
 	private ServerType serverType;
 	private double longitude;
 	private double latitude;
+	private String wireguardPublicKey;
 	private BufferedImage iconServerForMap;
 	private Controller controller;
 	private static I18n i18n = VpnI18N.getI18n();
@@ -42,6 +43,7 @@ public class Server implements LocatableIcon {
 		this.serverType = Enum.valueOf(ServerType.class, wss.getServertype());
 		this.longitude = wss.getLongitude();
 		this.latitude = wss.getLatitude();
+		this.wireguardPublicKey = wss.getWireguardPublicKey();
 
 		try {
 			this.iconServerForMap = ImageIO.read(getClass().getResourceAsStream("/icons/sf-server-map-32x32.png"));
@@ -121,6 +123,10 @@ public class Server implements LocatableIcon {
 
 	public double getLongitude() {
 		return this.longitude;
+	}
+	
+	public String getWireguardPublicKey() {
+		return this.wireguardPublicKey;
 	}
 
 	@Override

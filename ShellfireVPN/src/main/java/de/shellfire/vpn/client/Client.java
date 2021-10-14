@@ -232,4 +232,19 @@ public class Client implements MessageListener<Serializable> {
 		log.debug("setAppDataFolder() - finish");
 	}
 
+	public void setWireguardConfigFilePath(String configFilePath) {
+		log.debug("setWireguardConfigFilePath() - start");
+		Util.runWithAutoRetry(new ExceptionThrowingReturningRunnableImpl<Void>() {
+			public Void run() throws Exception {
+				log.debug("configFilePath: {}", configFilePath);
+				Message<String, Void> message = new Message<String, Void>(MessageType.SetWireguardConfigFilePath, configFilePath);
+				messageBroker.sendMessage(message);
+
+				return null;
+			}
+		}, 10, 50);
+		log.debug("setWireguardConfigFilePath() - finish");
+		
+	}
+
 }

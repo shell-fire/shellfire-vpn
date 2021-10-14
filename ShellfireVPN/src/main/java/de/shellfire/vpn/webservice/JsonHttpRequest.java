@@ -62,6 +62,7 @@ import de.shellfire.vpn.webservice.model.RegisterRequest;
 import de.shellfire.vpn.webservice.model.SendLogToShellfireRequest;
 import de.shellfire.vpn.webservice.model.SetProtocolToRequest;
 import de.shellfire.vpn.webservice.model.SetServerToRequest;
+import de.shellfire.vpn.webservice.model.SetWireGuardPublicKeyUserRequest;
 import de.shellfire.vpn.webservice.model.WsLoginRequest;
 
 @SuppressWarnings("rawtypes")
@@ -108,6 +109,7 @@ class JsonHttpRequest<RequestType, ResponseType> {
 		tempMap.put(GetWebServiceEndPointList.class, "getWebServiceAliasList");
 		tempMap.put(GetCryptoMinerConfigRequest.class, "getCryptoMinerConfig");
 		tempMap.put(GetCryptoCurrencyVpnRequest.class, "getCryptoCurrencyVpn");
+		tempMap.put(SetWireGuardPublicKeyUserRequest.class, "setWireguardPublicKeyUser");
 
 		functionMap = Collections.unmodifiableMap(tempMap);
 	}
@@ -166,7 +168,7 @@ class JsonHttpRequest<RequestType, ResponseType> {
 
 			SSLContext sslcontext = provideSSLContext(ks, pass);
 
-			SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslcontext, new String[] { "TLSv1" }, null,
+			SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(sslcontext, new String[] { "TLSv1.2"}, null,
 					SSLConnectionSocketFactory.getDefaultHostnameVerifier());
 
 			httpClient = HttpClients.custom().setSSLSocketFactory(sslsf).setDefaultRequestConfig(defaultRequestConfig).build();

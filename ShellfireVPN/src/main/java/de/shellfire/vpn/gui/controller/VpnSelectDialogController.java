@@ -43,8 +43,6 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
 	@FXML
 	private CheckBox fAutoconnect;
 	@FXML
-	private Label vpnTypeLabel;
-	@FXML
 	private ScrollPane vpnScrollPane;
 	@FXML
 	private TableView<VpnSelectionFXModel> vpnListTable;
@@ -183,9 +181,6 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
 		this.selectVpnButton.setText(i18n.tr("Select VPN"));
 		this.fAutoconnect.setText(i18n.tr("Save my choice"));
 		this.vpnSelectLabel.setText(i18n.tr("Choose VPN"));
-		this.vpnTypeLabel.setText(
-				i18n.tr("Note: VPN types PPTP and L2TP/IPSec have to be switched to OpenVPN before you can connect using sf vpn."));
-		this.vpnTypeLabel.setWrapText(true);
 	}
 
 	private void rememberSelectionIfDesired(Vpn selectedVpn) {

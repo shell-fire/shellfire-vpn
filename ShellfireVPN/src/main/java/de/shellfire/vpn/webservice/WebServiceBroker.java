@@ -51,6 +51,7 @@ import de.shellfire.vpn.webservice.model.RegisterRequest;
 import de.shellfire.vpn.webservice.model.SendLogToShellfireRequest;
 import de.shellfire.vpn.webservice.model.SetProtocolToRequest;
 import de.shellfire.vpn.webservice.model.SetServerToRequest;
+import de.shellfire.vpn.webservice.model.SetWireGuardPublicKeyUserRequest;
 import de.shellfire.vpn.webservice.model.TrayMessage;
 import de.shellfire.vpn.webservice.model.UrlResponse;
 import de.shellfire.vpn.webservice.model.VersionResponse;
@@ -202,6 +203,31 @@ public class WebServiceBroker {
 		log.debug("setServerTo () - returning result: {}", result);
 		return result;
 	}
+
+	/**
+	 * function used to set the public key of a wireguard vpn
+	 * 
+	 * @throws IOException
+	 * @throws ClientProtocolException
+	 * @throws VpnException
+	 */
+	public Boolean setWireGuardPublicKeyUser(int vpnProductId, String wireguardPublicKeyUser) throws ClientProtocolException, IOException, VpnException {
+		log.debug("setWireGuardPublicKeyUser ({}, {}) - start", vpnProductId, wireguardPublicKeyUser);
+		SetWireGuardPublicKeyUserRequest request = new SetWireGuardPublicKeyUserRequest(vpnProductId, wireguardPublicKeyUser);
+
+		Type theType = new TypeToken<Response<Void>>() {
+		}.getType();
+		Response<Void> resp = new JsonHttpRequest<SetWireGuardPublicKeyUserRequest, Void>().call(request, theType);
+
+		Boolean result = resp != null && resp.isSuccess();
+
+		log.debug("setWireGuardPublicKeyUser () - returning result: {}", result);
+		return result;
+	}
+	
+	
+	
+	
 
 	/**
 	 * function used to set the protocol of the users vpn
@@ -593,15 +619,16 @@ public class WebServiceBroker {
 		return sessionToken;
 	}
 
-	public Boolean sendLogToShellfire(String serviceLogString, String clientLogString, String installLogString)
+	public Boolean sendLogToShellfire(String serviceLogString, String clientLogString, String wireguardLogString, String installLogString)
 			throws ClientProtocolException, IOException, VpnException {
 		log.debug("sendLogToShellfire() - start");
 
 		serviceLogString = Util.encodeBase64(serviceLogString);
 		clientLogString = Util.encodeBase64(clientLogString);
+		wireguardLogString = Util.encodeBase64(wireguardLogString);
 		installLogString = Util.encodeBase64(installLogString);
 
-		SendLogToShellfireRequest request = new SendLogToShellfireRequest(serviceLogString, clientLogString, installLogString);
+		SendLogToShellfireRequest request = new SendLogToShellfireRequest(serviceLogString, clientLogString, wireguardLogString, installLogString);
 
 		Type theType = new TypeToken<Response<Void>>() {
 		}.getType();

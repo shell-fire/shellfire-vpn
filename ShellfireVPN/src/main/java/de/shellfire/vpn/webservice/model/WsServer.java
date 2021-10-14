@@ -23,12 +23,14 @@ public class WsServer implements java.io.Serializable {
 	private float longitude;
 
 	private float latitude;
+	
+	private java.lang.String wireguardPublicKey;
 
 	public WsServer() {
 	}
 
 	public WsServer(int vpnServerId, java.lang.String country, java.lang.String city, java.lang.String name, java.lang.String host,
-			java.lang.String servertype, float longitude, float latitude) {
+			java.lang.String servertype, float longitude, float latitude, java.lang.String wireguardPublicKey) {
 		this.vpnServerId = vpnServerId;
 		this.country = country;
 		this.city = city;
@@ -37,6 +39,7 @@ public class WsServer implements java.io.Serializable {
 		this.servertype = servertype;
 		this.longitude = longitude;
 		this.latitude = latitude;
+		this.wireguardPublicKey = wireguardPublicKey;
 	}
 
 	/**
@@ -182,4 +185,24 @@ public class WsServer implements java.io.Serializable {
 	public void setLatitude(float latitude) {
 		this.latitude = latitude;
 	}
+	
+
+	/**
+	 * Gets the wireguardPublicKey value for this WsServer.
+	 * 
+	 * @return name
+	 */
+	public java.lang.String getWireguardPublicKey() {
+		return wireguardPublicKey;
+	}
+
+	/**
+	 * Sets the wireguardPublicKey value for this WsServer.
+	 * 
+	 * @param name
+	 */
+	public void setWireguardPublicKey(java.lang.String wireguardPublicKey) {
+		this.wireguardPublicKey = wireguardPublicKey;
+	}
+
 }

@@ -23,7 +23,7 @@ public class EndpointManager {
 	private static final String DELIM = ";";
 	private final static String PROPERTY_ENDPOINTS = "webserviceEndPoints";
 	private final static String PROPERTY_PREFERRED_ENDPOINT = "preferredWebserviceEndPoint";
-	private final static String DEFAULT_PROPERTIES = "www.shellfire.de:443;www.shellfire.net:443;www.shellfire.fr:443;213.239.207.251:380;213.239.207.252:380;176.57.129.88:380;192.71.249.26:380;46.246.93.202:380;37.235.48.187:380;174.34.178.139:380;176.9.16.216:380;176.9.16.215:380;94.76.223.69:380;94.76.223.68:380;192.95.24.110:380;94.23.27.103:380;176.57.141.68:380;176.57.141.83:380;37.235.49.49:380;158.255.208.212:380;151.236.23.76:380;151.236.18.125:380;37.235.52.74:380;37.235.55.134:380;46.108.39.238:380;213.183.56.14:380;162.252.172.111:380;176.57.141.162:380;185.4.134.183:380;104.152.44.66:380;176.57.141.209:380;176.57.141.93:443;174.34.178.141:443;";
+	private final static String DEFAULT_PROPERTIES = "www.shellfire.de:443;www.shellfire.net:443;www.shellfire.fr;193.9.115.56:380;139.99.66.134:380;74.63.210.6:380;server58.vhorst.de:443;server13.ownz.it:380;server63.vhorst.de:380;217.182.196.58:380;server26.pow3r.de:380;server50.shellfire.co.uk:380;server45.shellfire.co.uk:380;78.46.95.38:380;server44.shellfire-vpn.de:443;server36.shellfire.fr:380;37.235.48.187:380;server52.pow3r.de:38333;server46.shellfire.fr:380;185.90.61.186:380;139.59.63.233:380;server57.ownz.it:443;server7.pow3r.de:380;203.23.128.158:380;server32.vhorst.de:45319;server35.shellfire.co.uk:380;162.252.172.100:380;server9.shellfire.co.uk:380;server27.shellfire-vpn.com:380;162.252.172.147:380;141.98.102.10:380;103.75.118.27:380;server51.anonymsurfen.de:443;server3.shellfire-vpn.com:443;server53.vhorst.de:443;136.243.72.228:380;5.9.60.246:380;server34.m-4-t-r-i-x.de:380;server64.mybouncer.de:443;23.106.80.10:380;37.120.213.50:380;37.235.55.134:380;server4.ownz.it:44598;185.224.197.84:380;server59.shellfire-vpn.de:380;server39.anonymsurfen.de:380;185.113.140.7:380;server40.m-4-t-r-i-x.de:443;158.255.215.108:380;185.150.28.32:380;server25.ownz.it:380;192.95.24.110:380;server61.shellfire.fr:380;5.254.14.162:380;server22.sixer.de:380;server38.sixer.de:443;5.9.97.217:380;185.123.101.227:380;server47.shellfirevpn.de:58650;185.150.28.29:380;server29.shellfire.co.uk:380;server43.shellfire-vpn.com:380;server60.shellfire.co.uk:380;37.235.49.49:380;92.38.163.95:380;server12.m-4-t-r-i-x.de:443;server11.anonymsurfen.de:380;51.81.51.215:380;37.143.130.168:380;server21.shellfirevpn.de:380;server54.m-4-t-r-i-x.de:380;94.76.204.84:380;185.186.79.121:380;server65.ownz.it:380;5.9.66.151:380;163.172.214.246:380;194.68.44.238:380;server6.m-4-t-r-i-x.de:380;server23.anonymsurfen.de:380;185.186.78.199:380;";
 	private static I18n i18n = VpnI18N.getI18n();
 
 	private static Logger log = Util.getLogger(EndpointManager.class.getCanonicalName());
@@ -208,17 +208,23 @@ public class EndpointManager {
 				initDialogFX.getDialogStage().hide();
 			}
 
+			log.debug("FindEndPointTask.succeeded() - calling getValue()");
 			result = getValue();
+			log.debug("FindEndPointTask.succeeded() - value retrieved {}", result);
 			if (result == null) {
+				log.debug("result is null, showing alert");
 				Alert alert = new Alert(Alert.AlertType.ERROR);
 				alert.setContentText(i18n.tr("Could not connect to the Shellfire backend - Shellfire VPN is shutting down"));
 				alert.showAndWait();
 				Platform.exit();
 				System.exit(0);
 			}
+			
 			if (isInitDialogOriginFX()) {
+				log.debug("isInitDialogOriginFX: yes, hiding dialogStage");
 				initDialogFX.getDialogStage().hide();
 			}
+			log.debug("calling continueFormFX.continueAfterBackEndAvailabledFX");
 			this.continueFormFX.continueAfterBackEndAvailabledFX();
 		}
 
@@ -254,7 +260,7 @@ public class EndpointManager {
 			log.error("Could not connect to endPoint", e);
 		}
 
-		log.debug("testEndpoint(String) - finsihed, returning {}", result);
+		log.debug("testEndpoint({}) - finished, returning {}", endPoint, result);
 		return result;
 	}
 

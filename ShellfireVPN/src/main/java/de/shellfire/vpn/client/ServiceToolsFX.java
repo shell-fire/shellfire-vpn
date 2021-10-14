@@ -91,11 +91,14 @@ public abstract class ServiceToolsFX {
 		protected Object call() throws Exception {
 			while (!serviceIsRunning()) {
 				try {
+					log.debug("WaitForServiceTask - service is NOT running");
 					Thread.sleep(100);
 				} catch (InterruptedException e) {
 					Util.handleException(e);
 				}
 			}
+			
+			log.debug("WaitForServiceTask - service is NOW RUNNING again!");
 
 			return null;
 		}

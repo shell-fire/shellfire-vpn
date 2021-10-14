@@ -8,6 +8,8 @@ package de.shellfire.vpn.client.win;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
@@ -18,6 +20,7 @@ import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.gui.controller.LoginController;
 import de.shellfire.vpn.gui.controller.ProgressDialogController;
 import de.shellfire.vpn.i18n.VpnI18N;
+import de.shellfire.vpn.service.win.WindowsVpnController;
 import javafx.concurrent.Task;
 import javafx.scene.control.Alert;
 
@@ -40,8 +43,16 @@ public class WinServiceToolsFX extends ServiceToolsFX {
 			alert.setContentText(
 					i18n.tr("Shellfire VPN service is now being installed. Please enter your admin password in the next window."));
 			alert.showAndWait();
-			loginProgressDialog.hide();
+			log.debug("loginProgressDialog.hide();");
+			if (loginProgressDialog != null) {
+				loginProgressDialog.hide();	
+			}
+			
+			log.debug("calling installElevated()");
 			installElevated();
+			log.debug("returned from calling installElevated()");
+			
+			log.debug("showing progressDialog");
 			try {
 				loginProgressDialog = ProgressDialogController.getInstance(i18n.tr("Installing Service..."), null, LoginForms.getStage(), true);
 				loginProgressDialog.setButtonText(i18n.tr("Cancel"));
@@ -60,6 +71,8 @@ public class WinServiceToolsFX extends ServiceToolsFX {
 			} catch (IOException ex) {
 				log.error(ex.getMessage());
 			}
+			
+			log.debug("Starting WaitForServiceTask");
 			WaitForServiceTask task = new WaitForServiceTask(form);
 			Thread taskrun = new Thread(task);
 			taskrun.start();
@@ -72,8 +85,10 @@ public class WinServiceToolsFX extends ServiceToolsFX {
 	@Override
 	public void uninstall(String path) {
 		log.debug("uninstall()");
-
+		log.debug("Uninstall all WireGuard services");
+		uninstallWireGuardTunnelServices();
 		try {
+			log.debug("Uninstalling Shellfire VPN Service");
 			String jarFile = Util.getPathJar();
 			String instDir = new File(jarFile).getParent() + File.separator;
 
@@ -91,11 +106,63 @@ public class WinServiceToolsFX extends ServiceToolsFX {
 			Util.digestProcess(p);
 			p.waitFor();
 			log.debug("service installed (or not?); - exiting");
+
 		} catch (IOException e) {
 			Util.handleException(e);
 		} catch (InterruptedException e) {
 			Util.handleException(e);
 		}
+	}
+
+	private void uninstallWireGuardTunnelServices() {
+		List<String> serviceNameList = getWireGuardTunnelServiceList();
+		
+		for (String serviceName : serviceNameList) {
+			WindowsVpnController.stopWireGuardService(serviceName);
+			deleteService(serviceName);
+		}
+	}
+
+
+	private void deleteService(String serviceName) {
+		log.debug("deleteService({}) - start", serviceName);
+		
+		String[] cmdStopService = {
+				WindowsVpnController.PATH_SC_EXE,
+				"delete",
+				serviceName
+		};
+		
+		Util.runCommandAndReturnOutput(cmdStopService);
+		
+		log.debug("deleteService({}) - start", serviceName);
+	}
+
+	private List<String> getWireGuardTunnelServiceList() {
+		log.debug("getWireGuardTunnelServiceList() - start");
+		
+		log.debug("Setting startup type to manual");
+		String[] cmdGetAllServices = {
+				WindowsVpnController.PATH_SC_EXE,
+				"query",
+				"state=",
+				"all"
+		};
+		String resultGetAllServices = Util.runCommandAndReturnOutput(cmdGetAllServices);
+
+		List<String> result = new LinkedList<String>();
+		
+		String[] lines = resultGetAllServices.split("\n");
+		for (String line : lines) {
+			if (line != null && line.contains("SERVICE_NAME: WireGuardTunnel$wg-sf")) {
+				String service = line.trim();
+				service = service.split(" ")[1];
+				result.add(service);
+			}
+		}
+		
+		log.debug("getWireGuardTunnelServiceList() - return: {}", result);
+		return result;
 	}
 
 	/**

@@ -18,6 +18,7 @@ public class Vpn {
 	private Server server;
 	private ProductType productType;
 	private final Date premiumUntil;
+	private String wireguardIp;
 
 	public Server getServer() {
 		return server;
@@ -32,6 +33,7 @@ public class Vpn {
 		this.serverId = vpn.getServerId();
 		this.accountType = Enum.valueOf(ServerType.class, vpn.getAccountType());
 		this.listenHost = vpn.getListenHost();
+		this.wireguardIp = vpn.getWireguardIP();
 		if (vpn.getProtocol() != null && vpn.getProtocol().length() > 0)
 			this.protocol = Enum.valueOf(VpnProtocol.class, vpn.getProtocol());
 
@@ -96,5 +98,26 @@ public class Vpn {
 
 	public Date getPremiumUntil() {
 		return this.premiumUntil;
+	}
+
+	public String getWireguardIp() {
+		return this.wireguardIp;
+	}
+	public void setWireguardIp(String wireguardIp) {
+		this.wireguardIp = wireguardIp;
+	}
+	
+	public String toString() {
+		String result ="private int vpnId="+vpnId+";\r\n" +
+			"private int serverId="+serverId+";\r\n" +
+			"private ServerType accountType="+accountType+";\r\n" +
+			"private String listenHost="+listenHost+";\r\n" +
+			"private VpnProtocol protocol="+protocol+";\r\n" +
+			"private Server server="+server+";\r\n" +
+			"private ProductType productType="+productType+";\r\n" +
+			"private final Date premiumUntil="+premiumUntil+";\r\n" +
+			"private String wireguardIp="+wireguardIp+";\r\n";
+		
+		return result;
 	}
 }
