@@ -125,17 +125,9 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	@FXML
 	private ImageView connectionBackgroundImageView;
 	@FXML
-	private Label connectionHeaderLabel;
-	@FXML
-	private Label connectionFooter;
-	@FXML
 	private Pane serverListPane;
 	@FXML
 	private ImageView serverListBackgroundImage;
-	@FXML
-	private Label serverListHeaderLabel;
-	@FXML
-	private ImageView shellfireImageView;
 	@FXML
 	private AnchorPane menuBarAnchorPane;
 	@FXML
@@ -153,31 +145,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	@FXML
 	private Pane contentHeaderPane;
 	@FXML
-	private ImageView globeConnectionImageView;
-	@FXML
-	private Label connectionStatusLabel;
-	@FXML
-	private Label connectionStatusValue;
-	@FXML
-	private Label connectedSinceLabel;
-	@FXML
-	private Label onlineIpLabel;
-	@FXML
-	private Label connectedSinceValue;
-	@FXML
-	private Label onlineIpValue;
-	@FXML
-	private Label vpnIdLabel;
-	@FXML
-	private Label vpnIdValue;
-	@FXML
-	private Label vpnTypeValue;
-	@FXML
 	private Pane contentDetailsPane;
-	@FXML
-	private Label vpnType;
-	@FXML
-	private Label serverListFooterLabel;
 
 	// Access to embedded controller and variables in subviews
 	@FXML
@@ -186,9 +154,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	@FXML
 	private ConnectionSubviewController connectionSubviewController;
 	@FXML
-	private Label validUntilLabel;
-	@FXML
-	private Label validUntilValue;
 	private Image imageIconFxButtonServerListIdle = Util.getImageIconFX("/buttons/button-serverlist-idle.png");
 	private Image imageIconFxButtonConnectActive = Util.getImageIconFX("/buttons/button-connect-active.png");
 	private Image imageIconFxButtonServerListActive = Util.getImageIconFX("/buttons/button-serverlist-active.png");
@@ -216,27 +181,10 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		// initializing images of the form
 		this.connectionBackgroundImageView.setImage(Util.getImageIconFX("/buttons/button-connect-idle.png"));
 		this.serverListBackgroundImage.setImage(Util.getImageIconFX("/buttons/button-serverlist-idle.png"));
-		this.globeConnectionImageView.setImage(Util.getImageIconFX("/icons/small-globe-disconnected.png"));
-		this.shellfireImageView.setImage(getLogo());
 		this.iconEcncryptionActive = Util.getImageIconFX("/icons/status-encrypted-width" + size + ".gif");
 		this.iconEcncryptionInactive = Util.getImageIconFX("/icons/status-unencrypted-width" + size + ".gif");
 		this.buttonConnect = Util.getImageIconFX("/buttons/button-connect-" + langKey + ".gif");
 		this.buttonDisconnect = Util.getImageIconFX("/buttons/button-disconnect-" + langKey + ".gif");
-		// initializing text of the form
-		this.connectionStatusLabel.setText(i18n.tr("Connection status"));
-		this.connectedSinceLabel.setText(i18n.tr("Connected since:"));
-		this.connectedSinceValue.setText(i18n.tr("(not connected)"));
-		this.onlineIpLabel.setText(i18n.tr("Online IP:"));
-		this.vpnIdLabel.setText(i18n.tr("VPN Id:"));
-		this.validUntilLabel.setText(i18n.tr("Valid Until:"));
-		this.vpnType.setText(i18n.tr("VPN type:"));
-		this.connectionHeaderLabel.setText(i18n.tr("Connection"));
-		this.connectionFooter.setText(i18n.tr("Connect to Shellfire VPN now"));
-		this.connectionFooter.setWrapText(true);
-		this.serverListHeaderLabel.setText(i18n.tr("Server list"));
-		this.connectionStatusValue.setText(i18n.tr("Not connected"));
-		this.serverListFooterLabel.setText(i18n.tr("Show list of all VPN servers"));
-		this.serverListFooterLabel.setWrapText(true);
 		this.connectionBackgroundImageView.setImage(Util.getImageIconFX("/buttons/button-connect-active.png"));
 		currentSidePane = SidePane.CONNECTION;
 	}
@@ -244,12 +192,8 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	public void initializeComponents() {
 	    Platform.runLater(() -> {
 	    	// Notice that you manipulate the javaObjects out of the initialize if not it will raise an InvocationTargetException
-	    	this.updateLoginDetail();
 	    	
 	    	// Bind visibility of buttons to their manage properties so that they are easilty rendered visible or invisible
-	    	this.validUntilLabel.managedProperty().bind(this.validUntilLabel.visibleProperty());
-	    	this.validUntilValue.managedProperty().bind(this.validUntilValue.visibleProperty());
-	    	
 	    	this.connectionSubviewController.initPremium(isFreeAccount());
 	    	this.connectionSubviewController.setApp(this.application);
 	    	this.connectionSubviewController.updateComponents(false);
@@ -670,10 +614,8 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		this.connectionSubviewController.connectButtonDisable(false);
 		Platform.runLater(() -> {
 			mySetIconImage("/icons/sfvpn2-disconnected-big.png");
-			this.connectionStatusValue.setText(i18n.tr("Not connected"));
 		});
 		this.serverListSubviewController.setConnetImage1Disable(false);
-		this.globeConnectionImageView.setImage(this.iconIdleSmall);
 		this.connectionSubviewController.updateComponents(false);
 		this.serverListSubviewController.getConnectImage1().setImage(this.buttonConnect);
 		log.debug("ShellfireMainForm: In setStateDisconnected method ");
@@ -818,8 +760,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		this.serverListSubviewController.setConnetImage1Disable(true);
 
 		Platform.runLater(() -> {
-			this.connectionStatusValue.setText(i18n.tr("Connection is being processed..."));
-			this.globeConnectionImageView.setImage(Util.getImageIconFX("/icons/small-globe-connecting.png"));
 			mySetIconImage("/icons/sfvpn2-connecting-big.png");
 		});
 
@@ -1065,7 +1005,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	private void setStateConnected() {
 		this.hideConnectProgress();
 		Platform.runLater(() -> {
-			this.connectionStatusValue.setText(i18n.tr("Connected"));
 			mySetIconImage("/icons/sfvpn2-connected-big.png");
 		});
 
@@ -1079,7 +1018,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		}
 
 		this.setNormalCursor();
-		this.globeConnectionImageView.setImage(this.iconConnectedSmall);
 
 		this.startConnectedSinceTimer();
 
@@ -1162,7 +1100,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 			hostWorker.valueProperty().addListener((observable, oldValue, newValue) -> {
 				if (newValue != null) {
 					String host = hostWorker.getValue();
-					onlineIpValue.setText(host);
 					log.debug("ShellfireMainFormController: Ip address is " + host);
 				}
 
@@ -1193,29 +1130,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
 	}
 
-	private void updateLoginDetail() {
-		log.debug("updateLoginDetail() - getVpn()");
-		Vpn vpn = this.shellfireService.getVpn();
-		log.debug("updateLoginDetail() - vpn loaded()");
-		log.debug("ShellfireMainFormController: vpn id and server are %s and %s " + vpn.getServerId(), vpn.getServer());
-		this.vpnIdValue.setText("sf" + vpn.getVpnId());
-		this.vpnTypeValue.setText(vpn.getAccountType().toString());
-
-		if (vpn.getAccountType() == ServerType.Free) {
-			this.validUntilValue.setVisible(false);
-			this.validUntilLabel.setVisible(false);
-		} else {
-
-			this.validUntilValue.setDisable(false);
-			this.validUntilLabel.setDisable(false);
-
-			SimpleDateFormat df = new SimpleDateFormat(i18n.tr("d/MM/yyyy"), VpnI18N.getLanguage().getLocale());
-			String date = df.format(vpn.getPremiumUntil());
-
-			this.validUntilValue.setText(date);
-		}
-	}
-
 	public void updateConnectedSince() {
 		Date now = new Date();
 		long diffInSeconds = (now.getTime() - connectedSince.getTime()) / 1000;
@@ -1229,9 +1143,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		SimpleDateFormat df = new SimpleDateFormat("E, H:m", VpnI18N.getLanguage().getLocale());
 		String start = df.format(connectedSince);
 		String text = start + " " + "(" + since + ")";
-		Platform.runLater(() -> {
-			this.connectedSinceValue.setText(text);
-		});
 	}
 
 	private void showSettingsDialog() {

@@ -7,9 +7,9 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.ConnectionSubviewController">
    <children>
-      <AnchorPane fx:id="contentDetailsPane" prefHeight="518.0" style="-fx-background-color: rgb(240,240,240);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <AnchorPane fx:id="contentDetailsPane" prefHeight="518.0" prefWidth="600.0" style="-fx-background-color: rgb(240,240,240);" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <ImageView fx:id="premiumInfoImageView" fitHeight="46.0" fitWidth="240.0" layoutX="524.0" layoutY="380.0">
+            <ImageView fx:id="premiumInfoImageView" fitHeight="46.0" fitWidth="240.0" layoutX="100.0" layoutY="100.0">
                <image>
                   <Image url="@../buttons/button-premium-infos.gif" />
                </image>
@@ -19,7 +19,7 @@
                   <Image url="@../buttons/button-connect-en.gif" />
                </image>
             </ImageView>
-            <ImageView fx:id="statusConnectionImageView" fitHeight="435.0" fitWidth="800.0" layoutX="5.0" layoutY="6.0">
+            <ImageView fx:id="statusConnectionImageView" fitHeight="435.0" fitWidth="600.0" layoutX="5.0" layoutY="6.0">
                <image>
                   <Image url="@../icons/status-unencrypted-width736.gif" />
                </image>

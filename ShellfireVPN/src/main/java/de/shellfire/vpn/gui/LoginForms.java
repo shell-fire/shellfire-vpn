@@ -125,7 +125,7 @@ public class LoginForms extends Application {
 		log.debug("LoginForms.start() - start");
 		try {
 			LoginForms.stage = primaryStage;
-			LoginForms.stage.initStyle(StageStyle.UNDECORATED);
+			LoginForms.stage.initStyle(StageStyle.UNIFIED);
 			initDialog = ProgressDialogController.getInstance("Init ...", null, stage, false);
 
 			this.loadLoginController();

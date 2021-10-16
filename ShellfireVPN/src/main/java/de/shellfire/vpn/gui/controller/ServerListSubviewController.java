@@ -228,7 +228,7 @@ public class ServerListSubviewController implements Initializable {
 									log.debug("****The current VPN has server " + item + " and id " + shellfireService.getVpn().getVpnId()
 											+ " and the type is " + shellfireService.getVpn().getAccountType());
 								} else {
-									log.debug("server not equal to item");
+									// log.debug("server not equal to item");
 								}
 							}
 						}
