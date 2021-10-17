@@ -17,7 +17,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="521.0" prefWidth="811.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.ServerListSubviewController">
+<AnchorPane prefHeight="521.0" prefWidth="811.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.SettingsSubviewController">
    <children>
       <AnchorPane fx:id="settingsAnchorPane" prefHeight="521.0" prefWidth="811.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>

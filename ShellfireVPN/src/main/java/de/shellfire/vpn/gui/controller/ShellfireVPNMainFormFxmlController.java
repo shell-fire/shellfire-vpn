@@ -1233,7 +1233,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 			this.settingsSubviewController.initComponents();
 			this.settingsSubviewController.setApp(this.application);
 			this.settingsSubviewController.setMainFormController(this);
-			leftPaneHashMap.put(SidePane.SERVERLIST, pairSettings);
+			leftPaneHashMap.put(SidePane.SETTINGS, pairSettings);
 			log.debug("settings controller defined");
 			
 			
@@ -1333,5 +1333,5 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 }
 
 enum SidePane {
-	CONNECTION, SERVERLIST;
+	CONNECTION, SERVERLIST, SETTINGS;
 }

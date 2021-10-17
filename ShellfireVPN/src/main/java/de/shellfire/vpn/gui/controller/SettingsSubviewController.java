@@ -9,6 +9,7 @@ import java.net.URL;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.LinkedList;
+import java.util.Optional;
 import java.util.Random;
 import java.util.ResourceBundle;
 
@@ -16,10 +17,13 @@ import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
 
 import de.shellfire.vpn.Util;
+import de.shellfire.vpn.VpnProperties;
+import de.shellfire.vpn.client.Client;
 import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.gui.model.CountryMap;
 import de.shellfire.vpn.gui.model.ServerListFXModel;
 import de.shellfire.vpn.gui.renderer.StarImageRendererFX;
+import de.shellfire.vpn.i18n.Language;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.types.Country;
 import de.shellfire.vpn.types.Server;
@@ -34,12 +38,17 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.NodeOrientation;
 import javafx.scene.Cursor;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableCell;
@@ -51,6 +60,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -60,11 +70,23 @@ import javafx.scene.layout.AnchorPane;
 public class SettingsSubviewController implements Initializable {
 
 	@FXML
+	private CheckBox saveLoginData;
+	@FXML
+	private CheckBox loginAutomatically;
+	@FXML
+	private CheckBox saveVpnChoice;
+	@FXML
+	private CheckBox startOnBoot;
+	@FXML
+	private CheckBox connectAutomatically;
+	@FXML
+	private CheckBox showStatusSite;
+	@FXML
+	private Label languageLabel;
+	@FXML
+	private ComboBox<Language> languageComboBox;
+	@FXML
 	private AnchorPane serverListAnchorPane;
-	@FXML
-	private TableView<ServerListFXModel> serverListTableView;
-	@FXML
-	private Label selectServerLabel;
 	@FXML
 	private RadioButton WireguardRadioButton;
 	@FXML
@@ -72,24 +94,15 @@ public class SettingsSubviewController implements Initializable {
 	@FXML
 	private RadioButton TCPRadioButton;
 	@FXML
-	private ImageView connectImage1;
-	@FXML
-	private ImageView connectImage2;
-	@FXML
 	private ToggleGroup networkTypeToggleGroup;
 	@FXML
-	private TableColumn<ServerListFXModel, Server> countryColumn;
+	private Button saveSettingsButton;
 	@FXML
-	private TableColumn<ServerListFXModel, String> nameColumn;
-	@FXML
-	private TableColumn<ServerListFXModel, String> serverColumn;
-	@FXML
-	private TableColumn<ServerListFXModel, VpnStar> securityColumn;
-	@FXML
-	private TableColumn<ServerListFXModel, VpnStar> speedColumn;
-	@FXML
-	private Button connectButton1;
+	private Button cancelButton;
+	
+	private Language currentLanguage;
 
+	
 	@FXML
 	private void handleConnectImage2MouseExited(MouseEvent event) {
 		this.application.getStage().getScene().setCursor(Cursor.DEFAULT);
@@ -143,9 +156,6 @@ public class SettingsSubviewController implements Initializable {
 		this.shellfireService = shellfireService;
 	}
 
-	public TableView<ServerListFXModel> getServerListTableView() {
-		return serverListTableView;
-	}
 
 	public RadioButton getWireguardRadioButton() {
 		return WireguardRadioButton;
@@ -159,20 +169,8 @@ public class SettingsSubviewController implements Initializable {
 		return TCPRadioButton;
 	}
 
-	public ImageView getConnectImage1() {
-		return connectImage1;
-	}
-
-	public ImageView getConnectImage2() {
-		return connectImage2;
-	}
-
 	public ToggleGroup getNetworkTypeToggleGroup() {
 		return networkTypeToggleGroup;
-	}
-
-	public void setConnetImage1Disable(boolean enable) {
-		this.connectButton1.setDisable(enable);
 	}
 
 	public void initComponents() {
@@ -180,7 +178,6 @@ public class SettingsSubviewController implements Initializable {
 		this.serverListData.addAll(initServerTable(this.shellfireService.getServerList().getAll()));
 		// this.serverListTableView.setItems(serverListData);
 		// this.serverListTableView.comp
-		selectCurrentVpn();
 	}
 
 	/**
@@ -188,89 +185,76 @@ public class SettingsSubviewController implements Initializable {
 	 */
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
-		this.selectServerLabel.setText(i18n.tr("Select a Server for your connection"));
 		this.TCPRadioButton.setText(i18n.tr("OpenVPN TCP (works with secure firewalls and proxies.)"));
 		this.UDPRadioButton.setText(i18n.tr("OpenVPN UDP (fast)"));
 		this.WireguardRadioButton.setText(i18n.tr("Wireguard (fastest)"));
-		this.connectButton1.setGraphic(connectImage1);
-		this.connectButton1.setPadding(Insets.EMPTY);
-		nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
-		serverColumn.setCellValueFactory(cellData -> cellData.getValue().serverTypeProperty());
-		securityColumn.setCellValueFactory(cellData -> cellData.getValue().securityProperty());
-		speedColumn.setCellValueFactory(cellData -> cellData.getValue().speedProperty());
-		countryColumn.setCellValueFactory(cellData -> cellData.getValue().countryProperty());
-		countryColumn.setComparator(new ServerListComparator());
-		countryColumn.setCellFactory(column -> {
-			// Set up the Table
-			return new TableCell<ServerListFXModel, Server>() {
-
-				@Override
-				protected void updateItem(Server item, boolean empty) {
-					if (item != null) {
-						if (shellfireService == null) {
-							log.debug("shellfireService is null, setting it");
-							setShellfireService(WebService.getInstance());
-						}
-						
-						Vpn vpn = shellfireService.getVpn();
-						if (vpn == null) {
-							log.debug("vpn retrieved from service is null, cannot check if current server to log details.");
-						} else {
-							Server server = vpn.getServer();
-							if (server == null) {
-								log.debug("server retrieved from vpn is null, cannot check if current server to log details");
-								log.debug("vpn details: {}", vpn.toString());
-							} else {
-								if (server.equals(item)) {
-									log.debug("****The current VPN has server " + item + " and id " + shellfireService.getVpn().getVpnId()
-											+ " and the type is " + shellfireService.getVpn().getAccountType());
-								} else {
-									// log.debug("server not equal to item");
-								}
-							}
-						}
-						
-						// get the corresponding country of this server
-						Country country = item.getCountry();
-						// Attach the imageview to the cell
-						ImageView imageView = new ImageView(CountryMap.getIconFX(country));
-						imageView.setFitHeight(14);
-						imageView.setFitWidth(18);
-						setGraphic(imageView);
-						getGraphic().setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
-						setText(VpnI18N.getCountryI18n().getCountryName(country));
-					}
-				}
-			};
-		});
-
-		speedColumn.setCellFactory(column -> {
-			return new StarImageRendererFX();
-		});
-
-		securityColumn.setCellFactory(column -> {
-			return new StarImageRendererFX();
-		});
-
-		// Wrap the FilteredList in a SortedList.
-		SortedList<ServerListFXModel> sortedData = new SortedList<>(serverListData);
-		// Bind the SortedList comparator to the TableView comparator.
-		sortedData.comparatorProperty().bind(serverListTableView.comparatorProperty());
-		// Add sorted (and filtered) data to the table.
-		serverListTableView.setItems(sortedData);
-
-		this.connectImage2.setVisible(false);
 	}
 
-	public void selectCurrentVpn() {
-		serverListTableView.requestFocus();
-		serverListTableView.getSelectionModel().select(serverList.getServerNumberByServer(shellfireService.getVpn().getServer()));
-		serverListTableView.getFocusModel().focus(serverList.getServerNumberByServer(shellfireService.getVpn().getServer()));
+	@FXML
+	private void handleSaveLoginData(ActionEvent event) {
+		if (!this.saveLoginData.isDisabled() && !saveLoginData.isSelected()) {
+			if (!this.loginAutomatically.isDisabled()) {
+				this.loginAutomatically.setSelected(false);
+			}
+			if (!this.saveLoginData.isDisabled()) {
+				this.saveLoginData.setSelected(false);
+			}
+		}
 	}
 
+	@FXML
+	private void handleLoginAutomatically(ActionEvent event) {
+		if (!this.loginAutomatically.isDisabled() && loginAutomatically.isSelected() && !this.saveLoginData.isDisabled()) {
+			this.saveLoginData.setSelected(true);
+		}
+	}
+	
+
+	@FXML
+	private void handleLanguageComboBox(ActionEvent event) {
+	}
+
+	@FXML
+	private void handleLanguageShown(Event event) {
+		this.languageComboBox.getSelectionModel().select(VpnI18N.getLanguage());
+	}
+	
+
+	@FXML
+	private void handleSaveVpnChoice(ActionEvent event) {
+		if (!this.saveVpnChoice.isDisabled() && saveVpnChoice.isSelected() && !this.saveLoginData.isDisabled()) {
+			this.saveLoginData.setSelected(true);
+		}
+	}
+
+	@FXML
+	private void handleStartOnBoot(ActionEvent event) {
+	}
+
+	@FXML
+	private void handleConnectAutomatically(ActionEvent event) {
+	}
+
+	@FXML
+	private void handleShowStatusSite(ActionEvent event) {
+	}
+
+	@FXML
+	private void handleSaveSettingsButton(ActionEvent event) {
+		log.debug("Save button has been clicked");
+		Stage stage = (Stage) this.saveSettingsButton.getScene().getWindow();
+		stage.hide();
+		log.debug("About to call the save function");
+		save();
+	}
+
+	@FXML
+	private void handleCancelButton(ActionEvent event) {
+		Stage stage = (Stage) this.cancelButton.getScene().getWindow();
+		stage.hide();
+	}	
+	
 	public void afterInitialization() {
-		this.connectImage1.imageProperty()
-				.bindBidirectional(this.mainFormController.getConnectionSubviewController().getConnectImageView().imageProperty());
 	}
 
 	/**
@@ -281,8 +265,6 @@ public class SettingsSubviewController implements Initializable {
 	 */
 	public void updateComponents(boolean isConnected) {
 		if (isConnected) {
-			this.connectImage1.setImage(buttonDisconnect);
-			serverListTableView.disableProperty().set(isConnected);
 			TCPRadioButton.disableProperty().set(isConnected);
 			UDPRadioButton.disableProperty().set(isConnected);
 			WireguardRadioButton.disableProperty().set(isConnected);
@@ -301,14 +283,6 @@ public class SettingsSubviewController implements Initializable {
 			allModels.add(serverModel);
 		}
 		return allModels;
-	}
-
-	public void initPremium(boolean freeAccount) {
-		if (!freeAccount) {
-			this.connectImage2.setVisible(false);
-		} else {
-			this.connectImage2.setVisible(true);
-		}
 	}
 
 	public Server getRandomFreeServer() {
@@ -335,20 +309,6 @@ public class SettingsSubviewController implements Initializable {
 		}
 	}
 
-	// Selects a server on serverlist table based on the index (position) of the server
-	public void setSelectedServer(int number) {
-		log.debug("setSelectedServer setting the selected server");
-		// Embeded in a Platform runner because we are modifying the UI thread.
-		Platform.runLater(new Runnable() {
-			@Override
-			public void run() {
-				serverListTableView.requestFocus();
-				serverListTableView.getSelectionModel().select(number);
-				serverListTableView.getFocusModel().focus(number);
-			}
-		});
-	}
-
 	public VpnProtocol getSelectedProtocol() {
 		if (this.WireguardRadioButton.isSelected()) {
 			return VpnProtocol.WireGuard;
@@ -359,19 +319,6 @@ public class SettingsSubviewController implements Initializable {
 		}
 
 		return null;
-	}
-
-	public Server getSelectedServer() {
-		log.debug("getSelectedServer: About to test server model to load");
-		ServerListFXModel serverModel = this.serverListTableView.getSelectionModel().getSelectedItem();
-		if (null == serverModel) {
-			log.debug("Return default server 18");
-			return this.shellfireService.getServerList().getServer(18);
-		} else {
-			// The getCountry method of ServerListFXModel returns the server object
-			log.debug("getSelectedServer() - returning: " + serverModel.getCountry());
-			return serverModel.getCountry();
-		}
 	}
 
 	public Server getRandomPremiumServer() {
@@ -417,6 +364,54 @@ public class SettingsSubviewController implements Initializable {
 
 	}
 
+
+	private void save() {
+		VpnProperties props = VpnProperties.getInstance();
+		this.currentLanguage = this.languageComboBox.getValue();
+		if (!this.loginAutomatically.isDisabled()) { // Not disabled means the checkbox is enabled.
+			props.setBoolean(LoginController.REG_AUTOlogIN, this.loginAutomatically.isSelected());
+		}
+
+		if (!this.saveLoginData.isDisabled() && this.saveLoginData.isSelected() == false) {
+			props.remove(LoginController.REG_USER);
+			props.remove(LoginController.REG_PASS);
+		}
+
+		if (!this.saveVpnChoice.isDisabled() && !this.saveVpnChoice.isSelected()) {
+			props.remove(LoginForms.REG_REMEMBERSELECTION);
+		}
+
+		props.setBoolean(LoginController.REG_AUTOCONNECT, this.connectAutomatically.isSelected());
+		props.setBoolean(LoginController.REG_SHOWSTATUSURL, this.showStatusSite.isSelected());
+
+		if (this.saveVpnChoice.isSelected()) {
+			WebService service = WebService.getInstance();
+			Vpn vpn = service.getVpn();
+			props.setInt(LoginForms.REG_REMEMBERSELECTION, vpn.getVpnId());
+		}
+
+		if (this.startOnBoot.isSelected()) {
+			Client.addVpnToAutoStart();
+		} else {
+			Client.removeVpnFromAutoStart();
+		}
+
+		Language oldLanguage = VpnI18N.getLanguage();
+
+		if (!currentLanguage.equals(oldLanguage)) {
+			VpnI18N.setLanguage(currentLanguage);
+			log.debug("SettingsDialogController: save() - language changed to " + currentLanguage.getName());
+			Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
+					i18n.tr("Changed language settings require a restart of ShellfireVPN to take effect. Restart now?"), ButtonType.YES,
+					ButtonType.NO);
+			alert.setHeaderText(i18n.tr("Changed language settings require a restart of Shellfire VPN to take effect."));
+			Optional<ButtonType> result = alert.showAndWait();
+			if ((result.isPresent()) && (result.get() == ButtonType.YES)) {
+				alert.close();
+				LoginController.restart();
+			}
+		}
+	}
 	class ServerListComparator implements Comparator<Server> {
 		@Override
 		public int compare(Server o1, Server o2) {
