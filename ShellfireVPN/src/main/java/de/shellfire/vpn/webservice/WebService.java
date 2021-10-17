@@ -234,7 +234,7 @@ public class WebService {
 				return result;
 			}
 		}, 3, 100);
-		if (res == true) {
+		if (res != null && res == true) {
 			return true;
 		} else {
 			return false;

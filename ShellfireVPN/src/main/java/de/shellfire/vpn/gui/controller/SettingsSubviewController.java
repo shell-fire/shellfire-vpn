@@ -50,6 +50,8 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -61,6 +63,7 @@ import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 /**
  * FXML Controller class
@@ -95,33 +98,8 @@ public class SettingsSubviewController implements Initializable {
 	private RadioButton TCPRadioButton;
 	@FXML
 	private ToggleGroup networkTypeToggleGroup;
-	@FXML
-	private Button saveSettingsButton;
-	@FXML
-	private Button cancelButton;
 	
 	private Language currentLanguage;
-
-	
-	@FXML
-	private void handleConnectImage2MouseExited(MouseEvent event) {
-		this.application.getStage().getScene().setCursor(Cursor.DEFAULT);
-	}
-
-	@FXML
-	private void handleConnectImage2MouseEntered(MouseEvent event) {
-		this.application.getStage().getScene().setCursor(Cursor.HAND);
-	}
-
-	@FXML
-	private void handleConnectImage2ContextRequested(ContextMenuEvent event) {
-	}
-
-	@FXML
-	private void handleConnectImage2MouseClicked(MouseEvent event) {
-		WebService service = WebService.getInstance();
-		Util.openUrl(service.getUrlPremiumInfo());
-	}
 
 	private static I18n i18n = VpnI18N.getI18n();
 	public static Vpn currentVpn;
@@ -185,9 +163,20 @@ public class SettingsSubviewController implements Initializable {
 	 */
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
+		currentLanguage = VpnI18N.getLanguage();
 		this.TCPRadioButton.setText(i18n.tr("OpenVPN TCP (works with secure firewalls and proxies.)"));
 		this.UDPRadioButton.setText(i18n.tr("OpenVPN UDP (fast)"));
 		this.WireguardRadioButton.setText(i18n.tr("Wireguard (fastest)"));
+		this.saveLoginData.setText(i18n.tr("Save login data"));
+		this.loginAutomatically.setText(i18n.tr("Login automatically"));
+		this.saveVpnChoice.setText(i18n.tr("Save VPN choice"));
+		this.startOnBoot.setText(i18n.tr("Start on boot"));
+		this.showStatusSite.setText(i18n.tr("Show status site after connection has been established"));
+		this.languageLabel.setText(i18n.tr("Language") + ":");
+		this.connectAutomatically.setText(i18n.tr("Connect automatically"));
+		this.languageComboBox.setEditable(false);
+	
+		initValues();
 	}
 
 	@FXML
@@ -200,6 +189,7 @@ public class SettingsSubviewController implements Initializable {
 				this.saveLoginData.setSelected(false);
 			}
 		}
+		save();
 	}
 
 	@FXML
@@ -207,16 +197,19 @@ public class SettingsSubviewController implements Initializable {
 		if (!this.loginAutomatically.isDisabled() && loginAutomatically.isSelected() && !this.saveLoginData.isDisabled()) {
 			this.saveLoginData.setSelected(true);
 		}
+		save();
 	}
 	
 
 	@FXML
 	private void handleLanguageComboBox(ActionEvent event) {
+		save();
 	}
 
 	@FXML
 	private void handleLanguageShown(Event event) {
 		this.languageComboBox.getSelectionModel().select(VpnI18N.getLanguage());
+		save();
 	}
 	
 
@@ -225,34 +218,23 @@ public class SettingsSubviewController implements Initializable {
 		if (!this.saveVpnChoice.isDisabled() && saveVpnChoice.isSelected() && !this.saveLoginData.isDisabled()) {
 			this.saveLoginData.setSelected(true);
 		}
-	}
-
-	@FXML
-	private void handleStartOnBoot(ActionEvent event) {
-	}
-
-	@FXML
-	private void handleConnectAutomatically(ActionEvent event) {
-	}
-
-	@FXML
-	private void handleShowStatusSite(ActionEvent event) {
-	}
-
-	@FXML
-	private void handleSaveSettingsButton(ActionEvent event) {
-		log.debug("Save button has been clicked");
-		Stage stage = (Stage) this.saveSettingsButton.getScene().getWindow();
-		stage.hide();
-		log.debug("About to call the save function");
 		save();
 	}
 
 	@FXML
-	private void handleCancelButton(ActionEvent event) {
-		Stage stage = (Stage) this.cancelButton.getScene().getWindow();
-		stage.hide();
-	}	
+	private void handleStartOnBoot(ActionEvent event) {
+		save();
+	}
+
+	@FXML
+	private void handleConnectAutomatically(ActionEvent event) {
+		save();
+	}
+
+	@FXML
+	private void handleShowStatusSite(ActionEvent event) {
+		save();
+	}
 	
 	public void afterInitialization() {
 	}
@@ -345,26 +327,66 @@ public class SettingsSubviewController implements Initializable {
 		this.mainFormController = mainController;
 	}
 
-	@FXML
-	private void connectButton1Exited(MouseEvent event) {
-		this.application.getStage().getScene().setCursor(Cursor.DEFAULT);
+
+	private void initValues() {
+		VpnProperties props = VpnProperties.getInstance();
+
+		if (props.getProperty(LoginController.REG_USER, null) != null) {
+			this.saveLoginData.setDisable(true);
+		} else {
+			this.saveLoginData.setSelected(true); // can only be enabled from login dialog
+		}
+
+		if (props.getBoolean(LoginController.REG_AUTOlogIN, false)) {
+			this.loginAutomatically.setSelected(true);
+		} else if (props.getProperty(LoginController.REG_USER, null) == null) {
+			this.loginAutomatically.setDisable(true); // disable if login data not remembered, because then it makes no sense
+		}
+
+		if (props.getInt(LoginForms.REG_REMEMBERSELECTION, 0) != 0) {
+			this.saveVpnChoice.setSelected(true);
+		} else if (props.getProperty(LoginController.REG_USER, null) == null) {
+			this.saveVpnChoice.setDisable(true); // disable if login data not remembered, because then it makes no sense
+		}
+
+		boolean autoConnect = props.getBoolean(LoginController.REG_AUTOCONNECT, false);
+		this.connectAutomatically.setSelected(autoConnect);
+
+		boolean autoStart = Client.vpnAutoStartEnabled();
+		this.startOnBoot.setSelected(autoStart);
+
+		boolean showStatusUrlOnConnect = props.getBoolean(LoginController.REG_SHOWSTATUSURL, false);
+		this.showStatusSite.setSelected(showStatusUrlOnConnect);
+
+		this.initLanguages();
 	}
 
-	@FXML
-	private void connectButton1Entered(MouseEvent event) {
-		this.application.getStage().getScene().setCursor(Cursor.HAND);
-	}
+	private void initLanguages() {
+		log.debug("SettingsDialogController: initLanguages - method called");
+		LinkedList<Language> languages = VpnI18N.getAvailableTranslations();
+		this.languageComboBox.getItems().addAll(languages);
 
-	@FXML
-	private void connectButton1OnAction(ActionEvent event) {
-		log.debug("connectButton1OnAction");
-		Platform.runLater(() -> {
-			application.shellfireVpnMainController.connectFromButton();
+		languageComboBox.setCellFactory(new Callback<ListView<Language>, ListCell<Language>>() {
+			@Override
+			public ListCell<Language> call(ListView<Language> param) {
+				final ListCell<Language> cell = new ListCell<Language>() {
+					@Override
+					public void updateItem(Language item, boolean empty) {
+						super.updateItem(item, empty);
+						if (item != null) {
+							setText(i18n.tr(item.getName()));
+							currentLanguage = item;
+						} else {
+							log.debug("Item is null here");
+						}
+					}
+				};
+				return cell;
+			}
 		});
-
+		languageComboBox.setValue(currentLanguage);
 	}
-
-
+	
 	private void save() {
 		VpnProperties props = VpnProperties.getInstance();
 		this.currentLanguage = this.languageComboBox.getValue();
@@ -412,6 +434,7 @@ public class SettingsSubviewController implements Initializable {
 			}
 		}
 	}
+	
 	class ServerListComparator implements Comparator<Server> {
 		@Override
 		public int compare(Server o1, Server o2) {

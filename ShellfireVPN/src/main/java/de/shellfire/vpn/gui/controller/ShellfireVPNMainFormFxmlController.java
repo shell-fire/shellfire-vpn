@@ -345,13 +345,23 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	}
 
 	@FXML
+	private void handleSettingsPaneClicked(MouseEvent event) {
+		contentDetailsPane.getChildren().setAll(leftPaneHashMap.get(SidePane.SETTINGS).getKey());
+		this.settingsSubviewController.updateComponents(connectionStatus);
+		currentSidePane = SidePane.SETTINGS;
+		updateSidePanes(currentSidePane);
+	}
+
+
+	@FXML
 	private void handleServerListPaneClicked(MouseEvent event) {
 		contentDetailsPane.getChildren().setAll(leftPaneHashMap.get(SidePane.SERVERLIST).getKey());
 		this.serverListSubviewController.updateComponents(connectionStatus);
 		currentSidePane = SidePane.SERVERLIST;
 		updateSidePanes(currentSidePane);
 	}
-
+	
+	
 	private void updateSidePanes(SidePane pane) {
 		if (pane.equals(SidePane.CONNECTION)) {
 			this.serverListBackgroundImage.setImage(imageIconFxButtonServerListIdle);
@@ -394,11 +404,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
 	@FXML
 	private void handleSettingsImageViewContext(ContextMenuEvent event) {
-	}
-
-	@FXML
-	private void handleSettingsImageViewClicked(MouseEvent event) {
-		showSettingsDialog();
 	}
 
 	// TODO: Bind this hideImageView code to the minimize button from Stage, so minimize will always be minimize to tray...
@@ -1142,22 +1147,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		SimpleDateFormat df = new SimpleDateFormat("E, H:m", VpnI18N.getLanguage().getLocale());
 		String start = df.format(connectedSince);
 		String text = start + " " + "(" + since + ")";
-	}
-
-	private void showSettingsDialog() {
-		try {
-			Pair<Pane, Object> pair = FxUIManager.SwitchSubview("menuShellfireSettings.fxml");
-			Stage dialogStage = new Stage(StageStyle.UTILITY);
-			Scene scene = new Scene(pair.getKey());
-			dialogStage.setTitle(i18n.tr("Shellfire VPN settings"));
-			dialogStage.setScene(scene);
-			dialogStage.initModality(Modality.APPLICATION_MODAL);
-			dialogStage.setAlwaysOnTop(true);
-			dialogStage.setResizable(false);
-			dialogStage.show();
-		} catch (IOException ex) {
-			log.debug("ShellfireVPNMainFormFxmlController:  showSettingsDialog has error " + ex);
-		}
 	}
 
 	public void openHelp() {
