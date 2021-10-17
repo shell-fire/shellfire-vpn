@@ -24,32 +24,26 @@ import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.types.Country;
 import de.shellfire.vpn.types.Server;
 import de.shellfire.vpn.types.ServerType;
-import de.shellfire.vpn.types.VpnProtocol;
 import de.shellfire.vpn.webservice.ServerList;
 import de.shellfire.vpn.webservice.Vpn;
 import de.shellfire.vpn.webservice.WebService;
 import de.shellfire.vpn.webservice.model.VpnStar;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ListChangeListener.Change;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
 import javafx.geometry.NodeOrientation;
-import javafx.scene.Cursor;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.ContextMenuEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
 /**
@@ -77,26 +71,6 @@ public class ServerListSubviewController implements Initializable {
 	private TableColumn<ServerListFXModel, VpnStar> securityColumn;
 	@FXML
 	private TableColumn<ServerListFXModel, VpnStar> speedColumn;
-
-	@FXML
-	private void handleConnectImage2MouseExited(MouseEvent event) {
-		this.application.getStage().getScene().setCursor(Cursor.DEFAULT);
-	}
-
-	@FXML
-	private void handleConnectImage2MouseEntered(MouseEvent event) {
-		this.application.getStage().getScene().setCursor(Cursor.HAND);
-	}
-
-	@FXML
-	private void handleConnectImage2ContextRequested(ContextMenuEvent event) {
-	}
-
-	@FXML
-	private void handleConnectImage2MouseClicked(MouseEvent event) {
-		WebService service = WebService.getInstance();
-		Util.openUrl(service.getUrlPremiumInfo());
-	}
 
 	private static I18n i18n = VpnI18N.getI18n();
 	public static Vpn currentVpn;
@@ -144,7 +118,7 @@ public class ServerListSubviewController implements Initializable {
 		this.serverListData.addAll(initServerTable(this.shellfireService.getServerList().getAll()));
 		// this.serverListTableView.setItems(serverListData);
 		// this.serverListTableView.comp
-		selectCurrentVpn();
+		selectServerOfCurrentVpn();
 	}
 
 	/**
@@ -217,9 +191,19 @@ public class ServerListSubviewController implements Initializable {
 		sortedData.comparatorProperty().bind(serverListTableView.comparatorProperty());
 		// Add sorted (and filtered) data to the table.
 		serverListTableView.setItems(sortedData);
+		
+		ObservableList<ServerListFXModel> selectedItems = serverListTableView.getSelectionModel().getSelectedItems();
+
+		selectedItems.addListener(new ListChangeListener<ServerListFXModel>() {
+		  @Override
+		  public void onChanged(Change<? extends ServerListFXModel> change) {
+		    System.out.println("Selection changed: " + change.getList());
+		  }
+		});
+
 	}
 
-	public void selectCurrentVpn() {
+	public void selectServerOfCurrentVpn() {
 		serverListTableView.requestFocus();
 		serverListTableView.getSelectionModel().select(serverList.getServerNumberByServer(shellfireService.getVpn().getServer()));
 		serverListTableView.getFocusModel().focus(serverList.getServerNumberByServer(shellfireService.getVpn().getServer()));
@@ -325,26 +309,6 @@ public class ServerListSubviewController implements Initializable {
 	public void setMainFormController(ShellfireVPNMainFormFxmlController mainController) {
 		this.mainFormController = mainController;
 	}
-
-	@FXML
-	private void connectButton1Exited(MouseEvent event) {
-		this.application.getStage().getScene().setCursor(Cursor.DEFAULT);
-	}
-
-	@FXML
-	private void connectButton1Entered(MouseEvent event) {
-		this.application.getStage().getScene().setCursor(Cursor.HAND);
-	}
-
-	@FXML
-	private void connectButton1OnAction(ActionEvent event) {
-		log.debug("connectButton1OnAction");
-		Platform.runLater(() -> {
-			application.shellfireVpnMainController.connectFromButton();
-		});
-
-	}
-
 	class ServerListComparator implements Comparator<Server> {
 		@Override
 		public int compare(Server o1, Server o2) {

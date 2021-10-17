@@ -19,7 +19,7 @@
       </ImageView>
       <ImageView fx:id="statusConnectionImageView" fitHeight="435.0" fitWidth="600.0">
          <image>
-            <Image url="@../icons/status-unencrypted-width736.gif" />
+            <Image url="@../servers/australia-melbourne.jpg" />
          </image>
       </ImageView>
       <ImageView fx:id="productKeyImageView" fitHeight="46.0" fitWidth="248.0" onContextMenuRequested="#handleProductKeyImageViewContext" onMouseClicked="#handleProductKeyImageViewClicked" onMouseEntered="#handleProductKeyImageViewMouseEntered" onMouseExited="#handleProductKeyImageViewMouseExited" AnchorPane.bottomAnchor="12.0">
