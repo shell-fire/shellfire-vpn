@@ -246,6 +246,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
 		this.initShortCuts();
 		this.initConnection();
+		this.application.getStage().resizableProperty().setValue(Boolean.FALSE);
 		this.application.getStage().show();
 	}
 
@@ -398,6 +399,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		showSettingsDialog();
 	}
 
+	// TODO: Bind this hideImageView code to the minimize button from Stage, so minimize will always be minimize to tray...
 	@FXML
 	private void handleHideImageViewExited(MouseEvent event) {
 		this.application.getStage().getScene().setCursor(Cursor.DEFAULT);

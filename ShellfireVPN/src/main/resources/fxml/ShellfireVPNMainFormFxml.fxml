@@ -14,65 +14,47 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="0.0" prefWidth="0.0" style="-fx-background-color: rgb(64,69,73);" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.ShellfireVPNMainFormFxmlController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" style="-fx-background-color: rgb(64,69,73);" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.ShellfireVPNMainFormFxmlController">
    <children>
-      <AnchorPane layoutX="4.0" onKeyPressed="#handleWindowKeyPressed" prefHeight="515.0" prefWidth="668.0" AnchorPane.bottomAnchor="4.0" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="4.0" AnchorPane.topAnchor="4.0">
-         <opaqueInsets>
-            <Insets />
-         </opaqueInsets>
+      <AnchorPane fx:id="menuBarAnchorPane" layoutY="520.0" style="-fx-background-color: rgb(244,244,244);">
          <children>
-            <AnchorPane fx:id="menuBarAnchorPane" style="-fx-background-color: rgb(244,244,244);">
+            <AnchorPane fx:id="serverListPane" layoutX="100.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onContextMenuRequested="#handleServerListPaneContext" onMouseClicked="#handleServerListPaneClicked" onMouseEntered="#handleServerListPaneMouseEntered" onMouseExited="#handleServerListPaneMouseExited" style="-fx-background-color: black;">
                <children>
-                  <AnchorPane fx:id="serverListPane" layoutX="100.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onContextMenuRequested="#handleServerListPaneContext" onMouseClicked="#handleServerListPaneClicked" onMouseEntered="#handleServerListPaneMouseEntered" onMouseExited="#handleServerListPaneMouseExited" style="-fx-background-color: black;">
-                     <children>
-                        <ImageView fx:id="serverListBackgroundImage" blendMode="LIGHTEN" fitHeight="25.0" fitWidth="75.0" AnchorPane.rightAnchor="2.0">
-                           <image>
-                              <Image url="@../buttons/button-serverlist-idle.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                     <padding>
-                        <Insets top="1.0" />
-                     </padding>
-                  </AnchorPane>
-                  <AnchorPane fx:id="leftConnectionPane" layoutX="175.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onContextMenuRequested="#handleConnectionPaneContext" onMouseClicked="#handleConnectionPaneClicked" onMouseEntered="#handleConnectionPaneMouseEntered" onMouseExited="#handleConnectionPaneMouseExited" style="-fx-background-color: black;">
-                     <children>
-                        <ImageView fx:id="connectionBackgroundImageView" blendMode="LIGHTEN" fitHeight="25.0" fitWidth="75.0" style="--fx-border-color: yellow;">
-                           <image>
-                              <Image url="@../buttons/button-connect-idle.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                     <padding>
-                        <Insets top="1.0" />
-                     </padding>
-                  </AnchorPane>
-                  <ImageView fx:id="helpImageView" layoutX="250.0" layoutY="7.0" onContextMenuRequested="#handleHelpImageViewContext" onMouseClicked="#handleHelpImageViewClicked" onMouseEntered="#handleHelpImageViewMouseEntered" onMouseExited="#handleHelpImageViewMouseExited">
+                  <ImageView fx:id="serverListBackgroundImage" blendMode="LIGHTEN" fitHeight="25.0" fitWidth="75.0" AnchorPane.rightAnchor="2.0">
                      <image>
-                        <Image url="@../icons/help.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="hideImageView" onContextMenuRequested="#handleHideImageViewContext" onMouseClicked="#handleHideImageViewClicked" onMouseEntered="#handleHideImageViewEntered" onMouseExited="#handleHideImageViewExited">
-                     <image>
-                        <Image url="@../icons/hide.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fx:id="settingsImageView" layoutX="39.0" layoutY="8.0" onContextMenuRequested="#handleSettingsImageViewContext" onMouseClicked="#handleSettingsImageViewClicked" onMouseEntered="#handleSettingsImageViewMouseEntered" onMouseExited="#handleSettingsImageViewMouseExited">
-                     <image>
-                        <Image url="@../icons/settings.png" />
+                        <Image url="@../buttons/button-serverlist-idle.png" />
                      </image>
                   </ImageView>
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="contentAnchorPane" layoutY="34.0" style="-fx-background-color: rgb(240,240,240);">
+            <AnchorPane fx:id="leftConnectionPane" layoutX="175.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onContextMenuRequested="#handleConnectionPaneContext" onMouseClicked="#handleConnectionPaneClicked" onMouseEntered="#handleConnectionPaneMouseEntered" onMouseExited="#handleConnectionPaneMouseExited" style="-fx-background-color: black;">
                <children>
-                  <Pane fx:id="contentDetailsPane" style="-fx-background-color: rgb(240,240,240);">
-                     <children>
-                        <fx:include fx:id="connectionSubview" source="connection_subview.fxml" />
-                     </children>
-                  </Pane>
+                  <ImageView fx:id="connectionBackgroundImageView" blendMode="LIGHTEN" fitHeight="25.0" fitWidth="75.0" style="--fx-border-color: yellow;">
+                     <image>
+                        <Image url="@../buttons/button-connect-idle.png" />
+                     </image>
+                  </ImageView>
                </children>
             </AnchorPane>
+            <ImageView fx:id="helpImageView" layoutX="250.0" onContextMenuRequested="#handleHelpImageViewContext" onMouseClicked="#handleHelpImageViewClicked" onMouseEntered="#handleHelpImageViewMouseEntered" onMouseExited="#handleHelpImageViewMouseExited">
+               <image>
+                  <Image url="@../icons/help.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="settingsImageView" layoutX="39.0" layoutY="8.0" onContextMenuRequested="#handleSettingsImageViewContext" onMouseClicked="#handleSettingsImageViewClicked" onMouseEntered="#handleSettingsImageViewMouseEntered" onMouseExited="#handleSettingsImageViewMouseExited">
+               <image>
+                  <Image url="@../icons/settings.png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="contentAnchorPane" style="-fx-background-color: rgb(240,240,240);">
+         <children>
+            <Pane fx:id="contentDetailsPane" style="-fx-background-color: rgb(240,240,240);">
+               <children>
+                  <fx:include fx:id="connectionSubview" source="connection_subview.fxml" />
+               </children>
+            </Pane>
          </children>
       </AnchorPane>
    </children>
