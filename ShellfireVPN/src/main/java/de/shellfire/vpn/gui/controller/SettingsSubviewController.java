@@ -57,7 +57,7 @@ import javafx.scene.layout.AnchorPane;
  *
  * @author Tcheutchoua Steve
  */
-public class ServerListSubviewController implements Initializable {
+public class SettingsSubviewController implements Initializable {
 
 	@FXML
 	private AnchorPane serverListAnchorPane;
@@ -65,6 +65,16 @@ public class ServerListSubviewController implements Initializable {
 	private TableView<ServerListFXModel> serverListTableView;
 	@FXML
 	private Label selectServerLabel;
+	@FXML
+	private RadioButton WireguardRadioButton;
+	@FXML
+	private RadioButton UDPRadioButton;
+	@FXML
+	private RadioButton TCPRadioButton;
+	@FXML
+	private ImageView connectImage1;
+	@FXML
+	private ImageView connectImage2;
 	@FXML
 	private ToggleGroup networkTypeToggleGroup;
 	@FXML
@@ -77,6 +87,8 @@ public class ServerListSubviewController implements Initializable {
 	private TableColumn<ServerListFXModel, VpnStar> securityColumn;
 	@FXML
 	private TableColumn<ServerListFXModel, VpnStar> speedColumn;
+	@FXML
+	private Button connectButton1;
 
 	@FXML
 	private void handleConnectImage2MouseExited(MouseEvent event) {
@@ -103,7 +115,7 @@ public class ServerListSubviewController implements Initializable {
 	private WebService shellfireService;
 	private ServerList serverList;
 	private LoginForms application;
-	private static final Logger log = Util.getLogger(ServerListSubviewController.class.getCanonicalName());
+	private static final Logger log = Util.getLogger(SettingsSubviewController.class.getCanonicalName());
 	private ObservableList<ServerListFXModel> serverListData = FXCollections.observableArrayList();
 	private ShellfireVPNMainFormFxmlController mainFormController;
 	private Image buttonDisconnect = new Image("/buttons/button-disconnect-" + VpnI18N.getLanguage().getKey() + ".gif");
@@ -114,7 +126,7 @@ public class ServerListSubviewController implements Initializable {
 	 * @param shellfireService
 	 *            used to get the serverList data
 	 */
-	public ServerListSubviewController(WebService shellfireService) {
+	public SettingsSubviewController(WebService shellfireService) {
 		this.shellfireService = shellfireService;
 		currentVpn = shellfireService.getVpn();
 		initComponents();
@@ -124,7 +136,7 @@ public class ServerListSubviewController implements Initializable {
 	 * No argument constructor used by javafx framework
 	 *
 	 */
-	public ServerListSubviewController() {
+	public SettingsSubviewController() {
 	}
 
 	public void setShellfireService(WebService shellfireService) {
@@ -135,8 +147,32 @@ public class ServerListSubviewController implements Initializable {
 		return serverListTableView;
 	}
 
+	public RadioButton getWireguardRadioButton() {
+		return WireguardRadioButton;
+	}
+
+	public RadioButton getUDPRadioButton() {
+		return UDPRadioButton;
+	}
+
+	public RadioButton getTCPRadioButton() {
+		return TCPRadioButton;
+	}
+
+	public ImageView getConnectImage1() {
+		return connectImage1;
+	}
+
+	public ImageView getConnectImage2() {
+		return connectImage2;
+	}
+
 	public ToggleGroup getNetworkTypeToggleGroup() {
 		return networkTypeToggleGroup;
+	}
+
+	public void setConnetImage1Disable(boolean enable) {
+		this.connectButton1.setDisable(enable);
 	}
 
 	public void initComponents() {
@@ -153,6 +189,11 @@ public class ServerListSubviewController implements Initializable {
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		this.selectServerLabel.setText(i18n.tr("Select a Server for your connection"));
+		this.TCPRadioButton.setText(i18n.tr("OpenVPN TCP (works with secure firewalls and proxies.)"));
+		this.UDPRadioButton.setText(i18n.tr("OpenVPN UDP (fast)"));
+		this.WireguardRadioButton.setText(i18n.tr("Wireguard (fastest)"));
+		this.connectButton1.setGraphic(connectImage1);
+		this.connectButton1.setPadding(Insets.EMPTY);
 		nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
 		serverColumn.setCellValueFactory(cellData -> cellData.getValue().serverTypeProperty());
 		securityColumn.setCellValueFactory(cellData -> cellData.getValue().securityProperty());
@@ -217,12 +258,19 @@ public class ServerListSubviewController implements Initializable {
 		sortedData.comparatorProperty().bind(serverListTableView.comparatorProperty());
 		// Add sorted (and filtered) data to the table.
 		serverListTableView.setItems(sortedData);
+
+		this.connectImage2.setVisible(false);
 	}
 
 	public void selectCurrentVpn() {
 		serverListTableView.requestFocus();
 		serverListTableView.getSelectionModel().select(serverList.getServerNumberByServer(shellfireService.getVpn().getServer()));
 		serverListTableView.getFocusModel().focus(serverList.getServerNumberByServer(shellfireService.getVpn().getServer()));
+	}
+
+	public void afterInitialization() {
+		this.connectImage1.imageProperty()
+				.bindBidirectional(this.mainFormController.getConnectionSubviewController().getConnectImageView().imageProperty());
 	}
 
 	/**
@@ -233,7 +281,11 @@ public class ServerListSubviewController implements Initializable {
 	 */
 	public void updateComponents(boolean isConnected) {
 		if (isConnected) {
+			this.connectImage1.setImage(buttonDisconnect);
 			serverListTableView.disableProperty().set(isConnected);
+			TCPRadioButton.disableProperty().set(isConnected);
+			UDPRadioButton.disableProperty().set(isConnected);
+			WireguardRadioButton.disableProperty().set(isConnected);
 		}
 	}
 
@@ -249,6 +301,14 @@ public class ServerListSubviewController implements Initializable {
 			allModels.add(serverModel);
 		}
 		return allModels;
+	}
+
+	public void initPremium(boolean freeAccount) {
+		if (!freeAccount) {
+			this.connectImage2.setVisible(false);
+		} else {
+			this.connectImage2.setVisible(true);
+		}
 	}
 
 	public Server getRandomFreeServer() {
@@ -287,6 +347,18 @@ public class ServerListSubviewController implements Initializable {
 				serverListTableView.getFocusModel().focus(number);
 			}
 		});
+	}
+
+	public VpnProtocol getSelectedProtocol() {
+		if (this.WireguardRadioButton.isSelected()) {
+			return VpnProtocol.WireGuard;
+		} else if (this.UDPRadioButton.isSelected()) {
+			return VpnProtocol.UDP;
+		} else if (this.TCPRadioButton.isSelected()) {
+			return VpnProtocol.TCP;
+		}
+
+		return null;
 	}
 
 	public Server getSelectedServer() {

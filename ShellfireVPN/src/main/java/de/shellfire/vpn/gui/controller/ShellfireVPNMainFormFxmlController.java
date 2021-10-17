@@ -96,6 +96,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	private StringBuffer typedStrings = new StringBuffer();
 	private ProgressDialogController connectProgressDialog;
 	private ServerListSubviewController serverListSubviewController;
+	private SettingsSubviewController settingsSubviewController;
 	private Date connectedSince;
 	private Image iconEcncryptionActive;
 	private Image iconEcncryptionInactive;
@@ -274,8 +275,8 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		log.debug("afterLogin() - if proxy enabled, enforce TCP");
 		if (ProxyConfig.isProxyEnabled()) {
 			this.setSelectedProtocol(VpnProtocol.TCP);
-			this.serverListSubviewController.getUDPRadioButton().setDisable(true);
-			this.serverListSubviewController.getWireguardRadioButton().setDisable(true);
+			this.settingsSubviewController.getUDPRadioButton().setDisable(true);
+			this.settingsSubviewController.getWireguardRadioButton().setDisable(true);
 		} else {
 			VpnProtocol selectedProtocol = vpn.getProtocol();
 			this.setSelectedProtocol(selectedProtocol);
@@ -375,6 +376,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	private void handleHelpImageViewContext(ContextMenuEvent event) {
 	}
 
+	// TODO: replace by loader from somewhere else, e.g. "more" screen?
 	@FXML
 	private void handleHelpImageViewClicked(MouseEvent event) {
 		this.openHelp();
@@ -542,7 +544,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 						return;
 					}
 
-					controller.connect(serverListSubviewController.getSelectedServer(), serverListSubviewController.getSelectedProtocol(),
+					controller.connect(serverListSubviewController.getSelectedServer(), settingsSubviewController.getSelectedProtocol(),
 							Reason.ConnectButtonPressed);
 				} else if (isPremiumAccount()) {
 					log.debug("ServerList Subview controller  has the object " + serverListSubviewController.toString());
@@ -563,10 +565,10 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
 					}
 
-					controller.connect(serverListSubviewController.getSelectedServer(), serverListSubviewController.getSelectedProtocol(),
+					controller.connect(serverListSubviewController.getSelectedServer(), settingsSubviewController.getSelectedProtocol(),
 							Reason.ConnectButtonPressed);
 				} else {
-					controller.connect(serverListSubviewController.getSelectedServer(), serverListSubviewController.getSelectedProtocol(),
+					controller.connect(serverListSubviewController.getSelectedServer(), settingsSubviewController.getSelectedProtocol(),
 							Reason.ConnectButtonPressed);
 				}
 
@@ -617,9 +619,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		Platform.runLater(() -> {
 			mySetIconImage("/icons/sfvpn2-disconnected-big.png");
 		});
-		this.serverListSubviewController.setConnetImage1Disable(false);
 		this.connectionSubviewController.updateComponents(false);
-		this.serverListSubviewController.getConnectImage1().setImage(this.buttonConnect);
 		log.debug("ShellfireMainForm: In setStateDisconnected method ");
 		popup.remove(disconnectItem);
 		popup.remove(abortItem);
@@ -713,10 +713,10 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		this.setNormalCursor();
 		this.updateOnlineHost();
 		if (!ProxyConfig.isProxyEnabled()) {
-			this.serverListSubviewController.getUDPRadioButton().setDisable(false);
-			this.serverListSubviewController.getWireguardRadioButton().setDisable(false);
+			this.settingsSubviewController.getUDPRadioButton().setDisable(false);
+			this.settingsSubviewController.getWireguardRadioButton().setDisable(false);
 		}
-		this.serverListSubviewController.getTCPRadioButton().setDisable(false);
+		this.settingsSubviewController.getTCPRadioButton().setDisable(false);
 		Task<Reason> disconnectTask = new Task<Reason>() {
 
 			@Override
@@ -759,7 +759,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 			log.debug("setStateConnecting: cannot start showConnectProgress with error " + ex.getMessage());
 		}
 		this.connectionSubviewController.connectButtonDisable(true);
-		this.serverListSubviewController.setConnetImage1Disable(true);
 
 		Platform.runLater(() -> {
 			mySetIconImage("/icons/sfvpn2-connecting-big.png");
@@ -774,9 +773,9 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		popupConnectItem.setEnabled(false);
 		popup.add(abortItem);
 		serverListSubviewController.getServerListTableView().disableProperty().set(true);
-		serverListSubviewController.getWireguardRadioButton().setDisable(true);
-		serverListSubviewController.getUDPRadioButton().setDisable(true);
-		serverListSubviewController.getTCPRadioButton().setDisable(true);
+		settingsSubviewController.getWireguardRadioButton().setDisable(true);
+		settingsSubviewController.getUDPRadioButton().setDisable(true);
+		settingsSubviewController.getTCPRadioButton().setDisable(true);
 	}
 
 	/**
@@ -1011,9 +1010,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		});
 
 		this.connectionSubviewController.updateComponents(true);
-		this.serverListSubviewController.getConnectImage1().setImage(this.buttonDisconnect);
 		this.connectionSubviewController.connectButtonDisable(false);
-		this.serverListSubviewController.setConnetImage1Disable(false);
 		serverListSubviewController.getServerListTableView().disableProperty().set(true);
 		if (this.trayIcon != null) {
 			this.trayIcon.setImage(this.iconConnected);
@@ -1024,9 +1021,9 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		this.startConnectedSinceTimer();
 
 		this.updateOnlineHost();
-		serverListSubviewController.getWireguardRadioButton().disableProperty().set(true);
-		serverListSubviewController.getUDPRadioButton().disableProperty().set(true);
-		serverListSubviewController.getTCPRadioButton().disableProperty().set(true);
+		settingsSubviewController.getWireguardRadioButton().disableProperty().set(true);
+		settingsSubviewController.getUDPRadioButton().disableProperty().set(true);
+		settingsSubviewController.getTCPRadioButton().disableProperty().set(true);
 		showTrayMessageWithoutCallback(i18n.tr("Connection successful"),
 				i18n.tr("You are now connected to Shellfire VPN. Your internet connection is encrypted."));
 		showStatusUrlIfEnabled();
@@ -1120,13 +1117,13 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
 		switch (protocol) {
 		case WireGuard:
-			this.serverListSubviewController.getWireguardRadioButton().setSelected(true);
+			this.settingsSubviewController.getWireguardRadioButton().setSelected(true);
 			break;
 		case UDP:
-			this.serverListSubviewController.getUDPRadioButton().setSelected(true);
+			this.settingsSubviewController.getUDPRadioButton().setSelected(true);
 			break;
 		case TCP:
-			this.serverListSubviewController.getTCPRadioButton().setSelected(true);
+			this.settingsSubviewController.getTCPRadioButton().setSelected(true);
 			break;
 		}
 
@@ -1224,12 +1221,21 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 			this.serverListSubviewController = (ServerListSubviewController) pair.getValue();
 			this.serverListSubviewController.setShellfireService((this.shellfireService));
 			this.serverListSubviewController.initComponents();
-			this.serverListSubviewController.initPremium(isFreeAccount());
 			this.serverListSubviewController.setApp(this.application);
 			this.serverListSubviewController.setMainFormController(this);
-			this.serverListSubviewController.afterInitialization();
 			leftPaneHashMap.put(SidePane.SERVERLIST, pair);
 			log.debug("Serverlist controller defined");
+
+			// load the settings pane
+			Pair<Pane, Object> pairSettings = FxUIManager.SwitchSubview("settings_subview.fxml");
+			this.settingsSubviewController = (SettingsSubviewController) pairSettings.getValue();
+			this.settingsSubviewController.setShellfireService((this.shellfireService));
+			this.settingsSubviewController.initComponents();
+			this.settingsSubviewController.setApp(this.application);
+			this.settingsSubviewController.setMainFormController(this);
+			leftPaneHashMap.put(SidePane.SERVERLIST, pairSettings);
+			log.debug("settings controller defined");
+			
 			
 			// load connection pane
 			Pair<Pane, Object> pairConnection = FxUIManager.SwitchSubview("connection_subview.fxml");

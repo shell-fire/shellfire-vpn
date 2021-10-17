@@ -16,7 +16,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" style="-fx-background-color: rgb(64,69,73);" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.ShellfireVPNMainFormFxmlController">
    <children>
-      <AnchorPane fx:id="menuBarAnchorPane" layoutY="520.0" style="-fx-background-color: rgb(244,244,244);">
+      <AnchorPane fx:id="menuBarAnchorPane" layoutY="520.0" prefHeight="28.0" prefWidth="600.0" style="-fx-background-color: rgb(244,244,244);">
          <children>
             <AnchorPane fx:id="serverListPane" layoutX="100.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onContextMenuRequested="#handleServerListPaneContext" onMouseClicked="#handleServerListPaneClicked" onMouseEntered="#handleServerListPaneMouseEntered" onMouseExited="#handleServerListPaneMouseExited" style="-fx-background-color: black;">
                <children>
@@ -27,7 +27,7 @@
                   </ImageView>
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="leftConnectionPane" layoutX="175.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onContextMenuRequested="#handleConnectionPaneContext" onMouseClicked="#handleConnectionPaneClicked" onMouseEntered="#handleConnectionPaneMouseEntered" onMouseExited="#handleConnectionPaneMouseExited" style="-fx-background-color: black;">
+            <AnchorPane fx:id="leftConnectionPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onContextMenuRequested="#handleConnectionPaneContext" onMouseClicked="#handleConnectionPaneClicked" onMouseEntered="#handleConnectionPaneMouseEntered" onMouseExited="#handleConnectionPaneMouseExited" style="-fx-background-color: black;">
                <children>
                   <ImageView fx:id="connectionBackgroundImageView" blendMode="LIGHTEN" fitHeight="25.0" fitWidth="75.0" style="--fx-border-color: yellow;">
                      <image>
@@ -36,12 +36,7 @@
                   </ImageView>
                </children>
             </AnchorPane>
-            <ImageView fx:id="helpImageView" layoutX="250.0" onContextMenuRequested="#handleHelpImageViewContext" onMouseClicked="#handleHelpImageViewClicked" onMouseEntered="#handleHelpImageViewMouseEntered" onMouseExited="#handleHelpImageViewMouseExited">
-               <image>
-                  <Image url="@../icons/help.png" />
-               </image>
-            </ImageView>
-            <ImageView fx:id="settingsImageView" layoutX="39.0" layoutY="8.0" onContextMenuRequested="#handleSettingsImageViewContext" onMouseClicked="#handleSettingsImageViewClicked" onMouseEntered="#handleSettingsImageViewMouseEntered" onMouseExited="#handleSettingsImageViewMouseExited">
+            <ImageView fx:id="settingsImageView" layoutX="536.0" layoutY="4.0" onContextMenuRequested="#handleSettingsImageViewContext" onMouseClicked="#handleSettingsImageViewClicked" onMouseEntered="#handleSettingsImageViewMouseEntered" onMouseExited="#handleSettingsImageViewMouseExited">
                <image>
                   <Image url="@../icons/settings.png" />
                </image>

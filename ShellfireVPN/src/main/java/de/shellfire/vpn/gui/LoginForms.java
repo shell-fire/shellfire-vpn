@@ -238,6 +238,7 @@ public class LoginForms extends Application {
 			log.error("Loading fxml has error for replaceSceneContent for " + fxml, ex);
 		}
 		log.debug("replaceSceneContent() - start setOnMouse...");
+		/*
 		page.setOnMousePressed(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
@@ -245,6 +246,7 @@ public class LoginForms extends Application {
 				yOffset = event.getSceneY();
 			}
 		});
+		
 		page.setOnMouseDragged(new EventHandler<MouseEvent>() {
 			@Override
 			public void handle(MouseEvent event) {
@@ -252,6 +254,7 @@ public class LoginForms extends Application {
 				stage.setY(event.getScreenY() - yOffset);
 			}
 		});
+		*/
 		log.debug("replaceSceneContent() - finished setOnMouse...");
 		if (page.getScene() == null) {
 			Scene scene = new Scene(page);

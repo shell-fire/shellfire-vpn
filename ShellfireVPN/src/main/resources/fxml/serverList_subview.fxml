@@ -20,58 +20,20 @@
    <children>
       <AnchorPane fx:id="serverListAnchorPane" prefHeight="521.0" prefWidth="811.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <RadioButton fx:id="UDPRadioButton" layoutX="5.0" layoutY="400.0" mnemonicParsing="false" prefHeight="24.0" prefWidth="800.0" text="UDP (fast)">
-               <toggleGroup>
-                  <ToggleGroup fx:id="networkTypeToggleGroup" />
-               </toggleGroup>
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </RadioButton>
-            <AnchorPane layoutX="2.0" layoutY="48.0" prefHeight="290.0" prefWidth="809.0" AnchorPane.bottomAnchor="183.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="48.0">
-               <children>
-                        <TableView fx:id="serverListTableView" editable="true" fixedCellSize="0.0" prefHeight="290.0" prefWidth="809.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                          <columns>
-                            <TableColumn fx:id="countryColumn" prefWidth="149.0" text="Country" />
-                            <TableColumn fx:id="nameColumn" prefWidth="115.0" text="Name" />
-                              <TableColumn fx:id="serverColumn" prefWidth="121.0" text="Server" />
-                              <TableColumn fx:id="securityColumn" prefWidth="183.0" text="Security" />
-                              <TableColumn fx:id="speedColumn" prefWidth="233.0" text="Speed" />
-                          </columns>
-                        </TableView>
-               </children>
-            </AnchorPane>
+                  <TableView fx:id="serverListTableView" editable="true" fixedCellSize="0.0" prefHeight="290.0" prefWidth="809.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <columns>
+                      <TableColumn fx:id="countryColumn" prefWidth="149.0" text="Country" />
+                      <TableColumn fx:id="nameColumn" prefWidth="115.0" text="Name" />
+                        <TableColumn fx:id="serverColumn" prefWidth="121.0" text="Server" />
+                        <TableColumn fx:id="securityColumn" prefWidth="183.0" text="Security" />
+                        <TableColumn fx:id="speedColumn" prefWidth="233.0" text="Speed" />
+                    </columns>
+                  </TableView>
             <Label fx:id="selectServerLabel" contentDisplay="CENTER" layoutX="1.0" layoutY="2.0" prefHeight="42.0" prefWidth="636.0" style="-fx-background-color: rgb(64,69,73);" text="   WÃ¤hle einen Server fÃ¼r deine Verbindung" textFill="WHITE" AnchorPane.leftAnchor="1.0" AnchorPane.rightAnchor="1.0" AnchorPane.topAnchor="1.0">
                <font>
                   <Font size="24.0" />
                </font>
             </Label>
-            <ImageView fx:id="connectImage2" fitHeight="46.0" fitWidth="240.0" layoutX="523.0" layoutY="464.0" onContextMenuRequested="#handleConnectImage2ContextRequested" onMouseClicked="#handleConnectImage2MouseClicked" onMouseEntered="#handleConnectImage2MouseEntered" onMouseExited="#handleConnectImage2MouseExited" AnchorPane.bottomAnchor="11.0" AnchorPane.rightAnchor="48.0">
-               <image>
-                  <Image url="@../buttons/button-premium-infos.gif" />
-               </image>
-            </ImageView>
-            <RadioButton fx:id="WireguardRadioButton" layoutX="5.0" layoutY="375.0" mnemonicParsing="false" prefHeight="24.0" prefWidth="800.0" text="Wireguard (fastest)" toggleGroup="$networkTypeToggleGroup">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </RadioButton>
-            <RadioButton fx:id="TCPRadioButton" layoutX="5.0" layoutY="425.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="800.0" selected="true" text="TCP (works with safe firewalls and proxies)" toggleGroup="$networkTypeToggleGroup">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </RadioButton>
-            <Label fx:id="connectionTypeLabel" layoutX="3.0" layoutY="347.0" prefHeight="29.0" prefWidth="262.0" text="Connection type  " textFill="#404549">
-               <font>
-                  <Font name="System Bold" size="18.0" />
-               </font>
-            </Label>
-            <Button fx:id="connectButton1" ellipsisString="" layoutX="14.0" layoutY="467.0" mnemonicParsing="false" onAction="#connectButton1OnAction" onMouseEntered="#connectButton1Entered" onMouseExited="#connectButton1Exited" prefHeight="40.0" prefWidth="184.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" />
-            <ImageView fx:id="connectImage1" fitHeight="40.0" fitWidth="184.0" layoutX="25.0" layoutY="474.0" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="25.0">
-               <image>
-                  <Image url="@../buttons/button-connect-de.gif" />
-               </image>
-            </ImageView>
          </children>
       </AnchorPane>
    </children>

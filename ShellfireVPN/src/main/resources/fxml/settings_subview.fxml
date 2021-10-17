@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="521.0" prefWidth="811.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.ServerListSubviewController">
+   <children>
+      <AnchorPane fx:id="settingsAnchorPane" prefHeight="521.0" prefWidth="811.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="521.0" prefWidth="661.0">
+               <children>
+                  <RadioButton fx:id="UDPRadioButton" layoutX="10.0" layoutY="360.0" mnemonicParsing="false" text="UDP (fast)">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="networkTypeToggleGroup" />
+                     </toggleGroup>
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </RadioButton>
+                  <RadioButton fx:id="WireguardRadioButton" layoutX="10.0" layoutY="330.0" mnemonicParsing="false" text="Wireguard (fastest)" toggleGroup="$networkTypeToggleGroup">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </RadioButton>
+                  <RadioButton fx:id="TCPRadioButton" layoutX="10.0" layoutY="390.0" mnemonicParsing="false" selected="true" text="TCP (works with safe firewalls and proxies)" toggleGroup="$networkTypeToggleGroup">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </RadioButton>
+                  <Label fx:id="connectionTypeLabel" layoutX="10.0" layoutY="300.0" prefHeight="29.0" prefWidth="262.0" text="Connection type  " textFill="#404549">
+                     <font>
+                        <Font name="System Bold" size="18.0" />
+                     </font>
+                  </Label>
+                  <CheckBox fx:id="saveLoginData" layoutX="8.0" layoutY="13.0" mnemonicParsing="false" onAction="#handleSaveLoginData" prefHeight="20.0" prefWidth="303.0" text="Save login data" AnchorPane.leftAnchor="8.0">
+                     <padding>
+                        <Insets bottom="1.0" left="1.0" right="1.0" top="1.0" />
+                     </padding>
+                  </CheckBox>
+                  <CheckBox fx:id="loginAutomatically" layoutX="8.0" layoutY="40.0" mnemonicParsing="false" onAction="#handleLoginAutomatically" prefHeight="18.0" prefWidth="290.0" text="Login automatically" AnchorPane.leftAnchor="8.0" />
+                  <CheckBox fx:id="saveVpnChoice" layoutX="8.0" layoutY="66.0" mnemonicParsing="false" onAction="#handleSaveVpnChoice" prefHeight="18.0" prefWidth="282.0" text="Save VPN choice" AnchorPane.leftAnchor="8.0" />
+                  <CheckBox fx:id="startOnBoot" layoutX="8.0" layoutY="92.0" mnemonicParsing="false" onAction="#handleStartOnBoot" prefHeight="18.0" prefWidth="290.0" text="Start on boot" AnchorPane.leftAnchor="8.0" />
+                  <CheckBox fx:id="connectAutomatically" layoutX="8.0" layoutY="117.0" mnemonicParsing="false" onAction="#handleConnectAutomatically" prefHeight="18.0" prefWidth="282.0" text="Connect automatically" AnchorPane.leftAnchor="8.0" />
+                  <CheckBox fx:id="showStatusSite" layoutX="8.0" layoutY="142.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#handleShowStatusSite" prefHeight="21.0" prefWidth="407.0" text="Show status site after connection has been established" AnchorPane.leftAnchor="8.0" />
+                  <Label fx:id="languageLabel" alignment="TOP_RIGHT" contentDisplay="CENTER" layoutX="108.0" layoutY="179.0" prefHeight="21.0" prefWidth="76.0" text="Language :" textAlignment="RIGHT" />
+                  <Button fx:id="saveSettingsButton" layoutX="12.0" layoutY="215.0" mnemonicParsing="false" onAction="#handleSaveSettingsButton" prefHeight="23.0" prefWidth="169.0" text="save settings" textAlignment="CENTER" AnchorPane.bottomAnchor="12.0" AnchorPane.leftAnchor="12.0">
+                     <padding>
+                        <Insets bottom="1.0" left="2.0" right="2.0" top="1.0" />
+                     </padding>
+                  </Button>
+                  <Button fx:id="cancelButton" layoutX="261.0" layoutY="215.0" mnemonicParsing="false" onAction="#handleCancelButton" prefHeight="23.0" prefWidth="150.0" text="cancel" AnchorPane.bottomAnchor="12.0" AnchorPane.rightAnchor="13.0">
+                     <padding>
+                        <Insets bottom="1.0" top="1.0" />
+                     </padding>
+                  </Button>
+                  <ComboBox fx:id="languageComboBox" layoutX="261.0" layoutY="178.0" minHeight="23.0" onAction="#handleLanguageComboBox" onShown="#handleLanguageShown" prefHeight="23.0" prefWidth="150.0" AnchorPane.rightAnchor="13.0" />
+               </children>
+            </AnchorPane>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
