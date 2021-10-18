@@ -197,7 +197,13 @@ public class ServerListSubviewController implements Initializable {
 		selectedItems.addListener(new ListChangeListener<ServerListFXModel>() {
 		  @Override
 		  public void onChanged(Change<? extends ServerListFXModel> change) {
-		    System.out.println("Selection changed: " + change.getList());
+			  if (mainFormController != null) {
+				  ObservableList<? extends ServerListFXModel> changes = change.getList();
+				  
+				  for (ServerListFXModel curChange : changes) {
+					  mainFormController.setSelectedServer(curChange.getCountry());
+				  }
+			  }
 		  }
 		});
 

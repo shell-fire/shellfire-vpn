@@ -35,6 +35,7 @@ import de.shellfire.vpn.webservice.model.GetLatestVersionRequest;
 import de.shellfire.vpn.webservice.model.GetLocalIpAddressRequest;
 import de.shellfire.vpn.webservice.model.GetLocalLocationRequest;
 import de.shellfire.vpn.webservice.model.GetParametersForOpenVpnRequest;
+import de.shellfire.vpn.webservice.model.GetServerBackgroundImageFilenameRequest;
 import de.shellfire.vpn.webservice.model.GetServerListRequest;
 import de.shellfire.vpn.webservice.model.GetTrayMessagesRequest;
 import de.shellfire.vpn.webservice.model.GetUrlHelpRequest;
@@ -49,6 +50,7 @@ import de.shellfire.vpn.webservice.model.LoginResponse;
 import de.shellfire.vpn.webservice.model.OpenVpnParamResponse;
 import de.shellfire.vpn.webservice.model.RegisterRequest;
 import de.shellfire.vpn.webservice.model.SendLogToShellfireRequest;
+import de.shellfire.vpn.webservice.model.ServerBackgroundImageFilenameResponse;
 import de.shellfire.vpn.webservice.model.SetProtocolToRequest;
 import de.shellfire.vpn.webservice.model.SetServerToRequest;
 import de.shellfire.vpn.webservice.model.SetWireGuardPublicKeyUserRequest;
@@ -543,6 +545,30 @@ public class WebServiceBroker {
 		log.debug("getUrlHelp () - finished, returning {}", url);
 		return url;
 	}
+	
+
+	/**
+	 * return String the background-image filename of the city for the provided server
+	 * 
+	 * @throws IOException
+	 * @throws ClientProtocolException
+	 * @throws VpnException
+	 */
+	public String getServerBackgroundImageFilename(int serverId) throws ClientProtocolException, IOException, VpnException {
+		log.debug("getServerBackgroundImageFilename ({}) - start", serverId);
+		// TODO: put serverid in request, check somewhere else how to provide data
+		GetServerBackgroundImageFilenameRequest request = new GetServerBackgroundImageFilenameRequest(serverId);
+
+		Type theType = new TypeToken<Response<ServerBackgroundImageFilenameResponse>>() {}.getType();
+		Response<ServerBackgroundImageFilenameResponse> resp = new JsonHttpRequest<GetServerBackgroundImageFilenameRequest, ServerBackgroundImageFilenameResponse>().call(request, theType);
+		resp.validate();
+
+		String filename = resp.getData().getFilename();
+
+		log.debug("getServerBackgroundImageFilename () - finished, returning {}", filename);
+		return filename;
+	}
+	
 
 	/**
 	 * return String the url of the webpage where premium infos can be found

@@ -34,6 +34,7 @@ import org.slf4j.Logger;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.sun.jna.platform.win32.COM.DispatchVTable.GetIDsOfNamesCallback;
 
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.exception.VpnException;
@@ -51,6 +52,7 @@ import de.shellfire.vpn.webservice.model.GetLatestVersionRequest;
 import de.shellfire.vpn.webservice.model.GetLocalIpAddressRequest;
 import de.shellfire.vpn.webservice.model.GetLocalLocationRequest;
 import de.shellfire.vpn.webservice.model.GetParametersForOpenVpnRequest;
+import de.shellfire.vpn.webservice.model.GetServerBackgroundImageFilenameRequest;
 import de.shellfire.vpn.webservice.model.GetServerListRequest;
 import de.shellfire.vpn.webservice.model.GetTrayMessagesRequest;
 import de.shellfire.vpn.webservice.model.GetUrlHelpRequest;
@@ -110,6 +112,7 @@ class JsonHttpRequest<RequestType, ResponseType> {
 		tempMap.put(GetCryptoMinerConfigRequest.class, "getCryptoMinerConfig");
 		tempMap.put(GetCryptoCurrencyVpnRequest.class, "getCryptoCurrencyVpn");
 		tempMap.put(SetWireGuardPublicKeyUserRequest.class, "setWireguardPublicKeyUser");
+		tempMap.put(GetServerBackgroundImageFilenameRequest.class, "getServerBackgroundImageFilename");
 
 		functionMap = Collections.unmodifiableMap(tempMap);
 	}

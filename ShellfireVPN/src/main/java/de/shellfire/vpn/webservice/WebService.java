@@ -4,8 +4,10 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
@@ -25,6 +27,7 @@ import de.shellfire.vpn.webservice.model.WsFile;
 import de.shellfire.vpn.webservice.model.WsGeoPosition;
 import de.shellfire.vpn.webservice.model.WsServer;
 import de.shellfire.vpn.webservice.model.WsVpn;
+import javafx.scene.image.Image;
 
 /**
  * 
@@ -50,6 +53,7 @@ public class WebService {
 	private String urlSuccesfulConnect;
 	private static I18n i18n = VpnI18N.getI18n();
 	private static WebService instance;
+	private Map<Integer, String> serverBackgroundImageFilenameMap = new HashMap<Integer, String>();
 
 	WebServiceBroker shellfire = WebServiceBroker.getInstance();
 	private boolean initialized;
@@ -518,6 +522,27 @@ public class WebService {
 
 		return urlHelp;
 	}
+	
+
+	public String getServerBackgroundImageFilename(int serverId) {
+		init();
+
+		String filename = null;
+		if (serverBackgroundImageFilenameMap.containsKey(serverId)) {
+			filename = serverBackgroundImageFilenameMap.get(serverId);
+		}
+		
+		if (filename == null) {
+			filename = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnableImpl<String>() {
+				public String run() throws Exception {
+					return shellfire.getServerBackgroundImageFilename(serverId);
+				}
+			}, 3, 100);
+		}
+
+		return filename;
+	}
+
 
 	public String getUrlPremiumInfo() {
 		init();

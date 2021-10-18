@@ -19,7 +19,9 @@ import org.xnap.commons.i18n.I18n;
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.client.Controller;
 import de.shellfire.vpn.gui.LoginForms;
+import de.shellfire.vpn.gui.ServerImageBackgroundManager;
 import de.shellfire.vpn.i18n.VpnI18N;
+import de.shellfire.vpn.types.Server;
 import de.shellfire.vpn.webservice.WebService;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -127,15 +129,33 @@ public class ConnectionSubviewController implements Initializable {
 	}
 
 	public void updateComponents(boolean connected) {
+		// TODO: Here we can later implement design switches red/green for disconnected/connected...
 		if (connected) {
-			this.statusConnectionImageView.setImage(imageStatusEncrypted);
+			// this.statusConnectionImageView.setImage(imageStatusEncrypted);
 			this.connectImageView.setImage(imageButtonDisconnect);
 		} else {
-			this.statusConnectionImageView.setImage(imageStatusUnencrypted);
+			// this.statusConnectionImageView.setImage(imageStatusUnencrypted);
 			this.connectImageView.setImage(imageButtonConnect);
 		}
 	}
 
+	public void setSelectedServer(Server server) {
+		log.debug("setSelectedServer(" + server + ") - updating background image");
+		
+		Image image;
+		try {
+			image = ServerImageBackgroundManager.getImage(server.getServerId());
+			this.statusConnectionImageView.setImage(image);
+			log.debug("background imaage updated");
+		} catch (Exception e) {
+			log.error("Error occured during loading of background image", e);
+		}
+		
+		
+		
+
+	}	
+	
 	public void initPremium(boolean freeAccount) {
 		log.debug("ConnectionSubviewController: initPremium is free? " + freeAccount);
 		if (!freeAccount) {

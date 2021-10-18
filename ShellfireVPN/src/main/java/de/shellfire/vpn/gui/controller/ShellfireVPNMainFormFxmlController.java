@@ -2,7 +2,6 @@ package de.shellfire.vpn.gui.controller;
 
 import java.awt.AWTEvent;
 import java.awt.AWTException;
-import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.MenuItem;
 import java.awt.PopupMenu;
@@ -47,6 +46,7 @@ import de.shellfire.vpn.exception.VpnException;
 import de.shellfire.vpn.gui.FxUIManager;
 import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.gui.VpnTrayMessage;
+import de.shellfire.vpn.gui.model.ServerListFXModel;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.proxy.ProxyConfig;
 import de.shellfire.vpn.types.Reason;
@@ -57,6 +57,8 @@ import de.shellfire.vpn.webservice.Vpn;
 import de.shellfire.vpn.webservice.WebService;
 import de.shellfire.vpn.webservice.model.TrayMessage;
 import javafx.application.Platform;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ListChangeListener.Change;
 import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.EventHandler;
@@ -67,7 +69,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ContextMenuEvent;
@@ -75,12 +76,11 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import javafx.util.Pair;
 
-public class ShellfireVPNMainFormFxmlController extends AnchorPane implements Initializable, LocaleChangeListener, ConnectionStateListener {
+public class ShellfireVPNMainFormFxmlController extends AnchorPane implements Initializable, LocaleChangeListener, ConnectionStateListener, ListChangeListener<ServerListFXModel>
+	{
 
 	HashMap<SidePane, Pair<Pane, Object>> leftPaneHashMap = new HashMap<>();
 	private static LoginForms application;
@@ -1192,9 +1192,11 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	}
 
 	public void setSelectedServer(Server server) {
-		log.debug("setSelectedServer(" + server + ")");
-		int num = this.shellfireService.getServerList().getServerNumberByServer(server);
-		this.serverListSubviewController.setSelectedServer(num);
+		log.debug("setSelectedServer(" + server + ") - updating background image");
+		
+		
+		connectionSubviewController.setSelectedServer(server);
+		
 
 	}
 
@@ -1317,6 +1319,12 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 			log.debug("leftMenuPane is null, cannot hide()");
 		}
 		log.debug("ShellfireVPNMainController.minimizeToTray() - return");
+	}
+
+	@Override
+	public void onChanged(javafx.collections.ListChangeListener.Change<? extends ServerListFXModel> arg0) {
+		System.out.println("onChange of server registered in Main Form, nice!");
+		
 	}
 
 }
