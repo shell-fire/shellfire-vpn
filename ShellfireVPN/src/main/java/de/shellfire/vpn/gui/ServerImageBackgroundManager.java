@@ -1,9 +1,15 @@
 package de.shellfire.vpn.gui;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import javax.imageio.ImageIO;
 
 import org.slf4j.Logger;
 
@@ -11,6 +17,7 @@ import de.shellfire.vpn.Util;
 import de.shellfire.vpn.VpnProperties;
 import de.shellfire.vpn.gui.controller.LoginController;
 import de.shellfire.vpn.webservice.WebService;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 
 public class ServerImageBackgroundManager {
@@ -48,43 +55,68 @@ public class ServerImageBackgroundManager {
 		filenameImageMap = new HashMap<String, Image>();
 		
 		for (String filename : filenameSet) {
-			loadImageFromJarOrDownloadFolder(filename);
+			loadImageFromJarOrDownloadDir(filename);
 		}
 	}
 
-	private static void loadImageFromJarOrDownloadFolder(String filename) {
+	private static void loadImageFromJarOrDownloadDir(String filename) {
 		Image image = loadImageFromJar(filename);
 		if (image != null) {
 			filenameImageMap.put(filename, image);
 			log.debug("loaded image for {} from jar file");
 		}
 		if (image == null) {
-			image = loadImageFromDownloadFolder(filename);
+			image = loadImageFromDownloadDir(filename);
 		}
 		if (image != null) {
 			filenameImageMap.put(filename, image);
-			log.debug("loaded image for {} from jar download store");
+			log.debug("loaded image for {} from in-jar or downloadDir", filename);
 			
 		} else {
 			log.debug("did not yet find image in jar file or download store - doing nothing");
 		}
 	}
 		
-	private static Image loadImageFromDownloadFolder(String filename) {
-		// TODO Auto-generated method stub
-		return null;
+	private static Image loadImageFromDownloadDir(String filename) {
+
+		String inDownloadDirPath = Util.getDownloadDir() + filename;
+		File file = new File(inDownloadDirPath);
+		inDownloadDirPath = file.toURI().toString();
+	    
+		Image image = null;
+		try {
+			log.debug("try to load image from download dir {}", inDownloadDirPath);
+			image = new Image(inDownloadDirPath);
+			log.debug("image loaded");
+		} catch (IllegalArgumentException e) {
+			// log.error("could not load file within jar", e);
+			image = null;
+		}
+		
+		if (image != null && image.getException() != null) {
+			// log.error("error while loading from download dir", image.getException());
+			image = null;
+		}
+		
+		return image;
 	}
 	
 	private static Image loadImageFromJar(String filename) {
 		String inJarPath = pathPrefix + filename;
 		Image image = null;
 		try {
-			log.debug("try to load image from {}", inJarPath);
+			log.debug("try to load image from in-jar {}", inJarPath);
 			image = new Image(inJarPath);
 			log.debug("image loaded");
 		} catch (IllegalArgumentException e) {
-			log.error("could not load file within jar", e);
+			// log.error("could not load file within download dir", e);
+			image = null;
 		}
+		
+		if (image != null && image.getException() != null) {
+			log.error("error while loading from in-jar", image.getException());
+		}
+		
 		
 		return image;
 	}
@@ -102,7 +134,7 @@ public class ServerImageBackgroundManager {
 		
 		Image image = filenameImageMap.get(filename);
 		if (image == null) {
-			// TODO: Need to implement download function
+			log.debug("image for filename {} not in filenameImageMap, loading it from webservice", filename);
 			image = loadImageFromWebService(serverId, filename);
 		}
 		if (image == null) {
@@ -114,8 +146,32 @@ public class ServerImageBackgroundManager {
 	}
 
 	private static Image loadImageFromWebService(int serverId, String filename) {
-		// TODO Auto-generated method stub
-		return null;
+		log.debug("loadImageFromWebService(serverId={}) - start", serverId);
+		Image image = service.getServerBackgroundImage(serverId);
+		
+		if (image == null || image.getException() != null) {
+			log.debug("Error - webservice did not deliver image for serverId {}", serverId);
+			if (image.getException() != null) {
+				log.error("Exception in image during loading from webservice", image.getException());
+			}
+		} else {
+			filenameImageMap.put(filename, image);
+			storeImageInDownloadDir(filename, image);
+		}
+		
+		log.debug("loadImageFromWebService() - finished, returning: {}", filename);
+		return image;
+	}
+
+	private static void storeImageInDownloadDir(String filename, Image image) {
+	    File outputFile = new File(Util.getDownloadDir() + filename);
+	    BufferedImage bImage = SwingFXUtils.fromFXImage(image, null);
+	    try {
+	      ImageIO.write(bImage, "jpg", outputFile);
+	    } catch (IOException e) {
+	      throw new RuntimeException(e);
+	    }
+	 
 	}
 
 	private static String loadFilenameFromWebService(int serverId) {
@@ -130,7 +186,7 @@ public class ServerImageBackgroundManager {
 		}
 		
 		// check if myabe we already have a file with this filename available...
-		loadImageFromJarOrDownloadFolder(filename);
+		loadImageFromJarOrDownloadDir(filename);
 		
 		log.debug("loadFilenameFromWebService() - finished, returning: {}", filename);
 		return filename;

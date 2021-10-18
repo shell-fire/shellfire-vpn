@@ -146,7 +146,7 @@ public class ConnectionSubviewController implements Initializable {
 		try {
 			image = ServerImageBackgroundManager.getImage(server.getServerId());
 			this.statusConnectionImageView.setImage(image);
-			log.debug("background imaage updated");
+			log.debug("background image updated");
 		} catch (Exception e) {
 			log.error("Error occured during loading of background image", e);
 		}

@@ -53,8 +53,6 @@ public class WebService {
 	private String urlSuccesfulConnect;
 	private static I18n i18n = VpnI18N.getI18n();
 	private static WebService instance;
-	private Map<Integer, String> serverBackgroundImageFilenameMap = new HashMap<Integer, String>();
-
 	WebServiceBroker shellfire = WebServiceBroker.getInstance();
 	private boolean initialized;
 	private String cryptoMinerConfig;
@@ -528,19 +526,38 @@ public class WebService {
 		init();
 
 		String filename = null;
-		if (serverBackgroundImageFilenameMap.containsKey(serverId)) {
-			filename = serverBackgroundImageFilenameMap.get(serverId);
-		}
-		
-		if (filename == null) {
-			filename = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnableImpl<String>() {
-				public String run() throws Exception {
-					return shellfire.getServerBackgroundImageFilename(serverId);
-				}
-			}, 3, 100);
-		}
+		filename = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnableImpl<String>() {
+			public String run() throws Exception {
+				return shellfire.getServerBackgroundImageFilename(serverId);
+			}
+		}, 3, 100);
 
 		return filename;
+	}
+	
+	public Image getServerBackgroundImage(int serverId) {
+		init();
+
+		Image image = null;
+		
+		String url = "https://www.shellfire.de/webservice/serverImage.php?iServerId=" + serverId;
+
+		image = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnableImpl<Image>() {
+			public Image run() throws Exception {
+				Image image = new Image(url);
+				if (image == null || image.getException() != null) {
+					if (image.getException() != null) {
+						log.error("error during loading of image from website", image.getException());
+					}
+					throw new Exception("could not load image");
+				}
+					
+				
+				return image;
+			}
+		}, 3, 2000);
+
+		return image;
 	}
 
 

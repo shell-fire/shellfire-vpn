@@ -345,6 +345,18 @@ public class Util {
 
 		return Util.configDir;
 	}
+	
+	public static String getDownloadDir() {
+		String configDir = getConfigDir();
+		String downloadDir = configDir + "download\\";
+		
+		File downloadDirFile = new File(downloadDir);
+		if (!downloadDirFile.exists()) {
+			downloadDirFile.mkdirs();
+		}
+		
+		return downloadDir;
+	}
 
 	public static String getOpenVpnLocation() {
 		log.debug("getOpenVpnLocation() - start");

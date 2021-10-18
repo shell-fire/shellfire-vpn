@@ -63,6 +63,7 @@ import de.shellfire.vpn.webservice.model.WsGeoPosition;
 import de.shellfire.vpn.webservice.model.WsLoginRequest;
 import de.shellfire.vpn.webservice.model.WsServer;
 import de.shellfire.vpn.webservice.model.WsVpn;
+import javafx.scene.image.Image;
 
 public class WebServiceBroker {
 
@@ -556,7 +557,6 @@ public class WebServiceBroker {
 	 */
 	public String getServerBackgroundImageFilename(int serverId) throws ClientProtocolException, IOException, VpnException {
 		log.debug("getServerBackgroundImageFilename ({}) - start", serverId);
-		// TODO: put serverid in request, check somewhere else how to provide data
 		GetServerBackgroundImageFilenameRequest request = new GetServerBackgroundImageFilenameRequest(serverId);
 
 		Type theType = new TypeToken<Response<ServerBackgroundImageFilenameResponse>>() {}.getType();
@@ -568,7 +568,7 @@ public class WebServiceBroker {
 		log.debug("getServerBackgroundImageFilename () - finished, returning {}", filename);
 		return filename;
 	}
-	
+
 
 	/**
 	 * return String the url of the webpage where premium infos can be found
