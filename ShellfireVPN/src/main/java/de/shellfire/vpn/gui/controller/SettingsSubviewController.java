@@ -7,10 +7,8 @@ package de.shellfire.vpn.gui.controller;
 
 import java.net.URL;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.Optional;
-import java.util.Random;
 import java.util.ResourceBundle;
 
 import org.slf4j.Logger;
@@ -20,32 +18,20 @@ import de.shellfire.vpn.Util;
 import de.shellfire.vpn.VpnProperties;
 import de.shellfire.vpn.client.Client;
 import de.shellfire.vpn.gui.LoginForms;
-import de.shellfire.vpn.gui.model.CountryMap;
 import de.shellfire.vpn.gui.model.ServerListFXModel;
-import de.shellfire.vpn.gui.renderer.StarImageRendererFX;
 import de.shellfire.vpn.i18n.Language;
 import de.shellfire.vpn.i18n.VpnI18N;
-import de.shellfire.vpn.types.Country;
 import de.shellfire.vpn.types.Server;
-import de.shellfire.vpn.types.ServerType;
 import de.shellfire.vpn.types.VpnProtocol;
-import de.shellfire.vpn.webservice.ServerList;
 import de.shellfire.vpn.webservice.Vpn;
 import de.shellfire.vpn.webservice.WebService;
-import de.shellfire.vpn.webservice.model.VpnStar;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
-import javafx.geometry.NodeOrientation;
-import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -53,16 +39,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.input.ContextMenuEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.stage.Stage;
 import javafx.util.Callback;
 
 /**
@@ -104,10 +83,8 @@ public class SettingsSubviewController implements Initializable {
 	private static I18n i18n = VpnI18N.getI18n();
 	public static Vpn currentVpn;
 	private WebService shellfireService;
-	private ServerList serverList;
 	private LoginForms application;
 	private static final Logger log = Util.getLogger(SettingsSubviewController.class.getCanonicalName());
-	private ObservableList<ServerListFXModel> serverListData = FXCollections.observableArrayList();
 	private ShellfireVPNMainFormFxmlController mainFormController;
 	private Image buttonDisconnect = new Image("/buttons/button-disconnect-" + VpnI18N.getLanguage().getKey() + ".gif");
 
@@ -152,10 +129,6 @@ public class SettingsSubviewController implements Initializable {
 	}
 
 	public void initComponents() {
-		this.serverList = this.shellfireService.getServerList();
-		this.serverListData.addAll(initServerTable(this.shellfireService.getServerList().getAll()));
-		// this.serverListTableView.setItems(serverListData);
-		// this.serverListTableView.comp
 	}
 
 	/**
@@ -253,44 +226,6 @@ public class SettingsSubviewController implements Initializable {
 		}
 	}
 
-	private LinkedList<ServerListFXModel> initServerTable(LinkedList<Server> servers) {
-		LinkedList<ServerListFXModel> allModels = new LinkedList<>();
-		for (int i = 0; i < servers.size(); i++) {
-			ServerListFXModel serverModel = new ServerListFXModel();
-			serverModel.setCountry(servers.get(i));
-			serverModel.setName(servers.get(i).getName());
-			serverModel.setServerType(servers.get(i).getServerType().toString());
-			serverModel.setSecurity(servers.get(i).getSecurity());
-			serverModel.setSpeed(servers.get(i).getServerSpeed());
-			allModels.add(serverModel);
-		}
-		return allModels;
-	}
-
-	public Server getRandomFreeServer() {
-		Server[] arrServer = new Server[this.getNumberOfServers()];
-		int i = 0;
-		for (Server server : this.shellfireService.getServerList().getAll()) {
-			if (server.getServerType() == ServerType.Free) {
-				arrServer[i++] = server;
-			}
-		}
-
-		Random generator = new Random((new Date()).getTime());
-		int num = generator.nextInt(i);
-
-		return arrServer[num];
-
-	}
-
-	public int getNumberOfServers() {
-		if (this.shellfireService == null) {
-			return 0;
-		} else {
-			return this.shellfireService.getServerList().getAll().size();
-		}
-	}
-
 	public VpnProtocol getSelectedProtocol() {
 		if (this.WireguardRadioButton.isSelected()) {
 			return VpnProtocol.WireGuard;
@@ -303,21 +238,6 @@ public class SettingsSubviewController implements Initializable {
 		return null;
 	}
 
-	public Server getRandomPremiumServer() {
-		Server[] arrServer = new Server[this.getNumberOfServers()];
-		int i = 0;
-		for (Server server : this.shellfireService.getServerList().getAll()) {
-			if (server.getServerType() == ServerType.Premium) {
-				arrServer[i++] = server;
-			}
-		}
-
-		Random generator = new Random((new Date()).getTime());
-		int num = generator.nextInt(i);
-
-		return arrServer[num];
-
-	}
 
 	public void setApp(LoginForms app) {
 		this.application = app;

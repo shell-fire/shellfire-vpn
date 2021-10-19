@@ -17,6 +17,7 @@ public class Server implements LocatableIcon {
 
 	private int serverId;
 	private Country country;
+	private String city;
 	private String name;
 	private String host;
 	private ServerType serverType;
@@ -38,6 +39,7 @@ public class Server implements LocatableIcon {
 			this.country = Country.Germany;
 		}
 
+		this.city = wss.getCity();
 		this.name = wss.getName();
 		this.host = wss.getHost();
 		this.serverType = Enum.valueOf(ServerType.class, wss.getServertype());
@@ -66,6 +68,12 @@ public class Server implements LocatableIcon {
 
 	public void setCountry(Country country) {
 		this.country = country;
+	}
+	public String getCity() {
+		return this.city;
+	}
+	public void setCity(String city) {
+		this.city = city;
 	}
 
 	public String getName() {

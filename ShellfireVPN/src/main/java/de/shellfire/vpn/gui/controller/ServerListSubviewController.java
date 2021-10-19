@@ -58,17 +58,11 @@ public class ServerListSubviewController implements Initializable {
 	@FXML
 	private TableView<ServerListFXModel> serverListTableView;
 	@FXML
-	private Label selectServerLabel;
-	@FXML
 	private ToggleGroup networkTypeToggleGroup;
 	@FXML
 	private TableColumn<ServerListFXModel, Server> countryColumn;
 	@FXML
 	private TableColumn<ServerListFXModel, String> nameColumn;
-	@FXML
-	private TableColumn<ServerListFXModel, String> serverColumn;
-	@FXML
-	private TableColumn<ServerListFXModel, VpnStar> securityColumn;
 	@FXML
 	private TableColumn<ServerListFXModel, VpnStar> speedColumn;
 
@@ -126,10 +120,6 @@ public class ServerListSubviewController implements Initializable {
 	 */
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
-		this.selectServerLabel.setText(i18n.tr("Select a Server for your connection"));
-		nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
-		serverColumn.setCellValueFactory(cellData -> cellData.getValue().serverTypeProperty());
-		securityColumn.setCellValueFactory(cellData -> cellData.getValue().securityProperty());
 		speedColumn.setCellValueFactory(cellData -> cellData.getValue().speedProperty());
 		countryColumn.setCellValueFactory(cellData -> cellData.getValue().countryProperty());
 		countryColumn.setComparator(new ServerListComparator());
@@ -167,21 +157,19 @@ public class ServerListSubviewController implements Initializable {
 						Country country = item.getCountry();
 						// Attach the imageview to the cell
 						ImageView imageView = new ImageView(CountryMap.getIconFX(country));
-						imageView.setFitHeight(14);
-						imageView.setFitWidth(18);
+						imageView.setFitHeight(35);
+						imageView.setFitWidth(45);
 						setGraphic(imageView);
 						getGraphic().setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
-						setText(VpnI18N.getCountryI18n().getCountryName(country));
+						//setText(VpnI18N.getCountryI18n().getCountryName(country));
 					}
 				}
 			};
 		});
+		
+		nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
 
 		speedColumn.setCellFactory(column -> {
-			return new StarImageRendererFX();
-		});
-
-		securityColumn.setCellFactory(column -> {
 			return new StarImageRendererFX();
 		});
 
@@ -230,12 +218,7 @@ public class ServerListSubviewController implements Initializable {
 	private LinkedList<ServerListFXModel> initServerTable(LinkedList<Server> servers) {
 		LinkedList<ServerListFXModel> allModels = new LinkedList<>();
 		for (int i = 0; i < servers.size(); i++) {
-			ServerListFXModel serverModel = new ServerListFXModel();
-			serverModel.setCountry(servers.get(i));
-			serverModel.setName(servers.get(i).getName());
-			serverModel.setServerType(servers.get(i).getServerType().toString());
-			serverModel.setSecurity(servers.get(i).getSecurity());
-			serverModel.setSpeed(servers.get(i).getServerSpeed());
+			ServerListFXModel serverModel = new ServerListFXModel(servers.get(i));
 			allModels.add(serverModel);
 		}
 		return allModels;

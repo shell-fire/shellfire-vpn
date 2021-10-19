@@ -5,6 +5,7 @@
  */
 package de.shellfire.vpn.gui.model;
 
+import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.types.Server;
 import de.shellfire.vpn.webservice.model.VpnStar;
 import javafx.beans.property.ObjectProperty;
@@ -18,26 +19,14 @@ import javafx.beans.property.StringProperty;
  */
 public class ServerListFXModel {
 	private final StringProperty name;
-	private final StringProperty serverType;
-	private final ObjectProperty<VpnStar> security;
 	private final ObjectProperty<VpnStar> speed;
 	private final ObjectProperty<Server> country;
 
-	// private static I18n i18n = VpnI18N.getI18n();
 
-	// private String[] header = {i18n.tr("Land"), i18n.tr("Name"), i18n.tr("Servertyp"), i18n.tr("Sicherheit"),
-	// i18n.tr("Geschwindigkeit")};
-	/// private ServerList serverList;
-	public ServerListFXModel() {
-		this(null, null, null, null, null);
-	}
-
-	public ServerListFXModel(Object country, String name, String serverType, Object security, Object speed) {
-		this.country = new SimpleObjectProperty(country);
-		this.name = new SimpleStringProperty(name);
-		this.serverType = new SimpleStringProperty(serverType);
-		this.security = new SimpleObjectProperty(security);
-		this.speed = new SimpleObjectProperty(speed);
+	public ServerListFXModel(Server server) {
+		this.country = new SimpleObjectProperty(server);
+		this.name = new SimpleStringProperty("<span class=\"city\">"+server.getCity()+"</span> <span class=\"country\">"+VpnI18N.getCountryI18n().getCountryName(server.getCountry())+"</span><br /><span class=\"servername\">"+server.getName()+"</span>");
+		this.speed = new SimpleObjectProperty(server.getServerSpeed());
 	}
 
 	public Server getCountry() {
@@ -62,30 +51,6 @@ public class ServerListFXModel {
 
 	public StringProperty nameProperty() {
 		return name;
-	}
-
-	public VpnStar getSecurity() {
-		return security.get();
-	}
-
-	public void setSecurity(VpnStar security) {
-		this.security.set(security);
-	}
-
-	public ObjectProperty<VpnStar> securityProperty() {
-		return security;
-	}
-
-	public String getServerType() {
-		return serverType.get();
-	}
-
-	public void setServerType(String serverType) {
-		this.serverType.set(serverType);
-	}
-
-	public StringProperty serverTypeProperty() {
-		return serverType;
 	}
 
 	public VpnStar getSpeed() {
