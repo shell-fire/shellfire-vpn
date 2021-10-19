@@ -191,7 +191,9 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	}
 
 	public void initializeComponents() {
+		log.debug("initializeComponents() - start - before Platform.runlater");
 	    Platform.runLater(() -> {
+	    	log.debug("initializeComponents() - in Platform.runlater");
 	    	// Notice that you manipulate the javaObjects out of the initialize if not it will raise an InvocationTargetException
 	    	
 	    	// Bind visibility of buttons to their manage properties so that they are easilty rendered visible or invisible
@@ -1205,7 +1207,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	 * Prepare controllers so that they load controllers so that controller objects can be accessed.
 	 */
 	public void prepareSubviewControllers() {
-
 		try {
 			// load the serverList pane
 			Pair<Pane, Object> pair = FxUIManager.SwitchSubview("serverList_subview.fxml");

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.web.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.image.*?>
@@ -7,27 +8,17 @@
 
 <AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.ConnectionSubviewController">
    <children>
-      <ImageView fx:id="premiumInfoImageView" fitHeight="46.0" fitWidth="240.0">
-         <image>
-            <Image url="@../buttons/button-premium-infos.gif" />
-         </image>
-      </ImageView>
-      <ImageView fx:id="connectImageView" fitHeight="46.0" fitWidth="200.0">
-         <image>
-            <Image url="@../buttons/button-connect-en.gif" />
-         </image>
-      </ImageView>
       <ImageView fx:id="statusConnectionImageView" fitHeight="435.0" fitWidth="600.0">
          <image>
             <Image url="@../servers/australia-melbourne.jpg" />
          </image>
       </ImageView>
-      <ImageView fx:id="productKeyImageView" fitHeight="46.0" fitWidth="248.0" onContextMenuRequested="#handleProductKeyImageViewContext" onMouseClicked="#handleProductKeyImageViewClicked" onMouseEntered="#handleProductKeyImageViewMouseEntered" onMouseExited="#handleProductKeyImageViewMouseExited" AnchorPane.bottomAnchor="12.0">
+      <Button id="connect-button" fx:id="connectButton" layoutX="14.0" layoutY="378.0" mnemonicParsing="false" onAction="#handleConnectButtonAction" onMouseEntered="#handleConnectButtonEntered" onMouseExited="#handleConnectButtonExited" prefHeight="46.0" prefWidth="200.0" />
+      <ImageView fx:id="connectImageView" fitHeight="46.0" fitWidth="200.0" layoutX="14.0" layoutY="378.0">
          <image>
-            <Image url="@../buttons/button-serial-en.gif" />
+            <Image url="@../buttons/button-connect-en.gif" />
          </image>
       </ImageView>
-      <Button id="connect-button" fx:id="connectButton" mnemonicParsing="false" onAction="#handleConnectButtonAction" onMouseEntered="#handleConnectButtonEntered" onMouseExited="#handleConnectButtonExited" prefHeight="46.0" prefWidth="200.0" AnchorPane.bottomAnchor="11.0" AnchorPane.leftAnchor="14.0" />
-      <Button fx:id="premiumButton" ellipsisString="" mnemonicParsing="false" onAction="#premiumButtonOnAction" onMouseClicked="#premiumButtonClicked" onMouseEntered="#premiumButtonEntered" onMouseExited="#premiumButtonExited" prefHeight="46.0" prefWidth="240.0" AnchorPane.bottomAnchor="11.0" AnchorPane.rightAnchor="17.0" />
+      <WebView fx:id="locationMap" layoutY="440.0" prefHeight="200.0" prefWidth="600.0" />
    </children>
 </AnchorPane>

@@ -216,14 +216,17 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
 						});
 						
-						
+						log.debug("before loaderTaskThread");
 						
 						// TODO: in loaderTask.call(), separate background processing / gui loading etc. from 
 						// needed gui manipulating, which needs to be in the onSucceed method...
 						//loaderTask.call();
 						Thread loaderTaskThread = new Thread(loaderTask);
+						log.debug("before loaderTaskThread.setDaemon(true)");
 						loaderTaskThread.setDaemon(true);
+						log.debug("before loaderTaskThread.start()");
 						loaderTaskThread.start();
+						log.debug("after loaderTaskThread.start()");
 					}
 
 				} catch (Exception e) {

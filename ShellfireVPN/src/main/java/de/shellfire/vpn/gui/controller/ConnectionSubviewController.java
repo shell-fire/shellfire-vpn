@@ -35,6 +35,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 
 /**
  * FXML Controller class
@@ -50,13 +52,10 @@ public class ConnectionSubviewController implements Initializable {
 	@FXML
 	private ImageView connectImageView;
 	@FXML
-	private ImageView productKeyImageView;
-	@FXML
-	private ImageView premiumInfoImageView;
-	@FXML
-	private Button premiumButton;
-	@FXML
 	private Button connectButton;
+	@FXML
+	private WebView locationMap;
+	
 	private LoginForms application;
 	private static final Logger log = Util.getLogger(ShellfireVPNMainFormFxmlController.class.getCanonicalName());
 	private static I18n i18n = VpnI18N.getI18n();
@@ -83,14 +82,6 @@ public class ConnectionSubviewController implements Initializable {
 		return connectImageView;
 	}
 
-	public ImageView getProductKeyImageView() {
-		return productKeyImageView;
-	}
-
-	public ImageView getPremiumInfoImageView() {
-		return premiumInfoImageView;
-	}
-
 	public void connectButtonDisable(boolean disable) {
 		this.connectButton.setDisable(disable);
 	}
@@ -113,16 +104,17 @@ public class ConnectionSubviewController implements Initializable {
 			
 			this.connectButton.setGraphic(connectImageView);
 			this.connectButton.setPadding(Insets.EMPTY);
-			this.premiumButton.setGraphic(premiumInfoImageView);
-			this.premiumButton.setPadding(Insets.EMPTY);
 			
 			// makes product key to be disable when disable is set to true
-			this.productKeyImageView.managedProperty().bind(this.productKeyImageView.visibleProperty());
-			this.premiumInfoImageView.managedProperty().bind(this.premiumInfoImageView.visibleProperty());
 			this.connectImageView.managedProperty().bind(this.connectImageView.visibleProperty());
-			this.productKeyImageView.setVisible(false);
+			
+			 WebEngine engine = locationMap.getEngine();
+			 // engine.load("/map/map.html");
+			 engine.load(getClass().getResource("map.html").toString());
+			 // engine.executeScript("document.goToLocation(\"49.406841, 11.167721\")");
+			    
+			    
 			// this.premiumInfoImageView.setVisible(false);
-			this.premiumButton.setVisible(false);
 			log.debug("After initialization of images");
 		}
 		this.initialized = true;
@@ -163,17 +155,11 @@ public class ConnectionSubviewController implements Initializable {
 			// this.premiumInfoImageView.setVisible(false);
 		} else {
 			// this.productKeyImageView.setVisible(false);
-			this.premiumInfoImageView.setVisible(true);
-			this.premiumButton.setVisible(true);
 		}
 	}
 
 	public String displayCreationMessage(String msg) {
 		return ("ConnectionSubviewController: " + msg);
-	}
-
-	public void productKeyDisable(boolean value) {
-		this.productKeyImageView.setDisable(value);
 	}
 
 	@FXML
