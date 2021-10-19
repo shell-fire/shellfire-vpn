@@ -5,10 +5,8 @@
  */
 package de.shellfire.vpn.gui.controller;
 
-import java.awt.Dimension;
 import java.awt.MenuItem;
 import java.awt.PopupMenu;
-import java.awt.Toolkit;
 import java.awt.TrayIcon;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -24,6 +22,9 @@ import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.types.Server;
 import de.shellfire.vpn.webservice.WebService;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -73,6 +74,8 @@ public class ConnectionSubviewController implements Initializable {
 	private Image imageStatusUnencrypted = new Image("/icons/status-unencrypted-width736.gif");
 	private Image imageButtonConnect = new Image("/buttons/button-connect-" + langKey + ".gif");
 	private boolean initialized;
+	private WebEngine webEngine;
+	protected boolean mapLoaded = false;
 
 	public ImageView getStatusConnectionImageView() {
 		return statusConnectionImageView;
@@ -108,25 +111,58 @@ public class ConnectionSubviewController implements Initializable {
 			// makes product key to be disable when disable is set to true
 			this.connectImageView.managedProperty().bind(this.connectImageView.visibleProperty());
 			
-			 WebEngine engine = locationMap.getEngine();
-			 // engine.load("/map/map.html");
-			 engine.load(getClass().getResource("map.html").toString());
-			 // engine.executeScript("document.goToLocation(\"49.406841, 11.167721\")");
-			    
+			 webEngine = locationMap.getEngine();
+			 webEngine.setJavaScriptEnabled(true);
+			 webEngine.load(getClass().getResource("map.html").toString());
+			 webEngine.getLoadWorker().stateProperty().addListener(new ChangeListener<Worker.State>() {
+				    @Override
+				    public void changed(ObservableValue<? extends Worker.State> ov, Worker.State t, Worker.State t1) {
+				        if (t1 == Worker.State.SUCCEEDED) {
+				            mapLoaded  = true;        
+				            log.debug("Map has now been loaded - will process changes from now on");
+				        }
+				    }
+				});
 			    
 			// this.premiumInfoImageView.setVisible(false);
 			log.debug("After initialization of images");
 		}
 		this.initialized = true;
 	}
+	
+	public void setMapConnected() {
+		if (mapLoaded) {
+			Platform.runLater(() -> {
+				webEngine.executeScript("document.setConnected();");
+			});
+		}
+	}
 
+	public void setMapDisconnected() {
+		if (mapLoaded) {
+			Platform.runLater(() -> {
+				webEngine.executeScript("document.setDisconnected();");
+			});
+
+		}
+	}
+
+	public void setLocation(double lng, double lat) {
+		if (mapLoaded) {
+			Platform.runLater(() -> {
+				webEngine.executeScript("document.setPosition("+lng+", " + lat + ");");
+			});
+
+		}
+	}
+	
 	public void updateComponents(boolean connected) {
 		// TODO: Here we can later implement design switches red/green for disconnected/connected...
 		if (connected) {
-			// this.statusConnectionImageView.setImage(imageStatusEncrypted);
+			this.setMapConnected();
 			this.connectImageView.setImage(imageButtonDisconnect);
 		} else {
-			// this.statusConnectionImageView.setImage(imageStatusUnencrypted);
+			this.setMapDisconnected();
 			this.connectImageView.setImage(imageButtonConnect);
 		}
 	}
@@ -137,6 +173,7 @@ public class ConnectionSubviewController implements Initializable {
 		Image image;
 		try {
 			image = ServerImageBackgroundManager.getImage(server.getServerId());
+			setLocation(server.getLatitude(), server.getLongitude());
 			this.statusConnectionImageView.setImage(image);
 			log.debug("background image updated");
 		} catch (Exception e) {
