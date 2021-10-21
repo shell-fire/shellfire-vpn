@@ -31,13 +31,12 @@ import de.shellfire.vpn.webservice.model.VpnStar;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
-import javafx.collections.ListChangeListener.Change;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.NodeOrientation;
-import javafx.scene.control.Label;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -45,6 +44,12 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Region;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 
 /**
  * FXML Controller class
@@ -62,7 +67,7 @@ public class ServerListSubviewController implements Initializable {
 	@FXML
 	private TableColumn<ServerListFXModel, Server> countryColumn;
 	@FXML
-	private TableColumn<ServerListFXModel, String> nameColumn;
+	private TableColumn<ServerListFXModel, Server> nameColumn;
 	@FXML
 	private TableColumn<ServerListFXModel, VpnStar> speedColumn;
 
@@ -113,6 +118,7 @@ public class ServerListSubviewController implements Initializable {
 		// this.serverListTableView.setItems(serverListData);
 		// this.serverListTableView.comp
 		selectServerOfCurrentVpn();
+		
 	}
 
 	/**
@@ -135,30 +141,13 @@ public class ServerListSubviewController implements Initializable {
 							setShellfireService(WebService.getInstance());
 						}
 						
-						Vpn vpn = shellfireService.getVpn();
-						if (vpn == null) {
-							log.debug("vpn retrieved from service is null, cannot check if current server to log details.");
-						} else {
-							Server server = vpn.getServer();
-							if (server == null) {
-								log.debug("server retrieved from vpn is null, cannot check if current server to log details");
-								log.debug("vpn details: {}", vpn.toString());
-							} else {
-								if (server.equals(item)) {
-									log.debug("****The current VPN has server " + item + " and id " + shellfireService.getVpn().getVpnId()
-											+ " and the type is " + shellfireService.getVpn().getAccountType());
-								} else {
-									// log.debug("server not equal to item");
-								}
-							}
-						}
-						
 						// get the corresponding country of this server
 						Country country = item.getCountry();
 						// Attach the imageview to the cell
 						ImageView imageView = new ImageView(CountryMap.getIconFX(country));
-						imageView.setFitHeight(35);
-						imageView.setFitWidth(45);
+						
+						imageView.setFitHeight(50);
+						imageView.setFitWidth(60);
 						setGraphic(imageView);
 						getGraphic().setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
 						//setText(VpnI18N.getCountryI18n().getCountryName(country));
@@ -167,8 +156,61 @@ public class ServerListSubviewController implements Initializable {
 			};
 		});
 		
-		nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+		nameColumn.setCellValueFactory(cellData -> cellData.getValue().countryProperty());
 
+		nameColumn.setCellFactory(column -> {
+            return new TableCell<ServerListFXModel, Server>() {
+                @Override
+                protected void updateItem(Server item, boolean empty) {
+                    super.updateItem(item, empty);
+                    
+                    if (empty || item == null) {
+                        setGraphic(null);
+                    } else {
+                    	boolean isSelected = getSelectedServer().equals(item);
+                        updateItemSelection(item, isSelected);
+                    }
+                }
+                
+                private void updateItemSelection(Server item, boolean selected) {
+                    // update for HBox for non-empty cells based on selection
+                    // Generate Textflow with variable length
+                    TextFlow textFlow = new TextFlow();
+                    textFlow.setPrefHeight(Region.USE_COMPUTED_SIZE);
+                    
+                    Text text1 = new Text(item.getCity() + " ");
+                    text1.setFont(Font.font("Verdana", FontWeight.MEDIUM, 15));
+                    
+                    Text text2 = new Text(VpnI18N.getCountryI18n().getCountryName(item.getCountry()));
+                    text2.setFont(Font.font("Verdana", FontWeight.MEDIUM, 15));
+                    
+                    Text text3 = new Text("\n" + item.getName());
+                    text3.setFont(Font.font("Verdana", FontWeight.MEDIUM, 12));
+                    
+                    if (selected) {
+                    	text1.setFill(Color.WHITE);
+                    	text2.setFill(Color.WHITE);
+                    	text3.setFill(Color.WHITE);
+                    } else {
+                        text1.setFill(Color.web("#666f78"));
+                        text2.setFill(Color.web("#a6afb7"));
+                        text3.setFill(Color.web("#a6afb7"));
+                    }
+                    
+                    textFlow.getChildren().add(text1);
+                    textFlow.getChildren().add(text2);
+                    textFlow.getChildren().add(text3);
+                    
+                    setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+                    setGraphic(textFlow);
+                    setPrefHeight(20); 
+                }
+                
+                
+            };
+        });
+
+		
 		speedColumn.setCellFactory(column -> {
 			return new StarImageRendererFX();
 		});
@@ -192,9 +234,11 @@ public class ServerListSubviewController implements Initializable {
 					  mainFormController.setSelectedServer(curChange.getCountry());
 				  }
 			  }
+			  
+			  serverListTableView.refresh();
 		  }
 		});
-
+        
 	}
 
 	public void selectServerOfCurrentVpn() {
@@ -263,14 +307,11 @@ public class ServerListSubviewController implements Initializable {
 	}
 
 	public Server getSelectedServer() {
-		log.debug("getSelectedServer: About to test server model to load");
 		ServerListFXModel serverModel = this.serverListTableView.getSelectionModel().getSelectedItem();
 		if (null == serverModel) {
-			log.debug("Return default server 18");
 			return this.shellfireService.getServerList().getServer(18);
 		} else {
 			// The getCountry method of ServerListFXModel returns the server object
-			log.debug("getSelectedServer() - returning: " + serverModel.getCountry());
 			return serverModel.getCountry();
 		}
 	}

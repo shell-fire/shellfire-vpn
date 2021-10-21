@@ -157,7 +157,6 @@ public class ConnectionSubviewController implements Initializable {
 	}
 	
 	public void updateComponents(boolean connected) {
-		// TODO: Here we can later implement design switches red/green for disconnected/connected...
 		if (connected) {
 			this.setMapConnected();
 			this.connectImageView.setImage(imageButtonDisconnect);

@@ -874,6 +874,7 @@ public class Util {
 	}
 
 	public static javafx.scene.image.Image getImageIconFX(String resourceName) {
+		log.debug("getImageIconFX: " + resourceName);
 		javafx.scene.image.Image imageIcon = imageIconCacheMap.get(resourceName);
 		if (imageIcon != null) {
 			return imageIcon;

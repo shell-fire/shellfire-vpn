@@ -58,7 +58,6 @@ import de.shellfire.vpn.webservice.WebService;
 import de.shellfire.vpn.webservice.model.TrayMessage;
 import javafx.application.Platform;
 import javafx.collections.ListChangeListener;
-import javafx.collections.ListChangeListener.Change;
 import javafx.concurrent.Task;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.EventHandler;
@@ -200,7 +199,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	    	this.connectionSubviewController.initPremium(isFreeAccount());
 	    	this.connectionSubviewController.setApp(this.application);
 	    	this.connectionSubviewController.updateComponents(false);
-	    	this.updateOnlineHost();
+	    	
 	    });
 	}
 
@@ -249,8 +248,13 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
 		this.initShortCuts();
 		this.initConnection();
+		this.initServer();
 		this.application.getStage().resizableProperty().setValue(Boolean.FALSE);
 		this.application.getStage().show();
+	}
+
+	private void initServer() {
+		setSelectedServer(shellfireService.getVpn().getServer());
 	}
 
 	private final static HashMap<String, Image> mainIconMap = new HashMap<String, Image>() {
