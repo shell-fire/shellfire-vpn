@@ -115,7 +115,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	private boolean connectionStatus;
 	private boolean disconnectDetectExpected;
 
-	private final LogViewerFxmlController logViewer;
+	
 	static SidePane currentSidePane = SidePane.CONNECTION;
 
 	@FXML
@@ -159,8 +159,8 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	private Image imageIconFxButtonServerListActive = Util.getImageIconFX("/buttons/button-serverlist-active.png");
 	private Image imageIconFxButtonConnectIdle = Util.getImageIconFX("/buttons/button-connect-idle.png");
 
-	public ShellfireVPNMainFormFxmlController() throws IOException {
-		this.logViewer = LogViewerFxmlController.getInstance();
+	public ShellfireVPNMainFormFxmlController() {
+
 		log.debug("No argumenent controller of shellfire has been called");
 	}
 
@@ -990,7 +990,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		log.debug("Charter " + c + " pressed");
 		this.typedStrings.append(c);
 		if (typedStrings.toString().toLowerCase().endsWith("showconsole")) {
-			this.initConsole();
+			
 		}
 	}
 
@@ -1286,17 +1286,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	private void showTrayMessageWithoutCallback(String header, String content) {
 		log.debug("showTrayMessageWithoutCallback(String header=" + header + ", String content=" + content + ")");
 		trayIcon.displayMessage(header, content, MessageType.INFO);
-	}
-
-	private void initConsole() {
-		log.debug("showing logviewer...");
-		try {
-			log.debug("setting logViewer to visible");
-			logViewer.getInstanceStage().show();
-			log.debug("Logviewer has been shown");
-		} catch (Exception e) {
-			log.error("Error occured while displaying logviewer", e);
-		}
 	}
 
 	@FXML

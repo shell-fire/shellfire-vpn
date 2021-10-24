@@ -5,6 +5,7 @@
 */
 package de.shellfire.vpn.gui.controller;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -18,20 +19,18 @@ import de.shellfire.vpn.Util;
 import de.shellfire.vpn.VpnProperties;
 import de.shellfire.vpn.client.Client;
 import de.shellfire.vpn.gui.LoginForms;
-import de.shellfire.vpn.gui.model.ServerListFXModel;
 import de.shellfire.vpn.i18n.Language;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.types.Server;
 import de.shellfire.vpn.types.VpnProtocol;
 import de.shellfire.vpn.webservice.Vpn;
 import de.shellfire.vpn.webservice.WebService;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -51,6 +50,7 @@ import javafx.util.Callback;
  */
 public class SettingsSubviewController implements Initializable {
 
+	private LogViewerFxmlController logViewer;
 	@FXML
 	private CheckBox saveLoginData;
 	@FXML
@@ -76,6 +76,8 @@ public class SettingsSubviewController implements Initializable {
 	@FXML
 	private RadioButton TCPRadioButton;
 	@FXML
+	private Button showLogButton;
+	@FXML
 	private ToggleGroup networkTypeToggleGroup;
 	
 	private Language currentLanguage;
@@ -88,27 +90,30 @@ public class SettingsSubviewController implements Initializable {
 	private ShellfireVPNMainFormFxmlController mainFormController;
 	private Image buttonDisconnect = new Image("/buttons/button-disconnect-" + VpnI18N.getLanguage().getKey() + ".gif");
 
-	/**
-	 * Constructor used to initialize serverListTable data from Webservice
-	 *
-	 * @param shellfireService
-	 *            used to get the serverList data
-	 */
-	public SettingsSubviewController(WebService shellfireService) {
-		this.shellfireService = shellfireService;
-		currentVpn = shellfireService.getVpn();
+
+	public SettingsSubviewController() throws IOException  {
+		this.logViewer = LogViewerFxmlController.getInstance();
+
 		initComponents();
 	}
 
-	/**
-	 * No argument constructor used by javafx framework
-	 *
-	 */
-	public SettingsSubviewController() {
+
+	private void initConsole() {
+		log.debug("showing logviewer...");
+		try {
+			log.debug("setting logViewer to visible");
+			logViewer.getInstanceStage().show();
+			logViewer.enable();
+			log.debug("Logviewer has been shown");
+		} catch (Exception e) {
+			log.error("Error occured while displaying logviewer", e);
+		}
 	}
+
 
 	public void setShellfireService(WebService shellfireService) {
 		this.shellfireService = shellfireService;
+		currentVpn = shellfireService.getVpn();
 	}
 
 
@@ -137,6 +142,7 @@ public class SettingsSubviewController implements Initializable {
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		currentLanguage = VpnI18N.getLanguage();
+		this.showLogButton.setText(i18n.tr("Show Log Window"));
 		this.TCPRadioButton.setText(i18n.tr("OpenVPN TCP (works with secure firewalls and proxies.)"));
 		this.UDPRadioButton.setText(i18n.tr("OpenVPN UDP (fast)"));
 		this.WireguardRadioButton.setText(i18n.tr("Wireguard (fastest)"));
@@ -177,6 +183,11 @@ public class SettingsSubviewController implements Initializable {
 	@FXML
 	private void handleLanguageComboBox(ActionEvent event) {
 		save();
+	}
+	
+	@FXML
+	private void onClickShowLogButton(ActionEvent event) {
+		this.initConsole();
 	}
 
 	@FXML

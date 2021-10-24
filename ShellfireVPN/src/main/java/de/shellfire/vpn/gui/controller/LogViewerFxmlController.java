@@ -8,6 +8,7 @@ package de.shellfire.vpn.gui.controller;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -62,6 +63,7 @@ public class LogViewerFxmlController implements Initializable {
 	private TextArea clientLogTextArea;
 	@FXML
 	private TextArea serviceLogTextArea;
+	private boolean enabled;
 
 	private static I18n i18n = VpnI18N.getI18n();
 	// The Stage for the logViewer
@@ -83,11 +85,13 @@ public class LogViewerFxmlController implements Initializable {
 			if (line != null) {
 				Platform.runLater(() -> {
 					// TODO: This caused alwyas a long delay on startup, so commented out for now.. but logviewer is probably broken for now...
-					//this.textArea.appendText(line + "\n");
-					//this.textArea.end();
+					this.textArea.appendText(line + "\n");
+					this.textArea.end();
 				});
+				
 			}
 		}
+			
 	}
 
 	/**
@@ -96,19 +100,6 @@ public class LogViewerFxmlController implements Initializable {
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 
-		LogListener clientListener = new LogListener(clientLogTextArea);
-		String clientLog = Util.getLogFilePath(UserType.Client);
-		log.debug("Client is " + UserType.Client);
-		File clientLogFile = new File(clientLog);
-		Tailer.create(clientLogFile, clientListener);
-		// making the textareas non-editable
-		clientLogTextArea.setEditable(false);
-		serviceLogTextArea.setEditable(false);
-
-		LogListener serviceListener = new LogListener(serviceLogTextArea);
-		String serviceLog = Util.getLogFilePath(UserType.Service);
-		File serviceLogFile = new File(serviceLog);
-		Tailer.create(serviceLogFile, serviceListener);
 	}
 
 	@FXML
@@ -224,5 +215,43 @@ public class LogViewerFxmlController implements Initializable {
 		}
 		log.debug("returning instance");
 		return instance;
+	}
+
+	public void enable() throws FileNotFoundException, IOException {
+		if (enabled) {
+			return;
+		}
+		LogListener clientListener = new LogListener(clientLogTextArea);
+		
+		
+		String clientLog = Util.getLogFilePath(UserType.Client);
+		
+		// Initial load of file directly - without Tailer, because this was causing long delays
+		clientListener.handle(Util.fileToString(clientLog));
+		File clientLogFile = new File(clientLog);
+		
+		// then create tailer to only ready from the end, e.g. when new content is added
+		Tailer clientTailer = new Tailer(clientLogFile, clientListener, 1000, true);
+	    Thread clientThread = new Thread(clientTailer);
+	    clientThread.setDaemon(true); // optional
+	    clientThread.start();
+
+	    
+	    // same for service listener....
+		LogListener serviceListener = new LogListener(serviceLogTextArea);
+		String serviceLog = Util.getLogFilePath(UserType.Service);
+		serviceListener.handle(Util.fileToString(serviceLog));
+		File serviceLogFile = new File(serviceLog);
+		Tailer serviceTailer = new Tailer(serviceLogFile, serviceListener, 1000, true);
+	    Thread serviceThread = new Thread(serviceTailer);
+	    serviceThread.setDaemon(true);
+	    serviceThread.start();
+
+		
+		// making the textareas non-editable
+		clientLogTextArea.setEditable(false);
+		serviceLogTextArea.setEditable(false);
+		    
+		enabled = true;
 	}
 }
