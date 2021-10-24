@@ -19,7 +19,7 @@ import de.shellfire.vpn.Util;
 import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.gui.model.CountryMap;
 import de.shellfire.vpn.gui.model.ServerListFXModel;
-import de.shellfire.vpn.gui.renderer.StarImageRendererFX;
+import de.shellfire.vpn.gui.renderer.CrownImageRendererFX;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.types.Country;
 import de.shellfire.vpn.types.Server;
@@ -27,7 +27,6 @@ import de.shellfire.vpn.types.ServerType;
 import de.shellfire.vpn.webservice.ServerList;
 import de.shellfire.vpn.webservice.Vpn;
 import de.shellfire.vpn.webservice.WebService;
-import de.shellfire.vpn.webservice.model.VpnStar;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -35,6 +34,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.geometry.NodeOrientation;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.TableCell;
@@ -69,7 +69,7 @@ public class ServerListSubviewController implements Initializable {
 	@FXML
 	private TableColumn<ServerListFXModel, Server> nameColumn;
 	@FXML
-	private TableColumn<ServerListFXModel, VpnStar> speedColumn;
+	private TableColumn<ServerListFXModel, Server> speedColumn;
 
 	private static I18n i18n = VpnI18N.getI18n();
 	public static Vpn currentVpn;
@@ -99,6 +99,8 @@ public class ServerListSubviewController implements Initializable {
 	 */
 	public ServerListSubviewController() {
 	}
+	
+	
 
 	public void setShellfireService(WebService shellfireService) {
 		this.shellfireService = shellfireService;
@@ -126,9 +128,10 @@ public class ServerListSubviewController implements Initializable {
 	 */
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
-		speedColumn.setCellValueFactory(cellData -> cellData.getValue().speedProperty());
+		speedColumn.setCellValueFactory(cellData -> cellData.getValue().countryProperty());
 		countryColumn.setCellValueFactory(cellData -> cellData.getValue().countryProperty());
 		countryColumn.setComparator(new ServerListComparator());
+		countryColumn.setStyle( "-fx-alignment: CENTER;");
 		countryColumn.setCellFactory(column -> {
 			// Set up the Table
 			return new TableCell<ServerListFXModel, Server>() {
@@ -147,17 +150,19 @@ public class ServerListSubviewController implements Initializable {
 						ImageView imageView = new ImageView(CountryMap.getIconFX(country));
 						
 						imageView.setFitHeight(50);
-						imageView.setFitWidth(60);
+						imageView.setFitWidth(53);
+						imageView.setPreserveRatio(false);
+						
 						setGraphic(imageView);
 						getGraphic().setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
-						//setText(VpnI18N.getCountryI18n().getCountryName(country));
+
 					}
 				}
 			};
 		});
 		
 		nameColumn.setCellValueFactory(cellData -> cellData.getValue().countryProperty());
-
+		nameColumn.setStyle( "-fx-alignment: CENTER;");
 		nameColumn.setCellFactory(column -> {
             return new TableCell<ServerListFXModel, Server>() {
                 @Override
@@ -179,13 +184,13 @@ public class ServerListSubviewController implements Initializable {
                     textFlow.setPrefHeight(Region.USE_COMPUTED_SIZE);
                     
                     Text text1 = new Text(item.getCity() + " ");
-                    text1.setFont(Font.font("Verdana", FontWeight.MEDIUM, 15));
+                    text1.setFont(Font.font("Verdana", FontWeight.MEDIUM, 14));
                     
                     Text text2 = new Text(VpnI18N.getCountryI18n().getCountryName(item.getCountry()));
-                    text2.setFont(Font.font("Verdana", FontWeight.MEDIUM, 15));
+                    text2.setFont(Font.font("Verdana", FontWeight.MEDIUM, 14));
                     
                     Text text3 = new Text("\n" + item.getName());
-                    text3.setFont(Font.font("Verdana", FontWeight.MEDIUM, 12));
+                    text3.setFont(Font.font("Verdana", FontWeight.MEDIUM, 11));
                     
                     if (selected) {
                     	text1.setFill(Color.WHITE);
@@ -200,19 +205,21 @@ public class ServerListSubviewController implements Initializable {
                     textFlow.getChildren().add(text1);
                     textFlow.getChildren().add(text2);
                     textFlow.getChildren().add(text3);
-                    
+                    textFlow.setPrefHeight(30);
+                    textFlow.setPadding(new Insets(5, 0, 0, 0));
+                    textFlow.setStyle("-fx-text-alignment: left;");
                     setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
                     setGraphic(textFlow);
-                    setPrefHeight(20); 
+
                 }
                 
                 
             };
         });
 
-		
+		speedColumn.setStyle( "-fx-alignment: baseline-right;");
 		speedColumn.setCellFactory(column -> {
-			return new StarImageRendererFX();
+			return new CrownImageRendererFX(this);
 		});
 
 		// Wrap the FilteredList in a SortedList.
@@ -221,6 +228,7 @@ public class ServerListSubviewController implements Initializable {
 		sortedData.comparatorProperty().bind(serverListTableView.comparatorProperty());
 		// Add sorted (and filtered) data to the table.
 		serverListTableView.setItems(sortedData);
+		serverListTableView.getStyleClass().add("noheader");
 		
 		ObservableList<ServerListFXModel> selectedItems = serverListTableView.getSelectionModel().getSelectedItems();
 

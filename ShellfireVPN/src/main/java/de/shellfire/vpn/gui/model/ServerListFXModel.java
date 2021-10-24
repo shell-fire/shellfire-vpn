@@ -7,6 +7,7 @@ package de.shellfire.vpn.gui.model;
 
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.types.Server;
+import de.shellfire.vpn.types.ServerType;
 import de.shellfire.vpn.webservice.model.VpnStar;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
@@ -19,14 +20,14 @@ import javafx.beans.property.StringProperty;
  */
 public class ServerListFXModel {
 	private final StringProperty name;
-	private final ObjectProperty<VpnStar> speed;
+	private final ObjectProperty<ServerType> serverType;
 	private final ObjectProperty<Server> country;
 
 
 	public ServerListFXModel(Server server) {
 		this.country = new SimpleObjectProperty(server);
 		this.name = new SimpleStringProperty("<span class=\"city\">"+server.getCity()+"</span> <span class=\"country\">"+VpnI18N.getCountryI18n().getCountryName(server.getCountry())+"</span><br /><span class=\"servername\">"+server.getName()+"</span>");
-		this.speed = new SimpleObjectProperty(server.getServerSpeed());
+		this.serverType = new SimpleObjectProperty(server.getServerType());
 	}
 
 	public Server getCountry() {
@@ -53,16 +54,16 @@ public class ServerListFXModel {
 		return name;
 	}
 
-	public VpnStar getSpeed() {
-		return speed.get();
+	public ServerType getServerType() {
+		return serverType.get();
 	}
 
-	public void setSpeed(VpnStar speed) {
-		this.speed.set(speed);
+	public void setSpeed(ServerType serverType) {
+		this.serverType.set(serverType);
 	}
 
-	public ObjectProperty<VpnStar> speedProperty() {
-		return speed;
+	public ObjectProperty<ServerType> serverTypeProperty() {
+		return serverType;
 	}
 
 }

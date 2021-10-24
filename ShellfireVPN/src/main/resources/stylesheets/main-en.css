@@ -1,9 +1,44 @@
-#connect-button {
-    -fx-padding: 1;
-    -fx-background-image: url("../buttons/button-connect-en.gif");
+/* Server List/Table Styling  */
+
+/* Disable alternating tablerow-background colors */
+.root {
+    -fx-control-inner-background-alt: -fx-control-inner-background;
 }
 
-#disconnect-button {
-    -fx-padding: 1;
-    -fx-background-image: url("../buttons/button-disconnect-en.gif");
+/* Remove all grid-lines in table */
+.table-view {
+  -fx-table-cell-border-color: transparent;
+} 
+
+/* Also for selected rows */
+.table-row-cell{ 
+    -fx-table-cell-border-color: transparent;
+}
+
+
+/* Set blue background color for selected rows */
+.table-row-cell:selected {
+ -fx-background-color: #4581f2; 
+}
+
+/* Get horizontal gridlines back in light grey */
+.table-view .table-row-cell {
+  -fx-border-width: 1;
+  -fx-border-color: #ededed
+}
+
+ /* Hide table header */
+ .noheader .column-header-background {
+    -fx-max-height: 0;
+    -fx-pref-height: 0;
+    -fx-min-height: 0;
+}
+
+/* Remove blue "focus" border around the table */
+.table-view:focused {
+  -fx-background-color: transparent; 
+  -fx-background-insets: -1.4, 0, 1;
+  -fx-background-radius: 1.4, 0, 0;
+  /*....*/
+  -fx-padding: 1; /* 0.083333em; */
 }
