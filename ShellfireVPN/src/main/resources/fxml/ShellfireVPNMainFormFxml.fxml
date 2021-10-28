@@ -16,15 +16,15 @@
          <children>
             <AnchorPane fx:id="menuPaneStatus" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#onMenuPaneStatusClicked" onMouseEntered="#onMenuPaneStatusMouseEntered" onMouseExited="#onMenuPaneStatusMouseExited" prefHeight="68.0" prefWidth="70.0" style="-fx-background-color: black;">
                <children>
+                  <Label fx:id="menuLabelStatus" alignment="CENTER" layoutY="40.0" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="17.0" prefWidth="70.0" text="Status" textAlignment="CENTER" textFill="#4581f8" AnchorPane.bottomAnchor="2.0">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font></Label>
                   <ImageView fx:id="menuImageStatus" blendMode="LIGHTEN" fitHeight="53.0" fitWidth="48.0" layoutY="7.0" preserveRatio="true" style="--fx-border-color: yellow;" x="11.0">
                      <image>
                         <Image url="@../menu/status_selected.png" />
                      </image>
                   </ImageView>
-                  <Label fx:id="menuLabelStatus" alignment="CENTER" layoutY="40.0" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="17.0" prefWidth="70.0" text="Status" textAlignment="CENTER" textFill="#4581f8" AnchorPane.bottomAnchor="2.0">
-                     <font>
-                        <Font name="System Bold" size="12.0" />
-                     </font></Label>
                </children>
             </AnchorPane>
             <AnchorPane fx:id="serverListPane" layoutX="70.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#onMenuPaneServerListClicked" onMouseEntered="#onMenuPaneServerListMouseEntered" onMouseExited="#onMenuPaneServerListMouseExited" prefHeight="68.0" prefWidth="70.0" style="-fx-background-color: black;">
@@ -62,7 +62,7 @@
                         <Font name="System Bold" size="12.0" />
                      </font>
                   </Label>
-                  <ImageView fx:id="menuImageSettings" blendMode="LIGHTEN" fitHeight="41.0" fitWidth="39.0" layoutX="22.0" layoutY="8.0" preserveRatio="true" AnchorPane.leftAnchor="22.0" AnchorPane.rightAnchor="14.0">
+                  <ImageView fx:id="menuImageSettings" blendMode="LIGHTEN" fitHeight="41.0" fitWidth="39.0" layoutX="15.0" layoutY="8.0" preserveRatio="true">
                      <image>
                         <Image url="@../menu/settings.png" />
                      </image>
@@ -99,7 +99,7 @@
             </AnchorPane>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="contentAnchorPane" prefHeight="575.0" prefWidth="420.0" style="-fx-background-color: rgb(240,240,240);">
+      <AnchorPane fx:id="contentAnchorPane" prefHeight="640.0" prefWidth="420.0" style="-fx-background-color: rgb(240,240,240);">
          <children>
             <Pane fx:id="contentDetailsPane" prefHeight="640.0" prefWidth="420.0" style="-fx-background-color: rgb(240,240,240);">
                <children>

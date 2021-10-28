@@ -65,6 +65,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ContextMenuEvent;
@@ -72,6 +73,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -99,6 +102,8 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	private AppScreenControllerAbout appScreenControllerAbout;
 	private AppScreenControllerHelp appScreenControllerHelp;
 	
+	private Color colorMenuBlue = Color.web("#4581f8");
+	private Color colorMenuGrey = Color.web("#757575");
 	
 	private Date connectedSince;
 	private java.awt.Image iconConnected = Util.getImageIcon("/icons/sfvpn2-connected-big.png").getImage();
@@ -114,7 +119,19 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
 	
 	static AppScreen currentAppScreen = AppScreen.STATUS;
-
+	@FXML
+	private Label menuLabelStatus;
+	@FXML
+	private Label menuLabelServerList;
+	@FXML
+	private Label menuLabelPremium;
+	@FXML
+	private Label menuLabelSettings;
+	@FXML
+	private Label menuLabelAbout;
+	@FXML
+	private Label menuLabelHelp;
+	
 	@FXML
 	private Pane leftMenuPane;
 	@FXML
@@ -158,6 +175,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
 	@FXML
 	private HashMap<AppScreen, ImageView> menuImageViewMap;
+	private HashMap<AppScreen, Label> menuLabelMap;
 	private HashMap<AppScreen, AppScreenController> menuControllerMap;
 
 	public ShellfireVPNMainFormFxmlController() {
@@ -193,6 +211,14 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		menuImageViewMap.put(AppScreen.SETTINGS, menuImageSettings);
 		menuImageViewMap.put(AppScreen.ABOUT, menuImageAbout);
 		menuImageViewMap.put(AppScreen.HELP, menuImageHelp);
+		
+		menuLabelMap = new HashMap<AppScreen, Label>();
+		menuLabelMap.put(AppScreen.STATUS, menuLabelStatus);
+		menuLabelMap.put(AppScreen.SERVERLIST, menuLabelServerList);
+		menuLabelMap.put(AppScreen.PREMIUM, menuLabelPremium);
+		menuLabelMap.put(AppScreen.SETTINGS, menuLabelSettings);
+		menuLabelMap.put(AppScreen.ABOUT, menuLabelAbout);
+		menuLabelMap.put(AppScreen.HELP, menuLabelHelp);
 		
 		menuImageStatusMap = new HashMap<AppScreen, Map<MenuStatus, Image>>();
 		
@@ -361,6 +387,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		application.getStage().getScene().setCursor(Cursor.DEFAULT);
 		if (!currentAppScreen.equals(appScreen)) {
 			this.menuImageViewMap.get(appScreen).setImage(menuImageStatusMap.get(appScreen).get(MenuStatus.UNSELECTED));
+			this.menuLabelMap.get(appScreen).setTextFill(colorMenuGrey);
 		}
 	}
 
@@ -368,9 +395,12 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		application.getStage().getScene().setCursor(Cursor.HAND);
 		if (!currentAppScreen.equals(appScreen)) {
 			this.menuImageViewMap.get(appScreen).setImage(menuImageStatusMap.get(appScreen).get(MenuStatus.HOVER));
+			this.menuLabelMap.get(appScreen).setTextFill(colorMenuBlue);
 		}
 	}
 
+	// TODO: add highlighting of text / labels
+	// TODO: fix map
 	private void showAppScreen(AppScreen pane) {
 		contentDetailsPane.getChildren().setAll(leftPaneHashMap.get(pane).getKey());
 		
@@ -383,8 +413,10 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 			ImageView imageView = menuImageViewMap.get(currentAppScreen);
 			if (currentAppScreen.equals(pane)) {
 				imageView.setImage(menuImageStatusMap.get(currentAppScreen).get(MenuStatus.SELECTED));
+				this.menuLabelMap.get(currentAppScreen).setTextFill(colorMenuBlue);
 			} else {
 				imageView.setImage(menuImageStatusMap.get(currentAppScreen).get(MenuStatus.UNSELECTED));
+				this.menuLabelMap.get(currentAppScreen).setTextFill(colorMenuGrey);
 			}
 		}
 	}
