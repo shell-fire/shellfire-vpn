@@ -235,19 +235,19 @@ msgstr ""
 msgid "Registration successful."
 msgstr ""
 
-#: main/java/de/shellfire/vpn/gui/controller/ServerListSubviewController.java:202
+#: main/java/de/shellfire/vpn/gui/controller/AppScreenControllerServerList.java:202
 msgid "Select a Server for your connection"
 msgstr ""
 
-#: main/java/de/shellfire/vpn/gui/controller/ServerListSubviewController.java:203
+#: main/java/de/shellfire/vpn/gui/controller/AppScreenControllerServerList.java:203
 msgid "Connection type"
 msgstr ""
 
-#: main/java/de/shellfire/vpn/gui/controller/ServerListSubviewController.java:204
+#: main/java/de/shellfire/vpn/gui/controller/AppScreenControllerServerList.java:204
 msgid "TCP (works with safe firewalls and proxies.)"
 msgstr ""
 
-#: main/java/de/shellfire/vpn/gui/controller/ServerListSubviewController.java:205
+#: main/java/de/shellfire/vpn/gui/controller/AppScreenControllerServerList.java:205
 msgid "UDP (fast)"
 msgstr ""
 

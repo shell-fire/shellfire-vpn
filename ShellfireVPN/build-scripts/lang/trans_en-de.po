@@ -292,23 +292,23 @@ msgstr ""
 msgid "Registration successful."
 msgstr "Registrierung erfolgreich."
 
-#: main/java/de/shellfire/vpn/gui/controller/ServerListSubviewController.java:211
+#: main/java/de/shellfire/vpn/gui/controller/AppScreenControllerServerList.java:211
 msgid "Select a Server for your connection"
 msgstr "Wähle einen Server für deine Verbindung"
 
-#: main/java/de/shellfire/vpn/gui/controller/ServerListSubviewController.java:212
+#: main/java/de/shellfire/vpn/gui/controller/AppScreenControllerServerList.java:212
 msgid "Connection type"
 msgstr "Verbindungstyp"
 
-#: main/java/de/shellfire/vpn/gui/controller/ServerListSubviewController.java:213
+#: main/java/de/shellfire/vpn/gui/controller/AppScreenControllerServerList.java:213
 msgid "OpenVPN TCP (works with secure firewalls and proxies.)"
 msgstr "OpenVPN TCP (funktioniert mit firewalls und proxies.)"
 
-#: main/java/de/shellfire/vpn/gui/controller/ServerListSubviewController.java:214
+#: main/java/de/shellfire/vpn/gui/controller/AppScreenControllerServerList.java:214
 msgid "OpenVPN UDP (fast)"
 msgstr "OpenVPN UDP (schnell)"
 
-#: main/java/de/shellfire/vpn/gui/controller/ServerListSubviewController.java:215
+#: main/java/de/shellfire/vpn/gui/controller/AppScreenControllerServerList.java:215
 msgid "Wireguard (fastest)"
 msgstr "Wireguard (am schnellsten)"
 

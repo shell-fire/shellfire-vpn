@@ -48,7 +48,7 @@ import javafx.util.Callback;
  *
  * @author Tcheutchoua Steve
  */
-public class SettingsSubviewController implements Initializable {
+public class AppScreenControllerSettings implements Initializable, AppScreenController {
 
 	private LogViewerFxmlController logViewer;
 	@FXML
@@ -86,12 +86,12 @@ public class SettingsSubviewController implements Initializable {
 	public static Vpn currentVpn;
 	private WebService shellfireService;
 	private LoginForms application;
-	private static final Logger log = Util.getLogger(SettingsSubviewController.class.getCanonicalName());
+	private static final Logger log = Util.getLogger(AppScreenControllerSettings.class.getCanonicalName());
 	private ShellfireVPNMainFormFxmlController mainFormController;
 	private Image buttonDisconnect = new Image("/buttons/button-disconnect-" + VpnI18N.getLanguage().getKey() + ".gif");
 
 
-	public SettingsSubviewController() throws IOException  {
+	public AppScreenControllerSettings() throws IOException  {
 		this.logViewer = LogViewerFxmlController.getInstance();
 
 		initComponents();
@@ -229,7 +229,7 @@ public class SettingsSubviewController implements Initializable {
 	 * @param isConnected
 	 *            boolean variable for the connection status
 	 */
-	public void updateComponents(boolean isConnected) {
+	public void notifyThatNowVisible(boolean isConnected) {
 		if (isConnected) {
 			TCPRadioButton.disableProperty().set(isConnected);
 			UDPRadioButton.disableProperty().set(isConnected);

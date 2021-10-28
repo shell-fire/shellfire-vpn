@@ -56,7 +56,7 @@ import javafx.scene.text.TextFlow;
  *
  * @author Tcheutchoua Steve
  */
-public class ServerListSubviewController implements Initializable, AppScreenController {
+public class AppScreenControllerServerList implements Initializable, AppScreenController {
 
 	@FXML
 	private AnchorPane serverListAnchorPane;
@@ -76,7 +76,7 @@ public class ServerListSubviewController implements Initializable, AppScreenCont
 	private WebService shellfireService;
 	private ServerList serverList;
 	private LoginForms application;
-	private static final Logger log = Util.getLogger(ServerListSubviewController.class.getCanonicalName());
+	private static final Logger log = Util.getLogger(AppScreenControllerServerList.class.getCanonicalName());
 	private ObservableList<ServerListFXModel> serverListData = FXCollections.observableArrayList();
 	private ShellfireVPNMainFormFxmlController mainFormController;
 	private Image buttonDisconnect = new Image("/buttons/button-disconnect-" + VpnI18N.getLanguage().getKey() + ".gif");
@@ -87,7 +87,7 @@ public class ServerListSubviewController implements Initializable, AppScreenCont
 	 * @param shellfireService
 	 *            used to get the serverList data
 	 */
-	public ServerListSubviewController(WebService shellfireService) {
+	public AppScreenControllerServerList(WebService shellfireService) {
 		this.shellfireService = shellfireService;
 		currentVpn = shellfireService.getVpn();
 		initComponents();
@@ -97,7 +97,7 @@ public class ServerListSubviewController implements Initializable, AppScreenCont
 	 * No argument constructor used by javafx framework
 	 *
 	 */
-	public ServerListSubviewController() {
+	public AppScreenControllerServerList() {
 	}
 	
 	

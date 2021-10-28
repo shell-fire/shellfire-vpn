@@ -10,7 +10,7 @@ import java.util.HashMap;
 import org.slf4j.Logger;
 
 import de.shellfire.vpn.Util;
-import de.shellfire.vpn.gui.controller.ServerListSubviewController;
+import de.shellfire.vpn.gui.controller.AppScreenControllerServerList;
 import de.shellfire.vpn.gui.model.ServerListFXModel;
 import de.shellfire.vpn.types.Server;
 import de.shellfire.vpn.types.ServerType;
@@ -30,11 +30,11 @@ public class CrownImageRendererFX extends TableCell<ServerListFXModel, Server> {
 	HashMap<ServerType, Image> icons = new HashMap<ServerType, Image>();
 	HashMap<ServerType, Image> iconsSelected = new HashMap<ServerType, Image>();
 	HashMap<ServerType, Image> iconsDisabled = new HashMap<ServerType, Image>();
-	private ServerListSubviewController serverListSubViewController;
+	private AppScreenControllerServerList AppScreenControllerServerList;
 	private static final Logger log = Util.getLogger(CrownImageRendererFX.class.getCanonicalName());
 
-	public CrownImageRendererFX(ServerListSubviewController serverListSubviewController) {
-		this.serverListSubViewController = serverListSubviewController;
+	public CrownImageRendererFX(AppScreenControllerServerList AppScreenControllerServerList) {
+		this.AppScreenControllerServerList = AppScreenControllerServerList;
 		init();
 	}
 
@@ -55,7 +55,7 @@ public class CrownImageRendererFX extends TableCell<ServerListFXModel, Server> {
         if (empty || item == null) {
             setGraphic(null);
         } else {
-        	boolean isSelected = serverListSubViewController.getSelectedServer().equals(item);
+        	boolean isSelected = AppScreenControllerServerList.getSelectedServer().equals(item);
         	updateItemSelected(item, isSelected);
         }
     }

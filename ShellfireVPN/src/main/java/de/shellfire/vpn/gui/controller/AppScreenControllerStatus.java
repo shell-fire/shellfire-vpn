@@ -44,7 +44,7 @@ import javafx.scene.web.WebView;
  *
  * @author Tcheutchoua Steve
  */
-public class ConnectionSubviewController implements Initializable, AppScreenController {
+public class AppScreenControllerStatus implements Initializable, AppScreenController {
 
 	@FXML
 	private Pane contentDetailsPane;
@@ -185,7 +185,7 @@ public class ConnectionSubviewController implements Initializable, AppScreenCont
 	}	
 	
 	public void initPremium(boolean freeAccount) {
-		log.debug("ConnectionSubviewController: initPremium is free? " + freeAccount);
+		log.debug("AppScreenControllerStatus: initPremium is free? " + freeAccount);
 		if (!freeAccount) {
 			// this.productKeyImageView.setVisible(false);
 			// this.premiumInfoImageView.setVisible(false);
@@ -195,7 +195,7 @@ public class ConnectionSubviewController implements Initializable, AppScreenCont
 	}
 
 	public String displayCreationMessage(String msg) {
-		return ("ConnectionSubviewController: " + msg);
+		return ("AppScreenControllerStatus: " + msg);
 	}
 
 	@FXML
