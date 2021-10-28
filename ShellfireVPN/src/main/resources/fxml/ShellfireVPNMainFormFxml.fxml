@@ -21,7 +21,7 @@
                         <Image url="@../menu/status_selected.png" />
                      </image>
                   </ImageView>
-                  <Label alignment="CENTER" layoutY="40.0" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="17.0" prefWidth="70.0" text="Status" textAlignment="CENTER" textFill="#4581f8" AnchorPane.bottomAnchor="2.0">
+                  <Label fx:id="menuLabelStatus" alignment="CENTER" layoutY="40.0" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="17.0" prefWidth="70.0" text="Status" textAlignment="CENTER" textFill="#4581f8" AnchorPane.bottomAnchor="2.0">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font></Label>
@@ -29,7 +29,7 @@
             </AnchorPane>
             <AnchorPane fx:id="serverListPane" layoutX="70.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#onMenuPaneServerListClicked" onMouseEntered="#onMenuPaneServerListMouseEntered" onMouseExited="#onMenuPaneServerListMouseExited" prefHeight="68.0" prefWidth="70.0" style="-fx-background-color: black;">
                <children>
-                  <Label fx:id="menuImageServerList" alignment="CENTER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="17.0" prefWidth="70.0" text="All Servers" textAlignment="CENTER" textFill="#757575" AnchorPane.bottomAnchor="2.0">
+                  <Label fx:id="menuLabelServerList" alignment="CENTER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="17.0" prefWidth="70.0" text="All Servers" textAlignment="CENTER" textFill="#757575" AnchorPane.bottomAnchor="2.0">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
@@ -43,7 +43,7 @@
             </AnchorPane>
             <AnchorPane fx:id="serverListPane2" layoutX="140.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#onMenuPanePremiumClicked" onMouseEntered="#onMenuPanePremiumMouseEntered" onMouseExited="#onMenuPanePremiumMouseExited" prefHeight="68.0" prefWidth="70.0" style="-fx-background-color: black;">
                <children>
-                  <Label fx:id="menuImagePremium" alignment="CENTER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="17.0" prefWidth="70.0" text="Premium" textAlignment="CENTER" textFill="#757575" AnchorPane.bottomAnchor="2.0">
+                  <Label fx:id="menuLabelPremium" alignment="CENTER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="17.0" prefWidth="70.0" text="Premium" textAlignment="CENTER" textFill="#757575" AnchorPane.bottomAnchor="2.0">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
@@ -57,7 +57,7 @@
             </AnchorPane>
             <AnchorPane fx:id="serverListPane21" layoutX="210.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#onMenuPaneSettingsClicked" onMouseEntered="#onMenuPaneSettingsMouseEntered" onMouseExited="#onMenuPaneSettingsMouseExited" prefHeight="68.0" prefWidth="70.0" style="-fx-background-color: black;">
                <children>
-                  <Label alignment="CENTER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="17.0" prefWidth="70.0" text="Settings" textAlignment="CENTER" textFill="#757575" AnchorPane.bottomAnchor="2.0">
+                  <Label fx:id="menuLabelSettings" alignment="CENTER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="17.0" prefWidth="70.0" text="Settings" textAlignment="CENTER" textFill="#757575" AnchorPane.bottomAnchor="2.0">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
@@ -71,7 +71,7 @@
             </AnchorPane>
             <AnchorPane fx:id="serverListPane211" layoutX="280.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#onMenuPaneAboutClicked" onMouseEntered="#onMenuPaneAboutMouseEntered" onMouseExited="#onMenuPaneAboutMouseExited" prefHeight="68.0" prefWidth="70.0" style="-fx-background-color: black;">
                <children>
-                  <Label alignment="CENTER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="17.0" prefWidth="70.0" text="About" textAlignment="CENTER" textFill="#757575" AnchorPane.bottomAnchor="2.0">
+                  <Label fx:id="menuLabelAbout" alignment="CENTER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="17.0" prefWidth="70.0" text="About" textAlignment="CENTER" textFill="#757575" AnchorPane.bottomAnchor="2.0">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
@@ -85,7 +85,7 @@
             </AnchorPane>
             <AnchorPane fx:id="serverListPane2111" layoutX="350.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#onMenuPaneHelpClicked" onMouseEntered="#onMenuPaneHelpMouseEntered" onMouseExited="#onMenuPaneHelpMouseExited" prefHeight="68.0" prefWidth="70.0" style="-fx-background-color: black;">
                <children>
-                  <Label alignment="CENTER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="17.0" prefWidth="70.0" text="Help" textAlignment="CENTER" textFill="#757575" AnchorPane.bottomAnchor="2.0">
+                  <Label fx:id="menuLabelHelp" alignment="CENTER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="17.0" prefWidth="70.0" text="Help" textAlignment="CENTER" textFill="#757575" AnchorPane.bottomAnchor="2.0">
                      <font>
                         <Font name="System Bold" size="12.0" />
                      </font>
@@ -103,7 +103,7 @@
          <children>
             <Pane fx:id="contentDetailsPane" prefHeight="640.0" prefWidth="420.0" style="-fx-background-color: rgb(240,240,240);">
                <children>
-                  <fx:include fx:id="connectionSubview" source="connection_subview.fxml" />
+                  <fx:include fx:id="connectionSubview" source="appscreen_subview_status.fxml" />
                </children>
             </Pane>
          </children>

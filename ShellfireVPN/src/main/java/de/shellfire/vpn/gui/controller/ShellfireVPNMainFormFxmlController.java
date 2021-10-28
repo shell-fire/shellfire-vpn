@@ -91,8 +91,15 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	private TrayIcon trayIcon;
 	private StringBuffer typedStrings = new StringBuffer();
 	private ProgressDialogController connectProgressDialog;
+
+	private AppScreenControllerStatus appScreenControllerStatus;
 	private AppScreenControllerServerList appScreenControllerServerList;
+	private AppScreenControllerPremium appScreenControllerPremium;
 	private AppScreenControllerSettings appScreenControllerSettings;
+	private AppScreenControllerAbout appScreenControllerAbout;
+	private AppScreenControllerHelp appScreenControllerHelp;
+	
+	
 	private Date connectedSince;
 	private java.awt.Image iconConnected = Util.getImageIcon("/icons/sfvpn2-connected-big.png").getImage();
 	private java.awt.Image iconConnecting = Util.getImageIcon("/icons/sfvpn2-connecting-big.png").getImage();
@@ -150,7 +157,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	private Parent connectionSubview;
 
 	@FXML
-	private AppScreenControllerStatus appScreenControllerStatus;
 	private HashMap<AppScreen, ImageView> menuImageViewMap;
 	private HashMap<AppScreen, AppScreenController> menuControllerMap;
 
@@ -230,10 +236,10 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		menuControllerMap = new HashMap<AppScreen, AppScreenController>();
 		menuControllerMap.put(AppScreen.STATUS, appScreenControllerStatus);
 		menuControllerMap.put(AppScreen.SERVERLIST, appScreenControllerServerList);
-		menuControllerMap.put(AppScreen.PREMIUM, appScreenControllerStatus);
+		menuControllerMap.put(AppScreen.PREMIUM, appScreenControllerPremium);
 		menuControllerMap.put(AppScreen.SETTINGS, appScreenControllerSettings);
-		menuControllerMap.put(AppScreen.ABOUT, appScreenControllerStatus);
-		menuControllerMap.put(AppScreen.HELP, appScreenControllerStatus);
+		menuControllerMap.put(AppScreen.ABOUT, appScreenControllerAbout);
+		menuControllerMap.put(AppScreen.HELP, appScreenControllerHelp);
 		
 		
 		
@@ -368,15 +374,17 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	private void showAppScreen(AppScreen pane) {
 		contentDetailsPane.getChildren().setAll(leftPaneHashMap.get(pane).getKey());
 		
-		this.menuControllerMap.get(pane).notifyThatNowVisible(connectionStatus);
+		if (this.menuControllerMap != null && this.menuControllerMap.get(pane) != null) {
+			this.menuControllerMap.get(pane).notifyThatNowVisible(connectionStatus);
+		}
 		currentAppScreen = pane;
 		
 		for (AppScreen currentAppScreen : AppScreen.values()) {
 			ImageView imageView = menuImageViewMap.get(currentAppScreen);
 			if (currentAppScreen.equals(pane)) {
-				imageView.setImage(menuImageStatusMap.get(AppScreen.STATUS).get(MenuStatus.SELECTED));
+				imageView.setImage(menuImageStatusMap.get(currentAppScreen).get(MenuStatus.SELECTED));
 			} else {
-				imageView.setImage(menuImageStatusMap.get(AppScreen.STATUS).get(MenuStatus.UNSELECTED));
+				imageView.setImage(menuImageStatusMap.get(currentAppScreen).get(MenuStatus.UNSELECTED));
 			}
 		}
 	}
@@ -1255,10 +1263,9 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	public void setSelectedServer(Server server) {
 		log.debug("setSelectedServer(" + server + ") - updating background image");
 		
-		
-		appScreenControllerStatus.setSelectedServer(server);
-		
-
+		if (appScreenControllerStatus != null) {
+			appScreenControllerStatus.setSelectedServer(server);
+		}
 	}
 
 	
@@ -1267,18 +1274,29 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	 */
 	public void prepareSubviewControllers() {
 		try {
+	
 			// load the serverList pane
-			Pair<Pane, Object> pair = FxUIManager.SwitchSubview("serverList_subview.fxml");
-			this.appScreenControllerServerList = (AppScreenControllerServerList) pair.getValue();
+			Pair<Pane, Object> pairServerList = FxUIManager.SwitchSubview("appscreen_subview_serverlist.fxml");
+			this.appScreenControllerServerList = (AppScreenControllerServerList) pairServerList.getValue();
 			this.appScreenControllerServerList.setShellfireService((this.shellfireService));
 			this.appScreenControllerServerList.initComponents();
 			this.appScreenControllerServerList.setApp(this.application);
 			this.appScreenControllerServerList.setMainFormController(this);
-			leftPaneHashMap.put(AppScreen.SERVERLIST, pair);
+			leftPaneHashMap.put(AppScreen.SERVERLIST, pairServerList);
 			log.debug("Serverlist controller defined");
 
+			// load the premium pane
+			Pair<Pane, Object> pairPremium = FxUIManager.SwitchSubview("appscreen_subview_premium.fxml");
+			this.appScreenControllerPremium = (AppScreenControllerPremium) pairPremium.getValue();
+			this.appScreenControllerPremium.setShellfireService((this.shellfireService));
+			this.appScreenControllerPremium.initComponents();
+			this.appScreenControllerPremium.setApp(this.application);
+			this.appScreenControllerPremium.setMainFormController(this);
+			leftPaneHashMap.put(AppScreen.PREMIUM, pairPremium);
+			log.debug("premium controller defined");
+
 			// load the settings pane
-			Pair<Pane, Object> pairSettings = FxUIManager.SwitchSubview("settings_subview.fxml");
+			Pair<Pane, Object> pairSettings = FxUIManager.SwitchSubview("appscreen_subview_settings.fxml");
 			this.appScreenControllerSettings = (AppScreenControllerSettings) pairSettings.getValue();
 			this.appScreenControllerSettings.setShellfireService((this.shellfireService));
 			this.appScreenControllerSettings.initComponents();
@@ -1286,21 +1304,43 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 			this.appScreenControllerSettings.setMainFormController(this);
 			leftPaneHashMap.put(AppScreen.SETTINGS, pairSettings);
 			log.debug("settings controller defined");
+
+			// load the about pane
+			Pair<Pane, Object> pairAbout = FxUIManager.SwitchSubview("appscreen_subview_about.fxml");
+			this.appScreenControllerAbout = (AppScreenControllerAbout) pairAbout.getValue();
+			this.appScreenControllerAbout.setShellfireService((this.shellfireService));
+			this.appScreenControllerAbout.initComponents();
+			this.appScreenControllerAbout.setApp(this.application);
+			this.appScreenControllerAbout.setMainFormController(this);
+			leftPaneHashMap.put(AppScreen.ABOUT, pairAbout);
+			log.debug("about controller defined");
+
+			// load the help pane
+			Pair<Pane, Object> pairHelp = FxUIManager.SwitchSubview("appscreen_subview_help.fxml");
+			this.appScreenControllerHelp = (AppScreenControllerHelp) pairHelp.getValue();
+			this.appScreenControllerHelp.setShellfireService((this.shellfireService));
+			this.appScreenControllerHelp.initComponents();
+			this.appScreenControllerHelp.setApp(this.application);
+			this.appScreenControllerHelp.setMainFormController(this);
+			leftPaneHashMap.put(AppScreen.HELP, pairHelp);
+			log.debug("help controller defined");
+
 			
-			
-			// load connection pane
-			Pair<Pane, Object> pairConnection = FxUIManager.SwitchSubview("connection_subview.fxml");
-			this.appScreenControllerStatus = (AppScreenControllerStatus) pairConnection.getValue();
+			// load status pane
+			Pair<Pane, Object> pairStatus = FxUIManager.SwitchSubview("appscreen_subview_status.fxml");
+			this.appScreenControllerStatus = (AppScreenControllerStatus) pairStatus.getValue();
 			contentDetailsPane.getChildren().setAll(leftPaneHashMap.get(AppScreen.SERVERLIST).getKey());
-			this.appScreenControllerStatus = (AppScreenControllerStatus) pairConnection.getValue();
+			this.appScreenControllerStatus = (AppScreenControllerStatus) pairStatus.getValue();
 			this.appScreenControllerStatus.initPremium(isFreeAccount());
 			this.appScreenControllerStatus.setApp(this.application);
 			log.debug("handleConnectionPanelClicked: VPN connection status is " + connectionStatus);
 			this.appScreenControllerStatus.notifyThatNowVisible(connectionStatus);
-
-			leftPaneHashMap.put(AppScreen.STATUS, pairConnection);
+			log.debug("status controller defined");
+		
+			
+			leftPaneHashMap.put(AppScreen.STATUS, pairStatus);
 			onMenuPaneStatusClicked(null);
-			log.debug("connection controller defined");
+			
 
 			
 			
