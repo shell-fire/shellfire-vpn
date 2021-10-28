@@ -24,6 +24,6 @@
             <Image url="@../buttons/button-connect-en.gif" />
          </image>
       </ImageView>
-      <WebView fx:id="locationMap" layoutY="435.0" prefHeight="-1.0" prefWidth="420.0" />
+      <WebView fx:id="locationMap" layoutY="435.0" prefHeight="205.0" prefWidth="420.0" />
    </children>
 </AnchorPane>
