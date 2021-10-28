@@ -34,6 +34,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Background;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -125,7 +127,7 @@ public class LoginForms extends Application {
 		log.debug("LoginForms.start() - start");
 		try {
 			LoginForms.stage = primaryStage;
-			LoginForms.stage.initStyle(StageStyle.UNIFIED);
+			LoginForms.stage.initStyle(StageStyle.DECORATED);
 			initDialog = ProgressDialogController.getInstance("Init ...", null, stage, false);
 
 			this.loadLoginController();
@@ -133,7 +135,7 @@ public class LoginForms extends Application {
 			log.error("could not start with first stage load \n");
 			ex.printStackTrace(System.out);
 		}
-		Platform.setImplicitExit(false);
+		Platform.setImplicitExit(true);
 		try {
 			log.debug("LoginForms.start() - calling initializations");
 			initializations(default_args);
@@ -200,7 +202,8 @@ public class LoginForms extends Application {
 		log.debug("loadShellFireMainController - start()");
 		try {
 			if (shellfireVpnMainController == null) {
-				this.shellfireVpnMainController = (ShellfireVPNMainFormFxmlController) replaceSceneContent("ShellfireVPNMainFormFxml.fxml");	
+				this.shellfireVpnMainController = (ShellfireVPNMainFormFxmlController) replaceSceneContent("ShellfireVPNMainFormFxml.fxml");
+
 			}
 			
 			if (!loadOnly) {
@@ -233,37 +236,25 @@ public class LoginForms extends Application {
 		try {
 			log.debug("ReplaceSceneContent trying to load anchor pane for " + fxml);
 			page = (AnchorPane) loader.load();
+			page.setBackground(Background.EMPTY);
 			log.debug("AnchorPane loaded");
 		} catch (Exception ex) {
 			log.error("Loading fxml has error for replaceSceneContent for " + fxml, ex);
 		}
-		log.debug("replaceSceneContent() - start setOnMouse...");
-		/*
-		page.setOnMousePressed(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				xOffset = event.getSceneX();
-				yOffset = event.getSceneY();
-			}
-		});
-		
-		page.setOnMouseDragged(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				stage.setX(event.getScreenX() - xOffset);
-				stage.setY(event.getScreenY() - yOffset);
-			}
-		});
-		*/
-		log.debug("replaceSceneContent() - finished setOnMouse...");
 		if (page.getScene() == null) {
 			Scene scene = new Scene(page);
 			log.debug("replaceSceneContent() - stage.setScene() - start...");
+			scene.setFill(Color.TRANSPARENT);
+
 			stage.setScene(scene);
+
 			log.debug("Scene of " + fxml + " has been newly created");
 		} else {
 			log.debug("Scene of " + fxml + " is that of anchorpane");
+			page.getScene().setFill(Color.TRANSPARENT);
+
 			stage.setScene(page.getScene());
+			 
 		}
 		log.debug("replaceSceneContent() - stage.centerOnScreen() - start...");
 		stage.centerOnScreen();

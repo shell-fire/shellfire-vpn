@@ -3,7 +3,9 @@
 /* Disable alternating tablerow-background colors */
 .root {
     -fx-control-inner-background-alt: -fx-control-inner-background;
+-fx-box-border: transparent;
 }
+
 
 /* Remove all grid-lines in table */
 .table-view {

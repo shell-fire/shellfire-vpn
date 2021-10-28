@@ -56,7 +56,7 @@ import javafx.scene.text.TextFlow;
  *
  * @author Tcheutchoua Steve
  */
-public class ServerListSubviewController implements Initializable {
+public class ServerListSubviewController implements Initializable, AppScreenController {
 
 	@FXML
 	private AnchorPane serverListAnchorPane;
@@ -261,7 +261,7 @@ public class ServerListSubviewController implements Initializable {
 	 * @param isConnected
 	 *            boolean variable for the connection status
 	 */
-	public void updateComponents(boolean isConnected) {
+	public void notifyThatNowVisible(boolean isConnected) {
 		if (isConnected) {
 			serverListTableView.disableProperty().set(isConnected);
 		}

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
@@ -8,38 +10,98 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.Pane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="700.0" prefWidth="390.0" style="-fx-background-color: rgb(64,69,73);" stylesheets="@../stylesheets/main-en.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.ShellfireVPNMainFormFxmlController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="700.0" prefWidth="420.0" style="-fx-background-color: rgb(64,69,73);" stylesheets="@../stylesheets/main-en.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.ShellfireVPNMainFormFxmlController">
    <children>
-      <AnchorPane fx:id="menuBarAnchorPane" layoutY="650.0" prefHeight="50.0" prefWidth="400.0" style="-fx-background-color: rgb(244,244,244);">
+      <AnchorPane fx:id="menuBarAnchorPane" layoutY="640.0" prefHeight="66.0" prefWidth="420.0" style="-fx-background-color: rgb(244,244,244);">
          <children>
-            <AnchorPane fx:id="serverListPane" layoutX="100.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onContextMenuRequested="#handleServerListPaneContext" onMouseClicked="#handleServerListPaneClicked" onMouseEntered="#handleServerListPaneMouseEntered" onMouseExited="#handleServerListPaneMouseExited" style="-fx-background-color: black;">
+            <AnchorPane fx:id="menuPaneStatus" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#onMenuPaneStatusClicked" onMouseEntered="#onMenuPaneStatusMouseEntered" onMouseExited="#onMenuPaneStatusMouseExited" prefHeight="68.0" prefWidth="70.0" style="-fx-background-color: black;">
                <children>
-                  <ImageView fx:id="serverListBackgroundImage" blendMode="LIGHTEN" fitHeight="25.0" fitWidth="75.0" AnchorPane.rightAnchor="2.0">
+                  <ImageView fx:id="menuImageStatus" blendMode="LIGHTEN" fitHeight="53.0" fitWidth="48.0" layoutY="7.0" preserveRatio="true" style="--fx-border-color: yellow;" x="11.0">
                      <image>
-                        <Image url="@../buttons/button-serverlist-idle.png" />
+                        <Image url="@../menu/status_selected.png" />
+                     </image>
+                  </ImageView>
+                  <Label alignment="CENTER" layoutY="40.0" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="17.0" prefWidth="70.0" text="Status" textAlignment="CENTER" textFill="#4581f8" AnchorPane.bottomAnchor="2.0">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font></Label>
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="serverListPane" layoutX="70.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#onMenuPaneServerListClicked" onMouseEntered="#onMenuPaneServerListMouseEntered" onMouseExited="#onMenuPaneServerListMouseExited" prefHeight="68.0" prefWidth="70.0" style="-fx-background-color: black;">
+               <children>
+                  <Label fx:id="menuImageServerList" alignment="CENTER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="17.0" prefWidth="70.0" text="All Servers" textAlignment="CENTER" textFill="#757575" AnchorPane.bottomAnchor="2.0">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <ImageView fx:id="menuImageServerList" blendMode="LIGHTEN" fitHeight="34.0" fitWidth="48.0" layoutX="10.0" layoutY="8.0" preserveRatio="true">
+                     <image>
+                        <Image url="@../menu/server.png" />
                      </image>
                   </ImageView>
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="leftConnectionPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onContextMenuRequested="#handleConnectionPaneContext" onMouseClicked="#handleConnectionPaneClicked" onMouseEntered="#handleConnectionPaneMouseEntered" onMouseExited="#handleConnectionPaneMouseExited" style="-fx-background-color: black;">
+            <AnchorPane fx:id="serverListPane2" layoutX="140.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#onMenuPanePremiumClicked" onMouseEntered="#onMenuPanePremiumMouseEntered" onMouseExited="#onMenuPanePremiumMouseExited" prefHeight="68.0" prefWidth="70.0" style="-fx-background-color: black;">
                <children>
-                  <ImageView fx:id="connectionBackgroundImageView" blendMode="LIGHTEN" fitHeight="25.0" fitWidth="75.0" style="--fx-border-color: yellow;">
+                  <Label fx:id="menuImagePremium" alignment="CENTER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="17.0" prefWidth="70.0" text="Premium" textAlignment="CENTER" textFill="#757575" AnchorPane.bottomAnchor="2.0">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <ImageView fx:id="menuImagePremium" blendMode="LIGHTEN" fitHeight="34.0" fitWidth="48.0" layoutX="15.0" layoutY="8.0" preserveRatio="true">
                      <image>
-                        <Image url="@../buttons/button-connect-idle.png" />
+                        <Image url="@../menu/premium.png" />
                      </image>
                   </ImageView>
                </children>
             </AnchorPane>
-            <ImageView fx:id="settingsImageView" fitHeight="20.0" fitWidth="20.0" layoutX="300.0" layoutY="4.0" onContextMenuRequested="#handleSettingsImageViewContext" onMouseClicked="#handleSettingsPaneClicked" onMouseEntered="#handleSettingsImageViewMouseEntered" onMouseExited="#handleSettingsImageViewMouseExited">
-               <image>
-                  <Image url="@../icons/settings.png" />
-               </image>
-            </ImageView>
+            <AnchorPane fx:id="serverListPane21" layoutX="210.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#onMenuPaneSettingsClicked" onMouseEntered="#onMenuPaneSettingsMouseEntered" onMouseExited="#onMenuPaneSettingsMouseExited" prefHeight="68.0" prefWidth="70.0" style="-fx-background-color: black;">
+               <children>
+                  <Label alignment="CENTER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="17.0" prefWidth="70.0" text="Settings" textAlignment="CENTER" textFill="#757575" AnchorPane.bottomAnchor="2.0">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <ImageView fx:id="menuImageSettings" blendMode="LIGHTEN" fitHeight="41.0" fitWidth="39.0" layoutX="22.0" layoutY="8.0" preserveRatio="true" AnchorPane.leftAnchor="22.0" AnchorPane.rightAnchor="14.0">
+                     <image>
+                        <Image url="@../menu/settings.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="serverListPane211" layoutX="280.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#onMenuPaneAboutClicked" onMouseEntered="#onMenuPaneAboutMouseEntered" onMouseExited="#onMenuPaneAboutMouseExited" prefHeight="68.0" prefWidth="70.0" style="-fx-background-color: black;">
+               <children>
+                  <Label alignment="CENTER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="17.0" prefWidth="70.0" text="About" textAlignment="CENTER" textFill="#757575" AnchorPane.bottomAnchor="2.0">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <ImageView fx:id="menuImageAbout" blendMode="LIGHTEN" fitHeight="41.0" fitWidth="39.0" layoutY="8.0" preserveRatio="true" x="15.0">
+                     <image>
+                        <Image url="@../menu/about.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </AnchorPane>
+            <AnchorPane fx:id="serverListPane2111" layoutX="350.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#onMenuPaneHelpClicked" onMouseEntered="#onMenuPaneHelpMouseEntered" onMouseExited="#onMenuPaneHelpMouseExited" prefHeight="68.0" prefWidth="70.0" style="-fx-background-color: black;">
+               <children>
+                  <Label alignment="CENTER" maxWidth="1.7976931348623157E308" minWidth="-Infinity" prefHeight="17.0" prefWidth="70.0" text="Help" textAlignment="CENTER" textFill="#757575" AnchorPane.bottomAnchor="2.0">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <ImageView fx:id="menuImageHelp" blendMode="LIGHTEN" fitHeight="41.0" fitWidth="39.0" layoutY="8.0" preserveRatio="true" x="15.0">
+                     <image>
+                        <Image url="@../menu/help.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </AnchorPane>
          </children>
       </AnchorPane>
-      <AnchorPane fx:id="contentAnchorPane" prefHeight="650.0" prefWidth="400.0" style="-fx-background-color: rgb(240,240,240);">
+      <AnchorPane fx:id="contentAnchorPane" prefHeight="575.0" prefWidth="420.0" style="-fx-background-color: rgb(240,240,240);">
          <children>
-            <Pane fx:id="contentDetailsPane" prefHeight="640.0" prefWidth="400.0" style="-fx-background-color: rgb(240,240,240);">
+            <Pane fx:id="contentDetailsPane" prefHeight="640.0" prefWidth="420.0" style="-fx-background-color: rgb(240,240,240);">
                <children>
                   <fx:include fx:id="connectionSubview" source="connection_subview.fxml" />
                </children>

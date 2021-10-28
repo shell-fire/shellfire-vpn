@@ -1,17 +1,13 @@
 package de.shellfire.vpn.gui.controller;
 
-import java.awt.AWTEvent;
 import java.awt.AWTException;
-import java.awt.EventQueue;
 import java.awt.MenuItem;
 import java.awt.PopupMenu;
 import java.awt.SystemTray;
-import java.awt.Toolkit;
 import java.awt.TrayIcon;
 import java.awt.TrayIcon.MessageType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -21,6 +17,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 import java.util.ResourceBundle;
@@ -81,7 +78,7 @@ import javafx.util.Pair;
 public class ShellfireVPNMainFormFxmlController extends AnchorPane implements Initializable, LocaleChangeListener, ConnectionStateListener, ListChangeListener<ServerListFXModel>
 	{
 
-	HashMap<SidePane, Pair<Pane, Object>> leftPaneHashMap = new HashMap<>();
+	HashMap<AppScreen, Pair<Pane, Object>> leftPaneHashMap = new HashMap<>();
 	private static LoginForms application;
 	private static final Logger log = Util.getLogger(ShellfireVPNMainFormFxmlController.class.getCanonicalName());
 	private static final I18n i18n = VpnI18N.getI18n();
@@ -94,40 +91,41 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	private TrayIcon trayIcon;
 	private StringBuffer typedStrings = new StringBuffer();
 	private ProgressDialogController connectProgressDialog;
-	private ServerListSubviewController serverListSubviewController;
+	private ServerListSubviewController appScreenControllerServerList;
 	private SettingsSubviewController settingsSubviewController;
 	private Date connectedSince;
-	private Image iconEcncryptionActive;
-	private Image iconEcncryptionInactive;
 	private java.awt.Image iconConnected = Util.getImageIcon("/icons/sfvpn2-connected-big.png").getImage();
-	private Image iconConnectedSmall = Util.getImageIconFX("/icons/small-globe-connected.png");
 	private java.awt.Image iconConnecting = Util.getImageIcon("/icons/sfvpn2-connecting-big.png").getImage();
-
+	Map<AppScreen, Map<MenuStatus, Image>> menuImageStatusMap = null;
 	private java.awt.Image iconDisconnectedAwt = Util.getImageIcon("/icons/sfvpn2-disconnected-big.png").getImage();
-	private Image iconIdleSmall = Util.getImageIconFX("/icons/small-globe-disconnected.png");
 	private java.awt.Image iconIdleAwt = Util.getImageIcon("/icons/sfvpn2-idle-big.png").getImage();
 
 	
-	private Image buttonConnect;
-	private Image buttonDisconnect;
 	private ScheduledExecutorService currentConnectedSinceTimerFX = Executors.newSingleThreadScheduledExecutor();
-	private Preferences preferences;
 	private boolean connectionStatus;
 	private boolean disconnectDetectExpected;
 
 	
-	static SidePane currentSidePane = SidePane.CONNECTION;
+	static AppScreen currentAppScreen = AppScreen.STATUS;
 
 	@FXML
 	private Pane leftMenuPane;
 	@FXML
 	private Pane leftConnectionPane;
 	@FXML
-	private ImageView connectionBackgroundImageView;
+	private ImageView menuImageStatus;
 	@FXML
 	private Pane serverListPane;
 	@FXML
-	private ImageView serverListBackgroundImage;
+	private ImageView menuImageServerList;
+	@FXML
+	private ImageView menuImagePremium;
+	@FXML
+	private ImageView menuImageSettings;
+	@FXML
+	private ImageView menuImageAbout;
+	@FXML
+	private ImageView menuImageHelp;
 	@FXML
 	private AnchorPane menuBarAnchorPane;
 	@FXML
@@ -152,12 +150,9 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	private Parent connectionSubview;
 
 	@FXML
-	private ConnectionSubviewController connectionSubviewController;
-	@FXML
-	private Image imageIconFxButtonServerListIdle = Util.getImageIconFX("/buttons/button-serverlist-idle.png");
-	private Image imageIconFxButtonConnectActive = Util.getImageIconFX("/buttons/button-connect-active.png");
-	private Image imageIconFxButtonServerListActive = Util.getImageIconFX("/buttons/button-serverlist-active.png");
-	private Image imageIconFxButtonConnectIdle = Util.getImageIconFX("/buttons/button-connect-idle.png");
+	private ConnectionSubviewController appScreenControllerStatus;
+	private HashMap<AppScreen, ImageView> menuImageViewMap;
+	private HashMap<AppScreen, AppScreenController> menuControllerMap;
 
 	public ShellfireVPNMainFormFxmlController() {
 
@@ -165,7 +160,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	}
 
 	public ConnectionSubviewController getConnectionSubviewController() {
-		return connectionSubviewController;
+		return appScreenControllerStatus;
 	}
 
 	@Override
@@ -178,15 +173,71 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
 		mySetIconImage("/icons/sfvpn2-idle-big.png");
 
-		// initializing images of the form
-		this.connectionBackgroundImageView.setImage(Util.getImageIconFX("/buttons/button-connect-idle.png"));
-		this.serverListBackgroundImage.setImage(Util.getImageIconFX("/buttons/button-serverlist-idle.png"));
-		this.iconEcncryptionActive = Util.getImageIconFX("/icons/status-encrypted-width" + size + ".gif");
-		this.iconEcncryptionInactive = Util.getImageIconFX("/icons/status-unencrypted-width" + size + ".gif");
-		this.buttonConnect = Util.getImageIconFX("/buttons/button-connect-" + langKey + ".gif");
-		this.buttonDisconnect = Util.getImageIconFX("/buttons/button-disconnect-" + langKey + ".gif");
-		this.connectionBackgroundImageView.setImage(Util.getImageIconFX("/buttons/button-connect-active.png"));
-		currentSidePane = SidePane.CONNECTION;
+		initializeMenuImages();
+		currentAppScreen = AppScreen.STATUS;
+	}
+	
+	enum MenuStatus { SELECTED, UNSELECTED, HOVER }
+	
+	private void initializeMenuImages() {
+		menuImageViewMap = new HashMap<AppScreen, ImageView>();
+		menuImageViewMap.put(AppScreen.STATUS, menuImageStatus);
+		menuImageViewMap.put(AppScreen.SERVERLIST, menuImageServerList);
+		menuImageViewMap.put(AppScreen.PREMIUM, menuImagePremium);
+		menuImageViewMap.put(AppScreen.SETTINGS, menuImageSettings);
+		menuImageViewMap.put(AppScreen.ABOUT, menuImageAbout);
+		menuImageViewMap.put(AppScreen.HELP, menuImageHelp);
+		
+		menuImageStatusMap = new HashMap<AppScreen, Map<MenuStatus, Image>>();
+		
+		Map<MenuStatus, Image> statusImageMap = new HashMap<MenuStatus, Image>();
+		statusImageMap.put(MenuStatus.UNSELECTED, Util.getImageIconFX("/menu/status.png"));
+		statusImageMap.put(MenuStatus.SELECTED, Util.getImageIconFX("/menu/status_selected.png"));
+		statusImageMap.put(MenuStatus.HOVER, Util.getImageIconFX("/menu/status_selected.png"));
+		menuImageStatusMap.put(AppScreen.STATUS, statusImageMap);
+		
+		Map<MenuStatus, Image> serverListImageMap = new HashMap<MenuStatus, Image>();
+		serverListImageMap.put(MenuStatus.UNSELECTED, Util.getImageIconFX("/menu/server.png"));
+		serverListImageMap.put(MenuStatus.SELECTED, Util.getImageIconFX("/menu/server_selected.png"));
+		serverListImageMap.put(MenuStatus.HOVER, Util.getImageIconFX("/menu/server_selected.png"));
+		menuImageStatusMap.put(AppScreen.SERVERLIST, serverListImageMap);
+		
+		Map<MenuStatus, Image> premiumImageMap = new HashMap<MenuStatus, Image>();
+		premiumImageMap.put(MenuStatus.UNSELECTED, Util.getImageIconFX("/menu/premium.png"));
+		premiumImageMap.put(MenuStatus.SELECTED, Util.getImageIconFX("/menu/premium_selected.png"));
+		premiumImageMap.put(MenuStatus.HOVER, Util.getImageIconFX("/menu/premium_selected.png"));
+		menuImageStatusMap.put(AppScreen.PREMIUM, premiumImageMap);
+		
+		Map<MenuStatus, Image> settingsImageMap = new HashMap<MenuStatus, Image>();
+		settingsImageMap.put(MenuStatus.UNSELECTED, Util.getImageIconFX("/menu/settings.png"));
+		settingsImageMap.put(MenuStatus.SELECTED, Util.getImageIconFX("/menu/settings_selected.png"));
+		settingsImageMap.put(MenuStatus.HOVER, Util.getImageIconFX("/menu/settings_selected.png"));
+		menuImageStatusMap.put(AppScreen.SETTINGS, settingsImageMap);
+		
+		Map<MenuStatus, Image> aboutImageMap = new HashMap<MenuStatus, Image>();
+		aboutImageMap.put(MenuStatus.UNSELECTED, Util.getImageIconFX("/menu/about.png"));
+		aboutImageMap.put(MenuStatus.SELECTED, Util.getImageIconFX("/menu/about_selected.png"));
+		aboutImageMap.put(MenuStatus.HOVER, Util.getImageIconFX("/menu/about_selected.png"));
+		menuImageStatusMap.put(AppScreen.ABOUT, aboutImageMap);
+		
+		Map<MenuStatus, Image> helpImageMap = new HashMap<MenuStatus, Image>();
+		helpImageMap.put(MenuStatus.UNSELECTED, Util.getImageIconFX("/menu/help.png"));
+		helpImageMap.put(MenuStatus.SELECTED, Util.getImageIconFX("/menu/help_selected.png"));
+		helpImageMap.put(MenuStatus.HOVER, Util.getImageIconFX("/menu/help_selected.png"));
+		menuImageStatusMap.put(AppScreen.HELP, helpImageMap);
+		
+		
+		menuControllerMap = new HashMap<AppScreen, AppScreenController>();
+		menuControllerMap.put(AppScreen.STATUS, appScreenControllerStatus);
+		menuControllerMap.put(AppScreen.SERVERLIST, appScreenControllerServerList);
+		menuControllerMap.put(AppScreen.PREMIUM, appScreenControllerStatus);
+		menuControllerMap.put(AppScreen.SETTINGS, appScreenControllerStatus);
+		menuControllerMap.put(AppScreen.ABOUT, appScreenControllerStatus);
+		menuControllerMap.put(AppScreen.HELP, appScreenControllerStatus);
+		
+		
+		
+		
 	}
 
 	public void initializeComponents() {
@@ -196,9 +247,9 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	    	// Notice that you manipulate the javaObjects out of the initialize if not it will raise an InvocationTargetException
 	    	
 	    	// Bind visibility of buttons to their manage properties so that they are easilty rendered visible or invisible
-	    	this.connectionSubviewController.initPremium(isFreeAccount());
-	    	this.connectionSubviewController.setApp(this.application);
-	    	this.connectionSubviewController.updateComponents(false);
+	    	this.appScreenControllerStatus.initPremium(isFreeAccount());
+	    	this.appScreenControllerStatus.setApp(this.application);
+	    	this.appScreenControllerStatus.notifyThatNowVisible(false);
 	    	
 	    });
 	}
@@ -246,7 +297,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
 		Storage.register(this);
 
-		this.initShortCuts();
+
 		this.initConnection();
 		this.initServer();
 		this.application.getStage().resizableProperty().setValue(Boolean.FALSE);
@@ -300,83 +351,132 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		log.debug("afterLogin() - finished");
 	}
 
-	@FXML
-	private void handleConnectionPaneMouseExited(MouseEvent event) {
-		this.application.getStage().getScene().setCursor(Cursor.DEFAULT);
-		if (!currentSidePane.equals(SidePane.CONNECTION)) {
-			this.connectionBackgroundImageView.setImage(Util.getImageIconFX("/buttons/button-connect-idle.png"));
+	private void onMenuPaneMouseExited(AppScreen appScreen) {
+		application.getStage().getScene().setCursor(Cursor.DEFAULT);
+		if (!currentAppScreen.equals(appScreen)) {
+			this.menuImageViewMap.get(appScreen).setImage(menuImageStatusMap.get(appScreen).get(MenuStatus.UNSELECTED));
 		}
 	}
 
-	@FXML
-	private void handleConnectionPaneMouseEntered(MouseEvent event) {
-		this.application.getStage().getScene().setCursor(Cursor.HAND);
-		if (!currentSidePane.equals(SidePane.CONNECTION)) {
-			this.connectionBackgroundImageView.setImage(Util.getImageIconFX("/buttons/button-connect-hover.png"));
+	private void onMenuPaneMouseEntered(AppScreen appScreen) {
+		application.getStage().getScene().setCursor(Cursor.HAND);
+		if (!currentAppScreen.equals(appScreen)) {
+			this.menuImageViewMap.get(appScreen).setImage(menuImageStatusMap.get(appScreen).get(MenuStatus.HOVER));
 		}
 	}
 
-	@FXML
-	private void handleConnectionPaneContext(ContextMenuEvent event) {
-	}
-
+	private void showAppScreen(AppScreen pane) {
+		contentDetailsPane.getChildren().setAll(leftPaneHashMap.get(pane).getKey());
 		
-	
-	@FXML
-	private void handleConnectionPaneClicked(MouseEvent event) {
-		contentDetailsPane.getChildren().setAll(leftPaneHashMap.get(SidePane.CONNECTION).getKey());
-		this.connectionSubviewController.updateComponents(connectionStatus);
-		currentSidePane = SidePane.CONNECTION;
-		updateSidePanes(currentSidePane);
-	}
-
-	@FXML
-	private void handleServerListPaneMouseExited(MouseEvent event) {
-		this.application.getStage().getScene().setCursor(Cursor.DEFAULT);
-		if (!currentSidePane.equals(SidePane.SERVERLIST)) {
-			this.serverListBackgroundImage.setImage(Util.getImageIconFX("/buttons/button-serverlist-idle.png"));
+		this.menuControllerMap.get(pane).notifyThatNowVisible(connectionStatus);
+		currentAppScreen = pane;
+		
+		for (AppScreen currentAppScreen : AppScreen.values()) {
+			ImageView imageView = menuImageViewMap.get(currentAppScreen);
+			if (currentAppScreen.equals(pane)) {
+				imageView.setImage(menuImageStatusMap.get(AppScreen.STATUS).get(MenuStatus.SELECTED));
+			} else {
+				imageView.setImage(menuImageStatusMap.get(AppScreen.STATUS).get(MenuStatus.UNSELECTED));
+			}
 		}
 	}
-
+	
+	// Status
 	@FXML
-	private void handleServerListPaneMouseEntered(MouseEvent event) {
-		this.application.getStage().getScene().setCursor(Cursor.HAND);
-		if (!currentSidePane.equals(SidePane.SERVERLIST)) {
-			this.serverListBackgroundImage.setImage(Util.getImageIconFX("/buttons/button-serverlist-hover.png"));
-		}
+	private void onMenuPaneStatusMouseExited(MouseEvent event) {
+		onMenuPaneMouseExited(AppScreen.STATUS);
 	}
 
 	@FXML
-	private void handleServerListPaneContext(ContextMenuEvent event) {
-	}
-
-	@FXML
-	private void handleSettingsPaneClicked(MouseEvent event) {
-		contentDetailsPane.getChildren().setAll(leftPaneHashMap.get(SidePane.SETTINGS).getKey());
-		this.settingsSubviewController.updateComponents(connectionStatus);
-		currentSidePane = SidePane.SETTINGS;
-		updateSidePanes(currentSidePane);
-	}
-
-
-	@FXML
-	private void handleServerListPaneClicked(MouseEvent event) {
-		contentDetailsPane.getChildren().setAll(leftPaneHashMap.get(SidePane.SERVERLIST).getKey());
-		this.serverListSubviewController.updateComponents(connectionStatus);
-		currentSidePane = SidePane.SERVERLIST;
-		updateSidePanes(currentSidePane);
+	private void onMenuPaneStatusMouseEntered(MouseEvent event) {
+		onMenuPaneMouseEntered(AppScreen.STATUS);
 	}
 	
-	
-	private void updateSidePanes(SidePane pane) {
-		if (pane.equals(SidePane.CONNECTION)) {
-			this.serverListBackgroundImage.setImage(imageIconFxButtonServerListIdle);
-			this.connectionBackgroundImageView.setImage(imageIconFxButtonConnectActive);
-		} else if (pane.equals(SidePane.SERVERLIST)) {
-			this.serverListBackgroundImage.setImage(imageIconFxButtonServerListActive);
-			this.connectionBackgroundImageView.setImage(imageIconFxButtonConnectIdle);
-		}
+	@FXML
+	private void onMenuPaneStatusClicked(MouseEvent event) {
+		showAppScreen(AppScreen.STATUS);
 	}
+
+	// Server List
+	@FXML
+	private void onMenuPaneServerListMouseExited(MouseEvent event) {
+		onMenuPaneMouseExited(AppScreen.SERVERLIST);
+	}
+
+	@FXML
+	private void onMenuPaneServerListMouseEntered(MouseEvent event) {
+		onMenuPaneMouseEntered(AppScreen.SERVERLIST);
+	}
+
+	@FXML
+	private void onMenuPaneServerListClicked(MouseEvent event) {
+		showAppScreen(AppScreen.SERVERLIST);
+	}
+	
+	// Premium
+	@FXML
+	private void onMenuPanePremiumMouseExited(MouseEvent event) {
+		onMenuPaneMouseExited(AppScreen.PREMIUM);
+	}
+
+	@FXML
+	private void onMenuPanePremiumMouseEntered(MouseEvent event) {
+		onMenuPaneMouseEntered(AppScreen.PREMIUM);
+	}
+
+	@FXML
+	private void onMenuPanePremiumClicked(MouseEvent event) {
+		showAppScreen(AppScreen.PREMIUM);
+	}
+	
+	// Settings
+	@FXML
+	private void onMenuPaneSettingsClicked(MouseEvent event) {
+		showAppScreen(AppScreen.SETTINGS);
+	}
+
+	@FXML
+	private void onMenuPaneSettingsMouseExited(MouseEvent event) {
+		onMenuPaneMouseExited(AppScreen.SETTINGS);
+	}
+
+	@FXML
+	private void onMenuPaneSettingsMouseEntered(MouseEvent event) {
+		onMenuPaneMouseEntered(AppScreen.SETTINGS);
+	}
+	
+	// About
+	@FXML
+	private void onMenuPaneAboutClicked(MouseEvent event) {
+		showAppScreen(AppScreen.ABOUT);
+	}
+
+	@FXML
+	private void onMenuPaneAboutMouseExited(MouseEvent event) {
+		onMenuPaneMouseExited(AppScreen.ABOUT);
+	}
+
+	@FXML
+	private void onMenuPaneAboutMouseEntered(MouseEvent event) {
+		onMenuPaneMouseEntered(AppScreen.ABOUT);
+	}
+
+	
+	// Help
+	@FXML
+	private void onMenuPaneHelpClicked(MouseEvent event) {
+		showAppScreen(AppScreen.HELP);
+	}
+
+	@FXML
+	private void onMenuPaneHelpMouseExited(MouseEvent event) {
+		onMenuPaneMouseExited(AppScreen.HELP);
+	}
+
+	@FXML
+	private void onMenuPaneHelpMouseEntered(MouseEvent event) {
+		onMenuPaneMouseEntered(AppScreen.HELP);
+	}	
 
 	@FXML
 	private void handleHelpImageViewMouseExited(MouseEvent event) {
@@ -388,9 +488,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		this.application.getStage().getScene().setCursor(Cursor.HAND);
 	}
 
-	@FXML
-	private void handleHelpImageViewContext(ContextMenuEvent event) {
-	}
 
 	// TODO: replace by loader from somewhere else, e.g. "more" screen?
 	@FXML
@@ -398,19 +495,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		this.openHelp();
 	}
 
-	@FXML
-	private void handleSettingsImageViewMouseExited(MouseEvent event) {
-		this.application.getStage().getScene().setCursor(Cursor.DEFAULT);
-	}
-
-	@FXML
-	private void handleSettingsImageViewMouseEntered(MouseEvent event) {
-		this.application.getStage().getScene().setCursor(Cursor.HAND);
-	}
-
-	@FXML
-	private void handleSettingsImageViewContext(ContextMenuEvent event) {
-	}
 
 	// TODO: Bind this hideImageView code to the minimize button from Stage, so minimize will always be minimize to tray...
 	@FXML
@@ -539,7 +623,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 			case Disconnected:
 				if (isFreeAccount()) {
 
-					Server server = this.serverListSubviewController.getSelectedServer();
+					Server server = this.appScreenControllerServerList.getSelectedServer();
 					if (server.getServerType() == ServerType.Premium || server.getServerType() == ServerType.PremiumPlus) {
 						setNormalCursor();
 						Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
@@ -555,11 +639,11 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 						return;
 					}
 
-					controller.connect(serverListSubviewController.getSelectedServer(), settingsSubviewController.getSelectedProtocol(),
+					controller.connect(appScreenControllerServerList.getSelectedServer(), settingsSubviewController.getSelectedProtocol(),
 							Reason.ConnectButtonPressed);
 				} else if (isPremiumAccount()) {
-					log.debug("ServerList Subview controller  has the object " + serverListSubviewController.toString());
-					Server server = this.serverListSubviewController.getSelectedServer();
+					log.debug("ServerList Subview controller  has the object " + appScreenControllerServerList.toString());
+					Server server = this.appScreenControllerServerList.getSelectedServer();
 
 					if (server.getServerType() == ServerType.PremiumPlus) {
 						setNormalCursor();
@@ -576,10 +660,10 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
 					}
 
-					controller.connect(serverListSubviewController.getSelectedServer(), settingsSubviewController.getSelectedProtocol(),
+					controller.connect(appScreenControllerServerList.getSelectedServer(), settingsSubviewController.getSelectedProtocol(),
 							Reason.ConnectButtonPressed);
 				} else {
-					controller.connect(serverListSubviewController.getSelectedServer(), settingsSubviewController.getSelectedProtocol(),
+					controller.connect(appScreenControllerServerList.getSelectedServer(), settingsSubviewController.getSelectedProtocol(),
 							Reason.ConnectButtonPressed);
 				}
 
@@ -626,11 +710,11 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		enableSystemProxyIfProxyConfig();
 		this.hideConnectProgress();
 
-		this.connectionSubviewController.connectButtonDisable(false);
+		this.appScreenControllerStatus.connectButtonDisable(false);
 		Platform.runLater(() -> {
 			mySetIconImage("/icons/sfvpn2-disconnected-big.png");
 		});
-		this.connectionSubviewController.updateComponents(false);
+		this.appScreenControllerStatus.notifyThatNowVisible(false);
 		log.debug("ShellfireMainForm: In setStateDisconnected method ");
 		popup.remove(disconnectItem);
 		popup.remove(abortItem);
@@ -720,7 +804,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 			this.trayIcon.setImage(this.iconIdleAwt);
 		}
 		this.stopConnectedSinceTimer();
-		serverListSubviewController.getServerListTableView().disableProperty().set(false);
+		appScreenControllerServerList.getServerListTableView().disableProperty().set(false);
 		this.setNormalCursor();
 		this.updateOnlineHost();
 		if (!ProxyConfig.isProxyEnabled()) {
@@ -769,7 +853,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		} catch (IOException ex) {
 			log.debug("setStateConnecting: cannot start showConnectProgress with error " + ex.getMessage());
 		}
-		this.connectionSubviewController.connectButtonDisable(true);
+		this.appScreenControllerStatus.connectButtonDisable(true);
 
 		Platform.runLater(() -> {
 			mySetIconImage("/icons/sfvpn2-connecting-big.png");
@@ -783,7 +867,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		popupConnectItem.setLabel(i18n.tr("Connection is being processed..."));
 		popupConnectItem.setEnabled(false);
 		popup.add(abortItem);
-		serverListSubviewController.getServerListTableView().disableProperty().set(true);
+		appScreenControllerServerList.getServerListTableView().disableProperty().set(true);
 		settingsSubviewController.getWireguardRadioButton().setDisable(true);
 		settingsSubviewController.getUDPRadioButton().setDisable(true);
 		settingsSubviewController.getTCPRadioButton().setDisable(true);
@@ -965,35 +1049,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
 	}
 
-	private void initShortCuts() {
-		EventQueue ev = Toolkit.getDefaultToolkit().getSystemEventQueue();
-
-		ev.push(new EventQueue() {
-
-			protected void dispatchEvent(AWTEvent event) {
-				if (event instanceof KeyEvent) {
-					log.debug("Event noticed from AWT");
-					final KeyEvent oKeyEvent = (KeyEvent) event;
-					if (oKeyEvent.getID() == KeyEvent.KEY_PRESSED) {
-						final int iKeyCode = oKeyEvent.getKeyCode();
-						appendKey((char) iKeyCode);
-					}
-				}
-
-				super.dispatchEvent(event);
-			}
-		});
-
-	}
-
-	private void appendKey(char c) {
-		log.debug("Charter " + c + " pressed");
-		this.typedStrings.append(c);
-		if (typedStrings.toString().toLowerCase().endsWith("showconsole")) {
-			
-		}
-	}
-
 	private void initConnection() {
 		new Thread() {
 			public void run() {
@@ -1020,9 +1075,9 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 			mySetIconImage("/icons/sfvpn2-connected-big.png");
 		});
 
-		this.connectionSubviewController.updateComponents(true);
-		this.connectionSubviewController.connectButtonDisable(false);
-		serverListSubviewController.getServerListTableView().disableProperty().set(true);
+		this.appScreenControllerStatus.notifyThatNowVisible(true);
+		this.appScreenControllerStatus.connectButtonDisable(false);
+		appScreenControllerServerList.getServerListTableView().disableProperty().set(true);
 		if (this.trayIcon != null) {
 			this.trayIcon.setImage(this.iconConnected);
 		}
@@ -1201,7 +1256,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		log.debug("setSelectedServer(" + server + ") - updating background image");
 		
 		
-		connectionSubviewController.setSelectedServer(server);
+		appScreenControllerStatus.setSelectedServer(server);
 		
 
 	}
@@ -1214,12 +1269,12 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		try {
 			// load the serverList pane
 			Pair<Pane, Object> pair = FxUIManager.SwitchSubview("serverList_subview.fxml");
-			this.serverListSubviewController = (ServerListSubviewController) pair.getValue();
-			this.serverListSubviewController.setShellfireService((this.shellfireService));
-			this.serverListSubviewController.initComponents();
-			this.serverListSubviewController.setApp(this.application);
-			this.serverListSubviewController.setMainFormController(this);
-			leftPaneHashMap.put(SidePane.SERVERLIST, pair);
+			this.appScreenControllerServerList = (ServerListSubviewController) pair.getValue();
+			this.appScreenControllerServerList.setShellfireService((this.shellfireService));
+			this.appScreenControllerServerList.initComponents();
+			this.appScreenControllerServerList.setApp(this.application);
+			this.appScreenControllerServerList.setMainFormController(this);
+			leftPaneHashMap.put(AppScreen.SERVERLIST, pair);
 			log.debug("Serverlist controller defined");
 
 			// load the settings pane
@@ -1229,22 +1284,22 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 			this.settingsSubviewController.initComponents();
 			this.settingsSubviewController.setApp(this.application);
 			this.settingsSubviewController.setMainFormController(this);
-			leftPaneHashMap.put(SidePane.SETTINGS, pairSettings);
+			leftPaneHashMap.put(AppScreen.SETTINGS, pairSettings);
 			log.debug("settings controller defined");
 			
 			
 			// load connection pane
 			Pair<Pane, Object> pairConnection = FxUIManager.SwitchSubview("connection_subview.fxml");
-			this.connectionSubviewController = (ConnectionSubviewController) pairConnection.getValue();
-			contentDetailsPane.getChildren().setAll(leftPaneHashMap.get(SidePane.SERVERLIST).getKey());
-			this.connectionSubviewController = (ConnectionSubviewController) pairConnection.getValue();
-			this.connectionSubviewController.initPremium(isFreeAccount());
-			this.connectionSubviewController.setApp(this.application);
+			this.appScreenControllerStatus = (ConnectionSubviewController) pairConnection.getValue();
+			contentDetailsPane.getChildren().setAll(leftPaneHashMap.get(AppScreen.SERVERLIST).getKey());
+			this.appScreenControllerStatus = (ConnectionSubviewController) pairConnection.getValue();
+			this.appScreenControllerStatus.initPremium(isFreeAccount());
+			this.appScreenControllerStatus.setApp(this.application);
 			log.debug("handleConnectionPanelClicked: VPN connection status is " + connectionStatus);
-			this.connectionSubviewController.updateComponents(connectionStatus);
+			this.appScreenControllerStatus.notifyThatNowVisible(connectionStatus);
 
-			leftPaneHashMap.put(SidePane.CONNECTION, pairConnection);
-			handleConnectionPaneClicked(null);
+			leftPaneHashMap.put(AppScreen.STATUS, pairConnection);
+			onMenuPaneStatusClicked(null);
 			log.debug("connection controller defined");
 
 			
@@ -1288,13 +1343,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		trayIcon.displayMessage(header, content, MessageType.INFO);
 	}
 
-	@FXML
-	private void handleWindowKeyPressed(javafx.scene.input.KeyEvent event) {
-		if (event.getCode().isLetterKey()) {
-			appendKey(event.getCode().getName().charAt(0));
-		}
-	}
-
 	public void minimizeToTray() {
 		log.debug("ShellfireVPNMainController.minimizeToTray() - start");
 		if (leftMenuPane != null) {
@@ -1323,6 +1371,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
 }
 
-enum SidePane {
-	CONNECTION, SERVERLIST, SETTINGS;
+enum AppScreen {
+	STATUS, SERVERLIST, SETTINGS, PREMIUM, ABOUT, HELP;
 }

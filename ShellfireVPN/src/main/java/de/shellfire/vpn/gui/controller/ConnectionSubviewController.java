@@ -44,7 +44,7 @@ import javafx.scene.web.WebView;
  *
  * @author Tcheutchoua Steve
  */
-public class ConnectionSubviewController implements Initializable {
+public class ConnectionSubviewController implements Initializable, AppScreenController {
 
 	@FXML
 	private Pane contentDetailsPane;
@@ -156,7 +156,7 @@ public class ConnectionSubviewController implements Initializable {
 		}
 	}
 	
-	public void updateComponents(boolean connected) {
+	public void notifyThatNowVisible(boolean connected) {
 		if (connected) {
 			this.setMapConnected();
 			this.connectImageView.setImage(imageButtonDisconnect);
