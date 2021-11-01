@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<fx:root style="-fx-background-color: #fafafa;" type="javafx.scene.layout.Pane" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8">
+   <children>
+      <VBox>
+         <children>
+            <HBox alignment="CENTER_LEFT" onMouseClicked="#onClickHeader" prefWidth="390.0" VBox.vgrow="ALWAYS">
+               <children>
+                  <Label fx:id="header" alignment="BASELINE_LEFT" prefWidth="350.0" text="Help Header 1" textFill="#666666">
+                     <font>
+                        <Font name="Arial Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <ImageView fx:id="helpArrowImage" pickOnBounds="true" preserveRatio="true" HBox.hgrow="NEVER">
+                     <image>
+                        <Image url="file:/A:/Seafile/My%20Library/workspace/shellfire-vpn4/ShellfireVPN/src/main/resources/icons/arrow_up.png" />
+                     </image>
+                  </ImageView>
+               </children>
+               <padding>
+                  <Insets bottom="10.0" right="10.0" top="10.0" />
+               </padding>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </HBox>
+            <Label fx:id="text" alignment="BASELINE_CENTER" contentDisplay="CENTER" prefWidth="380.0" style="-fx-background-color: white;" text="Shellfire is a hosting provider located in Bad Vilbel, Germany, close to Frankfurt am Main. Shellfire was founded in 2002 by Florian Gattung and Max Behr, who have been acting as CEOs since then." textFill="#666666" wrapText="true">
+               <font>
+                  <Font name="Arial" size="12.0" />
+               </font>
+               <padding>
+                  <Insets bottom="20.0" top="10.0" />
+               </padding>
+            </Label>
+         </children>
+      </VBox>
+   </children>
+</fx:root>
