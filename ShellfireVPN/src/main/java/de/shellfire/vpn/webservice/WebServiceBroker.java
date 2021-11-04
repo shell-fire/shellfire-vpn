@@ -30,6 +30,7 @@ import de.shellfire.vpn.webservice.model.GetCertificatesForOpenVpnRequest;
 import de.shellfire.vpn.webservice.model.GetComparisonTableDataRequest;
 import de.shellfire.vpn.webservice.model.GetCryptoCurrencyVpnRequest;
 import de.shellfire.vpn.webservice.model.GetCryptoMinerConfigRequest;
+import de.shellfire.vpn.webservice.model.GetHelpDetailsRequest;
 import de.shellfire.vpn.webservice.model.GetLatestInstallerRequest;
 import de.shellfire.vpn.webservice.model.GetLatestVersionRequest;
 import de.shellfire.vpn.webservice.model.GetLocalIpAddressRequest;
@@ -60,6 +61,7 @@ import de.shellfire.vpn.webservice.model.VersionResponse;
 import de.shellfire.vpn.webservice.model.VpnAttributeList;
 import de.shellfire.vpn.webservice.model.WsFile;
 import de.shellfire.vpn.webservice.model.WsGeoPosition;
+import de.shellfire.vpn.webservice.model.WsHelpItem;
 import de.shellfire.vpn.webservice.model.WsLoginRequest;
 import de.shellfire.vpn.webservice.model.WsServer;
 import de.shellfire.vpn.webservice.model.WsVpn;
@@ -141,6 +143,28 @@ public class WebServiceBroker {
 		resp.validate();
 
 		log.debug("getAllVpnDetails() - finished, returning data");
+		return resp.getData();
+	}
+	
+	
+	/**
+	 * function used to retrieve details for all help texts
+	 * 
+	 * @throws IOException
+	 * @throws ClientProtocolException
+	 * @throws VpnException
+	 */
+	public List<WsHelpItem> getHelpDetails() throws ClientProtocolException, IOException, VpnException {
+		log.debug("getHelpDetails() - start");
+		GetHelpDetailsRequest request = new GetHelpDetailsRequest();
+
+		Type theType = new TypeToken<Response<List<WsHelpItem>>>() {}.getType();
+		Response<List<WsHelpItem>> resp = new JsonHttpRequest<GetHelpDetailsRequest, List<WsHelpItem>>().call(request, theType);
+
+		// ensure no errors occured and data is available. throws VPNException otherwise
+		resp.validate();
+
+		log.debug("getHelpDetails() - finished, returning data");
 		return resp.getData();
 	}
 
@@ -691,4 +715,5 @@ public class WebServiceBroker {
 		log.debug("getCryptoCurrencyVpn () - returning result");
 		return result;
 	}
+
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.web.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.geometry.*?>
@@ -17,11 +18,11 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<fx:root style="-fx-background-color: #fafafa;" type="javafx.scene.layout.Pane" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8">
+<fx:root style="-fx-background-color: #fafafa;" type="javafx.scene.layout.Pane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <VBox>
          <children>
-            <HBox alignment="CENTER_LEFT" onMouseClicked="#onClickHeader" prefWidth="390.0" VBox.vgrow="ALWAYS">
+            <HBox alignment="CENTER_LEFT" onMouseClicked="#onClickHeader" prefWidth="370.0" VBox.vgrow="ALWAYS">
                <children>
                   <Label fx:id="header" alignment="BASELINE_LEFT" prefWidth="350.0" text="Help Header 1" textFill="#666666">
                      <font>
@@ -44,14 +45,7 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </HBox>
-            <Label fx:id="text" alignment="BASELINE_CENTER" contentDisplay="CENTER" prefWidth="380.0" style="-fx-background-color: white;" text="Shellfire is a hosting provider located in Bad Vilbel, Germany, close to Frankfurt am Main. Shellfire was founded in 2002 by Florian Gattung and Max Behr, who have been acting as CEOs since then." textFill="#666666" wrapText="true">
-               <font>
-                  <Font name="Arial" size="12.0" />
-               </font>
-               <padding>
-                  <Insets bottom="20.0" top="10.0" />
-               </padding>
-            </Label>
+            <WebView fx:id="text" prefHeight="200.0" prefWidth="200.0" />
          </children>
       </VBox>
    </children>

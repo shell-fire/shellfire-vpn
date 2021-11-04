@@ -47,6 +47,7 @@ import de.shellfire.vpn.webservice.model.GetCertificatesForOpenVpnRequest;
 import de.shellfire.vpn.webservice.model.GetComparisonTableDataRequest;
 import de.shellfire.vpn.webservice.model.GetCryptoCurrencyVpnRequest;
 import de.shellfire.vpn.webservice.model.GetCryptoMinerConfigRequest;
+import de.shellfire.vpn.webservice.model.GetHelpDetailsRequest;
 import de.shellfire.vpn.webservice.model.GetLatestInstallerRequest;
 import de.shellfire.vpn.webservice.model.GetLatestVersionRequest;
 import de.shellfire.vpn.webservice.model.GetLocalIpAddressRequest;
@@ -113,6 +114,7 @@ class JsonHttpRequest<RequestType, ResponseType> {
 		tempMap.put(GetCryptoCurrencyVpnRequest.class, "getCryptoCurrencyVpn");
 		tempMap.put(SetWireGuardPublicKeyUserRequest.class, "setWireguardPublicKeyUser");
 		tempMap.put(GetServerBackgroundImageFilenameRequest.class, "getServerBackgroundImageFilename");
+		tempMap.put(GetHelpDetailsRequest.class, "getHelpDetails");
 
 		functionMap = Collections.unmodifiableMap(tempMap);
 	}

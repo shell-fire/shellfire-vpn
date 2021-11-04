@@ -11,6 +11,7 @@ import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.gui.helper.HelpItem;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.webservice.WebService;
+import de.shellfire.vpn.webservice.model.WsHelpItem;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.VBox;
@@ -23,30 +24,33 @@ public class AppScreenControllerHelp implements Initializable, AppScreenControll
 	
 	@FXML
 	private VBox helpItemContainerVBox;
+	private WebService webService;
+	private LoginForms application;
 
 	
 	public void setShellfireService(WebService webService) {
-
+		this.webService = webService;
 		
 	}
 
 	public void initComponents() {
 		
-		// TODO: replace by retrieving helpItems from web-service
+		List<WsHelpItem> wsHelpItemList = webService.getHelpDetails();
 		helpItemList = new LinkedList<HelpItem>();
-		helpItemList.add(new HelpItem(this, i18n.tr("Help Header 1"), i18n.tr("Help Text 1 ... Help Text 1 ... Help Text 1 ... Help Text 1 ... Help Text 1 ... Help Text 1 ... Help Text 1 ... ")));
-		helpItemList.add(new HelpItem(this, i18n.tr("Help Header 2"), i18n.tr("Help Text 2 ... Help Text 2 ... Help Text 2 ... Help Text 2 ... Help Text 2 ... Help Text 2 ... Help Text 2 ... ")));
-		helpItemList.add(new HelpItem(this, i18n.tr("Help Header 3"), i18n.tr("Help Text 3 ... Help Text 3 ... Help Text 3 ... Help Text 3 ... Help Text 3 ... Help Text 3 ... Help Text 3 ... ")));
-		helpItemList.add(new HelpItem(this, i18n.tr("Help Header 4"), i18n.tr("Help Text 4 ... Help Text 4 ... Help Text 4 ... Help Text 4 ... Help Text 4 ... Help Text 4 ... Help Text 4 ... ")));
+		for (WsHelpItem wsHelpItem : wsHelpItemList) {
 
-		for (HelpItem currentItem : helpItemList) {
-			helpItemContainerVBox.getChildren().add(currentItem);
+			HelpItem helpItem = new HelpItem(this, wsHelpItem.getHeader(), wsHelpItem.getText());
+			helpItemList.add(helpItem);
+			helpItemContainerVBox.getChildren().add(helpItem);
 		}
 	}
 
 	public void setApp(LoginForms application) {
-		// TODO Auto-generated method stub
-		
+		this.application = application;
+	}
+
+	public LoginForms getApp() {
+		return this.application;
 	}
 
 	public void setMainFormController(ShellfireVPNMainFormFxmlController shellfireVPNMainFormFxmlController) {

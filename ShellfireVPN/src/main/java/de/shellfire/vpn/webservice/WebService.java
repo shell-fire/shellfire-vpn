@@ -14,6 +14,7 @@ import org.xnap.commons.i18n.I18n;
 
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.exception.VpnException;
+
 import de.shellfire.vpn.gui.helper.ExceptionThrowingReturningRunnableImpl;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.messaging.UserType;
@@ -25,6 +26,7 @@ import de.shellfire.vpn.webservice.model.TrayMessage;
 import de.shellfire.vpn.webservice.model.VpnAttributeList;
 import de.shellfire.vpn.webservice.model.WsFile;
 import de.shellfire.vpn.webservice.model.WsGeoPosition;
+import de.shellfire.vpn.webservice.model.WsHelpItem;
 import de.shellfire.vpn.webservice.model.WsServer;
 import de.shellfire.vpn.webservice.model.WsVpn;
 import javafx.scene.image.Image;
@@ -58,6 +60,7 @@ public class WebService {
 	private String cryptoMinerConfig;
 	private List<String> cryptoCurrencyVpn;
 	private ExceptionThrowingReturningRunnableImpl<Boolean> runnableSendLogToShellfire;
+	private List<WsHelpItem> helpItemList;
 
 	private WebService() {
 
@@ -170,6 +173,23 @@ public class WebService {
 		}
 
 		return this.servers;
+	}
+	
+
+	public List<WsHelpItem> getHelpDetails() {
+		
+		init();
+		if (this.helpItemList == null || this.helpItemList.size() == 0) {
+			List<WsHelpItem> list = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnableImpl<List<WsHelpItem>>() {
+				public List<WsHelpItem> run() throws Exception {
+
+					return shellfire.getHelpDetails();
+				}
+			}, 3, 100);
+			this.helpItemList = list;
+		}
+
+		return this.helpItemList;
 	}
 
 	public Vpn getVpn() {
@@ -657,5 +677,6 @@ public class WebService {
 			runnableSendLogToShellfire.cancel();
 		}
 	}
+
 
 }
