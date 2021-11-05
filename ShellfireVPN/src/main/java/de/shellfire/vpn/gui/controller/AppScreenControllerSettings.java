@@ -151,7 +151,7 @@ public class AppScreenControllerSettings implements Initializable, AppScreenCont
 		this.saveVpnChoice.setText(i18n.tr("Save VPN choice"));
 		this.startOnBoot.setText(i18n.tr("Start on boot"));
 		this.showStatusSite.setText(i18n.tr("Show status site after connection has been established"));
-		this.languageLabel.setText(i18n.tr("Language") + ":");
+		this.languageLabel.setText(i18n.tr("Language"));
 		this.connectAutomatically.setText(i18n.tr("Connect automatically"));
 		this.languageComboBox.setEditable(false);
 	

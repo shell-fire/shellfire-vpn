@@ -25,7 +25,7 @@
                   <Font name="Arial" size="24.0" />
                </font>
                <VBox.margin>
-                  <Insets bottom="20.0" top="20.0" />
+                  <Insets bottom="30.0" top="20.0" />
                </VBox.margin>
             </Label>
          </children>
