@@ -23,12 +23,15 @@ import de.shellfire.vpn.i18n.Language;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.types.Server;
 import de.shellfire.vpn.types.VpnProtocol;
-import de.shellfire.vpn.webservice.Vpn;
 import de.shellfire.vpn.webservice.WebService;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -41,6 +44,9 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Callback;
 
 /**
@@ -52,12 +58,6 @@ public class AppScreenControllerSettings implements Initializable, AppScreenCont
 
 	private LogViewerFxmlController logViewer;
 	@FXML
-	private CheckBox saveLoginData;
-	@FXML
-	private CheckBox loginAutomatically;
-	@FXML
-	private CheckBox saveVpnChoice;
-	@FXML
 	private CheckBox startOnBoot;
 	@FXML
 	private CheckBox connectAutomatically;
@@ -65,6 +65,10 @@ public class AppScreenControllerSettings implements Initializable, AppScreenCont
 	private CheckBox showStatusSite;
 	@FXML
 	private Label languageLabel;
+	@FXML
+	private Label selectedVpnId;
+	@FXML
+	private Label selectedVpnType;
 	@FXML
 	private ComboBox<Language> languageComboBox;
 	@FXML
@@ -83,7 +87,6 @@ public class AppScreenControllerSettings implements Initializable, AppScreenCont
 	private Language currentLanguage;
 
 	private static I18n i18n = VpnI18N.getI18n();
-	public static Vpn currentVpn;
 	private WebService shellfireService;
 	private LoginForms application;
 	private static final Logger log = Util.getLogger(AppScreenControllerSettings.class.getCanonicalName());
@@ -113,7 +116,15 @@ public class AppScreenControllerSettings implements Initializable, AppScreenCont
 
 	public void setShellfireService(WebService shellfireService) {
 		this.shellfireService = shellfireService;
-		currentVpn = shellfireService.getVpn();
+		
+		this.updateSelectedVpn();
+	}
+
+
+	private void updateSelectedVpn() {
+		this.selectedVpnId.setText("" + shellfireService.getVpn().getVpnId());
+		this.selectedVpnType.setText(shellfireService.getVpn().getAccountType().toString());
+		
 	}
 
 
@@ -146,36 +157,17 @@ public class AppScreenControllerSettings implements Initializable, AppScreenCont
 		this.TCPRadioButton.setText(i18n.tr("OpenVPN TCP (works with secure firewalls and proxies.)"));
 		this.UDPRadioButton.setText(i18n.tr("OpenVPN UDP (fast)"));
 		this.WireguardRadioButton.setText(i18n.tr("Wireguard (fastest)"));
-		this.saveLoginData.setText(i18n.tr("Save login data"));
-		this.loginAutomatically.setText(i18n.tr("Login automatically"));
-		this.saveVpnChoice.setText(i18n.tr("Save VPN choice"));
-		this.startOnBoot.setText(i18n.tr("Start on boot"));
-		this.showStatusSite.setText(i18n.tr("Show status site after connection has been established"));
+		this.startOnBoot.setText(i18n.tr("When Windows starts: Start Shellfire VPN App"));
+		this.showStatusSite.setText(i18n.tr("When connected to VPN: Show VPN Status in Browser"));
 		this.languageLabel.setText(i18n.tr("Language"));
-		this.connectAutomatically.setText(i18n.tr("Connect automatically"));
+		this.connectAutomatically.setText(i18n.tr("When Shellfire VPN App Starts: Connect to VPN"));
 		this.languageComboBox.setEditable(false);
 	
 		initValues();
 	}
 
 	@FXML
-	private void handleSaveLoginData(ActionEvent event) {
-		if (!this.saveLoginData.isDisabled() && !saveLoginData.isSelected()) {
-			if (!this.loginAutomatically.isDisabled()) {
-				this.loginAutomatically.setSelected(false);
-			}
-			if (!this.saveLoginData.isDisabled()) {
-				this.saveLoginData.setSelected(false);
-			}
-		}
-		save();
-	}
-
-	@FXML
 	private void handleLoginAutomatically(ActionEvent event) {
-		if (!this.loginAutomatically.isDisabled() && loginAutomatically.isSelected() && !this.saveLoginData.isDisabled()) {
-			this.saveLoginData.setSelected(true);
-		}
 		save();
 	}
 	
@@ -189,6 +181,43 @@ public class AppScreenControllerSettings implements Initializable, AppScreenCont
 	private void onClickShowLogButton(ActionEvent event) {
 		this.initConsole();
 	}
+	
+	@FXML
+	private void onClickSelectVpnButton(ActionEvent event) {
+		VpnProperties props = VpnProperties.getInstance();
+		props.remove(LoginForms.REG_REMEMBERSELECTION);
+		
+		
+	    Stage stage = new Stage();
+	    Parent root;
+		try {
+			FXMLLoader loader = new FXMLLoader(AppScreenControllerSettings.class.getResource("/fxml/VpnSelectDialogFxml.fxml"));
+			root = loader.load();
+			
+		    stage.setScene(new Scene(root));
+		    stage.initStyle(StageStyle.UTILITY);
+		    stage.initModality(Modality.WINDOW_MODAL);
+		    stage.initOwner(((Node)event.getSource()).getScene().getWindow() );
+		    
+		    stage.show();
+		    
+		    VpnSelectDialogController vpnSelectController = (VpnSelectDialogController) loader.getController();
+			vpnSelectController.setApp(this.application);
+			vpnSelectController.setService(this.shellfireService);
+		    
+		
+		} catch (IOException e) {
+			log.error("onClickSelectVpnButton - Could not switch subview to VPN Select Screen", e);
+		}
+	}
+	
+	@FXML
+	private void onClickLogoutButton(ActionEvent event) {
+		VpnProperties props = VpnProperties.getInstance();
+		props.remove(LoginController.REG_USER);
+		props.remove(LoginController.REG_PASS);
+		props.setBoolean(LoginController.REG_AUTOlOGIN, false);
+	}
 
 	@FXML
 	private void handleLanguageShown(Event event) {
@@ -199,9 +228,6 @@ public class AppScreenControllerSettings implements Initializable, AppScreenCont
 
 	@FXML
 	private void handleSaveVpnChoice(ActionEvent event) {
-		if (!this.saveVpnChoice.isDisabled() && saveVpnChoice.isSelected() && !this.saveLoginData.isDisabled()) {
-			this.saveLoginData.setSelected(true);
-		}
 		save();
 	}
 
@@ -262,24 +288,6 @@ public class AppScreenControllerSettings implements Initializable, AppScreenCont
 	private void initValues() {
 		VpnProperties props = VpnProperties.getInstance();
 
-		if (props.getProperty(LoginController.REG_USER, null) != null) {
-			this.saveLoginData.setDisable(true);
-		} else {
-			this.saveLoginData.setSelected(true); // can only be enabled from login dialog
-		}
-
-		if (props.getBoolean(LoginController.REG_AUTOlOGIN, false)) {
-			this.loginAutomatically.setSelected(true);
-		} else if (props.getProperty(LoginController.REG_USER, null) == null) {
-			this.loginAutomatically.setDisable(true); // disable if login data not remembered, because then it makes no sense
-		}
-
-		if (props.getInt(LoginForms.REG_REMEMBERSELECTION, 0) != 0) {
-			this.saveVpnChoice.setSelected(true);
-		} else if (props.getProperty(LoginController.REG_USER, null) == null) {
-			this.saveVpnChoice.setDisable(true); // disable if login data not remembered, because then it makes no sense
-		}
-
 		boolean autoConnect = props.getBoolean(LoginController.REG_AUTOCONNECT, false);
 		this.connectAutomatically.setSelected(autoConnect);
 
@@ -293,7 +301,7 @@ public class AppScreenControllerSettings implements Initializable, AppScreenCont
 	}
 
 	private void initLanguages() {
-		log.debug("SettingsDialogController: initLanguages - method called");
+		log.debug("initLanguages - method called");
 		LinkedList<Language> languages = VpnI18N.getAvailableTranslations();
 		this.languageComboBox.getItems().addAll(languages);
 
@@ -317,31 +325,13 @@ public class AppScreenControllerSettings implements Initializable, AppScreenCont
 		});
 		languageComboBox.setValue(currentLanguage);
 	}
-	
+
 	private void save() {
 		VpnProperties props = VpnProperties.getInstance();
 		this.currentLanguage = this.languageComboBox.getValue();
-		if (!this.loginAutomatically.isDisabled()) { // Not disabled means the checkbox is enabled.
-			props.setBoolean(LoginController.REG_AUTOlOGIN, this.loginAutomatically.isSelected());
-		}
-
-		if (!this.saveLoginData.isDisabled() && this.saveLoginData.isSelected() == false) {
-			props.remove(LoginController.REG_USER);
-			props.remove(LoginController.REG_PASS);
-		}
-
-		if (!this.saveVpnChoice.isDisabled() && !this.saveVpnChoice.isSelected()) {
-			props.remove(LoginForms.REG_REMEMBERSELECTION);
-		}
 
 		props.setBoolean(LoginController.REG_AUTOCONNECT, this.connectAutomatically.isSelected());
 		props.setBoolean(LoginController.REG_SHOWSTATUSURL, this.showStatusSite.isSelected());
-
-		if (this.saveVpnChoice.isSelected()) {
-			WebService service = WebService.getInstance();
-			Vpn vpn = service.getVpn();
-			props.setInt(LoginForms.REG_REMEMBERSELECTION, vpn.getVpnId());
-		}
 
 		if (this.startOnBoot.isSelected()) {
 			Client.addVpnToAutoStart();
@@ -353,7 +343,7 @@ public class AppScreenControllerSettings implements Initializable, AppScreenCont
 
 		if (!currentLanguage.equals(oldLanguage)) {
 			VpnI18N.setLanguage(currentLanguage);
-			log.debug("SettingsDialogController: save() - language changed to " + currentLanguage.getName());
+			log.debug("save() - language changed to " + currentLanguage.getName());
 			Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
 					i18n.tr("Changed language settings require a restart of ShellfireVPN to take effect. Restart now?"), ButtonType.YES,
 					ButtonType.NO);
@@ -364,6 +354,8 @@ public class AppScreenControllerSettings implements Initializable, AppScreenCont
 				LoginController.restart();
 			}
 		}
+		
+		initValues();
 	}
 	
 	class ServerListComparator implements Comparator<Server> {

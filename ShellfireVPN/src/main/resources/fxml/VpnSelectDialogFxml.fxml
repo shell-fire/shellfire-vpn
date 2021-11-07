@@ -1,58 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="677.0" prefWidth="522.0" style="-fx-background-color: rgb(240,240,240);" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.VpnSelectDialogController">
+<AnchorPane prefHeight="640.0" prefWidth="380.0" style="-fx-background-color: #fafafa;" stylesheets="@../stylesheets/main-en.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.VpnSelectDialogController">
    <children>
-      <AnchorPane id="AnchorPane" layoutX="8.0" layoutY="9.0" prefHeight="661.0" prefWidth="507.0" style="-fx-background-color: rgb(64,69,73);">
+      <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <AnchorPane layoutX="6.0" layoutY="77.0" prefHeight="581.0" prefWidth="495.0" style="-fx-background-color: rgb(240,240,240);" AnchorPane.bottomAnchor="6.0" AnchorPane.leftAnchor="6.0" AnchorPane.rightAnchor="6.0">
+            <VBox alignment="TOP_CENTER">
                <children>
-                  <Button fx:id="selectVpnButton" layoutX="4.0" layoutY="542.0" mnemonicParsing="false" onAction="#handleSelectVpnButton" prefHeight="25.0" prefWidth="453.0" text="VPN auswÃ¤hlen" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="4.0" AnchorPane.rightAnchor="2.0" />
-                  <Label fx:id="vpnSelectLabel" layoutX="14.0" layoutY="-3.0" minHeight="16" minWidth="69" prefHeight="31.0" prefWidth="216.0" text="vpn auswahl">
+                  <Label fx:id="vpnSelectLabel" alignment="BASELINE_CENTER" contentDisplay="CENTER" text="Select VPN" textAlignment="CENTER" textFill="#12ace5">
                      <font>
-                        <Font name="Arial" size="30.0" />
+                        <Font name="Arial" size="24.0" />
                      </font>
+                     <VBox.margin>
+                        <Insets top="20.0" />
+                     </VBox.margin>
                   </Label>
-                  <CheckBox fx:id="fAutoconnect" layoutX="4.0" layoutY="514.0" mnemonicParsing="false" onAction="#handlefAutoconnect" selected="true" text="Auswahl merken" AnchorPane.bottomAnchor="50.0" />
-                  <ScrollPane fx:id="vpnScrollPane" layoutX="9.0" layoutY="78.0" prefHeight="427.0" prefWidth="479.0">
-                     <content>
-                        <TableView fx:id="vpnListTable" prefHeight="423.0" prefWidth="476.0">
-                          <columns>
-                            <TableColumn fx:id="idTbleColumn" prefWidth="134.0" text="Id" />
-                            <TableColumn fx:id="typeTbleColumn" prefWidth="148.0" text="Typ" />
-                              <TableColumn fx:id="accArtTbleColumn" prefWidth="158.0" text="Account Art" />
-                          </columns>
-                        </TableView>
-                     </content>
-                  </ScrollPane>
-                  <Label fx:id="numAccountVpnLabel" layoutX="9.0" layoutY="35.0" prefHeight="34.0" prefWidth="342.0" text="Multiple VPN are located in your Shellfire account&#10;Please select the VPN you want to use" />
                </children>
-            </AnchorPane>
-            <Pane fx:id="headerPanel" prefHeight="68.0" prefWidth="507.0" style="-fx-background-color: rgb(18,172,229);">
+               <padding>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </padding>
+            </VBox>
+            <VBox>
                <children>
-                   <ImageView fx:id="headerImageView" fitHeight="60.0" fitWidth="250.0" layoutX="2.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../icons/sf_en.png" />
-               </image></ImageView>
-
-                  <Pane fx:id="backLabelPane" layoutX="417.0" layoutY="20.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseClicked="#handleBackLabel" onMouseEntered="#backPaneMouseEntered" onMouseExited="#backPaneMouseExited" prefHeight="32.0" prefWidth="70.0" style="-fx-background-color: rgb(0,0,0);">
-                     <children>
-                        <Label fx:id="backLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="26.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onMouseEntered="#handleMouseEntered" onMouseExited="#backLabelMousexited" prefHeight="31.0" prefWidth="40.0" style="-fx-background-color: rgb(0,0,0);" text="back" textAlignment="CENTER" textFill="#eee5e5" wrapText="true" />
-                        <ImageView fx:id="backImageVeiw" layoutX="4.0" layoutY="7.0">
-                           <image>
-                              <Image url="@../icons/exit.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                  </Pane>
+                  <Label fx:id="numAccountVpnLabel" text="Please select the VPN to use" textFill="#666666">
+                     <font>
+                        <Font name="Arial Bold" size="14.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  <TableView fx:id="vpnListTable" prefHeight="465.0">
+                    <columns>
+                      <TableColumn fx:id="idTbleColumn" prefWidth="70.0" text="Id" />
+                      <TableColumn fx:id="typeTbleColumn" prefWidth="100.0" text="Typ" />
+                        <TableColumn fx:id="accArtTbleColumn" prefWidth="100.0" text="Account Art" />
+                    </columns>
+                     <VBox.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </VBox.margin>
+                  </TableView>
+                  <Button fx:id="selectVpnButton" mnemonicParsing="false" onAction="#handleSelectVpnButton" prefHeight="25.0" prefWidth="200.0" text="VPN auswÃ¤hlen">
+                     <VBox.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </VBox.margin>
+                  </Button>
                </children>
-            </Pane>
+               <padding>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </padding>
+            </VBox>
          </children>
-      </AnchorPane>
+      </VBox>
    </children>
 </AnchorPane>

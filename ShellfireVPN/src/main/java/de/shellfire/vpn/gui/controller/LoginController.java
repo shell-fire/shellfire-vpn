@@ -180,11 +180,9 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 							application.getStage().hide();
 							if (selectionRequired && rememberedVpnSelection == 0) {
 								log.debug("Selection is required and no vpn remembered (yet) - showing dialog");
-								application.loadVPNSelect();
-								application.vpnSelectController.setService(service);
-								application.vpnSelectController.setAutoConnect(fAutoconnect.isSelected());
-								application.vpnSelectController.setApp(application);
+								application.loadVPNSelect(service, fAutoconnect.isSelected());
 								application.getStage().show();
+								
 
 							} else {
 								if (selectionRequired && rememberedVpnSelection != 0) {

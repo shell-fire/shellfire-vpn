@@ -63,7 +63,7 @@ public class ServerImageBackgroundManager {
 		Image image = loadImageFromJar(filename);
 		if (image != null) {
 			filenameImageMap.put(filename, image);
-			log.debug("loaded image for {} from jar file");
+			// log.debug("loaded image for {} from jar file", filename);
 		}
 		if (image == null) {
 			image = loadImageFromDownloadDir(filename);
@@ -85,7 +85,7 @@ public class ServerImageBackgroundManager {
 	    
 		Image image = null;
 		try {
-			log.debug("try to load image from download dir {}", inDownloadDirPath);
+			// log.debug("try to load image from download dir {}", inDownloadDirPath);
 			image = new Image(inDownloadDirPath);
 			log.debug("image loaded");
 		} catch (IllegalArgumentException e) {
@@ -141,7 +141,7 @@ public class ServerImageBackgroundManager {
 			throw new Exception("filename="+filename+" not found in filenameImageMap");
 		}
 		
-		log.debug("Image for serverId=" + serverId + " found in filename=" + filename + " and loaded, returning it");
+		// log.debug("Image for serverId=" + serverId + " found in filename=" + filename + " and loaded, returning it");
 		return image;
 	}
 

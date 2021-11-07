@@ -24,6 +24,7 @@ import de.shellfire.vpn.gui.controller.VpnSelectDialogController;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.proxy.ProxyConfig;
 import de.shellfire.vpn.updater.UpdaterFX;
+import de.shellfire.vpn.webservice.WebService;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -176,11 +177,13 @@ public class LoginForms extends Application {
 
 	}
 
-	public void loadVPNSelect() {
+	public void loadVPNSelect(WebService service, boolean fAutoconnect) {
 		log.debug("loadVPNSelect() - start");
 		try {
 			this.vpnSelectController = (VpnSelectDialogController) replaceSceneContent("VpnSelectDialogFxml.fxml");
 			this.vpnSelectController.setApp(this);
+			this.vpnSelectController.setService(service);
+			this.vpnSelectController.setAutoConnect(fAutoconnect);
 		} catch (Exception ex) {
 			log.error("could not load vpnSelect fxml\n" + ex.getMessage());
 		}
@@ -201,9 +204,9 @@ public class LoginForms extends Application {
 	public void loadShellFireMainController(boolean loadOnly) {
 		log.debug("loadShellFireMainController - start()");
 		try {
+			// TODO: find a way to differentiate between loading the fxml and its controller and showing/hiding it...
 			if (shellfireVpnMainController == null) {
 				this.shellfireVpnMainController = (ShellfireVPNMainFormFxmlController) replaceSceneContent("ShellfireVPNMainFormFxml.fxml");
-
 			}
 			
 			if (!loadOnly) {

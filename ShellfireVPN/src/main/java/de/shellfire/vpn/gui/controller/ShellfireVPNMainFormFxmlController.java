@@ -81,7 +81,7 @@ import javafx.util.Pair;
 public class ShellfireVPNMainFormFxmlController extends AnchorPane implements Initializable, LocaleChangeListener, ConnectionStateListener, ListChangeListener<ServerListFXModel>
 	{
 
-	HashMap<AppScreen, Pair<Pane, Object>> leftPaneHashMap = new HashMap<>();
+	Map<AppScreen, Pair<Pane, Object>> menuAppScreenMap = new HashMap<>();
 	private static LoginForms application;
 	private static final Logger log = Util.getLogger(ShellfireVPNMainFormFxmlController.class.getCanonicalName());
 	private static final I18n i18n = VpnI18N.getI18n();
@@ -177,6 +177,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	private HashMap<AppScreen, ImageView> menuImageViewMap;
 	private HashMap<AppScreen, Label> menuLabelMap;
 	private HashMap<AppScreen, AppScreenController> menuControllerMap;
+	private boolean subViewControllersPrepared;
 
 	public ShellfireVPNMainFormFxmlController() {
 
@@ -402,7 +403,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	// TODO: add highlighting of text / labels
 	// TODO: fix map
 	private void showAppScreen(AppScreen pane) {
-		contentDetailsPane.getChildren().setAll(leftPaneHashMap.get(pane).getKey());
+		contentDetailsPane.getChildren().setAll(menuAppScreenMap.get(pane).getKey());
 		
 		if (this.menuControllerMap != null && this.menuControllerMap.get(pane) != null) {
 			this.menuControllerMap.get(pane).notifyThatNowVisible(connectionStatus);
@@ -1305,6 +1306,9 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	 * Prepare controllers so that they load controllers so that controller objects can be accessed.
 	 */
 	public void prepareSubviewControllers() {
+		if (this.subViewControllersPrepared) {
+			return;
+		}
 		try {
 	
 			// load the serverList pane
@@ -1314,7 +1318,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 			this.appScreenControllerServerList.initComponents();
 			this.appScreenControllerServerList.setApp(this.application);
 			this.appScreenControllerServerList.setMainFormController(this);
-			leftPaneHashMap.put(AppScreen.SERVERLIST, pairServerList);
+			menuAppScreenMap.put(AppScreen.SERVERLIST, pairServerList);
 			log.debug("Serverlist controller defined");
 
 			// load the premium pane
@@ -1324,7 +1328,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 			this.appScreenControllerPremium.initComponents();
 			this.appScreenControllerPremium.setApp(this.application);
 			this.appScreenControllerPremium.setMainFormController(this);
-			leftPaneHashMap.put(AppScreen.PREMIUM, pairPremium);
+			menuAppScreenMap.put(AppScreen.PREMIUM, pairPremium);
 			log.debug("premium controller defined");
 
 			// load the settings pane
@@ -1334,7 +1338,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 			this.appScreenControllerSettings.initComponents();
 			this.appScreenControllerSettings.setApp(this.application);
 			this.appScreenControllerSettings.setMainFormController(this);
-			leftPaneHashMap.put(AppScreen.SETTINGS, pairSettings);
+			menuAppScreenMap.put(AppScreen.SETTINGS, pairSettings);
 			log.debug("settings controller defined");
 
 			// load the about pane
@@ -1344,7 +1348,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 			this.appScreenControllerAbout.initComponents();
 			this.appScreenControllerAbout.setApp(this.application);
 			this.appScreenControllerAbout.setMainFormController(this);
-			leftPaneHashMap.put(AppScreen.ABOUT, pairAbout);
+			menuAppScreenMap.put(AppScreen.ABOUT, pairAbout);
 			log.debug("about controller defined");
 
 			// load the help pane
@@ -1354,14 +1358,14 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 			this.appScreenControllerHelp.initComponents();
 			this.appScreenControllerHelp.setApp(this.application);
 			this.appScreenControllerHelp.setMainFormController(this);
-			leftPaneHashMap.put(AppScreen.HELP, pairHelp);
+			menuAppScreenMap.put(AppScreen.HELP, pairHelp);
 			log.debug("help controller defined");
 
 			
 			// load status pane
 			Pair<Pane, Object> pairStatus = FxUIManager.SwitchSubview("appscreen_subview_status.fxml");
 			this.appScreenControllerStatus = (AppScreenControllerStatus) pairStatus.getValue();
-			contentDetailsPane.getChildren().setAll(leftPaneHashMap.get(AppScreen.SERVERLIST).getKey());
+			contentDetailsPane.getChildren().setAll(menuAppScreenMap.get(AppScreen.SERVERLIST).getKey());
 			this.appScreenControllerStatus = (AppScreenControllerStatus) pairStatus.getValue();
 			this.appScreenControllerStatus.initPremium(isFreeAccount());
 			this.appScreenControllerStatus.setApp(this.application);
@@ -1370,7 +1374,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 			log.debug("status controller defined");
 		
 			
-			leftPaneHashMap.put(AppScreen.STATUS, pairStatus);
+			menuAppScreenMap.put(AppScreen.STATUS, pairStatus);
 			onMenuPaneStatusClicked(null);
 			
 
@@ -1379,6 +1383,8 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		} catch (IOException ex) {
 			log.error("ShellfireVPNMainFormFxmlController:  prepareControllers has error", ex);
 		}
+		
+		subViewControllersPrepared = true;
 		
 	}
 
