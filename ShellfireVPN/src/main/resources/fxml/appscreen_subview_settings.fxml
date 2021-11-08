@@ -37,58 +37,41 @@
             </VBox>
             <VBox>
                <children>
-                  <Label alignment="BASELINE_CENTER" contentDisplay="CENTER" text="Account" textAlignment="CENTER" textFill="#666666">
+                  <Label fx:id="connectionTypeLabel" alignment="BASELINE_CENTER" contentDisplay="CENTER" text="Connection Type" textAlignment="CENTER" textFill="#666666">
                      <font>
                         <Font name="Arial Bold" size="14.0" />
                      </font>
                      <padding>
-                        <Insets bottom="10.0" right="10.0" />
+                        <Insets bottom="10.0" right="10.0" top="10.0" />
                      </padding>
                   </Label>
-                  <HBox alignment="CENTER_LEFT">
-                     <children>
-                        <Label alignment="BASELINE_CENTER" contentDisplay="CENTER" text="Selected VPN" textAlignment="CENTER" textFill="#666666">
-                           <font>
-                              <Font name="Arial" size="12.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets right="10.0" />
-                           </HBox.margin>
-                        </Label>
-                        <Label fx:id="selectedVpnId" alignment="BASELINE_CENTER" contentDisplay="CENTER" text="sf12345" textAlignment="CENTER" textFill="#666666">
-                           <font>
-                              <Font name="Arial" size="12.0" />
-                           </font>
-                           <padding>
-                              <Insets right="10.0" />
-                           </padding>
-                        </Label>
-                        <ImageView fx:id="selectedVpnType" fitHeight="25.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../images/crowns_1.png" />
-                           </image>
-                        </ImageView>
-                     </children>
-                     <VBox.margin>
-                        <Insets />
-                     </VBox.margin>
-                  </HBox>
-                  <Button fx:id="selectVpnButton" mnemonicParsing="false" onAction="#onClickSelectVpnButton" prefWidth="200.0" text="Change VPN">
+                  <RadioButton fx:id="WireguardRadioButton" mnemonicParsing="false" text="Wireguard (fastest)" textFill="#666666">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="networkTypeToggleGroup" />
+                     </toggleGroup>
                      <font>
                         <Font name="Arial" size="12.0" />
                      </font>
-                     <VBox.margin>
+                     <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </VBox.margin>
-                  </Button>
-                  <Button fx:id="logoutButton" mnemonicParsing="false" onAction="#onClickLogoutButton" prefWidth="200.0" text="Logout">
-                     <VBox.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </VBox.margin>
+                     </padding>
+                  </RadioButton>
+                  <RadioButton fx:id="UDPRadioButton" mnemonicParsing="false" text="UDP (fast)" textFill="#666666" toggleGroup="$networkTypeToggleGroup">
                      <font>
                         <Font name="Arial" size="12.0" />
                      </font>
-                  </Button>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </RadioButton>
+                  <RadioButton fx:id="TCPRadioButton" mnemonicParsing="false" selected="true" text="TCP (works with safe firewalls and proxies)" textFill="#666666" toggleGroup="$networkTypeToggleGroup">
+                     <font>
+                        <Font name="Arial" size="12.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </RadioButton>
                   <Label alignment="BASELINE_CENTER" contentDisplay="CENTER" text="Startup" textAlignment="CENTER" textFill="#666666">
                      <font>
                         <Font name="Arial Bold" size="14.0" />
@@ -129,50 +112,7 @@
                         <Insets bottom="10.0" right="10.0" top="10.0" />
                      </padding>
                   </Label>
-                  <HBox>
-                     <children>
-                        <ComboBox fx:id="languageComboBox" onAction="#handleLanguageComboBox" onShown="#handleLanguageShown" prefWidth="200.0">
-                           <HBox.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </HBox.margin>
-                        </ComboBox>
-                     </children>
-                  </HBox>
-                  <Label fx:id="connectionTypeLabel" alignment="BASELINE_CENTER" contentDisplay="CENTER" text="Connection Type" textAlignment="CENTER" textFill="#666666">
-                     <font>
-                        <Font name="Arial Bold" size="14.0" />
-                     </font>
-                     <padding>
-                        <Insets bottom="10.0" right="10.0" top="10.0" />
-                     </padding>
-                  </Label>
-                  <RadioButton fx:id="WireguardRadioButton" mnemonicParsing="false" text="Wireguard (fastest)" textFill="#666666">
-                     <toggleGroup>
-                        <ToggleGroup fx:id="networkTypeToggleGroup" />
-                     </toggleGroup>
-                     <font>
-                        <Font name="Arial" size="12.0" />
-                     </font>
-                     <padding>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </padding>
-                  </RadioButton>
-                  <RadioButton fx:id="UDPRadioButton" mnemonicParsing="false" text="UDP (fast)" textFill="#666666" toggleGroup="$networkTypeToggleGroup">
-                     <font>
-                        <Font name="Arial" size="12.0" />
-                     </font>
-                     <padding>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </padding>
-                  </RadioButton>
-                  <RadioButton fx:id="TCPRadioButton" mnemonicParsing="false" selected="true" text="TCP (works with safe firewalls and proxies)" textFill="#666666" toggleGroup="$networkTypeToggleGroup">
-                     <font>
-                        <Font name="Arial" size="12.0" />
-                     </font>
-                     <padding>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                     </padding>
-                  </RadioButton>
+                  <ComboBox fx:id="languageComboBox" onAction="#handleLanguageComboBox" onShown="#handleLanguageShown" prefWidth="200.0" />
                   <Label fx:id="connectionTypeLabel1" alignment="BASELINE_CENTER" contentDisplay="CENTER" text="Log" textAlignment="CENTER" textFill="#666666">
                      <font>
                         <Font name="Arial Bold" size="14.0" />
@@ -189,6 +129,69 @@
                         <Font name="Arial" size="12.0" />
                      </font>
                   </Button>
+                  <Label alignment="BASELINE_CENTER" contentDisplay="CENTER" text="Account" textAlignment="CENTER" textFill="#666666">
+                     <font>
+                        <Font name="Arial Bold" size="14.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="5.0" right="10.0" top="10.0" />
+                     </padding>
+                  </Label>
+                  <GridPane>
+                    <columnConstraints>
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="70.0" minWidth="10.0" prefWidth="59.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="107.0" minWidth="10.0" prefWidth="68.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="171.0" minWidth="10.0" prefWidth="103.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Label alignment="BASELINE_CENTER" contentDisplay="CENTER" text="VPN" textAlignment="CENTER" textFill="#666666">
+                           <font>
+                              <Font name="Arial Bold" size="12.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="selectedVpnId" alignment="BASELINE_RIGHT" contentDisplay="RIGHT" text="sf12345" textAlignment="RIGHT" textFill="#666666" GridPane.columnIndex="1">
+                           <font>
+                              <Font name="Arial" size="12.0" />
+                           </font>
+                           <padding>
+                              <Insets right="10.0" />
+                           </padding>
+                        </Label>
+                        <Label alignment="BASELINE_LEFT" contentDisplay="CENTER" prefHeight="15.0" prefWidth="50.0" text="Login" textFill="#666666" GridPane.rowIndex="1">
+                           <font>
+                              <Font name="Arial" size="12.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="selectedVpnId1" alignment="BASELINE_CENTER" contentDisplay="CENTER" text="mister.smith@gmail.com" textAlignment="CENTER" textFill="#666666" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1">
+                           <font>
+                              <Font name="Arial" size="12.0" />
+                           </font>
+                           <padding>
+                              <Insets right="10.0" />
+                           </padding>
+                        </Label>
+                        <ImageView fx:id="selectedVpnType" fitHeight="25.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="2">
+                           <image>
+                              <Image url="@../images/crowns_1.png" />
+                           </image>
+                        </ImageView>
+                        <Button fx:id="selectVpnButton" mnemonicParsing="false" onAction="#onClickSelectVpnButton" prefWidth="150.0" text="Change VPN" GridPane.columnIndex="3">
+                           <font>
+                              <Font name="Arial" size="12.0" />
+                           </font>
+                        </Button>
+                        <Button fx:id="logoutButton" mnemonicParsing="false" onAction="#onClickLogoutButton" prefWidth="150.0" text="Logout" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                           <font>
+                              <Font name="Arial" size="12.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </GridPane>
                </children>
                <padding>
                   <Insets bottom="20.0" left="30.0" right="20.0" top="20.0" />

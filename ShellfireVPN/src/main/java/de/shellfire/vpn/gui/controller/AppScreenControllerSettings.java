@@ -24,7 +24,6 @@ import de.shellfire.vpn.i18n.Language;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.types.Server;
 import de.shellfire.vpn.types.VpnProtocol;
-import de.shellfire.vpn.webservice.Vpn;
 import de.shellfire.vpn.webservice.WebService;
 import javafx.event.ActionEvent;
 import javafx.event.Event;

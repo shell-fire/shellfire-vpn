@@ -39,7 +39,7 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
 	@FXML
 	private TableView<VpnSelectionFXModel> vpnListTable;
 	@FXML
-	private TableColumn<VpnSelectionFXModel, Integer> idTbleColumn;
+	private TableColumn<VpnSelectionFXModel, String> idTbleColumn;
 	@FXML
 	private TableColumn<VpnSelectionFXModel, Vpn> accArtTbleColumn;
 	@FXML
@@ -102,7 +102,7 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		idTbleColumn.setCellValueFactory(cellData -> cellData.getValue().idProperty().asObject());
+		idTbleColumn.setCellValueFactory(cellData -> cellData.getValue().idProperty());
 		idTbleColumn.setStyle( "-fx-alignment: CENTER;");
 		accArtTbleColumn.setCellValueFactory(cellData -> cellData.getValue().accountArtProperty());
 
@@ -149,7 +149,7 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
 		log.debug("The size of all VPN is " + allVpn.size());
 		for (int i = 0; i < allVpn.size(); i++) {
 			VpnSelectionFXModel vpnModel = new VpnSelectionFXModel();
-			vpnModel.setId(allVpn.get(i).getVpnId());
+			vpnModel.setId("sf" + allVpn.get(i).getVpnId());
 			// Converting the Vpn Account Type enum to String
 			vpnModel.setAccount_art(allVpn.get(i));
 			vpnModel.setVpn(allVpn.get(i));
@@ -181,7 +181,7 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
 	public void setSelectedVpn(int vpnId) {
 		for (int i = 0; i < vpnData.size(); i++) {
 			VpnSelectionFXModel curVpn = vpnData.get(i);
-			if (curVpn.getId() == vpnId) {
+			if (Integer.parseInt(curVpn.getId().substring(2)) == vpnId) {
 				vpnListTable.requestFocus();
 				vpnListTable.getSelectionModel().select(i);
 				vpnListTable.getFocusModel().focus(i);

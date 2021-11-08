@@ -377,7 +377,6 @@ public class RegisterFormController extends AnchorPane implements Initializable 
 		this.application.loadLoginController();
 		LoginForms.instance.setUsername(this.getUser());
 		LoginForms.instance.setPassword(this.getPassword());
-		LoginForms.instance.setAutoLogin(false);
 		this.application.getStage().show();
 		this.application.getStage().setAlwaysOnTop(true);
 		this.application.getStage().setAlwaysOnTop(false);

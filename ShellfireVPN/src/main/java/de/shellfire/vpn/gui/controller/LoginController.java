@@ -69,8 +69,6 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 	@FXML
 	private CheckBox fStoreLoginData;
 	@FXML
-	private CheckBox fAutoLogin;
-	@FXML
 	private CheckBox fAutoStart;
 	@FXML
 	private CheckBox fAutoconnect;
@@ -204,23 +202,6 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 	public void handlefButtonLostUserCredential(ActionEvent event) {
 		Util.openUrl(service.getUrlPasswordLost());
 	}
-
-	// Event Listener on CheckBox[#fStoreLoginData].onAction
-	@FXML
-	public void handlefStoreLoginData(ActionEvent event) {
-		if (!this.fStoreLoginData.isSelected()) {
-			this.fAutoLogin.setSelected(false);
-		}
-	}
-
-	// Event Listener on CheckBox[#fAutoLogin].onAction
-	@FXML
-	public void handlefAutoLogin(ActionEvent event) {
-		if (this.fAutoLogin.isSelected()) {
-			this.fStoreLoginData.setSelected(true);
-		}
-	}
-
 	// Event Listener on CheckBox[#fAutoStart].onAction
 	@FXML
 	public void handlefAutoStart(ActionEvent event) {
@@ -270,8 +251,6 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 		this.fLabelUsername.setText(i18n.tr("Email / Username:"));
 
 		this.fLabelPassword.setText(i18n.tr("Password:"));
-
-		this.fAutoLogin.setText(i18n.tr("Login automatically"));
 
 		this.fButtonOpenRegistrationForm.setText(i18n.tr("No user credentials?"));
 
@@ -411,10 +390,6 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
 	}
 
-	void setAutoLogin(boolean autologin) {
-		this.fAutoLogin.setSelected(autologin);
-	}
-
 	class LoginTask extends Task<Response<LoginResponse>> {
 
 		@Override
@@ -535,7 +510,6 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 		boolean doAutoLogin = props.getBoolean(REG_AUTOlOGIN, false);
 
 		if (doAutoLogin) {
-			this.fAutoLogin.setSelected(true);
 			this.application.getStage().hide();
 			handlefButtonLogin(null);
 		}
@@ -592,10 +566,8 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 		Optional<ButtonType> result = alert.showAndWait();
 
 		if ((result.isPresent()) && (result.get() == ButtonType.YES)) {
-
 			Client.addVpnToAutoStart();
 			fAutoStart.setSelected(true);
-			setAutoLogin(true);
 			fAutoconnect.setSelected(true);
 			fStoreLoginData.setSelected(true);
 		}
@@ -622,7 +594,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 		VpnProperties props = VpnProperties.getInstance();
 		props.setProperty(REG_USER, CryptFactory.encrypt(user));
 		props.setProperty(REG_PASS, CryptFactory.encrypt(password));
-		props.setBoolean(REG_AUTOlOGIN, fAutoLogin.isSelected());
+		props.setBoolean(REG_AUTOlOGIN, true);
 
 	}
 
