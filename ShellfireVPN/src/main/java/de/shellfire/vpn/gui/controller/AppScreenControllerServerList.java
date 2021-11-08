@@ -80,6 +80,7 @@ public class AppScreenControllerServerList implements Initializable, AppScreenCo
 	private ObservableList<ServerListFXModel> serverListData = FXCollections.observableArrayList();
 	private ShellfireVPNMainFormFxmlController mainFormController;
 	private Image buttonDisconnect = new Image("/buttons/button-disconnect-" + VpnI18N.getLanguage().getKey() + ".gif");
+	private int selectedServerId;
 
 	/**
 	 * Constructor used to initialize serverListTable data from Webservice
@@ -239,6 +240,7 @@ public class AppScreenControllerServerList implements Initializable, AppScreenCo
 				  ObservableList<? extends ServerListFXModel> changes = change.getList();
 				  
 				  for (ServerListFXModel curChange : changes) {
+					  
 					  mainFormController.setSelectedServer(curChange.getCountry());
 				  }
 			  }
@@ -302,16 +304,26 @@ public class AppScreenControllerServerList implements Initializable, AppScreenCo
 
 	// Selects a server on serverlist table based on the index (position) of the server
 	public void setSelectedServer(int number) {
-		log.debug("setSelectedServer setting the selected server");
+		log.debug("setSelectedServer setting the selected server: {}", number);
 		// Embeded in a Platform runner because we are modifying the UI thread.
-		Platform.runLater(new Runnable() {
-			@Override
-			public void run() {
+		
+		if (this.selectedServerId == number) {
+			log.debug("Server {} already selected - returning", number);
+			return;
+		}
+		
+		this.selectedServerId = number;
+		
+		for (int i = 0; i < serverListData.size(); i++) {
+			ServerListFXModel curServer = serverListData.get(i);
+			if (curServer.getCountry().getServerId() == number) {
 				serverListTableView.requestFocus();
-				serverListTableView.getSelectionModel().select(number);
-				serverListTableView.getFocusModel().focus(number);
+				serverListTableView.getSelectionModel().select(i);
+				serverListTableView.getFocusModel().focus(i);
+				
 			}
-		});
+		}
+		
 	}
 
 	public Server getSelectedServer() {

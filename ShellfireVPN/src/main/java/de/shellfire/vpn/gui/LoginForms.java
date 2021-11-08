@@ -177,25 +177,6 @@ public class LoginForms extends Application {
 
 	}
 
-	public void loadVPNSelect(WebService service, boolean fAutoconnect) {
-		log.debug("loadVPNSelect() - start");
-		try {
-			this.vpnSelectController = (VpnSelectDialogController) replaceSceneContent("VpnSelectDialogFxml.fxml");
-			this.vpnSelectController.setApp(this);
-			this.vpnSelectController.setService(service);
-			this.vpnSelectController.setAutoConnect(fAutoconnect);
-		} catch (Exception ex) {
-			log.error("could not load vpnSelect fxml\n" + ex.getMessage());
-		}
-
-	}
-
-	public int rememberedVpnSelection() {
-		VpnProperties props = VpnProperties.getInstance();
-		int remembered = props.getInt(REG_REMEMBERSELECTION, 0);
-
-		return remembered;
-	}
 	
 	public void loadShellFireMainController() {
 		loadShellFireMainController(false);

@@ -24,13 +24,13 @@ import de.shellfire.vpn.i18n.Language;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.types.Server;
 import de.shellfire.vpn.types.VpnProtocol;
+import de.shellfire.vpn.webservice.Vpn;
 import de.shellfire.vpn.webservice.WebService;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -123,7 +123,7 @@ public class AppScreenControllerSettings implements Initializable, AppScreenCont
 	}
 
 
-	private void updateSelectedVpn() {
+	void updateSelectedVpn() {
 		this.selectedVpnId.setText("" + shellfireService.getVpn().getVpnId());
 		this.selectedVpnType.setImage(CrownImageRendererVpn.getIcon(shellfireService.getVpn().getAccountType(), false, false));
 	}
@@ -185,6 +185,7 @@ public class AppScreenControllerSettings implements Initializable, AppScreenCont
 	
 	@FXML
 	private void onClickSelectVpnButton(ActionEvent event) {
+		showVpnSelectScreen();
 	}
 	
 	public void showVpnSelectScreen() {
@@ -207,14 +208,15 @@ public class AppScreenControllerSettings implements Initializable, AppScreenCont
 		    
 		    VpnSelectDialogController vpnSelectController = (VpnSelectDialogController) loader.getController();
 			vpnSelectController.setApp(this.application);
+			vpnSelectController.setMainForm(this.mainFormController);
 			vpnSelectController.setService(this.shellfireService);
 		    
-		
+			
 		} catch (IOException e) {
 			log.error("onClickSelectVpnButton - Could not switch subview to VPN Select Screen", e);
 		}
 	}
-	
+
 	@FXML
 	private void onClickLogoutButton(ActionEvent event) {
 		VpnProperties props = VpnProperties.getInstance();
@@ -368,4 +370,5 @@ public class AppScreenControllerSettings implements Initializable, AppScreenCont
 			return o1.getCountry().name().compareTo(o2.getCountry().name());
 		}
 	}
+
 }

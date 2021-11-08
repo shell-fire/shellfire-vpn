@@ -20,6 +20,7 @@ import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.messaging.UserType;
 import de.shellfire.vpn.proxy.ProxyConfig;
 import de.shellfire.vpn.types.Server;
+import de.shellfire.vpn.types.ServerType;
 import de.shellfire.vpn.types.VpnProtocol;
 import de.shellfire.vpn.webservice.model.LoginResponse;
 import de.shellfire.vpn.webservice.model.TrayMessage;
@@ -140,6 +141,8 @@ public class WebService {
 		if (this.vpns.contains(vpn)) {
 			this.selectedVpn = this.vpns.get(this.vpns.indexOf(vpn));
 			this.selectedVpn.loadServerObject(this.getServerList());
+		} else {
+			log.debug("selectVpn() did not find vpn {} in vpn list", vpn.getVpnId());
 		}
 	}
 
@@ -158,6 +161,44 @@ public class WebService {
 			return true;
 		else
 			return false;
+	}
+	
+	public void autoSelectBestVpn() {
+		int vpnId = 0;
+		if (this.selectedVpn != null) {
+			vpnId = this.selectedVpn.getVpnId();
+		} else if (this.vpns.size() == 1) {
+			vpnId = this.vpns.get(0).getVpnId();
+		} else {
+			boolean vpnFound = false;
+			
+			// try to find a PremiumPlus one
+			for (Vpn vpn : this.vpns) {
+				if (vpn.getAccountType().equals(ServerType.PremiumPlus)) {
+					vpnId = vpn.getVpnId();
+					vpnFound = true;
+					break;
+				}
+			}
+			
+			if (!vpnFound) {
+				// try to find a Premium one
+				for (Vpn vpn : this.vpns) {
+					if (vpn.getAccountType().equals(ServerType.Premium)) {
+						vpnId = vpn.getVpnId();
+						vpnFound = true;
+						break;
+					}
+				}
+			}
+			
+			if (!vpnFound) {
+				// all free vpns - simply pick the first one
+				vpnId = this.vpns.get(0).getVpnId();
+			}
+		}
+		
+		this.selectVpn(vpnId);
 	}
 
 	public ServerList getServerList() {

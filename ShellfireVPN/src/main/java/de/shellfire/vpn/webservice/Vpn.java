@@ -27,7 +27,7 @@ public class Vpn {
 	public void setServer(Server server) {
 		this.server = server;
 	}
-
+// TODO: Server List macht komische sachen beim VPN-Wechsel...
 	public Vpn(WsVpn vpn) {
 		this.vpnId = vpn.getVpnId();
 		this.serverId = vpn.getServerId();
@@ -120,4 +120,19 @@ public class Vpn {
 		
 		return result;
 	}
+	
+
+	@Override
+	public boolean equals(Object vpn) {
+		if (vpn == null)
+			return false;
+		else if (!(vpn instanceof Vpn))
+			return false;
+		else {
+			Vpn v = (Vpn) vpn;
+			return v.getVpnId() == this.getVpnId();
+		}
+
+	}
+
 }

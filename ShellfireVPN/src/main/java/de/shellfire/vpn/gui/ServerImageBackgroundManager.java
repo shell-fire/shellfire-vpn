@@ -34,6 +34,11 @@ public class ServerImageBackgroundManager {
 		initImageMap();
 	}
 	
+	/*
+	 * We want to initialize this class early for performance reasons
+	 * */
+	public static void init() {}
+	
 	private static void initFilenameMap() {
 		// populate fileNameMap based on Properties
 		String allKnownFileNameMappings = VpnProperties.getInstance().getProperty(LoginController.REG_SERVERBACKGROUNDIMAGEFILENAMEMAP);
@@ -70,7 +75,7 @@ public class ServerImageBackgroundManager {
 		}
 		if (image != null) {
 			filenameImageMap.put(filename, image);
-			log.debug("loaded image for {} from in-jar or downloadDir", filename);
+			// log.debug("loaded image for {} from in-jar or downloadDir", filename);
 			
 		} else {
 			log.debug("did not yet find image in jar file or download store - doing nothing");
@@ -105,9 +110,9 @@ public class ServerImageBackgroundManager {
 		String inJarPath = pathPrefix + filename;
 		Image image = null;
 		try {
-			log.debug("try to load image from in-jar {}", inJarPath);
+			// log.debug("try to load image from in-jar {}", inJarPath);
 			image = new Image(inJarPath);
-			log.debug("image loaded");
+			// log.debug("image loaded");
 		} catch (IllegalArgumentException e) {
 			// log.error("could not load file within download dir", e);
 			image = null;

@@ -19,6 +19,7 @@ import de.shellfire.vpn.client.Client;
 import de.shellfire.vpn.client.Controller;
 import de.shellfire.vpn.gui.CanContinueAfterBackEndAvailableFX;
 import de.shellfire.vpn.gui.LoginForms;
+import de.shellfire.vpn.gui.ServerImageBackgroundManager;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.service.CryptFactory;
 import de.shellfire.vpn.types.Reason;
@@ -32,9 +33,6 @@ import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventDispatchChain;
-import javafx.event.EventDispatcher;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
@@ -164,54 +162,19 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 						loginProgressDialog.setDialogText(i18n.tr("Loading..."));
 						MainFormLoaderTask loaderTask = new MainFormLoaderTask(loginResult);
 						loaderTask.setOnSucceeded((WorkerStateEvent wEvent2) -> {
-							Boolean selectionRequired = null;
-							try {
-								selectionRequired = loaderTask.get();
-							} catch (InterruptedException | ExecutionException e) {
-								log.error("Could not get() result from loaderTask", e);
+							application.loadShellFireMainController();
+							application.shellfireVpnMainController.setShellfireService(service);
+							boolean vis = true;
+							if (minimize && service.getVpn().getAccountType() != ServerType.Free) {
+								vis = false;
 							}
-							// prepare the other necessary controllers
-							int rememberedVpnSelection = application.rememberedVpnSelection();
 
-							if (selectionRequired == null) {
-								selectionRequired = false;
-							}
+							application.shellfireVpnMainController.initializeComponents();
+							application.shellfireVpnMainController.setServiceAndInitialize(service);
+							application.shellfireVpnMainController.prepareSubviewControllers();
+							application.shellfireVpnMainController.setApp(application);
+							application.shellfireVpnMainController.afterLogin(fAutoconnect.isSelected());
 							loginProgressDialog.hide();
-							application.getStage().hide();
-							if (selectionRequired && rememberedVpnSelection == 0) {
-								log.debug("Selection is required and no vpn remembered (yet) - showing dialog");
-								application.loadVPNSelect(service, fAutoconnect.isSelected());
-								application.getStage().show();
-								
-
-							} else {
-								if (selectionRequired && rememberedVpnSelection != 0) {
-									log.debug("selection required and vpn already remembered - selecting remembered vpn automatically");
-									if (!service.selectVpn(rememberedVpnSelection)) {
-										log.debug("not possible to select remembered vpn");
-										application.vpnSelectController.setApp(application);
-										application.getStage().show();
-									}
-								}
-								if (!application.getStage().isShowing()) {
-									log.debug("handlefButtonLogin: vpnController not visible - not needed, continue with main controller");
-									application.loadShellFireMainController();
-									application.shellfireVpnMainController.setShellfireService(service);
-									boolean vis = true;
-									if (minimize && service.getVpn().getAccountType() != ServerType.Free) {
-										vis = false;
-									}
-
-									application.shellfireVpnMainController.initializeComponents();
-									application.shellfireVpnMainController.setServiceAndInitialize(service);
-									application.shellfireVpnMainController.prepareSubviewControllers();
-									application.shellfireVpnMainController.setApp(application);
-									application.shellfireVpnMainController.afterLogin(fAutoconnect.isSelected());
-								} else {
-									log.debug("handlefButtonLogin: vpnController is visible");
-								}
-							}
-
 						});
 						
 						log.debug("before loaderTaskThread");
@@ -469,7 +432,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
 	}
 
-	class MainFormLoaderTask extends Task<Boolean> {
+	class MainFormLoaderTask extends Task<Void> {
 
 		private Response<LoginResponse> loginResult;
 
@@ -478,7 +441,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 		}
 
 		@Override
-		protected Boolean call() throws Exception {
+		protected Void call() throws Exception {
 			log.debug("Starting LoaderTask");
 			log.debug("LoginController: handlefLogginButton - service is loggedIn " + loginResult.getMessage());
 			if (fStoreLoginData.isSelected()) {
@@ -499,12 +462,10 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 			} else {
 				setAutoConnectInRegistry(false);
 			}
-			boolean selectionRequired = service.vpnSelectionRequired();
-			log.debug("LoginController: loginTask - selectionRequired is " + selectionRequired);
 			
-			return selectionRequired;
+			ServerImageBackgroundManager.init();
 			
-
+			return null;
 		}
 		
 		

@@ -178,10 +178,6 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
 		} catch (Exception e) {
 			log.error("Error occured during loading of background image", e);
 		}
-		
-		
-		
-
 	}	
 	
 	public void initPremium(boolean freeAccount) {

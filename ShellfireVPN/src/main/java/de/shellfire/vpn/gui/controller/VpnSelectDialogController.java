@@ -21,6 +21,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
@@ -28,6 +29,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
 
 public class VpnSelectDialogController extends AnchorPane implements Initializable {
 
@@ -43,7 +45,6 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
 	private Pane headerPanel;
 
 	private WebService shellfireService;
-	private boolean autoConnect;
 	private static I18n i18n = VpnI18N.getI18n();
 
 	private LoginForms application;
@@ -55,6 +56,8 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
 	private ImageView backImageVeiw;
 
 	private ObservableList<VpnSelectionFXModel> vpnData = FXCollections.observableArrayList();
+	private Vpn newVpn;
+	private ShellfireVPNMainFormFxmlController shellfireVpnMainForm;
 
 	/**
 	 * The constructor. The constructor is called before the initialize() method.
@@ -63,16 +66,6 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
 		log.debug("constructor has been accessed");
 	}
 	// Event Listener on Button[#selectVpnButton].onAction
-
-	// Set Autoconnect like former constructor
-	public boolean isAutoConnect() {
-		return autoConnect;
-	}
-
-	public void setAutoConnect(boolean autoConnect) {
-		log.debug("We have set autoconnect" + autoConnect);
-		this.autoConnect = autoConnect;
-	}
 
 	// Set Service like former constructor
 	public WebService getService() {
@@ -94,13 +87,17 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
 			alert.setContentText(i18n.tr("Please select a VPN from the list to proceed."));
 			alert.showAndWait();
 		} else {
-			rememberSelectionIfDesired(selectedItem.getVpn());
-
-			this.shellfireService.selectVpn(selectedItem.getVpn());
-			this.loadMainForm();
+			this.shellfireVpnMainForm.setVpn(selectedItem.getVpn());
+			this.closeStage(event);
 		}
 
 	}
+	
+    private void closeStage(ActionEvent event) {
+        Node  source = (Node)  event.getSource(); 
+        Stage stage  = (Stage) source.getScene().getWindow();
+        stage.close();
+    }
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
@@ -114,8 +111,7 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
 		// Listen for selection changes and store the selected VPN.
 		vpnListTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 			if (newValue != null) {
-				rememberSelectionIfDesired(newValue.getVpn());
-				this.shellfireService.selectVpn(newValue.getVpn());
+				newVpn = newValue.getVpn();
 				vpnListTable.refresh();
 			}
 		});
@@ -131,13 +127,6 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
 	public void initComponents() {
 		this.selectVpnButton.setText(i18n.tr("Select VPN"));
 	}
-
-	private void rememberSelectionIfDesired(Vpn selectedVpn) {
-		VpnProperties props = VpnProperties.getInstance();
-		int vpnId = selectedVpn.getVpnId();
-		log.debug("Remembering Vpn ID:" + vpnId);
-	}
-
 
 	public void loadIcon() {
 		this.backImageVeiw.setImage(Util.getImageIconFX("/icons/sfvpn2-idle.png"));
@@ -173,28 +162,6 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
 		this.application = applic;
 	}
 
-	public void displayVpnSelect() {
-		this.application.getStage().show();
-		log.debug("VpnSelectDialogController: displayVpnSelect(); displaying the select window");
-		this.application.shellfireVpnMainController.afterLogin(autoConnect);
-	}
-
-	private void loadMainForm() {
-		if (this.application == null) {
-			log.debug("VpnSelectDialogController: LoginForms empty");
-			this.application = LoginController.application;
-		} else {
-			log.debug("VpnSelectDialogController: LoginForms already set");
-		}
-		this.application.toString();
-		this.application.loadShellFireMainController();
-		this.application.shellfireVpnMainController.setShellfireService(this.shellfireService);
-		this.application.shellfireVpnMainController.initializeComponents();
-		this.application.shellfireVpnMainController.setServiceAndInitialize(this.shellfireService);
-		this.application.shellfireVpnMainController.prepareSubviewControllers();
-		this.application.shellfireVpnMainController.afterLogin(autoConnect);
-	}
-
 	public Vpn getSelectedVpn() {
 		VpnSelectionFXModel serverModel = this.vpnListTable.getSelectionModel().getSelectedItem();
 		if (null == serverModel) {
@@ -203,5 +170,10 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
 			Vpn selectedVpn = serverModel.getVpn();
 			return selectedVpn; 
 		}
+	}
+
+	public void setMainForm(ShellfireVPNMainFormFxmlController shellfireVpnMainForm) {
+		this.shellfireVpnMainForm = shellfireVpnMainForm;
+		
 	}
 }

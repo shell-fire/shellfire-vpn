@@ -178,6 +178,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	private HashMap<AppScreen, Label> menuLabelMap;
 	private HashMap<AppScreen, AppScreenController> menuControllerMap;
 	private boolean subViewControllersPrepared;
+	private Server selectedServer;
 
 	public ShellfireVPNMainFormFxmlController() {
 
@@ -332,9 +333,46 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
 
 		this.initConnection();
+		this.initVpn();
 		this.initServer();
 		this.application.getStage().resizableProperty().setValue(Boolean.FALSE);
 		this.application.getStage().show();
+	}
+
+
+
+	public int getRememberedVpnSelection() {
+		VpnProperties props = VpnProperties.getInstance();
+		int remembered = props.getInt(LoginForms.REG_REMEMBERSELECTION, 0);
+
+		return remembered;
+	}
+	
+	public void setRememberedVpnSelection(int vpnId) {
+		VpnProperties props = VpnProperties.getInstance();
+		props.setInt(LoginForms.REG_REMEMBERSELECTION, vpnId);
+	}
+	
+	private void initVpn() {
+		int rememberedVpn = getRememberedVpnSelection();
+		boolean setRememberedVpnIsSuccess = false;
+		if (rememberedVpn > 0) {
+			setRememberedVpnIsSuccess = this.shellfireService.selectVpn(rememberedVpn);
+		}
+
+		if (!setRememberedVpnIsSuccess) {
+			this.shellfireService.autoSelectBestVpn();
+			setRememberedVpnSelection(this.shellfireService.getVpn().getVpnId());
+		}
+	}
+	
+	public void setVpn(Vpn vpn) {
+		log.debug("setVpn() called {}", vpn.getVpnId());
+		this.shellfireService.selectVpn(vpn);
+		this.appScreenControllerSettings.updateSelectedVpn();
+		setRememberedVpnSelection(vpn.getVpnId());
+		this.initServer();
+		
 	}
 
 	private void initServer() {
@@ -1294,11 +1332,32 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	}
 
 	public void setSelectedServer(Server server) {
-		log.debug("setSelectedServer(" + server + ") - updating background image");
+		log.debug("setSelectedServer(" + server + ")");
+		
+		if (selectedServer != null && selectedServer.equals(server)) {
+			log.debug("setSelectedServer() - (Server {} already set - returning", server.getServerId());
+			return;
+		}
+		
+		this.selectedServer = server;
 		
 		if (appScreenControllerStatus != null) {
 			appScreenControllerStatus.setSelectedServer(server);
+		}		
+		
+		if (appScreenControllerServerList != null) {
+			appScreenControllerServerList.setSelectedServer(server.getServerId());
 		}
+		
+		Task<Void> task = new Task<Void>() {
+		    @Override public Void call() {
+		    	shellfireService.setServerTo(server);
+		    	return null;
+		    }
+		};
+
+		new Thread(task).start();
+		
 	}
 
 	
@@ -1446,6 +1505,8 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		System.out.println("onChange of server registered in Main Form, nice!");
 		
 	}
+
+
 
 }
 
