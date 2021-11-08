@@ -241,7 +241,7 @@ public class AppScreenControllerServerList implements Initializable, AppScreenCo
 				  
 				  for (ServerListFXModel curChange : changes) {
 					  
-					  mainFormController.setSelectedServer(curChange.getCountry());
+					  mainFormController.setSelectedServer(curChange.getCountry().getServerId());
 				  }
 			  }
 			  
@@ -329,7 +329,7 @@ public class AppScreenControllerServerList implements Initializable, AppScreenCo
 	public Server getSelectedServer() {
 		ServerListFXModel serverModel = this.serverListTableView.getSelectionModel().getSelectedItem();
 		if (null == serverModel) {
-			return this.shellfireService.getServerList().getServer(18);
+			return this.shellfireService.getServerList().getServerByServerId(18);
 		} else {
 			// The getCountry method of ServerListFXModel returns the server object
 			return serverModel.getCountry();

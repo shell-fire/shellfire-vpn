@@ -269,6 +269,11 @@ public class WebService {
 			return true;
 		}
 	}
+	
+	public boolean setServerTo(int serverId) {
+		Server server = this.getServerList().getServerByServerId(serverId);
+		return setServerTo(server);
+	}
 
 	public boolean setProtocolTo(final VpnProtocol protocol) {
 		init();

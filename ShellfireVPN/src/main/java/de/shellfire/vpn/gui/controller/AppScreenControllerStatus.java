@@ -61,7 +61,7 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
 	private static final Logger log = Util.getLogger(ShellfireVPNMainFormFxmlController.class.getCanonicalName());
 	private static I18n i18n = VpnI18N.getI18n();
 	private Controller controller;
-	private static WebService shellfireService;
+	private WebService shellfireService;
 	private MenuItem popupConnectItem;
 	private PopupMenu popup;
 	private TrayIcon trayIcon;
@@ -166,12 +166,13 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
 		}
 	}
 
-	public void setSelectedServer(Server server) {
-		log.debug("setSelectedServer(" + server + ") - updating background image");
+	public void setSelectedServer(int serverId) {
+		log.debug("setSelectedServer(" + serverId + ") - updating background image");
 		
 		Image image;
 		try {
-			image = ServerImageBackgroundManager.getImage(server.getServerId());
+			image = ServerImageBackgroundManager.getImage(serverId);
+			Server server = shellfireService.getServerList().getServerByServerId(serverId);
 			setLocation(server.getLatitude(), server.getLongitude());
 			this.statusConnectionImageView.setImage(image);
 			log.debug("background image updated");
@@ -179,6 +180,13 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
 			log.error("Error occured during loading of background image", e);
 		}
 	}	
+	
+	
+	public void setShellfireService(WebService shellfireService) {
+		this.shellfireService = shellfireService;
+	}
+
+
 	
 	public void initPremium(boolean freeAccount) {
 		log.debug("AppScreenControllerStatus: initPremium is free? " + freeAccount);

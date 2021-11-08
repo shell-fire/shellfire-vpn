@@ -178,7 +178,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	private HashMap<AppScreen, Label> menuLabelMap;
 	private HashMap<AppScreen, AppScreenController> menuControllerMap;
 	private boolean subViewControllersPrepared;
-	private Server selectedServer;
+	private int selectedServer;
 
 	public ShellfireVPNMainFormFxmlController() {
 
@@ -366,17 +366,20 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		}
 	}
 	
-	public void setVpn(Vpn vpn) {
-		log.debug("setVpn() called {}", vpn.getVpnId());
-		this.shellfireService.selectVpn(vpn);
+	public void setVpn(int vpnId) {
+		log.debug("setVpn() called {}", vpnId);
+		this.shellfireService.selectVpn(vpnId);
 		this.appScreenControllerSettings.updateSelectedVpn();
-		setRememberedVpnSelection(vpn.getVpnId());
+		setRememberedVpnSelection(vpnId);
 		this.initServer();
 		
 	}
 
 	private void initServer() {
-		setSelectedServer(shellfireService.getVpn().getServer());
+		log.debug("initServer() - start");
+		Vpn vpn = shellfireService.getVpn();
+		log.debug("Vpn: {}, Server: {}", vpn.getVpnId(), vpn.getServerId());
+		setSelectedServer(shellfireService.getVpn().getServer().getServerId());
 	}
 
 	private final static HashMap<String, Image> mainIconMap = new HashMap<String, Image>() {
@@ -1331,11 +1334,11 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		return this.shellfireService.getVpn().getAccountType() == ServerType.Premium;
 	}
 
-	public void setSelectedServer(Server server) {
+	public void setSelectedServer(int server) {
 		log.debug("setSelectedServer(" + server + ")");
 		
-		if (selectedServer != null && selectedServer.equals(server)) {
-			log.debug("setSelectedServer() - (Server {} already set - returning", server.getServerId());
+		if (selectedServer == server) {
+			log.debug("setSelectedServer() - (Server {} already set - returning", server);
 			return;
 		}
 		
@@ -1346,7 +1349,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		}		
 		
 		if (appScreenControllerServerList != null) {
-			appScreenControllerServerList.setSelectedServer(server.getServerId());
+			appScreenControllerServerList.setSelectedServer(server);
 		}
 		
 		Task<Void> task = new Task<Void>() {
@@ -1428,6 +1431,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 			this.appScreenControllerStatus = (AppScreenControllerStatus) pairStatus.getValue();
 			this.appScreenControllerStatus.initPremium(isFreeAccount());
 			this.appScreenControllerStatus.setApp(this.application);
+			this.appScreenControllerStatus.setShellfireService((this.shellfireService));
 			log.debug("handleConnectionPanelClicked: VPN connection status is " + connectionStatus);
 			this.appScreenControllerStatus.notifyThatNowVisible(connectionStatus);
 			log.debug("status controller defined");

@@ -11,6 +11,7 @@ import org.xnap.commons.i18n.I18n;
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.VpnProperties;
 import de.shellfire.vpn.gui.LoginForms;
+import de.shellfire.vpn.gui.model.ServerListFXModel;
 import de.shellfire.vpn.gui.model.VpnSelectionFXModel;
 import de.shellfire.vpn.gui.renderer.CrownImageRendererVpn;
 import de.shellfire.vpn.i18n.VpnI18N;
@@ -87,7 +88,7 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
 			alert.setContentText(i18n.tr("Please select a VPN from the list to proceed."));
 			alert.showAndWait();
 		} else {
-			this.shellfireVpnMainForm.setVpn(selectedItem.getVpn());
+			this.shellfireVpnMainForm.setVpn(selectedItem.getVpn().getVpnId());
 			this.closeStage(event);
 		}
 
@@ -101,7 +102,6 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		// TODO Auto-generated method stub
 		idTbleColumn.setCellValueFactory(cellData -> cellData.getValue().idProperty().asObject());
 		idTbleColumn.setStyle( "-fx-alignment: CENTER;");
 		accArtTbleColumn.setCellValueFactory(cellData -> cellData.getValue().accountArtProperty());
@@ -135,6 +135,7 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
 	private void initVpnSelectTable(LinkedList<Vpn> allVpn) {
 		this.vpnData.addAll(getVpnSelectionModelFromVpn(allVpn));
 		this.vpnListTable.setItems(vpnData);
+		
 	}
 
 	/**
@@ -174,6 +175,17 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
 
 	public void setMainForm(ShellfireVPNMainFormFxmlController shellfireVpnMainForm) {
 		this.shellfireVpnMainForm = shellfireVpnMainForm;
-		
+	}
+	
+	// Selects a server on serverlist table based on the index (position) of the server
+	public void setSelectedVpn(int vpnId) {
+		for (int i = 0; i < vpnData.size(); i++) {
+			VpnSelectionFXModel curVpn = vpnData.get(i);
+			if (curVpn.getId() == vpnId) {
+				vpnListTable.requestFocus();
+				vpnListTable.getSelectionModel().select(i);
+				vpnListTable.getFocusModel().focus(i);
+			}
+		}
 	}
 }

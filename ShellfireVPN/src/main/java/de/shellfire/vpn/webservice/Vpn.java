@@ -26,8 +26,9 @@ public class Vpn {
 
 	public void setServer(Server server) {
 		this.server = server;
+		this.serverId = server.getServerId();
 	}
-// TODO: Server List macht komische sachen beim VPN-Wechsel...
+
 	public Vpn(WsVpn vpn) {
 		this.vpnId = vpn.getVpnId();
 		this.serverId = vpn.getServerId();

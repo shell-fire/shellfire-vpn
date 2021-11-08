@@ -124,7 +124,7 @@ public class AppScreenControllerSettings implements Initializable, AppScreenCont
 
 
 	void updateSelectedVpn() {
-		this.selectedVpnId.setText("" + shellfireService.getVpn().getVpnId());
+		this.selectedVpnId.setText("sf" + shellfireService.getVpn().getVpnId());
 		this.selectedVpnType.setImage(CrownImageRendererVpn.getIcon(shellfireService.getVpn().getAccountType(), false, false));
 	}
 
@@ -210,7 +210,7 @@ public class AppScreenControllerSettings implements Initializable, AppScreenCont
 			vpnSelectController.setApp(this.application);
 			vpnSelectController.setMainForm(this.mainFormController);
 			vpnSelectController.setService(this.shellfireService);
-		    
+			vpnSelectController.setSelectedVpn(Integer.parseInt(this.selectedVpnId.getText().substring(2)));
 			
 		} catch (IOException e) {
 			log.error("onClickSelectVpnButton - Could not switch subview to VPN Select Screen", e);
