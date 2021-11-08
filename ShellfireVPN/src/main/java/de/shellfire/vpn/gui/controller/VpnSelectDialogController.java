@@ -12,6 +12,7 @@ import de.shellfire.vpn.Util;
 import de.shellfire.vpn.VpnProperties;
 import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.gui.model.VpnSelectionFXModel;
+import de.shellfire.vpn.gui.renderer.CrownImageRendererVpn;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.webservice.Vpn;
 import de.shellfire.vpn.webservice.WebService;
@@ -20,36 +21,24 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
 
 public class VpnSelectDialogController extends AnchorPane implements Initializable {
 
 	@FXML
 	private Button selectVpnButton;
 	@FXML
-	private Label vpnSelectLabel;
-	@FXML
 	private TableView<VpnSelectionFXModel> vpnListTable;
 	@FXML
 	private TableColumn<VpnSelectionFXModel, Integer> idTbleColumn;
 	@FXML
-	private TableColumn<VpnSelectionFXModel, String> typeTbleColumn;
-	@FXML
-	private TableColumn<VpnSelectionFXModel, String> accArtTbleColumn;
-	@FXML
-	private Label numAccountVpnLabel;
+	private TableColumn<VpnSelectionFXModel, Vpn> accArtTbleColumn;
 	@FXML
 	private Pane headerPanel;
 
@@ -117,7 +106,7 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		// TODO Auto-generated method stub
 		idTbleColumn.setCellValueFactory(cellData -> cellData.getValue().idProperty().asObject());
-		typeTbleColumn.setCellValueFactory(cellData -> cellData.getValue().typeProperty());
+		idTbleColumn.setStyle( "-fx-alignment: CENTER;");
 		accArtTbleColumn.setCellValueFactory(cellData -> cellData.getValue().accountArtProperty());
 
 		initComponents();
@@ -127,16 +116,20 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
 			if (newValue != null) {
 				rememberSelectionIfDesired(newValue.getVpn());
 				this.shellfireService.selectVpn(newValue.getVpn());
+				vpnListTable.refresh();
 			}
 		});
+		
+		accArtTbleColumn.setStyle( "-fx-alignment: baseline-right;");
+		accArtTbleColumn.setCellFactory(column -> {
+			return new CrownImageRendererVpn(this);
+		});
 
+		vpnListTable.setFixedCellSize(40.0);
 	}
 
 	public void initComponents() {
-		this.numAccountVpnLabel.setText(i18n.tr("Please select the VPN to use."));
-		this.numAccountVpnLabel.setWrapText(true);
 		this.selectVpnButton.setText(i18n.tr("Select VPN"));
-		this.vpnSelectLabel.setText(i18n.tr("Choose VPN"));
 	}
 
 	private void rememberSelectionIfDesired(Vpn selectedVpn) {
@@ -168,8 +161,7 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
 			VpnSelectionFXModel vpnModel = new VpnSelectionFXModel();
 			vpnModel.setId(allVpn.get(i).getVpnId());
 			// Converting the Vpn Account Type enum to String
-			vpnModel.setAccount_art(allVpn.get(i).getAccountType().toString());
-			vpnModel.setType(allVpn.get(i).getProductType().toString());
+			vpnModel.setAccount_art(allVpn.get(i));
 			vpnModel.setVpn(allVpn.get(i));
 			allModels.add(vpnModel);
 		}
@@ -201,5 +193,15 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
 		this.application.shellfireVpnMainController.setServiceAndInitialize(this.shellfireService);
 		this.application.shellfireVpnMainController.prepareSubviewControllers();
 		this.application.shellfireVpnMainController.afterLogin(autoConnect);
+	}
+
+	public Vpn getSelectedVpn() {
+		VpnSelectionFXModel serverModel = this.vpnListTable.getSelectionModel().getSelectedItem();
+		if (null == serverModel) {
+			return null;
+		} else {
+			Vpn selectedVpn = serverModel.getVpn();
+			return selectedVpn; 
+		}
 	}
 }

@@ -7,56 +7,35 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="640.0" prefWidth="380.0" style="-fx-background-color: #fafafa;" stylesheets="@../stylesheets/main-en.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.VpnSelectDialogController">
+<AnchorPane style="-fx-background-color: #fafafa;" stylesheets="@../stylesheets/main-en.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.VpnSelectDialogController">
    <children>
       <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <VBox alignment="TOP_CENTER">
+            <VBox prefHeight="245.0" prefWidth="200.0">
                <children>
-                  <Label fx:id="vpnSelectLabel" alignment="BASELINE_CENTER" contentDisplay="CENTER" text="Select VPN" textAlignment="CENTER" textFill="#12ace5">
-                     <font>
-                        <Font name="Arial" size="24.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets top="20.0" />
-                     </VBox.margin>
-                  </Label>
-               </children>
-               <padding>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-               </padding>
-            </VBox>
-            <VBox>
-               <children>
-                  <Label fx:id="numAccountVpnLabel" text="Please select the VPN to use" textFill="#666666">
-                     <font>
-                        <Font name="Arial Bold" size="14.0" />
-                     </font>
-                     <VBox.margin>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </VBox.margin>
-                  </Label>
-                  <TableView fx:id="vpnListTable" prefHeight="465.0">
+                  <TableView fx:id="vpnListTable" prefHeight="250.0" prefWidth="200.0">
                     <columns>
-                      <TableColumn fx:id="idTbleColumn" prefWidth="70.0" text="Id" />
-                      <TableColumn fx:id="typeTbleColumn" prefWidth="100.0" text="Typ" />
-                        <TableColumn fx:id="accArtTbleColumn" prefWidth="100.0" text="Account Art" />
+                      <TableColumn fx:id="idTbleColumn" maxWidth="70.0" minWidth="70.0" prefWidth="70.0" text="Id" />
+                        <TableColumn fx:id="accArtTbleColumn" maxWidth="100.0" minWidth="100.0" prefWidth="100.0" text="Account Art" />
                     </columns>
                      <VBox.margin>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                        <Insets bottom="10.0" />
                      </VBox.margin>
                   </TableView>
                   <Button fx:id="selectVpnButton" mnemonicParsing="false" onAction="#handleSelectVpnButton" prefHeight="25.0" prefWidth="200.0" text="VPN auswÃ¤hlen">
                      <VBox.margin>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                        <Insets />
                      </VBox.margin>
+                     <font>
+                        <Font name="Arial" size="12.0" />
+                     </font>
                   </Button>
                </children>
-               <padding>
-                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-               </padding>
             </VBox>
          </children>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
       </VBox>
    </children>
 </AnchorPane>

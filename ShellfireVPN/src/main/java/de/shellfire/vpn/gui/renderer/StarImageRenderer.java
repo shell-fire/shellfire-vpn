@@ -23,14 +23,14 @@ import javafx.scene.image.ImageView;
  *
  * @author TcheutchouaSteve on May 29, 2018
  */
-public class StarImageRendererFX2 extends TableCell<VpnComparisonFXTableModel, VpnEntry> {
+public class StarImageRenderer extends TableCell<VpnComparisonFXTableModel, VpnEntry> {
 
 	HashMap<Integer, Image> icons = new HashMap<>();
 	HashMap<Integer, Image> iconsSelected = new HashMap<>();
 	HashMap<Integer, Image> iconsDisabled = new HashMap<>();
-	private static final Logger log = Util.getLogger(StarImageRendererFX2.class.getCanonicalName());
+	private static final Logger log = Util.getLogger(StarImageRenderer.class.getCanonicalName());
 
-	public StarImageRendererFX2() {
+	public StarImageRenderer() {
 		init();
 	}
 

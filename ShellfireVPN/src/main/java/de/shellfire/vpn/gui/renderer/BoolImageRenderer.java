@@ -18,7 +18,7 @@ import javafx.scene.text.TextAlignment;
  *
  * @author TcheutchouaSteve on May 28, 2018
  */
-public class BoolImageRendererFX extends TableCell<VpnComparisonFXTableModel, VpnEntry> {
+public class BoolImageRenderer extends TableCell<VpnComparisonFXTableModel, VpnEntry> {
 	Image iconTrue = Util.getImageIconFX("/icons/yes.png");
 	Image iconFalse = Util.getImageIconFX("/icons/no.png");
 

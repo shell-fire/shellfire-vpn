@@ -19,6 +19,7 @@ import de.shellfire.vpn.Util;
 import de.shellfire.vpn.VpnProperties;
 import de.shellfire.vpn.client.Client;
 import de.shellfire.vpn.gui.LoginForms;
+import de.shellfire.vpn.gui.renderer.CrownImageRendererVpn;
 import de.shellfire.vpn.i18n.Language;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.types.Server;
@@ -43,6 +44,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -68,7 +70,7 @@ public class AppScreenControllerSettings implements Initializable, AppScreenCont
 	@FXML
 	private Label selectedVpnId;
 	@FXML
-	private Label selectedVpnType;
+	private ImageView selectedVpnType;
 	@FXML
 	private ComboBox<Language> languageComboBox;
 	@FXML
@@ -123,8 +125,7 @@ public class AppScreenControllerSettings implements Initializable, AppScreenCont
 
 	private void updateSelectedVpn() {
 		this.selectedVpnId.setText("" + shellfireService.getVpn().getVpnId());
-		this.selectedVpnType.setText(shellfireService.getVpn().getAccountType().toString());
-		
+		this.selectedVpnType.setImage(CrownImageRendererVpn.getIcon(shellfireService.getVpn().getAccountType(), false, false));
 	}
 
 
@@ -184,6 +185,9 @@ public class AppScreenControllerSettings implements Initializable, AppScreenCont
 	
 	@FXML
 	private void onClickSelectVpnButton(ActionEvent event) {
+	}
+	
+	public void showVpnSelectScreen() {
 		VpnProperties props = VpnProperties.getInstance();
 		props.remove(LoginForms.REG_REMEMBERSELECTION);
 		
@@ -197,8 +201,8 @@ public class AppScreenControllerSettings implements Initializable, AppScreenCont
 		    stage.setScene(new Scene(root));
 		    stage.initStyle(StageStyle.UTILITY);
 		    stage.initModality(Modality.WINDOW_MODAL);
-		    stage.initOwner(((Node)event.getSource()).getScene().getWindow() );
-		    
+		    stage.initOwner(LoginForms.getStage().getScene().getWindow() );
+		    stage.setTitle(i18n.tr("Select VPN"));
 		    stage.show();
 		    
 		    VpnSelectDialogController vpnSelectController = (VpnSelectDialogController) loader.getController();

@@ -10,12 +10,10 @@ import java.util.HashMap;
 import org.slf4j.Logger;
 
 import de.shellfire.vpn.Util;
-import de.shellfire.vpn.gui.controller.AppScreenControllerServerList;
-import de.shellfire.vpn.gui.model.ServerListFXModel;
-import de.shellfire.vpn.types.Server;
+import de.shellfire.vpn.gui.controller.VpnSelectDialogController;
+import de.shellfire.vpn.gui.model.VpnSelectionFXModel;
 import de.shellfire.vpn.types.ServerType;
-import de.shellfire.vpn.webservice.WebService;
-import javafx.geometry.Insets;
+import de.shellfire.vpn.webservice.Vpn;
 import javafx.geometry.NodeOrientation;
 import javafx.scene.control.TableCell;
 import javafx.scene.image.Image;
@@ -25,20 +23,20 @@ import javafx.scene.image.ImageView;
  *
  * @author Tcheutchoua Steve
  */
-public class CrownImageRendererFX extends TableCell<ServerListFXModel, Server> {
+public class CrownImageRendererVpn extends TableCell<VpnSelectionFXModel, Vpn> {
 
-	HashMap<ServerType, Image> icons = new HashMap<ServerType, Image>();
-	HashMap<ServerType, Image> iconsSelected = new HashMap<ServerType, Image>();
-	HashMap<ServerType, Image> iconsDisabled = new HashMap<ServerType, Image>();
-	private AppScreenControllerServerList AppScreenControllerServerList;
-	private static final Logger log = Util.getLogger(CrownImageRendererFX.class.getCanonicalName());
+	static HashMap<ServerType, Image> icons = new HashMap<ServerType, Image>();
+	static 	HashMap<ServerType, Image> iconsSelected = new HashMap<ServerType, Image>();
+	static HashMap<ServerType, Image> iconsDisabled = new HashMap<ServerType, Image>();
+	private VpnSelectDialogController vpnSelectDialogController;
+	private static final Logger log = Util.getLogger(CrownImageRendererVpn.class.getCanonicalName());
 
-	public CrownImageRendererFX(AppScreenControllerServerList AppScreenControllerServerList) {
-		this.AppScreenControllerServerList = AppScreenControllerServerList;
-		init();
+	public CrownImageRendererVpn(VpnSelectDialogController vpnSelectDialogController) {
+		this.vpnSelectDialogController = vpnSelectDialogController;
+
 	}
 
-	private void init() {
+	static {
 		icons.put(ServerType.Free, Util.getImageIconFX("/images/crowns_1.png"));
 		icons.put(ServerType.Premium, Util.getImageIconFX("/images/crowns_2.png"));
 		icons.put(ServerType.PremiumPlus, Util.getImageIconFX("/images/crowns_3.png"));
@@ -49,35 +47,37 @@ public class CrownImageRendererFX extends TableCell<ServerListFXModel, Server> {
 	}
 
     @Override
-    protected void updateItem(Server item, boolean empty) {
+    protected void updateItem(Vpn item, boolean empty) {
         super.updateItem(item, empty);
         
         if (empty || item == null) {
             setGraphic(null);
         } else {
-        	boolean isSelected = AppScreenControllerServerList.getSelectedServer().equals(item);
+        	boolean isSelected = (vpnSelectDialogController.getSelectedVpn() != null && vpnSelectDialogController.getSelectedVpn().equals(item));
         	updateItemSelected(item, isSelected);
         }
     }
     
-	protected void updateItemSelected(Server item, boolean isSelected) {
-		Image img = this.getIcon(item.getServerType(), isSelected);
+	protected void updateItemSelected(Vpn item, boolean isSelected) {
+		Image img = this.getIcon(item.getAccountType(), isSelected);
 		ImageView imageView = new ImageView(img);
 		imageView.setPreserveRatio(true);
 		imageView.setFitHeight(20);
 		setGraphic(imageView);
 		getGraphic().setNodeOrientation(NodeOrientation.LEFT_TO_RIGHT);
 
-		// this.setDisable(true);
-		// this.setDisabled(true);
 	}
 
 	public Image getIcon(ServerType type, boolean isSelected) {
+		return getIcon(type, isSelected, isDisabled());
+	}
+	
+	public static Image getIcon(ServerType type, boolean isSelected, boolean isDisabled) {
 		
 		if (isSelected) {
 			return iconsSelected.get(type);
 		} // else if (!isDisabled())
-		else if (isDisabled()) {
+		else if (isDisabled) {
 			return iconsSelected.get(type);
 		} else {
 			return icons.get(type);

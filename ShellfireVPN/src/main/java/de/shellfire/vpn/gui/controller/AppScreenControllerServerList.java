@@ -19,7 +19,7 @@ import de.shellfire.vpn.Util;
 import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.gui.model.CountryMap;
 import de.shellfire.vpn.gui.model.ServerListFXModel;
-import de.shellfire.vpn.gui.renderer.CrownImageRendererFX;
+import de.shellfire.vpn.gui.renderer.CrownImageRendererServer;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.types.Country;
 import de.shellfire.vpn.types.Server;
@@ -219,7 +219,7 @@ public class AppScreenControllerServerList implements Initializable, AppScreenCo
 
 		speedColumn.setStyle( "-fx-alignment: baseline-right;");
 		speedColumn.setCellFactory(column -> {
-			return new CrownImageRendererFX(this);
+			return new CrownImageRendererServer(this);
 		});
 
 		// Wrap the FilteredList in a SortedList.

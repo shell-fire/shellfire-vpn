@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
@@ -44,50 +45,29 @@
                         <Insets bottom="10.0" right="10.0" />
                      </padding>
                   </Label>
-                  <HBox alignment="BOTTOM_LEFT">
+                  <HBox alignment="CENTER_LEFT">
                      <children>
                         <Label alignment="BASELINE_CENTER" contentDisplay="CENTER" text="Selected VPN" textAlignment="CENTER" textFill="#666666">
                            <font>
-                              <Font name="Arial" size="14.0" />
+                              <Font name="Arial" size="12.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets right="10.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Label fx:id="selectedVpnId" alignment="BASELINE_CENTER" contentDisplay="CENTER" text="sf12345" textAlignment="CENTER" textFill="#666666">
+                           <font>
+                              <Font name="Arial" size="12.0" />
                            </font>
                            <padding>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                              <Insets right="10.0" />
                            </padding>
                         </Label>
-                        <VBox alignment="TOP_CENTER">
-                           <children>
-                              <Label alignment="BASELINE_CENTER" contentDisplay="CENTER" text="Id" textAlignment="CENTER" textFill="#666666">
-                                 <font>
-                                    <Font name="Arial Bold" size="11.0" />
-                                 </font>
-                              </Label>
-                              <Label fx:id="selectedVpnId" alignment="BASELINE_CENTER" contentDisplay="CENTER" text="sf12345" textAlignment="CENTER" textFill="#666666">
-                                 <font>
-                                    <Font name="Arial" size="14.0" />
-                                 </font>
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" />
-                                 </padding>
-                              </Label>
-                           </children>
-                        </VBox>
-                        <VBox alignment="TOP_CENTER">
-                           <children>
-                              <Label alignment="BASELINE_CENTER" contentDisplay="CENTER" text="Type" textAlignment="CENTER" textFill="#666666">
-                                 <font>
-                                    <Font name="Arial Bold" size="11.0" />
-                                 </font>
-                              </Label>
-                              <Label fx:id="selectedVpnType" alignment="BASELINE_CENTER" contentDisplay="CENTER" text="Free" textAlignment="CENTER" textFill="#666666">
-                                 <font>
-                                    <Font name="Arial" size="14.0" />
-                                 </font>
-                                 <padding>
-                                    <Insets bottom="5.0" left="5.0" right="5.0" />
-                                 </padding>
-                              </Label>
-                           </children>
-                        </VBox>
+                        <ImageView fx:id="selectedVpnType" fitHeight="25.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/crowns_1.png" />
+                           </image>
+                        </ImageView>
                      </children>
                      <VBox.margin>
                         <Insets />

@@ -1,16 +1,16 @@
 package de.shellfire.vpn.gui.model;
 
+import de.shellfire.vpn.types.ServerType;
 import de.shellfire.vpn.webservice.Vpn;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.SimpleObjectProperty;
 
 public class VpnSelectionFXModel {
 
 	private IntegerProperty id;
-	private StringProperty type;
-	private StringProperty account_art;
+	private ObjectProperty<Vpn> account_art;
 
 	// vpn does not need property Object because it's just a storage of the vpn in question
 	private Vpn vpn;
@@ -19,7 +19,7 @@ public class VpnSelectionFXModel {
 	 * Default constructor.
 	 */
 	public VpnSelectionFXModel() {
-		this(0, null, null);
+		this(0, null);
 	}
 
 	/**
@@ -29,10 +29,9 @@ public class VpnSelectionFXModel {
 	 * @param vpn_type
 	 * @param vpn_account_art
 	 */
-	public VpnSelectionFXModel(int vpn_id, String vpn_type, String vpn_account_art) {
+	public VpnSelectionFXModel(int vpn_id, Vpn vpn_account_art) {
 		this.id = new SimpleIntegerProperty(vpn_id);
-		this.type = new SimpleStringProperty(vpn_type);
-		this.account_art = new SimpleStringProperty(vpn_account_art);
+		this.account_art = new SimpleObjectProperty<Vpn>(vpn_account_art);
 
 	}
 
@@ -48,28 +47,15 @@ public class VpnSelectionFXModel {
 		return id;
 	}
 
-	public String getType() {
-		return type.get();
-	}
-
-	public void setType(String type) {
-		this.type.set(type);
-		;
-	}
-
-	public StringProperty typeProperty() {
-		return type;
-	}
-
-	public String getAccount_art() {
+	public Vpn getAccount_art() {
 		return account_art.get();
 	}
 
-	public void setAccount_art(String account_art) {
+	public void setAccount_art(Vpn account_art) {
 		this.account_art.set(account_art);
 	}
 
-	public StringProperty accountArtProperty() {
+	public ObjectProperty<Vpn> accountArtProperty() {
 		return account_art;
 	}
 
