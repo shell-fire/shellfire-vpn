@@ -5,16 +5,11 @@ import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
 import java.nio.file.StandardOpenOption;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
 
 import de.shellfire.vpn.Util;
-import de.shellfire.vpn.VpnProperties;
 import de.shellfire.vpn.client.ServiceToolsFX;
 import de.shellfire.vpn.gui.controller.LoginController;
 import de.shellfire.vpn.gui.controller.ProgressDialogController;
@@ -24,7 +19,6 @@ import de.shellfire.vpn.gui.controller.VpnSelectDialogController;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.proxy.ProxyConfig;
 import de.shellfire.vpn.updater.UpdaterFX;
-import de.shellfire.vpn.webservice.WebService;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -33,12 +27,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.stage.WindowEvent;
 
 public class LoginForms extends Application {
 
@@ -131,12 +125,26 @@ public class LoginForms extends Application {
 			LoginForms.stage.initStyle(StageStyle.DECORATED);
 			initDialog = ProgressDialogController.getInstance("Init ...", null, stage, false);
 
+			primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+			    @Override
+			    public void handle(WindowEvent event) {
+			    	if (shellfireVpnMainController != null && shellfireVpnMainController.isVisible()) {
+			    		shellfireVpnMainController.exitHandler();
+			    	} else {
+				        Platform.exit();
+				        System.exit(0);
+			    	}
+			    	
+			    	event.consume();
+			    }
+			});
+			
 			this.loadLoginController();
 		} catch (Exception ex) {
 			log.error("could not start with first stage load \n");
 			ex.printStackTrace(System.out);
 		}
-		Platform.setImplicitExit(true);
+		
 		try {
 			log.debug("LoginForms.start() - calling initializations");
 			initializations(default_args);

@@ -378,8 +378,10 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	private void initServer() {
 		log.debug("initServer() - start");
 		Vpn vpn = shellfireService.getVpn();
+
 		log.debug("Vpn: {}, Server: {}", vpn.getVpnId(), vpn.getServerId());
-		setSelectedServer(shellfireService.getVpn().getServer().getServerId());
+
+		setSelectedServer(vpn.getServerId());
 	}
 
 	private final static HashMap<String, Image> mainIconMap = new HashMap<String, Image>() {
@@ -760,7 +762,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		});
 
 		log.debug("showConnectProgress: Thread Has started");
-		Platform.setImplicitExit(false);
+		
 		Platform.runLater(() -> {
 			try {
 				
@@ -1451,7 +1453,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		
 	}
 
-	private void exitHandler() {
+	public void exitHandler() {
 		boolean connected;
 
 		connected = this.controller.getCurrentConnectionState() != ConnectionState.Disconnected;

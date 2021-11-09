@@ -222,6 +222,16 @@ public class AppScreenControllerSettings implements Initializable, AppScreenCont
 		props.remove(LoginController.REG_USER);
 		props.remove(LoginController.REG_PASS);
 		props.setBoolean(LoginController.REG_AUTOlOGIN, false);
+		
+		Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
+				i18n.tr("Are you sure you want to logout?"), ButtonType.YES,
+				ButtonType.NO);
+		alert.setHeaderText(i18n.tr("Are you sure?"));
+		Optional<ButtonType> result = alert.showAndWait();
+		if ((result.isPresent()) && (result.get() == ButtonType.YES)) {
+			alert.close();
+			LoginController.restart();
+		}
 	}
 
 	@FXML
