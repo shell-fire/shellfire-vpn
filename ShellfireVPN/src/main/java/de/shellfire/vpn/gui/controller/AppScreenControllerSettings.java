@@ -69,6 +69,8 @@ public class AppScreenControllerSettings implements Initializable, AppScreenCont
 	@FXML
 	private Label selectedVpnId;
 	@FXML
+	private Label loggedInUser;
+	@FXML
 	private ImageView selectedVpnType;
 	@FXML
 	private ComboBox<Language> languageComboBox;
@@ -127,6 +129,9 @@ public class AppScreenControllerSettings implements Initializable, AppScreenCont
 		this.selectedVpnType.setImage(CrownImageRendererVpn.getIcon(shellfireService.getVpn().getAccountType(), false, false));
 	}
 
+	void setLoggedInUser(String username) {
+		loggedInUser.setText(username);
+	}
 
 	public RadioButton getWireguardRadioButton() {
 		return WireguardRadioButton;
@@ -157,10 +162,10 @@ public class AppScreenControllerSettings implements Initializable, AppScreenCont
 		this.TCPRadioButton.setText(i18n.tr("OpenVPN TCP (works with secure firewalls and proxies.)"));
 		this.UDPRadioButton.setText(i18n.tr("OpenVPN UDP (fast)"));
 		this.WireguardRadioButton.setText(i18n.tr("Wireguard (fastest)"));
-		this.startOnBoot.setText(i18n.tr("When Windows starts: Start Shellfire VPN App"));
-		this.showStatusSite.setText(i18n.tr("When connected to VPN: Show VPN Status in Browser"));
+		this.startOnBoot.setText(i18n.tr("Windows has started"));
+		this.showStatusSite.setText(i18n.tr("VPN connected"));
 		this.languageLabel.setText(i18n.tr("Language"));
-		this.connectAutomatically.setText(i18n.tr("When Shellfire VPN App Starts: Connect to VPN"));
+		this.connectAutomatically.setText(i18n.tr("Shellfire VPN has started"));
 		this.languageComboBox.setEditable(false);
 	
 		initValues();

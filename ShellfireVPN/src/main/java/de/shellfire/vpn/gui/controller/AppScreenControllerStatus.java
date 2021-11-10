@@ -58,7 +58,7 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
 	private WebView locationMap;
 	
 	private LoginForms application;
-	private static final Logger log = Util.getLogger(ShellfireVPNMainFormFxmlController.class.getCanonicalName());
+	private static final Logger log = Util.getLogger(AppScreenControllerStatus.class.getCanonicalName());
 	private static I18n i18n = VpnI18N.getI18n();
 	private Controller controller;
 	private WebService shellfireService;
@@ -102,9 +102,8 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
 	 */
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
+		log.debug("initialize(url={}) - initialized: {} - start", url.toString(), this.initialized);
 		if (!this.initialized) {
-			log.debug("langKey: " + langKey);
-			
 			this.connectButton.setGraphic(connectImageView);
 			this.connectButton.setPadding(Insets.EMPTY);
 			
@@ -120,6 +119,8 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
 				        if (t1 == Worker.State.SUCCEEDED) {
 				            mapLoaded  = true;        
 				            log.debug("Map has now been loaded - will process changes from now on");
+				             application.instance.loginProgressDialog.hide();
+
 				        }
 				    }
 				});

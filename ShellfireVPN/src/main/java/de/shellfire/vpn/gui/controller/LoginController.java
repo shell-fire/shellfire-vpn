@@ -103,7 +103,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 	private static Logger log = Util.getLogger(LoginController.class.getCanonicalName());
 	private String username;
 	private String password;
-	private ProgressDialogController loginProgressDialog;
+	ProgressDialogController loginProgressDialog;
 	private static boolean passwordBogus;
 	public static ProgressDialogController initProgressDialog;
 	public static ShellfireVPNMainFormFxmlController mainForm;
@@ -132,6 +132,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 			Thread loginTaskThread = new Thread(loginTask);
 			loginTaskThread.start();
 
+			// TODO: move much of this on success stuff into the actual worker, so progress dialog is shown longer
 			loginTask.setOnSucceeded((WorkerStateEvent wEvent) -> {
 				log.info("Login task completed successfully");
 				Response<LoginResponse> loginResult = null;
@@ -161,6 +162,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 						MainFormLoaderTask loaderTask = new MainFormLoaderTask(loginResult);
 						loaderTask.setOnSucceeded((WorkerStateEvent wEvent2) -> {
 							application.loadShellFireMainController();
+							
 							application.shellfireVpnMainController.setShellfireService(service);
 							boolean vis = true;
 							if (minimize && service.getVpn().getAccountType() != ServerType.Free) {
@@ -168,11 +170,16 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 							}
 
 							application.shellfireVpnMainController.initializeComponents();
+							
 							application.shellfireVpnMainController.setServiceAndInitialize(service);
+							
 							application.shellfireVpnMainController.prepareSubviewControllers();
 							application.shellfireVpnMainController.setApp(application);
 							application.shellfireVpnMainController.afterLogin(fAutoconnect.isSelected());
-							loginProgressDialog.hide();
+							
+							
+							application.shellfireVpnMainController.setUserName(this.username);
+
 						});
 						
 						log.debug("before loaderTaskThread");

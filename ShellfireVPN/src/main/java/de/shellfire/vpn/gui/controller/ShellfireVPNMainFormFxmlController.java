@@ -24,7 +24,6 @@ import java.util.ResourceBundle;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.prefs.Preferences;
 
 import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
@@ -74,7 +73,6 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
@@ -174,6 +172,9 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	private Parent connectionSubview;
 
 	@FXML
+	private AppScreenControllerStatus connectionSubviewController;
+	
+	@FXML
 	private HashMap<AppScreen, ImageView> menuImageViewMap;
 	private HashMap<AppScreen, Label> menuLabelMap;
 	private HashMap<AppScreen, AppScreenController> menuControllerMap;
@@ -182,7 +183,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
 	public ShellfireVPNMainFormFxmlController() {
 
-		log.debug("No argumenent controller of shellfire has been called");
+		log.debug("No argumenent constructer of ShellfireVPNMainFormFxmlController has been called");
 	}
 
 	public AppScreenControllerStatus getAppScreenControllerStatus() {
@@ -334,7 +335,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
 		this.initConnection();
 		this.initVpn();
-		this.initServer();
+
 		this.application.getStage().resizableProperty().setValue(Boolean.FALSE);
 		this.application.getStage().show();
 	}
@@ -1403,6 +1404,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 			this.appScreenControllerSettings.setApp(this.application);
 			this.appScreenControllerSettings.setMainFormController(this);
 			menuAppScreenMap.put(AppScreen.SETTINGS, pairSettings);
+			
 			log.debug("settings controller defined");
 
 			// load the about pane
@@ -1427,10 +1429,12 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
 			
 			// load status pane
-			Pair<Pane, Object> pairStatus = FxUIManager.SwitchSubview("appscreen_subview_status.fxml");
-			this.appScreenControllerStatus = (AppScreenControllerStatus) pairStatus.getValue();
+			// what is in connectionSubview ??
+			// Pair<Pane, Object> pairStatus = FxUIManager.SwitchSubview("appscreen_subview_status.fxml");
+			this.appScreenControllerStatus = connectionSubviewController;
+			
+			 Pair<Pane, Object> pairStatus = new Pair<Pane, Object>((AnchorPane)connectionSubview, appScreenControllerStatus);
 			contentDetailsPane.getChildren().setAll(menuAppScreenMap.get(AppScreen.SERVERLIST).getKey());
-			this.appScreenControllerStatus = (AppScreenControllerStatus) pairStatus.getValue();
 			this.appScreenControllerStatus.initPremium(isFreeAccount());
 			this.appScreenControllerStatus.setApp(this.application);
 			this.appScreenControllerStatus.setShellfireService((this.shellfireService));
@@ -1442,8 +1446,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 			menuAppScreenMap.put(AppScreen.STATUS, pairStatus);
 			onMenuPaneStatusClicked(null);
 			
-
-			
+			this.initServer();
 			
 		} catch (IOException ex) {
 			log.error("ShellfireVPNMainFormFxmlController:  prepareControllers has error", ex);
@@ -1510,6 +1513,10 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	public void onChanged(javafx.collections.ListChangeListener.Change<? extends ServerListFXModel> arg0) {
 		System.out.println("onChange of server registered in Main Form, nice!");
 		
+	}
+
+	public void setUserName(String username) {
+		this.appScreenControllerSettings.setLoggedInUser(username);
 	}
 
 
