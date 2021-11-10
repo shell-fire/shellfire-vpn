@@ -26,6 +26,7 @@ import de.shellfire.vpn.service.IVpnRegistry;
 import de.shellfire.vpn.service.ProcessWrapper;
 import de.shellfire.vpn.types.ProductType;
 import de.shellfire.vpn.types.Reason;
+import javafx.application.Platform;
 
 public class WindowsVpnController implements IVpnController {
 
@@ -476,7 +477,9 @@ SERVICE_NAME: WireGuardTunnel$wg-sf35022
 			log.error("", e);
 		}
 		kernel32.PulseEvent(result);
-		ipv6manager.enableIPV6OnPreviouslyDisabledDevices();
+		Platform.runLater(() ->  {
+			ipv6manager.enableIPV6OnPreviouslyDisabledDevices();
+		});
 	}
 
 	private void fixTapDevices() throws IOException {
@@ -596,7 +599,7 @@ SERVICE_NAME: WireGuardTunnel$wg-sf35022
 	public boolean autoStartEnabled() {
 		log.debug("autoStartEnabled()");
 		boolean result = registry.autoStartEnabled();
-		log.debug("autoStartEnabled() - resturning {}", result);
+		log.debug("autoStartEnabled() - returning {}", result);
 		return result;
 	}
 
@@ -616,14 +619,14 @@ SERVICE_NAME: WireGuardTunnel$wg-sf35022
 		log.debug("isAutoProxyConfigEnabled()");
 		boolean result = registry.autoProxyConfigEnabled();
 		;
-		log.debug("isAutoProxyConfigEnabled() - resturning {}", result);
+		log.debug("isAutoProxyConfigEnabled() - returning {}", result);
 		return result;
 	}
 
 	public String getAutoProxyConfigPath() {
 		log.debug("getAutoProxyConfigPath()");
 		String result = registry.getAutoProxyConfigPath();
-		log.debug("getAutoProxyConfigPath() - resturning {}", result);
+		log.debug("getAutoProxyConfigPath() - returning {}", result);
 		return result;
 	}
 

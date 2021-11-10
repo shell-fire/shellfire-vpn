@@ -28,7 +28,7 @@ public class MessageBroker {
 	ExcerptTailer tailer;
 
 	private final static int MAX_MESSAGE_SIZE = 1000;
-	private static final long TIMEOUT = 1000;
+	private static final long TIMEOUT = 10000;
 
 	private Map<UUID, Message<?, ?>> receivedMessageMap = new ConcurrentHashMap<UUID, Message<?, ?>>();
 	private ArrayList<MessageListener<?>> messageListeners = new ArrayList<MessageListener<?>>();

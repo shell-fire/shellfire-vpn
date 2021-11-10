@@ -891,7 +891,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		this.stopConnectedSinceTimer();
 		appScreenControllerServerList.getServerListTableView().disableProperty().set(false);
 		this.setNormalCursor();
-		this.updateOnlineHost();
 		if (!ProxyConfig.isProxyEnabled()) {
 			this.appScreenControllerSettings.getUDPRadioButton().setDisable(false);
 			this.appScreenControllerSettings.getWireguardRadioButton().setDisable(false);
@@ -1171,7 +1170,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
 		this.startConnectedSinceTimer();
 
-		this.updateOnlineHost();
 		appScreenControllerSettings.getWireguardRadioButton().disableProperty().set(true);
 		appScreenControllerSettings.getUDPRadioButton().disableProperty().set(true);
 		appScreenControllerSettings.getTCPRadioButton().disableProperty().set(true);
@@ -1235,30 +1233,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 			this.currentConnectedSinceTimerFX.shutdown();
 			this.currentConnectedSinceTimerFX = Executors.newSingleThreadScheduledExecutor();
 		}
-	}
-
-	private void updateOnlineHost() {
-		Platform.runLater(() -> {
-			Task<String> hostWorker = new Task<String>() {
-				@Override
-				protected String call() throws Exception {
-					String host = shellfireService.getLocalIpAddress();
-					log.debug("ShellfireMainFormController: Ip address in task" + host);
-					return host;
-				}
-			};
-			hostWorker.valueProperty().addListener((observable, oldValue, newValue) -> {
-				if (newValue != null) {
-					String host = hostWorker.getValue();
-					log.debug("ShellfireMainFormController: Ip address is " + host);
-				}
-
-			});
-			Thread worker = new Thread(hostWorker);
-			worker.run();
-
-		});
-
 	}
 
 	public void setSelectedProtocol(VpnProtocol protocol) {

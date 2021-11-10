@@ -13,6 +13,7 @@ import de.shellfire.vpn.messaging.MessageBroker;
 import de.shellfire.vpn.messaging.MessageListener;
 import de.shellfire.vpn.messaging.MessageType;
 import de.shellfire.vpn.types.Reason;
+import javafx.application.Platform;
 
 @SuppressWarnings("unchecked")
 public class ServiceMessageHandler implements MessageListener<Object>, ConnectionStateListener {
@@ -83,15 +84,18 @@ public class ServiceMessageHandler implements MessageListener<Object>, Connectio
 			}
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			log.error("Error occured during handling of message", e);
 		}
 
 	}
 
 	private void handleReinstallTapDriver(Message<?, ?> message) {
-		log.info("handleSetParametersForOpenVpn()");
-		vpnController.reinstallTapDriver();
+		log.info("handleReinstallTapDriver()");
+		new Thread(() -> {
+			vpnController.reinstallTapDriver();
+		}).start(); 
 	}
+
 
 	private void handleSetParametersForOpenVpn(Message<?, ?> message) {
 		log.info("handleSetParametersForOpenVpn()");
@@ -114,20 +118,28 @@ public class ServiceMessageHandler implements MessageListener<Object>, Connectio
 	private void handleGetConnectionState(Message<?, ?> message) throws IOException {
 		log.info("handleGetConnectionState() - sending connection state");
 
-		ConnectionState connectionState = vpnController.getConnectionState();
-		log.info("ConnectionState: {}", connectionState);
-
-		Message<ConnectionState, Void> msg = (Message<ConnectionState, Void>) message;
-		Message<ConnectionState, Void> response = msg.createResponse(connectionState);
-		messageBroker.sendResponse(response);
+		new Thread(() -> {
+			ConnectionState connectionState = vpnController.getConnectionState();
+			log.info("ConnectionState: {}", connectionState);
+			
+			Message<ConnectionState, Void> msg = (Message<ConnectionState, Void>) message;
+			Message<ConnectionState, Void> response = msg.createResponse(connectionState);
+			try {
+				messageBroker.sendResponse(response);
+			} catch (IOException e) {
+				log.error("Error occured during handling of message", e);
+			}
+		}).start(); 
 	}
 
 	private void handleDisconnect(Message<?, ?> message) {
 		log.info("handleDisconnect()");
-		Message<Reason, Void> msg = (Message<Reason, Void>) message;
-		Reason reason = msg.getPayload();
-		log.info("Reason: {}", reason.name());
-		vpnController.disconnect(reason);
+		new Thread(() -> {
+			Message<Reason, Void> msg = (Message<Reason, Void>) message;
+			Reason reason = msg.getPayload();
+			log.info("Reason: {}", reason.name());
+			vpnController.disconnect(reason);
+		}).start(); 
 	}
 
 	private void handleError(Message<?, ?> message) {
@@ -145,7 +157,6 @@ public class ServiceMessageHandler implements MessageListener<Object>, Connectio
 		log.info("appDataFolder: {}", appDataFolder);
 		vpnController.setAppDataFolder(appDataFolder);
 	}
-	
 
 	private void handleSetWireguardConfigFilePath(Message<?, ?> message) {
 		log.info("handleSetWireguardConfigFilePath()");
@@ -162,17 +173,23 @@ public class ServiceMessageHandler implements MessageListener<Object>, Connectio
 
 		Reason reason = msg.getPayload();
 		log.info("Reason: {}", reason.name());
-		vpnController.connect(reason);
+		new Thread(() -> {
+			vpnController.connect(reason);
+		}).start(); 
 	}
 
 	private void handleEnableAutoStart(Message<?, ?> message) {
 		log.info("handleEnableAutoStart()");
-		vpnController.enableAutoStart();
+		new Thread(() -> {
+			vpnController.enableAutoStart();
+		}).start(); 
 	}
 
 	private void handleDisableAutoStart(Message<?, ?> message) {
 		log.info("handleDisableAutoStart()");
-		vpnController.disableAutoStart();
+		new Thread(() -> {
+			vpnController.disableAutoStart();
+		}).start(); 
 	}
 
 	private void handleUnknownMessageType(Message<?, ?> message) {
@@ -182,33 +199,48 @@ public class ServiceMessageHandler implements MessageListener<Object>, Connectio
 	private void handlePing(Message<?, ?> message) throws IOException {
 		log.info("handlePing() - sending pingback");
 
-		Message<Boolean, Void> msg = (Message<Boolean, Void>) message;
-		Message<Boolean, Void> response = msg.createResponse(true);
-		messageBroker.sendResponse(response);
+		new Thread(() -> {
+			Message<Boolean, Void> msg = (Message<Boolean, Void>) message;
+			Message<Boolean, Void> response = msg.createResponse(true);
+			try {
+				messageBroker.sendResponse(response);
+			} catch (IOException e) {
+				log.error("Error occured during handling of message", e);
+			}
+		}).start(); 
 	}
-
 	private void handleAutoStartEnabled(Message<?, ?> message) throws IOException {
 		log.info("Received request IsAutoStartEnabled");
-		Boolean isAutoStartEnabled = vpnController.autoStartEnabled();
-		log.info("Sending response: " + isAutoStartEnabled);
-
-		Message<Boolean, Void> msg = (Message<Boolean, Void>) message;
-		Message<Boolean, Void> response = msg.createResponse(isAutoStartEnabled);
-
-		messageBroker.sendResponse(response);
+		
+		new Thread(() -> {
+			Boolean isAutoStartEnabled = vpnController.autoStartEnabled();
+			log.info("Sending response: {}", isAutoStartEnabled);
+			
+			Message<Boolean, Void> msg = (Message<Boolean, Void>) message;
+			Message<Boolean, Void> response = msg.createResponse(isAutoStartEnabled);
+			
+			try {
+				messageBroker.sendResponse(response);
+			} catch (IOException e) {
+				log.error("Error occured during handling of message", e);
+			}
+		}).start(); 
 	}
 
 	@Override
 	public void connectionStateChanged(ConnectionStateChangedEvent event) {
 		log.debug("connectionStateChanged(ConnectionStateChangedEvent={})", event.toString());
-		connectionState = event.getConnectionState();
-		Message<ConnectionStateChangedEvent, Void> message = new Message<ConnectionStateChangedEvent, Void>(
-				MessageType.ConnectionStateChanged, event);
-		try {
-			messageBroker.sendMessage(message);
-		} catch (IOException e) {
-			log.error("Error occured while sending connectionStateChanged message to client: {}", e.getMessage(), e);
-		}
+
+		new Thread(() -> {
+			try {
+				connectionState = event.getConnectionState();
+				Message<ConnectionStateChangedEvent, Void> message = new Message<ConnectionStateChangedEvent, Void>(
+						MessageType.ConnectionStateChanged, event);
+				messageBroker.sendMessage(message);
+			} catch (IOException e) {
+				log.error("Error occured while sending connectionStateChanged message to client: {}", e.getMessage(), e);
+			}
+		}).start(); 
 	}
 
 	public void close() {
