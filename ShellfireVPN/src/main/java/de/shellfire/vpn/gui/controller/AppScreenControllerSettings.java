@@ -18,10 +18,13 @@ import org.xnap.commons.i18n.I18n;
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.VpnProperties;
 import de.shellfire.vpn.client.Client;
+import de.shellfire.vpn.client.ConnectionState;
 import de.shellfire.vpn.gui.LoginForms;
+import de.shellfire.vpn.gui.helper.CurrentConnectionState;
 import de.shellfire.vpn.gui.renderer.CrownImageRendererVpn;
 import de.shellfire.vpn.i18n.Language;
 import de.shellfire.vpn.i18n.VpnI18N;
+import de.shellfire.vpn.types.Reason;
 import de.shellfire.vpn.types.Server;
 import de.shellfire.vpn.types.VpnProtocol;
 import de.shellfire.vpn.webservice.WebService;
@@ -223,19 +226,40 @@ public class AppScreenControllerSettings implements Initializable, AppScreenCont
 
 	@FXML
 	private void onClickLogoutButton(ActionEvent event) {
-		VpnProperties props = VpnProperties.getInstance();
-		props.remove(LoginController.REG_USER);
-		props.remove(LoginController.REG_PASS);
-		props.setBoolean(LoginController.REG_AUTOlOGIN, false);
+		boolean performLogout = true;
+		boolean isConnected = CurrentConnectionState.getConnectionState() == ConnectionState.Connected;
 		
-		Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
-				i18n.tr("Are you sure you want to logout?"), ButtonType.YES,
-				ButtonType.NO);
-		alert.setHeaderText(i18n.tr("Are you sure?"));
+		String text, titleText;
+		titleText = i18n.tr("Shellfire VPN - Logout Confirmation");
+		if (isConnected) {
+			text = i18n.tr("You are currently connected. Disconnect and logout?");
+		} else {
+			text = i18n.tr("Are you sure you want to logout?");
+		}
+		
+		Alert alert = new Alert(Alert.AlertType.CONFIRMATION, text,	ButtonType.YES,	ButtonType.NO);
+		alert.initStyle(StageStyle.UTILITY);
+		alert.setTitle(titleText);
+		alert.setHeaderText(null);
+		
 		Optional<ButtonType> result = alert.showAndWait();
-		if ((result.isPresent()) && (result.get() == ButtonType.YES)) {
-			alert.close();
-			LoginController.restart();
+		performLogout = ((result.isPresent()) && (result.get() == ButtonType.YES));
+
+		
+		if (performLogout) {
+			if (isConnected) {
+				this.mainFormController.getController().disconnect(Reason.ClientLogout);
+			}
+			
+			VpnProperties props = VpnProperties.getInstance();
+			props.remove(LoginController.REG_USER);
+			props.remove(LoginController.REG_PASS);
+			props.setBoolean(LoginController.REG_AUTOlOGIN, false);
+			
+			if ((result.isPresent()) && (result.get() == ButtonType.YES)) {
+				alert.close();
+				LoginController.restart();
+			}
 		}
 	}
 

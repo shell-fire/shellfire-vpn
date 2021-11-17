@@ -33,6 +33,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
+import jfxtras.styles.jmetro.JMetro;
+import jfxtras.styles.jmetro.Style;
 
 public class LoginForms extends Application {
 
@@ -237,6 +239,8 @@ public class LoginForms extends Application {
 			Scene scene = new Scene(page);
 			log.debug("replaceSceneContent() - stage.setScene() - start...");
 			scene.setFill(Color.TRANSPARENT);
+			JMetro jMetro = new JMetro(Style.DARK);
+			jMetro.setScene(scene);
 
 			stage.setScene(scene);
 
@@ -246,6 +250,9 @@ public class LoginForms extends Application {
 			page.getScene().setFill(Color.TRANSPARENT);
 
 			stage.setScene(page.getScene());
+			JMetro jMetro = new JMetro(Style.DARK);
+			jMetro.setScene(page.getScene());
+
 			 
 		}
 		log.debug("replaceSceneContent() - stage.centerOnScreen() - start...");

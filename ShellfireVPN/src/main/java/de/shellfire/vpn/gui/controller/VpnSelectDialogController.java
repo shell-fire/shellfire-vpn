@@ -3,6 +3,7 @@ package de.shellfire.vpn.gui.controller;
 import java.io.IOException;
 import java.net.URL;
 import java.util.LinkedList;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import org.slf4j.Logger;
@@ -10,11 +11,14 @@ import org.xnap.commons.i18n.I18n;
 
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.VpnProperties;
+import de.shellfire.vpn.client.ConnectionState;
 import de.shellfire.vpn.gui.LoginForms;
+import de.shellfire.vpn.gui.helper.CurrentConnectionState;
 import de.shellfire.vpn.gui.model.ServerListFXModel;
 import de.shellfire.vpn.gui.model.VpnSelectionFXModel;
 import de.shellfire.vpn.gui.renderer.CrownImageRendererVpn;
 import de.shellfire.vpn.i18n.VpnI18N;
+import de.shellfire.vpn.types.Reason;
 import de.shellfire.vpn.webservice.Vpn;
 import de.shellfire.vpn.webservice.WebService;
 import javafx.collections.FXCollections;
@@ -25,6 +29,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.image.ImageView;
@@ -88,13 +93,37 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
 			alert.setContentText(i18n.tr("Please select a VPN from the list to proceed."));
 			alert.showAndWait();
 		} else {
-			this.shellfireVpnMainForm.setVpn(selectedItem.getVpn().getVpnId());
-			this.closeStage(event);
+			int oldVpnId = this.shellfireService.getVpn().getVpnId();
+			int newVpnId = selectedItem.getVpn().getVpnId();
+			
+			if (oldVpnId != newVpnId) {
+				boolean performChange = true;
+				boolean isConnected = CurrentConnectionState.getConnectionState() == ConnectionState.Connected;
+				if (isConnected) {
+					Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
+							i18n.tr("You are currently connected. Disconnect and use selected vpn?"), 
+							ButtonType.YES,
+							ButtonType.NO);
+					alert.setTitle(i18n.tr("Currently Connected"));
+					Optional<ButtonType> result = alert.showAndWait();
+					performChange = ((result.isPresent()) && (result.get() == ButtonType.YES));
+				}
+				
+				if (performChange) {
+					if (isConnected) {
+						this.shellfireVpnMainForm.getController().disconnect(Reason.OtherVpnSelected);
+					}
+					
+					this.shellfireVpnMainForm.setVpn(selectedItem.getVpn().getVpnId());
+					this.closeStage(event);
+				}
+			}
+					
 		}
 
 	}
-	
-    private void closeStage(ActionEvent event) {
+
+	private void closeStage(ActionEvent event) {
         Node  source = (Node)  event.getSource(); 
         Stage stage  = (Stage) source.getScene().getWindow();
         stage.close();

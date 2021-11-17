@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
@@ -16,7 +22,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="settingsAnchorPane" prefHeight="640.0" prefWidth="420.0" style="-fx-background-color: #fafafa;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.AppScreenControllerSettings">
+<AnchorPane fx:id="settingsAnchorPane" prefHeight="640.0" prefWidth="420.0" style="-fx-background-color: #fafafa;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.AppScreenControllerSettings">
    <children>
       <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
@@ -80,90 +86,30 @@
                         <Insets bottom="10.0" right="10.0" top="10.0" />
                      </padding>
                   </Label>
-                  <GridPane>
-                    <columnConstraints>
-                      <ColumnConstraints hgrow="NEVER" minWidth="10.0" />
-                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" />
-                    </columnConstraints>
-                    <rowConstraints>
-                        <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-                      <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
-                    </rowConstraints>
-                     <children>
-                        <CheckBox fx:id="startOnBoot" mnemonicParsing="false" onAction="#handleStartOnBoot" text="Windows has started" textFill="#666666" GridPane.rowIndex="1">
-                           <font>
-                              <Font name="Arial" size="12.0" />
-                           </font>
-                           <GridPane.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </GridPane.margin>
-                        </CheckBox>
-                        <CheckBox fx:id="connectAutomatically" mnemonicParsing="false" onAction="#handleConnectAutomatically" text="Shellfire VPN has started" textFill="#666666" GridPane.rowIndex="2">
-                           <font>
-                              <Font name="Arial" size="12.0" />
-                           </font>
-                           <GridPane.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </GridPane.margin>
-                        </CheckBox>
-                        <CheckBox fx:id="showStatusSite" mnemonicParsing="false" onAction="#handleShowStatusSite" text="VPN connected" textFill="#666666" GridPane.rowIndex="3">
-                           <font>
-                              <Font name="Arial" size="12.0" />
-                           </font>
-                           <GridPane.margin>
-                              <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-                           </GridPane.margin>
-                        </CheckBox>
-                        <Label alignment="BASELINE_CENTER" contentDisplay="CENTER" text="Event" textAlignment="CENTER" textFill="#666666">
-                           <font>
-                              <Font name="Arial Bold" size="12.0" />
-                           </font>
-                           <padding>
-                              <Insets left="25.0" />
-                           </padding>
-                           <GridPane.margin>
-                              <Insets bottom="5.0" right="5.0" top="5.0" />
-                           </GridPane.margin>
-                        </Label>
-                        <Label alignment="BASELINE_CENTER" contentDisplay="CENTER" text="Action" textAlignment="CENTER" textFill="#666666" GridPane.columnIndex="1">
-                           <font>
-                              <Font name="Arial Bold" size="12.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="selectedVpnId2" alignment="BASELINE_RIGHT" contentDisplay="RIGHT" text="Start Shellfire VPN" textFill="#666666" GridPane.columnIndex="1" GridPane.rowIndex="1">
-                           <font>
-                              <Font name="Arial" size="12.0" />
-                           </font>
-                           <padding>
-                              <Insets right="10.0" />
-                           </padding>
-                           <GridPane.margin>
-                              <Insets bottom="5.0" right="5.0" top="5.0" />
-                           </GridPane.margin>
-                        </Label>
-                        <Label fx:id="selectedVpnId21" alignment="BASELINE_RIGHT" contentDisplay="RIGHT" text="Show VPN Status in Browser" textFill="#666666" GridPane.columnIndex="1" GridPane.rowIndex="3">
-                           <font>
-                              <Font name="Arial" size="12.0" />
-                           </font>
-                           <padding>
-                              <Insets right="10.0" />
-                           </padding>
-                           <GridPane.margin>
-                              <Insets bottom="5.0" right="5.0" top="5.0" />
-                           </GridPane.margin>
-                        </Label>
-                        <Label fx:id="selectedVpnId22" alignment="BASELINE_RIGHT" contentDisplay="RIGHT" text="Connect to VPN" textFill="#666666" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                           <font>
-                              <Font name="Arial" size="12.0" />
-                           </font>
-                           <padding>
-                              <Insets right="10.0" />
-                           </padding>
-                        </Label>
-                     </children>
-                  </GridPane>
+                  <CheckBox fx:id="startOnBoot" mnemonicParsing="false" onAction="#handleStartOnBoot" text="Start on boot" textFill="#666666">
+                     <font>
+                        <Font name="Arial" size="12.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </CheckBox>
+                  <CheckBox fx:id="connectAutomatically" mnemonicParsing="false" onAction="#handleConnectAutomatically" text="Connect automatically" textFill="#666666">
+                     <font>
+                        <Font name="Arial" size="12.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </CheckBox>
+                  <CheckBox fx:id="showStatusSite" mnemonicParsing="false" onAction="#handleShowStatusSite" text="Once connected, verify status in browser" textFill="#666666">
+                     <font>
+                        <Font name="Arial" size="12.0" />
+                     </font>
+                     <padding>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </padding>
+                  </CheckBox>
                   <Label fx:id="languageLabel" alignment="BASELINE_CENTER" contentDisplay="CENTER" text="Language" textAlignment="CENTER" textFill="#666666">
                      <font>
                         <Font name="Arial Bold" size="14.0" />

@@ -76,6 +76,8 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
 	private boolean initialized;
 	private WebEngine webEngine;
 	protected boolean mapLoaded = false;
+	private double mapLat;
+	private double mapLng;
 
 	public ImageView getStatusConnectionImageView() {
 		return statusConnectionImageView;
@@ -119,7 +121,8 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
 				        if (t1 == Worker.State.SUCCEEDED) {
 				            mapLoaded  = true;        
 				            log.debug("Map has now been loaded - will process changes from now on");
-				             application.instance.loginProgressDialog.hide();
+				            setLocation();
+				            application.instance.loginProgressDialog.hide();
 
 				        }
 				    }
@@ -148,12 +151,30 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
 		}
 	}
 
+	public void setLocation() {
+		log.debug("setLocation() called without params - checking if remembered coordinates are stored");
+		if (this.mapLng != 0 && this.mapLat != 0) {
+			log.debug("coordinates stored - setting them on the map");
+			this.setLocation(this.mapLng, this.mapLat);
+			this.mapLng = 0;
+			this.mapLat = 0;
+		} else {
+			log.debug("no coordinates available - doing nothing");
+		}
+	}
+	
 	public void setLocation(double lng, double lat) {
+		log.debug("setLocation({}, {})", lng, lat);
 		if (mapLoaded) {
 			Platform.runLater(() -> {
+				log.debug("executing: setLocation({}, {})", lng, lat);
 				webEngine.executeScript("document.setPosition("+lng+", " + lat + ");");
 			});
 
+		} else {
+			log.debug("setLocation - map not yet loaded - remembering coordinates for later setting");
+			this.mapLng = lng;
+			this.mapLat = lat;
 		}
 	}
 	

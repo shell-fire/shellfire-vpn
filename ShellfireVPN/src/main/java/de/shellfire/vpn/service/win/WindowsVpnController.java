@@ -477,9 +477,7 @@ SERVICE_NAME: WireGuardTunnel$wg-sf35022
 			log.error("", e);
 		}
 		kernel32.PulseEvent(result);
-		Platform.runLater(() ->  {
-			ipv6manager.enableIPV6OnPreviouslyDisabledDevices();
-		});
+		ipv6manager.enableIPV6OnPreviouslyDisabledDevices();
 	}
 
 	private void fixTapDevices() throws IOException {

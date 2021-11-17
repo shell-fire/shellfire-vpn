@@ -42,6 +42,7 @@ import de.shellfire.vpn.exception.VpnException;
 import de.shellfire.vpn.gui.FxUIManager;
 import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.gui.VpnTrayMessage;
+import de.shellfire.vpn.gui.helper.CurrentConnectionState;
 import de.shellfire.vpn.gui.model.ServerListFXModel;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.proxy.ProxyConfig;
@@ -104,7 +105,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	private Color colorMenuGrey = Color.web("#757575");
 	
 	private Date connectedSince;
-	private java.awt.Image iconConnected = Util.getImageIcon("/icons/sfvpn2-connected-big.png").getImage();
+	java.awt.Image iconConnected = Util.getImageIcon("/icons/sfvpn2-connected-big.png").getImage();
 	private java.awt.Image iconConnecting = Util.getImageIcon("/icons/sfvpn2-connecting-big.png").getImage();
 	Map<AppScreen, Map<MenuStatus, Image>> menuImageStatusMap = null;
 	private java.awt.Image iconDisconnectedAwt = Util.getImageIcon("/icons/sfvpn2-disconnected-big.png").getImage();
@@ -170,7 +171,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	// Access to embedded controller and variables in subviews
 	@FXML
 	private Parent connectionSubview;
-
+	
 	@FXML
 	private AppScreenControllerStatus connectionSubviewController;
 	
@@ -202,6 +203,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
 		initializeMenuImages();
 		currentAppScreen = AppScreen.STATUS;
+		
 	}
 	
 	enum MenuStatus { SELECTED, UNSELECTED, HOVER }
@@ -328,6 +330,11 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
 		this.shellfireService = service;
 		this.initController();
+		
+		// this ensures early and correct initialization
+		CurrentConnectionState.getInstance(this);
+
+		
 		this.initTray();
 
 		Storage.register(this);
