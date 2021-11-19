@@ -239,8 +239,8 @@ public class LoginForms extends Application {
 			Scene scene = new Scene(page);
 			log.debug("replaceSceneContent() - stage.setScene() - start...");
 			scene.setFill(Color.TRANSPARENT);
-			JMetro jMetro = new JMetro(Style.DARK);
-			jMetro.setScene(scene);
+			//JMetro jMetro = new JMetro(Style.DARK);
+			//jMetro.setScene(scene);
 
 			stage.setScene(scene);
 
@@ -250,8 +250,8 @@ public class LoginForms extends Application {
 			page.getScene().setFill(Color.TRANSPARENT);
 
 			stage.setScene(page.getScene());
-			JMetro jMetro = new JMetro(Style.DARK);
-			jMetro.setScene(page.getScene());
+			//JMetro jMetro = new JMetro(Style.DARK);
+			//jMetro.setScene(page.getScene());
 
 			 
 		}
