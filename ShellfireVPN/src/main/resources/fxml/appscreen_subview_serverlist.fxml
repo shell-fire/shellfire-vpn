@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.image.*?>
@@ -58,6 +59,9 @@
                      <HBox.margin>
                         <Insets bottom="5.0" left="210.0" right="5.0" top="5.0" />
                      </HBox.margin>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
                   </ImageView>
                   <ImageView fx:id="filterCrown_2" fitHeight="20.0" onMouseClicked="#handleClickFilterCrown_2" pickOnBounds="true" preserveRatio="true" HBox.hgrow="NEVER">
                      <image>
@@ -66,6 +70,9 @@
                      <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </HBox.margin>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
                   </ImageView>
                   <ImageView fx:id="filterCrown_3" fitHeight="20.0" onMouseClicked="#handleClickFilterCrown_3" pickOnBounds="true" preserveRatio="true" HBox.hgrow="NEVER">
                      <image>
@@ -74,6 +81,9 @@
                      <HBox.margin>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </HBox.margin>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
                   </ImageView>
                </children></HBox>
          </children>
