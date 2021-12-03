@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.*?>
+<?import javafx.geometry.*?>
 <?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
@@ -13,17 +15,30 @@
 
 <AnchorPane prefHeight="640.0" prefWidth="420.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.AppScreenControllerStatus">
    <children>
-      <ImageView fx:id="statusConnectionImageView" fitHeight="435.0" fitWidth="420.0">
-         <image>
-            <Image url="@../servers/australia-melbourne.jpg" />
-         </image>
-      </ImageView>
-      <Button id="connect-button" fx:id="connectButton" layoutX="14.0" layoutY="378.0" mnemonicParsing="false" onAction="#handleConnectButtonAction" onMouseEntered="#handleConnectButtonEntered" onMouseExited="#handleConnectButtonExited" prefHeight="46.0" prefWidth="200.0" />
-      <ImageView fx:id="connectImageView" fitHeight="46.0" fitWidth="200.0" layoutX="14.0" layoutY="378.0">
-         <image>
-            <Image url="@../buttons/button-connect-en.gif" />
-         </image>
-      </ImageView>
-      <WebView fx:id="locationMap" layoutY="435.0" prefHeight="205.0" prefWidth="420.0" />
+      <VBox prefHeight="200.0" prefWidth="100.0">
+         <children>
+            <ImageView fx:id="statusConnectionImageView" fitHeight="435.0" fitWidth="420.0">
+               <image>
+                  <Image url="@../servers/australia-melbourne.jpg" />
+               </image>
+            </ImageView>
+            <StackPane>
+               <children>
+                  <WebView fx:id="locationMap" prefHeight="350.0" prefWidth="420.0" />
+                  <ImageView fx:id="connectImageView" fitHeight="50.0" fitWidth="200.0" onMouseClicked="#handleConnectButtonAction">
+                     <image>
+                        <Image url="@../buttons/button-connect-en.gif" />
+                     </image>
+                     <StackPane.margin>
+                        <Insets bottom="79.0" left="50.0" right="50.0" top="79.0" />
+                     </StackPane.margin>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </ImageView>
+               </children>
+            </StackPane>
+         </children>
+      </VBox>
    </children>
 </AnchorPane>

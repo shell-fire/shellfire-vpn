@@ -53,8 +53,6 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
 	@FXML
 	private ImageView connectImageView;
 	@FXML
-	private Button connectButton;
-	@FXML
 	private WebView locationMap;
 	
 	private LoginForms application;
@@ -88,7 +86,7 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
 	}
 
 	public void connectButtonDisable(boolean disable) {
-		this.connectButton.setDisable(disable);
+		// this.connectButton.setDisable(disable);
 	}
 
 	public void setConnectImageView(ImageView connectImageView) {
@@ -106,8 +104,6 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
 	public void initialize(URL url, ResourceBundle rb) {
 		log.debug("initialize(url={}) - initialized: {} - start", url.toString(), this.initialized);
 		if (!this.initialized) {
-			this.connectButton.setGraphic(connectImageView);
-			this.connectButton.setPadding(Insets.EMPTY);
 			
 			// makes product key to be disable when disable is set to true
 			this.connectImageView.managedProperty().bind(this.connectImageView.visibleProperty());
@@ -261,7 +257,7 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
 	}
 
 	@FXML
-	private void handleConnectButtonAction(ActionEvent event) {
+	private void handleConnectButtonAction(MouseEvent event) {
 
 		Platform.runLater(() -> {
 			this.application.shellfireVpnMainController.connectFromButton();
