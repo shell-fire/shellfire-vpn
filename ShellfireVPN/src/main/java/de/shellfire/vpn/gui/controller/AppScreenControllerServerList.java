@@ -40,6 +40,7 @@ import javafx.geometry.NodeOrientation;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
@@ -213,10 +214,7 @@ public class AppScreenControllerServerList implements Initializable, AppScreenCo
                     textFlow.setStyle("-fx-text-alignment: left;");
                     setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
                     setGraphic(textFlow);
-
                 }
-                
-                
             };
         });
 
@@ -228,11 +226,6 @@ public class AppScreenControllerServerList implements Initializable, AppScreenCo
 		this.serverList = this.shellfireService.getServerList();
 		this.serverListData.addAll(initServerTable(this.serverList.getAll()));
 
-		
-		//final StyleChangingRowFactory<ServerRow> rowFactory = new StyleChangingRowFactory<>("highlightedRow");
-		// serverListTableView.setRowFactory(rowFactory);
-		
-	
 		filteredData = new FilteredList<>(serverListData, p -> true);
 
 		searchField.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -303,9 +296,25 @@ public class AppScreenControllerServerList implements Initializable, AppScreenCo
 				serverListTableView.getSelectionModel().clearAndSelect(index);
 			}
 			serverListTableView.refresh();
+			
 		} catch (Exception e) {
 			log.error("ignore this... !? better check before...");
 		}
+	}
+	
+	private void scrollToCurrentServer() {
+		Server server = shellfireService.getServerList().getServerByServerId(selectedServerId);
+		int index = filteredData.indexOf(server);
+		if (index != -1) {
+			scrollToPosition(index);
+		}
+		
+	}
+	private void scrollToPosition(int index) {
+        final int numElementsVisible = 10;
+        final int offset = numElementsVisible / 3;
+        final int scrollPosition = java.lang.Math.max(0, index-offset);
+       	serverListTableView.scrollTo(scrollPosition);
 	}
 
 	/**
@@ -356,11 +365,7 @@ public class AppScreenControllerServerList implements Initializable, AppScreenCo
 	// Selects a server on serverlist table based on the index (position) of the server
 	public void setSelectedServer(int number) {
 		log.debug("setSelectedServer setting the selected server: {}", number);
-		
-		if (inSelectionChangeListener) {
-			log.debug("setSelectedServer fired from selection Change listener, doing nothing");
-  			//return;
-		}
+
 		if (this.selectedServerId == number) {
 			log.debug("Server {} already selected - returning", number);
 			return;
@@ -369,6 +374,9 @@ public class AppScreenControllerServerList implements Initializable, AppScreenCo
 		this.selectedServerId = number;
 		selectServer(this.shellfireService.getServerList().getServerByServerId(selectedServerId));
 		
+		if (!inSelectionChangeListener) {
+			scrollToCurrentServer();
+		}
 	}
 
 	public Server getSelectedServer() {
