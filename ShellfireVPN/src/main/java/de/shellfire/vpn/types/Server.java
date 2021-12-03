@@ -9,6 +9,7 @@ import org.xnap.commons.i18n.I18n;
 
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.client.Controller;
+import de.shellfire.vpn.gui.model.ServerRow;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.webservice.model.VpnStar;
 import de.shellfire.vpn.webservice.model.WsServer;
@@ -114,15 +115,17 @@ public class Server implements LocatableIcon {
 
 	@Override
 	public boolean equals(Object server) {
-		if (server == null)
+		if (server == null) {
 			return false;
-		else if (!(server instanceof Server))
+		} else if (server instanceof Server) {
+			Server srv = (Server)server;
+			return this.getServerId() == srv.getServerId();
+		} else if (server instanceof ServerRow) {
+			ServerRow srvRow = (ServerRow)server;
+			return this.getServerId() == srvRow.getServer().getServerId();
+		} else {
 			return false;
-		else {
-			Server s = (Server) server;
-			return s.getServerId() == this.getServerId();
 		}
-
 	}
 
 	public double getLatitude() {
@@ -173,6 +176,18 @@ public class Server implements LocatableIcon {
 	public String toString() {
 		return "serverId= " + serverId + "\r\n" + "country= " + country + "\r\n" + "name= " + name + "\r\n" + "host= " + host + "\r\n"
 				+ "serrverType= " + serverType + "\r\n";
+	}
+
+	public boolean matchesFilter(String filter) {
+		String lower = filter.toLowerCase();
+		boolean cityContainsFilter = city != null && city.toLowerCase().contains(lower);
+		boolean countryContainsFilter = country != null && country.name().toLowerCase().contains(lower);
+		boolean country2ContainsFilter = country != null && VpnI18N.getCountryI18n().getCountryName(country).toLowerCase().contains(lower);
+		boolean serverIdContainsFilter = (""+this.serverId).contains(lower);
+		
+		boolean matchesFilter = cityContainsFilter || countryContainsFilter || country2ContainsFilter|| serverIdContainsFilter;
+
+		return matchesFilter;
 	}
 
 }

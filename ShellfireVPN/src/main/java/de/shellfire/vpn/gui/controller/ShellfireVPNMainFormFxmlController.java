@@ -43,7 +43,7 @@ import de.shellfire.vpn.gui.FxUIManager;
 import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.gui.VpnTrayMessage;
 import de.shellfire.vpn.gui.helper.CurrentConnectionState;
-import de.shellfire.vpn.gui.model.ServerListFXModel;
+import de.shellfire.vpn.gui.model.ServerRow;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.proxy.ProxyConfig;
 import de.shellfire.vpn.types.Reason;
@@ -77,7 +77,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Pair;
 
-public class ShellfireVPNMainFormFxmlController extends AnchorPane implements Initializable, LocaleChangeListener, ConnectionStateListener, ListChangeListener<ServerListFXModel>
+public class ShellfireVPNMainFormFxmlController extends AnchorPane implements Initializable, LocaleChangeListener, ConnectionStateListener, ListChangeListener<ServerRow>
 	{
 
 	Map<AppScreen, Pair<Pane, Object>> menuAppScreenMap = new HashMap<>();
@@ -380,7 +380,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		this.appScreenControllerSettings.updateSelectedVpn();
 		setRememberedVpnSelection(vpnId);
 		this.initServer();
-		
 	}
 
 	private void initServer() {
@@ -1360,9 +1359,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 			// load the serverList pane
 			Pair<Pane, Object> pairServerList = FxUIManager.SwitchSubview("appscreen_subview_serverlist.fxml");
 			this.appScreenControllerServerList = (AppScreenControllerServerList) pairServerList.getValue();
-			this.appScreenControllerServerList.setShellfireService((this.shellfireService));
 			this.appScreenControllerServerList.initComponents();
-			this.appScreenControllerServerList.setApp(this.application);
 			this.appScreenControllerServerList.setMainFormController(this);
 			menuAppScreenMap.put(AppScreen.SERVERLIST, pairServerList);
 			log.debug("Serverlist controller defined");
@@ -1491,7 +1488,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	}
 
 	@Override
-	public void onChanged(javafx.collections.ListChangeListener.Change<? extends ServerListFXModel> arg0) {
+	public void onChanged(javafx.collections.ListChangeListener.Change<? extends ServerRow> arg0) {
 		System.out.println("onChange of server registered in Main Form, nice!");
 		
 	}

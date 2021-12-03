@@ -94,4 +94,5 @@ public class ServerList {
 		return arrServer[num];
 
 	}
+
 }

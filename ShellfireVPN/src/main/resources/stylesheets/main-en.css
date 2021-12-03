@@ -44,3 +44,12 @@
   /*....*/
   -fx-padding: 1; /* 0.083333em; */
 }
+
+
+
+.highlightedRow {
+    -fx-background-color: brown;
+    -fx-background-insets: 0, 1, 2;
+    -fx-background: -fx-accent;
+    -fx-text-fill: -fx-selection-bar-text;
+}

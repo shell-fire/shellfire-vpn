@@ -14,7 +14,7 @@ import de.shellfire.vpn.VpnProperties;
 import de.shellfire.vpn.client.ConnectionState;
 import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.gui.helper.CurrentConnectionState;
-import de.shellfire.vpn.gui.model.ServerListFXModel;
+import de.shellfire.vpn.gui.model.ServerRow;
 import de.shellfire.vpn.gui.model.VpnSelectionFXModel;
 import de.shellfire.vpn.gui.renderer.CrownImageRendererVpn;
 import de.shellfire.vpn.i18n.VpnI18N;

@@ -15,10 +15,12 @@ import java.util.ResourceBundle;
 import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
 
+import com.sun.javafx.collections.MappingChange;
+
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.gui.model.CountryMap;
-import de.shellfire.vpn.gui.model.ServerListFXModel;
+import de.shellfire.vpn.gui.model.ServerRow;
 import de.shellfire.vpn.gui.renderer.CrownImageRendererServer;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.types.Country;
@@ -27,11 +29,10 @@ import de.shellfire.vpn.types.ServerType;
 import de.shellfire.vpn.webservice.ServerList;
 import de.shellfire.vpn.webservice.Vpn;
 import de.shellfire.vpn.webservice.WebService;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.SortedList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
@@ -40,6 +41,7 @@ import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -61,25 +63,27 @@ public class AppScreenControllerServerList implements Initializable, AppScreenCo
 	@FXML
 	private AnchorPane serverListAnchorPane;
 	@FXML
-	private TableView<ServerListFXModel> serverListTableView;
+	private TableView<ServerRow> serverListTableView;
 	@FXML
 	private ToggleGroup networkTypeToggleGroup;
 	@FXML
-	private TableColumn<ServerListFXModel, Server> countryColumn;
+	private TableColumn<ServerRow, Server> countryColumn;
 	@FXML
-	private TableColumn<ServerListFXModel, Server> nameColumn;
+	private TableColumn<ServerRow, Server> nameColumn;
 	@FXML
-	private TableColumn<ServerListFXModel, Server> speedColumn;
+	private TableColumn<ServerRow, Server> speedColumn;
+	@FXML
+	private TextField searchField;
 
+	private boolean inSelectionChangeListener;
 	private static I18n i18n = VpnI18N.getI18n();
 	public static Vpn currentVpn;
 	private WebService shellfireService;
 	private ServerList serverList;
-	private LoginForms application;
 	private static final Logger log = Util.getLogger(AppScreenControllerServerList.class.getCanonicalName());
-	private ObservableList<ServerListFXModel> serverListData = FXCollections.observableArrayList();
+	private ObservableList<ServerRow> serverListData = FXCollections.observableArrayList();
+	private FilteredList<ServerRow> filteredData;
 	private ShellfireVPNMainFormFxmlController mainFormController;
-	private Image buttonDisconnect = new Image("/buttons/button-disconnect-" + VpnI18N.getLanguage().getKey() + ".gif");
 	private int selectedServerId;
 
 	/**
@@ -103,11 +107,8 @@ public class AppScreenControllerServerList implements Initializable, AppScreenCo
 	
 	
 
-	public void setShellfireService(WebService shellfireService) {
-		this.shellfireService = shellfireService;
-	}
 
-	public TableView<ServerListFXModel> getServerListTableView() {
+	public TableView<ServerRow> getServerListTableView() {
 		return serverListTableView;
 	}
 
@@ -116,11 +117,10 @@ public class AppScreenControllerServerList implements Initializable, AppScreenCo
 	}
 
 	public void initComponents() {
-		this.serverList = this.shellfireService.getServerList();
-		this.serverListData.addAll(initServerTable(this.shellfireService.getServerList().getAll()));
+		
+		
 		// this.serverListTableView.setItems(serverListData);
 		// this.serverListTableView.comp
-		selectServerOfCurrentVpn();
 		
 	}
 
@@ -129,20 +129,22 @@ public class AppScreenControllerServerList implements Initializable, AppScreenCo
 	 */
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
+		shellfireService = WebService.getInstance();
 		speedColumn.setCellValueFactory(cellData -> cellData.getValue().countryProperty());
 		countryColumn.setCellValueFactory(cellData -> cellData.getValue().countryProperty());
 		countryColumn.setComparator(new ServerListComparator());
 		countryColumn.setStyle( "-fx-alignment: CENTER;");
 		countryColumn.setCellFactory(column -> {
 			// Set up the Table
-			return new TableCell<ServerListFXModel, Server>() {
+			return new TableCell<ServerRow, Server>() {
 
 				@Override
 				protected void updateItem(Server item, boolean empty) {
+					super.updateItem(item, empty);
+					
 					if (item != null) {
 						if (shellfireService == null) {
 							log.debug("shellfireService is null, setting it");
-							setShellfireService(WebService.getInstance());
 						}
 						
 						// get the corresponding country of this server
@@ -165,11 +167,11 @@ public class AppScreenControllerServerList implements Initializable, AppScreenCo
 		nameColumn.setCellValueFactory(cellData -> cellData.getValue().countryProperty());
 		nameColumn.setStyle( "-fx-alignment: CENTER;");
 		nameColumn.setCellFactory(column -> {
-            return new TableCell<ServerListFXModel, Server>() {
+            return new TableCell<ServerRow, Server>() {
                 @Override
                 protected void updateItem(Server item, boolean empty) {
                     super.updateItem(item, empty);
-                    
+
                     if (empty || item == null) {
                         setGraphic(null);
                     } else {
@@ -223,38 +225,87 @@ public class AppScreenControllerServerList implements Initializable, AppScreenCo
 			return new CrownImageRendererServer(this);
 		});
 
-		// Wrap the FilteredList in a SortedList.
-		SortedList<ServerListFXModel> sortedData = new SortedList<>(serverListData);
-		// Bind the SortedList comparator to the TableView comparator.
-		sortedData.comparatorProperty().bind(serverListTableView.comparatorProperty());
+		this.serverList = this.shellfireService.getServerList();
+		this.serverListData.addAll(initServerTable(this.serverList.getAll()));
+
+		
+		//final StyleChangingRowFactory<ServerRow> rowFactory = new StyleChangingRowFactory<>("highlightedRow");
+		// serverListTableView.setRowFactory(rowFactory);
+		
+	
+		filteredData = new FilteredList<>(serverListData, p -> true);
+
+		searchField.textProperty().addListener((observable, oldValue, newValue) -> {
+			filteredData.setPredicate(server -> {
+				// If filter text is empty, display all servers.
+				if (newValue == null || newValue.isEmpty()) {
+					return true;
+				}
+				
+				return server.getServer().matchesFilter(newValue);
+			});
+
+			selectServerOfCurrentVpn();
+
+		});		
+		
+	
 		// Add sorted (and filtered) data to the table.
-		serverListTableView.setItems(sortedData);
+		serverListTableView.setItems(filteredData);
+		
+		serverListTableView.refresh();
 		serverListTableView.getStyleClass().add("noheader");
 		
-		ObservableList<ServerListFXModel> selectedItems = serverListTableView.getSelectionModel().getSelectedItems();
+		ObservableList<ServerRow> selectedItems = serverListTableView.getSelectionModel().getSelectedItems();
 
-		selectedItems.addListener(new ListChangeListener<ServerListFXModel>() {
+		selectedItems.addListener(new ListChangeListener<ServerRow>() {
 		  @Override
-		  public void onChanged(Change<? extends ServerListFXModel> change) {
+		  public void onChanged(Change<? extends ServerRow> change) {
+			  if (inSelectionChangeListener) {
+				  return; 
+			  }
 			  if (mainFormController != null) {
-				  ObservableList<? extends ServerListFXModel> changes = change.getList();
-				  
-				  for (ServerListFXModel curChange : changes) {
+				  if (change instanceof MappingChange<?, ?>) {
+					  while (change.next()) {
+						  ObservableList<? extends ServerRow> changes = change.getList();
+
+						  for (ServerRow curChange : changes) {
+							  inSelectionChangeListener = true;
+							  mainFormController.setSelectedServer(curChange.getServer().getServerId());
+
+							  inSelectionChangeListener = false;
+						  }
+					  }
 					  
-					  mainFormController.setSelectedServer(curChange.getCountry().getServerId());
 				  }
 			  }
 			  
-			  serverListTableView.refresh();
+			  
 		  }
 		});
-        
 	}
 
+	
 	public void selectServerOfCurrentVpn() {
-		serverListTableView.requestFocus();
-		serverListTableView.getSelectionModel().select(serverList.getServerNumberByServer(shellfireService.getVpn().getServer()));
-		serverListTableView.getFocusModel().focus(serverList.getServerNumberByServer(shellfireService.getVpn().getServer()));
+		try {
+			Server server = shellfireService.getVpn().getServer();
+			selectServer(server);
+		} catch (Exception e) {
+			log.error("ignore this... !? better check before...");
+		}
+	}	
+	
+	private void selectServer(Server server) {
+		try {
+			int index = filteredData.indexOf(server);
+
+			if (index != -1) {
+				serverListTableView.getSelectionModel().clearAndSelect(index);
+			}
+			serverListTableView.refresh();
+		} catch (Exception e) {
+			log.error("ignore this... !? better check before...");
+		}
 	}
 
 	/**
@@ -269,10 +320,10 @@ public class AppScreenControllerServerList implements Initializable, AppScreenCo
 		}
 	}
 
-	private LinkedList<ServerListFXModel> initServerTable(LinkedList<Server> servers) {
-		LinkedList<ServerListFXModel> allModels = new LinkedList<>();
+	private LinkedList<ServerRow> initServerTable(LinkedList<Server> servers) {
+		LinkedList<ServerRow> allModels = new LinkedList<>();
 		for (int i = 0; i < servers.size(); i++) {
-			ServerListFXModel serverModel = new ServerListFXModel(servers.get(i));
+			ServerRow serverModel = new ServerRow(servers.get(i));
 			allModels.add(serverModel);
 		}
 		return allModels;
@@ -305,34 +356,28 @@ public class AppScreenControllerServerList implements Initializable, AppScreenCo
 	// Selects a server on serverlist table based on the index (position) of the server
 	public void setSelectedServer(int number) {
 		log.debug("setSelectedServer setting the selected server: {}", number);
-		// Embeded in a Platform runner because we are modifying the UI thread.
 		
+		if (inSelectionChangeListener) {
+			log.debug("setSelectedServer fired from selection Change listener, doing nothing");
+  			//return;
+		}
 		if (this.selectedServerId == number) {
 			log.debug("Server {} already selected - returning", number);
 			return;
 		}
 		
 		this.selectedServerId = number;
-		
-		for (int i = 0; i < serverListData.size(); i++) {
-			ServerListFXModel curServer = serverListData.get(i);
-			if (curServer.getCountry().getServerId() == number) {
-				serverListTableView.requestFocus();
-				serverListTableView.getSelectionModel().select(i);
-				serverListTableView.getFocusModel().focus(i);
-				
-			}
-		}
+		selectServer(this.shellfireService.getServerList().getServerByServerId(selectedServerId));
 		
 	}
 
 	public Server getSelectedServer() {
-		ServerListFXModel serverModel = this.serverListTableView.getSelectionModel().getSelectedItem();
+		ServerRow serverModel = this.serverListTableView.getSelectionModel().getSelectedItem();
 		if (null == serverModel) {
 			return this.shellfireService.getServerList().getServerByServerId(18);
 		} else {
 			// The getCountry method of ServerListFXModel returns the server object
-			return serverModel.getCountry();
+			return serverModel.getServer();
 		}
 	}
 
@@ -350,10 +395,6 @@ public class AppScreenControllerServerList implements Initializable, AppScreenCo
 
 		return arrServer[num];
 
-	}
-
-	public void setApp(LoginForms app) {
-		this.application = app;
 	}
 
 	public void setMainFormController(ShellfireVPNMainFormFxmlController mainController) {

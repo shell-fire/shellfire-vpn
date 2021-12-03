@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.gui.controller.AppScreenControllerServerList;
-import de.shellfire.vpn.gui.model.ServerListFXModel;
+import de.shellfire.vpn.gui.model.ServerRow;
 import de.shellfire.vpn.types.Server;
 import de.shellfire.vpn.types.ServerType;
 import de.shellfire.vpn.webservice.WebService;
@@ -25,7 +25,7 @@ import javafx.scene.image.ImageView;
  *
  * @author Tcheutchoua Steve
  */
-public class CrownImageRendererServer extends TableCell<ServerListFXModel, Server> {
+public class CrownImageRendererServer extends TableCell<ServerRow, Server> {
 
 	HashMap<ServerType, Image> icons = new HashMap<ServerType, Image>();
 	HashMap<ServerType, Image> iconsSelected = new HashMap<ServerType, Image>();
