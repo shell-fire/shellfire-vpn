@@ -398,16 +398,11 @@ public class AppScreenControllerServerList implements Initializable, AppScreenCo
 		Server server = shellfireService.getServerList().getServerByServerId(selectedServerId);
 		int index = filteredDataByServerType.indexOf(server);
 		if (index != -1) {
-			scrollToPosition(index);
+			serverListTableView.scrollTo(index);
 		}
 		
 	}
-	private void scrollToPosition(int index) {
-        final int numElementsVisible = 10;
-        final int offset = numElementsVisible / 3;
-        final int scrollPosition = java.lang.Math.max(0, index-offset);
-       	serverListTableView.scrollTo(scrollPosition);
-	}
+
 
 	/**
 	 * Updates buttons and other components when connection status changes
