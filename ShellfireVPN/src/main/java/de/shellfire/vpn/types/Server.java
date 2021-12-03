@@ -189,5 +189,23 @@ public class Server implements LocatableIcon {
 
 		return matchesFilter;
 	}
+	
+	public boolean matchesFilter(boolean includeFree, boolean includePremium, boolean includePremiumPlus) {
+		if (!includeFree && !includePremium && !includePremiumPlus) {
+			return true;	
+		}
+		
+		if (serverType == ServerType.Free && includeFree) {
+			return true;
+		}
+		if (serverType == ServerType.Premium && includePremium) {
+			return true;
+		}
+		if (serverType == ServerType.PremiumPlus && includePremiumPlus) {
+			return true;
+		}
+		
+		return false;
+	}
 
 }

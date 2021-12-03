@@ -8,6 +8,7 @@ package de.shellfire.vpn.gui.controller;
 import java.net.URL;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Random;
 import java.util.ResourceBundle;
@@ -18,7 +19,6 @@ import org.xnap.commons.i18n.I18n;
 import com.sun.javafx.collections.MappingChange;
 
 import de.shellfire.vpn.Util;
-import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.gui.model.CountryMap;
 import de.shellfire.vpn.gui.model.ServerRow;
 import de.shellfire.vpn.gui.renderer.CrownImageRendererServer;
@@ -40,12 +40,12 @@ import javafx.geometry.NodeOrientation;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
@@ -75,7 +75,23 @@ public class AppScreenControllerServerList implements Initializable, AppScreenCo
 	private TableColumn<ServerRow, Server> speedColumn;
 	@FXML
 	private TextField searchField;
-
+	@FXML
+	private ImageView filterCrown_1;
+	@FXML
+	private ImageView filterCrown_2;
+	@FXML
+	private ImageView filterCrown_3;
+	private HashMap<ServerType, Image> filterOnMap;
+	private HashMap<ServerType, Image> filterOffMap;
+	
+	private Image crown1_selected = Util.getImageIconFX("/images/crowns_1.png");
+	private Image crown2_selected = Util.getImageIconFX("/images/crowns_2.png");
+	private Image crown3_selected = Util.getImageIconFX("/images/crowns_3.png");
+	
+	private Image crown1_deselected = Util.getImageIconFX("/images/crowns_1_disabled.png");
+	private Image crown2_deselected = Util.getImageIconFX("/images/crowns_2_disabled.png");
+	private Image crown3_deselected = Util.getImageIconFX("/images/crowns_3_disabled.png");
+	
 	private boolean inSelectionChangeListener;
 	private static I18n i18n = VpnI18N.getI18n();
 	public static Vpn currentVpn;
@@ -83,9 +99,15 @@ public class AppScreenControllerServerList implements Initializable, AppScreenCo
 	private ServerList serverList;
 	private static final Logger log = Util.getLogger(AppScreenControllerServerList.class.getCanonicalName());
 	private ObservableList<ServerRow> serverListData = FXCollections.observableArrayList();
-	private FilteredList<ServerRow> filteredData;
+	private FilteredList<ServerRow> filteredDataByText;
+	private FilteredList<ServerRow> filteredDataByServerType;
 	private ShellfireVPNMainFormFxmlController mainFormController;
 	private int selectedServerId;
+	private boolean filterFree = false;
+	private boolean filterPremium = false;
+	private boolean filterPremiumPlus = false;
+	private boolean currentlyUpdatingServerTypeFilter;
+	
 
 	/**
 	 * Constructor used to initialize serverListTable data from Webservice
@@ -176,7 +198,11 @@ public class AppScreenControllerServerList implements Initializable, AppScreenCo
                     if (empty || item == null) {
                         setGraphic(null);
                     } else {
-                    	boolean isSelected = getSelectedServer().equals(item);
+                    	Server selectedServer = getSelectedServer();
+                    	boolean isSelected = false;
+                    	if (selectedServer != null) {
+                    		isSelected = selectedServer.equals(item);
+                    	}
                         updateItemSelection(item, isSelected);
                     }
                 }
@@ -226,10 +252,10 @@ public class AppScreenControllerServerList implements Initializable, AppScreenCo
 		this.serverList = this.shellfireService.getServerList();
 		this.serverListData.addAll(initServerTable(this.serverList.getAll()));
 
-		filteredData = new FilteredList<>(serverListData, p -> true);
+		filteredDataByText = new FilteredList<>(serverListData, p -> true);
 
 		searchField.textProperty().addListener((observable, oldValue, newValue) -> {
-			filteredData.setPredicate(server -> {
+			filteredDataByText.setPredicate(server -> {
 				// If filter text is empty, display all servers.
 				if (newValue == null || newValue.isEmpty()) {
 					return true;
@@ -242,9 +268,15 @@ public class AppScreenControllerServerList implements Initializable, AppScreenCo
 
 		});		
 		
+		
+		filteredDataByServerType = new FilteredList<>(filteredDataByText, p -> true);
+
+		selectServerOfCurrentVpn();		
+		
+		
 	
 		// Add sorted (and filtered) data to the table.
-		serverListTableView.setItems(filteredData);
+		serverListTableView.setItems(filteredDataByServerType);
 		
 		serverListTableView.refresh();
 		serverListTableView.getStyleClass().add("noheader");
@@ -254,7 +286,7 @@ public class AppScreenControllerServerList implements Initializable, AppScreenCo
 		selectedItems.addListener(new ListChangeListener<ServerRow>() {
 		  @Override
 		  public void onChanged(Change<? extends ServerRow> change) {
-			  if (inSelectionChangeListener) {
+			  if (inSelectionChangeListener || currentlyUpdatingServerTypeFilter) {
 				  return; 
 			  }
 			  if (mainFormController != null) {
@@ -276,12 +308,71 @@ public class AppScreenControllerServerList implements Initializable, AppScreenCo
 			  
 		  }
 		});
+		
+		
+		filterOnMap = new HashMap<ServerType, Image>();
+		filterOnMap.put(ServerType.Free, crown1_selected);
+		filterOnMap.put(ServerType.Premium, crown2_selected);
+		filterOnMap.put(ServerType.PremiumPlus, crown3_selected);
+		
+		filterOffMap = new HashMap<ServerType, Image>();
+		filterOffMap.put(ServerType.Free, crown1_deselected);
+		filterOffMap.put(ServerType.Premium, crown2_deselected);
+		filterOffMap.put(ServerType.PremiumPlus, crown3_deselected);
+		
+	}
+	
+
+	private void updaterFilterServerType() {
+		currentlyUpdatingServerTypeFilter = true;
+		filteredDataByServerType.setPredicate(server -> {
+			return server.getServer().matchesFilter(filterFree , filterPremium, filterPremiumPlus);
+		});
+		selectServerOfCurrentVpn();
+		currentlyUpdatingServerTypeFilter = false;
 	}
 
+	@FXML
+	private void handleClickFilterCrown_1(MouseEvent event) {
+		filterFree = !filterFree;
+		updaterFilterServerType();
+		
+		if (filterFree) {
+			filterCrown_1.setImage(crown1_selected);
+		} else {
+			filterCrown_1.setImage(crown1_deselected);
+		}
+	}
+
+	@FXML
+	private void handleClickFilterCrown_2(MouseEvent event) {
+		filterPremium = !filterPremium;
+		updaterFilterServerType();
+		
+		if (filterPremium) {
+			filterCrown_2.setImage(crown2_selected);
+		} else {
+			filterCrown_2.setImage(crown2_deselected);
+		}
+		
+	}
+	
+	@FXML
+	private void handleClickFilterCrown_3(MouseEvent event) {
+		filterPremiumPlus = !filterPremiumPlus;
+		updaterFilterServerType();
+		
+		if (filterPremiumPlus) {
+			filterCrown_3.setImage(crown3_selected);
+		} else {
+			filterCrown_3.setImage(crown3_deselected);
+		}
+
+	}
 	
 	public void selectServerOfCurrentVpn() {
 		try {
-			Server server = shellfireService.getVpn().getServer();
+			Server server = shellfireService.getServerList().getServerByServerId(selectedServerId);
 			selectServer(server);
 		} catch (Exception e) {
 			log.error("ignore this... !? better check before...");
@@ -290,10 +381,11 @@ public class AppScreenControllerServerList implements Initializable, AppScreenCo
 	
 	private void selectServer(Server server) {
 		try {
-			int index = filteredData.indexOf(server);
+			int index = filteredDataByServerType.indexOf(server);
 
 			if (index != -1) {
 				serverListTableView.getSelectionModel().clearAndSelect(index);
+				serverListTableView.getSelectionModel().focus(index);
 			}
 			serverListTableView.refresh();
 			
@@ -304,7 +396,7 @@ public class AppScreenControllerServerList implements Initializable, AppScreenCo
 	
 	private void scrollToCurrentServer() {
 		Server server = shellfireService.getServerList().getServerByServerId(selectedServerId);
-		int index = filteredData.indexOf(server);
+		int index = filteredDataByServerType.indexOf(server);
 		if (index != -1) {
 			scrollToPosition(index);
 		}
@@ -382,9 +474,8 @@ public class AppScreenControllerServerList implements Initializable, AppScreenCo
 	public Server getSelectedServer() {
 		ServerRow serverModel = this.serverListTableView.getSelectionModel().getSelectedItem();
 		if (null == serverModel) {
-			return this.shellfireService.getServerList().getServerByServerId(18);
+			return null;
 		} else {
-			// The getCountry method of ServerListFXModel returns the server object
 			return serverModel.getServer();
 		}
 	}

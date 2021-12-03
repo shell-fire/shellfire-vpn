@@ -210,6 +210,7 @@ public class WebService {
 					return shellfire.getServerList();
 				}
 			}, 3, 100);
+			
 			servers = new ServerList(list);
 		}
 

@@ -41,7 +41,41 @@
                         <TableColumn fx:id="speedColumn" maxWidth="90.0" minWidth="90.0" prefWidth="90.0" text="Speed" />
                     </columns>
                   </TableView>
-            <HBox prefHeight="50.0" prefWidth="420.0" />
+            <HBox style="-fx-background-color: #fdfdfd;">
+               <children>
+                  <Label text="Filter" textFill="#666666" HBox.hgrow="ALWAYS">
+                     <padding>
+                        <Insets left="10.0" top="7.0" />
+                     </padding>
+                     <font>
+                        <Font name="Arial Bold" size="12.0" />
+                     </font>
+                  </Label>
+                  <ImageView fx:id="filterCrown_1" fitHeight="20.0" onMouseClicked="#handleClickFilterCrown_1" pickOnBounds="true" preserveRatio="true" HBox.hgrow="NEVER">
+                     <image>
+                        <Image url="@../images/crowns_1_disabled.png" />
+                     </image>
+                     <HBox.margin>
+                        <Insets bottom="5.0" left="210.0" right="5.0" top="5.0" />
+                     </HBox.margin>
+                  </ImageView>
+                  <ImageView fx:id="filterCrown_2" fitHeight="20.0" onMouseClicked="#handleClickFilterCrown_2" pickOnBounds="true" preserveRatio="true" HBox.hgrow="NEVER">
+                     <image>
+                        <Image url="@../images/crowns_2_disabled.png" />
+                     </image>
+                     <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </HBox.margin>
+                  </ImageView>
+                  <ImageView fx:id="filterCrown_3" fitHeight="20.0" onMouseClicked="#handleClickFilterCrown_3" pickOnBounds="true" preserveRatio="true" HBox.hgrow="NEVER">
+                     <image>
+                        <Image url="@../images/crowns_3_disabled.png" />
+                     </image>
+                     <HBox.margin>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                     </HBox.margin>
+                  </ImageView>
+               </children></HBox>
          </children>
       </VBox>
    </children>

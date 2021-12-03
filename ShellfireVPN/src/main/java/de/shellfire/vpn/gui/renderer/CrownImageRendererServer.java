@@ -55,7 +55,12 @@ public class CrownImageRendererServer extends TableCell<ServerRow, Server> {
         if (empty || item == null) {
             setGraphic(null);
         } else {
-        	boolean isSelected = appScreenControllerServerList.getSelectedServer().equals(item);
+        	Server selectedServer = appScreenControllerServerList.getSelectedServer();
+        	boolean isSelected = false;
+        	if (selectedServer != null) {
+        		isSelected = selectedServer.equals(item);
+        	}
+        	
         	updateItemSelected(item, isSelected);
         }
     }
