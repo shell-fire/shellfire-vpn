@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.*?>
 <?import javafx.geometry.*?>
 <?import java.lang.*?>
@@ -15,27 +17,46 @@
 
 <AnchorPane prefHeight="640.0" prefWidth="420.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.AppScreenControllerStatus">
    <children>
-      <VBox prefHeight="200.0" prefWidth="100.0">
+      <VBox>
          <children>
-            <ImageView fx:id="statusConnectionImageView" fitHeight="435.0" fitWidth="420.0">
-               <image>
-                  <Image url="@../servers/australia-melbourne.jpg" />
-               </image>
-            </ImageView>
-            <StackPane>
+            <StackPane prefHeight="643.0" prefWidth="420.0">
                <children>
-                  <WebView fx:id="locationMap" prefHeight="350.0" prefWidth="420.0" />
-                  <ImageView fx:id="connectImageView" fitHeight="50.0" fitWidth="200.0" onMouseClicked="#handleConnectButtonAction">
+                  <ImageView fx:id="statusConnectionImageView" fitHeight="435.0" fitWidth="420.0" StackPane.alignment="TOP_CENTER">
+                     <image>
+                        <Image url="@../servers/australia-melbourne.jpg" />
+                     </image>
+                  </ImageView>
+                  <WebView fx:id="locationMap" maxHeight="208.0" prefHeight="208.0" prefWidth="420.0" StackPane.alignment="BOTTOM_CENTER" />
+                  <ImageView fx:id="connectImageView" fitHeight="50.0" fitWidth="200.0" onMouseClicked="#handleConnectButtonAction" StackPane.alignment="BOTTOM_CENTER">
                      <image>
                         <Image url="@../buttons/button-connect-en.gif" />
                      </image>
-                     <StackPane.margin>
-                        <Insets bottom="79.0" left="50.0" right="50.0" top="79.0" />
-                     </StackPane.margin>
                      <cursor>
                         <Cursor fx:constant="HAND" />
                      </cursor>
+                     <StackPane.margin>
+                        <Insets bottom="100.0" />
+                     </StackPane.margin>
                   </ImageView>
+                  <Label alignment="TOP_LEFT" opacity="0.8" prefHeight="35.0" prefWidth="420.0" style="-fx-background-color: #c76673;" textAlignment="CENTER" textFill="WHITE" StackPane.alignment="TOP_CENTER">
+                     <font>
+                        <Font name="Arial Bold" size="12.0" />
+                     </font>
+                     <effect>
+                        <DropShadow height="100.81" radius="24.7025" width="0.0" />
+                     </effect>
+                     <StackPane.margin>
+                        <Insets top="400.0" />
+                     </StackPane.margin>
+                  </Label>
+                  <Label alignment="BASELINE_CENTER" prefHeight="35.0" prefWidth="420.0" text="DISCONNECTED" textAlignment="CENTER" textFill="WHITE" StackPane.alignment="TOP_CENTER">
+                     <font>
+                        <Font name="Arial Bold" size="12.0" />
+                     </font>
+                     <StackPane.margin>
+                        <Insets top="400.0" />
+                     </StackPane.margin>
+                  </Label>
                </children>
             </StackPane>
          </children>
