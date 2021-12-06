@@ -48,6 +48,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
@@ -81,6 +82,7 @@ public class AppScreenControllerServerList implements Initializable, AppScreenCo
 	private ImageView filterCrown_2;
 	@FXML
 	private ImageView filterCrown_3;
+	
 	private HashMap<ServerType, Image> filterOnMap;
 	private HashMap<ServerType, Image> filterOffMap;
 	

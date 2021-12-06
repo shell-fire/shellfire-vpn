@@ -35,10 +35,17 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 
@@ -65,6 +72,9 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
 	private Label labelConnectionStatusText;
 	@FXML
 	private Rectangle rectCrowns;
+	@FXML
+	private HBox hboxCountryCity;
+
 	
 	private LoginForms application;
 	private static final Logger log = Util.getLogger(AppScreenControllerStatus.class.getCanonicalName());
@@ -215,6 +225,26 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
 			setLocation(server.getLatitude(), server.getLongitude());
 			this.statusConnectionImageView.setImage(image);
 			this.setServerType(server.getServerType());
+			
+            TextFlow textFlow = new TextFlow();
+            textFlow.setPrefHeight(Region.USE_COMPUTED_SIZE);
+            
+            Text text1 = new Text(server.getCity() + " ");
+            text1.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
+            text1.setFill(Color.WHITE);
+            HBox.setHgrow(text1, Priority.ALWAYS);
+            
+            Text text2 = new Text(VpnI18N.getCountryI18n().getCountryName(server.getCountry()));
+            text2.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
+            text2.setFill(Color.WHITE);
+            text2.setOpacity(0.8);
+            HBox.setHgrow(text2, Priority.ALWAYS);
+            
+            
+            textFlow.getChildren().add(text1);
+            textFlow.getChildren().add(text2);
+			hboxCountryCity.getChildren().setAll(textFlow);
+			
 			log.debug("background image updated");
 		} catch (Exception e) {
 			log.error("Error occured during loading of background image", e);

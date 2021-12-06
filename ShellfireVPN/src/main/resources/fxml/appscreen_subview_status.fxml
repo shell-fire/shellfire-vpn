@@ -96,6 +96,14 @@
                         <Insets top="200.0" />
                      </StackPane.margin>
                   </ImageView>
+                  <HBox fx:id="hboxCountryCity" alignment="BASELINE_CENTER" prefHeight="277.0" prefWidth="219.0" StackPane.alignment="TOP_CENTER">
+                     <StackPane.margin>
+                        <Insets bottom="200.0" top="240.0" />
+                     </StackPane.margin>
+                     <effect>
+                        <DropShadow />
+                     </effect>
+                  </HBox>
                </children>
             </StackPane>
          </children>
