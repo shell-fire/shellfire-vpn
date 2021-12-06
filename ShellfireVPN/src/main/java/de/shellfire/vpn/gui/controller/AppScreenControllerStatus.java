@@ -20,6 +20,7 @@ import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.gui.ServerImageBackgroundManager;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.types.Server;
+import de.shellfire.vpn.types.ServerType;
 import de.shellfire.vpn.webservice.WebService;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -28,14 +29,16 @@ import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
 import javafx.scene.Cursor;
-import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 
@@ -51,9 +54,17 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
 	@FXML
 	private ImageView statusConnectionImageView;
 	@FXML
-	private ImageView connectImageView;
-	@FXML
 	private WebView locationMap;
+	@FXML
+	private Label labelConnect;
+	@FXML
+	private Rectangle rectConnectButton;
+	@FXML
+	private Label labelConnectionStatus;
+	@FXML
+	private Label labelConnectionStatusText;
+	@FXML
+	private Rectangle rectCrowns;
 	
 	private LoginForms application;
 	private static final Logger log = Util.getLogger(AppScreenControllerStatus.class.getCanonicalName());
@@ -81,16 +92,13 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
 		return statusConnectionImageView;
 	}
 
-	public ImageView getConnectImageView() {
-		return connectImageView;
-	}
 
 	public void connectButtonDisable(boolean disable) {
 		// this.connectButton.setDisable(disable);
 	}
 
 	public void setConnectImageView(ImageView connectImageView) {
-		this.connectImageView = connectImageView;
+		// this.connectImageView = connectImageView;
 	}
 
 	public void setStatusConnectionImageView(ImageView statusConnectionImageView) {
@@ -106,7 +114,7 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
 		if (!this.initialized) {
 			
 			// makes product key to be disable when disable is set to true
-			this.connectImageView.managedProperty().bind(this.connectImageView.visibleProperty());
+			// this.connectImageView.managedProperty().bind(this.connectImageView.visibleProperty());
 			
 			 webEngine = locationMap.getEngine();
 			 webEngine.setJavaScriptEnabled(true);
@@ -122,8 +130,9 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
 
 				        }
 				    }
-				});
-			    
+			});
+			 
+						 
 			// this.premiumInfoImageView.setVisible(false);
 			log.debug("After initialization of images");
 		}
@@ -177,10 +186,22 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
 	public void notifyThatNowVisible(boolean connected) {
 		if (connected) {
 			this.setMapConnected();
-			this.connectImageView.setImage(imageButtonDisconnect);
+			Platform.runLater(() -> {
+				this.rectConnectButton.setFill(Color.web("#c76673"));
+				this.labelConnect.setText(i18n.tr("DISCONNECT"));
+				this.labelConnectionStatus.setStyle("-fx-background-color: #74e495");
+				this.labelConnectionStatusText.setText(i18n.tr("CONNECTED"));
+				
+			});
+			
 		} else {
 			this.setMapDisconnected();
-			this.connectImageView.setImage(imageButtonConnect);
+			Platform.runLater(() -> {
+				this.rectConnectButton.setFill(Color.web("#74e495"));
+				this.labelConnect.setText(i18n.tr("CONNECT"));
+				this.labelConnectionStatus.setStyle("-fx-background-color: #c76673");
+				this.labelConnectionStatusText.setText(i18n.tr("DISCONNECTED"));
+			});
 		}
 	}
 
@@ -193,6 +214,7 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
 			Server server = shellfireService.getServerList().getServerByServerId(serverId);
 			setLocation(server.getLatitude(), server.getLongitude());
 			this.statusConnectionImageView.setImage(image);
+			this.setServerType(server.getServerType());
 			log.debug("background image updated");
 		} catch (Exception e) {
 			log.error("Error occured during loading of background image", e);
@@ -200,6 +222,18 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
 	}	
 	
 	
+	private void setServerType(ServerType serverType) {
+		ImagePattern pattern = new ImagePattern(
+				Util.getImageIconFX("/images/crowns_3_status.png")
+			);
+		
+		//this.rectCrowns.setFill(pattern);
+		
+		// TODO Auto-generated method stub
+		
+	}
+
+
 	public void setShellfireService(WebService shellfireService) {
 		this.shellfireService = shellfireService;
 	}

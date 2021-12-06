@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.shape.*?>
 <?import javafx.scene.effect.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.*?>
@@ -21,42 +22,80 @@
          <children>
             <StackPane prefHeight="643.0" prefWidth="420.0">
                <children>
-                  <ImageView fx:id="statusConnectionImageView" fitHeight="435.0" fitWidth="420.0" StackPane.alignment="TOP_CENTER">
+                  <ImageView fx:id="statusConnectionImageView" fitHeight="500.0" fitWidth="420.0" StackPane.alignment="TOP_CENTER">
                      <image>
                         <Image url="@../servers/australia-melbourne.jpg" />
                      </image>
                   </ImageView>
-                  <WebView fx:id="locationMap" maxHeight="208.0" prefHeight="208.0" prefWidth="420.0" StackPane.alignment="BOTTOM_CENTER" />
-                  <ImageView fx:id="connectImageView" fitHeight="50.0" fitWidth="200.0" onMouseClicked="#handleConnectButtonAction" StackPane.alignment="BOTTOM_CENTER">
-                     <image>
-                        <Image url="@../buttons/button-connect-en.gif" />
-                     </image>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                     <StackPane.margin>
-                        <Insets bottom="100.0" />
-                     </StackPane.margin>
-                  </ImageView>
-                  <Label alignment="TOP_LEFT" opacity="0.8" prefHeight="35.0" prefWidth="420.0" style="-fx-background-color: #c76673;" textAlignment="CENTER" textFill="WHITE" StackPane.alignment="TOP_CENTER">
+                  <WebView fx:id="locationMap" maxHeight="143.0" prefHeight="143.0" prefWidth="420.0" StackPane.alignment="BOTTOM_CENTER" />
+                  <Label fx:id="labelConnectionStatus" alignment="TOP_LEFT" opacity="0.8" prefHeight="35.0" prefWidth="420.0" style="-fx-background-color: #c76673;" textAlignment="CENTER" textFill="WHITE" StackPane.alignment="TOP_CENTER">
                      <font>
                         <Font name="Arial Bold" size="12.0" />
                      </font>
                      <effect>
-                        <DropShadow height="100.81" radius="24.7025" width="0.0" />
+                        <DropShadow height="50.41" radius="12.1025" width="0.0" />
                      </effect>
                      <StackPane.margin>
-                        <Insets top="400.0" />
+                        <Insets top="465.0" />
                      </StackPane.margin>
                   </Label>
-                  <Label alignment="BASELINE_CENTER" prefHeight="35.0" prefWidth="420.0" text="DISCONNECTED" textAlignment="CENTER" textFill="WHITE" StackPane.alignment="TOP_CENTER">
+                  <Label fx:id="labelConnectionStatusText" alignment="BASELINE_CENTER" prefHeight="35.0" prefWidth="420.0" text="DISCONNECTED" textAlignment="CENTER" textFill="WHITE" StackPane.alignment="TOP_CENTER">
                      <font>
                         <Font name="Arial Bold" size="12.0" />
                      </font>
                      <StackPane.margin>
-                        <Insets top="400.0" />
+                        <Insets top="465.0" />
                      </StackPane.margin>
                   </Label>
+                  <Rectangle fx:id="rectConnectButton" arcHeight="35.0" arcWidth="35.0" fill="#74e495" height="35.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="140.0" StackPane.alignment="BOTTOM_CENTER">
+                     <StackPane.margin>
+                        <Insets bottom="25.0" />
+                     </StackPane.margin>
+                     <effect>
+                        <DropShadow color="#0000009f" height="35.0" radius="17.0" width="35.0" />
+                     </effect>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Rectangle>
+                  <Label fx:id="labelConnect" alignment="BASELINE_CENTER" onMouseClicked="#handleConnectButtonAction" prefHeight="35.0" prefWidth="140.0" text="CONNECT" textAlignment="CENTER" textFill="WHITE" StackPane.alignment="BOTTOM_CENTER">
+                     <font>
+                        <Font name="Arial Bold" size="12.0" />
+                     </font>
+                     <StackPane.margin>
+                        <Insets bottom="25.0" />
+                     </StackPane.margin>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                  </Label>
+                  <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="TOP_CENTER">
+                     <image>
+                        <Image url="@../flags/Austria.png" />
+                     </image>
+                     <StackPane.margin>
+                        <Insets top="100.0" />
+                     </StackPane.margin>
+                     <effect>
+                        <DropShadow height="30.0" radius="14.5" spread="0.22" width="30.0" />
+                     </effect>
+                  </ImageView>
+                  <Rectangle fx:id="rectCrowns" arcHeight="26.0" arcWidth="26.0" fill="DODGERBLUE" height="26.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="76.0" StackPane.alignment="TOP_CENTER">
+                     <effect>
+                        <DropShadow spread="0.11" />
+                     </effect>
+                     <StackPane.margin>
+                        <Insets top="200.0" />
+                     </StackPane.margin>
+                  </Rectangle>
+                  <ImageView fitHeight="26.0" fitWidth="76.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="TOP_CENTER">
+                     <image>
+                        <Image url="@../images/crowns_3_status.png" />
+                     </image>
+                     <StackPane.margin>
+                        <Insets top="200.0" />
+                     </StackPane.margin>
+                  </ImageView>
                </children>
             </StackPane>
          </children>
