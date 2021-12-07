@@ -31,12 +31,18 @@ import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundImage;
+import javafx.scene.layout.BackgroundPosition;
+import javafx.scene.layout.BackgroundRepeat;
+import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
@@ -59,9 +65,9 @@ import javafx.scene.web.WebView;
 public class AppScreenControllerStatus implements Initializable, AppScreenController {
 
 	@FXML
-	private Pane contentDetailsPane;
+	private Region statusConnectionRegion; 
 	@FXML
-	private ImageView statusConnectionImageView;
+	private Pane contentDetailsPane;
 	@FXML
 	private WebView locationMap;
 	@FXML
@@ -104,10 +110,6 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
 	private double mapLat;
 	private double mapLng;
 
-	public ImageView getStatusConnectionImageView() {
-		return statusConnectionImageView;
-	}
-
 
 	public void connectButtonDisable(boolean disable) {
 		// this.connectButton.setDisable(disable);
@@ -115,10 +117,6 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
 
 	public void setConnectImageView(ImageView connectImageView) {
 		// this.connectImageView = connectImageView;
-	}
-
-	public void setStatusConnectionImageView(ImageView statusConnectionImageView) {
-		this.statusConnectionImageView = statusConnectionImageView;
 	}
 
 	/**
@@ -233,7 +231,16 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
 			image = ServerImageBackgroundManager.getImage(serverId);
 			Server server = shellfireService.getServerList().getServerByServerId(serverId);
 			setLocation(server.getLatitude(), server.getLongitude());
-			this.statusConnectionImageView.setImage(image);
+			BackgroundImage bgImage = new BackgroundImage(
+			        image,                                                 // image
+			        BackgroundRepeat.NO_REPEAT,                            // repeatX
+			        BackgroundRepeat.NO_REPEAT,                            // repeatY
+			        BackgroundPosition.CENTER,                             // position
+			        new BackgroundSize(BackgroundSize.AUTO, 500, false, false, false, false)  // size
+			);
+			
+			statusConnectionRegion.setBackground(new Background(bgImage));
+			
 			this.setServerType(server.getServerType());
 			
             TextFlow textFlow = new TextFlow();
@@ -250,16 +257,12 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
             text2.setOpacity(0.8);
             HBox.setHgrow(text2, Priority.ALWAYS);
             
-            
             textFlow.getChildren().add(text1);
             textFlow.getChildren().add(text2);
 			hboxCountryCity.getChildren().setAll(textFlow);
+
 			
-			Image crownImage = serverTypeCrownMap.get(server.getServerType());
-			imageCrowns.setImage(crownImage);
-			rectCrowns.setWidth(crownImage.getWidth()/2.5);
-			
-			log.debug("background image updated");
+			log.debug("selected server set in status - background image, flag, city/country, crowns");
 		} catch (Exception e) {
 			log.error("Error occured during loading of background image", e);
 		}
@@ -267,14 +270,9 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
 	
 	
 	private void setServerType(ServerType serverType) {
-		ImagePattern pattern = new ImagePattern(
-				Util.getImageIconFX("/images/crowns_3_status.png")
-			);
-		
-		//this.rectCrowns.setFill(pattern);
-		
-		// TODO Auto-generated method stub
-		
+		Image crownImage = serverTypeCrownMap.get(serverType);
+		imageCrowns.setImage(crownImage);
+		rectCrowns.setWidth(crownImage.getWidth()/2.5);
 	}
 
 
