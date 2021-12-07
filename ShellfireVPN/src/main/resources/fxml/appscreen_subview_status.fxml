@@ -88,7 +88,7 @@
                         <Insets top="200.0" />
                      </StackPane.margin>
                   </Rectangle>
-                  <ImageView fitHeight="26.0" fitWidth="76.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="TOP_CENTER">
+                  <ImageView fx:id="imageCrowns" fitHeight="26.0" fitWidth="76.0" pickOnBounds="true" preserveRatio="true" StackPane.alignment="TOP_CENTER">
                      <image>
                         <Image url="@../images/crowns_3_status.png" />
                      </image>

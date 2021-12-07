@@ -9,6 +9,8 @@ import java.awt.MenuItem;
 import java.awt.PopupMenu;
 import java.awt.TrayIcon;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import org.slf4j.Logger;
@@ -74,6 +76,8 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
 	private Rectangle rectCrowns;
 	@FXML
 	private HBox hboxCountryCity;
+	@FXML
+	private ImageView imageCrowns;
 
 	
 	private LoginForms application;
@@ -86,6 +90,8 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
 	private TrayIcon trayIcon;
 	private ShellfireVPNMainFormFxmlController mainController;
 	String baseImageUrl = "src/main/resources";
+	
+	private Map<ServerType, Image> serverTypeCrownMap;
 
 	String langKey = VpnI18N.getLanguage().getKey();
 	private Image imageStatusEncrypted = imageStatusEncrypted = new Image("/icons/status-encrypted-width736.gif");
@@ -142,6 +148,10 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
 				    }
 			});
 			 
+			 serverTypeCrownMap = new HashMap<ServerType, Image>();
+			 this.serverTypeCrownMap.put(ServerType.Free, Util.getImageIconFX("/images/crowns_1_status.png"));
+			 this.serverTypeCrownMap.put(ServerType.Premium, Util.getImageIconFX("/images/crowns_2_status.png"));
+			 this.serverTypeCrownMap.put(ServerType.PremiumPlus, Util.getImageIconFX("/images/crowns_3_status.png"));
 						 
 			// this.premiumInfoImageView.setVisible(false);
 			log.debug("After initialization of images");
@@ -244,6 +254,10 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
             textFlow.getChildren().add(text1);
             textFlow.getChildren().add(text2);
 			hboxCountryCity.getChildren().setAll(textFlow);
+			
+			Image crownImage = serverTypeCrownMap.get(server.getServerType());
+			imageCrowns.setImage(crownImage);
+			rectCrowns.setWidth(crownImage.getWidth()/2.5);
 			
 			log.debug("background image updated");
 		} catch (Exception e) {
