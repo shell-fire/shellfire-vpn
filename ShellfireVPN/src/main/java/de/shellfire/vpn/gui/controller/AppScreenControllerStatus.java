@@ -20,7 +20,9 @@ import de.shellfire.vpn.Util;
 import de.shellfire.vpn.client.Controller;
 import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.gui.ServerImageBackgroundManager;
+import de.shellfire.vpn.gui.model.CountryMap;
 import de.shellfire.vpn.i18n.VpnI18N;
+import de.shellfire.vpn.types.Country;
 import de.shellfire.vpn.types.Server;
 import de.shellfire.vpn.types.ServerType;
 import de.shellfire.vpn.webservice.WebService;
@@ -84,6 +86,8 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
 	private HBox hboxCountryCity;
 	@FXML
 	private ImageView imageCrowns;
+	@FXML
+	private ImageView flagImageView;
 
 	
 	private LoginForms application;
@@ -225,47 +229,87 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
 
 	public void setSelectedServer(int serverId) {
 		log.debug("setSelectedServer(" + serverId + ") - updating background image");
-		
-		Image image;
+
 		try {
-			image = ServerImageBackgroundManager.getImage(serverId);
 			Server server = shellfireService.getServerList().getServerByServerId(serverId);
+
+			// set location on map
 			setLocation(server.getLatitude(), server.getLongitude());
-			BackgroundImage bgImage = new BackgroundImage(
-			        image,                                                 // image
-			        BackgroundRepeat.NO_REPEAT,                            // repeatX
-			        BackgroundRepeat.NO_REPEAT,                            // repeatY
-			        BackgroundPosition.CENTER,                             // position
-			        new BackgroundSize(BackgroundSize.AUTO, 500, false, false, false, false)  // size
-			);
 			
-			statusConnectionRegion.setBackground(new Background(bgImage));
+			// update background image for location
+			setBackgroundImage(serverId);
 			
+			// update flat for server
+			setFlag(server.getCountry());
+			
+			// set crowns for serverType
 			this.setServerType(server.getServerType());
 			
-            TextFlow textFlow = new TextFlow();
-            textFlow.setPrefHeight(Region.USE_COMPUTED_SIZE);
-            
-            Text text1 = new Text(server.getCity() + " ");
-            text1.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
-            text1.setFill(Color.WHITE);
-            HBox.setHgrow(text1, Priority.ALWAYS);
-            
-            Text text2 = new Text(VpnI18N.getCountryI18n().getCountryName(server.getCountry()));
-            text2.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
-            text2.setFill(Color.WHITE);
-            text2.setOpacity(0.8);
-            HBox.setHgrow(text2, Priority.ALWAYS);
-            
-            textFlow.getChildren().add(text1);
-            textFlow.getChildren().add(text2);
-			hboxCountryCity.getChildren().setAll(textFlow);
+			// update city/country text
+            setCountryCityText(server);
 
 			
 			log.debug("selected server set in status - background image, flag, city/country, crowns");
 		} catch (Exception e) {
 			log.error("Error occured during loading of background image", e);
 		}
+	}
+
+	private void setFlag(Country country) {
+		flagImageView.setImage(CountryMap.getIconFX(country));
+	}
+
+	private void setCountryCityText(Server server) {
+		TextFlow textFlow = new TextFlow();
+		textFlow.setPrefHeight(Region.USE_COMPUTED_SIZE);
+		
+		Text text1 = new Text(server.getCity() + " ");
+		text1.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
+		text1.setFill(Color.WHITE);
+		HBox.setHgrow(text1, Priority.ALWAYS);
+		
+		Text text2 = new Text(VpnI18N.getCountryI18n().getCountryName(server.getCountry()));
+		text2.setFont(Font.font("Verdana", FontWeight.BOLD, 20));
+		text2.setFill(Color.WHITE);
+		text2.setOpacity(0.8);
+		HBox.setHgrow(text2, Priority.ALWAYS);
+		
+		textFlow.getChildren().add(text1);
+		textFlow.getChildren().add(text2);
+		hboxCountryCity.getChildren().setAll(textFlow);
+	}
+
+	private void setBackgroundImage(int serverId) throws Exception {
+		Image image;
+		image = ServerImageBackgroundManager.getImage(serverId);
+		
+		double maxRatioForFitToHeight = 500/420;
+		double actualRatio = image.getHeight() / image.getWidth();
+		
+		boolean fitToHeight;
+		if (actualRatio < maxRatioForFitToHeight) {
+			fitToHeight = true;
+		} else {
+			fitToHeight = false;
+		}
+		
+		double backgroundSizeWidth = BackgroundSize.AUTO;
+		double backgroundSizeHeight = BackgroundSize.AUTO;
+		if (fitToHeight) {
+			backgroundSizeHeight = 500;
+		} else {
+			backgroundSizeWidth = 420;
+		}
+		
+		BackgroundImage bgImage = new BackgroundImage(
+		        image,                                                 // image
+		        BackgroundRepeat.NO_REPEAT,                            // repeatX
+		        BackgroundRepeat.NO_REPEAT,                            // repeatY
+		        BackgroundPosition.CENTER,                             // position
+		        new BackgroundSize(backgroundSizeWidth, backgroundSizeHeight, false, false, false, false)  // size
+		);
+		
+		statusConnectionRegion.setBackground(new Background(bgImage));
 	}	
 	
 	
