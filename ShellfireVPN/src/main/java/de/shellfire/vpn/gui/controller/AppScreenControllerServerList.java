@@ -45,6 +45,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
@@ -321,6 +323,15 @@ public class AppScreenControllerServerList implements Initializable, AppScreenCo
 		filterOffMap.put(ServerType.Free, crown1_deselected);
 		filterOffMap.put(ServerType.Premium, crown2_deselected);
 		filterOffMap.put(ServerType.PremiumPlus, crown3_deselected);
+		
+		
+		this.searchField.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
+		    if (event.getCode() == KeyCode.ESCAPE) {
+		        event.consume();
+		        this.searchField.setText("");
+		    }
+		});
+		
 		
 	}
 	
