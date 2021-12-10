@@ -10,6 +10,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Optional;
 import java.util.Random;
 import java.util.ResourceBundle;
 
@@ -37,9 +38,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.NodeOrientation;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
@@ -47,15 +51,16 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
+import javafx.stage.StageStyle;
 
 /**
  * FXML Controller class
@@ -111,6 +116,7 @@ public class AppScreenControllerServerList implements Initializable, AppScreenCo
 	private boolean filterPremium = false;
 	private boolean filterPremiumPlus = false;
 	private boolean currentlyUpdatingServerTypeFilter;
+	private Vpn selectedVpn;
 	
 
 	/**
@@ -157,6 +163,7 @@ public class AppScreenControllerServerList implements Initializable, AppScreenCo
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		shellfireService = WebService.getInstance();
+		updateSelectedVpn();
 		speedColumn.setCellValueFactory(cellData -> cellData.getValue().countryProperty());
 		countryColumn.setCellValueFactory(cellData -> cellData.getValue().countryProperty());
 		countryColumn.setComparator(new ServerListComparator());
@@ -300,8 +307,8 @@ public class AppScreenControllerServerList implements Initializable, AppScreenCo
 
 						  for (ServerRow curChange : changes) {
 							  inSelectionChangeListener = true;
-							  mainFormController.setSelectedServer(curChange.getServer().getServerId());
-
+							  Server newServer = curChange.getServer();
+							  mainFormController.setSelectedServer(newServer.getServerId());
 							  inSelectionChangeListener = false;
 						  }
 					  }
@@ -332,10 +339,83 @@ public class AppScreenControllerServerList implements Initializable, AppScreenCo
 		    }
 		});
 		
+		this.serverListTableView.setRowFactory(tv -> {
+		    TableRow<ServerRow> row = new TableRow<>();
+		    row.addEventFilter(MouseEvent.MOUSE_PRESSED, e -> {
+		    	
+		    	boolean abort = false;
+		    	ServerType clickedServerType = row.getItem().getServerType();
+		    	ServerType selectedVpnServerType = selectedVpn.getAccountType();
+		    	
+		    	if (selectedVpnServerType == ServerType.Free && clickedServerType != ServerType.Free) {
+	    			abort = true;
+		    	}
+		    	else if (selectedVpnServerType == ServerType.Premium && clickedServerType == ServerType.PremiumPlus) {
+	    			abort = true;
+		    	}
+		    	
+				if (abort) {
+					boolean userCouldSwitchToHigherClassifiedVpn = false;
+					
+					ServerType highestVpnTypeOfUser = ServerType.Free;
+					LinkedList<Vpn> allVpn = this.shellfireService.getAllVpn(); 
+					
+					for (Vpn curVpn : allVpn) {
+						if (curVpn.getAccountType() == ServerType.PremiumPlus) {
+							highestVpnTypeOfUser = ServerType.PremiumPlus;
+							break;
+						} else if (curVpn.getAccountType() == ServerType.Premium && highestVpnTypeOfUser == ServerType.Free) {
+							highestVpnTypeOfUser = ServerType.Premium;
+							break;
+						}
+					}
+					
+					
+					
+					if (clickedServerType == ServerType.PremiumPlus && highestVpnTypeOfUser == ServerType.PremiumPlus) {
+						userCouldSwitchToHigherClassifiedVpn = true;
+					}
+					if (clickedServerType == ServerType.Premium && (highestVpnTypeOfUser == ServerType.Premium || highestVpnTypeOfUser == ServerType.PremiumPlus)) {
+						userCouldSwitchToHigherClassifiedVpn = true;
+					}
+					
+					if (userCouldSwitchToHigherClassifiedVpn) {
+						Alert alert = new Alert(Alert.AlertType.ERROR, i18n.tr("Select a different VPN?"), ButtonType.YES, ButtonType.NO);
+						alert.initStyle(StageStyle.UTILITY);
+						alert.setTitle(i18n.tr("Error: You're not allowed to use this server."));
+						alert.setHeaderText(i18n.tr("Current VPN has type %s\r\nYou selected a server of type:%s\r\nThis is not possible with your current VPN. Please go to settings and select a VPN with higher classification."));
+						Optional<ButtonType> result = alert.showAndWait();
+						boolean doOpenVpnSelectDialog = ((result.isPresent()) && (result.get() == ButtonType.YES));
+						
+						if (doOpenVpnSelectDialog) {
+							this.mainFormController.getAppScreenControllerSettings().showVpnSelectScreen();
+							this.mainFormController.setServerIdRejectedDueToPrivileges(row.getItem().getServer().getServerId());
+						}
+
+					} else {
+						Alert alert = new Alert(Alert.AlertType.ERROR, i18n.tr("Show Details about Shellfire VPN Premium?"), ButtonType.YES, ButtonType.NO);
+						alert.initStyle(StageStyle.UTILITY);
+						alert.setTitle(i18n.tr("Error: You're not allowed to use this server."));
+						alert.setHeaderText(i18n.tr("Current VPN has type %s\r\nYou selected a server of type:%s\r\nThis is not possible with your current VPN. Please go to settings and select a VPN with higher classification."));
+						Optional<ButtonType> result = alert.showAndWait();
+						boolean showPremiumInfo = ((result.isPresent()) && (result.get() == ButtonType.YES));
+						
+						if (showPremiumInfo) {
+							Util.openUrl(this.shellfireService.getUrlPremiumInfo());
+						}
+					}
+					
+					
+					e.consume();
+				}
+
+		    });
+		    return row ;
+		});
 		
+   
 	}
 	
-
 	private void updaterFilterServerType() {
 		currentlyUpdatingServerTypeFilter = true;
 		filteredDataByServerType.setPredicate(server -> {
@@ -477,6 +557,7 @@ public class AppScreenControllerServerList implements Initializable, AppScreenCo
 		if (!inSelectionChangeListener) {
 			scrollToCurrentServer();
 		}
+		
 	}
 
 	public Server getSelectedServer() {
@@ -512,5 +593,8 @@ public class AppScreenControllerServerList implements Initializable, AppScreenCo
 		public int compare(Server o1, Server o2) {
 			return o1.getCountry().name().compareTo(o2.getCountry().name());
 		}
+	}
+	public void updateSelectedVpn() {
+		this.selectedVpn = shellfireService.getVpn();
 	}
 }

@@ -206,7 +206,7 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
 		this.shellfireVpnMainForm = shellfireVpnMainForm;
 	}
 	
-	// Selects a server on serverlist table based on the index (position) of the server
+	// Selects a vpn on vpn table based on the vpn id
 	public void setSelectedVpn(int vpnId) {
 		for (int i = 0; i < vpnData.size(); i++) {
 			VpnSelectionFXModel curVpn = vpnData.get(i);

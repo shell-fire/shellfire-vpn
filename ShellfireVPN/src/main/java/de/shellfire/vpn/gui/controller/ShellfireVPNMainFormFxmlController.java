@@ -115,6 +115,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	private ScheduledExecutorService currentConnectedSinceTimerFX = Executors.newSingleThreadScheduledExecutor();
 	private boolean connectionStatus;
 	private boolean disconnectDetectExpected;
+	private Integer serverIdRejectedDueToPrivileges;
 
 	
 	static AppScreen currentAppScreen = AppScreen.STATUS;
@@ -378,6 +379,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		log.debug("setVpn() called {}", vpnId);
 		this.shellfireService.selectVpn(vpnId);
 		this.appScreenControllerSettings.updateSelectedVpn();
+		this.appScreenControllerServerList.updateSelectedVpn();
 		setRememberedVpnSelection(vpnId);
 		this.initServer();
 	}
@@ -452,7 +454,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
 	// TODO: add highlighting of text / labels
 	// TODO: fix map
-	private void showAppScreen(AppScreen pane) {
+	void showAppScreen(AppScreen pane) {
 		contentDetailsPane.getChildren().setAll(menuAppScreenMap.get(pane).getKey());
 		
 		if (this.menuControllerMap != null && this.menuControllerMap.get(pane) != null) {
@@ -1320,9 +1322,33 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	public void setSelectedServer(int server) {
 		log.debug("setSelectedServer(" + server + ")");
 		
+		
 		if (selectedServer == server) {
 			log.debug("setSelectedServer() - (Server {} already set - returning", server);
 			return;
+		}
+		
+		if (serverIdRejectedDueToPrivileges != null) {
+			log.debug("overriding selected server to {} because it was previusly requested, then the vpn tab was shown and another vpn has now been selected", serverIdRejectedDueToPrivileges);
+			
+			ServerType serverType = this.shellfireService.getServerList().getServerByServerId(serverIdRejectedDueToPrivileges).getServerType();
+			Vpn vpn = this.shellfireService.getVpn();
+			
+			boolean allowed = false;
+			if (vpn.getAccountType() == ServerType.PremiumPlus) {
+				allowed = true;
+			}
+			if (vpn.getAccountType() == ServerType.Premium && serverType != ServerType.PremiumPlus) {
+				allowed = true;
+			}
+			if (vpn.getAccountType() == ServerType.Free && serverType == ServerType.Free) {
+				allowed = true;
+			}
+			
+			if (allowed) {
+				server = serverIdRejectedDueToPrivileges;
+			}
+			serverIdRejectedDueToPrivileges = null;
 		}
 		
 		this.selectedServer = server;
@@ -1335,9 +1361,10 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 			appScreenControllerServerList.setSelectedServer(server);
 		}
 		
+		final int finalServer = server;
 		Task<Void> task = new Task<Void>() {
 		    @Override public Void call() {
-		    	shellfireService.setServerTo(server);
+		    	shellfireService.setServerTo(finalServer);
 		    	return null;
 		    }
 		};
@@ -1495,6 +1522,14 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
 	public void setUserName(String username) {
 		this.appScreenControllerSettings.setLoggedInUser(username);
+	}
+
+	public AppScreenControllerSettings getAppScreenControllerSettings() {
+		return this.appScreenControllerSettings;
+	}
+
+	public void setServerIdRejectedDueToPrivileges(int serverId) {
+		this.serverIdRejectedDueToPrivileges = serverId;
 	}
 
 
