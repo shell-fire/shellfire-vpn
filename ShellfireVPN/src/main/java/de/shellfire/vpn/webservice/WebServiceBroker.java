@@ -24,6 +24,7 @@ import de.shellfire.vpn.webservice.model.ActivationStatus;
 import de.shellfire.vpn.webservice.model.CryptoMinerConfigResponse;
 import de.shellfire.vpn.webservice.model.EndPoint;
 import de.shellfire.vpn.webservice.model.GeoPositionResponse;
+import de.shellfire.vpn.webservice.model.GetAboutRequest;
 import de.shellfire.vpn.webservice.model.GetActivationStatusRequest;
 import de.shellfire.vpn.webservice.model.GetAllVpnDetailsRequest;
 import de.shellfire.vpn.webservice.model.GetCertificatesForOpenVpnRequest;
@@ -167,6 +168,30 @@ public class WebServiceBroker {
 		log.debug("getHelpDetails() - finished, returning data");
 		return resp.getData();
 	}
+	
+	/**
+	 * function used to retrieve details for all help texts
+	 * 
+	 * @throws IOException
+	 * @throws ClientProtocolException
+	 * @throws VpnException
+	 */
+	public List<WsHelpItem> getAbout() throws ClientProtocolException, IOException, VpnException {
+		log.debug("getAbout() - start");
+		GetAboutRequest request = new GetAboutRequest();
+
+		Type theType = new TypeToken<Response<List<WsHelpItem>>>() {}.getType();
+		Response<List<WsHelpItem>> resp = new JsonHttpRequest<GetAboutRequest, List<WsHelpItem>>().call(request, theType);
+
+		// ensure no errors occured and data is available. throws VPNException otherwise
+		resp.validate();
+
+		log.debug("getAbout() - finished, returning data");
+		return resp.getData();
+	}
+	
+	
+	
 
 	/**
 	 * function used to retrieve the list of all shellfire vpn servers

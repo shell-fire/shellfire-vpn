@@ -41,6 +41,7 @@ import de.shellfire.vpn.exception.VpnException;
 import de.shellfire.vpn.messaging.CompositeX509KeyManager;
 import de.shellfire.vpn.messaging.CompositeX509TrustManager;
 import de.shellfire.vpn.updater.UpdaterFX;
+import de.shellfire.vpn.webservice.model.GetAboutRequest;
 import de.shellfire.vpn.webservice.model.GetActivationStatusRequest;
 import de.shellfire.vpn.webservice.model.GetAllVpnDetailsRequest;
 import de.shellfire.vpn.webservice.model.GetCertificatesForOpenVpnRequest;
@@ -115,6 +116,7 @@ class JsonHttpRequest<RequestType, ResponseType> {
 		tempMap.put(SetWireGuardPublicKeyUserRequest.class, "setWireguardPublicKeyUser");
 		tempMap.put(GetServerBackgroundImageFilenameRequest.class, "getServerBackgroundImageFilename");
 		tempMap.put(GetHelpDetailsRequest.class, "getHelpDetails");
+		tempMap.put(GetAboutRequest.class, "getAbout");
 
 		functionMap = Collections.unmodifiableMap(tempMap);
 	}

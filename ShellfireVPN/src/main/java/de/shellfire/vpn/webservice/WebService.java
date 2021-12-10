@@ -62,6 +62,7 @@ public class WebService {
 	private List<String> cryptoCurrencyVpn;
 	private ExceptionThrowingReturningRunnableImpl<Boolean> runnableSendLogToShellfire;
 	private List<WsHelpItem> helpItemList;
+	private List<WsHelpItem> aboutItemList;
 
 	private WebService() {
 
@@ -232,6 +233,22 @@ public class WebService {
 		}
 
 		return this.helpItemList;
+	}
+
+	public List<WsHelpItem> getAbout() {
+		
+		init();
+		if (this.aboutItemList == null || this.aboutItemList.size() == 0) {
+			List<WsHelpItem> list = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnableImpl<List<WsHelpItem>>() {
+				public List<WsHelpItem> run() throws Exception {
+
+					return shellfire.getAbout();
+				}
+			}, 3, 100);
+			this.aboutItemList = list;
+		}
+
+		return this.aboutItemList;
 	}
 
 	public Vpn getVpn() {

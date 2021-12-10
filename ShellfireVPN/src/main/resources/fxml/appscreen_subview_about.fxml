@@ -17,59 +17,20 @@
 
 <AnchorPane fx:id="aboutAnchorPane" prefHeight="640.0" prefWidth="420.0" style="-fx-background-color: #fafafa;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.AppScreenControllerAbout">
    <children>
-      <VBox alignment="TOP_CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox fx:id="aboutItemContainerVBox" alignment="TOP_CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </padding>
          <children>
-            <Label alignment="BASELINE_CENTER" contentDisplay="CENTER" text="About Shellfire" textAlignment="CENTER" textFill="#12ace5">
+            <Label alignment="BASELINE_CENTER" contentDisplay="CENTER" prefWidth="380.0" text="About" textFill="#12ace5">
                <font>
                   <Font name="Arial" size="24.0" />
                </font>
                <VBox.margin>
-                  <Insets bottom="20.0" top="20.0" />
+                  <Insets bottom="30.0" top="20.0" />
                </VBox.margin>
-            </Label>
-            <Label alignment="BASELINE_CENTER" contentDisplay="CENTER" text="Hosting since 2002" textAlignment="CENTER" textFill="#666666">
-               <font>
-                  <Font name="Arial Bold" size="14.0" />
-               </font>
-               <VBox.margin>
-                  <Insets bottom="20.0" top="20.0" />
-               </VBox.margin>
-            </Label>
-            <Label alignment="BASELINE_CENTER" contentDisplay="CENTER" text="Shellfire is a hosting provider located in Bad Vilbel, Germany, close to Frankfurt am Main. Shellfire was founded in 2002 by Florian Gattung and Max Behr, who have been acting as CEOs since then." textAlignment="CENTER" textFill="#666666" wrapText="true">
-               <font>
-                  <Font name="Arial" size="12.0" />
-               </font>
-            </Label>
-            <Label alignment="BASELINE_CENTER" contentDisplay="CENTER" text="Vision" textAlignment="CENTER" textFill="#666666">
-               <font>
-                  <Font name="Arial Bold" size="14.0" />
-               </font>
-               <VBox.margin>
-                  <Insets bottom="20.0" top="20.0" />
-               </VBox.margin>
-            </Label>
-            <Label alignment="BASELINE_CENTER" contentDisplay="CENTER" text="We believe that free and secure access to the internet is a fundamental right for every person on this planet. That's why it is our goal to sustain the internet as a place of freedom and to protect your private data. With our encrypted vpn servers and voiceservers, we provide protection from hackers and other spies." textAlignment="CENTER" textFill="#666666" wrapText="true">
-               <font>
-                  <Font name="Arial" size="12.0" />
-               </font>
-            </Label>
-            <Label alignment="BASELINE_CENTER" contentDisplay="CENTER" layoutX="199.0" layoutY="343.0" text="Achievements" textAlignment="CENTER" textFill="#666666">
-               <font>
-                  <Font name="Arial Bold" size="14.0" />
-               </font>
-               <VBox.margin>
-                  <Insets bottom="20.0" top="20.0" />
-               </VBox.margin>
-            </Label>
-            <Label alignment="BASELINE_CENTER" contentDisplay="CENTER" layoutX="30.0" layoutY="359.0" text="In the past years, we have already helped more than 250,000 people to protect their data and to overcome censorship. Our high service- and security-standard &quot;Made in Germany&quot; make Shellfire one of the best addresses on the vpn market." textAlignment="CENTER" textFill="#666666" wrapText="true">
-               <font>
-                  <Font name="Arial" size="12.0" />
-               </font>
             </Label>
          </children>
-         <padding>
-            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-         </padding>
       </VBox>
    </children>
 </AnchorPane>
