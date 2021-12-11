@@ -270,7 +270,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
 		this.fStoreLoginData.setText(i18n.tr("Save login data"));
 
-		this.headerImageView.setImage(ShellfireVPNMainFormFxmlController.getLogo());
+		// this.headerImageView.setImage(ShellfireVPNMainFormFxmlController.getLogo());
 
 		this.headerPanel.setStyle("-fx-background-color: rgb(18,172,229);");
 

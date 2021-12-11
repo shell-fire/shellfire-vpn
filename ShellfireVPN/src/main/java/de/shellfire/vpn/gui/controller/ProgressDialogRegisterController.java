@@ -37,10 +37,6 @@ public class ProgressDialogRegisterController extends AnchorPane implements Init
 	private static ProgressDialogRegisterController instance;
 
 	@FXML
-	private Pane headerPanel1;
-	@FXML
-	private ImageView headerImageView1;
-	@FXML
 	private Label waitingLabel;
 	@FXML
 	private Label infoLabel;
@@ -84,7 +80,6 @@ public class ProgressDialogRegisterController extends AnchorPane implements Init
 		instanceStage.initStyle(StageStyle.UNDECORATED);
 		instanceStage.initModality(Modality.WINDOW_MODAL);
 
-		this.headerImageView1.setImage(ShellfireVPNMainFormFxmlController.getLogo());
 		log.debug("\n " + com.sun.javafx.runtime.VersionInfo.getRuntimeVersion());
 	}
 

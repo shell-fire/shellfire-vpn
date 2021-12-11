@@ -380,7 +380,7 @@ public class UpdaterFX implements CanContinueAfterBackEndAvailableFX {
 			final String fileName = getService().getLatestInstaller();
 			final DownloadTask downloadTask = new DownloadTask(fileName, path, user);
 			updateProgressDialog = ProgressDialogController.getInstance(i18n.tr("Downloading update..."), null, null, true);
-			updateProgressDialog.getProgressBar().setProgress(ProgressBar.INDETERMINATE_PROGRESS);
+			updateProgressDialog.setIndeterminate(true);
 			updateProgressDialog.setButtonText(i18n.tr("Cancel"));
 			updateProgressDialog.bindProgressProperty(downloadTask.progressProperty());
 			updateProgressDialog.setOptionCallback(new Task<Void>() {

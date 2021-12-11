@@ -125,7 +125,7 @@ public class LoginForms extends Application {
 		try {
 			LoginForms.stage = primaryStage;
 			LoginForms.stage.initStyle(StageStyle.DECORATED);
-			initDialog = ProgressDialogController.getInstance("Init ...", null, stage, false);
+			initDialog = ProgressDialogController.getInstance(i18n.tr("Init..."), null, stage, false);
 
 			primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 			    @Override

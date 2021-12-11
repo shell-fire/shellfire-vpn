@@ -22,10 +22,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.SVGPath;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -38,10 +40,6 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
 	private Stage instanceStage;
 	private static ProgressDialogController instance;
 
-	@FXML
-	private Pane headerPanel1;
-	@FXML
-	private ImageView headerImageView1;
 	@FXML
 	private Label dynamicLabel;
 	@FXML
@@ -72,7 +70,6 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
 
 	public void initComponents() {
 		dynamicLabel.setText(i18n.tr("Logging in..."));
-		this.headerImageView1.setImage(ShellfireVPNMainFormFxmlController.getLogo());
 		log.debug("\n " + com.sun.javafx.runtime.VersionInfo.getRuntimeVersion());
 	}
 
@@ -80,10 +77,7 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
 		ensureButtonExists();
 		return button;
 	}
-	
-	public ProgressBar getProgressBar() {
-		return progressBar;
-	}
+
 
 	public void setOptionCallback(Task task) {
 		// make the button visible when a task has to be assigned to the respective button
@@ -110,11 +104,15 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
 
 	public void setIndeterminate(boolean b) {
 		if (b == true) {
+			progressBar.setVisible(false);
 			progressBar.setProgress(ProgressBar.INDETERMINATE_PROGRESS);
+			
+			
+		} else {
+			progressBar.setVisible(true);
 		}
 	}
 
-	// Removed because the dynamic label has a binding in EntityManager
 	public void setDialogText(String string) {
 		this.dynamicLabel.setText(string);
 	}
@@ -126,25 +124,54 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
 
 	public static ProgressDialogController getInstance(String dialogText, Task task, Window owner, boolean createNew) throws IOException {
 		if (instance == null || createNew) {
+			StackPane root = new StackPane();
+			root.setStyle("-fx-background-color:transparent");
+			SVGPath p = new SVGPath();
+			p.setContent("M 265.873 176.686 c -4.268 -12.383 -14.609 -40.019 -35.033 -64.999 c 3.455 18.85 -5.904 20.615 -12.156 13.694 c -11.153 -12.347 -14.412 -40.654 -36.333 -46.032 c 5.969 15.281 -5.869 55.82 -23.282 63.808 c -2.332 1.368 -6.64 -0.13 -9.28 -7.971 c -3.98 4.546 -4.818 16.973 -8.04 24.582 c -11.04 12.747 -17.731 29.279 -17.731 47.337 c 0 40.196 33.081 72.898 73.742 72.898 s 73.741 -32.702 73.741 -72.898 C 271.5 196.286 270.046 188.072 265.873 176.686 z M 198 203 z z");
+			p.setFill(Color.web("#4381e5"));
+			p.setScaleX(1.5);
+			p.setScaleY(1.5);
+			p.setScaleZ(1.5);
+			p.setEffect(new DropShadow());
+
 			// Load the fxml file and create a new stage for the popup dialog.
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(LoginForms.class.getResource("/fxml/ProgressDialog.fxml"));
-			AnchorPane page = (AnchorPane) loader.load();
+			StackPane pane = (StackPane) loader.load();
+
+			root.getChildren().add(p);
+			root.getChildren().add(pane);
+			
+			// transparent scene and stage
+			Scene scene = null;
+			scene = new Scene(root, 400, 400, Color.TRANSPARENT);
+			scene.setFill(Color.TRANSPARENT);
+			
 			instance = (ProgressDialogController) loader.getController();
 			instance.setDialogText(dialogText);
-			instance.getProgressBar().setProgress(ProgressBar.INDETERMINATE_PROGRESS);
+			instance.setIndeterminate(true);
 			if (null != task) {
 				instance.setOptionCallback(task);
 			}
-			Stage instanceStage = new Stage();
-			instanceStage.initStyle(StageStyle.UNDECORATED);
-			instanceStage.initModality(Modality.WINDOW_MODAL);
-			instanceStage.initOwner(owner);
-			Scene scene = new Scene(page);
-			instanceStage.setScene(scene);
-			instance.getProgressBar().progressProperty().unbind();
+		    Stage parent = new Stage();
+
+		    parent.initStyle(StageStyle.UTILITY);
+		    parent.setMaxHeight(0);
+		    parent.setMaxWidth(0);
+		    parent.setX(Double.MAX_VALUE);
+		    parent.show();
 			
-			instance.setInstanceAndStage(instanceStage);
+			
+			Stage stage = new Stage();
+			stage.setScene(scene);
+			stage.initStyle(StageStyle.TRANSPARENT);
+
+			stage.initModality(Modality.WINDOW_MODAL);
+			stage.initOwner(parent);
+			stage.show();
+			
+			instance.unbindProgressProperty();
+			instance.setInstanceAndStage(stage);
 			log.debug("ProgressDialogController instance and Stage created");
 		}
 		return instance;
@@ -196,5 +223,13 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
 	public void bindProgressProperty(ReadOnlyDoubleProperty progressProperty) {
 		this.progressBar.progressProperty().bind(progressProperty);
 	}
+	
+
+	public void unbindProgressProperty() {
+		this.progressBar.progressProperty().unbind();
+	}
+	
+	
+	
 
 }

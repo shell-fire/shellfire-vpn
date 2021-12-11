@@ -158,7 +158,7 @@ public class EndpointManager {
 				log.debug("No preferred endPoint set yet, not testing ");
 			} else {
 				log.debug("fx testing preferred endPoint {}", preferredEndPoint);
-				Platform.runLater(() -> initDialogFX.setDialogText(i18n.tr("Testing endpoint that worked before...")));
+				Platform.runLater(() -> initDialogFX.setDialogText(i18n.tr("Finding best server")));
 				log.debug("testPreferredEndpoint - Tested endpoint that worked befores");
 
 				result = testEndpoint(preferredEndPoint);

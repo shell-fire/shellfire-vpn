@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.shape.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
@@ -7,27 +10,37 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefWidth="271.0" style="-fx-background-color: rgb(64,69,73);" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.ProgressDialogController">
+
+<StackPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.ProgressDialogController">
    <children>
-      <Pane fx:id="headerPanel1" maxWidth="1.7976931348623157E308" style="-fx-background-color: rgb(18,172,229);" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox fillWidth="false">
          <children>
-            <ImageView fx:id="headerImageView1" fitHeight="60.0" fitWidth="250.0" layoutX="2.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../icons/sf_en.png" />
-               </image>
-            </ImageView>
-         </children>
-      </Pane>
-      <VBox fillWidth="false" layoutX="2.0" layoutY="60.0" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="62.0">
-         <children>
-            <AnchorPane layoutX="1.0" layoutY="70.0" maxWidth="1.7976931348623157E308" prefWidth="267.0" style="-fx-background-color: rgb(240,240,240);" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0">
+            <AnchorPane layoutX="1.0" layoutY="70.0" maxWidth="1.7976931348623157E308" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0">
                <children>
-                  <Label fx:id="dynamicLabel" layoutX="11.0" layoutY="7.0" maxWidth="1.7976931348623157E308" text="&lt;dynamic&gt;" AnchorPane.leftAnchor="11.0" />
-                  <ProgressBar fx:id="progressBar" layoutX="8.0" layoutY="33.0" maxWidth="1.7976931348623157E308" progress="0.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" />
-                  <VBox fx:id="contentPane" layoutX="159.0" layoutY="64.0" maxWidth="1.7976931348623157E308" minHeight="2.0" prefWidth="100.0" AnchorPane.rightAnchor="12.0" />
+                  <ProgressBar fx:id="progressBar" layoutX="8.0" layoutY="33.0" prefWidth="285.0" progress="0.0" visible="false" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" />
+                  <Label fx:id="dynamicLabel" alignment="BASELINE_CENTER" maxWidth="120.0" prefHeight="45.0" prefWidth="120.0" text="&lt;dynamic&gt;" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+                     <font>
+                        <Font name="Arial" size="18.0" />
+                     </font>
+                     <effect>
+                        <DropShadow />
+                     </effect>
+                  </Label>
+                  <VBox fx:id="contentPane" layoutX="159.0" layoutY="64.0" maxWidth="1.7976931348623157E308" minHeight="2.0" prefWidth="100.0" visible="false" AnchorPane.rightAnchor="12.0" />
+                  <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" scaleX="1.5" scaleY="1.5" scaleZ="1.5" x="10.0" y="45.0">
+                     <image>
+                        <Image url="@../icons/spinner.gif" />
+                     </image>
+                  </ImageView>
                </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
             </AnchorPane>
          </children>
+         <StackPane.margin>
+            <Insets left="140.0" top="160.0" />
+         </StackPane.margin>
       </VBox>
    </children>
-</AnchorPane>
+</StackPane>

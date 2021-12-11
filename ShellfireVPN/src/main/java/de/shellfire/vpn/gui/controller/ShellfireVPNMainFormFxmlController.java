@@ -393,19 +393,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		setSelectedServer(vpn.getServerId());
 	}
 
-	private final static HashMap<String, Image> mainIconMap = new HashMap<String, Image>() {
-		{
-			put("de", Util.getImageIconFX("/icons/sf.png"));
-			put("en", Util.getImageIconFX("/icons/sf_en.png"));
-			put("fr", Util.getImageIconFX("/icons/sf_fr.png"));
-		}
-	};
-
-	public static Image getLogo() {
-		Image imagelogo = ShellfireVPNMainFormFxmlController.mainIconMap.get(VpnI18N.getLanguage().getKey());
-		return imagelogo;
-	}
-
 	public void setApp(LoginForms applic) {
 		this.application = applic;
 	}
@@ -775,7 +762,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		Platform.runLater(() -> {
 			try {
 				
-				connectProgressDialog = ProgressDialogController.getInstance(i18n.tr("Connection is being processed..."), task, this.application.getStage(), true);
+				connectProgressDialog = ProgressDialogController.getInstance(i18n.tr("Connecting..."), task, this.application.getStage(), true);
 				connectProgressDialog.getButton().setOnAction(new EventHandler<javafx.event.ActionEvent>() {
 
 					@Override
@@ -956,7 +943,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		}
 		this.setWaitCursor();
 
-		popupConnectItem.setLabel(i18n.tr("Connection is being processed..."));
+		popupConnectItem.setLabel(i18n.tr("Connecting..."));
 		popupConnectItem.setEnabled(false);
 		popup.add(abortItem);
 		appScreenControllerServerList.getServerListTableView().disableProperty().set(true);
