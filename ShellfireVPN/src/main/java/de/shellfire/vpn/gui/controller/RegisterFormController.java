@@ -19,6 +19,7 @@ import org.xnap.commons.i18n.I18n;
 
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.gui.LoginForms;
+import de.shellfire.vpn.gui.helper.Browser;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.webservice.Response;
 import de.shellfire.vpn.webservice.WebService;
@@ -67,21 +68,11 @@ public class RegisterFormController extends AnchorPane implements Initializable 
 	private Label passwordLabel;
 	@FXML
 	private Label confirmPasswordLabel;
-	@FXML
-	private Pane headerPanel;
-	@FXML
-	private ImageView headerImageView;
-	@FXML
-	private Pane backLabelPane;
-	@FXML
-	private ImageView backImageVeiw;
 
 	@FXML
 	private PasswordField passwordField;
 	@FXML
 	private PasswordField confirmPasswordField;
-	@FXML
-	private Label registerBackLabel;
 	@FXML
 	private WebView policyWebView;
 
@@ -137,17 +128,16 @@ public class RegisterFormController extends AnchorPane implements Initializable 
 
 		this.newsLetterCheckBox.setText(i18n.tr("I subscribe to the newsletter"));
 
-		this.registerBackLabel.setText(i18n.tr("back"));
-
 		// Load web content to webView
-		webEngine = policyWebView.getEngine();
+		
+		// webEngine = policyWebView.getEngine();
 		
 		String webContent = "<html>" + "  <body style='background-color: rgb(240,240,240);font-family:System; font-size:14px'>"
 				+ i18n.tr(
 						"I accept the <a onclick='return false;' target='_agb' href='https://www.shellfire.net/terms-and-conditions/'>Terms and Conditions</a> and have read and noted the <a onclick='return false;' target='_datenschutzerklaerung' href='https://www.shellfire.net/privacy-statement/'>Privacy Policy</a> and the <a onclick='return false;' target='_widerrufsrecht' href='https://www.shellfire.net/right-of-withdrawal/'>Right of Withdrawal</a>.")
 				+ "  </body>" + "</html>";
-		webEngine.loadContent(webContent);
-
+		// webEngine.loadContent(webContent);
+		Browser b = new Browser(policyWebView, webContent);
 		
 		HostServices hostServices = (HostServices) this.application.getStage().getProperties().get("hostServices");
 
