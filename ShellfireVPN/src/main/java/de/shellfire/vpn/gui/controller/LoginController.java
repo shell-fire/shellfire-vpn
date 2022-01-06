@@ -69,21 +69,9 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 	@FXML
 	private CheckBox fStoreLoginData;
 	@FXML
-	private CheckBox fAutoStart;
-	@FXML
-	private CheckBox fAutoconnect;
-	@FXML
 	private Button fButtonOpenRegistrationForm;
 	@FXML
 	private PasswordField fPassword;
-	@FXML
-	private Pane headerPanel;
-	@FXML
-	private ImageView headerImageView;
-	@FXML
-	private Pane exitLogoPane;
-	@FXML
-	private ImageView exitImageView;
 	@FXML
 	private Label loginLabel;
 
@@ -175,7 +163,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 							
 							application.shellfireVpnMainController.prepareSubviewControllers();
 							application.shellfireVpnMainController.setApp(application);
-							application.shellfireVpnMainController.afterLogin(fAutoconnect.isSelected());
+							application.shellfireVpnMainController.afterLogin(false);
 							
 							
 							application.shellfireVpnMainController.setUserName(this.username);
@@ -248,13 +236,9 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 			Util.openUrl(service.getUrlPasswordLost());
 		});
 		this.restoreCredentialsFromRegistry();
-		this.restoreAutoConnectFromRegistry();
-		this.restoreAutoStartFromRegistry();
 	}
 
 	public void initComponents() {
-		this.headerImageView.setImage(Util.getImageIconFX("/icons/sf_en.png"));
-		this.exitImageView.setImage(Util.getImageIconFX("/icons/exit.png"));
 		this.fLabelUsername.setText(i18n.tr("Email / Username:"));
 
 		this.fLabelPassword.setText(i18n.tr("Password:"));
@@ -265,16 +249,8 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
 		this.fButtonLogin.setText(i18n.tr("Login"));
 		this.loginLabel.setText(i18n.tr("Login"));
-		this.fAutoStart.setText(i18n.tr("Start on boot"));
-		this.fAutoconnect.setText(i18n.tr("Connect automatically"));
 
 		this.fStoreLoginData.setText(i18n.tr("Save login data"));
-
-		// this.headerImageView.setImage(ShellfireVPNMainFormFxmlController.getLogo());
-
-		this.headerPanel.setStyle("-fx-background-color: rgb(18,172,229);");
-
-		this.exitImageView.setImage(Util.getImageIconFX("/icons/exit.png"));
 
 		this.fButtonLogin.managedProperty().bind(this.fButtonLogin.visibleProperty());
 
@@ -357,8 +333,6 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 		log.debug("continueAfterBackEndAvailabledFX: being enabled");
 		Storage.register(service);
 		this.restoreCredentialsFromRegistry();
-		this.restoreAutoConnectFromRegistry();
-		this.restoreAutoStartFromRegistry();
 		LoginController.application.setLicenseAccepted(false);
 
 		if (!LoginForms.getStage().isShowing()) {
@@ -432,18 +406,6 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 			} else {
 				removeCredentialsFromRegistry();
 			}
-			if (fAutoStart.isSelected()) {
-				Client.addVpnToAutoStart();
-				log.debug("LoginController: Autostart Data stored");
-			} else {
-				Client.removeVpnFromAutoStart();
-			}
-			if (fAutoconnect.isSelected()) {
-				setAutoConnectInRegistry(true);
-				log.debug("LoginController: Autoconnect Data stored");
-			} else {
-				setAutoConnectInRegistry(false);
-			}
 			
 			ServerImageBackgroundManager.init();
 			
@@ -498,18 +460,6 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 			}
 
 		}
-	}
-
-	private void restoreAutoStartFromRegistry() {
-		boolean autoStart = Client.vpnAutoStartEnabled();
-		this.fAutoStart.setSelected(autoStart);
-	}
-
-	private void restoreAutoConnectFromRegistry() {
-		VpnProperties props = VpnProperties.getInstance();
-		boolean autoConnect = props.getBoolean(REG_AUTOCONNECT, false);
-		this.fAutoconnect.setSelected(autoConnect);
-
 	}
 
 	private boolean autoLoginIfActive() {
@@ -574,8 +524,6 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
 		if ((result.isPresent()) && (result.get() == ButtonType.YES)) {
 			Client.addVpnToAutoStart();
-			fAutoStart.setSelected(true);
-			fAutoconnect.setSelected(true);
 			fStoreLoginData.setSelected(true);
 		}
 	}
