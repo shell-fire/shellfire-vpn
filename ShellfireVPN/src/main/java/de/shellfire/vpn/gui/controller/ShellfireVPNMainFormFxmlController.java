@@ -344,7 +344,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		this.initConnection();
 		this.initVpn();
 
-		this.application.getStage().resizableProperty().setValue(Boolean.FALSE);
+		this.application.getStage().resizableProperty().setValue(Boolean.TRUE);
 		this.application.getStage().show();
 	}
 

@@ -42,6 +42,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 
@@ -52,6 +53,8 @@ import javafx.scene.web.WebView;
  */
 public class RegisterFormController extends AnchorPane implements Initializable {
 
+	@FXML
+	VBox vboxRegisterForm;
 	@FXML
 	private Button registerButton;
 	@FXML
@@ -137,7 +140,7 @@ public class RegisterFormController extends AnchorPane implements Initializable 
 						"I accept the <a onclick='return false;' target='_agb' href='https://www.shellfire.net/terms-and-conditions/'>Terms and Conditions</a> and have read and noted the <a onclick='return false;' target='_datenschutzerklaerung' href='https://www.shellfire.net/privacy-statement/'>Privacy Policy</a> and the <a onclick='return false;' target='_widerrufsrecht' href='https://www.shellfire.net/right-of-withdrawal/'>Right of Withdrawal</a>.")
 				+ "  </body>" + "</html>";
 		// webEngine.loadContent(webContent);
-		Browser b = new Browser(policyWebView, webContent);
+		Browser b = new Browser(policyWebView, webContent, vboxRegisterForm, this.application.getStage());
 		
 		HostServices hostServices = (HostServices) this.application.getStage().getProperties().get("hostServices");
 

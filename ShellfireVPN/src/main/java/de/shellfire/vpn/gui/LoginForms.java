@@ -168,7 +168,7 @@ public class LoginForms extends Application {
 			this.instance = (LoginController) replaceSceneContent("login.fxml");
 			this.instance.setApp(this);
 			this.stage.setTitle("Shellfire VPN");
-			stage.setResizable(false);
+			stage.setResizable(true);
 			log.debug("LoginForms: Login controller loaded");
 
 		} catch (Exception ex) {
@@ -240,8 +240,6 @@ public class LoginForms extends Application {
 			Scene scene = new Scene(page);
 			log.debug("replaceSceneContent() - stage.setScene() - start...");
 			scene.setFill(Color.TRANSPARENT);
-			//JMetro jMetro = new JMetro(Style.DARK);
-			//jMetro.setScene(scene);
 
 			stage.setScene(scene);
 
@@ -251,10 +249,6 @@ public class LoginForms extends Application {
 			page.getScene().setFill(Color.TRANSPARENT);
 
 			stage.setScene(page.getScene());
-			//JMetro jMetro = new JMetro(Style.DARK);
-			//jMetro.setScene(page.getScene());
-
-			 
 		}
 		log.debug("replaceSceneContent() - stage.centerOnScreen() - start...");
 		stage.centerOnScreen();

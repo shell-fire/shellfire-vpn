@@ -19,31 +19,39 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.web.WebView?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: rgb(240,240,240);" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.RegisterFormController">
+<AnchorPane style="-fx-background-color: rgb(240,240,240);" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.RegisterFormController">
    <children>
-      <VBox prefHeight="469.0" prefWidth="250.0">
+      <VBox fx:id="vboxRegisterForm">
          <children>
-            <Label fx:id="registerHeadingLabel" minHeight="16" minWidth="69" prefHeight="42.0" prefWidth="216.0" text="Registrierung">
-               <font>
-                  <Font size="24.0" />
-               </font>
-            </Label>
-            <Label fx:id="emailLabel" text="Email-Adresse:">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Label>
-            <TextField fx:id="emailTextField" prefWidth="230.0">
-               <VBox.margin>
-                  <Insets bottom="10.0" />
-               </VBox.margin>
-            </TextField>
+            <HBox VBox.vgrow="SOMETIMES">
+               <children>
+                  <Label fx:id="registerHeadingLabel" text="Registrierung" HBox.hgrow="ALWAYS">
+                     <font>
+                        <Font size="24.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox VBox.vgrow="SOMETIMES">
+               <children>
+                  <Label fx:id="emailLabel" text="Email-Adresse:" HBox.hgrow="ALWAYS">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+               </children>
+            </HBox>
+            <HBox>
+               <children>
+                  <TextField fx:id="emailTextField" HBox.hgrow="ALWAYS" />
+               </children>
+            </HBox>
             <Label fx:id="passwordLabel" text="Passwort:">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <PasswordField fx:id="passwordField" prefHeight="25.0" prefWidth="230.0">
+            <PasswordField fx:id="passwordField">
                <VBox.margin>
                   <Insets bottom="10.0" />
                </VBox.margin>
@@ -53,15 +61,18 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <PasswordField fx:id="confirmPasswordField" prefHeight="25.0" prefWidth="230.0">
+            <PasswordField fx:id="confirmPasswordField">
                <VBox.margin>
                   <Insets bottom="10.0" />
                </VBox.margin>
             </PasswordField>
-            <HBox prefWidth="200.0">
+            <HBox VBox.vgrow="ALWAYS">
                <children>
-                  <CheckBox fx:id="fAutoconnect1" mnemonicParsing="false" onAction="#handlefAutoconnect" prefHeight="34.0" prefWidth="20.0" text="&#10;&#10;" />
-                  <WebView fx:id="policyWebView" prefHeight="15.0" prefWidth="230.0" style="-fx-background-color: rgb(240,240,240);" />
+                  <CheckBox fx:id="fAutoconnect1" mnemonicParsing="false" onAction="#handlefAutoconnect" text="&#10;&#10;" />
+                  <WebView fx:id="policyWebView" maxWidth="-1.0" minHeight="20.0" minWidth="250.0" prefHeight="15.0" prefWidth="250.0" style="-fx-background-color: rgb(240,240,240);">
+                     <HBox.margin>
+                        <Insets left="-5.0" />
+                     </HBox.margin></WebView>
                </children>
                <VBox.margin>
                   <Insets bottom="10.0" />
@@ -75,7 +86,11 @@
                   <Insets bottom="10.0" />
                </VBox.margin>
             </CheckBox>
-            <Button fx:id="registerButton" mnemonicParsing="false" onAction="#handleRegisterButton" prefHeight="25.0" prefWidth="230.0" text="Jetzt Registrieren" />
+            <Button fx:id="registerButton" mnemonicParsing="false" onAction="#handleRegisterButton" text="Jetzt Registrieren" VBox.vgrow="ALWAYS" />
+            <HBox />
+            <HBox />
+            <HBox />
+            <HBox />
          </children>
          <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />

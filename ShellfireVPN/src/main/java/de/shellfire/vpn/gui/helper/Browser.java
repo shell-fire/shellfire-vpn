@@ -12,18 +12,24 @@ import javafx.geometry.Insets;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import javafx.stage.Stage;
 import netscape.javascript.JSException;
 
 public class Browser extends Region {
 
 	final WebView webview;
     final WebEngine webEngine;
+	private VBox vboxRegisterForm;
+	private Stage stage;
      
-    public Browser(WebView webview, String content ) {
+    public Browser(WebView webview, String content, VBox vboxRegisterForm, Stage stage ) {
     	this.webview = webview;
     	this.webEngine = webview.getEngine();
+    	this.vboxRegisterForm = vboxRegisterForm;
+    	this.stage = stage;
     	
     	webview.setPrefHeight(5);
     	
@@ -93,7 +99,8 @@ public class Browser extends Region {
 	private void adjustHeight() {
 		
 		Platform.runLater(new Runnable(){
-    		@Override                                
+
+			@Override                                
     		public void run() {
     			try {
     				//"document.getElementById('mydiv').offsetHeight"
@@ -101,10 +108,16 @@ public class Browser extends Region {
     						"document.getElementById('mydiv').offsetHeight");
     				if (result instanceof Integer) {
     					Integer i = (Integer) result;
-    					double height = new Double(i);
+    					Double height = new Double(i);
     					height = height + 20;
     					webview.setPrefHeight(height);
-    					System.out.println("height on state: " + height + " prefh: " + webview.getPrefHeight());
+    					
+    					Double windowHeight = height + 276;
+    					vboxRegisterForm.setPrefHeight(windowHeight);
+    					stage.sizeToScene();
+    					
+
+    					
     				}
     			} catch (JSException e) {
     				// not important
