@@ -135,10 +135,8 @@ public class RegisterFormController extends AnchorPane implements Initializable 
 		
 		// webEngine = policyWebView.getEngine();
 		
-		String webContent = "<html>" + "  <body style='background-color: rgb(240,240,240);font-family:System; font-size:14px'>"
-				+ i18n.tr(
-						"I accept the <a onclick='return false;' target='_agb' href='https://www.shellfire.net/terms-and-conditions/'>Terms and Conditions</a> and have read and noted the <a onclick='return false;' target='_datenschutzerklaerung' href='https://www.shellfire.net/privacy-statement/'>Privacy Policy</a> and the <a onclick='return false;' target='_widerrufsrecht' href='https://www.shellfire.net/right-of-withdrawal/'>Right of Withdrawal</a>.")
-				+ "  </body>" + "</html>";
+		String webContent = i18n.tr("I accept the <a onclick='return false;' target='_agb' href='https://www.shellfire.net/terms-and-conditions/'>Terms and Conditions</a> and have read and noted the <a onclick='return false;' target='_datenschutzerklaerung' href='https://www.shellfire.net/privacy-statement/'>Privacy Policy</a> and the <a onclick='return false;' target='_widerrufsrecht' href='https://www.shellfire.net/right-of-withdrawal/'>Right of Withdrawal</a>.");
+				
 		// webEngine.loadContent(webContent);
 		Browser b = new Browser(policyWebView, webContent, vboxRegisterForm, this.application.getStage());
 		
@@ -149,7 +147,6 @@ public class RegisterFormController extends AnchorPane implements Initializable 
 			if (event.getEventType() == HyperlinkEvent.EventType.ACTIVATED) {
 				hostServices.showDocument(event.getURL().toString());
 			}
-
 			return false;
 		};
 		WebViews.addHyperlinkListener(policyWebView, eventPrintingListener);

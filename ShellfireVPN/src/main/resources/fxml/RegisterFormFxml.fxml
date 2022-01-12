@@ -68,7 +68,10 @@
             </PasswordField>
             <HBox VBox.vgrow="ALWAYS">
                <children>
-                  <CheckBox fx:id="fAutoconnect1" mnemonicParsing="false" onAction="#handlefAutoconnect" text="&#10;&#10;" />
+                  <CheckBox fx:id="fAutoconnect1" mnemonicParsing="false" onAction="#handlefAutoconnect" prefHeight="20.0">
+                     <font>
+                        <Font size="14.0" />
+                     </font></CheckBox>
                   <WebView fx:id="policyWebView" maxWidth="-1.0" minHeight="20.0" minWidth="250.0" prefHeight="15.0" prefWidth="250.0" style="-fx-background-color: rgb(240,240,240);">
                      <HBox.margin>
                         <Insets left="-5.0" />
@@ -78,17 +81,21 @@
                   <Insets bottom="10.0" />
                </VBox.margin>
             </HBox>
-            <CheckBox fx:id="newsLetterCheckBox" mnemonicParsing="false" onAction="#handlefAutoconnect" selected="true" text="Ich abonniere den Newsletter">
-               <font>
-                  <Font size="14.0" />
-               </font>
-               <VBox.margin>
+            <HBox>
+               <children>
+                  <CheckBox fx:id="newsLetterCheckBox" mnemonicParsing="false" onAction="#handlefAutoconnect" prefHeight="20.0" selected="true" text="Ich abonniere den Newsletter">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </CheckBox>
+               </children>
+               <padding>
                   <Insets bottom="10.0" />
-               </VBox.margin>
-            </CheckBox>
-            <Button fx:id="registerButton" mnemonicParsing="false" onAction="#handleRegisterButton" text="Jetzt Registrieren" VBox.vgrow="ALWAYS" />
-            <HBox />
-            <HBox />
+               </padding></HBox>
+            <HBox VBox.vgrow="ALWAYS">
+               <children>
+                  <Button fx:id="registerButton" mnemonicParsing="false" onAction="#handleRegisterButton" prefHeight="25.0" prefWidth="266.0" text="Jetzt Registrieren" HBox.hgrow="ALWAYS" />
+               </children></HBox>
             <HBox />
             <HBox />
          </children>

@@ -9,8 +9,11 @@ import javafx.collections.ListChangeListener;
 import javafx.concurrent.Worker.State;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
+import javafx.geometry.Point2D;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
+import javafx.scene.control.ScrollBar;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
@@ -24,7 +27,10 @@ public class Browser extends Region {
     final WebEngine webEngine;
 	private VBox vboxRegisterForm;
 	private Stage stage;
-     
+	private Point2D pLimit;
+	private double width, height;
+
+	
     public Browser(WebView webview, String content, VBox vboxRegisterForm, Stage stage ) {
     	this.webview = webview;
     	this.webEngine = webview.getEngine();
@@ -67,7 +73,42 @@ public class Browser extends Region {
     		}
     	});
         
+        
+        // disable context menu (copy option)
+        webview.setContextMenuEnabled(false);
+
+        WebEventDispatcher webEventDispatcher = new WebEventDispatcher(webview.getEventDispatcher());
+        webEngine.getLoadWorker().stateProperty().addListener(new ChangeListener<State>() {
+
+            @Override
+            public void changed(ObservableValue<? extends State> observable, State oldValue, State newValue) {
+                if(newValue.equals(State.SUCCEEDED)){
+                    // dispatch all events
+                	webview.setEventDispatcher(webEventDispatcher);
+                }
+            }
+
+        });
+        
         setContent( content );
+        
+        webview.getChildrenUnmodifiable().addListener(new ListChangeListener<Node>() {
+
+            @Override
+            public void onChanged(Change<? extends Node> c) {
+                pLimit=webview.localToScene(webview.getWidth(),webview.getHeight());
+                webview.lookupAll(".scroll-bar").stream().map(s->(ScrollBar)s).forEach(s->{
+                            if(s.getOrientation().equals(Orientation.VERTICAL)){
+                                width=s.getBoundsInLocal().getWidth();
+                            }
+                            if(s.getOrientation().equals(Orientation.HORIZONTAL)){
+                                height=s.getBoundsInLocal().getHeight();
+                            }
+                        });
+                // dispatch all events
+                webEventDispatcher.setLimit(pLimit.subtract(width, height));
+            }
+        });
         
         // getChildren().add(webview);
     }
@@ -109,7 +150,7 @@ public class Browser extends Region {
     				if (result instanceof Integer) {
     					Integer i = (Integer) result;
     					Double height = new Double(i);
-    					height = height + 20;
+    					height = height;;
     					webview.setPrefHeight(height);
     					
     					Double windowHeight = height + 276;
@@ -128,7 +169,7 @@ public class Browser extends Region {
 	}
 	
 	private String getHtml(String content) {
-		return "<html><body>" +
+		return "<html><style type=\"text/css\">a { cursor:hand;  } </style><body style=\"margin-top:0;padding-top:0;cursor:default;background-color: rgb(240,240,240);color:#323232;font-family:System; font-size:14px\">" +
 				"<div id=\"mydiv\">" + content + "</div>" +
 				"</body></html>";
 	}
