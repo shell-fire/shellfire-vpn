@@ -2,6 +2,7 @@ package de.shellfire.vpn.gui.helper;
 
 import java.util.Set;
 
+import de.shellfire.vpn.gui.controller.RegisterFormController;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -26,16 +27,17 @@ public class Browser extends Region {
 	final WebView webview;
     final WebEngine webEngine;
 	private VBox vboxRegisterForm;
-	private Stage stage;
+
 	private Point2D pLimit;
 	private double width, height;
+	private RegisterFormController controller;
 
 	
-    public Browser(WebView webview, String content, VBox vboxRegisterForm, Stage stage ) {
+    public Browser(WebView webview, String content, VBox vboxRegisterForm, RegisterFormController controller) {
     	this.webview = webview;
     	this.webEngine = webview.getEngine();
     	this.vboxRegisterForm = vboxRegisterForm;
-    	this.stage = stage;
+    	this.controller = controller;
     	
     	webview.setPrefHeight(5);
     	
@@ -155,7 +157,7 @@ public class Browser extends Region {
     					
     					Double windowHeight = height + 276;
     					vboxRegisterForm.setPrefHeight(windowHeight);
-    					stage.sizeToScene();
+    					controller.getStage().sizeToScene();
     					
 
     					

@@ -10,7 +10,9 @@ import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
 
 import de.shellfire.vpn.Util;
+import de.shellfire.vpn.VpnProperties;
 import de.shellfire.vpn.client.ServiceToolsFX;
+import de.shellfire.vpn.gui.controller.AppScreenControllerSettings;
 import de.shellfire.vpn.gui.controller.LoginController;
 import de.shellfire.vpn.gui.controller.ProgressDialogController;
 import de.shellfire.vpn.gui.controller.RegisterFormController;
@@ -24,12 +26,14 @@ import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.paint.Color;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
@@ -178,10 +182,24 @@ public class LoginForms extends Application {
 	}
 
 	public void loadRegisterFormController() {
-		log.debug("In the RegisterForm controller");
+		log.debug("loadRegisterFormController() - start");
+		
+	    Stage stage = new Stage();
+	    Parent root;
 		try {
-			this.registerController = (RegisterFormController) replaceSceneContent("RegisterFormFxml.fxml");
-			this.registerController.setApp(this);
+			FXMLLoader loader = new FXMLLoader(AppScreenControllerSettings.class.getResource("/fxml/RegisterFormFxml.fxml"));
+			root = loader.load();
+			
+		    stage.setScene(new Scene(root));
+		    stage.initStyle(StageStyle.UTILITY);
+		    stage.initModality(Modality.WINDOW_MODAL);
+		    stage.initOwner(LoginForms.getStage().getScene().getWindow() );
+		    stage.setTitle(i18n.tr("Select VPN"));
+		    stage.setResizable(false);
+		    stage.show();
+			
+			this.registerController = (RegisterFormController) loader.getController();
+			this.registerController.setStage(stage);
 		} catch (Exception ex) {
 			log.error("could not load RegisterForm fxml\n" + ex.getMessage());
 		}
@@ -220,11 +238,18 @@ public class LoginForms extends Application {
 		log.debug("loadShellFireMainController - end()");
 	}
 
-
 	public static Initializable replaceSceneContent(String fxml) throws Exception {
+		return replaceSceneContent(fxml, false);
+	}
+	
+
+
+	
+	public static Initializable replaceSceneContent(String fxml, boolean dialogOnly) throws Exception {
 		log.debug("replaceSceneContent fxml=" + fxml + " - start");
 		loader = new FXMLLoader(LoginForms.class.getClassLoader().getResource("/fxml/" + fxml));
 		loader.setLocation(LoginForms.class.getResource("/fxml/" + fxml));
+
 		
 		log.debug("Location of loader is " + loader.getLocation());
 		AnchorPane page = null;
@@ -250,10 +275,13 @@ public class LoginForms extends Application {
 
 			stage.setScene(page.getScene());
 		}
+		
 		log.debug("replaceSceneContent() - stage.centerOnScreen() - start...");
 		stage.centerOnScreen();
 		log.debug("replaceSceneContent() - stage.sizeToScene() - start...");
 		stage.sizeToScene();
+		
+
 		
 		log.debug("replaceSceneContent fxml=" + fxml + " - returning");
 		return (Initializable) loader.getController();

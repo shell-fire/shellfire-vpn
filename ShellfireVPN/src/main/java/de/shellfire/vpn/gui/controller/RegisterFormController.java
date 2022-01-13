@@ -45,6 +45,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import javafx.stage.Stage;
+import javafx.stage.Window;
 
 /**
  * FXML Controller class
@@ -93,6 +95,7 @@ public class RegisterFormController extends AnchorPane implements Initializable 
 	WebViewHyperlinkListener eventPrintingListener;
 	private boolean isResend;
 	private WebEngine webEngine;
+	private Stage stage;
 
 	public RegisterFormController() {
 		System.out.println("*********No arg constructor was used");
@@ -138,7 +141,7 @@ public class RegisterFormController extends AnchorPane implements Initializable 
 		String webContent = i18n.tr("I accept the <a onclick='return false;' target='_agb' href='https://www.shellfire.net/terms-and-conditions/'>Terms and Conditions</a> and have read and noted the <a onclick='return false;' target='_datenschutzerklaerung' href='https://www.shellfire.net/privacy-statement/'>Privacy Policy</a> and the <a onclick='return false;' target='_widerrufsrecht' href='https://www.shellfire.net/right-of-withdrawal/'>Right of Withdrawal</a>.");
 				
 		// webEngine.loadContent(webContent);
-		Browser b = new Browser(policyWebView, webContent, vboxRegisterForm, this.application.getStage());
+		Browser b = new Browser(policyWebView, webContent, vboxRegisterForm, this);
 		
 		HostServices hostServices = (HostServices) this.application.getStage().getProperties().get("hostServices");
 
@@ -394,5 +397,14 @@ public class RegisterFormController extends AnchorPane implements Initializable 
 		}
 		this.isResend = false;
 		ProgressDialogRegisterController.getDialogStage().hide();
+	}
+
+	public void setStage(Stage stage) {
+		this.stage = stage;
+		
+	}
+
+	public Stage getStage() {
+		return this.stage;
 	}
 }
