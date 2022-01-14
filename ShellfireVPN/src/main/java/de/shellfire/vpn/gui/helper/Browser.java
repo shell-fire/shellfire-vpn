@@ -152,7 +152,7 @@ public class Browser extends Region {
     				if (result instanceof Integer) {
     					Integer i = (Integer) result;
     					Double height = new Double(i);
-    					height = height;;
+    					height = height + 10;
     					webview.setPrefHeight(height);
     					
     					Double windowHeight = height + 276;
@@ -171,7 +171,7 @@ public class Browser extends Region {
 	}
 	
 	private String getHtml(String content) {
-		return "<html><style type=\"text/css\">a { cursor:hand;  } </style><body style=\"margin-top:0;padding-top:0;cursor:default;background-color: rgb(240,240,240);color:#323232;font-family:System; font-size:14px\">" +
+		return "<html><style type=\"text/css\">a { cursor:hand;  } </style><body style=\"margin-top:0;padding-top:0;cursor:default;background-color: rgb(240,240,240);color:#323232;font-family:System; font-size:12px\">" +
 				"<div id=\"mydiv\">" + content + "</div>" +
 				"</body></html>";
 	}

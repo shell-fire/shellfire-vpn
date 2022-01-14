@@ -29,38 +29,32 @@
                      <font>
                         <Font size="24.0" />
                      </font>
+                     <HBox.margin>
+                        <Insets bottom="10.0" />
+                     </HBox.margin>
                   </Label>
                </children>
             </HBox>
             <HBox VBox.vgrow="SOMETIMES">
                <children>
-                  <Label fx:id="emailLabel" text="Email-Adresse:" HBox.hgrow="ALWAYS">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
+                  <Label fx:id="emailLabel" text="Email-Adresse:" HBox.hgrow="ALWAYS" />
                </children>
             </HBox>
             <HBox>
                <children>
-                  <TextField fx:id="emailTextField" HBox.hgrow="ALWAYS" />
+                  <TextField fx:id="emailTextField" HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets bottom="10.0" />
+                     </HBox.margin></TextField>
                </children>
             </HBox>
-            <Label fx:id="passwordLabel" text="Passwort:">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Label>
+            <Label fx:id="passwordLabel" text="Passwort:" />
             <PasswordField fx:id="passwordField">
                <VBox.margin>
                   <Insets bottom="10.0" />
                </VBox.margin>
             </PasswordField>
-            <Label fx:id="confirmPasswordLabel" text="Passwort-Check:">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Label>
+            <Label fx:id="confirmPasswordLabel" text="Passwort-Check:" />
             <PasswordField fx:id="confirmPasswordField">
                <VBox.margin>
                   <Insets bottom="10.0" />
@@ -68,10 +62,7 @@
             </PasswordField>
             <HBox VBox.vgrow="ALWAYS">
                <children>
-                  <CheckBox fx:id="fAutoconnect1" mnemonicParsing="false" onAction="#handlefAutoconnect" prefHeight="20.0">
-                     <font>
-                        <Font size="14.0" />
-                     </font></CheckBox>
+                  <CheckBox fx:id="fAutoconnect1" mnemonicParsing="false" onAction="#handlefAutoconnect" prefHeight="20.0" />
                   <WebView fx:id="policyWebView" maxWidth="-1.0" minHeight="20.0" minWidth="250.0" prefHeight="15.0" prefWidth="250.0" style="-fx-background-color: rgb(240,240,240);">
                      <HBox.margin>
                         <Insets left="-5.0" />
@@ -83,15 +74,11 @@
             </HBox>
             <HBox>
                <children>
-                  <CheckBox fx:id="newsLetterCheckBox" mnemonicParsing="false" onAction="#handlefAutoconnect" prefHeight="20.0" selected="true" text="Ich abonniere den Newsletter">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </CheckBox>
+                  <CheckBox fx:id="newsLetterCheckBox" mnemonicParsing="false" onAction="#handlefAutoconnect" prefHeight="20.0" selected="true" text="Ich abonniere den Newsletter" />
                </children>
-               <padding>
+               <VBox.margin>
                   <Insets bottom="10.0" />
-               </padding></HBox>
+               </VBox.margin></HBox>
             <HBox VBox.vgrow="ALWAYS">
                <children>
                   <Button fx:id="registerButton" mnemonicParsing="false" onAction="#handleRegisterButton" prefHeight="25.0" prefWidth="266.0" text="Jetzt Registrieren" HBox.hgrow="ALWAYS" />

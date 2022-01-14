@@ -376,8 +376,6 @@ public class RegisterFormController extends AnchorPane implements Initializable 
 
 		LoginForms.controllerInstance.setUsername(this.getUser());
 		LoginForms.controllerInstance.setPassword(this.getPassword());
-		
-
 	}
 
 	private void showRequestProgress() {
