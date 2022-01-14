@@ -51,7 +51,7 @@ public class LoginForms extends Application {
 	public RegisterFormController registerController;
 	public static VpnSelectDialogController vpnSelectController;
 	public static ShellfireVPNMainFormFxmlController shellfireVpnMainController = null;
-	public static LoginController instance;
+	public static LoginController controllerInstance;
 	private static final I18n i18n = VpnI18N.getI18n();
 	private boolean licenseAccepted;
 	private boolean startMinimized = false;
@@ -169,8 +169,8 @@ public class LoginForms extends Application {
 
 	public void loadLoginController() {
 		try {
-			this.instance = (LoginController) replaceSceneContent("login.fxml");
-			this.instance.setApp(this);
+			this.controllerInstance = (LoginController) replaceSceneContent("login.fxml");
+			this.controllerInstance.setApp(this);
 			this.stage.setTitle("Shellfire VPN");
 			stage.setResizable(false);
 			log.debug("LoginForms: Login controller loaded");
@@ -200,6 +200,7 @@ public class LoginForms extends Application {
 			
 			this.registerController = (RegisterFormController) loader.getController();
 			this.registerController.setStage(stage);
+			this.registerController.setApp(this);
 		} catch (Exception ex) {
 			log.error("could not load RegisterForm fxml\n" + ex.getMessage());
 		}
@@ -304,7 +305,7 @@ public class LoginForms extends Application {
 
 		log.debug("giving control to login");
 
-		instance.setApp(this);
+		controllerInstance.setApp(this);
 		log.debug("Preparing to display login menu");
 		LoginForms.initConnectionTest();
 		
@@ -391,7 +392,7 @@ public class LoginForms extends Application {
 		if (internetAvailable) {
 			log.debug("Before the service Environment Ensure");
 			initDialog.setDialogText(i18n.tr("Initializing ShellfireVPNService..."));
-			ServiceToolsFX.getInstanceForOS().ensureServiceEnvironmentFX(instance);
+			ServiceToolsFX.getInstanceForOS().ensureServiceEnvironmentFX(controllerInstance);
 			log.debug("After the service Environment Ensure");
 		} else {
 			log.debug("Connection not available");

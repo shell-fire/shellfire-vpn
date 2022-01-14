@@ -144,7 +144,7 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
 				            mapLoaded  = true;        
 				            log.debug("Map has now been loaded - will process changes from now on");
 				            setLocation();
-				            application.instance.loginProgressDialog.hide();
+				            application.controllerInstance.loginProgressDialog.hide();
 
 				        }
 				    }

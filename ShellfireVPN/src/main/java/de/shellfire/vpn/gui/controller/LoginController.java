@@ -562,7 +562,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 	public static void restart() {
 		if (Util.isWindows()) {
 
-			if (LoginForms.instance != null) {
+			if (LoginForms.controllerInstance != null) {
 
 				if (LoginForms.shellfireVpnMainController != null) {
 
@@ -576,7 +576,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
 				// TODO - investigage if commenting causes memory leaks
 				// LoginForms.instance.close();
-				LoginForms.instance = null;
+				LoginForms.controllerInstance = null;
 
 				List<String> restart = new ArrayList<String>();
 				restart.add("ShellfireVPN2.exe");

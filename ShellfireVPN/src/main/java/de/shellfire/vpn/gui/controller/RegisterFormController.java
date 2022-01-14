@@ -305,7 +305,7 @@ public class RegisterFormController extends AnchorPane implements Initializable 
 				activationToken = registrationResult.getData().getToken();
 			} else {
 				if (progressDialog != null) {
-					ProgressDialogRegisterController.getDialogStage().show();
+					ProgressDialogRegisterController.getDialogStage().hide();
 				}
 				Alert alert = new Alert(Alert.AlertType.ERROR);
 				alert.setHeaderText(i18n.tr("Error"));
@@ -360,20 +360,24 @@ public class RegisterFormController extends AnchorPane implements Initializable 
 	}
 
 	private void activationSuccesful() {
-		this.progressDialog.getDialogStage().show();
+		this.progressDialog.getDialogStage().hide();
 
+		this.application.getStage().setAlwaysOnTop(true);
+		this.application.getStage().setAlwaysOnTop(false);
+		this.application.getStage().toFront();
+		
 		Alert alert = new Alert(Alert.AlertType.INFORMATION,
 				i18n.tr("Your Shellfire account has been successfully activated. Please log in with your email address and password to start Shellfire VPN."),
 				ButtonType.OK);
 		alert.setHeaderText(i18n.tr("Registration successful."));
-		this.application.getStage().hide();
-		this.application.loadLoginController();
-		LoginForms.instance.setUsername(this.getUser());
-		LoginForms.instance.setPassword(this.getPassword());
-		this.application.getStage().show();
-		this.application.getStage().setAlwaysOnTop(true);
-		this.application.getStage().setAlwaysOnTop(false);
-		this.application.getStage().toFront();
+		alert.showAndWait();
+
+		this.stage.hide();
+
+		LoginForms.controllerInstance.setUsername(this.getUser());
+		LoginForms.controllerInstance.setPassword(this.getPassword());
+		
+
 	}
 
 	private void showRequestProgress() {
