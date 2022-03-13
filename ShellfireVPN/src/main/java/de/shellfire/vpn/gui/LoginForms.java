@@ -194,7 +194,7 @@ public class LoginForms extends Application {
 		    stage.initStyle(StageStyle.UTILITY);
 		    stage.initModality(Modality.WINDOW_MODAL);
 		    stage.initOwner(LoginForms.getStage().getScene().getWindow() );
-		    stage.setTitle(i18n.tr("Select VPN"));
+		    stage.setTitle(i18n.tr("Register new account"));
 		    stage.setResizable(false);
 		    stage.show();
 			

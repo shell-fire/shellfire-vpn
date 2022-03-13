@@ -96,7 +96,10 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
 			int oldVpnId = this.shellfireService.getVpn().getVpnId();
 			int newVpnId = selectedItem.getVpn().getVpnId();
 			
-			if (oldVpnId != newVpnId) {
+			if (oldVpnId == newVpnId) {
+				// close dialog without doing anything
+				this.closeStage(event);
+			} else {
 				boolean performChange = true;
 				boolean isConnected = CurrentConnectionState.getConnectionState() == ConnectionState.Connected;
 				if (isConnected) {

@@ -7,31 +7,55 @@
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="202.0" prefWidth="538.0" style="-fx-background-color: rgb(64,69,73);" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.ProgressDialogRegisterController">
-   <children>
-      <Pane fx:id="headerPanel1" maxWidth="1.7976931348623157E308" style="-fx-background-color: rgb(18,172,229);" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+<AnchorPane maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.ProgressDialogRegisterController">
          <children>
-            <ImageView fx:id="headerImageView1" fitHeight="60.0" fitWidth="385.0" layoutX="2.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../icons/sf_en.png" />
-               </image>
-            </ImageView>
-         </children>
-      </Pane>
-      <VBox fillWidth="false" layoutX="2.0" layoutY="60.0" maxWidth="1.7976931348623157E308" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0" AnchorPane.topAnchor="62.0">
+      <VBox style="-fx-background-color: rgb(240,240,240);">
          <children>
-            <AnchorPane layoutX="1.0" layoutY="70.0" maxWidth="1.7976931348623157E308" prefHeight="138.0" prefWidth="565.0" style="-fx-background-color: rgb(240,240,240);" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0">
+                  <Label fx:id="waitingLabel" maxWidth="1.7976931348623157E308" prefHeight="17.0" prefWidth="518.0" text="Waiting for account activation...">
+               <font>
+                  <Font size="24.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="10.0" />
+               </VBox.margin>
+            </Label>
+                  <Label fx:id="infoLabel" prefHeight="17.0" prefWidth="518.0" text="We have just sent you an email - please follow the instructions in it.">
+               <VBox.margin>
+                  <Insets bottom="10.0" />
+               </VBox.margin>
+            </Label>
+                  <ProgressBar fx:id="progressBar" maxWidth="1.7976931348623157E308" progress="0.0">
+               <VBox.margin>
+                  <Insets bottom="10.0" />
+               </VBox.margin>
+            </ProgressBar>
+            <Separator prefWidth="200.0" />
+                  <Label fx:id="noMailReceivedLabel" alignment="BASELINE_CENTER" maxWidth="1.7976931348623157E308" text="No email received?" VBox.vgrow="ALWAYS">
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <padding>
+                  <Insets top="10.0" />
+               </padding>
+            </Label>
+            <HBox VBox.vgrow="ALWAYS">
                <children>
-                  <Label fx:id="waitingLabel" layoutX="9.0" layoutY="7.0" maxWidth="1.7976931348623157E308" prefHeight="17.0" prefWidth="518.0" text="&lt;dynamic&gt;" AnchorPane.leftAnchor="9.0" />
-                  <ProgressBar fx:id="progressBar" layoutX="8.0" layoutY="55.0" maxWidth="1.7976931348623157E308" progress="0.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" />
-                  <VBox fx:id="contentPane" layoutX="159.0" layoutY="64.0" maxWidth="1.7976931348623157E308" minHeight="2.0" prefWidth="100.0" AnchorPane.rightAnchor="12.0" />
-                  <Label fx:id="infoLabel" layoutX="9.0" layoutY="24.0" prefHeight="17.0" prefWidth="518.0" text="Label" />
-                  <Label fx:id="noMailReceivedLabel" layoutX="9.0" layoutY="81.0" prefHeight="17.0" prefWidth="518.0" text="Label" />
-                  <Button fx:id="reRequestEmailButton" disable="true" layoutX="9.0" layoutY="102.0" mnemonicParsing="false" onAction="#onRequestNewEmailButtonAction" prefHeight="25.0" prefWidth="156.0" text="Request new email" />
-                  <Button fx:id="changeEmailAddressButton" disable="true" layoutX="364.0" layoutY="102.0" mnemonicParsing="false" onAction="#onChangeEmailAddressButtonAction" prefHeight="25.0" prefWidth="156.0" text="Change email address" />
+                        <Button fx:id="reRequestEmailButton" disable="true" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onRequestNewEmailButtonAction" text="Request new email" HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </HBox.margin>
+                  </Button>
+                        <Button fx:id="changeEmailAddressButton" disable="true" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onChangeEmailAddressButtonAction" text="Change email address" HBox.hgrow="ALWAYS">
+                     <HBox.margin>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </HBox.margin>
+                  </Button>
                </children>
-            </AnchorPane>
+            </HBox>
          </children>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
       </VBox>
-   </children>
+         </children>
 </AnchorPane>

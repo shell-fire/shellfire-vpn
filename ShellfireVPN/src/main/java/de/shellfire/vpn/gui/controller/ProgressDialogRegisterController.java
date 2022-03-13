@@ -29,6 +29,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.Window;
 
+// todo: load this class also as another modal dialog window...
 public class ProgressDialogRegisterController extends AnchorPane implements Initializable {
 
 	private static I18n i18n = VpnI18N.getI18n();
@@ -49,8 +50,6 @@ public class ProgressDialogRegisterController extends AnchorPane implements Init
 	@FXML 
 	private Button changeEmailAddressButton;
 	
-	@FXML
-	private Pane contentPane;
 	private RegisterFormController registerFormController;
 	private static final Logger log = Util.getLogger(ProgressDialogRegisterController.class.getCanonicalName());
 
@@ -117,7 +116,7 @@ public class ProgressDialogRegisterController extends AnchorPane implements Init
 	@FXML
 	private void onChangeEmailAddressButtonAction() {
 		Platform.runLater(() -> {
-			registerFormController.stopWaitForActivationAndHide();
+			registerFormController.stopWaitForActivationAndHideProgressDialog();
 			Alert alert = new Alert(Alert.AlertType.INFORMATION);
 			alert.setHeaderText(i18n.tr("Please enter a different email-address and try again."));
 			alert.showAndWait();
@@ -138,15 +137,36 @@ public class ProgressDialogRegisterController extends AnchorPane implements Init
 	 * @param registerFormController */
 	public static ProgressDialogRegisterController getInstance(Window owner, RegisterFormController registerFormController) throws IOException {
 		if (instance == null) {
+			// TODO: check handling of error messages.
+			// TODO: also refactor to have nice names (the fxml especially)
+			
+			
 			// Load the fxml file and create a new stage for the popup dialog.
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(LoginForms.class.getResource("/fxml/ProgressDialogRegister.fxml"));
 			AnchorPane page = (AnchorPane) loader.load();
+			Stage stage = new Stage();
+		    stage.setScene(new Scene(page));
+		    stage.initStyle(StageStyle.UTILITY);
+		    stage.initModality(Modality.WINDOW_MODAL);
+		    stage.initOwner(owner.getScene().getWindow());
+		    stage.setResizable(false);
+		    stage.setTitle(i18n.tr("Waiting for activation..."));
+		    stage.show();
+			
+		    stage.setOnCloseRequest(event -> {
+				Platform.runLater(() -> {
+					registerFormController.stopWaitForActivationAndHideProgressDialog();
+					Alert alert = new Alert(Alert.AlertType.INFORMATION);
+					alert.setHeaderText(i18n.tr("Registration aborted. Please try again with a different email-address."));
+					alert.showAndWait();
+				});
+		    });
+			
+			
 			instance = (ProgressDialogRegisterController) loader.getController();
 			instance.setRegisterForm(registerFormController);
-			instanceStage.initOwner(owner);
-			Scene scene = new Scene(page);
-			instanceStage.setScene(scene);
+
 			instance.getProgressBar().progressProperty().unbind();
 		
 			Platform.runLater(() -> {
@@ -169,5 +189,8 @@ public class ProgressDialogRegisterController extends AnchorPane implements Init
 		this.registerFormController = registerFormController;
 		
 	}
+
+
+	
 
 }

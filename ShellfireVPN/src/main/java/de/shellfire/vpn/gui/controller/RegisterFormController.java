@@ -380,11 +380,11 @@ public class RegisterFormController extends AnchorPane implements Initializable 
 
 	private void showRequestProgress() {
 		try {
-			this.progressDialog = ProgressDialogRegisterController.getInstance(LoginForms.getStage(), this);
+			this.progressDialog = ProgressDialogRegisterController.getInstance(this.stage, this);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		ProgressDialogRegisterController.getDialogStage().show();
+
 	}
 
 	public void requestEmailAgain() {
@@ -393,7 +393,7 @@ public class RegisterFormController extends AnchorPane implements Initializable 
 		
 	}
 
-	public void stopWaitForActivationAndHide() {
+	public void stopWaitForActivationAndHideProgressDialog() {
 		if (poller != null) {
 			poller.stopIt();
 		}
