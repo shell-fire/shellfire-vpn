@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
@@ -13,9 +16,89 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="premiumAnchorPane" prefHeight="521.0" prefWidth="811.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.AppScreenControllerPremium">
+<AnchorPane fx:id="premiumAnchorPane" prefHeight="640.0" prefWidth="420.0" style="-fx-background-color: #fafafa;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.AppScreenControllerPremium">
    <children>
-      <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="521.0" prefWidth="661.0" />
-      <Label text="Premium" />
+      <VBox fx:id="aboutItemContainerVBox" alignment="TOP_CENTER" layoutX="10.0" layoutY="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <Label fx:id="labelPremiumHeader" alignment="BASELINE_CENTER" contentDisplay="CENTER" prefWidth="380.0" text="Premium Info" textFill="#12ace5">
+               <font>
+                  <Font name="Arial" size="24.0" />
+               </font>
+               <VBox.margin>
+                  <Insets bottom="30.0" top="20.0" />
+               </VBox.margin>
+            </Label>
+            <Label fx:id="currentPlanLabel" alignment="BASELINE_CENTER" contentDisplay="CENTER" text="Current Plan" textAlignment="CENTER" textFill="#666666">
+               <font>
+                  <Font name="Arial Bold" size="14.0" />
+               </font>
+               <padding>
+                  <Insets bottom="20.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+            </Label>
+            <ImageView fx:id="selectedVpnTypeImage" fitHeight="25.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/crowns_1.png" />
+               </image>
+               <VBox.margin>
+                  <Insets bottom="10.0" />
+               </VBox.margin>
+            </ImageView>
+            <Label fx:id="actualPlanLabel" alignment="BASELINE_RIGHT" contentDisplay="RIGHT" text="Free" textAlignment="JUSTIFY" textFill="#4381f9">
+               <font>
+                  <Font name="Arial Bold" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="paymentInfoLabel" alignment="BASELINE_CENTER" contentDisplay="CENTER" text="Payment Info" textAlignment="CENTER" textFill="#666666">
+               <font>
+                  <Font name="Arial Bold" size="14.0" />
+               </font>
+               <padding>
+                  <Insets bottom="20.0" top="30.0" />
+               </padding>
+            </Label>
+            <Label fx:id="freeLabel" alignment="BASELINE_CENTER" contentDisplay="CENTER" text="Free Forever, no payment" textAlignment="CENTER" textFill="#666666">
+               <font>
+                  <Font name="Arial" size="14.0" />
+               </font>
+               <padding>
+                  <Insets bottom="20.0" />
+               </padding>
+            </Label>
+            <Button fx:id="premiumInfoButton" mnemonicParsing="false" onAction="#onClickPremiumInfoButton" text="Click here to check out our Premium offer">
+               <font>
+                  <Font name="Arial" size="12.0" />
+               </font>
+            </Button>
+            <HBox fx:id="paidUntilHBox" alignment="CENTER">
+               <children>
+                  <Label fx:id="paidUntilLabel" alignment="CENTER" contentDisplay="CENTER" text="Paid Until" textAlignment="CENTER" textFill="#666666">
+                     <font>
+                        <Font name="Arial Bold" size="14.0" />
+                     </font>
+                     <padding>
+                        <Insets right="2.0" />
+                     </padding>
+                  </Label>
+                  <Label fx:id="actualPaidUntilDateLabel" alignment="BASELINE_CENTER" contentDisplay="CENTER" text="20 March 2022" textAlignment="CENTER" textFill="#666666">
+                     <font>
+                        <Font name="Arial" size="14.0" />
+                     </font>
+                  </Label>
+               </children>
+               <padding>
+                  <Insets bottom="20.0" />
+               </padding>
+            </HBox>
+            <Button fx:id="manageAccountButton" mnemonicParsing="false" onAction="#onClickManageAccountButton" text="Click here to manage your account">
+               <font>
+                  <Font name="Arial" size="12.0" />
+               </font>
+            </Button>
+         </children>
+         <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+         </padding>
+      </VBox>
    </children>
 </AnchorPane>

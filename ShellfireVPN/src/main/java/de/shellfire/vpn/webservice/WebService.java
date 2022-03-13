@@ -63,6 +63,7 @@ public class WebService {
 	private ExceptionThrowingReturningRunnableImpl<Boolean> runnableSendLogToShellfire;
 	private List<WsHelpItem> helpItemList;
 	private List<WsHelpItem> aboutItemList;
+	private String urlManageAccount;
 
 	private WebService() {
 
@@ -658,6 +659,23 @@ public class WebService {
 
 		return urlPremiumInfo;
 	}
+
+	public String getUrlManageAccount() {
+		init();
+
+		if (urlManageAccount == null) {
+			urlManageAccount = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnableImpl<String>() {
+				public String run() throws Exception {
+					return shellfire.getUrlManageAccount();
+				}
+			}, 3, 100);
+		}
+
+		return urlManageAccount;
+	}
+	
+	
+	
 
 	public String getUrlPasswordLost() {
 		init();

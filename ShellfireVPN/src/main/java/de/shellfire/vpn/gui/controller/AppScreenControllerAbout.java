@@ -14,6 +14,7 @@ import de.shellfire.vpn.webservice.WebService;
 import de.shellfire.vpn.webservice.model.WsHelpItem;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
@@ -25,6 +26,8 @@ public class AppScreenControllerAbout implements Initializable, AppScreenControl
 	
 	@FXML
 	private VBox aboutItemContainerVBox;
+	@FXML
+	private Label labelAboutHeader;
 	private WebService webService;
 	private LoginForms application;
 
@@ -35,6 +38,8 @@ public class AppScreenControllerAbout implements Initializable, AppScreenControl
 	}
 
 	public void initComponents() {
+		
+		labelAboutHeader.setText(i18n.tr("About"));
 		
 		List<WsHelpItem> wsAboutItemList = webService.getAbout();
 		aboutItemList = new LinkedList<AboutItem>();

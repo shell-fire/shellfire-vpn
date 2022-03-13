@@ -179,7 +179,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	@FXML
 	private HashMap<AppScreen, ImageView> menuImageViewMap;
 	private HashMap<AppScreen, Label> menuLabelMap;
-	private HashMap<AppScreen, AppScreenController> menuControllerMap;
+
 	private boolean subViewControllersPrepared;
 	private int selectedServer;
 
@@ -263,19 +263,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		helpImageMap.put(MenuStatus.SELECTED, Util.getImageIconFX("/menu/help_selected.png"));
 		helpImageMap.put(MenuStatus.HOVER, Util.getImageIconFX("/menu/help_selected.png"));
 		menuImageStatusMap.put(AppScreen.HELP, helpImageMap);
-		
-		
-		menuControllerMap = new HashMap<AppScreen, AppScreenController>();
-		menuControllerMap.put(AppScreen.STATUS, appScreenControllerStatus);
-		menuControllerMap.put(AppScreen.SERVERLIST, appScreenControllerServerList);
-		menuControllerMap.put(AppScreen.PREMIUM, appScreenControllerPremium);
-		menuControllerMap.put(AppScreen.SETTINGS, appScreenControllerSettings);
-		menuControllerMap.put(AppScreen.ABOUT, appScreenControllerAbout);
-		menuControllerMap.put(AppScreen.HELP, appScreenControllerHelp);
-		
-		
-		
-		
 	}
 
 	public void initializeComponents() {
@@ -344,7 +331,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		this.initConnection();
 		this.initVpn();
 
-		this.application.getStage().resizableProperty().setValue(Boolean.TRUE);
+		this.application.getStage().resizableProperty().setValue(Boolean.FALSE);
 		this.application.getStage().show();
 	}
 
@@ -439,13 +426,12 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		}
 	}
 
-	// TODO: add highlighting of text / labels
-	// TODO: fix map
 	void showAppScreen(AppScreen pane) {
 		contentDetailsPane.getChildren().setAll(menuAppScreenMap.get(pane).getKey());
 		
-		if (this.menuControllerMap != null && this.menuControllerMap.get(pane) != null) {
-			this.menuControllerMap.get(pane).notifyThatNowVisible(connectionStatus);
+		AppScreenController fxController = (AppScreenController) menuAppScreenMap.get(pane).getValue();
+		if (fxController != null) {
+			fxController.notifyThatNowVisible(connectionStatus);			
 		}
 		currentAppScreen = pane;
 		

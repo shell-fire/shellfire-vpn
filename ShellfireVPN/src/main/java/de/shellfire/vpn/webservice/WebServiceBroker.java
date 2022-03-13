@@ -41,6 +41,7 @@ import de.shellfire.vpn.webservice.model.GetServerBackgroundImageFilenameRequest
 import de.shellfire.vpn.webservice.model.GetServerListRequest;
 import de.shellfire.vpn.webservice.model.GetTrayMessagesRequest;
 import de.shellfire.vpn.webservice.model.GetUrlHelpRequest;
+import de.shellfire.vpn.webservice.model.GetUrlManageAccountRequest;
 import de.shellfire.vpn.webservice.model.GetUrlPasswordLostRequest;
 import de.shellfire.vpn.webservice.model.GetUrlPremiumInfoRequest;
 import de.shellfire.vpn.webservice.model.GetUrlSuccesfulConnectRequest;
@@ -641,6 +642,31 @@ public class WebServiceBroker {
 		return url;
 	}
 
+	/**
+	 * return String the url of the webpage where premium infos can be found
+	 * 
+	 * @throws IOException
+	 * @throws ClientProtocolException
+	 * @throws VpnException
+	 */
+	public String getUrlManageAccount() throws ClientProtocolException, IOException, VpnException {
+		log.debug("getUrlManageAccount () - start");
+		GetUrlManageAccountRequest request = new GetUrlManageAccountRequest();
+
+		Type theType = new TypeToken<Response<UrlResponse>>() {
+		}.getType();
+		Response<UrlResponse> resp = new JsonHttpRequest<GetUrlManageAccountRequest, UrlResponse>().call(request, theType);
+		resp.validate();
+
+		String url = resp.getData().getUrl();
+
+		log.debug("getUrlManageAccount () - finished, returning {}", url);
+		return url;
+	}
+
+	
+	
+	
 	/**
 	 * return String the url of the webpage where lost passwords can be retrieved
 	 * 

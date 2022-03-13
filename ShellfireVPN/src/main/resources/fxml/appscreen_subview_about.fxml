@@ -22,7 +22,7 @@
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
          </padding>
          <children>
-            <Label alignment="BASELINE_CENTER" contentDisplay="CENTER" prefWidth="380.0" text="About" textFill="#12ace5">
+            <Label fx:id="labelAboutHeader" alignment="BASELINE_CENTER" contentDisplay="CENTER" prefWidth="380.0" text="About" textFill="#12ace5">
                <font>
                   <Font name="Arial" size="24.0" />
                </font>

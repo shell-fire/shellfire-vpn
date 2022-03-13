@@ -18,6 +18,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.net.UnknownHostException;
@@ -95,11 +96,7 @@ public class Util {
 	}
 
 	public static void openUrl(URI url) {
-		Desktop desktop = Desktop.getDesktop();
-		try {
-			desktop.browse(url);
-		} catch (IOException e) {
-		}
+		Browser.browse(url.toString());
 	}
 
 	public static void openUrl(URL url) {
@@ -991,4 +988,25 @@ public class Util {
 	private static I18n i18n = VpnI18N.getI18n();
 	private static String jvmDll;
 
+	static class Browser {
+	    public static void browse(String url) {
+
+	        if(Desktop.isDesktopSupported()){
+	            Desktop desktop = Desktop.getDesktop();
+	            try {
+	                desktop.browse(new URI(url));
+	            } catch (IOException | URISyntaxException e) {
+	                Util.handleException(e);
+	            }
+	        }else{
+	            Runtime runtime = Runtime.getRuntime();
+	            try {
+	            	runtime.exec("rundll32 url.dll,FileProtocolHandler " + url);
+	            } catch (IOException e) {
+	            	Util.handleException(e);
+	            }
+	        }
+	    }
+	}
+	
 }

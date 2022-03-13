@@ -58,6 +58,7 @@ import de.shellfire.vpn.webservice.model.GetServerBackgroundImageFilenameRequest
 import de.shellfire.vpn.webservice.model.GetServerListRequest;
 import de.shellfire.vpn.webservice.model.GetTrayMessagesRequest;
 import de.shellfire.vpn.webservice.model.GetUrlHelpRequest;
+import de.shellfire.vpn.webservice.model.GetUrlManageAccountRequest;
 import de.shellfire.vpn.webservice.model.GetUrlPasswordLostRequest;
 import de.shellfire.vpn.webservice.model.GetUrlPremiumInfoRequest;
 import de.shellfire.vpn.webservice.model.GetUrlSuccesfulConnectRequest;
@@ -108,6 +109,7 @@ class JsonHttpRequest<RequestType, ResponseType> {
 		tempMap.put(GetUrlSuccesfulConnectRequest.class, "getUrlSuccesfulConnect");
 		tempMap.put(GetUrlHelpRequest.class, "getUrlHelp");
 		tempMap.put(GetUrlPremiumInfoRequest.class, "getUrlPremiumInfo");
+		tempMap.put(GetUrlManageAccountRequest.class, "getUrlManageAccount");
 		tempMap.put(GetUrlPasswordLostRequest.class, "getUrlPasswordLost");
 		tempMap.put(SendLogToShellfireRequest.class, "sendLog");
 		tempMap.put(GetWebServiceEndPointList.class, "getWebServiceAliasList");
