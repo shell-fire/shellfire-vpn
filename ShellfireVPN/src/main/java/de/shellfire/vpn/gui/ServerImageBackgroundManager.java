@@ -122,7 +122,6 @@ public class ServerImageBackgroundManager {
 			log.error("error while loading from in-jar", image.getException());
 		}
 		
-		
 		return image;
 	}
 

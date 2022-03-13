@@ -10,6 +10,7 @@ call c:\cygwin\bin\bash.exe -li /bin/msgfmt.sh
 rem echo create some folders
 rmdir %folder% /S /Q
 mkdir %folder%
+mkdir %folder%\servers
 
 echo make fat jars
 call ant\bin\ant.bat -buildfile makeService.ant
@@ -34,6 +35,7 @@ rem NOT: xcopy tools %folder%\tools\ /S /E
 xcopy InstallServiceTemplate.txt %folder%\
 xcopy UninstallServiceTemplate.txt %folder%\
 xcopy shellfire.keystore %folder%\
+xcopy servers %folder%\servers\
 
 echo creating installer...
 "c:\Program Files (x86)\NSIS\makensis.exe" /DVERSION=%version% nsis/sfvpn2.nsi 
