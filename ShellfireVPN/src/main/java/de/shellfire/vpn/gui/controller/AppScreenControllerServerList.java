@@ -383,7 +383,7 @@ public class AppScreenControllerServerList implements Initializable, AppScreenCo
 						Alert alert = new Alert(Alert.AlertType.ERROR, i18n.tr("Select a different VPN?"), ButtonType.YES, ButtonType.NO);
 						alert.initStyle(StageStyle.UTILITY);
 						alert.setTitle(i18n.tr("Error: You're not allowed to use this server."));
-						alert.setHeaderText(i18n.tr("Current VPN has type %s\r\nYou selected a server of type:%s\r\nThis is not possible with your current VPN. Please go to settings and select a VPN with higher classification."));
+						alert.setHeaderText(String.format(i18n.tr("Current VPN has type: %s\r\nYou selected a server of type: %s\r\nThis is not possible with your current VPN. Please go to settings and select a VPN with higher classification."), selectedVpnServerType.name(), clickedServerType.name()));
 						Optional<ButtonType> result = alert.showAndWait();
 						boolean doOpenVpnSelectDialog = ((result.isPresent()) && (result.get() == ButtonType.YES));
 						
@@ -396,7 +396,7 @@ public class AppScreenControllerServerList implements Initializable, AppScreenCo
 						Alert alert = new Alert(Alert.AlertType.ERROR, i18n.tr("Show Details about Shellfire VPN Premium?"), ButtonType.YES, ButtonType.NO);
 						alert.initStyle(StageStyle.UTILITY);
 						alert.setTitle(i18n.tr("Error: You're not allowed to use this server."));
-						alert.setHeaderText(i18n.tr("Current VPN has type %s\r\nYou selected a server of type:%s\r\nThis is not possible with your current VPN. Please go to settings and select a VPN with higher classification."));
+						alert.setHeaderText(String.format(i18n.tr("Current VPN has type: %s\r\nYou selected a server of type: %s\r\nThis is not possible with your current VPN. Would you like to get information about our Premium offer?"), selectedVpnServerType.name(), clickedServerType.name()));
 						Optional<ButtonType> result = alert.showAndWait();
 						boolean showPremiumInfo = ((result.isPresent()) && (result.get() == ButtonType.YES));
 						
