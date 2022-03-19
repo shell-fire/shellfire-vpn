@@ -19,7 +19,7 @@
    <children>
       <VBox fx:id="aboutItemContainerVBox" alignment="TOP_CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <padding>
-            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            <Insets left="20.0" right="20.0" top="20.0" />
          </padding>
          <children>
             <Label fx:id="labelAboutHeader" alignment="BASELINE_CENTER" contentDisplay="CENTER" prefWidth="380.0" text="About" textFill="#12ace5">
@@ -27,7 +27,7 @@
                   <Font name="Arial" size="24.0" />
                </font>
                <VBox.margin>
-                  <Insets bottom="30.0" top="20.0" />
+                  <Insets top="20.0" />
                </VBox.margin>
             </Label>
          </children>

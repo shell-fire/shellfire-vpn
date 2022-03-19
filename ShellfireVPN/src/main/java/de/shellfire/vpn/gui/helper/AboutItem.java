@@ -2,10 +2,7 @@ package de.shellfire.vpn.gui.helper;
 
 import java.io.IOException;
 
-import javax.swing.event.HyperlinkEvent;
-
 import org.codefx.libfx.control.webview.WebViewHyperlinkListener;
-import org.codefx.libfx.control.webview.WebViews;
 import org.slf4j.Logger;
 
 import de.shellfire.vpn.Util;
@@ -15,9 +12,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 
-public class AboutItem extends Pane {
+public class AboutItem extends VBox {
 	
 	private static final Logger log = Util.getLogger(HelpItem.class.getCanonicalName());
 	private static Image helpArrowImageHidden = Util.getImageIconFX("/icons/arrow_down.png");
