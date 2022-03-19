@@ -28,7 +28,7 @@
          <children>
             <VBox alignment="TOP_CENTER">
                <children>
-                  <Label alignment="BASELINE_CENTER" contentDisplay="CENTER" text="Settings" textAlignment="CENTER" textFill="#12ace5">
+                  <Label fx:id="headerLabel" alignment="BASELINE_CENTER" contentDisplay="CENTER" text="Settings" textAlignment="CENTER" textFill="#12ace5">
                      <font>
                         <Font name="Arial" size="24.0" />
                      </font>
@@ -78,7 +78,7 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                   </RadioButton>
-                  <Label alignment="BASELINE_CENTER" contentDisplay="CENTER" text="Triggers" textAlignment="CENTER" textFill="#666666">
+                  <Label fx:id="triggerLabel" alignment="BASELINE_CENTER" contentDisplay="CENTER" text="Triggers" textAlignment="CENTER" textFill="#666666">
                      <font>
                         <Font name="Arial Bold" size="14.0" />
                      </font>
@@ -135,7 +135,7 @@
                         <Font name="Arial" size="12.0" />
                      </font>
                   </Button>
-                  <Label alignment="BASELINE_CENTER" contentDisplay="CENTER" text="Account" textAlignment="CENTER" textFill="#666666">
+                  <Label fx:id="accountLabel" alignment="BASELINE_CENTER" contentDisplay="CENTER" text="Account" textAlignment="CENTER" textFill="#666666">
                      <font>
                         <Font name="Arial Bold" size="14.0" />
                      </font>
@@ -168,7 +168,7 @@
                               <Insets right="10.0" />
                            </padding>
                         </Label>
-                        <Label alignment="BASELINE_LEFT" contentDisplay="CENTER" prefHeight="15.0" prefWidth="50.0" text="User" textFill="#666666" GridPane.rowIndex="1">
+                        <Label fx:id="userLabel" alignment="BASELINE_LEFT" contentDisplay="CENTER" prefHeight="15.0" prefWidth="50.0" text="User" textFill="#666666" GridPane.rowIndex="1">
                            <font>
                               <Font name="Arial Bold" size="12.0" />
                            </font>

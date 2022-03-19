@@ -44,7 +44,7 @@
                   </TableView>
             <HBox style="-fx-background-color: #fdfdfd;">
                <children>
-                  <Label text="Filter" textFill="#666666" HBox.hgrow="ALWAYS">
+                  <Label fx:id="filterLabel" text="Filter" textFill="#666666" HBox.hgrow="ALWAYS">
                      <padding>
                         <Insets left="10.0" top="7.0" />
                      </padding>

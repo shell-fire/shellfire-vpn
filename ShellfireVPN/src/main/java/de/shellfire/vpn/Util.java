@@ -60,6 +60,7 @@ public class Util {
 	private static final String SHELLFIRE_VPN = "shellfire-vpn" + File.separator;
 	private static IVpnRegistry registry;
 	public static String GOOGLE_DE = null;
+	
 	private static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 	static String isoToday = sdf.format(new Date());
 	static SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");

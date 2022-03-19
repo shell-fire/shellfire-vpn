@@ -17,6 +17,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
@@ -217,6 +218,17 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		menuImageViewMap.put(AppScreen.SETTINGS, menuImageSettings);
 		menuImageViewMap.put(AppScreen.ABOUT, menuImageAbout);
 		menuImageViewMap.put(AppScreen.HELP, menuImageHelp);
+		
+		menuLabelStatus.setText(i18n.tr("Status"));
+		menuLabelServerList.setText(i18n.tr("All Servers"));
+		menuLabelPremium.setText(i18n.tr("Premium"));
+		menuLabelSettings.setText(i18n.tr("Settings"));
+		if (i18n.getLocale().equals(Locale.GERMAN)) {
+			menuLabelSettings.setStyle("-fx-font-size:11;-fx-font-weight:bold");
+		}
+		menuLabelAbout.setText(i18n.tr("About"));
+		menuLabelHelp.setText(i18n.tr("Help"));
+		
 		
 		menuLabelMap = new HashMap<AppScreen, Label>();
 		menuLabelMap.put(AppScreen.STATUS, menuLabelStatus);

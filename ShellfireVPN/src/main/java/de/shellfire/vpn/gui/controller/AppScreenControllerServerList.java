@@ -41,6 +41,7 @@ import javafx.geometry.NodeOrientation;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ContentDisplay;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
@@ -83,6 +84,8 @@ public class AppScreenControllerServerList implements Initializable, AppScreenCo
 	private TableColumn<ServerRow, Server> speedColumn;
 	@FXML
 	private TextField searchField;
+	@FXML
+	private Label filterLabel;
 	@FXML
 	private ImageView filterCrown_1;
 	@FXML
@@ -197,6 +200,7 @@ public class AppScreenControllerServerList implements Initializable, AppScreenCo
 				}
 			};
 		});
+		filterLabel.setText(i18n.tr("Filter"));
 		
 		nameColumn.setCellValueFactory(cellData -> cellData.getValue().countryProperty());
 		nameColumn.setStyle( "-fx-alignment: CENTER;");
@@ -265,6 +269,7 @@ public class AppScreenControllerServerList implements Initializable, AppScreenCo
 
 		filteredDataByText = new FilteredList<>(serverListData, p -> true);
 
+		searchField.setPromptText(i18n.tr("Type to filter..."));
 		searchField.textProperty().addListener((observable, oldValue, newValue) -> {
 			filteredDataByText.setPredicate(server -> {
 				// If filter text is empty, display all servers.

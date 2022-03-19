@@ -73,6 +73,20 @@ public class AppScreenControllerSettings implements Initializable, AppScreenCont
 	private Label selectedVpnId;
 	@FXML
 	private Label loggedInUser;
+	
+	
+	@FXML
+	private Label headerLabel;
+	@FXML
+	private Label connectionTypeLabel;
+	@FXML
+	private Label triggerLabel;
+	@FXML
+	private Label accountLabel;
+	@FXML
+	private Label userLabel;
+	
+	
 	@FXML
 	private ImageView selectedVpnType;
 	@FXML
@@ -88,6 +102,10 @@ public class AppScreenControllerSettings implements Initializable, AppScreenCont
 	@FXML
 	private Button showLogButton;
 	@FXML
+	private Button selectVpnButton;
+	@FXML
+	private Button logoutButton;
+	@FXML
 	private ToggleGroup networkTypeToggleGroup;
 	
 	private Language currentLanguage;
@@ -98,6 +116,7 @@ public class AppScreenControllerSettings implements Initializable, AppScreenCont
 	private static final Logger log = Util.getLogger(AppScreenControllerSettings.class.getCanonicalName());
 	private ShellfireVPNMainFormFxmlController mainFormController;
 	private Image buttonDisconnect = new Image("/buttons/button-disconnect-" + VpnI18N.getLanguage().getKey() + ".gif");
+	private boolean languagesInitialized = false;
 
 
 	public AppScreenControllerSettings() throws IOException  {
@@ -165,12 +184,21 @@ public class AppScreenControllerSettings implements Initializable, AppScreenCont
 		this.TCPRadioButton.setText(i18n.tr("OpenVPN TCP (works with secure firewalls and proxies.)"));
 		this.UDPRadioButton.setText(i18n.tr("OpenVPN UDP (fast)"));
 		this.WireguardRadioButton.setText(i18n.tr("Wireguard (fastest)"));
-		this.startOnBoot.setText(i18n.tr("Windows has started"));
-		this.showStatusSite.setText(i18n.tr("VPN connected"));
+		this.startOnBoot.setText(i18n.tr("Start on boot"));
+		this.showStatusSite.setText(i18n.tr("Once connected, verify status in browser"));
 		this.languageLabel.setText(i18n.tr("Language"));
-		this.connectAutomatically.setText(i18n.tr("Shellfire VPN has started"));
+		this.connectAutomatically.setText(i18n.tr("Connect automatically"));
 		this.languageComboBox.setEditable(false);
 	
+		headerLabel.setText(i18n.tr("Settings"));
+		connectionTypeLabel.setText(i18n.tr("Connection Type"));
+		triggerLabel.setText(i18n.tr("Triggers"));
+		accountLabel.setText(i18n.tr("Account"));
+		userLabel.setText(i18n.tr("User"));
+		selectVpnButton.setText(i18n.tr("Change VPN"));
+		logoutButton.setText(i18n.tr("Logout"));
+		
+		
 		initValues();
 	}
 
@@ -332,6 +360,7 @@ public class AppScreenControllerSettings implements Initializable, AppScreenCont
 	private void initValues() {
 		VpnProperties props = VpnProperties.getInstance();
 
+		// TODO: autoConnect aktuell ohne funktion
 		boolean autoConnect = props.getBoolean(LoginController.REG_AUTOCONNECT, false);
 		this.connectAutomatically.setSelected(autoConnect);
 
@@ -345,6 +374,10 @@ public class AppScreenControllerSettings implements Initializable, AppScreenCont
 	}
 
 	private void initLanguages() {
+		if (this.languagesInitialized) {
+			return;
+		}
+		
 		log.debug("initLanguages - method called");
 		LinkedList<Language> languages = VpnI18N.getAvailableTranslations();
 		this.languageComboBox.getItems().addAll(languages);
@@ -368,6 +401,8 @@ public class AppScreenControllerSettings implements Initializable, AppScreenCont
 			}
 		});
 		languageComboBox.setValue(currentLanguage);
+		
+		this.languagesInitialized  = true;
 	}
 
 	private void save() {

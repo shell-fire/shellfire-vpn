@@ -21,6 +21,7 @@ import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509KeyManager;
 import javax.net.ssl.X509TrustManager;
 
+import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.config.RequestConfig;
@@ -205,7 +206,15 @@ class JsonHttpRequest<RequestType, ResponseType> {
 			logParams = params.substring(0, Math.min(400, params.length()));
 		}
 		log.debug("Body of http post: {}", logParams);
-
+		Header[] authTokenHeaders = request.getHeaders("x-authorization-token");
+		if (authTokenHeaders != null && authTokenHeaders.length > 0) {
+			for (Header currentHeader: authTokenHeaders) {
+				log.debug("http header x-authorization-token: {}", currentHeader.getValue());				
+			}
+		} else {
+			log.debug("request sent without x-authorization-token header");
+		}
+		
 		StringEntity body = null;
 		body = new StringEntity(params);
 		request.setEntity(body);

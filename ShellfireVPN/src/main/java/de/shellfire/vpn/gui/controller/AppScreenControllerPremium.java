@@ -1,6 +1,7 @@
 package de.shellfire.vpn.gui.controller;
 
 import java.net.URL;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ResourceBundle;
 
@@ -104,7 +105,7 @@ public class AppScreenControllerPremium implements Initializable, AppScreenContr
 			paidUntilHBox.setManaged(true);
 			manageAccountButton.setManaged(true);
 			
-			SimpleDateFormat df = new SimpleDateFormat("d MMM yyyy", VpnI18N.getLanguage().getLocale());
+			DateFormat df = DateFormat.getDateInstance(DateFormat.LONG, i18n.getLocale());
 			String paidUntil = df.format(vpn.getPremiumUntil());
 			actualPaidUntilDateLabel.setText(paidUntil);
 			
