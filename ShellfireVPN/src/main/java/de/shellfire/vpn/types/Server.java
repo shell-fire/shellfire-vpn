@@ -5,17 +5,19 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
+import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
 
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.client.Controller;
+import de.shellfire.vpn.gui.controller.AppScreenControllerServerList;
 import de.shellfire.vpn.gui.model.ServerRow;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.webservice.model.VpnStar;
 import de.shellfire.vpn.webservice.model.WsServer;
 
 public class Server implements LocatableIcon {
-
+	private static final Logger log = Util.getLogger(Server.class.getCanonicalName());
 	private int serverId;
 	private Country country;
 	private String city;
@@ -191,6 +193,7 @@ public class Server implements LocatableIcon {
 	}
 	
 	public boolean matchesFilter(boolean includeFree, boolean includePremium, boolean includePremiumPlus) {
+		
 		if (!includeFree && !includePremium && !includePremiumPlus) {
 			return true;	
 		}
