@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-19 06:28+0100\n"
-"PO-Revision-Date: 2022-03-19 06:28+0100\n"
+"POT-Creation-Date: 2022-03-19 07:02+0100\n"
+"PO-Revision-Date: 2022-03-19 07:03+0100\n"
 "Last-Translator: Florian Gattung <fgattung@gmail.com>\n"
 "Language-Team: \n"
 "Language: en_DE\n"
@@ -174,8 +174,8 @@ msgid "Show Log Window"
 msgstr "Log-Fenster anzeigen"
 
 #: main/java/de/shellfire/vpn/gui/controller/AppScreenControllerSettings.java:184
-msgid "OpenVPN TCP (works with secure firewalls and proxies.)"
-msgstr "OpenVPN TCP (funktioniert mit firewalls und proxies.)"
+msgid "OpenVPN TCP (works best with firewalls and proxies)"
+msgstr "OpenVPN TCP (funktioniert am Besten mit Firewalls und Proxies.)"
 
 #: main/java/de/shellfire/vpn/gui/controller/AppScreenControllerSettings.java:185
 msgid "OpenVPN UDP (fast)"
@@ -190,7 +190,7 @@ msgid "Start on boot"
 msgstr "Beim Hochfahren starten"
 
 #: main/java/de/shellfire/vpn/gui/controller/AppScreenControllerSettings.java:188
-msgid "Once connected, verify status in browser"
+msgid "Once connected, show status in browser"
 msgstr "Sobald verbunden, zeige Verbindungsstatus im Browser"
 
 #: main/java/de/shellfire/vpn/gui/controller/AppScreenControllerSettings.java:189
@@ -211,8 +211,8 @@ msgid "Connection Type"
 msgstr "Verbindungstyp"
 
 #: main/java/de/shellfire/vpn/gui/controller/AppScreenControllerSettings.java:195
-msgid "Triggers"
-msgstr "Auslöser"
+msgid "Automation"
+msgstr "Automatisierung"
 
 #: main/java/de/shellfire/vpn/gui/controller/AppScreenControllerSettings.java:196
 msgid "Account"
@@ -736,27 +736,27 @@ msgstr ""
 msgid "An account is already registered for this email address."
 msgstr "Ein Account mit dieser Email-Adresse existiert bereits."
 
-#: main/java/de/shellfire/vpn/types/Server.java:107
+#: main/java/de/shellfire/vpn/types/Server.java:109
 msgid "unlimited kbit/sec"
 msgstr "unlimitierte kbit/sec"
 
-#: main/java/de/shellfire/vpn/types/Server.java:109
+#: main/java/de/shellfire/vpn/types/Server.java:111
 msgid "up to 10,000 kbit/sec"
 msgstr "bis 10.000 kbit/sec"
 
-#: main/java/de/shellfire/vpn/types/Server.java:112
+#: main/java/de/shellfire/vpn/types/Server.java:114
 msgid "up to 768 kbit/sec"
 msgstr "bis 768 kbit/sec"
 
-#: main/java/de/shellfire/vpn/types/Server.java:167
+#: main/java/de/shellfire/vpn/types/Server.java:169
 msgid "256 bit"
 msgstr "256 bit"
 
-#: main/java/de/shellfire/vpn/types/Server.java:169
+#: main/java/de/shellfire/vpn/types/Server.java:171
 msgid "192 bit"
 msgstr "192 bit"
 
-#: main/java/de/shellfire/vpn/types/Server.java:172
+#: main/java/de/shellfire/vpn/types/Server.java:174
 msgid "128 bit"
 msgstr "128 bit"
 
@@ -822,6 +822,21 @@ msgstr "VPN-Daten konnten nicht geladen werden."
 #: main/java/de/shellfire/vpn/webservice/WebService.java:404
 msgid "unknown"
 msgstr "unbekannt"
+
+#~ msgid "Triggers"
+#~ msgstr "Auslöser"
+
+#~ msgid "Once connected, verify status in browser"
+#~ msgstr "Sobald verbunden, zeige Verbindungsstatus im Browser"
+
+#~ msgid "OpenVPN TCP (works better with firewalls and proxies)"
+#~ msgstr "OpenVPN TCP (funktioniert mit firewalls und proxies)"
+
+#~ msgid "OpenVPN TCP (works with secure firewalls and proxies)"
+#~ msgstr "OpenVPN TCP (funktioniert mit firewalls und proxies)"
+
+#~ msgid "OpenVPN TCP (works with secure firewalls and proxies.)"
+#~ msgstr "OpenVPN TCP (funktioniert mit firewalls und proxies.)"
 
 #~ msgid "Windows has started"
 #~ msgstr "Windows wurde gestartet"

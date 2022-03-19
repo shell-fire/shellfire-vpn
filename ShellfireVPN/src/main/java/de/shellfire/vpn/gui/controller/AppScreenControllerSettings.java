@@ -181,18 +181,18 @@ public class AppScreenControllerSettings implements Initializable, AppScreenCont
 	public void initialize(URL url, ResourceBundle rb) {
 		currentLanguage = VpnI18N.getLanguage();
 		this.showLogButton.setText(i18n.tr("Show Log Window"));
-		this.TCPRadioButton.setText(i18n.tr("OpenVPN TCP (works with secure firewalls and proxies.)"));
+		this.TCPRadioButton.setText(i18n.tr("OpenVPN TCP (works best with firewalls and proxies)"));
 		this.UDPRadioButton.setText(i18n.tr("OpenVPN UDP (fast)"));
 		this.WireguardRadioButton.setText(i18n.tr("Wireguard (fastest)"));
 		this.startOnBoot.setText(i18n.tr("Start on boot"));
-		this.showStatusSite.setText(i18n.tr("Once connected, verify status in browser"));
+		this.showStatusSite.setText(i18n.tr("Once connected, show status in browser"));
 		this.languageLabel.setText(i18n.tr("Language"));
 		this.connectAutomatically.setText(i18n.tr("Connect automatically"));
 		this.languageComboBox.setEditable(false);
 	
 		headerLabel.setText(i18n.tr("Settings"));
 		connectionTypeLabel.setText(i18n.tr("Connection Type"));
-		triggerLabel.setText(i18n.tr("Triggers"));
+		triggerLabel.setText(i18n.tr("Automation"));
 		accountLabel.setText(i18n.tr("Account"));
 		userLabel.setText(i18n.tr("User"));
 		selectVpnButton.setText(i18n.tr("Change VPN"));
