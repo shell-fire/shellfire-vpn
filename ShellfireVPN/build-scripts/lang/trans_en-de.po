@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-13 21:32+0100\n"
-"PO-Revision-Date: 2022-03-13 21:32+0100\n"
+"POT-Creation-Date: 2022-03-19 06:28+0100\n"
+"PO-Revision-Date: 2022-03-19 06:28+0100\n"
 "Last-Translator: Florian Gattung <fgattung@gmail.com>\n"
 "Language-Team: \n"
 "Language: en_DE\n"
@@ -87,6 +87,12 @@ msgstr "Keine Internet-Verbindung verfügbar - ShellfireVPN wird beendet."
 #: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:229
 msgid "About"
 msgstr "Über"
+
+#: main/java/de/shellfire/vpn/gui/controller/AppScreenControllerHelp.java:39
+#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:230
+#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:1012
+msgid "Help"
+msgstr "Hilfe"
 
 #: main/java/de/shellfire/vpn/gui/controller/AppScreenControllerPremium.java:70
 msgid "Premium Infos"
@@ -241,7 +247,7 @@ msgstr "Du bist derzeit verbunden. Verbindung trennen und ausloggen?"
 msgid "Are you sure you want to logout?"
 msgstr "Bist du sicher, dass du dich ausloggen möchtest?"
 
-#: main/java/de/shellfire/vpn/gui/controller/AppScreenControllerSettings.java:426
+#: main/java/de/shellfire/vpn/gui/controller/AppScreenControllerSettings.java:427
 msgid ""
 "Changed language settings require a restart of ShellfireVPN to take effect. "
 "Restart now?"
@@ -249,7 +255,7 @@ msgstr ""
 "Geänderte Spracheinstellungen machen einen Neustart von ShellfireVPN "
 "erforderlich. Jetzt neu starten?"
 
-#: main/java/de/shellfire/vpn/gui/controller/AppScreenControllerSettings.java:428
+#: main/java/de/shellfire/vpn/gui/controller/AppScreenControllerSettings.java:429
 msgid ""
 "Changed language settings require a restart of Shellfire VPN to take effect."
 msgstr ""
@@ -489,11 +495,6 @@ msgstr "Alle Server"
 #: main/java/de/shellfire/vpn/gui/model/VpnComparisonFXHelper.java:27
 msgid "Premium"
 msgstr "Premium"
-
-#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:230
-#: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:1012
-msgid "Help"
-msgstr "Hilfe"
 
 #: main/java/de/shellfire/vpn/gui/controller/ShellfireVPNMainFormFxmlController.java:708
 msgid ""

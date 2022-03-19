@@ -36,7 +36,7 @@ public class AppScreenControllerHelp implements Initializable, AppScreenControll
 	}
 
 	public void initComponents() {
-		labelHelpHeader.setText(i18n.tr("Hilfe"));
+		labelHelpHeader.setText(i18n.tr("Help"));
 		List<WsHelpItem> wsHelpItemList = webService.getHelpDetails();
 		helpItemList = new LinkedList<HelpItem>();
 		for (WsHelpItem wsHelpItem : wsHelpItemList) {
