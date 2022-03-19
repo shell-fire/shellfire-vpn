@@ -20,7 +20,7 @@
    <children>
       <VBox fx:id="helpItemContainerVBox" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Label alignment="BASELINE_CENTER" contentDisplay="CENTER" prefWidth="380.0" text="Help" textFill="#12ace5">
+            <Label fx:id="labelHelpHeader" alignment="BASELINE_CENTER" contentDisplay="CENTER" prefWidth="380.0" text="Help" textFill="#12ace5">
                <font>
                   <Font name="Arial" size="24.0" />
                </font>

@@ -14,6 +14,7 @@ import de.shellfire.vpn.webservice.WebService;
 import de.shellfire.vpn.webservice.model.WsHelpItem;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
 public class AppScreenControllerHelp implements Initializable, AppScreenController {
@@ -26,7 +27,8 @@ public class AppScreenControllerHelp implements Initializable, AppScreenControll
 	private VBox helpItemContainerVBox;
 	private WebService webService;
 	private LoginForms application;
-
+	@FXML
+	private Label labelHelpHeader;
 	
 	public void setShellfireService(WebService webService) {
 		this.webService = webService;
@@ -34,7 +36,7 @@ public class AppScreenControllerHelp implements Initializable, AppScreenControll
 	}
 
 	public void initComponents() {
-		
+		labelHelpHeader.setText(i18n.tr("Hilfe"));
 		List<WsHelpItem> wsHelpItemList = webService.getHelpDetails();
 		helpItemList = new LinkedList<HelpItem>();
 		for (WsHelpItem wsHelpItem : wsHelpItemList) {

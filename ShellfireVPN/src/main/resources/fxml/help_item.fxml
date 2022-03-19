@@ -26,7 +26,7 @@
                <children>
                   <Label fx:id="header" alignment="BASELINE_LEFT" prefWidth="350.0" text="Help Header 1" textFill="#666666">
                      <font>
-                        <Font name="Arial Bold" size="14.0" />
+                        <Font name="Arial Bold" size="12.0" />
                      </font>
                   </Label>
                   <ImageView fx:id="helpArrowImage" pickOnBounds="true" preserveRatio="true" HBox.hgrow="NEVER">
