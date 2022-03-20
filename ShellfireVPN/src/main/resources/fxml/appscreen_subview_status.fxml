@@ -35,7 +35,7 @@
                         <Insets top="465.0" />
                      </StackPane.margin>
                   </Label>
-                  <Label fx:id="labelConnectionStatusText" alignment="BASELINE_CENTER" prefHeight="35.0" prefWidth="420.0" text="DISCONNECTED" textAlignment="CENTER" textFill="WHITE" StackPane.alignment="TOP_CENTER">
+                  <Label fx:id="labelConnectionStatusText" alignment="BASELINE_CENTER" prefHeight="35.0" prefWidth="420.0" textAlignment="CENTER" textFill="WHITE" StackPane.alignment="TOP_CENTER">
                      <font>
                         <Font name="Arial Bold" size="12.0" />
                      </font>
@@ -43,7 +43,7 @@
                         <Insets top="465.0" />
                      </StackPane.margin>
                   </Label>
-                  <Rectangle fx:id="rectConnectButton" arcHeight="35.0" arcWidth="35.0" fill="#74e495" height="35.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="140.0" StackPane.alignment="BOTTOM_CENTER">
+                  <Rectangle fx:id="rectConnectButton" arcHeight="35.0" arcWidth="35.0" fill="#74e495" height="35.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="180.0" StackPane.alignment="BOTTOM_CENTER">
                      <StackPane.margin>
                         <Insets bottom="25.0" />
                      </StackPane.margin>
@@ -54,7 +54,7 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </Rectangle>
-                  <Label fx:id="labelConnect" alignment="BASELINE_CENTER" onMouseClicked="#handleConnectButtonAction" prefHeight="35.0" prefWidth="140.0" text="CONNECT" textAlignment="CENTER" textFill="WHITE" StackPane.alignment="BOTTOM_CENTER">
+                  <Label fx:id="labelConnect" alignment="BASELINE_CENTER" onMouseClicked="#handleConnectButtonAction" prefHeight="35.0" prefWidth="180.0" textAlignment="CENTER" textFill="WHITE" StackPane.alignment="BOTTOM_CENTER">
                      <font>
                         <Font name="Arial Bold" size="12.0" />
                      </font>
