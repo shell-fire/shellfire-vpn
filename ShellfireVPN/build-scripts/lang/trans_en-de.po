@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-19 07:02+0100\n"
-"PO-Revision-Date: 2022-03-19 07:03+0100\n"
+"POT-Creation-Date: 2022-03-20 06:30+0100\n"
+"PO-Revision-Date: 2022-03-20 06:30+0100\n"
 "Last-Translator: Florian Gattung <fgattung@gmail.com>\n"
 "Language-Team: \n"
 "Language: en_DE\n"
@@ -383,19 +383,27 @@ msgstr ""
 msgid "No email received?"
 msgstr "Keine Email erhalten?"
 
-#: main/java/de/shellfire/vpn/gui/controller/ProgressDialogRegisterController.java:121
+#: main/java/de/shellfire/vpn/gui/controller/ProgressDialogRegisterController.java:77
+msgid "Request new email"
+msgstr "Email neu anfordern"
+
+#: main/java/de/shellfire/vpn/gui/controller/ProgressDialogRegisterController.java:78
+msgid "Change email-address"
+msgstr "E-Mail-Adresse ändern"
+
+#: main/java/de/shellfire/vpn/gui/controller/ProgressDialogRegisterController.java:124
 msgid "Please enter a different email-address and try again."
 msgstr "Bitte gib eine andere E-Mail-Adresse ein und versuche es erneut."
 
-#: main/java/de/shellfire/vpn/gui/controller/ProgressDialogRegisterController.java:131
+#: main/java/de/shellfire/vpn/gui/controller/ProgressDialogRegisterController.java:134
 msgid "We sent you the email again."
 msgstr "Wir haben dir die E-Mail nochmal geschickt."
 
-#: main/java/de/shellfire/vpn/gui/controller/ProgressDialogRegisterController.java:154
+#: main/java/de/shellfire/vpn/gui/controller/ProgressDialogRegisterController.java:157
 msgid "Waiting for activation..."
 msgstr "Warte auf Aktivierung..."
 
-#: main/java/de/shellfire/vpn/gui/controller/ProgressDialogRegisterController.java:161
+#: main/java/de/shellfire/vpn/gui/controller/ProgressDialogRegisterController.java:164
 msgid "Registration aborted. Please try again with a different email-address."
 msgstr ""
 "Registrierung abgebrochen. Bitte versuche es erneut mit einer anderen E-Mail-"
@@ -1100,9 +1108,6 @@ msgstr "unbekannt"
 #~ msgstr ""
 #~ "Das Shellfire VPN System hat dir soeben eine Email geschickt, bitte folge "
 #~ "den Anweisungen dort."
-
-#~ msgid "Request new email"
-#~ msgstr "Email neu anfordern"
 
 #~ msgid "Change email address"
 #~ msgstr "Emailadresse ändern"

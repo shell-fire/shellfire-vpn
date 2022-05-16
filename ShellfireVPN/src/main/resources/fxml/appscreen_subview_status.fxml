@@ -1,29 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.shape.*?>
-<?import javafx.scene.effect.*?>
-<?import javafx.scene.text.*?>
-<?import javafx.scene.*?>
-<?import javafx.geometry.*?>
-<?import java.lang.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.web.*?>
-<?import javafx.scene.control.Button?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.web.WebView?>
 
-<AnchorPane prefHeight="640.0" prefWidth="420.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.AppScreenControllerStatus">
+<AnchorPane prefHeight="640.0" prefWidth="420.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.AppScreenControllerStatus">
    <children>
       <VBox>
          <children>
-            <StackPane prefHeight="643.0" prefWidth="420.0">
+            <StackPane prefHeight="640.0" prefWidth="420.0">
                <children>
                   <Region fx:id="statusConnectionRegion" maxHeight="500.0" prefHeight="500.0" prefWidth="420.0" StackPane.alignment="TOP_CENTER" />
-                  <WebView fx:id="locationMap" maxHeight="143.0" prefHeight="143.0" prefWidth="420.0" StackPane.alignment="BOTTOM_CENTER" />
+                  <WebView fx:id="locationMap" maxHeight="140.0" prefHeight="140.0" prefWidth="420.0" StackPane.alignment="BOTTOM_CENTER" />
                   <Label fx:id="labelConnectionStatus" alignment="TOP_LEFT" opacity="0.8" prefHeight="35.0" prefWidth="420.0" style="-fx-background-color: #c76673;" textAlignment="CENTER" textFill="WHITE" StackPane.alignment="TOP_CENTER">
                      <font>
                         <Font name="Arial Bold" size="12.0" />
@@ -92,7 +91,7 @@
                         <Insets top="200.0" />
                      </StackPane.margin>
                   </ImageView>
-                  <HBox fx:id="hboxCountryCity" alignment="BASELINE_CENTER" prefHeight="277.0" prefWidth="219.0" StackPane.alignment="TOP_CENTER">
+                  <HBox fx:id="hboxCountryCity" alignment="BASELINE_CENTER" prefHeight="200.0" StackPane.alignment="TOP_CENTER">
                      <StackPane.margin>
                         <Insets bottom="200.0" top="240.0" />
                      </StackPane.margin>

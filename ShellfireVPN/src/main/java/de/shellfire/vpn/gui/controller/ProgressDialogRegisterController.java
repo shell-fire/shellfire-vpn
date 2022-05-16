@@ -74,6 +74,9 @@ public class ProgressDialogRegisterController extends AnchorPane implements Init
 		setWaitingLabelText(i18n.tr("Waiting for account activation..."));
 		setInfoLabelText(i18n.tr("We have just sent you an email - please follow the instructions in it."));
 		setNoMailReceivedLabelText(i18n.tr("No email received?"));
+		reRequestEmailButton.setText(i18n.tr("Request new email"));
+		changeEmailAddressButton.setText(i18n.tr("Change email-address"));
+		
 		getProgressBar().setProgress(ProgressBar.INDETERMINATE_PROGRESS);
 		instanceStage = new Stage();
 		instanceStage.initStyle(StageStyle.UNDECORATED);

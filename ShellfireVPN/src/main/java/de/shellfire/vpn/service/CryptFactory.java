@@ -11,8 +11,8 @@ import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
 
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
+import org.apache.commons.codec.binary.Base64;
+
 
 @SuppressWarnings("restriction")
 public class CryptFactory {
@@ -59,8 +59,7 @@ public class CryptFactory {
 			byte[] cleartext = toEncrypt.getBytes("UTF8");
 			cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
 			cipher.init(Cipher.ENCRYPT_MODE, key);
-			BASE64Encoder base64encoder = new BASE64Encoder();
-			String encrypedPwd = base64encoder.encode(cipher.doFinal(cleartext));
+			String encrypedPwd = new String(Base64.encodeBase64(cipher.doFinal(cleartext)));
 			return encrypedPwd;
 
 		} catch (Exception e) {
@@ -71,8 +70,8 @@ public class CryptFactory {
 
 	public static String decrypt(String encrypted) {
 		try {
-			BASE64Decoder base64decoder = new BASE64Decoder();
-			byte[] encrypedPwdBytes = base64decoder.decodeBuffer(encrypted);
+
+			byte[] encrypedPwdBytes = Base64.decodeBase64(encrypted);
 
 			Cipher cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
 			SecretKey key = CryptFactory.getKey();

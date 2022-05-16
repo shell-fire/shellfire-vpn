@@ -70,7 +70,7 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
 
 	public void initComponents() {
 		dynamicLabel.setText(i18n.tr("Logging in..."));
-		log.debug("\n " + com.sun.javafx.runtime.VersionInfo.getRuntimeVersion());
+		log.debug("\n " + System.getProperty("javafx.runtime.version"));
 	}
 
 	public Button getButton() {
