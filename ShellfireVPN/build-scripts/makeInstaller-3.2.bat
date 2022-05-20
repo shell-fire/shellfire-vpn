@@ -5,7 +5,8 @@ set version=3.2
 
 
 rem echo update language files
-call c:\cygwin\bin\bash.exe -li /bin/msgfmt.sh
+call lang\msgfmt.bat
+pause
 
 rem echo create some folders
 rmdir %folder% /S /Q
@@ -27,8 +28,8 @@ echo make mainDat - exe file (named .dat)
 move %folder%\ShellfireVPN2Dat.exe %folder%\ShellfireVPN2.dat
 
 echo "deleting jars"
-rm %folder%\ShellfireVPN2.jar
-rm %folder%\ShellfireVPN2Dat.jar
+del %folder%\ShellfireVPN2.jar
+del %folder%\ShellfireVPN2Dat.jar
 
 echo "copying tools"
 rem NOT: xcopy tools %folder%\tools\ /S /E

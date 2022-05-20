@@ -302,11 +302,19 @@ public class AppScreenControllerServerList implements Initializable, AppScreenCo
 		selectedItems.addListener(new ListChangeListener<ServerRow>() {
 		  @Override
 		  public void onChanged(Change<? extends ServerRow> change) {
+			
 			  if (inSelectionChangeListener || currentlyUpdatingServerTypeFilter) {
 				  return; 
 			  }
+			  
 			  if (mainFormController != null) {
-				  if (change instanceof MappingChange<?, ?>) {
+				  /*
+				  if (change instanceof MappingChange<?, ?>
+						  // || change instanceof ListChangeBuilder<?>
+				  
+						  )
+				  */
+				  {
 					  while (change.next()) {
 						  ObservableList<? extends ServerRow> changes = change.getList();
 
@@ -319,6 +327,12 @@ public class AppScreenControllerServerList implements Initializable, AppScreenCo
 					  }
 					  
 				  }
+					  // else
+				  {
+					//  log.debug("change NOT instanceof MappingChange<?, ?>");
+				  }
+			  } else {
+				  log.debug("mainFormController == null");
 			  }
 			  
 			  
