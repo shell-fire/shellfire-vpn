@@ -16,7 +16,7 @@ public class Service {
 	private static MessageBroker messageBroker;
 	private static Service service;
 	private static boolean stop = false;
-	private final static String MAN = "Run with atg \"start\" or \"stop\" to control the service";
+	private final static String MAN = "Run with atg \"start\", \"startconsole\" or \"stop\" to control the service";
 
 	public static void main(String[] args) {
 		if (args == null || args.length == 0) {
@@ -27,6 +27,8 @@ public class Service {
 
 		if ("start".equals(arg)) {
 			start(args);
+		} else if ("startconsole".equals(arg)) {
+			startconsole(args);
 		} else if ("stop".equals(arg)) {
 			stop(args);
 		} else {
@@ -39,7 +41,25 @@ public class Service {
 
 		service = new Service();
 		service.run();
+	}
 
+	public static void startconsole(String[] args) {
+		log.info("Service starting up in console mode");
+		
+		new Thread(() -> {
+			log.info("press enter to exit");
+			try {
+				System.in.read();
+				log.info("Received keystroke - stopping service");
+			} catch (IOException e) {
+				log.error("Exception thrown during System.in.read()", e);
+			}
+			stop(args);
+		}).start();
+		
+		start(args);
+		
+		
 	}
 
 	public static void stop(String[] args) {

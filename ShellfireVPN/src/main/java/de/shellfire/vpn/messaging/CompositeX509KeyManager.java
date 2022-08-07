@@ -8,10 +8,9 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.annotation.Nullable;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.X509KeyManager;
-
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents an ordered list of {@link X509KeyManager}s with most-preferred managers first.

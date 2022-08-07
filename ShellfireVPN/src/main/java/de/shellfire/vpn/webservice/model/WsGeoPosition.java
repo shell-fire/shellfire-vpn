@@ -8,9 +8,9 @@
 package de.shellfire.vpn.webservice.model;
 
 public class WsGeoPosition implements java.io.Serializable {
-	private java.lang.String country;
+	private String country;
 
-	private java.lang.String city;
+	private String city;
 
 	private float longitude;
 
@@ -19,7 +19,7 @@ public class WsGeoPosition implements java.io.Serializable {
 	public WsGeoPosition() {
 	}
 
-	public WsGeoPosition(java.lang.String country, java.lang.String city, float longitude, float latitude) {
+	public WsGeoPosition(String country, String city, float longitude, float latitude) {
 		this.country = country;
 		this.city = city;
 		this.longitude = longitude;
@@ -31,7 +31,7 @@ public class WsGeoPosition implements java.io.Serializable {
 	 * 
 	 * @return country
 	 */
-	public java.lang.String getCountry() {
+	public String getCountry() {
 		return country;
 	}
 
@@ -40,7 +40,7 @@ public class WsGeoPosition implements java.io.Serializable {
 	 * 
 	 * @param country
 	 */
-	public void setCountry(java.lang.String country) {
+	public void setCountry(String country) {
 		this.country = country;
 	}
 
@@ -49,7 +49,7 @@ public class WsGeoPosition implements java.io.Serializable {
 	 * 
 	 * @return city
 	 */
-	public java.lang.String getCity() {
+	public String getCity() {
 		return city;
 	}
 
@@ -58,7 +58,7 @@ public class WsGeoPosition implements java.io.Serializable {
 	 * 
 	 * @param city
 	 */
-	public void setCity(java.lang.String city) {
+	public void setCity(String city) {
 		this.city = city;
 	}
 

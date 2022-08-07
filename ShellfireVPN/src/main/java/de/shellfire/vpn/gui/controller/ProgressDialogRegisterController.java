@@ -82,7 +82,7 @@ public class ProgressDialogRegisterController extends AnchorPane implements Init
 		instanceStage.initStyle(StageStyle.UNDECORATED);
 		instanceStage.initModality(Modality.WINDOW_MODAL);
 
-		log.debug("\n " + com.sun.javafx.runtime.VersionInfo.getRuntimeVersion());
+		log.debug("javafx.runtime.version: " + System.getProperty("javafx.runtime.version"));
 	}
 
 	

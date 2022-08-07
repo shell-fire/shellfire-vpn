@@ -10,27 +10,27 @@ package de.shellfire.vpn.webservice.model;
 public class WsServer implements java.io.Serializable {
 	private int vpnServerId;
 
-	private java.lang.String country;
+	private String country;
 
-	private java.lang.String city;
+	private String city;
 
-	private java.lang.String name;
+	private String name;
 
-	private java.lang.String host;
+	private String host;
 
-	private java.lang.String servertype;
+	private String servertype;
 
 	private float longitude;
 
 	private float latitude;
 	
-	private java.lang.String wireguardPublicKey;
+	private String wireguardPublicKey;
 
 	public WsServer() {
 	}
 
-	public WsServer(int vpnServerId, java.lang.String country, java.lang.String city, java.lang.String name, java.lang.String host,
-			java.lang.String servertype, float longitude, float latitude, java.lang.String wireguardPublicKey) {
+	public WsServer(int vpnServerId, String country, String city, String name, String host,
+			String servertype, float longitude, float latitude, String wireguardPublicKey) {
 		this.vpnServerId = vpnServerId;
 		this.country = country;
 		this.city = city;
@@ -65,7 +65,7 @@ public class WsServer implements java.io.Serializable {
 	 * 
 	 * @return country
 	 */
-	public java.lang.String getCountry() {
+	public String getCountry() {
 		return country;
 	}
 
@@ -74,7 +74,7 @@ public class WsServer implements java.io.Serializable {
 	 * 
 	 * @param country
 	 */
-	public void setCountry(java.lang.String country) {
+	public void setCountry(String country) {
 		this.country = country;
 	}
 
@@ -83,7 +83,7 @@ public class WsServer implements java.io.Serializable {
 	 * 
 	 * @return city
 	 */
-	public java.lang.String getCity() {
+	public String getCity() {
 		return city;
 	}
 
@@ -92,7 +92,7 @@ public class WsServer implements java.io.Serializable {
 	 * 
 	 * @param city
 	 */
-	public void setCity(java.lang.String city) {
+	public void setCity(String city) {
 		this.city = city;
 	}
 
@@ -101,7 +101,7 @@ public class WsServer implements java.io.Serializable {
 	 * 
 	 * @return name
 	 */
-	public java.lang.String getName() {
+	public String getName() {
 		return name;
 	}
 
@@ -110,7 +110,7 @@ public class WsServer implements java.io.Serializable {
 	 * 
 	 * @param name
 	 */
-	public void setName(java.lang.String name) {
+	public void setName(String name) {
 		this.name = name;
 	}
 
@@ -119,7 +119,7 @@ public class WsServer implements java.io.Serializable {
 	 * 
 	 * @return host
 	 */
-	public java.lang.String getHost() {
+	public String getHost() {
 		return host;
 	}
 
@@ -128,7 +128,7 @@ public class WsServer implements java.io.Serializable {
 	 * 
 	 * @param host
 	 */
-	public void setHost(java.lang.String host) {
+	public void setHost(String host) {
 		this.host = host;
 	}
 
@@ -137,7 +137,7 @@ public class WsServer implements java.io.Serializable {
 	 * 
 	 * @return servertype
 	 */
-	public java.lang.String getServertype() {
+	public String getServertype() {
 		return servertype;
 	}
 
@@ -146,7 +146,7 @@ public class WsServer implements java.io.Serializable {
 	 * 
 	 * @param servertype
 	 */
-	public void setServertype(java.lang.String servertype) {
+	public void setServertype(String servertype) {
 		this.servertype = servertype;
 	}
 
@@ -192,7 +192,7 @@ public class WsServer implements java.io.Serializable {
 	 * 
 	 * @return name
 	 */
-	public java.lang.String getWireguardPublicKey() {
+	public String getWireguardPublicKey() {
 		return wireguardPublicKey;
 	}
 
@@ -201,7 +201,7 @@ public class WsServer implements java.io.Serializable {
 	 * 
 	 * @param name
 	 */
-	public void setWireguardPublicKey(java.lang.String wireguardPublicKey) {
+	public void setWireguardPublicKey(String wireguardPublicKey) {
 		this.wireguardPublicKey = wireguardPublicKey;
 	}
 

@@ -110,6 +110,7 @@ public class WebServiceBroker {
 		}.getType();
 		Response<LoginResponse> resp = new JsonHttpRequest<WsLoginRequest, LoginResponse>().call(request, theType);
 
+
 		// if login okay, store token
 		if (resp != null) {
 			if (resp.isSuccess()) {

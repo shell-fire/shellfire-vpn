@@ -1,9 +1,7 @@
 package de.shellfire.vpn.gui;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -41,7 +39,7 @@ public class ServerImageBackgroundManager {
 	
 	private static void initFilenameMap() {
 		// populate fileNameMap based on Properties
-		String allKnownFileNameMappings = VpnProperties.getInstance().getProperty(LoginController.REG_SERVERBACKGROUNDIMAGEFILENAMEMAP);
+		String allKnownFileNameMappings = VpnProperties.getInstance().getProperty(Util.REG_SERVERBACKGROUNDIMAGEFILENAMEMAP);
 		
 		if (allKnownFileNameMappings != null) {
 			serverFilenameMap = new HashMap<Integer, String>();
@@ -169,13 +167,7 @@ public class ServerImageBackgroundManager {
 
 	private static void storeImageInDownloadDir(String filename, Image image) {
 	    File outputFile = new File(Util.getDownloadDir() + filename);
-	    BufferedImage bImage = SwingFXUtils.fromFXImage(image, null);
-	    try {
-	      ImageIO.write(bImage, "jpg", outputFile);
-	    } catch (IOException e) {
-	      throw new RuntimeException(e);
-	    }
-	 
+	    Util.storeImageInFile(image, outputFile);
 	}
 
 	private static String loadFilenameFromWebService(int serverId) {
@@ -203,6 +195,6 @@ public class ServerImageBackgroundManager {
 			allKnownFileNameMappings += serverId + "=" + filename + ",";
 		}
 		
-		VpnProperties.getInstance().setProperty(LoginController.REG_SERVERBACKGROUNDIMAGEFILENAMEMAP, allKnownFileNameMappings); 
+		VpnProperties.getInstance().setProperty(Util.REG_SERVERBACKGROUNDIMAGEFILENAMEMAP, allKnownFileNameMappings); 
 	}
 }

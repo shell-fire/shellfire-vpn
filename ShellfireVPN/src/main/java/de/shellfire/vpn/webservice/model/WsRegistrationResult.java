@@ -10,14 +10,14 @@ package de.shellfire.vpn.webservice.model;
 public class WsRegistrationResult implements java.io.Serializable {
 	private boolean registrationOk;
 
-	private java.lang.String errorMessage;
+	private String errorMessage;
 
-	private java.lang.String token;
+	private String token;
 
 	public WsRegistrationResult() {
 	}
 
-	public WsRegistrationResult(boolean registrationOk, java.lang.String errorMessage, java.lang.String token) {
+	public WsRegistrationResult(boolean registrationOk, String errorMessage, String token) {
 		this.registrationOk = registrationOk;
 		this.errorMessage = errorMessage;
 		this.token = token;
@@ -46,7 +46,7 @@ public class WsRegistrationResult implements java.io.Serializable {
 	 * 
 	 * @return errorMessage
 	 */
-	public java.lang.String getErrorMessage() {
+	public String getErrorMessage() {
 		return errorMessage;
 	}
 
@@ -55,7 +55,7 @@ public class WsRegistrationResult implements java.io.Serializable {
 	 * 
 	 * @param errorMessage
 	 */
-	public void setErrorMessage(java.lang.String errorMessage) {
+	public void setErrorMessage(String errorMessage) {
 		this.errorMessage = errorMessage;
 	}
 
@@ -64,7 +64,7 @@ public class WsRegistrationResult implements java.io.Serializable {
 	 * 
 	 * @return token
 	 */
-	public java.lang.String getToken() {
+	public String getToken() {
 		return token;
 	}
 
@@ -73,7 +73,7 @@ public class WsRegistrationResult implements java.io.Serializable {
 	 * 
 	 * @param token
 	 */
-	public void setToken(java.lang.String token) {
+	public void setToken(String token) {
 		this.token = token;
 	}
 

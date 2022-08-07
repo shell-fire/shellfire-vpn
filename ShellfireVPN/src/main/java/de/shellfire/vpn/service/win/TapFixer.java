@@ -47,21 +47,27 @@ public class TapFixer {
 		log.debug("reinstallTapDriver() - start");
 
 		List<String> delTapAll = new LinkedList<String>();
-		delTapAll.add(getTapPath());
-		delTapAll.add(getTapPath() + "\\bin\\deltapall.bat");
+		delTapAll.add("'" + getTapPath() + "'");
+		delTapAll.add("'" + getTapPath() + "\\bin\\deltapall.bat" + "'");
 
 		List<String> addTap = new LinkedList<String>();
-		addTap.add(getTapPath());
-		addTap.add(getTapPath() + "\\bin\\addtap.bat");
+		addTap.add("'" + getTapPath() + "'");
+		addTap.add("'" + getTapPath() + "\\bin\\addtap.bat" + "'");
 
 		if (Util.isVistaOrLater()) {
 			delTapAll.add(0, Util.POWERSHELL_EXE);
 			delTapAll.add(1, "start-process");
+			delTapAll.add(2, "-WorkingDirectory");
+			delTapAll.add(4, "-FilePath");
+			
 			delTapAll.add("-Verb");
 			delTapAll.add("RunAs");
 
 			addTap.add(0, Util.POWERSHELL_EXE);
 			addTap.add(1, "start-process");
+			addTap.add(2, "-WorkingDirectory");
+			addTap.add(4, "-FilePath");
+
 			addTap.add("-Verb");
 			addTap.add("RunAs");
 
@@ -89,7 +95,7 @@ public class TapFixer {
 		String[] disable;
 		String[] enable;
 		if (Util.isVistaOrLater()) {
-			disable = new String[] { getTapPath() + "\\bin\\tapinstall.exe", "disable", "tap0901" };
+			disable = new String[] {getTapPath() + "\\bin\\tapinstall.exe", "disable", "tap0901" };
 			enable = new String[] { getTapPath() + "\\bin\\tapinstall.exe", "enable", "tap0901" };
 		} else {
 			disable = new String[] { getTapPath() + "\\bin\\devcon.exe", "disable", "tap0901" };

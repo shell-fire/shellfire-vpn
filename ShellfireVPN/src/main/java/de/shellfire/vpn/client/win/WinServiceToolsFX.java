@@ -97,6 +97,9 @@ public class WinServiceToolsFX extends ServiceToolsFX {
 
 			template = template.replace("$$PROCRUNPATH$$", procRunPath);
 
+			template = template.replace("$$INSTALLDIR$$", instDir);
+
+			
 			String uninstallBat = instDir + "UninstallService.bat";
 			Util.stringToFile(template, uninstallBat);
 
@@ -105,7 +108,7 @@ public class WinServiceToolsFX extends ServiceToolsFX {
 			Process p = Runtime.getRuntime().exec(command, null, new File(instDir));
 			Util.digestProcess(p);
 			p.waitFor();
-			log.debug("service installed (or not?); - exiting");
+			log.debug("service uninstalled (or not?); - exiting");
 
 		} catch (IOException e) {
 			Util.handleException(e);
@@ -235,7 +238,7 @@ public class WinServiceToolsFX extends ServiceToolsFX {
 				String elevateVbs = System.getProperty("java.io.tmpdir") + "/elevate.vbs";
 
 				String exec = pathJavaw;
-				String cmds = "-jar \"\"" + jarFile + "\"\" " + arg;
+				String cmds = "--add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/sun.nio.ch=ALL-UNNAMED --module-path=.\\lib\\javafx\\lib --add-modules=javafx.swing,javafx.graphics,javafx.fxml,javafx.media,javafx.web --add-reads=javafx.graphics=ALL-UNNAMED --add-opens=javafx.controls/com.sun.javafx.charts=ALL-UNNAMED --add-opens=javafx.graphics/com.sun.javafx.iio=ALL-UNNAMED --add-opens=javafx.graphics/com.sun.javafx.iio.common=ALL-UNNAMED --add-opens=javafx.graphics/com.sun.javafx.css=ALL-UNNAMED --add-opens=javafx.base/com.sun.javafx.runtime=ALL-UNNAMED --add-exports=java.base/jdk.internal.util=chronicle.bytes --add-exports=java.base/jdk.internal.ref=ALL-UNNAMED --add-exports=java.base/sun.nio.ch=ALL-UNNAMED --add-exports=jdk.unsupported/sun.misc=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED --add-opens=jdk.compiler/com.sun.tools.javac=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED -jar \"\"" + jarFile + "\"\" " + arg;
 
 				writeElevationVbsFile(elevateVbs, exec, cmds);
 

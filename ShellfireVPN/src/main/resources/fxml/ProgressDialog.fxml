@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.effect.*?>
-<?import javafx.scene.paint.*?>
-<?import javafx.scene.shape.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
-<?import javafx.scene.text.*?>
-<?import java.lang.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-
-<StackPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.ProgressDialogController">
+<StackPane xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.ProgressDialogController">
    <children>
       <VBox fillWidth="false">
          <children>
@@ -20,7 +20,7 @@
                   <ProgressBar fx:id="progressBar" layoutX="8.0" layoutY="33.0" prefWidth="285.0" progress="0.0" visible="false" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" />
                   <Label fx:id="dynamicLabel" alignment="BASELINE_CENTER" maxWidth="120.0" prefHeight="45.0" prefWidth="120.0" text="&lt;dynamic&gt;" textAlignment="CENTER" textFill="WHITE" wrapText="true">
                      <font>
-                        <Font name="Arial" size="18.0" />
+                        <Font size="18.0" />
                      </font>
                      <effect>
                         <DropShadow />

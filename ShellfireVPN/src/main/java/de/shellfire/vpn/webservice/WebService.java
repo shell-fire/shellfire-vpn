@@ -92,7 +92,13 @@ public class WebService {
 		init();
 		Response<LoginResponse> result = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnableImpl<Response<LoginResponse>>() {
 			public Response<LoginResponse> run() throws Exception {
-				return shellfire.login(user, pass);
+				if (pass != null && pass.length() > 1) {
+					return shellfire.login(user, pass);	
+				} else {
+					return null;
+				}
+				
+				
 			}
 		}, 3, 100);
 

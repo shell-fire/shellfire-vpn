@@ -8,7 +8,7 @@
 package de.shellfire.vpn.webservice.model;
 
 public class VpnAttributeElement implements java.io.Serializable {
-	private java.lang.String name;
+	private String name;
 
 	private Entry free;
 
@@ -19,7 +19,7 @@ public class VpnAttributeElement implements java.io.Serializable {
 	public VpnAttributeElement() {
 	}
 
-	public VpnAttributeElement(java.lang.String name, Entry free, Entry premium, Entry pp) {
+	public VpnAttributeElement(String name, Entry free, Entry premium, Entry pp) {
 		this.name = name;
 		this.free = free;
 		this.premium = premium;
@@ -31,7 +31,7 @@ public class VpnAttributeElement implements java.io.Serializable {
 	 * 
 	 * @return name
 	 */
-	public java.lang.String getName() {
+	public String getName() {
 		return name;
 	}
 
@@ -40,7 +40,7 @@ public class VpnAttributeElement implements java.io.Serializable {
 	 * 
 	 * @param name
 	 */
-	public void setName(java.lang.String name) {
+	public void setName(String name) {
 		this.name = name;
 	}
 

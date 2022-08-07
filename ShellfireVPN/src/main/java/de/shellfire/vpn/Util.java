@@ -1,11 +1,13 @@
 package de.shellfire.vpn;
 
 import java.awt.Desktop;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -22,6 +24,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.net.UnknownHostException;
+import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.security.Security;
 import java.text.SimpleDateFormat;
@@ -38,7 +41,7 @@ import javax.swing.ImageIcon;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.LoggerFactory;
-import org.xnap.commons.i18n.I18n;
+import org.xnap.commons.i18n.I18n; 
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
@@ -55,8 +58,21 @@ import de.shellfire.vpn.service.CryptFactory;
 import de.shellfire.vpn.service.IVpnRegistry;
 import de.shellfire.vpn.service.win.WinRegistry;
 import javafx.scene.control.Alert;
+import javafx.scene.image.Image;
+import javafx.scene.image.PixelFormat;
+import javafx.scene.image.PixelReader;
+import javafx.scene.image.WritablePixelFormat;
 
 public class Util {
+	public static final String REG_PASS = "pass";
+	public static final String REG_USER = "user";
+	public static final String REG_AUTOlOGIN = "autologin";
+	public static final String REG_AUTOCONNECT = "autoConnect";
+	public static final String REG_INSTDIR = "instdir";
+	public static final String REG_SHOWSTATUSURL = "show_status_url_on_connect";
+	public static final String REG_FIRST_START = "firststart";
+	public static final String REG_SERVERBACKGROUNDIMAGEFILENAMEMAP = "server_background_image_filename_map";
+
 	private static final String SHELLFIRE_VPN = "shellfire-vpn" + File.separator;
 	private static IVpnRegistry registry;
 	public static String GOOGLE_DE = null;
@@ -76,9 +92,10 @@ public class Util {
 	private static String programFiles = envs.get("ProgramFiles");
 	private static String programFiles86 = envs.get("ProgramFiles(x86)");
 	private static String programW6432 = envs.get("ProgramW6432");
+	private static String systemRoot = envs.get("SystemRoot");
 
 	
-	public static final String POWERSHELL_EXE = "%SystemRoot%\\system32\\WindowsPowerShell\\v1.0\\powershell.exe";
+	public static final String POWERSHELL_EXE = systemRoot + "\\system32\\WindowsPowerShell\\v1.0\\powershell.exe";
 	
 	private static Logger log = Util.getLogger(Util.class.getCanonicalName());
 	private static HashMap<String, javafx.scene.image.Image> imageIconCacheMap = new HashMap<String, javafx.scene.image.Image>();
@@ -569,10 +586,12 @@ public class Util {
 		private boolean finished = false;
 		private boolean result = false;
 		private String site;
+		private int timeOut;
 
-		public ReachableWithTimeout(String site) {
+		public ReachableWithTimeout(String site, int timeOut) {
 			super("ReachableWithTimeout");
 			this.site = site;
+			this.timeOut = timeOut;
 		}
 
 		public void run() {
@@ -587,7 +606,7 @@ public class Util {
 
 		int numTries = 0;
 		while (!result && numTries++ < 5) {
-			result = isReachableWithTimeout(site);
+			result = isReachableWithTimeout(site, 10000);
 			if (!result) {
 				log.debug("not reachable " + numTries + " / 5");
 				try {
@@ -601,16 +620,14 @@ public class Util {
 		return result;
 	}
 
-	public static boolean isReachableWithTimeout(String site) {
+	public static boolean isReachableWithTimeout(String site, int timeout) {
 
-		ReachableWithTimeout reach = new ReachableWithTimeout(site);
+		ReachableWithTimeout reach = new ReachableWithTimeout(site, timeout);
 		reach.start();
-
-		int timeout = 10;
 
 		int timePassed = 0;
 
-		while (reach.finished == false && timePassed < timeout * 1000) {
+		while (reach.finished == false && timePassed < timeout) {
 
 			try {
 				Thread.sleep(50);
@@ -658,8 +675,12 @@ public class Util {
 
 		return reachable;
 	}
-
 	public static boolean internetIsAvailable() {
+		return internetIsAvailable(3000, 10000);
+	}
+			
+			
+	public static boolean internetIsAvailable(int sleepTime, int timeout) {
 		log.debug("Testing if connection exists");
 		Boolean networkIsAvailable = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnableImpl<Boolean>() {
 			public Boolean run() throws Exception {
@@ -671,12 +692,12 @@ public class Util {
 				siteList.add("www.bing.com");
 
 				for (String site : siteList) {
-					if (Util.isReachableWithTimeout(site)) {
+					if (Util.isReachableWithTimeout(site, timeout)) {
 						log.debug("site " + site + " is reachable");
 						return true;
 					} else {
-						log.debug("site " + site + " NOT reachable - sleeping 3 seconds");
-						Thread.sleep(3000);
+						log.debug("site {} NOT reachable - sleeping {} seconds", site, sleepTime);
+						Thread.sleep(sleepTime);
 					}
 				}
 				log.debug("no known site reachable - returning false");
@@ -1009,5 +1030,59 @@ public class Util {
 	        }
 	    }
 	}
+	
+	public static void storeImageInFile(Image img, File outputFile) {
+		int width = (int) img.getWidth();
+		int height = (int) img.getHeight();
+		PixelReader reader = img.getPixelReader();
+		byte[] buffer = new byte[width * height * 4];
+		WritablePixelFormat<ByteBuffer> format = PixelFormat.getByteBgraInstance();
+		reader.getPixels(0, 0, width, height, format, buffer, 0, width * 4);
+		try {
+		    BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(outputFile));
+		    for(int count = 0; count < buffer.length; count += 4) {
+		        out.write(buffer[count + 2]);
+		        out.write(buffer[count + 1]);
+		        out.write(buffer[count]);
+		        out.write(buffer[count + 3]);
+		    }
+		    out.flush();
+		    out.close();
+		} catch(IOException e) {
+		    e.printStackTrace();
+		}
+	}
+	
+
+	public static String getInstDir() {
+		VpnProperties props = VpnProperties.getInstance();
+		String instDir = props.getProperty(REG_INSTDIR, null);
+
+		if (instDir == null) {
+			instDir = new File("").getAbsolutePath();
+		}
+
+		return instDir;
+	}
+
+	public static void waitUntilInternetAvailable(int maxWaitSeconds) {
+		log.debug("waitUntilInternetAvailable(maxWaitSeconds={}) - start", maxWaitSeconds);
+		boolean internetAvailable = false;
+		long secondsWaited = 0;
+		long startTime = System.nanoTime();
+		long curTime = System.nanoTime();
+
+		
+		while (!internetAvailable && secondsWaited < maxWaitSeconds) {
+			internetAvailable = Util.internetIsAvailable(100, 300);
+			curTime = System.nanoTime();
+			
+			secondsWaited = (curTime - startTime) / 1000000000;
+			log.debug("Waited a total number of {} seconds", secondsWaited);
+		}
+		
+		log.debug("waitUntilInternetAvailable() - finished, internetIsAvailable: {}", (internetAvailable ? "true" : "false"));
+	}
+
 	
 }

@@ -32,17 +32,20 @@ import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.proxy.ProxyConfig;
 import de.shellfire.vpn.webservice.EndpointManager;
 import de.shellfire.vpn.webservice.WebService;
+import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ProgressBar;
+import javafx.stage.Stage;
+
 
 /**
  *
  * @author TList
  */
-public class UpdaterFX implements CanContinueAfterBackEndAvailableFX {
+public class UpdaterFX extends Application implements CanContinueAfterBackEndAvailableFX {
 	private static Logger log = Util.getLogger(UpdaterFX.class.getCanonicalName());
 	private static final String MAIN_EXE = "ShellfireVPN2.dat";
 	private static final String UPDATER_EXE = "ShellfireVPN2.exe";
@@ -73,9 +76,11 @@ public class UpdaterFX implements CanContinueAfterBackEndAvailableFX {
 	public static void main(String[] args) {
 		System.setProperty("java.library.path", "./lib");
 		ProxyConfig.perform();
-
+		launch(args);
+/*
 		UpdaterFX updaterFX = new UpdaterFX(args);
 		updaterFX.run();
+		*/
 	}
 
 	private void run() {
@@ -87,6 +92,7 @@ public class UpdaterFX implements CanContinueAfterBackEndAvailableFX {
 
 				if (cmd.equals("uninstallservice")) {
 					ServiceToolsFX.getInstanceForOS().uninstall();
+					System.exit(0);
 					return;
 				} else if (cmd.equals("installservice")) {
 
@@ -104,10 +110,11 @@ public class UpdaterFX implements CanContinueAfterBackEndAvailableFX {
 
 					log.debug("Retrieved installation path from args parameter: " + path);
 					ServiceToolsFX.getInstanceForOS().install(path);
+					System.exit(0);
 					return;
 				}
 			}
-			com.sun.javafx.application.PlatformImpl.startup(() -> {});
+			
 			// Everything else required the backend, so make sure we can access it.
 			Platform.runLater(() -> {
 				EndpointManager.getInstance().ensureShellfireBackendAvailableFx(this);
@@ -131,6 +138,31 @@ public class UpdaterFX implements CanContinueAfterBackEndAvailableFX {
 		} else {
 			List<String> cmds = new LinkedList<String>();
 			cmds.add("java");
+			
+			cmds.add("--module-path");
+			cmds.add(".\\lib\\javafx\\lib");
+			
+			cmds.add("--add-opens=java.base/java.lang=ALL-UNNAMED");
+			cmds.add("--add-opens=java.base/sun.nio.ch=ALL-UNNAMED");
+			cmds.add("--module-path=.\\lib\\javafx\\lib");
+			cmds.add("--add-modules=javafx.swing,javafx.graphics,javafx.fxml,javafx.media,javafx.web");
+			cmds.add("--add-reads=javafx.graphics=ALL-UNNAMED");
+			cmds.add("--add-opens=javafx.controls/com.sun.javafx.charts=ALL-UNNAMED");
+			cmds.add("--add-opens=javafx.graphics/com.sun.javafx.iio=ALL-UNNAMED");
+			cmds.add("--add-opens=javafx.graphics/com.sun.javafx.iio.common=ALL-UNNAMED");
+			cmds.add("--add-opens=javafx.graphics/com.sun.javafx.css=ALL-UNNAMED");
+			cmds.add("--add-opens=javafx.base/com.sun.javafx.runtime=ALL-UNNAMED");
+			cmds.add("--add-exports=java.base/jdk.internal.util=chronicle.bytes");
+			cmds.add("--add-exports=java.base/jdk.internal.ref=ALL-UNNAMED");
+			cmds.add("--add-exports=java.base/sun.nio.ch=ALL-UNNAMED");
+			cmds.add("--add-exports=jdk.unsupported/sun.misc=ALL-UNNAMED");
+			cmds.add("--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED");
+			cmds.add("--add-opens=jdk.compiler/com.sun.tools.javac=ALL-UNNAMED");
+			cmds.add("--add-opens=java.base/java.lang.reflect=ALL-UNNAMED");
+			cmds.add("--add-opens=java.base/java.io=ALL-UNNAMED");
+			cmds.add("--add-opens=java.base/java.util=ALL-UNNAMED");
+
+			
 			cmds.add("-jar");
 			cmds.add(exec);
 
@@ -181,10 +213,8 @@ public class UpdaterFX implements CanContinueAfterBackEndAvailableFX {
 
 			this.displayError(
 					i18n.tr("Main application could not be started. The launcher will now shut down.") + ("\r\n") + e.getMessage());
-
-			System.exit(0);
 		}
-
+		System.exit(0);
 	}
 
 	private void displayError(String msg) {
@@ -427,9 +457,9 @@ public class UpdaterFX implements CanContinueAfterBackEndAvailableFX {
 		if (installedVersion == 0)
 			return false;
 
-		long latstAvailableVersion = this.getLatestAvailableVersionOnline();
+		long latestAvailableVersion = this.getLatestAvailableVersionOnline();
 
-		boolean updateAvailable = (latstAvailableVersion > installedVersion);
+		boolean updateAvailable = (latestAvailableVersion > installedVersion);
 
 		return updateAvailable;
 	}
@@ -446,7 +476,7 @@ public class UpdaterFX implements CanContinueAfterBackEndAvailableFX {
 		FileVersion info = Win32.getFileVersion(UPDATER_EXE);
 
 		if (info == null) {
-			return 3000;
+			return 3002;
 		}
 		long version = info.getFileMajor() * 1000 + info.getFileMinor();
 		return version;
@@ -494,6 +524,21 @@ public class UpdaterFX implements CanContinueAfterBackEndAvailableFX {
 			if (e != null)
 				e.printStackTrace();
 		}
+	}
+
+	@Override
+	public void start(Stage primaryStage) throws Exception {
+		Parameters params = getParameters();
+		
+		List<String> list = params.getRaw();
+		String[] myArgs = new String[list.size()];
+		int i = 0;
+		for(String each : list){
+			myArgs[i++] = each;
+		}
+		this.args = myArgs;
+		run();
+		
 	}
 
 }

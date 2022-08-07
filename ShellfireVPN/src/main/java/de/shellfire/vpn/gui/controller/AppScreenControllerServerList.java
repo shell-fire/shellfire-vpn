@@ -17,7 +17,7 @@ import java.util.ResourceBundle;
 import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
 
-import com.sun.javafx.collections.MappingChange;
+
 
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.gui.model.CountryMap;
@@ -120,6 +120,7 @@ public class AppScreenControllerServerList implements Initializable, AppScreenCo
 	private boolean filterPremiumPlus = false;
 	private boolean currentlyUpdatingServerTypeFilter;
 	private Vpn selectedVpn;
+	private Server mostRecentSelectedServer;
 	
 
 	/**
@@ -308,12 +309,7 @@ public class AppScreenControllerServerList implements Initializable, AppScreenCo
 			  }
 			  
 			  if (mainFormController != null) {
-				  /*
-				  if (change instanceof MappingChange<?, ?>
-						  // || change instanceof ListChangeBuilder<?>
-				  
-						  )
-				  */
+
 				  {
 					  while (change.next()) {
 						  ObservableList<? extends ServerRow> changes = change.getList();
@@ -436,6 +432,10 @@ public class AppScreenControllerServerList implements Initializable, AppScreenCo
 	}
 	
 	private void updaterFilterServerType() {
+		Server curServer = this.getSelectedServer();
+		if (curServer != null) {
+			mostRecentSelectedServer = curServer;
+		}
 		currentlyUpdatingServerTypeFilter = true;
 		filteredDataByServerType.setPredicate(server -> {
 			return server.getServer().matchesFilter(filterFree , filterPremium, filterPremiumPlus);
@@ -580,9 +580,15 @@ public class AppScreenControllerServerList implements Initializable, AppScreenCo
 	}
 
 	public Server getSelectedServer() {
+
+		
 		ServerRow serverModel = this.serverListTableView.getSelectionModel().getSelectedItem();
 		if (null == serverModel) {
-			return null;
+			if (this.mostRecentSelectedServer != null) {
+				return this.mostRecentSelectedServer;
+			} else {
+				return null;	
+			}
 		} else {
 			return serverModel.getServer();
 		}

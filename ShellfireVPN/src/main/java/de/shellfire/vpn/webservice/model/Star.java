@@ -10,12 +10,12 @@ package de.shellfire.vpn.webservice.model;
 public class Star implements java.io.Serializable {
 	private int numStars;
 
-	private java.lang.String text;
+	private String text;
 
 	public Star() {
 	}
 
-	public Star(int numStars, java.lang.String text) {
+	public Star(int numStars, String text) {
 		this.numStars = numStars;
 		this.text = text;
 	}
@@ -43,7 +43,7 @@ public class Star implements java.io.Serializable {
 	 * 
 	 * @return text
 	 */
-	public java.lang.String getText() {
+	public String getText() {
 		return text;
 	}
 
@@ -52,7 +52,7 @@ public class Star implements java.io.Serializable {
 	 * 
 	 * @param text
 	 */
-	public void setText(java.lang.String text) {
+	public void setText(String text) {
 		this.text = text;
 	}
 

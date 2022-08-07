@@ -26,6 +26,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
+import javax.imageio.ImageIO;
+
 import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
 import org.xnap.commons.i18n.LocaleChangeEvent;
@@ -301,8 +303,9 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	 *
 	 * @param WebService
 	 *            service
+	 * @throws IOException 
 	 */
-	public void setServiceAndInitialize(WebService service) {
+	public void setServiceAndInitialize(WebService service) throws IOException {
 		log.debug("Shellfire service has a size of " + service.getAllVpn().size());
 		if (!service.isLoggedIn()) {
 			try {
@@ -970,16 +973,26 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		log.debug("mySetIconImage: the icon Image  path is " + imagePath);
 		Platform.runLater(() -> {
 			this.application.getStage().getIcons().clear();
-			this.application.getStage().getIcons().add(new Image(imagePath));
+			
+			URL url = getClass().getResource(imagePath);
+			try {
+				BufferedImage image = ImageIO.read(url);
+				this.application.getStage().getIcons().add(SwingFXUtils.toFXImage(image, null));
+			} catch (IOException e) {
+				log.error("Could not load Image in mySetIconImage", e);
+			}
+			
+			
 		});
 	}
 
-	private void initTray() {
+	private void initTray() throws IOException {
 		if (SystemTray.isSupported()) {
 
 			SystemTray tray = SystemTray.getSystemTray();
-			Image image2 = new Image("/icons/sfvpn2-idle-big.png");
-			BufferedImage image = SwingFXUtils.fromFXImage(image2, null);
+			URL url = getClass().getResource("/icons/sfvpn2-idle-big.png");
+			BufferedImage image = ImageIO.read(url);
+				
 			ActionListener exitListener = new ActionListener() {
 
 				public void actionPerformed(ActionEvent e) {
@@ -1183,7 +1196,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
 	private boolean showStatusUrl() {
 		VpnProperties props = VpnProperties.getInstance();
-		return props.getBoolean(LoginController.REG_SHOWSTATUSURL, false);
+		return props.getBoolean(Util.REG_SHOWSTATUSURL, false);
 	}
 
 	private void hideConnectProgress() {

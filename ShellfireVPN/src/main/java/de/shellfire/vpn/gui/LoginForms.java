@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
 
 import de.shellfire.vpn.Util;
-import de.shellfire.vpn.VpnProperties;
 import de.shellfire.vpn.client.ServiceToolsFX;
 import de.shellfire.vpn.gui.controller.AppScreenControllerSettings;
 import de.shellfire.vpn.gui.controller.LoginController;
@@ -37,8 +36,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
-import jfxtras.styles.jmetro.JMetro;
-import jfxtras.styles.jmetro.Style;
 
 public class LoginForms extends Application {
 
@@ -319,6 +316,7 @@ public class LoginForms extends Application {
 		if (cmd.equals("uninstallservice")) {
 			ServiceToolsFX.getInstanceForOS().uninstall();
 			this.stage.hide();
+			System.exit(0);
 			return;
 		} else if (cmd.equals("installservice")) {
 			this.stage.hide();

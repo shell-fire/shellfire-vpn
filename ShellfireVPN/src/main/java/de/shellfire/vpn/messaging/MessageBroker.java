@@ -2,7 +2,6 @@ package de.shellfire.vpn.messaging;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
@@ -10,11 +9,14 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.slf4j.Logger;
 
 import de.shellfire.vpn.Util;
-import net.openhft.chronicle.Chronicle;
-import net.openhft.chronicle.ChronicleQueueBuilder;
-import net.openhft.chronicle.ExcerptAppender;
-import net.openhft.chronicle.ExcerptCommon;
-import net.openhft.chronicle.ExcerptTailer;
+import net.openhft.chronicle.bytes.MethodReader;
+import net.openhft.chronicle.queue.ChronicleQueue;
+import net.openhft.chronicle.queue.ExcerptAppender;
+import net.openhft.chronicle.queue.ExcerptCommon;
+import net.openhft.chronicle.queue.ExcerptTailer;
+import net.openhft.chronicle.queue.impl.single.SingleChronicleQueueBuilder;
+import net.openhft.chronicle.wire.DocumentContext;
+import net.openhft.chronicle.wire.Wire;
 
 public class MessageBroker {
 
@@ -24,17 +26,17 @@ public class MessageBroker {
 	// TODO: add full path to chmod part
 	private static final String FILE_PATH_SERVICE_TO_CLIENT = "sfvpn-chronicle-service-to-client";
 	private static final String FILE_PATH_CLIENT_TO_SERVICE = "sfvpn-chronicle-client-to-service";
-	ExcerptAppender writer;
+	ExcerptAppender appender;
 	ExcerptTailer tailer;
 
 	private final static int MAX_MESSAGE_SIZE = 1000;
 	private static final long TIMEOUT = 10000;
 
 	private Map<UUID, Message<?, ?>> receivedMessageMap = new ConcurrentHashMap<UUID, Message<?, ?>>();
-	private ArrayList<MessageListener<?>> messageListeners = new ArrayList<MessageListener<?>>();
+	private MessageListener<?> messageListener = null;
 	private ReaderThread readerThread;
-	private Chronicle chronicleReader;
-	private Chronicle chronicleWriter;
+	private ChronicleQueue chronicleReader;
+	private ChronicleQueue chronicleWriter;
 	private String readerPath;
 	private String writerPath;
 
@@ -128,16 +130,13 @@ public class MessageBroker {
 		writerPath = getChronicleFiles(Direction.Write);
 
 		log.debug("Opening Chronicle Writer Queue at {}", writerPath);
-		chronicleWriter = ChronicleQueueBuilder.indexed(writerPath).build();
+		chronicleWriter = SingleChronicleQueueBuilder.single(writerPath).build();
 
 		log.debug("Opening Chronicle Reader Queue at {}", readerPath);
-		chronicleReader = ChronicleQueueBuilder.indexed(readerPath).build();
+		chronicleReader = SingleChronicleQueueBuilder.single(readerPath).build();
 
 		// Obtain an ExcerptAppender
-		writer = chronicleWriter.createAppender();
-
-		// Configure the appender to write up to 1000 bytes
-		writer.startExcerpt(MAX_MESSAGE_SIZE);
+		appender = chronicleWriter.acquireAppender();
 
 		// Obtain an ExcerptTailer
 		tailer = chronicleReader.createTailer();
@@ -174,22 +173,21 @@ public class MessageBroker {
 		public void run() {
 			while (!stop) {
 				// While until there is a new Excerpt to read, or stop is requested
-				while (!stop && !tailer.nextIndex()) {
-					// 50 ms is enough to not use ANY cpu during sleep.
-					Util.sleep(50);
-				}
+				
+				// DocumentContext dc = tailer.readingDocument();
 
-				// Read the object
+				Wire wire  = null;
+				while (!stop && (wire = tailer.readingDocument().wire()) == null) {
+				// 	// 50 ms is enough to not use ANY cpu during sleep.
+				 					Util.sleep(50);
+				}
 				Object o = null;
 				try {
-					o = tailer.readObject();
+					o = wire.read("msg").object();
 
 				} catch (IllegalStateException e) {
 					log.error("Tailer in invalid state, ignoring", e);
 				}
-
-				// Make the reader ready for next read
-				tailer.finish();
 
 				if (o != null && o instanceof Message) {
 					Message<?, ?> message = (Message<?, ?>) o;
@@ -205,6 +203,7 @@ public class MessageBroker {
 				}
 
 			}
+			log.debug("stop is true, ReaderThread terminating");
 		}
 	}
 
@@ -215,17 +214,14 @@ public class MessageBroker {
 		readerThread.start();
 	}
 
-	public void addMessageListener(MessageListener<?> listener) {
-		this.messageListeners.add(listener);
+	public void setMessageListener(MessageListener<?> listener) {
+		this.messageListener = listener;
 	}
 
 	private void notifyListeners(Message<?, ?> message) {
 		if (message.isRecent()) {
 			try {
-				for (MessageListener<?> listener : this.messageListeners) {
-					listener.messageReceived(message);
-				}
-
+				this.messageListener.messageReceived(message);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -239,8 +235,11 @@ public class MessageBroker {
 		message.setSender(Util.getUserType());
 		log.debug(message.toString());
 
-		writer.writeObject(message);
-		writer.finish();
+		// As Appenders are not thread-safe, we try always getting a fresh oen...
+		ExcerptAppender threadlocalAppender = chronicleWriter.acquireAppender();
+		try (final DocumentContext dc = threadlocalAppender.writingDocument()) {
+		      dc.wire().write("msg").object(message);
+		}
 
 		return null;
 	}
@@ -286,7 +285,7 @@ public class MessageBroker {
 		log.info("closing tailer...");
 		this.closeExcerpt(tailer);
 		log.info("closing writer...");
-		this.closeExcerpt(writer);
+		this.closeExcerpt(appender);
 
 		log.info("closing chronicleReader");
 		closeChronicle(chronicleReader);
@@ -336,19 +335,16 @@ public class MessageBroker {
 		log.debug("closeExcerpt() - finish");
 	}
 
-	private void closeChronicle(Chronicle chronicle) {
+	private void closeChronicle(ChronicleQueue chronicle) {
 		log.debug("closeChronicle() - start");
-		try {
-			if (chronicle == null) {
-				log.warn("chronicle is null, not closing");
-			} else {
-				log.info("closing chroncile");
-				chronicle.close();
-				chronicle = null;
-			}
-			chronicleReader.close();
-		} catch (IOException e) {
-			log.error("IOException occured during chronicle.close()", e);
+		if (chronicle == null) {
+			log.warn("chronicle is null, not closing");
+		} else {
+			log.info("closing chronicle	");
+			chronicle.close();
+			log.info("chronicle closed, setting to null");
+			chronicle = null;
+			log.info("chronicle set to null");
 		}
 
 		log.debug("closeChronicle() - finish");

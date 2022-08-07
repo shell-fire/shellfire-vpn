@@ -31,7 +31,7 @@ public class ServiceMessageHandler implements MessageListener<Object>, Connectio
 		this.vpnController = VpnControllerFactory.getVpnController();
 		this.vpnController.addConnectionStateListener(this);
 
-		messageBroker.addMessageListener(this);
+		messageBroker.setMessageListener(this);
 		messageBroker.startReaderThread();
 	}
 

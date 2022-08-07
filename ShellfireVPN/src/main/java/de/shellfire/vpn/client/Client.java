@@ -34,7 +34,7 @@ public class Client implements MessageListener<Serializable> {
 
 	private Client() throws IOException {
 		this.messageBroker = MessageBroker.getInstance();
-		messageBroker.addMessageListener(this);
+		messageBroker.setMessageListener(this);
 		messageBroker.startReaderThread();
 	}
 

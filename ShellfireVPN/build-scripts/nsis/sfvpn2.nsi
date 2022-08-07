@@ -143,7 +143,7 @@ Section "${PRODUCT_NAME}" SecShellfireVPN
   ExpandEnvStrings $0 %COMSPEC%
   DetailPrint 'Running Command: "$0" /C "$INSTDIR\ShellfireVPN2.exe" uninstallservice'
   nsExec::ExecToLog '"$0" /C "$INSTDIR\ShellfireVPN2.exe" uninstallservice'
-  sleep 4000
+  sleep 10000
   continueafteruninst:
   
   RmDir /r $INSTDIR 

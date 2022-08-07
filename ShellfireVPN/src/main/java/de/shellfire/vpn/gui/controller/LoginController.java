@@ -76,14 +76,6 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 	private Label loginLabel;
 
 	private static final long serialVersionUID = 1L;
-	public static final String REG_PASS = "pass";
-	public static final String REG_USER = "user";
-	public static final String REG_AUTOlOGIN = "autologin";
-	public static final String REG_AUTOCONNECT = "autoConnect";
-	public static final String REG_INSTDIR = "instdir";
-	public static final String REG_SHOWSTATUSURL = "show_status_url_on_connect";
-	private static final String REG_FIRST_START = "firststart";
-	public static final String REG_SERVERBACKGROUNDIMAGEFILENAMEMAP = "server_background_image_filename_map";
 	WebService service = null;
 	private boolean minimize;
 	public static LoginForms application;
@@ -159,7 +151,11 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
 							application.shellfireVpnMainController.initializeComponents();
 							
-							application.shellfireVpnMainController.setServiceAndInitialize(service);
+							try {
+								application.shellfireVpnMainController.setServiceAndInitialize(service);
+							} catch (IOException e) {
+								log.error("Error during setServiceAndInitialize", e);
+							}
 							
 							application.shellfireVpnMainController.prepareSubviewControllers();
 							application.shellfireVpnMainController.setApp(application);
@@ -279,7 +275,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 		fButtonLogin.setOnMouseClicked(e -> {
 			fUsername.requestFocus();
 		});
-		mySetIconImage("/icons/sfvpn2-idle-big.png");
+		mySetIconImage("file:/icons/sfvpn2-idle-big.png");
 	}
 
 	public void setApp(LoginForms applic) {
@@ -444,8 +440,8 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
 	private void restoreCredentialsFromRegistry() {
 		VpnProperties props = VpnProperties.getInstance();
-		String user = props.getProperty(REG_USER, null);
-		String pass = props.getProperty(REG_PASS, null);
+		String user = props.getProperty(Util.REG_USER, null);
+		String pass = props.getProperty(Util.REG_PASS, null);
 
 		if (user != null && pass != null) {
 			user = CryptFactory.decrypt(user);
@@ -464,7 +460,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
 	private boolean autoLoginIfActive() {
 		VpnProperties props = VpnProperties.getInstance();
-		boolean doAutoLogin = props.getBoolean(REG_AUTOlOGIN, false);
+		boolean doAutoLogin = props.getBoolean(Util.REG_AUTOlOGIN, false);
 
 		if (doAutoLogin) {
 			this.application.getStage().hide();
@@ -492,9 +488,9 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
 	private void removeCredentialsFromRegistry() {
 		VpnProperties props = VpnProperties.getInstance();
-		props.remove(REG_USER);
-		props.remove(REG_PASS);
-		props.remove(REG_AUTOlOGIN);
+		props.remove(Util.REG_USER);
+		props.remove(Util.REG_PASS);
+		props.remove(Util.REG_AUTOlOGIN);
 	}
 
 	private void askForNewAccountAndAutoStartIfFirstStart() {
@@ -509,8 +505,8 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
 	private boolean firstStart() {
 		VpnProperties props = VpnProperties.getInstance();
-		boolean firstStart = props.getBoolean(LoginController.REG_FIRST_START, true);
-		String autoLogin = props.getProperty(LoginController.REG_AUTOlOGIN, null);
+		boolean firstStart = props.getBoolean(Util.REG_FIRST_START, true);
+		String autoLogin = props.getProperty(Util.REG_AUTOlOGIN, null);
 
 		return firstStart && autoLogin == null;
 	}
@@ -542,20 +538,20 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
 	private void setFirstStart(boolean b) {
 		VpnProperties props = VpnProperties.getInstance();
-		props.setBoolean(LoginController.REG_FIRST_START, b);
+		props.setBoolean(Util.REG_FIRST_START, b);
 	}
 
 	private void storeCredentialsInVpnProperties(String user, String password) {
 		VpnProperties props = VpnProperties.getInstance();
-		props.setProperty(REG_USER, CryptFactory.encrypt(user));
-		props.setProperty(REG_PASS, CryptFactory.encrypt(password));
-		props.setBoolean(REG_AUTOlOGIN, true);
+		props.setProperty(Util.REG_USER, CryptFactory.encrypt(user));
+		props.setProperty(Util.REG_PASS, CryptFactory.encrypt(password));
+		props.setBoolean(Util.REG_AUTOlOGIN, true);
 
 	}
 
 	private void setAutoConnectInRegistry(boolean autoConnect) {
 		VpnProperties props = VpnProperties.getInstance();
-		props.setBoolean(REG_AUTOCONNECT, autoConnect);
+		props.setBoolean(Util.REG_AUTOCONNECT, autoConnect);
 
 	}
 
@@ -582,7 +578,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 				restart.add("ShellfireVPN2.exe");
 				Process p;
 				try {
-					p = new ProcessBuilder(restart).directory(new File(getInstDir())).start();
+					p = new ProcessBuilder(restart).directory(new File(Util.getInstDir())).start();
 					Util.digestProcess(p);
 
 					System.exit(0);
@@ -592,17 +588,6 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
 			}
 		} 
-	}
-
-	public static String getInstDir() {
-		VpnProperties props = VpnProperties.getInstance();
-		String instDir = props.getProperty(REG_INSTDIR, null);
-
-		if (instDir == null) {
-			instDir = new File("").getAbsolutePath();
-		}
-
-		return instDir;
 	}
 
 }

@@ -13,14 +13,14 @@ public class WsHelpItem implements java.io.Serializable {
 	 */
 	private static final long serialVersionUID = 6159966437752302716L;
 
-	private java.lang.String header;
+	private String header;
 
-	private java.lang.String text;
+	private String text;
 
 	public WsHelpItem() {
 	}
 
-	public WsHelpItem(java.lang.String header, java.lang.String text) {
+	public WsHelpItem(String header, String text) {
 			this.header = header;
 			this.text = text;
 	}

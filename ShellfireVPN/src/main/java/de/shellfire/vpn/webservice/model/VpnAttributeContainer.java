@@ -8,14 +8,14 @@
 package de.shellfire.vpn.webservice.model;
 
 public class VpnAttributeContainer implements java.io.Serializable {
-	private java.lang.String containerName;
+	private String containerName;
 
 	private VpnAttributeElement[] elements;
 
 	public VpnAttributeContainer() {
 	}
 
-	public VpnAttributeContainer(java.lang.String containerName, VpnAttributeElement[] elements) {
+	public VpnAttributeContainer(String containerName, VpnAttributeElement[] elements) {
 		this.containerName = containerName;
 		this.elements = elements;
 	}
@@ -25,7 +25,7 @@ public class VpnAttributeContainer implements java.io.Serializable {
 	 * 
 	 * @return containerName
 	 */
-	public java.lang.String getContainerName() {
+	public String getContainerName() {
 		return containerName;
 	}
 
@@ -34,7 +34,7 @@ public class VpnAttributeContainer implements java.io.Serializable {
 	 * 
 	 * @param containerName
 	 */
-	public void setContainerName(java.lang.String containerName) {
+	public void setContainerName(String containerName) {
 		this.containerName = containerName;
 	}
 

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch4jConfig>
+  <dontWrapJar>false</dontWrapJar>
+  <headerType>gui</headerType>
+  <jar>C:\nextcloud\My Library\workspace\shellfire-vpn4\ShellfireVPN\bin\ShellfireVPN2.exe</jar>
+  <outfile>C:\nextcloud\My Library\workspace\shellfire-vpn4\ShellfireVPN\bin\ShellfireVPN2.exe</outfile>
+  <errTitle>Java Loader Fehler</errTitle>
+  <cmdLine></cmdLine>
+  <chdir>.</chdir>
+  <priority>normal</priority>
+  <downloadUrl>http://java.com/download</downloadUrl>
+  <supportUrl>http://www.shellfire.de</supportUrl>
+  <stayAlive>false</stayAlive>
+  <restartOnCrash>false</restartOnCrash>
+  <manifest></manifest>
+  <icon>C:\nextcloud\My Library\workspace\shellfire-vpn4\ShellfireVPN\build-scripts\images\normal.ico</icon>
+  <jre>
+    <path></path>
+    <bundledJre64Bit>false</bundledJre64Bit>
+    <bundledJreAsFallback>false</bundledJreAsFallback>
+    <minVersion>1.18.0</minVersion>
+    <maxVersion></maxVersion>
+    <jdkPreference>preferJre</jdkPreference>
+    <runtimeBits>64/32</runtimeBits>
+    <maxHeapSize>512</maxHeapSize>
+    <opt>--add-opens java.base/java.lang=ALL-UNNAMED</opt>
+    <opt>--add-opens java.base/sun.nio.ch=ALL-UNNAMED</opt>
+  </jre>
+  <splash>
+    <file>C:\nextcloud\My Library\workspace\shellfire-vpn4\ShellfireVPN\build-scripts\images\slpash\slpash-3.2.bmp</file>
+    <waitForWindow>true</waitForWindow>
+    <timeout>5</timeout>
+    <timeoutErr>false</timeoutErr>
+  </splash>
+  <versionInfo>
+    <fileVersion>3.2.0.0</fileVersion>
+    <txtFileVersion>ShellfireVPN 3.2</txtFileVersion>
+    <fileDescription>ShellfireVPN Executable </fileDescription>
+    <copyright>(c) 2010 by Shellfire GbR</copyright>
+    <productVersion>3.2.0.0</productVersion>
+    <txtProductVersion>ShellfireVPN 3.2</txtProductVersion>
+    <productName>ShellfireVPN</productName>
+    <companyName>Shellfire GbR</companyName>
+    <internalName>ShellfireVPN</internalName>
+    <originalFilename>ShellfireVPN2.exe</originalFilename>
+    <trademarks></trademarks>
+    <language>ENGLISH_US</language>
+  </versionInfo>
+</launch4jConfig>

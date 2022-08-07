@@ -8,9 +8,9 @@
 package de.shellfire.vpn.webservice.model;
 
 public class WsUpgradeResult implements java.io.Serializable {
-	private java.lang.String error;
+	private String error;
 
-	private java.lang.String eAccountType;
+	private String eAccountType;
 
 	private int iUpgradeUntil;
 
@@ -19,7 +19,7 @@ public class WsUpgradeResult implements java.io.Serializable {
 	public WsUpgradeResult() {
 	}
 
-	public WsUpgradeResult(java.lang.String error, java.lang.String eAccountType, int iUpgradeUntil, int upgradeSuccesful) {
+	public WsUpgradeResult(String error, String eAccountType, int iUpgradeUntil, int upgradeSuccesful) {
 		this.error = error;
 		this.eAccountType = eAccountType;
 		this.iUpgradeUntil = iUpgradeUntil;
@@ -31,7 +31,7 @@ public class WsUpgradeResult implements java.io.Serializable {
 	 * 
 	 * @return error
 	 */
-	public java.lang.String getError() {
+	public String getError() {
 		return error;
 	}
 
@@ -40,7 +40,7 @@ public class WsUpgradeResult implements java.io.Serializable {
 	 * 
 	 * @param error
 	 */
-	public void setError(java.lang.String error) {
+	public void setError(String error) {
 		this.error = error;
 	}
 
@@ -49,7 +49,7 @@ public class WsUpgradeResult implements java.io.Serializable {
 	 * 
 	 * @return eAccountType
 	 */
-	public java.lang.String getEAccountType() {
+	public String getEAccountType() {
 		return eAccountType;
 	}
 
@@ -58,7 +58,7 @@ public class WsUpgradeResult implements java.io.Serializable {
 	 * 
 	 * @param eAccountType
 	 */
-	public void setEAccountType(java.lang.String eAccountType) {
+	public void setEAccountType(String eAccountType) {
 		this.eAccountType = eAccountType;
 	}
 

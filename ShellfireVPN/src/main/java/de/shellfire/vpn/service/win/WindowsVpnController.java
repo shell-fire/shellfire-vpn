@@ -150,7 +150,10 @@ public class WindowsVpnController implements IVpnController {
 			boolean serviceStarted = startWireGuardService(serviceName);
 			
 			if (serviceStarted) {
-				log.debug("... service started, setting connectionState to Connected ...");
+				log.debug("... service started, waiting until internet is available again");
+				Util.waitUntilInternetAvailable(5);
+				
+				log.debug("... setting connectionState to Connected ...");
 				this.setConnectionState(ConnectionState.Connected, Reason.WireGuardServiceStarted);
 			} else {
 				log.debug("... service STOPPED, setting connectionState to Disconnected ...");
@@ -504,9 +507,12 @@ SERVICE_NAME: WireGuardTunnel$wg-sf35022
 	private void startConnectionMonitoring() {
 		log.debug("starting connection monitoring");
 		// if connection monitoring is not yet active, start it
+		WindowsVpnController troller = this;
 		if (this.connectionMonitor == null) {
-			this.connectionMonitor = new Timer();
-			connectionMonitor.schedule(new ConnectionMonitor(this), 5000, 20000);
+			new Thread(() ->  {
+				this.connectionMonitor = new Timer();
+				connectionMonitor.schedule(new ConnectionMonitor(troller), 5000, 20000);
+			}).start();
 		}
 
 		log.debug("connection monitoring started");

@@ -17,15 +17,19 @@ import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
 
 import de.shellfire.vpn.Util;
+import de.shellfire.vpn.client.ConnectionState;
 import de.shellfire.vpn.client.Controller;
 import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.gui.ServerImageBackgroundManager;
+import de.shellfire.vpn.gui.helper.ExceptionThrowingReturningRunnableImpl;
 import de.shellfire.vpn.gui.model.CountryMap;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.types.Country;
 import de.shellfire.vpn.types.Server;
 import de.shellfire.vpn.types.ServerType;
+import de.shellfire.vpn.webservice.Response;
 import de.shellfire.vpn.webservice.WebService;
+import de.shellfire.vpn.webservice.model.LoginResponse;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -58,6 +62,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextFlow;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import netscape.javascript.JSObject;
 
 /**
  * FXML Controller class
@@ -104,16 +109,26 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
 	private Map<ServerType, Image> serverTypeCrownMap;
 
 	String langKey = VpnI18N.getLanguage().getKey();
-	private Image imageStatusEncrypted = imageStatusEncrypted = new Image("/icons/status-encrypted-width736.gif");
-	private Image imageButtonDisconnect = new Image("/buttons/button-disconnect-" + langKey + ".gif");
-	private Image imageStatusUnencrypted = new Image("/icons/status-unencrypted-width736.gif");
-	private Image imageButtonConnect = new Image("/buttons/button-connect-" + langKey + ".gif");
+	private Image imageStatusEncrypted = imageStatusEncrypted = new Image("file:/icons/status-encrypted-width736.gif");
+	private Image imageButtonDisconnect = new Image("file:/buttons/button-disconnect-" + langKey + ".gif");
+	private Image imageStatusUnencrypted = new Image("file:/icons/status-unencrypted-width736.gif");
+	private Image imageButtonConnect = new Image("file:/buttons/button-connect-" + langKey + ".gif");
 	private boolean initialized;
 	private WebEngine webEngine;
 	protected boolean mapLoaded = false;
 	private double mapLat;
 	private double mapLng;
 
+	public class WebEngineConsole
+	{
+	    public void log(String text)
+	    {
+	        log.debug("WebEngineConsole: {}", text);
+	    }
+	}
+	
+	private final WebEngineConsole webEngineConsole = new WebEngineConsole();
+	
 
 	public void connectButtonDisable(boolean disable) {
 		// this.connectButton.setDisable(disable);
@@ -134,21 +149,7 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
 			// makes product key to be disable when disable is set to true
 			// this.connectImageView.managedProperty().bind(this.connectImageView.visibleProperty());
 			
-			 webEngine = locationMap.getEngine();
-			 webEngine.setJavaScriptEnabled(true);
-			 webEngine.load(getClass().getResource("map.html").toString());
-			 webEngine.getLoadWorker().stateProperty().addListener(new ChangeListener<Worker.State>() {
-				    @Override
-				    public void changed(ObservableValue<? extends Worker.State> ov, Worker.State t, Worker.State t1) {
-				        if (t1 == Worker.State.SUCCEEDED) {
-				            mapLoaded  = true;        
-				            log.debug("Map has now been loaded - will process changes from now on");
-				            setLocation();
-				            application.controllerInstance.loginProgressDialog.hide();
-
-				        }
-				    }
-			});
+			 initWebEngine();
 			 
 			 serverTypeCrownMap = new HashMap<ServerType, Image>();
 			 this.serverTypeCrownMap.put(ServerType.Free, Util.getImageIconFX("/images/crowns_1_status.png"));
@@ -160,23 +161,82 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
 		}
 		this.initialized = true;
 	}
+
+	private void initWebEngine(ConnectionState connectionState) {
+
+		webEngine = locationMap.getEngine();
+		webEngine.setJavaScriptEnabled(true);
+		webEngine.getLoadWorker().stateProperty().addListener((observable, oldValue, newValue) -> {
+			JSObject window = (JSObject) webEngine.executeScript("window");
+			window.setMember("java", webEngineConsole);
+			webEngine
+					.executeScript("console.log = function(message)\n" + "{\n" + "    java.log(message);\n" + "};");
+		});
+
+		webEngine.getLoadWorker().stateProperty().addListener(new ChangeListener<Worker.State>() {
+			@Override
+			public void changed(ObservableValue<? extends Worker.State> ov, Worker.State t, Worker.State t1) {
+				log.debug("loadWorker() - changed from {} to {}", t, t1);
+				if (t1 == Worker.State.SUCCEEDED) {
+					mapLoaded = true;
+					log.debug("Map has now been loaded - will process changes from now on");
+					setLocation();
+					application.controllerInstance.loginProgressDialog.hide();
+				}
+			}
+		});
+		webEngine.load(getClass().getResource("map.html").toString());
+	}
+	
+	private void initWebEngine() {
+		initWebEngine(ConnectionState.Disconnected);
+	}
 	
 	public void setMapConnected() {
+		log.debug("setMapConnected() - start");
 		if (mapLoaded) {
-			Platform.runLater(() -> {
-				webEngine.executeScript("document.setConnected();");
-			});
+			
+			log.debug("Starting new thread to sleep some time before calling the webengine again on main thread");
+            new Thread( 
+                    () -> {
+                    	log.debug("waiting until internet connection is available again");
+                    	Util.waitUntilInternetAvailable(5);
+
+         				log.debug("calling Platform.runLater()");
+         				Platform.runLater(() -> {
+         					log.debug("setMapconnected() - in thread - calling webEngine.executeScript");
+
+         					Object result = webEngine.executeScript("document.setConnected();");
+         					log.debug("Result of webEngine.executeScript() = {}", result);
+         				});
+                         
+                    }).start(); 
+		} else {
+			log.debug("mapLoaded == false -> cant access webEngine");
 		}
+		log.debug("setMapConnected() - done");
 	}
 
 	public void setMapDisconnected() {
 		if (mapLoaded) {
-			Platform.runLater(() -> {
-				webEngine.executeScript("document.setDisconnected();");
-			});
+			log.debug("Starting new thread to sleep some time before calling the webengine again on main thread");
+            new Thread( 
+                    () -> {
+                    	log.debug("waiting until internet connection is available again");
+                    	Util.waitUntilInternetAvailable(5);
 
+
+         				log.debug("calling Platform.runLater()");
+         				Platform.runLater(() -> {
+         					log.debug("setMapDisconnected() - in thread - calling webEngine.executeScript");
+         					Object result = webEngine.executeScript("document.setDisconnected();");
+         					log.debug("Result of webEngine.executeScript() = {}", result);
+         				});
+                         
+                    }).start(); 
 		}
 	}
+
 
 	public void setLocation() {
 		log.debug("setLocation() called without params - checking if remembered coordinates are stored");
@@ -195,7 +255,8 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
 		if (mapLoaded) {
 			Platform.runLater(() -> {
 				log.debug("executing: setLocation({}, {})", lng, lat);
-				webEngine.executeScript("document.setPosition("+lng+", " + lat + ");");
+				Object result = webEngine.executeScript("document.setPosition("+lng+", " + lat + ");");
+				log.debug("Result of webEngine.executeScript() = {}", result);
 			});
 
 		} else {
@@ -207,8 +268,9 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
 	
 	public void notifyThatNowVisible(boolean connected) {
 		if (connected) {
-			this.setMapConnected();
+			
 			Platform.runLater(() -> {
+				this.setMapConnected();
 				this.rectConnectButton.setFill(Color.web("#c76673"));
 				this.labelConnect.setText(i18n.tr("DISCONNECT"));
 				this.labelConnectionStatus.setStyle("-fx-background-color: #74e495");
@@ -217,8 +279,9 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
 			});
 			
 		} else {
-			this.setMapDisconnected();
+			
 			Platform.runLater(() -> {
+				this.setMapDisconnected();
 				this.rectConnectButton.setFill(Color.web("#74e495"));
 				this.labelConnect.setText(i18n.tr("CONNECT"));
 				this.labelConnectionStatus.setStyle("-fx-background-color: #c76673");

@@ -115,7 +115,7 @@ public class AppScreenControllerSettings implements Initializable, AppScreenCont
 	private LoginForms application;
 	private static final Logger log = Util.getLogger(AppScreenControllerSettings.class.getCanonicalName());
 	private ShellfireVPNMainFormFxmlController mainFormController;
-	private Image buttonDisconnect = new Image("/buttons/button-disconnect-" + VpnI18N.getLanguage().getKey() + ".gif");
+	private Image buttonDisconnect = new Image("file:/buttons/button-disconnect-" + VpnI18N.getLanguage().getKey() + ".gif");
 	private boolean languagesInitialized = false;
 
 
@@ -280,9 +280,9 @@ public class AppScreenControllerSettings implements Initializable, AppScreenCont
 			}
 			
 			VpnProperties props = VpnProperties.getInstance();
-			props.remove(LoginController.REG_USER);
-			props.remove(LoginController.REG_PASS);
-			props.setBoolean(LoginController.REG_AUTOlOGIN, false);
+			props.remove(Util.REG_USER);
+			props.remove(Util.REG_PASS);
+			props.setBoolean(Util.REG_AUTOlOGIN, false);
 			
 			if ((result.isPresent()) && (result.get() == ButtonType.YES)) {
 				alert.close();
@@ -361,13 +361,13 @@ public class AppScreenControllerSettings implements Initializable, AppScreenCont
 		VpnProperties props = VpnProperties.getInstance();
 
 		// TODO: autoConnect aktuell ohne funktion
-		boolean autoConnect = props.getBoolean(LoginController.REG_AUTOCONNECT, false);
+		boolean autoConnect = props.getBoolean(Util.REG_AUTOCONNECT, false);
 		this.connectAutomatically.setSelected(autoConnect);
 
 		boolean autoStart = Client.vpnAutoStartEnabled();
 		this.startOnBoot.setSelected(autoStart);
 
-		boolean showStatusUrlOnConnect = props.getBoolean(LoginController.REG_SHOWSTATUSURL, false);
+		boolean showStatusUrlOnConnect = props.getBoolean(Util.REG_SHOWSTATUSURL, false);
 		this.showStatusSite.setSelected(showStatusUrlOnConnect);
 
 		this.initLanguages();
@@ -409,8 +409,8 @@ public class AppScreenControllerSettings implements Initializable, AppScreenCont
 		VpnProperties props = VpnProperties.getInstance();
 		this.currentLanguage = this.languageComboBox.getValue();
 
-		props.setBoolean(LoginController.REG_AUTOCONNECT, this.connectAutomatically.isSelected());
-		props.setBoolean(LoginController.REG_SHOWSTATUSURL, this.showStatusSite.isSelected());
+		props.setBoolean(Util.REG_AUTOCONNECT, this.connectAutomatically.isSelected());
+		props.setBoolean(Util.REG_SHOWSTATUSURL, this.showStatusSite.isSelected());
 
 		if (this.startOnBoot.isSelected()) {
 			Client.addVpnToAutoStart();

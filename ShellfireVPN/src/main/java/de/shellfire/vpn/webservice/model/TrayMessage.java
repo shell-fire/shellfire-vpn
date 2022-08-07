@@ -8,16 +8,16 @@
 package de.shellfire.vpn.webservice.model;
 
 public class TrayMessage implements java.io.Serializable {
-	private java.lang.String header;
+	private String header;
 
-	private java.lang.String text;
+	private String text;
 
-	private java.lang.String buttontext;
+	private String buttontext;
 
 	public TrayMessage() {
 	}
 
-	public TrayMessage(java.lang.String header, java.lang.String text, java.lang.String buttontext) {
+	public TrayMessage(String header, String text, String buttontext) {
 		this.header = header;
 		this.text = text;
 	}
@@ -27,7 +27,7 @@ public class TrayMessage implements java.io.Serializable {
 	 * 
 	 * @return header
 	 */
-	public java.lang.String getHeader() {
+	public String getHeader() {
 		return header;
 	}
 
@@ -36,7 +36,7 @@ public class TrayMessage implements java.io.Serializable {
 	 * 
 	 * @param header
 	 */
-	public void setHeader(java.lang.String header) {
+	public void setHeader(String header) {
 		this.header = header;
 	}
 
@@ -45,7 +45,7 @@ public class TrayMessage implements java.io.Serializable {
 	 * 
 	 * @return text
 	 */
-	public java.lang.String getText() {
+	public String getText() {
 		return text;
 	}
 
@@ -54,7 +54,7 @@ public class TrayMessage implements java.io.Serializable {
 	 * 
 	 * @param text
 	 */
-	public void setText(java.lang.String text) {
+	public void setText(String text) {
 		this.text = text;
 	}
 

@@ -18,12 +18,12 @@ public class Entry implements java.io.Serializable {
 
 	private Star star;
 
-	private java.lang.String text;
+	private String text;
 
 	public Entry() {
 	}
 
-	public Entry(boolean boolEntry, boolean starEntry, boolean stringEntry, boolean bool, Star star, java.lang.String text) {
+	public Entry(boolean boolEntry, boolean starEntry, boolean stringEntry, boolean bool, Star star, String text) {
 		this.boolEntry = boolEntry;
 		this.starEntry = starEntry;
 		this.stringEntry = stringEntry;
@@ -127,7 +127,7 @@ public class Entry implements java.io.Serializable {
 	 * 
 	 * @return text
 	 */
-	public java.lang.String getText() {
+	public String getText() {
 		return text;
 	}
 
@@ -136,7 +136,7 @@ public class Entry implements java.io.Serializable {
 	 * 
 	 * @param text
 	 */
-	public void setText(java.lang.String text) {
+	public void setText(String text) {
 		this.text = text;
 	}
 

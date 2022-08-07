@@ -1,9 +1,10 @@
 package de.shellfire.vpn.messaging;
 
-import java.io.Serializable;
 import java.util.UUID;
 
-public class Message<T, E> implements Serializable {
+import net.openhft.chronicle.wire.SelfDescribingMarshallable;
+
+public class Message<T, E> extends SelfDescribingMarshallable {
 
 	private static final long serialVersionUID = -1627288370966014287L;
 	private static Integer currentMessageId = 0;

@@ -60,12 +60,12 @@ public abstract class ServiceToolsFX {
 	}
 
 	public void install() {
-		String instDir = LoginController.getInstDir();
+		String instDir = Util.getInstDir();
 		install(instDir);
 	}
 
 	public void uninstall() {
-		String instDir = LoginController.getInstDir();
+		String instDir = Util.getInstDir();
 		uninstall(instDir);
 	}
 

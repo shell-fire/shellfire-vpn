@@ -5,7 +5,7 @@
   <jar>C:\nextcloud\My Library\workspace\shellfire-vpn4\ShellfireVPN\bin\ShellfireVPN2Dat.jar</jar>
   <outfile>C:\nextcloud\My Library\workspace\shellfire-vpn4\ShellfireVPN\bin\ShellfireVPN2Dat.exe</outfile>
   <errTitle>Java Loader Fehler</errTitle>
-  <cmdLine> </cmdLine>
+  <cmdLine>--add-opens java.base/java.lang=ALL-UNNAMED --add-opens  java.base/sun.nio.ch=ALL-UNNAMED</cmdLine>
   <chdir>.</chdir>
   <priority>normal</priority>
   <downloadUrl>http://java.com/download</downloadUrl>
@@ -18,7 +18,7 @@
     <path></path>
     <bundledJre64Bit>false</bundledJre64Bit>
     <bundledJreAsFallback>false</bundledJreAsFallback>
-    <minVersion>1.8.0</minVersion>
+    <minVersion>1.17.0</minVersion>
     <maxVersion></maxVersion>
     <jdkPreference>preferJre</jdkPreference>
     <runtimeBits>64/32</runtimeBits>
