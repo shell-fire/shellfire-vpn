@@ -108,12 +108,11 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	private Color colorMenuGrey = Color.web("#757575");
 	
 	private Date connectedSince;
-	java.awt.Image iconConnected = Util.getImageIcon("/icons/sfvpn2-connected-big.png").getImage();
+	private java.awt.Image iconConnected = Util.getImageIcon("/icons/sfvpn2-connected-big.png").getImage();
 	private java.awt.Image iconConnecting = Util.getImageIcon("/icons/sfvpn2-connecting-big.png").getImage();
-	Map<AppScreen, Map<MenuStatus, Image>> menuImageStatusMap = null;
 	private java.awt.Image iconDisconnectedAwt = Util.getImageIcon("/icons/sfvpn2-disconnected-big.png").getImage();
 	private java.awt.Image iconIdleAwt = Util.getImageIcon("/icons/sfvpn2-idle-big.png").getImage();
-
+	Map<AppScreen, Map<MenuStatus, Image>> menuImageStatusMap = null;
 	
 	private ScheduledExecutorService currentConnectedSinceTimerFX = Executors.newSingleThreadScheduledExecutor();
 	private boolean connectionStatus;
@@ -383,16 +382,16 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		this.appScreenControllerSettings.updateSelectedVpn();
 		this.appScreenControllerServerList.updateSelectedVpn();
 		setRememberedVpnSelection(vpnId);
-		this.initServer();
+		this.initServer(false);
 	}
 
-	private void initServer() {
+	private void initServer(boolean startUp) {
 		log.debug("initServer() - start");
 		Vpn vpn = shellfireService.getVpn();
 
 		log.debug("Vpn: {}, Server: {}", vpn.getVpnId(), vpn.getServerId());
 
-		setSelectedServer(vpn.getServerId());
+		setSelectedServer(vpn.getServerId(), startUp);
 	}
 
 	public void setApp(LoginForms applic) {
@@ -441,7 +440,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		}
 	}
 
-	void showAppScreen(AppScreen pane) {
+	public void showAppScreen(AppScreen pane) {
 		contentDetailsPane.getChildren().setAll(menuAppScreenMap.get(pane).getKey());
 		
 		AppScreenController fxController = (AppScreenController) menuAppScreenMap.get(pane).getValue();
@@ -1317,7 +1316,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		return this.shellfireService.getVpn().getAccountType() == ServerType.Premium;
 	}
 
-	public void setSelectedServer(int server) {
+	public void setSelectedServer(int server, boolean startUp) {
 		log.debug("setSelectedServer(" + server + ")");
 		
 		
@@ -1361,8 +1360,39 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		
 		final int finalServer = server;
 		Task<Void> task = new Task<Void>() {
-		    @Override public Void call() {
+		    private ProgressDialogController initDialogFX;
+
+			@Override public Void call() {
+		    	log.debug("shellfireService.setServerTo(finalServer); - START");
+		    	
+				try {
+					initDialogFX = ProgressDialogController.getInstance(i18n.tr("Changing Server"), null, application.getStage(), false);
+					initDialogFX.show();
+				} catch (IOException e) {
+					log.error("Error during ProgressDialogController.getInstance()", e);
+				}
+				
 		    	shellfireService.setServerTo(finalServer);
+		    	initDialogFX.hide();
+		    	
+		    	if (!startUp) {
+			    	Platform.runLater(() -> { 
+						Alert alert = new Alert(Alert.AlertType.CONFIRMATION,
+								i18n.tr("Server Change successful. Connect to server?"),
+								ButtonType.YES, ButtonType.NO);
+						alert.setHeaderText(i18n.tr("Connect?"));
+						// TODO: Dont do it upon startup
+						Optional<ButtonType> result = alert.showAndWait();
+		
+						if ((result.isPresent()) && (result.get() == ButtonType.YES)) {
+							showAppScreen(AppScreen.STATUS);
+							appScreenControllerStatus.handleConnectButtonAction(null);
+
+							log.debug("Show Main Window and Connect");
+						}
+			    	});
+		    	}
+		    	
 		    	return null;
 		    }
 		};
@@ -1449,7 +1479,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 			menuAppScreenMap.put(AppScreen.STATUS, pairStatus);
 			onMenuPaneStatusClicked(null);
 			
-			this.initServer();
+			this.initServer(true);
 			
 		} catch (IOException ex) {
 			log.error("ShellfireVPNMainFormFxmlController:  prepareControllers has error", ex);

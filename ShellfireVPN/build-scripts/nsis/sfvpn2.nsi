@@ -125,6 +125,9 @@ FunctionEnd
 !endif
 
 Section "${PRODUCT_NAME}" SecShellfireVPN
+	${If} ${RunningX64}
+	  SetRegView 64
+	${EndIf}
 
   call DownloadAndInstallJREIfNecessary
   
@@ -480,6 +483,10 @@ nothingFound:
 FunctionEnd
 
 Section "Uninstall"
+
+	${If} ${RunningX64}
+	  SetRegView 64
+	${EndIf}
 
   DetailPrint "TAP REMOVE"
   

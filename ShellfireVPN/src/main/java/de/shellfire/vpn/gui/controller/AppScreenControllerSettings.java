@@ -115,7 +115,6 @@ public class AppScreenControllerSettings implements Initializable, AppScreenCont
 	private LoginForms application;
 	private static final Logger log = Util.getLogger(AppScreenControllerSettings.class.getCanonicalName());
 	private ShellfireVPNMainFormFxmlController mainFormController;
-	private Image buttonDisconnect = new Image("file:/buttons/button-disconnect-" + VpnI18N.getLanguage().getKey() + ".gif");
 	private boolean languagesInitialized = false;
 
 

@@ -56,10 +56,6 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
 	private LoginForms application;
 	private static final long serialVersionUID = 1L;
 	private static Logger log = Util.getLogger(VpnSelectDialogController.class.getCanonicalName());
-	@FXML
-	private Pane backLabelPane;
-	@FXML
-	private ImageView backImageVeiw;
 
 	private ObservableList<VpnSelectionFXModel> vpnData = FXCollections.observableArrayList();
 	private Vpn newVpn;
@@ -158,10 +154,6 @@ public class VpnSelectDialogController extends AnchorPane implements Initializab
 
 	public void initComponents() {
 		this.selectVpnButton.setText(i18n.tr("Select VPN"));
-	}
-
-	public void loadIcon() {
-		this.backImageVeiw.setImage(Util.getImageIconFX("/icons/sfvpn2-idle.png"));
 	}
 
 	private void initVpnSelectTable(LinkedList<Vpn> allVpn) {

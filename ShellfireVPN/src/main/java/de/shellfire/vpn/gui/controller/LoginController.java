@@ -329,7 +329,6 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 		log.debug("continueAfterBackEndAvailabledFX: being enabled");
 		Storage.register(service);
 		this.restoreCredentialsFromRegistry();
-		LoginController.application.setLicenseAccepted(false);
 
 		if (!LoginForms.getStage().isShowing()) {
 			log.debug("Initial progress dialog is hidden");

@@ -16,7 +16,7 @@ import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.webservice.model.VpnStar;
 import de.shellfire.vpn.webservice.model.WsServer;
 
-public class Server implements LocatableIcon {
+public class Server {
 	private static final Logger log = Util.getLogger(Server.class.getCanonicalName());
 	private int serverId;
 	private Country country;
@@ -27,7 +27,6 @@ public class Server implements LocatableIcon {
 	private double longitude;
 	private double latitude;
 	private String wireguardPublicKey;
-	private BufferedImage iconServerForMap;
 	private Controller controller;
 	private static I18n i18n = VpnI18N.getI18n();
 
@@ -49,12 +48,6 @@ public class Server implements LocatableIcon {
 		this.longitude = wss.getLongitude();
 		this.latitude = wss.getLatitude();
 		this.wireguardPublicKey = wss.getWireguardPublicKey();
-
-		try {
-			this.iconServerForMap = ImageIO.read(getClass().getResourceAsStream("/icons/sf-server-map-32x32.png"));
-		} catch (IOException e) {
-			Util.handleException(e);
-		}
 	}
 
 	public int getServerId() {
@@ -142,25 +135,16 @@ public class Server implements LocatableIcon {
 		return this.wireguardPublicKey;
 	}
 
-	@Override
-	public BufferedImage getIcon() {
-		return this.iconServerForMap;
-	}
-
-	@Override
 	public String getCountryString() {
 		return this.getCountry().toString();
 	}
 
-	@Override
 	public Controller getController() {
 		return controller;
 	}
 
-	@Override
 	public void setController(Controller controller) {
 		this.controller = controller;
-
 	}
 
 	public VpnStar getSecurity() {

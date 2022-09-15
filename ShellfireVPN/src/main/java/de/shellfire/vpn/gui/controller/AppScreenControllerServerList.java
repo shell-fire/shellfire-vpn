@@ -317,7 +317,7 @@ public class AppScreenControllerServerList implements Initializable, AppScreenCo
 						  for (ServerRow curChange : changes) {
 							  inSelectionChangeListener = true;
 							  Server newServer = curChange.getServer();
-							  mainFormController.setSelectedServer(newServer.getServerId());
+							  mainFormController.setSelectedServer(newServer.getServerId(), false);
 							  inSelectionChangeListener = false;
 						  }
 					  }

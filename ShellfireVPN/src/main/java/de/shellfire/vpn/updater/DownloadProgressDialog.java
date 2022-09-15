@@ -123,7 +123,7 @@ public class DownloadProgressDialog extends javax.swing.JDialog {
 	}
 
 	private void loadIcon() {
-		this.iconIdle = new ImageIcon(getClass().getResource("/de/shellfire/vpn/updater/resources/sfvpn2-idle.png")).getImage();
+		this.iconIdle = new ImageIcon(getClass().getResource("/de/shellfire/vpn/updater/resources/sfvpn2-idle-big.png")).getImage();
 
 		setIconImage(iconIdle);
 	}

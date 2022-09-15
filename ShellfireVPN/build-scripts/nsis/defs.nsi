@@ -38,7 +38,7 @@
 !define TAP "${PRODUCT_TAP_ID}"
 !define TAPDRV "${TAP}.sys"
 
- !define JRE_VERSION "1.8"
+ !define JRE_VERSION "1.18"
  
 
 

@@ -174,6 +174,7 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
 			instance.setInstanceAndStage(stage);
 			log.debug("ProgressDialogController instance and Stage created");
 		}
+		instance.setDialogText(dialogText);
 		return instance;
 	}
 	

@@ -90,12 +90,7 @@ Function DownloadAndInstallJREIfNecessary
 downloadJRE:
 	Var /GLOBAL JRE_URL
 	
- 	${If} ${AtLeastWinVista}
-		StrCpy $JRE_URL "http://javadl.oracle.com/webapps/download/AutoDL?BundleId=116037"
-	${Else}
-  	  StrCpy $JRE_URL "https://www.shellfire.de/download/jre-7u79-windows-i586.exe"
-
-	${EndIf}
+	StrCpy $JRE_URL "https://download.oracle.com/java/18/latest/jdk-18_windows-x64_bin.exe"
 
   DetailPrint "About to download JRE from $JRE_URL"
   Inetc::get "$JRE_URL" "$TEMP\jre_Setup.exe" /END
@@ -126,6 +121,7 @@ jreSetupFinished:
  
 InstallVerif:
   DetailPrint "Checking the JRE Setup's outcome"
+
   Push "${JRE_VERSION}"
   Call DetectJRE  
   Pop $0	  ; DetectJRE's return value
@@ -172,22 +168,47 @@ Function DetectJRE
 		; stack is now:  r3, r2, r1, r0
 
   ; first, check for an installed JRE
-  ReadRegStr $1 HKLM "SOFTWARE\JavaSoft\Java Runtime Environment" "CurrentVersion"
+
+  DetailPrint "DetectTry1"
+  ; then check if in differnet registry folder for newer vresions
+  ReadRegStr $1 HKLM "SOFTWARE\JavaSoft\JDK" "CurrentVersion"
+
   StrCmp $1 "" DetectTry2
-  ReadRegStr $2 HKLM "SOFTWARE\JavaSoft\Java Runtime Environment\$1" "JavaHome"
+  ReadRegStr $2 HKLM "SOFTWARE\JavaSoft\JDK\$1" "JavaHome"
   StrCmp $2 "" DetectTry2
+  
+  DetailPrint "DetectTry1 -> GetJRE"
+  Goto GetJRE  
+  
+DetectTry2:   
+  DetailPrint "DetectTry2"
+  ReadRegStr $1 HKLM "SOFTWARE\JavaSoft\Java Runtime Environment" "CurrentVersion"
+  
+  StrCmp $1 "" DetectTry3
+  ReadRegStr $2 HKLM "SOFTWARE\JavaSoft\Java Runtime Environment\$1" "JavaHome"
+  StrCmp $2 "" DetectTry3
+  
+  DetailPrint "DetectTry2 -> GetJRE"
   Goto GetJRE
  
-DetectTry2:
+DetectTry3:
+  DetailPrint "DetectTry2"
   ; next, check for an installed JDK
   ReadRegStr $1 HKLM "SOFTWARE\JavaSoft\Java Development Kit" "CurrentVersion"
   StrCmp $1 "" NoFound
   ReadRegStr $2 HKLM "SOFTWARE\JavaSoft\Java Development Kit\$1" "JavaHome"
-  StrCmp $2 "" NoFound
+  StrCmp $2 ""  NoFound
+
+  
+  DetailPrint "DetectTry3 -> GetJRE"
+  Goto GetJRE
+   
+
  
 GetJRE:
   ; ok, we found a JRE, let's compare it's version and make sure it is new enough
 ; $0 = version requested. $1 = version found. $2 = javaHome
+  DetailPrint "Presumed location of java: $2"
   IfFileExists "$2\bin\java.exe" 0 NoFound
 
   ${VersionCompare} $0 $1 $3 ; $3 now contains the result of the comparison

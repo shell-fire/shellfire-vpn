@@ -50,7 +50,6 @@ public class LoginForms extends Application {
 	public static ShellfireVPNMainFormFxmlController shellfireVpnMainController = null;
 	public static LoginController controllerInstance;
 	private static final I18n i18n = VpnI18N.getI18n();
-	private boolean licenseAccepted;
 	private boolean startMinimized = false;
 	// Variables to control draggin of window
 	private static double xOffset = 0;
@@ -364,22 +363,6 @@ public class LoginForms extends Application {
 		} else {
 			log.debug("handleCommandLine called not not supported command: {}", cmd);
 		}
-	}
-
-	public void licenseAccepted() {
-		this.licenseAccepted = true;
-	}
-
-	public void licenseNotAccepted() {
-		this.licenseAccepted = false;
-	}
-
-	public boolean getLicenseAccepted() {
-		return this.licenseAccepted;
-	}
-
-	public void setLicenseAccepted(boolean newLicence) {
-		this.licenseAccepted = newLicence;
 	}
 
 	private static void initConnectionTest() {

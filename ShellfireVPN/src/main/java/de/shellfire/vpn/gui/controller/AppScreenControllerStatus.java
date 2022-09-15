@@ -109,10 +109,6 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
 	private Map<ServerType, Image> serverTypeCrownMap;
 
 	String langKey = VpnI18N.getLanguage().getKey();
-	private Image imageStatusEncrypted = imageStatusEncrypted = new Image("file:/icons/status-encrypted-width736.gif");
-	private Image imageButtonDisconnect = new Image("file:/buttons/button-disconnect-" + langKey + ".gif");
-	private Image imageStatusUnencrypted = new Image("file:/icons/status-unencrypted-width736.gif");
-	private Image imageButtonConnect = new Image("file:/buttons/button-connect-" + langKey + ".gif");
 	private boolean initialized;
 	private WebEngine webEngine;
 	protected boolean mapLoaded = false;
@@ -440,7 +436,7 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
 	}
 
 	@FXML
-	private void handleConnectButtonAction(MouseEvent event) {
+	void handleConnectButtonAction(MouseEvent event) {
 
 		Platform.runLater(() -> {
 			this.application.shellfireVpnMainController.connectFromButton();

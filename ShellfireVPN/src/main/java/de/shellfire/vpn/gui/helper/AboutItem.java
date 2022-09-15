@@ -17,9 +17,6 @@ import javafx.scene.layout.VBox;
 public class AboutItem extends VBox {
 	
 	private static final Logger log = Util.getLogger(HelpItem.class.getCanonicalName());
-	private static Image helpArrowImageHidden = Util.getImageIconFX("/icons/arrow_down.png");
-	private static Image helpArrowImageVisible = Util.getImageIconFX("/icons/arrow_up.png");
-	
 	@FXML
 	private ImageView helpArrowImage;
 	@FXML
