@@ -1,6 +1,7 @@
 package de.shellfire.vpn;
 
 import java.awt.Desktop;
+import java.awt.image.BufferedImage;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -36,12 +37,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.LoggerFactory;
-import org.xnap.commons.i18n.I18n; 
+import org.xnap.commons.i18n.I18n;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
@@ -57,6 +59,8 @@ import de.shellfire.vpn.messaging.UserType;
 import de.shellfire.vpn.service.CryptFactory;
 import de.shellfire.vpn.service.IVpnRegistry;
 import de.shellfire.vpn.service.win.WinRegistry;
+import javafx.application.Platform;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelFormat;
@@ -1084,5 +1088,21 @@ public class Util {
 		log.debug("waitUntilInternetAvailable() - finished, internetIsAvailable: {}", (internetAvailable ? "true" : "false"));
 	}
 
-	
+	static public void mySetIconImage(LoginForms application, String[] imagePaths) {
+		log.debug("mySetIconImage: the icon Image  path is " + Util.listToString(Arrays.asList(imagePaths)));
+		Platform.runLater(() -> {
+			if (application != null) {
+				application.getStage().getIcons().clear();
+				for (String imagePath : imagePaths) {
+					URL url = application.getClass().getResource(imagePath);
+					try {
+						BufferedImage image = ImageIO.read(url);
+						application.getStage().getIcons().add(SwingFXUtils.toFXImage(image, null));
+					} catch (IOException e) {
+						log.error("Could not load Image in mySetIconImage", e);
+					}
+				}
+			}
+		});
+	}	
 }

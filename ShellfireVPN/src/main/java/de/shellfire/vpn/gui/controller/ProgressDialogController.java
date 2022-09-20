@@ -114,7 +114,9 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
 	}
 
 	public void setDialogText(String string) {
-		this.dynamicLabel.setText(string);
+		Platform.runLater(() -> {
+			this.dynamicLabel.setText(string);	
+		});
 	}
 
 	public Stage getDialogStage() {
@@ -129,9 +131,9 @@ public class ProgressDialogController extends AnchorPane implements Initializabl
 			SVGPath p = new SVGPath();
 			p.setContent("M 265.873 176.686 c -4.268 -12.383 -14.609 -40.019 -35.033 -64.999 c 3.455 18.85 -5.904 20.615 -12.156 13.694 c -11.153 -12.347 -14.412 -40.654 -36.333 -46.032 c 5.969 15.281 -5.869 55.82 -23.282 63.808 c -2.332 1.368 -6.64 -0.13 -9.28 -7.971 c -3.98 4.546 -4.818 16.973 -8.04 24.582 c -11.04 12.747 -17.731 29.279 -17.731 47.337 c 0 40.196 33.081 72.898 73.742 72.898 s 73.741 -32.702 73.741 -72.898 C 271.5 196.286 270.046 188.072 265.873 176.686 z M 198 203 z z");
 			p.setFill(Color.web("#4381e5"));
-			p.setScaleX(1.5);
-			p.setScaleY(1.5);
-			p.setScaleZ(1.5);
+			p.setScaleX(0.6);
+			p.setScaleY(0.6);
+			p.setScaleZ(0.6);
 			p.setEffect(new DropShadow());
 
 			// Load the fxml file and create a new stage for the popup dialog.

@@ -11,8 +11,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -202,11 +204,23 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		String langKey = VpnI18N.getLanguage().getKey();
 		log.debug("langKey: " + langKey);
 
-		mySetIconImage("/icons/sfvpn2-idle-big.png");
+		setIconImageIdle();
 
 		initializeMenuImages();
 		currentAppScreen = AppScreen.STATUS;
 		
+	}
+	
+	private void setIconImageIdle() {
+		Util.mySetIconImage(this.application, new String[] {
+				"/icons/sfvpn2-idle-256x256.png",
+				"/icons/sfvpn2-idle-128x128.png",
+				"/icons/sfvpn2-idle-64x64.png",
+				"/icons/sfvpn2-idle-40x40.png",
+				"/icons/sfvpn2-idle-32x32.png",
+				"/icons/sfvpn2-idle-24x24.png",
+				"/icons/sfvpn2-idle-16x16.png",
+			});
 	}
 	
 	enum MenuStatus { SELECTED, UNSELECTED, HOVER }
@@ -287,7 +301,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	    	// Bind visibility of buttons to their manage properties so that they are easilty rendered visible or invisible
 	    	this.appScreenControllerStatus.initPremium(isFreeAccount());
 	    	this.appScreenControllerStatus.setApp(this.application);
-	    	this.appScreenControllerStatus.notifyThatNowVisible(false);
+	    	// this.appScreenControllerStatus.notifyThatNowVisible(false);
 	    	
 	    });
 	}
@@ -342,7 +356,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		Storage.register(this);
 
 
-		this.initConnection();
+
 		this.initVpn();
 
 		this.application.getStage().resizableProperty().setValue(Boolean.FALSE);
@@ -784,6 +798,18 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	private boolean isFreeAccount() {
 		return this.shellfireService.getVpn().getAccountType() == ServerType.Free;
 	}
+	
+	private void setIconImageDisconnected() {
+		Util.mySetIconImage(this.application, new String[] {
+				"/icons/sfvpn2-disconnected-256x256.png",
+				"/icons/sfvpn2-disconnected-128x128.png",
+				"/icons/sfvpn2-disconnected-64x64.png",
+				"/icons/sfvpn2-disconnected-40x40.png",
+				"/icons/sfvpn2-disconnected-32x32.png",
+				"/icons/sfvpn2-disconnected-24x24.png",
+				"/icons/sfvpn2-disconnected-16x16.png",
+		});
+	}
 
 	private void setStateDisconnected() {
 		log.debug("setStateDisconnected() - start");
@@ -791,9 +817,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		this.hideConnectProgress();
 
 		this.appScreenControllerStatus.connectButtonDisable(false);
-		Platform.runLater(() -> {
-			mySetIconImage("/icons/sfvpn2-disconnected-big.png");
-		});
+		setIconImageDisconnected();
 		this.appScreenControllerStatus.notifyThatNowVisible(false);
 		log.debug("ShellfireMainForm: In setStateDisconnected method ");
 		popup.remove(disconnectItem);
@@ -924,6 +948,18 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		};
 		new Thread(disconnectTask).start();
 	}
+	
+	private void setIconImageConnecting() {
+		Util.mySetIconImage(this.application, new String[] {
+				"/icons/sfvpn2-connecting-256x256.png",
+				"/icons/sfvpn2-connecting-128x128.png",
+				"/icons/sfvpn2-connecting-64x64.png",
+				"/icons/sfvpn2-connecting-40x40.png",
+				"/icons/sfvpn2-connecting-32x32.png",
+				"/icons/sfvpn2-connecting-24x24.png",
+				"/icons/sfvpn2-connecting-16x16.png",
+		});
+	}
 
 	private void setStateConnecting() {
 		log.debug("SetStateConnecting: Connnection in proessess");
@@ -934,9 +970,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		}
 		this.appScreenControllerStatus.connectButtonDisable(true);
 
-		Platform.runLater(() -> {
-			mySetIconImage("/icons/sfvpn2-connecting-big.png");
-		});
+		setIconImageConnecting();
 
 		if (this.trayIcon != null) {
 			this.trayIcon.setImage(this.iconConnecting);
@@ -965,23 +999,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 			if (connectProgressDialog != null) {
 				connectProgressDialog.show();
 			}
-		});
-	}
-
-	public void mySetIconImage(String imagePath) {
-		log.debug("mySetIconImage: the icon Image  path is " + imagePath);
-		Platform.runLater(() -> {
-			this.application.getStage().getIcons().clear();
-			
-			URL url = getClass().getResource(imagePath);
-			try {
-				BufferedImage image = ImageIO.read(url);
-				this.application.getStage().getIcons().add(SwingFXUtils.toFXImage(image, null));
-			} catch (IOException e) {
-				log.error("Could not load Image in mySetIconImage", e);
-			}
-			
-			
 		});
 	}
 
@@ -1138,10 +1155,11 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
 	}
 
-	private void initConnection() {
+	void initConnection() {
 		new Thread() {
 			public void run() {
-				controller.getCurrentConnectionState();
+				ConnectionState state = controller.getCurrentConnectionState();
+				controller.connectionStateChanged(state, Reason.StatusUpdateUponAppRestart);
 			}
 		}.start();
 	}
@@ -1158,11 +1176,22 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		this.application.getStage().getScene().setCursor(Cursor.WAIT);
 	}
 
+	
+	private void setIconImageConnected() {
+		Util.mySetIconImage(this.application, new String[] {
+				"/icons/sfvpn2-connected-256x256.png",
+				"/icons/sfvpn2-connected-128x128.png",
+				"/icons/sfvpn2-connected-64x64.png",
+				"/icons/sfvpn2-connected-40x40.png",
+				"/icons/sfvpn2-connected-32x32.png",
+				"/icons/sfvpn2-connected-24x24.png",
+				"/icons/sfvpn2-connected-16x16.png",
+		});
+	}
+	
 	private void setStateConnected() {
 		this.hideConnectProgress();
-		Platform.runLater(() -> {
-			mySetIconImage("/icons/sfvpn2-connected-big.png");
-		});
+		setIconImageConnected();
 
 		this.appScreenControllerStatus.notifyThatNowVisible(true);
 		this.appScreenControllerStatus.connectButtonDisable(false);

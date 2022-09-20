@@ -45,12 +45,6 @@
 
 	
   </jre>
-  <splash>
-    <file>C:\nextcloud\My Library\workspace\shellfire-vpn4\ShellfireVPN\build-scripts\images\slpash\slpash-3.2.bmp</file>
-    <waitForWindow>true</waitForWindow>
-    <timeout>5</timeout>
-    <timeoutErr>false</timeoutErr>
-  </splash>
   <versionInfo>
     <fileVersion>3.2.0.0</fileVersion>
     <txtFileVersion>ShellfireVPN 3.2</txtFileVersion>

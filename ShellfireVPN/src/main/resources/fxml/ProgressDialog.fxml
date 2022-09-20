@@ -18,16 +18,16 @@
             <AnchorPane layoutX="1.0" layoutY="70.0" maxWidth="1.7976931348623157E308" AnchorPane.leftAnchor="2.0" AnchorPane.rightAnchor="2.0">
                <children>
                   <ProgressBar fx:id="progressBar" layoutX="8.0" layoutY="33.0" prefWidth="285.0" progress="0.0" visible="false" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" />
-                  <Label fx:id="dynamicLabel" alignment="BASELINE_CENTER" maxWidth="120.0" prefHeight="45.0" prefWidth="120.0" text="&lt;dynamic&gt;" textAlignment="CENTER" textFill="WHITE" wrapText="true">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
+                  <Label fx:id="dynamicLabel" alignment="BASELINE_CENTER" maxWidth="120.0" prefHeight="60.0" prefWidth="130.0" text="&lt;dynamic&gt;" textAlignment="CENTER" textFill="WHITE" wrapText="true">
                      <effect>
                         <DropShadow />
                      </effect>
+                     <font>
+                        <Font size="9.0" />
+                     </font>
                   </Label>
                   <VBox fx:id="contentPane" layoutX="159.0" layoutY="64.0" maxWidth="1.7976931348623157E308" minHeight="2.0" prefWidth="100.0" visible="false" AnchorPane.rightAnchor="12.0" />
-                  <ImageView fitHeight="100.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true" scaleX="1.5" scaleY="1.5" scaleZ="1.5" x="10.0" y="45.0">
+                  <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true" x="25.0" y="30.0">
                      <image>
                         <Image url="@../icons/spinner.gif" />
                      </image>

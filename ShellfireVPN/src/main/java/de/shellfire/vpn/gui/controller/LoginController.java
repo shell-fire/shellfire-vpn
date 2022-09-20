@@ -2,8 +2,10 @@ package de.shellfire.vpn.gui.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -150,7 +152,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 							}
 
 							application.shellfireVpnMainController.initializeComponents();
-							
+
 							try {
 								application.shellfireVpnMainController.setServiceAndInitialize(service);
 							} catch (IOException e) {
@@ -158,6 +160,10 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 							}
 							
 							application.shellfireVpnMainController.prepareSubviewControllers();
+							
+							application.shellfireVpnMainController.initConnection();
+		
+							
 							application.shellfireVpnMainController.setApp(application);
 							application.shellfireVpnMainController.afterLogin(false);
 							
@@ -275,7 +281,19 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 		fButtonLogin.setOnMouseClicked(e -> {
 			fUsername.requestFocus();
 		});
-		mySetIconImage("file:/icons/sfvpn2-idle-big.png");
+
+	}
+
+	public void setIconImageIdle() {
+		Util.mySetIconImage(this.application, new String[] {
+				"/icons/sfvpn2-idle-256x256.png",
+				"/icons/sfvpn2-idle-128x128.png",
+				"/icons/sfvpn2-idle-64x64.png",
+				"/icons/sfvpn2-idle-40x40.png",
+				"/icons/sfvpn2-idle-32x32.png",
+				"/icons/sfvpn2-idle-24x24.png",
+				"/icons/sfvpn2-idle-16x16.png",
+		});
 	}
 
 	public void setApp(LoginForms applic) {
@@ -283,13 +301,6 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 		this.application = applic;
 	}
 
-	public void mySetIconImage(String imagePath) {
-		log.debug("mySetIconImage: the icon Image  path is " + imagePath);
-		Platform.runLater(() -> {
-			this.application.getStage().getIcons().clear();
-			this.application.getStage().getIcons().add(new Image(imagePath));
-		});
-	}
 
 	public boolean isMinimize() {
 		return minimize;

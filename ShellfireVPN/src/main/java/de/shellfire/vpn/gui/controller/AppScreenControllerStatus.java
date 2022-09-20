@@ -21,6 +21,7 @@ import de.shellfire.vpn.client.ConnectionState;
 import de.shellfire.vpn.client.Controller;
 import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.gui.ServerImageBackgroundManager;
+import de.shellfire.vpn.gui.helper.CurrentConnectionState;
 import de.shellfire.vpn.gui.helper.ExceptionThrowingReturningRunnableImpl;
 import de.shellfire.vpn.gui.model.CountryMap;
 import de.shellfire.vpn.i18n.VpnI18N;
@@ -124,6 +125,7 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
 	}
 	
 	private final WebEngineConsole webEngineConsole = new WebEngineConsole();
+	private boolean setMapStatus;
 	
 
 	public void connectButtonDisable(boolean disable) {
@@ -177,11 +179,25 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
 					mapLoaded = true;
 					log.debug("Map has now been loaded - will process changes from now on");
 					setLocation();
+					setMap();
 					application.controllerInstance.loginProgressDialog.hide();
 				}
 			}
+
 		});
 		webEngine.load(getClass().getResource("map.html").toString());
+	}
+	
+
+	private void setMap() {
+		if (setMapStatus) {
+			if (CurrentConnectionState.getConnectionState() == ConnectionState.Connected) {
+				this.setMapConnected();
+			} else {
+				this.setMapDisconnected();
+			}
+		}
+		
 	}
 	
 	private void initWebEngine() {
@@ -192,7 +208,6 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
 		log.debug("setMapConnected() - start");
 		if (mapLoaded) {
 			
-			log.debug("Starting new thread to sleep some time before calling the webengine again on main thread");
             new Thread( 
                     () -> {
                     	log.debug("waiting until internet connection is available again");
@@ -208,19 +223,19 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
                          
                     }).start(); 
 		} else {
-			log.debug("mapLoaded == false -> cant access webEngine");
+			log.debug("setMapConnected - mapLoaded == false -> cant access webEngine - will do as soon as map is ready");
+			this.setMapStatus = true;
 		}
 		log.debug("setMapConnected() - done");
 	}
 
 	public void setMapDisconnected() {
+		log.debug("setMapDisconnected() - start");
 		if (mapLoaded) {
-			log.debug("Starting new thread to sleep some time before calling the webengine again on main thread");
             new Thread( 
                     () -> {
                     	log.debug("waiting until internet connection is available again");
                     	Util.waitUntilInternetAvailable(5);
-
 
          				log.debug("calling Platform.runLater()");
          				Platform.runLater(() -> {
@@ -230,7 +245,12 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
          				});
                          
                     }).start(); 
+		} else {
+			log.debug("setMapDisconnected - mapLoaded == false -> cant access webEngine");
+			this.setMapStatus = true;
 		}
+		
+		log.debug("setMapConnected() - done");
 	}
 
 
