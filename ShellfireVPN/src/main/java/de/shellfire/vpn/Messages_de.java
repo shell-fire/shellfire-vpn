@@ -5,7 +5,7 @@ public class Messages_de extends java.util.ResourceBundle {
   static {
     String[] t = new String[854];
     t[0] = "";
-    t[1] = "Project-Id-Version: \nReport-Msgid-Bugs-To: \nPO-Revision-Date: 2022-03-20 06:30+0100\nLast-Translator: Florian Gattung <fgattung@gmail.com>\nLanguage-Team: \nLanguage: en_DE\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nX-Generator: Poedit 3.0.1\nX-Poedit-Basepath: ../../src\nX-Poedit-KeywordsList: i18n.tr\nX-Poedit-SearchPath-0: .\n";
+    t[1] = "Project-Id-Version: \nReport-Msgid-Bugs-To: \nPO-Revision-Date: 2022-09-21 18:44+0200\nLast-Translator: Florian Gattung <fgattung@gmail.com>\nLanguage-Team: \nLanguage: en_DE\nMIME-Version: 1.0\nContent-Type: text/plain; charset=UTF-8\nContent-Transfer-Encoding: 8bit\nX-Generator: Poedit 3.1.1\nX-Poedit-Basepath: ../../src\nX-Poedit-KeywordsList: i18n.tr\nX-Poedit-SearchPath-0: .\n";
     t[2] = "Register now";
     t[3] = "Jetzt Registrieren";
     t[8] = "VPN data could not be loaded.";
@@ -36,8 +36,8 @@ public class Messages_de extends java.util.ResourceBundle {
     t[73] = "Verbinde...";
     t[84] = "OpenVPN TCP (works best with firewalls and proxies)";
     t[85] = "OpenVPN TCP (funktioniert am Besten mit Firewalls und Proxies.)";
-    t[86] = "go to your location";
-    t[87] = "gehe zu eigenem Standort";
+    t[86] = "Your Shellfire account has been successfully activated. Please log in with your email address and password to start Shellfire VPN.";
+    t[87] = "Dein Shellfire Account wurde soeben erfolgreich aktiviert. Logge dich jetzt mit Email-Adresse und Passwort ein, um Shellfire VPN zu starten.";
     t[88] = "Save login data";
     t[89] = "Logindaten speichern";
     t[94] = "Downloading update...";
@@ -114,6 +114,8 @@ public class Messages_de extends java.util.ResourceBundle {
     t[289] = "Premium Infos";
     t[290] = "Click here to check out our Premium offer";
     t[291] = "F\u00fcr Infos zu unserem Premium-Angebot hier klicken";
+    t[302] = "Changing Server";
+    t[303] = "Server wird gewechselt";
     t[314] = "Automation";
     t[315] = "Automatisierung";
     t[328] = "No user credentials?";
@@ -124,6 +126,8 @@ public class Messages_de extends java.util.ResourceBundle {
     t[337] = "Premium Server ausgew\u00e4hlt";
     t[340] = "Filter";
     t[341] = "Filter";
+    t[342] = "192 bit";
+    t[343] = "192 bit";
     t[348] = "Type to filter...";
     t[349] = "Zum Filtern tippen...";
     t[350] = "Process is being executed without administrator rights.";
@@ -148,8 +152,8 @@ public class Messages_de extends java.util.ResourceBundle {
     t[389] = "Beim Hochfahren starten";
     t[396] = "Changed language settings require a restart of ShellfireVPN to take effect. Restart now?";
     t[397] = "Ge\u00e4nderte Spracheinstellungen machen einen Neustart von ShellfireVPN erforderlich. Jetzt neu starten?";
-    t[398] = "Your Shellfire account has been successfully activated. Please log in with your email address and password to start Shellfire VPN.";
-    t[399] = "Dein Shellfire Account wurde soeben erfolgreich aktiviert. Logge dich jetzt mit Email-Adresse und Passwort ein, um Shellfire VPN zu starten.";
+    t[398] = "Server Change successful. Connect to server?";
+    t[399] = "Serverwechsel erfolgreich. Jetzt verbinden?";
     t[402] = "Current VPN has type: %s\r\nYou selected a server of type: %s\r\nThis is not possible with your current VPN. Please go to settings and select a VPN with higher classification.";
     t[403] = "Aktueller VPN ist vom Typ: %s\nAusgew\u00e4hlter VPN ist vom Typ: %s\nDies ist mit dem aktuellen VPN nicht m\u00f6glich. Bitte gehe zu den Einstellungen und w\u00e4hle einen VPN mit h\u00f6herer Einstufung aus.";
     t[408] = "Service has not been installed correctly - Shellfire VPN is now exited";
@@ -158,8 +162,6 @@ public class Messages_de extends java.util.ResourceBundle {
     t[411] = "Registrierung abgebrochen. Bitte versuche es erneut mit einer anderen E-Mail-Adresse.";
     t[426] = "WireGuard error. Please contact support for assistance or try another connection type.";
     t[427] = "WireGuard Fehler: Bitte wende dich an unseren Support f\u00fcr Unterst\u00fctzung, oder versuche einen anderen Verbindungstypen aus.";
-    t[438] = "Using these streams usually requires a US IP address.You can get one by connecting to a Shellfire VPN server located in the USA";
-    t[439] = "Die Nutzung dieser Streams erfordert normalerweise eine US IP Adresse. Du kannst eine US IP Adresse bekommen, in dem du dich zu einem Shellfire VPN Server verbindest, der sich in den USA befindet";
     t[442] = "No OpenVPN installation found. Please reinstall Shellfire VPN.";
     t[443] = "OpenVPN Installation wurde nicht gefunden. Bitte Shellfire VPN neu installieren.";
     t[444] = "Your password must contain at least 5 characters.";
@@ -252,8 +254,8 @@ public class Messages_de extends java.util.ResourceBundle {
     t[629] = "Ich abonniere den Newsletter";
     t[638] = "Register new account";
     t[639] = "Neues Konto registrieren";
-    t[652] = "Server map";
-    t[653] = "Server \u00dcbersichtskarte";
+    t[652] = "All Tap devices in use. Please close openvpn.exe using the task manager or reboot your PC.";
+    t[653] = "Alle Tap-Ger\u00e4te in Verwendung. Bitte alle openvpn.exe Prozesse im Task Manager schlie\u00dfen oder PC neu starten.";
     t[658] = "Current VPN has type: %s\r\nYou selected a server of type: %s\r\nThis is not possible with your current VPN. Would you like to get information about our Premium offer?";
     t[659] = "Aktueller VPN ist vom Typ: %s\nAusgew\u00e4hlter VPN ist vom Typ: %s\nDies ist mit dem aktuellen VPN nicht m\u00f6glich. M\u00f6chtest du Information \u00fcber unsere Premium-Angebote erhalten?";
     t[660] = "No internet connection available - ShellfireVPN is being closed.";
@@ -270,8 +272,8 @@ public class Messages_de extends java.util.ResourceBundle {
     t[677] = "Der Shellfire VPN Service wird jetzt installiert. Gib dazu bitte im nachfolgenden Fenster dein Admin-Passwort ein.";
     t[678] = "Disconnect";
     t[679] = "Trennen";
-    t[686] = "192 bit";
-    t[687] = "192 bit";
+    t[686] = "Connect?";
+    t[687] = "Verbinden?";
     t[688] = "DISCONNECTED";
     t[689] = "VERBINDUNG GETRENNT";
     t[690] = "An unknown error has occured while establishing the VPN connection. Please reboot and/or reinstall Shellfire VPN.";
@@ -310,8 +312,6 @@ public class Messages_de extends java.util.ResourceBundle {
     t[775] = "Free";
     t[776] = "Registration successful.";
     t[777] = "Registrierung erfolgreich.";
-    t[784] = "Show data route and your location (when connected)";
-    t[785] = "Datenroute und eigenen Standort anzeigen (falls verbunden)";
     t[792] = "Paid Until";
     t[793] = "Bezahlt bis";
     t[798] = "Registration";
@@ -330,10 +330,6 @@ public class Messages_de extends java.util.ResourceBundle {
     t[823] = "Bitte gib einen Benutzernamen und ein Passwort ein.";
     t[826] = "Exit";
     t[827] = "Beenden";
-    t[832] = "List of US TV streams (english language)";
-    t[833] = "Liste von TV Streams aus den USA (englischsprachig)";
-    t[838] = "All Tap devices in use. Please close openvpn.exe using the task manager or reboot your PC.";
-    t[839] = "Alle Tap-Ger\u00e4te in Verwendung. Bitte alle openvpn.exe Prozesse im Task Manager schlie\u00dfen oder PC neu starten.";
     t[852] = "User credentials lost?";
     t[853] = "Zugangsdaten verloren?";
     table = t;

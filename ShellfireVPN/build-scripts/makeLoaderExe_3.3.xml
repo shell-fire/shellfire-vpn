@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch4jConfig>
+  <dontWrapJar>false</dontWrapJar>
+  <headerType>gui</headerType>
+  <jar>C:\nextcloud\My Library\workspace\shellfire-vpn4\ShellfireVPN\bin\ShellfireVPN2.jar</jar>
+  <outfile>C:\nextcloud\My Library\workspace\shellfire-vpn4\ShellfireVPN\bin\ShellfireVPN2.exe</outfile>
+  <errTitle>Java Loader Fehler</errTitle>
+  <cmdLine></cmdLine>
+  <chdir>.</chdir>
+  <priority>normal</priority>
+  <downloadUrl>http://java.com/download</downloadUrl>
+  <supportUrl>http://www.shellfire.de</supportUrl>
+  <stayAlive>false</stayAlive>
+  <restartOnCrash>false</restartOnCrash>
+  <manifest></manifest>
+  <icon>C:\nextcloud\My Library\workspace\shellfire-vpn4\ShellfireVPN\build-scripts\images\normal.ico</icon>
+  <jre>
+    <path></path>
+    <bundledJre64Bit>false</bundledJre64Bit>
+    <bundledJreAsFallback>false</bundledJreAsFallback>
+    <minVersion>1.18.0</minVersion>
+    <maxVersion></maxVersion>
+    <jdkPreference>preferJre</jdkPreference>
+    <runtimeBits>64/32</runtimeBits>
+	<maxHeapSize>512</maxHeapSize>
+		<opt>--add-opens=java.base/java.lang=ALL-UNNAMED</opt>
+		<opt>--add-opens=java.base/sun.nio.ch=ALL-UNNAMED</opt>
+		<opt>--module-path=.\lib\javafx\lib</opt>
+		<opt>--add-modules=javafx.swing,javafx.graphics,javafx.fxml,javafx.media,javafx.web</opt>
+		<opt>--add-reads=javafx.graphics=ALL-UNNAMED</opt>
+		<opt>--add-opens=javafx.controls/com.sun.javafx.charts=ALL-UNNAMED</opt>
+		<opt>--add-opens=javafx.graphics/com.sun.javafx.iio=ALL-UNNAMED</opt>
+		<opt>--add-opens=javafx.graphics/com.sun.javafx.iio.common=ALL-UNNAMED</opt>
+		<opt>--add-opens=javafx.graphics/com.sun.javafx.css=ALL-UNNAMED</opt>
+		<opt>--add-opens=javafx.base/com.sun.javafx.runtime=ALL-UNNAMED</opt>
+		<opt>--add-exports=java.base/jdk.internal.util=chronicle.bytes</opt>
+		<opt>--add-exports=java.base/jdk.internal.ref=ALL-UNNAMED</opt>
+		<opt>--add-exports=java.base/sun.nio.ch=ALL-UNNAMED</opt>
+		<opt>--add-exports=jdk.unsupported/sun.misc=ALL-UNNAMED</opt>
+		<opt>--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED</opt>
+		<opt>--add-opens=jdk.compiler/com.sun.tools.javac=ALL-UNNAMED</opt>
+		<opt>--add-opens=java.base/java.lang.reflect=ALL-UNNAMED</opt>
+		<opt>--add-opens=java.base/java.io=ALL-UNNAMED</opt>
+		<opt>--add-opens=java.base/java.util=ALL-UNNAMED</opt>
+  </jre>
+  <versionInfo>
+    <fileVersion>3.3.0.0</fileVersion>
+    <txtFileVersion>ShellfireVPN 3.3</txtFileVersion>
+    <fileDescription>ShellfireVPN Executable </fileDescription>
+    <copyright>(c) 2010 by Shellfire GmbH</copyright>
+    <productVersion>3.3.0.0</productVersion>
+    <txtProductVersion>ShellfireVPN 3.3</txtProductVersion>
+    <productName>ShellfireVPN</productName>
+    <companyName>Shellfire GmbH</companyName>
+    <internalName>ShellfireVPN</internalName>
+    <originalFilename>ShellfireVPN2.exe</originalFilename>
+  </versionInfo>
+</launch4jConfig>
