@@ -133,12 +133,12 @@ public class AppScreenControllerPremium implements Initializable, AppScreenContr
 	}
 
 	public void setApp(LoginForms application) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	public void setMainFormController(ShellfireVPNMainFormFxmlController shellfireVPNMainFormFxmlController) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
@@ -150,7 +150,7 @@ public class AppScreenControllerPremium implements Initializable, AppScreenContr
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 }

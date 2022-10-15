@@ -53,24 +53,24 @@ public class AppScreenControllerAbout implements Initializable, AppScreenControl
 	}
 
 	public void setApp(LoginForms application) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	public void setMainFormController(ShellfireVPNMainFormFxmlController shellfireVPNMainFormFxmlController) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void notifyThatNowVisible(boolean isConnected) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 

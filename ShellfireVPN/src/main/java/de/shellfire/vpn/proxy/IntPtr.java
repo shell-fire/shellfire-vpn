@@ -8,7 +8,7 @@ public class IntPtr extends Structure {
 
 	@Override
 	protected List getFieldOrder() {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
