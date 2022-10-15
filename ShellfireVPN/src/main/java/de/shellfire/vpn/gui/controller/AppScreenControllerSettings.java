@@ -359,7 +359,6 @@ public class AppScreenControllerSettings implements Initializable, AppScreenCont
 	private void initValues() {
 		VpnProperties props = VpnProperties.getInstance();
 
-		// TODO: autoConnect aktuell ohne funktion
 		boolean autoConnect = props.getBoolean(Util.REG_AUTOCONNECT, false);
 		this.connectAutomatically.setSelected(autoConnect);
 
