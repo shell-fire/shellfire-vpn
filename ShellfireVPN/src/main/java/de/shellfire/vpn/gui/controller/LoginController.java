@@ -103,7 +103,6 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 		try {
 			Platform.runLater(() -> {
 				try {
-					//loginProgressDialog = ProgressDialogController.getInstance(i18n.tr("Logging in..."), null, LoginForms.getStage(), true);
 					loginProgressDialog = ProgressDialogController.getInstance(i18n.tr("Logging in..."), null, null, true);
 				} catch (IOException e) {
 					log.error("Error in ProgressDialogController.getInstancet()", e);
@@ -114,7 +113,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 			Thread loginTaskThread = new Thread(loginTask);
 			loginTaskThread.start();
 
-			// TODO: move much of this on success stuff into the actual worker, so progress dialog is shown longer
+
 			loginTask.setOnSucceeded((WorkerStateEvent wEvent) -> {
 				log.info("Login task completed successfully");
 				Response<LoginResponse> loginResult = null;
