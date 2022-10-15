@@ -3,6 +3,7 @@ SetCompressor lzma
 !include "MUI2.nsh"
 !include WinVer.nsh
 !include "defs.nsi"
+
 !include "macros.nsh"
 
 ; x64.nsh for architecture detection
@@ -131,11 +132,19 @@ Section "${PRODUCT_NAME}" SecShellfireVPN
 
   call DownloadAndInstallJREIfNecessary
   
-  
+  ${TimeStamp} $0
+  DetailPrint "TimeStamp=$0"
+
   ExpandEnvStrings $0 %COMSPEC%
   DetailPrint 'Running Command: "$0" /C %SystemRoot%\System32\Wbem\wmic Path win32_process Where "CommandLine Like $\'%ShellfireVPN2.exe%$\'"  Call Terminate'
   nsExec::ExecToLog '"$0" /C %SystemRoot%\System32\Wbem\wmic Path win32_process Where "CommandLine Like $\'%ShellfireVPN2.exe%$\'"  Call Terminate'
   
+  ${TimeStamp} $0
+  DetailPrint "TimeStamp=$0"
+  ExpandEnvStrings $0 %COMSPEC%
+  
+  DetailPrint 'Running Command: "$0" /C %SystemRoot%\System32\Wbem\wmic Path win32_process Where "CommandLine Like $\'%ShellfireVPN2.dat%$\'"  Call Terminate'
+  nsExec::ExecToLog '"$0" /C %SystemRoot%\System32\Wbem\wmic Path win32_process Where "CommandLine Like $\'%ShellfireVPN2.dat%$\'"  Call Terminate'
   
   SetShellVarContext all
   SetOverwrite on
@@ -143,10 +152,17 @@ Section "${PRODUCT_NAME}" SecShellfireVPN
   IfFileExists "$INSTDIR\ShellfireVPN2.exe" uninstsvc continueafteruninst
   uninstsvc:
   SetOutPath "$INSTDIR"
+
+  ${TimeStamp} $0
+  DetailPrint "TimeStamp=$0"
+
   ExpandEnvStrings $0 %COMSPEC%
-  DetailPrint 'Running Command: "$0" /C "$INSTDIR\ShellfireVPN2.exe" uninstallservice'
-  nsExec::ExecToLog '"$0" /C "$INSTDIR\ShellfireVPN2.exe" uninstallservice'
-  sleep 10000
+  ;DetailPrint 'Running Command: "$0" /C "$INSTDIR\ShellfireVPN2.exe" uninstallservice'
+  ;nsExec::ExecToLog '"$0" /C "$INSTDIR\ShellfireVPN2.exe" uninstallservice'
+  DetailPrint 'Running Command: "$0" /C $INSTDIR\ShellfireVpnService64.exe //DS//ShellfireVPN2Service'
+  nsExec::ExecToLog '"$0" /C "$INSTDIR\ShellfireVpnService64.exe" //DS//ShellfireVPN2Service'
+  
+  ; sleep 10000
   continueafteruninst:
   
   RmDir /r $INSTDIR 
@@ -165,6 +181,9 @@ Section "${PRODUCT_NAME}" SecShellfireVPN
 
 ; openvpn-64bit:
 
+  ${TimeStamp} $0
+  DetailPrint "TimeStamp=$0"
+  
   DetailPrint "Installing 64-bit openvpn"
   File "..\tools\openvpn\64-bit\"
 
@@ -172,18 +191,13 @@ goto openvpnend
 
 openvpn-32bit:
 
+  ${TimeStamp} $0
+  DetailPrint "TimeStamp=$0"
+
   DetailPrint "Installing 32-bit openvpn"
   File "..\tools\openvpn\32-bit\"
   
 openvpnend:  
-
-
-
-
-
-
-
-
 
   SetOutPath "$INSTDIR\wireguard\"
   
@@ -194,12 +208,19 @@ openvpnend:
 
 ; wireguard-64bit:
 
+  ${TimeStamp} $0
+  DetailPrint "TimeStamp=$0"
+
   DetailPrint "Installing 64-bit wireguard"
   File "..\tools\wireguard\64-bit\"
 
 goto wireguardend
 
 wireguard-32bit:
+
+  ${TimeStamp} $0
+  DetailPrint "TimeStamp=$0"
+
 
   DetailPrint "Installing 32-bit wireguard"
   File "..\tools\wireguard\32-bit\"
@@ -218,11 +239,13 @@ wireguardend:
 
 	; nvspbind-64bit:
 
+	  ${TimeStamp} $0
+	  DetailPrint "TimeStamp=$0"
+
 	  DetailPrint "Installing 64-bit nvspbind"
 	  File "..\tools\nvspbind\64-bit\"
 
 	goto nvspbindend
-
 
 	SetOutPath "$INSTDIR\nvspbind\"
 
@@ -233,31 +256,98 @@ wireguardend:
 
 	; nvspbind-64bit:
 
+	  ${TimeStamp} $0
+	  DetailPrint "TimeStamp=$0"
+
 	  DetailPrint "Installing 64-bit nvspbind"
 	  File "..\tools\nvspbind\64-bit\"
-
 	  
 	goto nvspbindend
-
 	
 nvspbind-32bit:
+
+	  ${TimeStamp} $0
+	  DetailPrint "TimeStamp=$0"
 
 	  DetailPrint "Installing 32-bit nvspbind"
 	  File "..\tools\nvspbind\32-bit\"
 nvspbindend:  
 	
   SetOutPath "$INSTDIR"  
+
+  ${TimeStamp} $0
+  DetailPrint "TimeStamp=$0"
+
+  DetailPrint "Replacing template variables in InstallService.bat"
+  ExpandEnvStrings $0 %SystemDrive%
+  !insertmacro _ReplaceInFile "$INSTDIR\InstallService.bat" "§§TEMP§§" "$0\temp\shellfire-vpn\"
+  !insertmacro _ReplaceInFile "$INSTDIR\InstallService.bat" "§§LOGFILE_STD§§" "$0\temp\shellfire-vpn\ProcRunLogStd.log"
+  !insertmacro _ReplaceInFile "$INSTDIR\InstallService.bat" "§§LOGFILE_ERR§§" "$0\temp\shellfire-vpn\ProcRunLogErr.log"
+  
+  Call DetectJRE  
+  Pop $0	  ; DetectJRE's return value
+  Pop $1	  ; JRE home (or error message if compatible JRE could not be found)
+
+  IfFileExists "$1\bin\client\jvm.dll" jvmdllclient jvmdllserver
+
+jvmdllclient:
+  !insertmacro _ReplaceInFile "$INSTDIR\InstallService.bat" "§§JVM_DLL§§" "$1\bin\client\jvm.dll"
+  goto jvmdllend
+  
+jvmdllserver:
+  !insertmacro _ReplaceInFile "$INSTDIR\InstallService.bat" "§§JVM_DLL§§" "$1\bin\server\jvm.dll"
+  goto jvmdllend
+
+jvmdllend:
+  
+
+  ; Check if we are running on a 64 bit system.
+  System::Call "kernel32::GetCurrentProcess() i .s"
+  System::Call "kernel32::IsWow64Process(i s, *i .r0)"
+  IntCmp $0 0 service-32bit
+
+service-64bit:
+
+  !insertmacro _ReplaceInFile "$INSTDIR\InstallService.bat" "§§PROCRUNPATH§§" "$INSTDIR\ShellfireVpnService64.exe"
+  !insertmacro _ReplaceInFile "$INSTDIR\UninstallService.bat" "§§PROCRUNPATH§§" "$INSTDIR\ShellfireVpnService64.exe"
+  
+goto serviceend
+
+service-32bit:
+
+  !insertmacro _ReplaceInFile "$INSTDIR\InstallService.bat" "§§PROCRUNPATH§§" "$INSTDIR\ShellfireVpnService32.exe"
+  !insertmacro _ReplaceInFile "$INSTDIR\UninstallService.bat" "§§PROCRUNPATH§§" "$INSTDIR\ShellfireVpnService32.exe"
+  
+serviceend:
+  
+  !insertmacro _ReplaceInFile "$INSTDIR\InstallService.bat" "§§SHELLFIREVPNSERVICEDAT§§" "$INSTDIR\ShellfireVPNService.dat"
+  !insertmacro _ReplaceInFile "$INSTDIR\InstallService.bat" "§§INSTALLDIR§§" "$INSTDIR"
+  
+  ${TimeStamp} $0
+  DetailPrint "TimeStamp=$0"
+  
   DetailPrint "Installing Service"
   ExpandEnvStrings $0 %COMSPEC%
-  DetailPrint 'Running Command: "$0" /C "$INSTDIR\ShellfireVPN2.exe" installservice"' 
-  nsExec::ExecToLog '"$0" /C "$INSTDIR\ShellfireVPN2.exe" installservice'
+  ;DetailPrint 'Running Command: "$0" /C "$INSTDIR\ShellfireVPN2.exe" installservice"' 
+  ;nsExec::ExecToLog '"$0" /C "$INSTDIR\ShellfireVPN2.exe" installservice'
+  DetailPrint 'Running Command: "$0" /C "$INSTDIR\InstallService.bat"' 
+  nsExec::ExecToLog '"$0" /C "$INSTDIR\InstallService.bat"'
 
   ;
   ; Add and remove a Wireguard tunnel, to ensure wintun driver is installed.
   ; Specially needed for win7, see this lengthy discussion: https://github.com/tailscale/tailscale/issues/1051
   ;
+  
+  ${TimeStamp} $0
+  DetailPrint "TimeStamp=$0"
+
+  ExpandEnvStrings $0 %COMSPEC%
   DetailPrint "Adding and removing a WireGuard tunnel to ensure wintun driver is installed..."
   nsExec::ExecToLog '"$0" /C "$INSTDIR\wireguard\forcewintun.exe"'
+
+  ${TimeStamp} $0
+  DetailPrint "TimeStamp=$0"
+
   DetailPrint "... done"
   
   
@@ -305,14 +395,17 @@ Section $(ML_SecTAP) SecTAP
 	
 	File /oname=tap-windows.exe "..\tools\tap\tap-windows-latest-stable.exe"
 	
+    ${TimeStamp} $0
+	DetailPrint "TimeStamp=$0"
 
 	DetailPrint "Uninstalling possibly existing TAP..."
 	nsExec::ExecToLog '"$PROGRAMFILES\TAP-Windows\uninstall.exe" /S'
-	sleep 4000
+
+    ${TimeStamp} $0
+	DetailPrint "TimeStamp=$0"
 	
 	DetailPrint "Installing TAP (may need confirmation)..."
 	nsExec::ExecToLog '"$INSTDIR\tap-windows.exe" /S /SELECT_UTILITIES=1'
-	sleep 4000
 	Pop $R0 # return value/error/timeout
 
 	WriteRegStr HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\${PACKAGE_NAME}" "tap" "installed"	
@@ -363,6 +456,10 @@ Section -post
     
     Pop $R0 # return value/error/timeout
     IntOp $5 $5 | $R0
+
+    ${TimeStamp} $0
+	DetailPrint "TimeStamp=$0"
+
     DetailPrint "tapinstall hwids returned: $R0"
 
     ; If tapinstall output string contains "${TAP}" we assume
@@ -376,16 +473,25 @@ Section -post
     IntCmp $R0 -1 tapinstall
 
  ;tapupdate:
+    ${TimeStamp} $0
+	DetailPrint "TimeStamp=$0"
+
     DetailPrint "TAP UPDATE"
 	nsExec::ExecToLog '"$PROGRAMFILES\TAP-Windows\bin\tapinstall.exe" update "$PROGRAMFILES\TAP-Windows\driver\OemVista.inf" ${TAP}'
     
     Pop $R0 # return value/error/timeout
     Call CheckReboot
     IntOp $5 $5 | $R0
+    ${TimeStamp} $0
+	DetailPrint "TimeStamp=$0"
+
     DetailPrint "tapinstall update returned: $R0"
     Goto tapinstall_check_error
 
  tapinstall:
+    ${TimeStamp} $0
+	DetailPrint "TimeStamp=$0"
+
     DetailPrint "TAP REMOVE OLD TAP"
 
     nsExec::ExecToLog '"$PROGRAMFILES\TAP-Windows\bin\tapinstall.exe" remove TAP0801'
@@ -396,6 +502,9 @@ Section -post
     nsExec::ExecToLog '"$PROGRAMFILES\TAP-Windows\bin\tapinstall.exe" remove TAP0901'
     
     Pop $R0 # return value/error/timeout
+    ${TimeStamp} $0
+	DetailPrint "TimeStamp=$0"
+
     DetailPrint "tapinstall remove TAP0901 returned: $R0"
 	
     DetailPrint "TAP INSTALL (${TAP})"
@@ -404,9 +513,16 @@ Section -post
     Pop $R0 # return value/error/timeout
     Call CheckReboot
     IntOp $5 $5 | $R0
+
+    ${TimeStamp} $0
+	DetailPrint "TimeStamp=$0"
+
     DetailPrint "tapinstall install returned: $R0"
 
  tapinstall_check_error:
+    ${TimeStamp} $0
+	DetailPrint "TimeStamp=$0"
+
     DetailPrint "tapinstall cumulative status: $5"
     IntCmp $5 0 notap
     MessageBox MB_OK $(ML_TAPINSTALLERROR)
@@ -421,7 +537,13 @@ Section -post
 
  noshortcuts:
   ; Create uninstaller
+  ${TimeStamp} $0
+  DetailPrint "TimeStamp=$0 / Write Uninstaller"
+  
   WriteUninstaller "$INSTDIR\Uninstall.exe"
+
+  ${TimeStamp} $0
+  DetailPrint "TimeStamp=$0 / Uninstaller Written - finalizing Registry entries"
 
   ; Show up in Add/Remove programs
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" "DisplayName" "${PRODUCT_NAME} ${VERSION}"
@@ -429,10 +551,17 @@ Section -post
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" "DisplayIcon" "$INSTDIR\${PRODUCT_ICON}"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" "DisplayVersion" "${VERSION}"
 
+  ${TimeStamp} $0
+  DetailPrint "TimeStamp=$0 / Dumping Log to File"
+
   ; write install log to install directory
-  StrCpy $0 "$INSTDIR\install.log"
-  Push $0
-  Call DumpLog
+  ;StrCpy $0 "$INSTDIR\install.log"
+  ;Push $0
+  ;Call DumpLog
+  DumpLog::DumpLog "$INSTDIR\install.log" .R0
+  
+  ${TimeStamp} $0
+  DetailPrint "TimeStamp=$0 / Log Dumped to File - all done"
   
 SectionEnd
 
@@ -494,6 +623,9 @@ Section "Uninstall"
 	${If} $R0 == "installed"
 		ReadRegStr $R0 HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\TAP-Windows" "UninstallString"
 		${If} $R0 != ""
+		    ${TimeStamp} $0
+			DetailPrint "TimeStamp=$0"
+		
 			DetailPrint "Uninstalling TAP..."
 			nsExec::ExecToLog '"$R0" /S'
 			Pop $R0 # return value/error/timeout
@@ -504,9 +636,8 @@ Section "Uninstall"
   SetOutPath "$INSTDIR"
 
   ExpandEnvStrings $0 %COMSPEC%
-  DetailPrint 'Running Command: "$0" /C "$INSTDIR\ShellfireVPN2.exe" uninstallservice'
-  nsExec::ExecToLog '"$0" /C "$INSTDIR\ShellfireVPN2.exe" uninstallservice'
-  sleep 4000
+  DetailPrint 'Running Command: "$0" /C "$INSTDIR\UninstallService.bat"'
+  nsExec::ExecToLog '"$0" /C "$INSTDIR\UninstallService.bat"'
     
   ExpandEnvStrings $0 %APPDATA%
   RMDir /r "$0\ShellfireVPN"

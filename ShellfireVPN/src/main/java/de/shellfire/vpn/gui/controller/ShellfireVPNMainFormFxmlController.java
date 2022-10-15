@@ -412,8 +412,8 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		this.application = applic;
 	}
 
-	public void afterLogin(boolean autoConnect) {
-		log.debug("afterLogin(autoConnect=" + autoConnect + ")");
+	public void afterLogin() {
+		log.debug("afterLogin() - start");
 		Vpn vpn = this.shellfireService.getVpn();
 		
 		log.debug("afterLogin() - if proxy enabled, enforce TCP");
@@ -428,6 +428,9 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
 		
 		log.debug("afterLogin() - if autoConnect do it");
+		VpnProperties props = VpnProperties.getInstance();
+		boolean autoConnect = props.getBoolean(Util.REG_AUTOCONNECT, false);
+		log.debug("autoConnect: " +  (autoConnect ? "true" : "false"));
 		if (autoConnect) {
 			Platform.runLater(() -> {
 				this.connectFromButton();

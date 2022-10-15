@@ -244,7 +244,7 @@ class JsonHttpRequest<RequestType, ResponseType> {
 
 		request.releaseConnection();
 
-		log.debug("jsonResult of response: {}", jsonResult);
+		log.debug("jsonResult of response: {}", Util.removeSensitiveDataForLog(jsonResult));
 
 		log.debug("gson.fromJson(...)");
 

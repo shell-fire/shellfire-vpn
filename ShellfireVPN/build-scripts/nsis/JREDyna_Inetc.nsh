@@ -90,7 +90,7 @@ Function DownloadAndInstallJREIfNecessary
 downloadJRE:
 	Var /GLOBAL JRE_URL
 	
-	StrCpy $JRE_URL "https://download.oracle.com/java/18/latest/jdk-18_windows-x64_bin.exe"
+	StrCpy $JRE_URL "https://download.oracle.com/java/17/archive/jdk-17.0.4.1_windows-x64_bin.exe"
 
   DetailPrint "About to download JRE from $JRE_URL"
   Inetc::get "$JRE_URL" "$TEMP\jre_Setup.exe" /END

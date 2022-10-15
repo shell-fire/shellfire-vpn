@@ -1104,5 +1104,13 @@ public class Util {
 				}
 			}
 		});
+	}
+
+	public static String removeSensitiveDataForLog(String jsonResult) {
+
+		
+		
+		return jsonResult;
+
 	}	
 }

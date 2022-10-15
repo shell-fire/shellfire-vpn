@@ -145,7 +145,7 @@ public class UpdaterFX extends Application implements CanContinueAfterBackEndAva
 			cmds.add("--add-opens=java.base/java.lang=ALL-UNNAMED");
 			cmds.add("--add-opens=java.base/sun.nio.ch=ALL-UNNAMED");
 			cmds.add("--module-path=.\\lib\\javafx\\lib");
-			cmds.add("--add-modules=javafx.swing,javafx.graphics,javafx.fxml,javafx.media,javafx.web");
+			cmds.add("--add-modules=javafx.swing,javafx.graphics,javafx.fxml,javafx.media");
 			cmds.add("--add-reads=javafx.graphics=ALL-UNNAMED");
 			cmds.add("--add-opens=javafx.controls/com.sun.javafx.charts=ALL-UNNAMED");
 			cmds.add("--add-opens=javafx.graphics/com.sun.javafx.iio=ALL-UNNAMED");
@@ -185,6 +185,9 @@ public class UpdaterFX extends Application implements CanContinueAfterBackEndAva
 		    String exec = UpdaterFX.UPDATER_EXE;
 		    String cmds = "doupdate";;
 		    String jarFile = Util.getPathJar();
+		    if (jarFile == null) {
+		    	jarFile = "c:\\temp\\shellfire-vpn\\";
+		    }
 		    File instDir = new File(jarFile).getParentFile();
 		    ServiceToolsFX.getInstanceForOS().writeElevationVbsFile(elevateVbs, exec, cmds);
 		    
@@ -275,7 +278,7 @@ public class UpdaterFX extends Application implements CanContinueAfterBackEndAva
 
 
 		private void downloadAndRunExeFileFromUrl(String url, String installPath, String user) throws IOException {
-			log.debug(url);
+			log.debug("downloadAndRunExeFileFromUrl({}, {}, {}) - start", url, installPath, user);
 
 			URL u = new URL(url);
 			String host = u.getHost();
@@ -292,28 +295,22 @@ public class UpdaterFX extends Application implements CanContinueAfterBackEndAva
 				file = u.getProtocol() + "://" + u.getHost() + file;
 			}
 
+			log.debug("Opening Socket({}, {}", host, port);
 			Socket s = new Socket(host, port);
-			PrintWriter out = new PrintWriter(s.getOutputStream(), true);
+			PrintWriter printWrite = new PrintWriter(s.getOutputStream(), true);
 			InputStream is = s.getInputStream();
 
 			String httpget = "GET " + file + " HTTP/1.0";
-			out.println(httpget);
+			printWrite.println(httpget);
 			log.debug(httpget);
 			String httphost = "HOST: " + host;
-			out.println(httphost);
+			printWrite.println(httphost);
 			log.debug(httphost);
-			out.println();
+			printWrite.println();
 
 			FileOutputStream fos = null;
-			String ext = "";
-			if (Util.isWindows()) {
-				ext = "exe";
-			} else {
-				ext = "dmg";
-			}
-
-			File f = File.createTempFile("ShellfireVPN_installer", "." + ext);
-
+			File f = File.createTempFile("ShellfireVPN_installer", ".exe");
+			log.debug("installer will be stored at temporary location: {}", f.getAbsolutePath());
 			fos = new FileOutputStream(f);
 
 			int count = 0;
@@ -324,6 +321,7 @@ public class UpdaterFX extends Application implements CanContinueAfterBackEndAva
 
 			int contentBytesRead = 0;
 
+			log.debug("start reading from inputstream...");
 			while ((len = is.read(buf)) > 0) {
 				if (afterHeader) {
 					fos.write(buf, 0, len);
@@ -370,12 +368,14 @@ public class UpdaterFX extends Application implements CanContinueAfterBackEndAva
 						header += str;
 					}
 				}
-
+				
 				count += 1024;
 			}
-			 Platform.runLater(() -> {updateProgressDialog.setDialogText(i18n.tr("Starting installer...")); });
 			
-
+			log.debug("Updating Progress Dialog - show 'Starting Installer...'");
+			Platform.runLater(() -> {updateProgressDialog.setDialogText(i18n.tr("Starting installer...")); });
+			
+			log.debug("Close inputstream and fileoutputstream");
 			is.close();
 			fos.close();
 
@@ -384,10 +384,10 @@ public class UpdaterFX extends Application implements CanContinueAfterBackEndAva
 			String start = "";
 
 			start += "\"" + f.getAbsolutePath() + "\"";
-			log.debug(start);
+			log.debug("Starting process: {}", start);
 			p = Runtime.getRuntime().exec(start);
-
-
+			// TODO: if above is still blocked for signed installer by defender, we need to find out how to detect such blocking....
+			log.debug("Starting separate threads to consume StdOut/ErrOut of process");
 			LogStreamReader isr = new LogStreamReader(p.getInputStream(), false);
 			Thread thread = new Thread(isr, "InputStreamReader");
 			thread.start();
@@ -395,6 +395,9 @@ public class UpdaterFX extends Application implements CanContinueAfterBackEndAva
 			LogStreamReader esr = new LogStreamReader(p.getErrorStream(), true);
 			Thread thread2 = new Thread(esr, "ErrorStreamReader");
 			thread2.start();
+
+			
+			log.debug("downloadAndRunExeFileFromUrl() - finished - calling System.exit()");
 			
 			// shutdown to ensure proper installation is possible
 			System.exit(0);

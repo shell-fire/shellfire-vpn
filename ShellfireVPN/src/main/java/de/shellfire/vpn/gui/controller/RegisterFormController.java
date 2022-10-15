@@ -305,7 +305,7 @@ public class RegisterFormController extends AnchorPane implements Initializable 
 				activationToken = registrationResult.getData().getToken();
 			} else {
 				if (progressDialog != null) {
-					ProgressDialogRegisterController.getDialogStage().hide();
+					progressDialog.hide();
 				}
 				Alert alert = new Alert(Alert.AlertType.ERROR);
 				alert.setHeaderText(i18n.tr("Error"));
@@ -393,12 +393,12 @@ public class RegisterFormController extends AnchorPane implements Initializable 
 		
 	}
 
-	public void stopWaitForActivationAndHideProgressDialog() {
+	public void stopWaitForActivation() {
 		if (poller != null) {
 			poller.stopIt();
 		}
+		progressDialog.hide();
 		this.isResend = false;
-		ProgressDialogRegisterController.getDialogStage().hide();
 	}
 
 	public void setStage(Stage stage) {

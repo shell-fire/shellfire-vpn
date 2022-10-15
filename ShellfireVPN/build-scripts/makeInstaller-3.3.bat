@@ -32,11 +32,11 @@ rem del %folder%\ShellfireVPN2Dat.jar
 
 echo "copying tools"
 rem NOT: xcopy tools %folder%\tools\ /S /E
-xcopy InstallServiceTemplate.txt %folder%\
-xcopy UninstallServiceTemplate.txt %folder%\
+xcopy InstallService.bat %folder%\
+xcopy UninstallService.bat %folder%\
 xcopy shellfire.keystore %folder%\
 xcopy servers %folder%\servers\
-xcopy /S c:\javafx-sdk-18.0.1\ %folder%\lib\javafx\
+xcopy /S c:\javafx-sdk-17\ %folder%\lib\javafx\
 
 echo creating installer...
 "c:\Program Files (x86)\NSIS\makensis.exe" /DVERSION=%version% nsis/sfvpn2.nsi 

@@ -181,26 +181,29 @@ public class MessageBroker {
 				// 	// 50 ms is enough to not use ANY cpu during sleep.
 				 					Util.sleep(50);
 				}
-				Object o = null;
-				try {
-					o = wire.read("msg").object();
+				if (!stop && wire != null) {
+					Object o = null;
+					try {
+						o = wire.read("msg").object();
 
-				} catch (IllegalStateException e) {
-					log.error("Tailer in invalid state, ignoring", e);
-				}
-
-				if (o != null && o instanceof Message) {
-					Message<?, ?> message = (Message<?, ?>) o;
-					// only handle this message if it did not
-					// originate from us
-					if (message.getSender() != Util.getUserType()) {
-						if (message.isResponse()) {
-							receivedMessageMap.put(message.getMessageId(), message);
-						} else {
-							notifyListeners(message);
-						}
+					} catch (IllegalStateException e) {
+						log.error("Tailer in invalid state, ignoring", e);
 					}
+
+					if (o != null && o instanceof Message) {
+						Message<?, ?> message = (Message<?, ?>) o;
+						// only handle this message if it did not
+						// originate from us
+						if (message.getSender() != Util.getUserType()) {
+							if (message.isResponse()) {
+								receivedMessageMap.put(message.getMessageId(), message);
+							} else {
+								notifyListeners(message);
+							}
+						}
+					}					
 				}
+
 
 			}
 			log.debug("stop is true, ReaderThread terminating");

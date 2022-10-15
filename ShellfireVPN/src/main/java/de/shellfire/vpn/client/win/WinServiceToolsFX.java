@@ -92,16 +92,7 @@ public class WinServiceToolsFX extends ServiceToolsFX {
 			String jarFile = Util.getPathJar();
 			String instDir = new File(jarFile).getParent() + File.separator;
 
-			String template = Util.fileToString(instDir + "UninstallServiceTemplate.txt");
-			String procRunPath = instDir + getProcrunExe();
-
-			template = template.replace("$$PROCRUNPATH$$", procRunPath);
-
-			template = template.replace("$$INSTALLDIR$$", instDir);
-
-			
 			String uninstallBat = instDir + "UninstallService.bat";
-			Util.stringToFile(template, uninstallBat);
 
 			String command = String.format("%s /C \"%s\"", Util.getCmdExe(), uninstallBat);
 			log.debug("Running command {}", command);
@@ -179,18 +170,7 @@ public class WinServiceToolsFX extends ServiceToolsFX {
 			String jarFile = Util.getPathJar();
 			String instDir = new File(jarFile).getParent() + File.separator;
 
-			String template = Util.fileToString(instDir + "InstallServiceTemplate.txt");
-			String procRunPath = instDir + getProcrunExe();
-
-			template = template.replace("$$TEMP$$", Util.getTempDir());
-			template = template.replace("$$LOGFILE$$", Util.getTempDir() + File.separator + "ProcRunLog.log");
-			template = template.replace("$$JVM_DLL$$", Util.getJvmDll());
-			template = template.replace("$$PROCRUNPATH$$", procRunPath);
-
-			template = template.replace("$$SHELLFIREVPNSERVICEDAT$$", jarFile);
-
 			String installBat = instDir + "InstallService.bat";
-			Util.stringToFile(template, installBat);
 
 			String command = String.format("%s /C \"%s\"", Util.getCmdExe(), installBat);
 			log.debug("Running command {}", command);
@@ -237,10 +217,12 @@ public class WinServiceToolsFX extends ServiceToolsFX {
 			} else {
 				String elevateVbs = System.getProperty("java.io.tmpdir") + "/elevate.vbs";
 
-				String exec = pathJavaw;
-				String cmds = "--add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/sun.nio.ch=ALL-UNNAMED --module-path=.\\lib\\javafx\\lib --add-modules=javafx.swing,javafx.graphics,javafx.fxml,javafx.media,javafx.web --add-reads=javafx.graphics=ALL-UNNAMED --add-opens=javafx.controls/com.sun.javafx.charts=ALL-UNNAMED --add-opens=javafx.graphics/com.sun.javafx.iio=ALL-UNNAMED --add-opens=javafx.graphics/com.sun.javafx.iio.common=ALL-UNNAMED --add-opens=javafx.graphics/com.sun.javafx.css=ALL-UNNAMED --add-opens=javafx.base/com.sun.javafx.runtime=ALL-UNNAMED --add-exports=java.base/jdk.internal.util=chronicle.bytes --add-exports=java.base/jdk.internal.ref=ALL-UNNAMED --add-exports=java.base/sun.nio.ch=ALL-UNNAMED --add-exports=jdk.unsupported/sun.misc=ALL-UNNAMED --add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED --add-opens=jdk.compiler/com.sun.tools.javac=ALL-UNNAMED --add-opens=java.base/java.lang.reflect=ALL-UNNAMED --add-opens=java.base/java.io=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED -jar \"\"" + jarFile + "\"\" " + arg;
+				String installBat = instDir + File.separator + "InstallService.bat";
 
-				writeElevationVbsFile(elevateVbs, exec, cmds);
+				String cmds = "/C \"\"" + installBat + "\"\"";
+				
+				
+				writeElevationVbsFile(elevateVbs, Util.getCmdExe(), cmds);
 
 				try {
 					String command = Util.getCscriptExe() + " " + elevateVbs;

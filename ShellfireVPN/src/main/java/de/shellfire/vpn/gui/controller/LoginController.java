@@ -165,7 +165,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 		
 							
 							application.shellfireVpnMainController.setApp(application);
-							application.shellfireVpnMainController.afterLogin(false);
+							application.shellfireVpnMainController.afterLogin();
 							
 							
 							application.shellfireVpnMainController.setUserName(this.username);
@@ -408,7 +408,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 			log.debug("LoginController: handlefLogginButton - service is loggedIn " + loginResult.getMessage());
 			if (fStoreLoginData.isSelected()) {
 				storeCredentialsInVpnProperties(username, password);
-				log.debug("LoginController: Login Data stored, username is " + username + " and passwd is " + password);
+				log.debug("LoginController: Login Data stored, username is " + username + " and passwd has a lenght > 3 characters? " + ((password != null && password.length() > 3) ? "yes" : "no"));
 			} else {
 				removeCredentialsFromRegistry();
 			}
@@ -531,6 +531,9 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 		if ((result.isPresent()) && (result.get() == ButtonType.YES)) {
 			Client.addVpnToAutoStart();
 			fStoreLoginData.setSelected(true);
+			
+			VpnProperties props = VpnProperties.getInstance();
+			props.setBoolean(Util.REG_AUTOCONNECT, true);
 		}
 	}
 

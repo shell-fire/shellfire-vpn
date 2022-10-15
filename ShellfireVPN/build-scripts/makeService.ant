@@ -26,14 +26,14 @@
 	<copy file="${dir.workspace}/shellfire-vpn4/ShellfireVPN/lib/sigar-x86-winnt.dll" todir="${dir.jarfile}/lib"/>
 	<copy file="${dir.workspace}/shellfire-vpn4/ShellfireVPN/lib/sigar-x86-winnt.lib" todir="${dir.jarfile}/lib"/>
 	
-	<copy file="C:/javafx-sdk-18.0.1/lib/javafx.base.jar" todir="${dir.jarfile}/lib"/>
-	<copy file="C:/javafx-sdk-18.0.1/lib/javafx.controls.jar" todir="${dir.jarfile}/lib"/>
-	 <copy file="C:/javafx-sdk-18.0.1/lib/javafx.fxml.jar" todir="${dir.jarfile}/lib"/>
-	 <copy file="C:/javafx-sdk-18.0.1/lib/javafx.graphics.jar" todir="${dir.jarfile}/lib"/>
-	 <copy file="C:/javafx-sdk-18.0.1/lib/javafx.media.jar" todir="${dir.jarfile}/lib"/>
-	 <copy file="C:/javafx-sdk-18.0.1/lib/javafx.swing.jar" todir="${dir.jarfile}/lib"/>
-	 <copy file="C:/javafx-sdk-18.0.1/lib/javafx.web.jar" todir="${dir.jarfile}/lib"/>
-	 <copy file="C:/javafx-sdk-18.0.1/lib/javafx-swt.jar" todir="${dir.jarfile}/lib"/>
+	<copy file="C:/javafx-sdk-17/lib/javafx.base.jar" todir="${dir.jarfile}/lib"/>
+	<copy file="C:/javafx-sdk-17/lib/javafx.controls.jar" todir="${dir.jarfile}/lib"/>
+	 <copy file="C:/javafx-sdk-17/lib/javafx.fxml.jar" todir="${dir.jarfile}/lib"/>
+	 <copy file="C:/javafx-sdk-17/lib/javafx.graphics.jar" todir="${dir.jarfile}/lib"/>
+	 <copy file="C:/javafx-sdk-17/lib/javafx.media.jar" todir="${dir.jarfile}/lib"/>
+	 <copy file="C:/javafx-sdk-17/lib/javafx.swing.jar" todir="${dir.jarfile}/lib"/>
+	 <copy file="C:/javafx-sdk-17/lib/javafx.web.jar" todir="${dir.jarfile}/lib"/>
+	 <copy file="C:/javafx-sdk-17/lib/javafx-swt.jar" todir="${dir.jarfile}/lib"/>
 	 
         <copy file="${dir.workspace}/shellfire-vpn4/ShellfireVPN/org.eclipse.jdt.annotation_2.2.600.v20200408-1511.jar" todir="${dir.jarfile}/lib"/>
         <copy file="C:/Users/flogat/.m2/repository/com/google/code/findbugs/jsr305/3.0.0/jsr305-3.0.0.jar" todir="${dir.jarfile}/lib"/>
