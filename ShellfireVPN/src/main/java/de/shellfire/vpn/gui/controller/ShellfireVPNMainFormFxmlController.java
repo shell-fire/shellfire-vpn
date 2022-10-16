@@ -557,41 +557,8 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		onMenuPaneMouseEntered(AppScreen.HELP);
 	}	
 
-	@FXML
-	private void handleMinimizeImageViewExited(MouseEvent event) {
-		this.application.getStage().getScene().setCursor(Cursor.DEFAULT);
-	}
-
-	@FXML
-	private void handleMinimizeImageViewEntered(MouseEvent event) {
-		this.application.getStage().getScene().setCursor(Cursor.HAND);
-	}
-
-	@FXML
-	private void handleMinimizeImageViewContext(ContextMenuEvent event) {
-	}
-
 	private void minimize() {
 		this.application.getStage().setIconified(true);
-	}
-
-	@FXML
-	private void handleExitImageViewMouseExited(MouseEvent event) {
-		this.application.getStage().getScene().setCursor(Cursor.DEFAULT);
-	}
-
-	@FXML
-	private void handleExitImageViewMouseEntered(MouseEvent event) {
-		this.application.getStage().getScene().setCursor(Cursor.HAND);
-	}
-
-	@FXML
-	private void handleExitImageViewContext(ContextMenuEvent event) {
-	}
-
-	@FXML
-	private void handleExitImageViewClicked(MouseEvent event) {
-		exitHandler();
 	}
 
 	private void initController() {
