@@ -4,17 +4,14 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
 
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.exception.VpnException;
-
 import de.shellfire.vpn.gui.helper.ExceptionThrowingReturningRunnableImpl;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.messaging.UserType;

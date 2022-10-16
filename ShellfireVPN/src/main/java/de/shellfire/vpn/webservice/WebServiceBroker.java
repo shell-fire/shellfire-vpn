@@ -67,7 +67,6 @@ import de.shellfire.vpn.webservice.model.WsHelpItem;
 import de.shellfire.vpn.webservice.model.WsLoginRequest;
 import de.shellfire.vpn.webservice.model.WsServer;
 import de.shellfire.vpn.webservice.model.WsVpn;
-import javafx.scene.image.Image;
 
 public class WebServiceBroker {
 

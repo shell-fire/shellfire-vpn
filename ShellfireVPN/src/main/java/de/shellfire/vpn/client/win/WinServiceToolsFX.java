@@ -16,6 +16,7 @@ import org.xnap.commons.i18n.I18n;
 
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.client.ServiceToolsFX;
+import de.shellfire.vpn.client.ServiceToolsFX.WaitForServiceTask;
 import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.gui.controller.LoginController;
 import de.shellfire.vpn.gui.controller.ProgressDialogController;

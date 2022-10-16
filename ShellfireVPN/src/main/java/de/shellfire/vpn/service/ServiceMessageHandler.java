@@ -13,7 +13,6 @@ import de.shellfire.vpn.messaging.MessageBroker;
 import de.shellfire.vpn.messaging.MessageListener;
 import de.shellfire.vpn.messaging.MessageType;
 import de.shellfire.vpn.types.Reason;
-import javafx.application.Platform;
 
 @SuppressWarnings("unchecked")
 public class ServiceMessageHandler implements MessageListener<Object>, ConnectionStateListener {

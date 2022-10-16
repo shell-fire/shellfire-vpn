@@ -2,7 +2,6 @@ package de.shellfire.vpn.gui.controller;
 
 import java.net.URL;
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ResourceBundle;
 
 import org.xnap.commons.i18n.I18n;

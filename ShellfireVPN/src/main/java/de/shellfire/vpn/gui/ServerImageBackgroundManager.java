@@ -1,21 +1,16 @@
 package de.shellfire.vpn.gui;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import javax.imageio.ImageIO;
-
 import org.slf4j.Logger;
 
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.VpnProperties;
-import de.shellfire.vpn.gui.controller.LoginController;
 import de.shellfire.vpn.webservice.WebService;
-import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.image.Image;
 
 public class ServerImageBackgroundManager {

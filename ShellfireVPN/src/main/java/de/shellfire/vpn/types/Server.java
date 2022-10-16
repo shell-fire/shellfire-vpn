@@ -1,16 +1,10 @@
 package de.shellfire.vpn.types;
 
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-
-import javax.imageio.ImageIO;
-
 import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
 
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.client.Controller;
-import de.shellfire.vpn.gui.controller.AppScreenControllerServerList;
 import de.shellfire.vpn.gui.model.ServerRow;
 import de.shellfire.vpn.i18n.VpnI18N;
 import de.shellfire.vpn.webservice.model.VpnStar;

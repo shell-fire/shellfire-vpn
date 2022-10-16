@@ -19,7 +19,6 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
-import javafx.stage.Stage;
 import netscape.javascript.JSException;
 
 public class Browser extends Region {

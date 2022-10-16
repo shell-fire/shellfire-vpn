@@ -9,7 +9,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.slf4j.Logger;
 
 import de.shellfire.vpn.Util;
-import net.openhft.chronicle.bytes.MethodReader;
 import net.openhft.chronicle.queue.ChronicleQueue;
 import net.openhft.chronicle.queue.ExcerptAppender;
 import net.openhft.chronicle.queue.ExcerptCommon;

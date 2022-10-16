@@ -35,7 +35,6 @@ import org.slf4j.Logger;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.sun.jna.platform.win32.COM.DispatchVTable.GetIDsOfNamesCallback;
 
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.exception.VpnException;

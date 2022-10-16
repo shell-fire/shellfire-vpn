@@ -14,8 +14,6 @@ import de.shellfire.vpn.gui.controller.AppScreenControllerServerList;
 import de.shellfire.vpn.gui.model.ServerRow;
 import de.shellfire.vpn.types.Server;
 import de.shellfire.vpn.types.ServerType;
-import de.shellfire.vpn.webservice.WebService;
-import javafx.geometry.Insets;
 import javafx.geometry.NodeOrientation;
 import javafx.scene.control.TableCell;
 import javafx.scene.image.Image;

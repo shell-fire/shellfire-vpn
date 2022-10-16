@@ -17,8 +17,6 @@ import java.util.ResourceBundle;
 import org.slf4j.Logger;
 import org.xnap.commons.i18n.I18n;
 
-
-
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.gui.model.CountryMap;
 import de.shellfire.vpn.gui.model.ServerRow;
@@ -52,7 +50,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Region;

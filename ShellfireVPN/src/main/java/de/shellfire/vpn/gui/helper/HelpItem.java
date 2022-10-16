@@ -10,8 +10,6 @@ import org.slf4j.Logger;
 
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.gui.controller.AppScreenControllerHelp;
-import de.shellfire.vpn.gui.controller.ShellfireVPNMainFormFxmlController;
-import javafx.application.HostServices;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
