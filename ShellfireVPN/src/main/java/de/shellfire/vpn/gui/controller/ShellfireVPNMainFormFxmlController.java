@@ -133,6 +133,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	@FXML
 	private Label menuLabelHelp;
 	
+	// TODO: delete this Pane, and possibly many others
 	@FXML
 	private Pane leftMenuPane;
 	@FXML
@@ -572,20 +573,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		onMenuPaneMouseEntered(AppScreen.HELP);
 	}	
 
-
-	private void hide(final Stage stage) {
-		Platform.runLater(new Runnable() {
-			@Override
-			public void run() {
-				if (SystemTray.isSupported()) {
-					stage.hide();
-				} else {
-					System.exit(0);
-				}
-			}
-		});
-	}
-
 	@FXML
 	private void handleMinimizeImageViewExited(MouseEvent event) {
 		this.application.getStage().getScene().setCursor(Cursor.DEFAULT);
@@ -600,9 +587,8 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	private void handleMinimizeImageViewContext(ContextMenuEvent event) {
 	}
 
-	@FXML
-	private void handleMinimizeImageViewClicked(MouseEvent event) {
-		((Stage) ((ImageView) event.getSource()).getScene().getWindow()).setIconified(true);
+	private void minimize() {
+		this.application.getStage().setIconified(true);
 	}
 
 	@FXML
@@ -1516,21 +1502,7 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 
 	public void minimizeToTray() {
 		log.debug("ShellfireVPNMainController.minimizeToTray() - start");
-		if (leftMenuPane != null) {
-			Scene scene = leftMenuPane.getScene();
-			if (scene != null) {
-				Stage stage = (Stage)scene.getWindow();
-				if (stage != null) {
-					hide(stage);
-				} else {
-					log.debug("stage is null, cannot hide()");
-				}
-			} else {
-				log.debug("scene is null, cannot hide()");
-			}
-		} else {
-			log.debug("leftMenuPane is null, cannot hide()");
-		}
+		minimize();
 		log.debug("ShellfireVPNMainController.minimizeToTray() - return");
 	}
 

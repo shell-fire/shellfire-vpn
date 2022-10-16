@@ -290,11 +290,12 @@ public class LoginForms extends Application {
 		if (default_args.length > 0) {
 			log.debug("LoginForms.afterDialogDisplay() - has command line, call handleCommandLine()");
 			handleCommandLine();
+			
 			log.debug("LoginForms.afterDialogDisplay() - returned from handleCommanLine, returning;");
-			if (!startMinimized) {
-				return;
-			} else {
+			if (startMinimized) {
 				log.debug("afterDialogDisplay - we need to start minimized, not returning");
+			} else {
+				return;
 			}
 		}
 		log.debug("Hiding stage");
