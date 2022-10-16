@@ -582,8 +582,6 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 					LoginForms.shellfireVpnMainController = null;
 				}
 
-				// TODO - investigage if commenting causes memory leaks
-				// LoginForms.instance.close();
 				LoginForms.controllerInstance = null;
 
 				List<String> restart = new ArrayList<String>();
