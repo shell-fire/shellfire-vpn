@@ -21,15 +21,12 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.Window;
 
-// todo: load this class also as another modal dialog window...
 public class ProgressDialogRegisterController extends AnchorPane implements Initializable {
 
 	private static I18n i18n = VpnI18N.getI18n();
