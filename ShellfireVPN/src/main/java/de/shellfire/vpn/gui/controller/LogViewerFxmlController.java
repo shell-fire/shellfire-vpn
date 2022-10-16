@@ -84,7 +84,6 @@ public class LogViewerFxmlController implements Initializable {
 		public void handle(String line) {
 			if (line != null) {
 				Platform.runLater(() -> {
-					// TODO: This caused alwyas a long delay on startup, so commented out for now.. but logviewer is probably broken for now...
 					this.textArea.appendText(line + "\n");
 					this.textArea.end();
 				});
