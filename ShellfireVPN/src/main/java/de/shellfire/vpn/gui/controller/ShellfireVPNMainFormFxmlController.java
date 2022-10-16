@@ -572,43 +572,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 		onMenuPaneMouseEntered(AppScreen.HELP);
 	}	
 
-	@FXML
-	private void handleHelpImageViewMouseExited(MouseEvent event) {
-		this.application.getStage().getScene().setCursor(Cursor.DEFAULT);
-	}
-
-	@FXML
-	private void handleHelpImageViewMouseEntered(MouseEvent event) {
-		this.application.getStage().getScene().setCursor(Cursor.HAND);
-	}
-
-
-	// TODO: replace by loader from somewhere else, e.g. "more" screen?
-	@FXML
-	private void handleHelpImageViewClicked(MouseEvent event) {
-		this.openHelp();
-	}
-
-
-	// TODO: Bind this hideImageView code to the minimize button from Stage, so minimize will always be minimize to tray...
-	@FXML
-	private void handleHideImageViewExited(MouseEvent event) {
-		this.application.getStage().getScene().setCursor(Cursor.DEFAULT);
-	}
-
-	@FXML
-	private void handleHideImageViewEntered(MouseEvent event) {
-		this.application.getStage().getScene().setCursor(Cursor.HAND);
-	}
-
-	@FXML
-	private void handleHideImageViewContext(ContextMenuEvent event) {
-	}
-
-	@FXML
-	private void handleHideImageViewClicked(MouseEvent event) {
-		hide(this.application.getStage());
-	}
 
 	private void hide(final Stage stage) {
 		Platform.runLater(new Runnable() {
