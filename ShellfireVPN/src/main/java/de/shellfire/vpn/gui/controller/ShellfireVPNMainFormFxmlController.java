@@ -132,12 +132,6 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	private Label menuLabelAbout;
 	@FXML
 	private Label menuLabelHelp;
-	
-	// TODO: delete this Pane, and possibly many others
-	@FXML
-	private Pane leftMenuPane;
-	@FXML
-	private Pane leftConnectionPane;
 	@FXML
 	private ImageView menuImageStatus;
 	@FXML
@@ -154,20 +148,10 @@ public class ShellfireVPNMainFormFxmlController extends AnchorPane implements In
 	private ImageView menuImageHelp;
 	@FXML
 	private AnchorPane menuBarAnchorPane;
-	@FXML
-	private ImageView helpImageView;
-	@FXML
-	private ImageView settingsImageView;
-	@FXML
-	private ImageView hideImageView;
-	@FXML
-	private ImageView minimizeImageView;
-	@FXML
-	private ImageView exitImageView;
+
 	@FXML
 	private AnchorPane contentAnchorPane;
-	@FXML
-	private Pane contentHeaderPane;
+
 	@FXML
 	private Pane contentDetailsPane;
 
