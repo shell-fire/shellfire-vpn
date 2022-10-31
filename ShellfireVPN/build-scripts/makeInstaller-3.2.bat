@@ -24,6 +24,10 @@ echo make updater to ShellfireVPN.exe
 echo make mainDat - exe file (named .dat)
 "C:\Program Files (x86)\Launch4j\launch4jc.exe" makeMainDatExe_%version%.xml
 
+echo "signing .exes"
+"C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64\signtool.exe" sign /tr http://timestamp.sectigo.com /td sha256 /fd sha256 /a "%folder%\ShellfireVPN2Dat.exe"
+"C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64\signtool.exe" sign /tr http://timestamp.sectigo.com /td sha256 /fd sha256 /a "%folder%\ShellfireVPN2.exe"
+
 move %folder%\ShellfireVPN2Dat.exe %folder%\ShellfireVPN2.dat
 
 echo "deleting jars"
@@ -40,6 +44,9 @@ xcopy /S c:\javafx-sdk-17\ %folder%\lib\javafx\
 
 echo creating installer...
 "c:\Program Files (x86)\NSIS\makensis.exe" /DVERSION=%version% nsis/sfvpn2.nsi 
+
+echo "signing installer..."
+"C:\Program Files (x86)\Windows Kits\10\bin\10.0.22621.0\x64\signtool.exe" sign /tr http://timestamp.sectigo.com /td sha256 /fd sha256 /a "..\installer\ShellfireVPN-%version%-install.exe"
 
 echo "finished - launching installer"
 pause

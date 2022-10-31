@@ -14,6 +14,9 @@
   <restartOnCrash>false</restartOnCrash>
   <manifest></manifest>
   <icon>C:\nextcloud\My Library\workspace\shellfire-vpn4\ShellfireVPN\build-scripts\images\normal.ico</icon>
+  <classPath>
+    <mainClass>de.shellfire.vpn.updater.UpdaterFX</mainClass>
+  </classPath>
   <jre>
     <path></path>
     <bundledJre64Bit>false</bundledJre64Bit>
