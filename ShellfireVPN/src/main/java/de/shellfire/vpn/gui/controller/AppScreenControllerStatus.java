@@ -41,6 +41,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.BackgroundPosition;
@@ -50,6 +51,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
@@ -71,6 +73,10 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
 	private Region statusConnectionRegion; 
 	@FXML
 	private Pane contentDetailsPane;
+	@FXML
+	private AnchorPane statusAnchorPane;
+	@FXML
+	private StackPane statusStackPane;
 	@FXML
 	private WebView locationMap;
 	@FXML
@@ -384,6 +390,8 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
 		);
 		
 		statusConnectionRegion.setBackground(new Background(bgImage));
+
+		
 	}	
 	
 	

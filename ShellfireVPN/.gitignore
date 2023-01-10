@@ -5,3 +5,4 @@
 /build-scripts/mac/macos-app-template/Contents/PlugIns
 /build-scripts/mac/apple-certs
 .DS_Store
+/java

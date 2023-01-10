@@ -130,7 +130,7 @@ Section "${PRODUCT_NAME}" SecShellfireVPN
 	  SetRegView 64
 	${EndIf}
 
-  call DownloadAndInstallJREIfNecessary
+  ; call DownloadAndInstallJREIfNecessary
   
   ${TimeStamp} $0
   DetailPrint "TimeStamp=$0"
@@ -281,25 +281,11 @@ nvspbindend:
   DetailPrint "Replacing template variables in InstallService.bat"
   ExpandEnvStrings $0 %SystemDrive%
   !insertmacro _ReplaceInFile "$INSTDIR\InstallService.bat" "§§TEMP§§" "$0\temp\shellfire-vpn\"
+  !insertmacro _ReplaceInFile "$INSTDIR\UninstallService.bat" "§§TEMP§§" "$0\temp\shellfire-vpn\"
   !insertmacro _ReplaceInFile "$INSTDIR\InstallService.bat" "§§LOGFILE_STD§§" "$0\temp\shellfire-vpn\ProcRunLogStd.log"
   !insertmacro _ReplaceInFile "$INSTDIR\InstallService.bat" "§§LOGFILE_ERR§§" "$0\temp\shellfire-vpn\ProcRunLogErr.log"
   
-  Call DetectJRE  
-  Pop $0	  ; DetectJRE's return value
-  Pop $1	  ; JRE home (or error message if compatible JRE could not be found)
-
-  IfFileExists "$1\bin\client\jvm.dll" jvmdllclient jvmdllserver
-
-jvmdllclient:
-  !insertmacro _ReplaceInFile "$INSTDIR\InstallService.bat" "§§JVM_DLL§§" "$1\bin\client\jvm.dll"
-  goto jvmdllend
-  
-jvmdllserver:
-  !insertmacro _ReplaceInFile "$INSTDIR\InstallService.bat" "§§JVM_DLL§§" "$1\bin\server\jvm.dll"
-  goto jvmdllend
-
-jvmdllend:
-  
+  !insertmacro _ReplaceInFile "$INSTDIR\InstallService.bat" "§§JVM_DLL§§" "$INSTDIR\java\bin\server\jvm.dll"
 
   ; Check if we are running on a 64 bit system.
   System::Call "kernel32::GetCurrentProcess() i .s"

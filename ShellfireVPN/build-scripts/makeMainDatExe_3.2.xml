@@ -8,7 +8,7 @@
   <cmdLine></cmdLine>
   <chdir>.</chdir>
   <priority>normal</priority>
-  <downloadUrl>http://java.com/download</downloadUrl>
+  <downloadUrl>https://download.oracle.com/java/17/latest/jdk-17_windows-x64_bin.exe</downloadUrl>
   <supportUrl>http://www.shellfire.de</supportUrl>
   <stayAlive>false</stayAlive>
   <restartOnCrash>false</restartOnCrash>
@@ -18,11 +18,11 @@
     <mainClass>de.shellfire.vpn.gui.LoginForms</mainClass>
   </classPath>  
   <jre>
-    <path></path>
+    <path>java</path>
     <bundledJre64Bit>false</bundledJre64Bit>
     <bundledJreAsFallback>false</bundledJreAsFallback>
     <minVersion>1.17.0</minVersion>
-    <maxVersion></maxVersion>
+    <maxVersion>1.17.10</maxVersion>
     <jdkPreference>preferJre</jdkPreference>
     <runtimeBits>64/32</runtimeBits>
 	<maxHeapSize>512</maxHeapSize>
@@ -36,7 +36,7 @@
 		<opt>--add-opens=javafx.graphics/com.sun.javafx.iio.common=ALL-UNNAMED</opt>
 		<opt>--add-opens=javafx.graphics/com.sun.javafx.css=ALL-UNNAMED</opt>
 		<opt>--add-opens=javafx.base/com.sun.javafx.runtime=ALL-UNNAMED</opt>
-		<opt>--add-exports=java.base/jdk.internal.util=chronicle.bytes</opt>
+		<opt>--add-exports=java.base/jdk.internal.util=ALL-UNNAMED</opt>
 		<opt>--add-exports=java.base/jdk.internal.ref=ALL-UNNAMED</opt>
 		<opt>--add-exports=java.base/sun.nio.ch=ALL-UNNAMED</opt>
 		<opt>--add-exports=jdk.unsupported/sun.misc=ALL-UNNAMED</opt>

@@ -151,7 +151,7 @@ public class UpdaterFX extends Application implements CanContinueAfterBackEndAva
 			cmds.add("--add-opens=javafx.graphics/com.sun.javafx.iio.common=ALL-UNNAMED");
 			cmds.add("--add-opens=javafx.graphics/com.sun.javafx.css=ALL-UNNAMED");
 			cmds.add("--add-opens=javafx.base/com.sun.javafx.runtime=ALL-UNNAMED");
-			cmds.add("--add-exports=java.base/jdk.internal.util=chronicle.bytes");
+			cmds.add("--add-exports=java.base/jdk.internal.util=ALL-UNNAMED");
 			cmds.add("--add-exports=java.base/jdk.internal.ref=ALL-UNNAMED");
 			cmds.add("--add-exports=java.base/sun.nio.ch=ALL-UNNAMED");
 			cmds.add("--add-exports=jdk.unsupported/sun.misc=ALL-UNNAMED");

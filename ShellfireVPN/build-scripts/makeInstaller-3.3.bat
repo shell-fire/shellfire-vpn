@@ -41,7 +41,7 @@ xcopy UninstallService.bat %folder%\
 xcopy shellfire.keystore %folder%\
 xcopy servers %folder%\servers\
 xcopy /S c:\javafx-sdk-17\ %folder%\lib\javafx\
-
+xcopy /S ..\java\ %folder%\java\
 echo creating installer...
 "c:\Program Files (x86)\NSIS\makensis.exe" /DVERSION=%version% nsis/sfvpn2.nsi 
 
