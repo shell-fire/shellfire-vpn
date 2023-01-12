@@ -1,32 +1,32 @@
 set SERVICE_NAME=ShellfireVPN2Service
 set PR_DESCRIPTION=ShellfireVPN2Service
-set PR_INSTALL=Â§Â§PROCRUNPATHÂ§Â§
+set PR_INSTALL=§§PROCRUNPATH§§
 set PR_SERVICEUSER=LocalSystem
 
 REM Service log configuration
 set PR_LOGPREFIX=%SERVICE_NAME%
-set PR_LOGPATH=Â§Â§TEMPÂ§Â§
-set PR_STDOUTPUT=Â§Â§LOGFILE_STDÂ§Â§
-set PR_STDERROR=Â§Â§LOGFILE_ERRÂ§Â§
+set PR_LOGPATH=§§TEMP§§
+set PR_STDOUTPUT=§§LOGFILE_STD§§
+set PR_STDERROR=§§LOGFILE_ERR§§
 set PR_LOGLEVEL=Trace
 set PR_LOGJNIMESSAGES=1
  
 REM Path to java installation
-set PR_JVM=Â§Â§JVM_DLLÂ§Â§
-set PR_CLASSPATH=Â§Â§SHELLFIREVPNSERVICEDATÂ§Â§
+set PR_JVM=§§JVM_DLL§§
+set PR_CLASSPATH=§§SHELLFIREVPNSERVICEDAT§§
  
 REM Startup configuration
 set PR_STARTUP=auto
 set PR_STARTMODE=jvm
 set PR_STARTCLASS=de.shellfire.vpn.service.Service
 set PR_STARTMETHOD=start
-set PR_STARTIMAGE=Â§Â§INSTALLDIRÂ§Â§\icon-big.ico
+set PR_STARTIMAGE=§§INSTALLDIR§§\icon-big.ico
 
 REM Shutdown configuration
 set PR_STOPMODE=jvm
 set PR_STOPCLASS=de.shellfire.vpn.service.Service
 set PR_STOPMETHOD=stop
-set PR_STOPIMAGE=Â§Â§INSTALLDIRÂ§Â§\icon-big.ico
+set PR_STOPIMAGE=§§INSTALLDIR§§\icon-big.ico
 
  
 REM JVM configuration
@@ -41,8 +41,8 @@ REM Uninstall service (might fail if service not installed before)
 "%PR_INSTALL%" //DS//%SERVICE_NAME%
 
 REM delete temp files
-rmdir Â§Â§TEMPÂ§Â§sfvpn-chronicle-client-to-service /s /q
-rmdir Â§Â§TEMPÂ§Â§sfvpn-chronicle-service-to-client /s /q
+rmdir §§TEMP§§sfvpn-chronicle-client-to-service /s /q
+rmdir §§TEMP§§sfvpn-chronicle-service-to-client /s /q
 
 REM Install service
 "%PR_INSTALL%" //IS//%SERVICE_NAME%

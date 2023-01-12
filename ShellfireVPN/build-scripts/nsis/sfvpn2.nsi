@@ -280,12 +280,12 @@ nvspbindend:
 
   DetailPrint "Replacing template variables in InstallService.bat"
   ExpandEnvStrings $0 %SystemDrive%
-  !insertmacro _ReplaceInFile "$INSTDIR\InstallService.bat" "Â§Â§TEMPÂ§Â§" "$0\temp\shellfire-vpn\"
-  !insertmacro _ReplaceInFile "$INSTDIR\UninstallService.bat" "Â§Â§TEMPÂ§Â§" "$0\temp\shellfire-vpn\"
-  !insertmacro _ReplaceInFile "$INSTDIR\InstallService.bat" "Â§Â§LOGFILE_STDÂ§Â§" "$0\temp\shellfire-vpn\ProcRunLogStd.log"
-  !insertmacro _ReplaceInFile "$INSTDIR\InstallService.bat" "Â§Â§LOGFILE_ERRÂ§Â§" "$0\temp\shellfire-vpn\ProcRunLogErr.log"
+  !insertmacro _ReplaceInFile "$INSTDIR\InstallService.bat" "§§TEMP§§" "$0\temp\shellfire-vpn\"
+  !insertmacro _ReplaceInFile "$INSTDIR\UninstallService.bat" "§§TEMP§§" "$0\temp\shellfire-vpn\"
+  !insertmacro _ReplaceInFile "$INSTDIR\InstallService.bat" "§§LOGFILE_STD§§" "$0\temp\shellfire-vpn\ProcRunLogStd.log"
+  !insertmacro _ReplaceInFile "$INSTDIR\InstallService.bat" "§§LOGFILE_ERR§§" "$0\temp\shellfire-vpn\ProcRunLogErr.log"
   
-  !insertmacro _ReplaceInFile "$INSTDIR\InstallService.bat" "Â§Â§JVM_DLLÂ§Â§" "$INSTDIR\java\bin\server\jvm.dll"
+  !insertmacro _ReplaceInFile "$INSTDIR\InstallService.bat" "§§JVM_DLL§§" "$INSTDIR\java\bin\server\jvm.dll"
 
   ; Check if we are running on a 64 bit system.
   System::Call "kernel32::GetCurrentProcess() i .s"
@@ -294,20 +294,20 @@ nvspbindend:
 
 service-64bit:
 
-  !insertmacro _ReplaceInFile "$INSTDIR\InstallService.bat" "Â§Â§PROCRUNPATHÂ§Â§" "$INSTDIR\ShellfireVpnService64.exe"
-  !insertmacro _ReplaceInFile "$INSTDIR\UninstallService.bat" "Â§Â§PROCRUNPATHÂ§Â§" "$INSTDIR\ShellfireVpnService64.exe"
+  !insertmacro _ReplaceInFile "$INSTDIR\InstallService.bat" "§§PROCRUNPATH§§" "$INSTDIR\ShellfireVpnService64.exe"
+  !insertmacro _ReplaceInFile "$INSTDIR\UninstallService.bat" "§§PROCRUNPATH§§" "$INSTDIR\ShellfireVpnService64.exe"
   
 goto serviceend
 
 service-32bit:
 
-  !insertmacro _ReplaceInFile "$INSTDIR\InstallService.bat" "Â§Â§PROCRUNPATHÂ§Â§" "$INSTDIR\ShellfireVpnService32.exe"
-  !insertmacro _ReplaceInFile "$INSTDIR\UninstallService.bat" "Â§Â§PROCRUNPATHÂ§Â§" "$INSTDIR\ShellfireVpnService32.exe"
+  !insertmacro _ReplaceInFile "$INSTDIR\InstallService.bat" "§§PROCRUNPATH§§" "$INSTDIR\ShellfireVpnService32.exe"
+  !insertmacro _ReplaceInFile "$INSTDIR\UninstallService.bat" "§§PROCRUNPATH§§" "$INSTDIR\ShellfireVpnService32.exe"
   
 serviceend:
   
-  !insertmacro _ReplaceInFile "$INSTDIR\InstallService.bat" "Â§Â§SHELLFIREVPNSERVICEDATÂ§Â§" "$INSTDIR\ShellfireVPNService.dat"
-  !insertmacro _ReplaceInFile "$INSTDIR\InstallService.bat" "Â§Â§INSTALLDIRÂ§Â§" "$INSTDIR"
+  !insertmacro _ReplaceInFile "$INSTDIR\InstallService.bat" "§§SHELLFIREVPNSERVICEDAT§§" "$INSTDIR\ShellfireVPNService.dat"
+  !insertmacro _ReplaceInFile "$INSTDIR\InstallService.bat" "§§INSTALLDIR§§" "$INSTDIR"
   
   ${TimeStamp} $0
   DetailPrint "TimeStamp=$0"
