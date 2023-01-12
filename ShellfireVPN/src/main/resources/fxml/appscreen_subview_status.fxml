@@ -15,14 +15,14 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.web.WebView?>
 
-<AnchorPane prefHeight="640.0" prefWidth="420.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"  fx:controller="de.shellfire.vpn.gui.controller.AppScreenControllerStatus">
+<AnchorPane prefHeight="580.0" prefWidth="420.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.shellfire.vpn.gui.controller.AppScreenControllerStatus">
    <children>
       <VBox>
          <children>
-            <StackPane prefHeight="640.0" prefWidth="420.0">
+            <StackPane prefHeight="580.0" prefWidth="420.0">
                <children>
                   <Region fx:id="statusConnectionRegion" maxHeight="500.0" prefHeight="500.0" prefWidth="420.0" StackPane.alignment="TOP_CENTER" />
-                  <WebView fx:id="locationMap" maxHeight="140.0" prefHeight="140.0" prefWidth="420.0" StackPane.alignment="BOTTOM_CENTER" />
+                  <WebView fx:id="locationMap" maxHeight="190.0" prefHeight="190.0" prefWidth="420.0" StackPane.alignment="BOTTOM_CENTER" />
                   <Label fx:id="labelConnectionStatus" alignment="TOP_LEFT" opacity="0.8" prefHeight="35.0" prefWidth="420.0" style="-fx-background-color: #c76673;" textAlignment="CENTER" textFill="WHITE" StackPane.alignment="TOP_CENTER">
                      <font>
                         <Font name="Arial Bold" size="12.0" />
@@ -31,7 +31,7 @@
                         <DropShadow height="50.41" radius="12.1025" width="0.0" />
                      </effect>
                      <StackPane.margin>
-                        <Insets top="465.0" />
+                        <Insets top="390.0" />
                      </StackPane.margin>
                   </Label>
                   <Label fx:id="labelConnectionStatusText" alignment="BASELINE_CENTER" prefHeight="35.0" prefWidth="420.0" textAlignment="CENTER" textFill="WHITE" StackPane.alignment="TOP_CENTER">
@@ -39,7 +39,7 @@
                         <Font name="Arial Bold" size="12.0" />
                      </font>
                      <StackPane.margin>
-                        <Insets top="465.0" />
+                        <Insets top="390.0" />
                      </StackPane.margin>
                   </Label>
                   <Rectangle fx:id="rectConnectButton" arcHeight="35.0" arcWidth="35.0" fill="#74e495" height="35.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="180.0" StackPane.alignment="BOTTOM_CENTER">
