@@ -102,16 +102,20 @@ public class WebService {
 		log.debug("LoginResult received");
 
 		if (shellfire.isLoggedIn()) {
-			try {
-				log.debug("Load vpn details - start");
-				this.loadVpnDetails();
-				log.debug("Load vpn details - finished");
-			} catch (VpnException e) {
-				result.setMessage(i18n.tr("VPN data could not be loaded."));
-			}
+			this.postLoginInit(result);
 		}
 
 		return result;
+	}
+	
+	public void postLoginInit(Response<LoginResponse> result) {
+		try {
+			log.debug("Load vpn details - start");
+			this.loadVpnDetails();
+			log.debug("Load vpn details - finished");
+		} catch (VpnException e) {
+			result.setMessage(i18n.tr("VPN data could not be loaded."));
+		}
 	}
 
 	private void loadVpnDetails() throws VpnException {

@@ -26,6 +26,7 @@ import de.shellfire.vpn.types.ServerType;
 import de.shellfire.vpn.webservice.EndpointManager;
 import de.shellfire.vpn.webservice.Response;
 import de.shellfire.vpn.webservice.WebService;
+import de.shellfire.vpn.webservice.WebServiceBroker;
 import de.shellfire.vpn.webservice.model.LoginResponse;
 import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
@@ -104,6 +105,15 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 				}
 				loginProgressDialog.show();
 			});
+			
+			if (fStoreLoginData.isSelected()) {
+				storeAutoLoginOnInVpnProperties();
+				log.debug("LoginController: persisted AutoLogin=On in VpnProperties");
+			} else if (event != null){
+				// when event==null, an automatic login is being performed. otherwise, it was really the user loggig in with 
+				// disabled checkbox to not do auto login in the future.
+				removeCredentialsFromRegistry();
+			}
 			
 			LoginTask loginTask = new LoginTask();
 			Thread loginTaskThread = new Thread(loginTask);
@@ -371,15 +381,21 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
 			VpnProperties props = VpnProperties.getInstance();
 			if (props.getBoolean(Util.REG_AUTOlOGIN, false)) {
-				String token = CryptFactory.decrypt(props.getProperty(Util.REG_AUTH_TOKEN, null));
-				// token not yet set, so login like before
-				if (token != null) {
-					// we already have a valid token, so let's use this shortcut
-					Response<LoginResponse> response = new Response<LoginResponse>();
-					LoginResponse data = new LoginResponse();
-					data.setToken(token);
-					response.setData(data);
-					return response;
+				String encryptedToken = props.getProperty(Util.REG_AUTH_TOKEN, null);
+				if (encryptedToken != null) {
+					String token = CryptFactory.decrypt(encryptedToken);
+					// token not yet set, so login like before
+					if (token != null) {
+						WebServiceBroker.setSessionToken(token);
+						
+						// we already have a valid token, so let's use this shortcut
+						Response<LoginResponse> response = new Response<LoginResponse>();
+						LoginResponse data = new LoginResponse();
+						data.setToken(token);
+						response.setData(data);
+						service.postLoginInit(response );
+						return response;
+					}
 				}
 			}
 			
@@ -392,8 +408,8 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 			log.debug("service.login() - finished()");
 			fButtonLogin.setDisable(false);
 			return loginResult;
+		}
 	}
-
 	class MainFormLoaderTask extends Task<Void> {
 
 		private Response<LoginResponse> loginResult;
@@ -406,12 +422,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 		protected Void call() throws Exception {
 			log.debug("Starting LoaderTask");
 			log.debug("LoginController: handlefLogginButton - service is loggedIn " + loginResult.getMessage());
-			if (fStoreLoginData.isSelected()) {
-				storeAutoLoginOnInVpnProperties();
-				log.debug("LoginController: persisted AutoLogin=On in VpnProperties");
-			} else {
-				removeCredentialsFromRegistry();
-			}
+
 
 			ServerImageBackgroundManager.init();
 
@@ -500,6 +511,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 		props.remove(Util.REG_USER);
 		props.remove(Util.REG_PASS);
 		props.remove(Util.REG_AUTOlOGIN);
+		props.remove(Util.REG_AUTH_TOKEN);
 	}
 
 	private void askForNewAccountAndAutoStartIfFirstStart() {
