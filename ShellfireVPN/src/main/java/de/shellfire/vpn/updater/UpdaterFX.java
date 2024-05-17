@@ -160,8 +160,8 @@ public class UpdaterFX extends Application implements CanContinueAfterBackEndAva
 			cmds.add("--add-opens=java.base/java.lang.reflect=ALL-UNNAMED");
 			cmds.add("--add-opens=java.base/java.io=ALL-UNNAMED");
 			cmds.add("--add-opens=java.base/java.util=ALL-UNNAMED");
+			cmds.add("-Dchronicle.analytics.disable=true");
 
-			
 			cmds.add("-jar");
 			cmds.add(exec);
 

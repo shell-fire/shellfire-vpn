@@ -32,6 +32,10 @@ public class Response<ResponseType> {
 	public ResponseType getData() {
 		return this.data;
 	}
+	
+	public void setData(ResponseType data) {
+		this.data = data;
+	}
 
 	public void setMessage(String message) {
 		this.message = message;

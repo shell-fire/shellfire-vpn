@@ -45,6 +45,7 @@
 		<opt>--add-opens=java.base/java.lang.reflect=ALL-UNNAMED</opt>
 		<opt>--add-opens=java.base/java.io=ALL-UNNAMED</opt>
 		<opt>--add-opens=java.base/java.util=ALL-UNNAMED</opt>
+		<opt>-Dchronicle.analytics.disable=true</opt>
   </jre>
   <versionInfo>
     <fileVersion>3.3.0.0</fileVersion>

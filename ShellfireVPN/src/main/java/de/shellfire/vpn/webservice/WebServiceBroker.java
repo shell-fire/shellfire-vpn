@@ -18,8 +18,10 @@ import org.slf4j.Logger;
 import com.google.gson.reflect.TypeToken;
 
 import de.shellfire.vpn.Util;
+import de.shellfire.vpn.VpnProperties;
 import de.shellfire.vpn.exception.VpnException;
 import de.shellfire.vpn.i18n.VpnI18N;
+import de.shellfire.vpn.service.CryptFactory;
 import de.shellfire.vpn.webservice.model.ActivationStatus;
 import de.shellfire.vpn.webservice.model.CryptoMinerConfigResponse;
 import de.shellfire.vpn.webservice.model.EndPoint;
@@ -99,7 +101,8 @@ public class WebServiceBroker {
 	 * @throws ClientProtocolException
 	 * @throws VpnException
 	 */
-	public Response<LoginResponse> login(String user, String pass) throws ClientProtocolException, IOException, VpnException {
+	public Response<LoginResponse> login(String user, String pass)
+			throws ClientProtocolException, IOException, VpnException {
 		log.debug("login ({}, xxx) - start", user);
 
 		String lang = getLangKey();
@@ -109,14 +112,13 @@ public class WebServiceBroker {
 		}.getType();
 		Response<LoginResponse> resp = new JsonHttpRequest<WsLoginRequest, LoginResponse>().call(request, theType);
 
-
 		// if login okay, store token
 		if (resp != null) {
 			if (resp.isSuccess()) {
 				LoginResponse token = resp.getData();
 				if (token != null) {
 					log.debug("login() succesful, storing sessionToken");
-					WebServiceBroker.sessionToken = token.getToken();
+					setSessionToken(token.getToken());
 				}
 			}
 		}
@@ -124,6 +126,16 @@ public class WebServiceBroker {
 		// return full response to GUI
 		log.debug("login() - finishd, returning response");
 		return resp;
+	}
+
+	public static void setSessionToken(String token) {
+		WebServiceBroker.sessionToken = token;
+
+		VpnProperties props = VpnProperties.getInstance();
+		if (props.getBoolean(Util.REG_AUTOlOGIN, false)) {
+			props.setProperty(Util.REG_AUTH_TOKEN, CryptFactory.encrypt(token));
+		}
+
 	}
 
 	/**
@@ -147,8 +159,7 @@ public class WebServiceBroker {
 		log.debug("getAllVpnDetails() - finished, returning data");
 		return resp.getData();
 	}
-	
-	
+
 	/**
 	 * function used to retrieve details for all help texts
 	 * 
@@ -160,8 +171,10 @@ public class WebServiceBroker {
 		log.debug("getHelpDetails() - start");
 		GetHelpDetailsRequest request = new GetHelpDetailsRequest();
 
-		Type theType = new TypeToken<Response<List<WsHelpItem>>>() {}.getType();
-		Response<List<WsHelpItem>> resp = new JsonHttpRequest<GetHelpDetailsRequest, List<WsHelpItem>>().call(request, theType);
+		Type theType = new TypeToken<Response<List<WsHelpItem>>>() {
+		}.getType();
+		Response<List<WsHelpItem>> resp = new JsonHttpRequest<GetHelpDetailsRequest, List<WsHelpItem>>().call(request,
+				theType);
 
 		// ensure no errors occured and data is available. throws VPNException otherwise
 		resp.validate();
@@ -169,7 +182,7 @@ public class WebServiceBroker {
 		log.debug("getHelpDetails() - finished, returning data");
 		return resp.getData();
 	}
-	
+
 	/**
 	 * function used to retrieve details for all help texts
 	 * 
@@ -181,8 +194,10 @@ public class WebServiceBroker {
 		log.debug("getAbout() - start");
 		GetAboutRequest request = new GetAboutRequest();
 
-		Type theType = new TypeToken<Response<List<WsHelpItem>>>() {}.getType();
-		Response<List<WsHelpItem>> resp = new JsonHttpRequest<GetAboutRequest, List<WsHelpItem>>().call(request, theType);
+		Type theType = new TypeToken<Response<List<WsHelpItem>>>() {
+		}.getType();
+		Response<List<WsHelpItem>> resp = new JsonHttpRequest<GetAboutRequest, List<WsHelpItem>>().call(request,
+				theType);
 
 		// ensure no errors occured and data is available. throws VPNException otherwise
 		resp.validate();
@@ -190,9 +205,6 @@ public class WebServiceBroker {
 		log.debug("getAbout() - finished, returning data");
 		return resp.getData();
 	}
-	
-	
-	
 
 	/**
 	 * function used to retrieve the list of all shellfire vpn servers
@@ -207,7 +219,8 @@ public class WebServiceBroker {
 
 		Type theType = new TypeToken<Response<List<WsServer>>>() {
 		}.getType();
-		Response<List<WsServer>> resp = new JsonHttpRequest<GetServerListRequest, List<WsServer>>().call(request, theType);
+		Response<List<WsServer>> resp = new JsonHttpRequest<GetServerListRequest, List<WsServer>>().call(request,
+				theType);
 
 		// ensure no errors occured and data is available. throws VPNException otherwise
 		resp.validate();
@@ -243,7 +256,8 @@ public class WebServiceBroker {
 	 * @throws ClientProtocolException
 	 * @throws VpnException
 	 */
-	public Boolean setServerTo(int vpnProductId, int vpnServerId) throws ClientProtocolException, IOException, VpnException {
+	public Boolean setServerTo(int vpnProductId, int vpnServerId)
+			throws ClientProtocolException, IOException, VpnException {
 		log.debug("setServerTo ({}, {}) - start", vpnProductId, vpnServerId);
 		SetServerToRequest request = new SetServerToRequest(vpnProductId, vpnServerId);
 
@@ -264,9 +278,11 @@ public class WebServiceBroker {
 	 * @throws ClientProtocolException
 	 * @throws VpnException
 	 */
-	public Boolean setWireGuardPublicKeyUser(int vpnProductId, String wireguardPublicKeyUser) throws ClientProtocolException, IOException, VpnException {
+	public Boolean setWireGuardPublicKeyUser(int vpnProductId, String wireguardPublicKeyUser)
+			throws ClientProtocolException, IOException, VpnException {
 		log.debug("setWireGuardPublicKeyUser ({}, {}) - start", vpnProductId, wireguardPublicKeyUser);
-		SetWireGuardPublicKeyUserRequest request = new SetWireGuardPublicKeyUserRequest(vpnProductId, wireguardPublicKeyUser);
+		SetWireGuardPublicKeyUserRequest request = new SetWireGuardPublicKeyUserRequest(vpnProductId,
+				wireguardPublicKeyUser);
 
 		Type theType = new TypeToken<Response<Void>>() {
 		}.getType();
@@ -277,10 +293,6 @@ public class WebServiceBroker {
 		log.debug("setWireGuardPublicKeyUser () - returning result: {}", result);
 		return result;
 	}
-	
-	
-	
-	
 
 	/**
 	 * function used to set the protocol of the users vpn
@@ -289,7 +301,8 @@ public class WebServiceBroker {
 	 * @throws ClientProtocolException
 	 * @throws VpnException
 	 */
-	public Boolean setProtocolTo(int vpnProductId, String protocol) throws ClientProtocolException, IOException, VpnException {
+	public Boolean setProtocolTo(int vpnProductId, String protocol)
+			throws ClientProtocolException, IOException, VpnException {
 		log.debug("setProtocolTo ({}, {}) - start", vpnProductId, protocol);
 
 		SetProtocolToRequest request = new SetProtocolToRequest(vpnProductId, protocol);
@@ -305,7 +318,8 @@ public class WebServiceBroker {
 	}
 
 	/**
-	 * function used to get the parameters for a users openvpn connection (parameters to openvpn.exe)
+	 * function used to get the parameters for a users openvpn connection
+	 * (parameters to openvpn.exe)
 	 * 
 	 * @throws VpnException
 	 * @throws IOException
@@ -317,40 +331,42 @@ public class WebServiceBroker {
 
 		Type theType = new TypeToken<Response<OpenVpnParamResponse>>() {
 		}.getType();
-		Response<OpenVpnParamResponse> resp = new JsonHttpRequest<GetParametersForOpenVpnRequest, OpenVpnParamResponse>().call(request,
-				theType);
+		Response<OpenVpnParamResponse> resp = new JsonHttpRequest<GetParametersForOpenVpnRequest, OpenVpnParamResponse>()
+				.call(request, theType);
 		resp.validate();
 
 		String result = resp.getData().getParams();
-	
+
 		log.debug("result - before remote replace {}", result);
 		if (result != null) {
 			result = result.replace("remote2", "remote");
 			result = result.replace("remote3", "remote");
 			result = result.replace("remote4", "remote");
 		}
-		
 
 		log.debug("result - after remote replace {}", result);
-		
+
 		log.debug("getParametersForOpenVpn () - returning result: {}", result);
 		return result;
 	}
 
 	/**
-	 * function used to get the certificates for a users openvpn connection (stored in config folder)
+	 * function used to get the certificates for a users openvpn connection (stored
+	 * in config folder)
 	 * 
 	 * @throws IOException
 	 * @throws ClientProtocolException
 	 * @throws VpnException
 	 */
-	public List<WsFile> getCertificatesForOpenVpn(int vpnProductId) throws ClientProtocolException, IOException, VpnException {
+	public List<WsFile> getCertificatesForOpenVpn(int vpnProductId)
+			throws ClientProtocolException, IOException, VpnException {
 		log.debug("getCertificatesForOpenVpn ({}) - start", vpnProductId);
 		GetCertificatesForOpenVpnRequest request = new GetCertificatesForOpenVpnRequest(vpnProductId);
 
 		Type theType = new TypeToken<Response<List<WsFile>>>() {
 		}.getType();
-		Response<List<WsFile>> resp = new JsonHttpRequest<GetCertificatesForOpenVpnRequest, List<WsFile>>().call(request, theType);
+		Response<List<WsFile>> resp = new JsonHttpRequest<GetCertificatesForOpenVpnRequest, List<WsFile>>()
+				.call(request, theType);
 		resp.validate();
 
 		List<WsFile> result = resp.getData();
@@ -359,8 +375,8 @@ public class WebServiceBroker {
 	}
 
 	/**
-	 * function used to get the local machines current ip address. this can then be used to determine whether or not a vpn connection is
-	 * active
+	 * function used to get the local machines current ip address. this can then be
+	 * used to determine whether or not a vpn connection is active
 	 * 
 	 * @throws IOException
 	 * @throws ClientProtocolException
@@ -372,7 +388,8 @@ public class WebServiceBroker {
 
 		Type theType = new TypeToken<Response<LocalIPResponse>>() {
 		}.getType();
-		Response<LocalIPResponse> resp = new JsonHttpRequest<GetLocalIpAddressRequest, LocalIPResponse>().call(request, theType);
+		Response<LocalIPResponse> resp = new JsonHttpRequest<GetLocalIpAddressRequest, LocalIPResponse>().call(request,
+				theType);
 		resp.validate();
 
 		String result = resp.getData().getIp();
@@ -381,8 +398,9 @@ public class WebServiceBroker {
 	}
 
 	/**
-	 * gets the geocoordinates of the calling IP address. this can be used in the sf vpn map to show the users current place and to draw the
-	 * line to the server he is connected to
+	 * gets the geocoordinates of the calling IP address. this can be used in the sf
+	 * vpn map to show the users current place and to draw the line to the server he
+	 * is connected to
 	 * 
 	 * @throws IOException
 	 * @throws ClientProtocolException
@@ -394,7 +412,8 @@ public class WebServiceBroker {
 
 		Type theType = new TypeToken<Response<GeoPositionResponse>>() {
 		}.getType();
-		Response<GeoPositionResponse> resp = new JsonHttpRequest<GetLocalLocationRequest, GeoPositionResponse>().call(request, theType);
+		Response<GeoPositionResponse> resp = new JsonHttpRequest<GetLocalLocationRequest, GeoPositionResponse>()
+				.call(request, theType);
 		resp.validate();
 
 		GeoPositionResponse result = resp.getData();
@@ -410,7 +429,8 @@ public class WebServiceBroker {
 	}
 
 	/*
-	 * Response to registration is in same format as login -> either error status with messages or a token to login with.
+	 * Response to registration is in same format as login -> either error status
+	 * with messages or a token to login with.
 	 */
 	public Response<LoginResponse> register(String email, String password, int subscribeToNewsletter, int resend)
 			throws ClientProtocolException, IOException, VpnException {
@@ -429,7 +449,7 @@ public class WebServiceBroker {
 			if (data != null) {
 				log.debug("registration succesful - storing sessionToken for immediate login");
 				LoginResponse token = data;
-				WebServiceBroker.sessionToken = token.getToken();
+				setSessionToken(token.getToken());
 			}
 		}
 
@@ -438,7 +458,8 @@ public class WebServiceBroker {
 	}
 
 	/**
-	 * Find out, if a shellfire account is active after calling registerNewFreeAccount(...)
+	 * Find out, if a shellfire account is active after calling
+	 * registerNewFreeAccount(...)
 	 * 
 	 * @throws VpnException
 	 * @throws IOException
@@ -450,7 +471,8 @@ public class WebServiceBroker {
 
 		Type theType = new TypeToken<Response<ActivationStatus>>() {
 		}.getType();
-		Response<ActivationStatus> resp = new JsonHttpRequest<GetActivationStatusRequest, ActivationStatus>().call(request, theType);
+		Response<ActivationStatus> resp = new JsonHttpRequest<GetActivationStatusRequest, ActivationStatus>()
+				.call(request, theType);
 		resp.validate();
 
 		ActivationStatus status = resp.getData();
@@ -501,7 +523,8 @@ public class WebServiceBroker {
 
 		Type theType = new TypeToken<Response<List<TrayMessage>>>() {
 		}.getType();
-		Response<List<TrayMessage>> resp = new JsonHttpRequest<GetTrayMessagesRequest, List<TrayMessage>>().call(request, theType);
+		Response<List<TrayMessage>> resp = new JsonHttpRequest<GetTrayMessagesRequest, List<TrayMessage>>()
+				.call(request, theType);
 		resp.validate();
 
 		List<TrayMessage> result = resp.getData();
@@ -522,7 +545,8 @@ public class WebServiceBroker {
 
 		Type theType = new TypeToken<Response<VersionResponse>>() {
 		}.getType();
-		Response<VersionResponse> resp = new JsonHttpRequest<GetLatestVersionRequest, VersionResponse>().call(request, theType);
+		Response<VersionResponse> resp = new JsonHttpRequest<GetLatestVersionRequest, VersionResponse>().call(request,
+				theType);
 		resp.validate();
 
 		int latestVersion = resp.getData().getVersion();
@@ -544,7 +568,8 @@ public class WebServiceBroker {
 
 		Type theType = new TypeToken<Response<InstallerResponse>>() {
 		}.getType();
-		Response<InstallerResponse> resp = new JsonHttpRequest<GetLatestInstallerRequest, InstallerResponse>().call(request, theType);
+		Response<InstallerResponse> resp = new JsonHttpRequest<GetLatestInstallerRequest, InstallerResponse>()
+				.call(request, theType);
 		resp.validate();
 
 		String installer = resp.getData().getInstaller();
@@ -554,7 +579,8 @@ public class WebServiceBroker {
 	}
 
 	/**
-	 * return String the url of the website that is displayed after a succesful connection has been established
+	 * return String the url of the website that is displayed after a succesful
+	 * connection has been established
 	 * 
 	 * @throws IOException
 	 * @throws ClientProtocolException
@@ -564,7 +590,8 @@ public class WebServiceBroker {
 		log.debug("getUrlSuccesfulConnect () - start");
 		GetUrlSuccesfulConnectRequest request = new GetUrlSuccesfulConnectRequest();
 
-		Type theType = new TypeToken<Response<UrlResponse>>() {}.getType();
+		Type theType = new TypeToken<Response<UrlResponse>>() {
+		}.getType();
 		JsonHttpRequest<GetUrlSuccesfulConnectRequest, UrlResponse> httpRequest = new JsonHttpRequest<GetUrlSuccesfulConnectRequest, UrlResponse>();
 		Response<UrlResponse> resp = httpRequest.call(request, theType);
 		resp.validate();
@@ -596,21 +623,24 @@ public class WebServiceBroker {
 		log.debug("getUrlHelp () - finished, returning {}", url);
 		return url;
 	}
-	
 
 	/**
-	 * return String the background-image filename of the city for the provided server
+	 * return String the background-image filename of the city for the provided
+	 * server
 	 * 
 	 * @throws IOException
 	 * @throws ClientProtocolException
 	 * @throws VpnException
 	 */
-	public String getServerBackgroundImageFilename(int serverId) throws ClientProtocolException, IOException, VpnException {
+	public String getServerBackgroundImageFilename(int serverId)
+			throws ClientProtocolException, IOException, VpnException {
 		log.debug("getServerBackgroundImageFilename ({}) - start", serverId);
 		GetServerBackgroundImageFilenameRequest request = new GetServerBackgroundImageFilenameRequest(serverId);
 
-		Type theType = new TypeToken<Response<ServerBackgroundImageFilenameResponse>>() {}.getType();
-		Response<ServerBackgroundImageFilenameResponse> resp = new JsonHttpRequest<GetServerBackgroundImageFilenameRequest, ServerBackgroundImageFilenameResponse>().call(request, theType);
+		Type theType = new TypeToken<Response<ServerBackgroundImageFilenameResponse>>() {
+		}.getType();
+		Response<ServerBackgroundImageFilenameResponse> resp = new JsonHttpRequest<GetServerBackgroundImageFilenameRequest, ServerBackgroundImageFilenameResponse>()
+				.call(request, theType);
 		resp.validate();
 
 		String filename = resp.getData().getFilename();
@@ -618,7 +648,6 @@ public class WebServiceBroker {
 		log.debug("getServerBackgroundImageFilename () - finished, returning {}", filename);
 		return filename;
 	}
-
 
 	/**
 	 * return String the url of the webpage where premium infos can be found
@@ -633,7 +662,8 @@ public class WebServiceBroker {
 
 		Type theType = new TypeToken<Response<UrlResponse>>() {
 		}.getType();
-		Response<UrlResponse> resp = new JsonHttpRequest<GetUrlPremiumInfoRequest, UrlResponse>().call(request, theType);
+		Response<UrlResponse> resp = new JsonHttpRequest<GetUrlPremiumInfoRequest, UrlResponse>().call(request,
+				theType);
 		resp.validate();
 
 		String url = resp.getData().getUrl();
@@ -655,7 +685,8 @@ public class WebServiceBroker {
 
 		Type theType = new TypeToken<Response<UrlResponse>>() {
 		}.getType();
-		Response<UrlResponse> resp = new JsonHttpRequest<GetUrlManageAccountRequest, UrlResponse>().call(request, theType);
+		Response<UrlResponse> resp = new JsonHttpRequest<GetUrlManageAccountRequest, UrlResponse>().call(request,
+				theType);
 		resp.validate();
 
 		String url = resp.getData().getUrl();
@@ -664,9 +695,6 @@ public class WebServiceBroker {
 		return url;
 	}
 
-	
-	
-	
 	/**
 	 * return String the url of the webpage where lost passwords can be retrieved
 	 * 
@@ -680,7 +708,8 @@ public class WebServiceBroker {
 
 		Type theType = new TypeToken<Response<UrlResponse>>() {
 		}.getType();
-		Response<UrlResponse> resp = new JsonHttpRequest<GetUrlPasswordLostRequest, UrlResponse>().call(request, theType);
+		Response<UrlResponse> resp = new JsonHttpRequest<GetUrlPasswordLostRequest, UrlResponse>().call(request,
+				theType);
 		resp.validate();
 
 		String url = resp.getData().getUrl();
@@ -720,8 +749,8 @@ public class WebServiceBroker {
 		return sessionToken;
 	}
 
-	public Boolean sendLogToShellfire(String serviceLogString, String clientLogString, String wireguardLogString, String installLogString)
-			throws ClientProtocolException, IOException, VpnException {
+	public Boolean sendLogToShellfire(String serviceLogString, String clientLogString, String wireguardLogString,
+			String installLogString) throws ClientProtocolException, IOException, VpnException {
 		log.debug("sendLogToShellfire() - start");
 
 		serviceLogString = Util.encodeBase64(serviceLogString);
@@ -729,7 +758,8 @@ public class WebServiceBroker {
 		wireguardLogString = Util.encodeBase64(wireguardLogString);
 		installLogString = Util.encodeBase64(installLogString);
 
-		SendLogToShellfireRequest request = new SendLogToShellfireRequest(serviceLogString, clientLogString, wireguardLogString, installLogString);
+		SendLogToShellfireRequest request = new SendLogToShellfireRequest(serviceLogString, clientLogString,
+				wireguardLogString, installLogString);
 
 		Type theType = new TypeToken<Response<Void>>() {
 		}.getType();
@@ -759,7 +789,8 @@ public class WebServiceBroker {
 
 		Type theType = new TypeToken<Response<List<String>>>() {
 		}.getType();
-		Response<List<String>> resp = new JsonHttpRequest<GetCryptoCurrencyVpnRequest, List<String>>().call(request, theType);
+		Response<List<String>> resp = new JsonHttpRequest<GetCryptoCurrencyVpnRequest, List<String>>().call(request,
+				theType);
 		resp.validate();
 
 		List<String> result = resp.getData();

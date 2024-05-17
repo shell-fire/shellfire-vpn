@@ -48,6 +48,7 @@ module ShellfireVPN {
 	requires chronicle.bytes;
 	requires chronicle.wire;
 	requires jsr305;
+	requires com.sun.jna.platform;
 	
 	
 	opens de.shellfire.vpn.gui.controller to javafx.fxml;

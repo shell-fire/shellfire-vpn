@@ -70,6 +70,8 @@ import javafx.scene.image.WritablePixelFormat;
 public class Util {
 	public static final String REG_PASS = "pass";
 	public static final String REG_USER = "user";
+	public static final String REG_AUTH_TOKEN = "authToken";
+	
 	public static final String REG_AUTOlOGIN = "autologin";
 	public static final String REG_AUTOCONNECT = "autoConnect";
 	public static final String REG_INSTDIR = "instdir";

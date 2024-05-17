@@ -97,16 +97,17 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 		try {
 			Platform.runLater(() -> {
 				try {
-					loginProgressDialog = ProgressDialogController.getInstance(i18n.tr("Logging in..."), null, null, true);
+					loginProgressDialog = ProgressDialogController.getInstance(i18n.tr("Logging in..."), null, null,
+							true);
 				} catch (IOException e) {
 					log.error("Error in ProgressDialogController.getInstancet()", e);
 				}
 				loginProgressDialog.show();
 			});
+			
 			LoginTask loginTask = new LoginTask();
 			Thread loginTaskThread = new Thread(loginTask);
 			loginTaskThread.start();
-
 
 			loginTask.setOnSucceeded((WorkerStateEvent wEvent) -> {
 				log.info("Login task completed successfully");
@@ -137,7 +138,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 						MainFormLoaderTask loaderTask = new MainFormLoaderTask(loginResult);
 						loaderTask.setOnSucceeded((WorkerStateEvent wEvent2) -> {
 							application.loadShellFireMainController();
-							
+
 							application.shellfireVpnMainController.setShellfireService(service);
 							boolean vis = true;
 							if (minimize && service.getVpn().getAccountType() != ServerType.Free) {
@@ -151,22 +152,20 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 							} catch (IOException e) {
 								log.error("Error during setServiceAndInitialize", e);
 							}
-							
+
 							application.shellfireVpnMainController.prepareSubviewControllers();
-							
+
 							application.shellfireVpnMainController.initConnection();
-		
-							
+
 							application.shellfireVpnMainController.setApp(application);
 							application.shellfireVpnMainController.afterLogin();
-							
-							
+
 							application.shellfireVpnMainController.setUserName(this.username);
 
 						});
-						
+
 						log.debug("before loaderTaskThread");
-						
+
 						Thread loaderTaskThread = new Thread(loaderTask);
 						log.debug("before loaderTaskThread.setDaemon(true)");
 						loaderTaskThread.setDaemon(true);
@@ -192,6 +191,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 	public void handlefButtonLostUserCredential(ActionEvent event) {
 		Util.openUrl(service.getUrlPasswordLost());
 	}
+
 	// Event Listener on CheckBox[#fAutoStart].onAction
 	@FXML
 	public void handlefAutoStart(ActionEvent event) {
@@ -250,8 +250,8 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 		this.fButtonLogin.managedProperty().bind(this.fButtonLogin.visibleProperty());
 
 		// Listeners for changes in password field
-		fPassword.focusedProperty()
-				.addListener((ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue) -> {
+		fPassword.focusedProperty().addListener(
+				(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue) -> {
 					// password field in focus
 					if (newPropertyValue) {
 						if (this.passwordBogus) {
@@ -265,8 +265,8 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 				});
 
 		// Listeners for changes in username field
-		fUsername.focusedProperty()
-				.addListener((ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue) -> {
+		fUsername.focusedProperty().addListener(
+				(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue) -> {
 					// password field in focus
 					this.username = this.fUsername.getText();
 				});
@@ -278,22 +278,16 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 	}
 
 	public void setIconImageIdle() {
-		Util.mySetIconImage(this.application, new String[] {
-				"/icons/sfvpn2-idle-256x256.png",
-				"/icons/sfvpn2-idle-128x128.png",
-				"/icons/sfvpn2-idle-64x64.png",
-				"/icons/sfvpn2-idle-40x40.png",
-				"/icons/sfvpn2-idle-32x32.png",
-				"/icons/sfvpn2-idle-24x24.png",
-				"/icons/sfvpn2-idle-16x16.png",
-		});
+		Util.mySetIconImage(this.application,
+				new String[] { "/icons/sfvpn2-idle-256x256.png", "/icons/sfvpn2-idle-128x128.png",
+						"/icons/sfvpn2-idle-64x64.png", "/icons/sfvpn2-idle-40x40.png", "/icons/sfvpn2-idle-32x32.png",
+						"/icons/sfvpn2-idle-24x24.png", "/icons/sfvpn2-idle-16x16.png", });
 	}
 
 	public void setApp(LoginForms applic) {
 		log.debug("LoginController: Application set up appropriately");
 		this.application = applic;
 	}
-
 
 	public boolean isMinimize() {
 		return minimize;
@@ -374,6 +368,21 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
 		@Override
 		protected Response<LoginResponse> call() throws Exception {
+
+			VpnProperties props = VpnProperties.getInstance();
+			if (props.getBoolean(Util.REG_AUTOlOGIN, false)) {
+				String token = CryptFactory.decrypt(props.getProperty(Util.REG_AUTH_TOKEN, null));
+				// token not yet set, so login like before
+				if (token != null) {
+					// we already have a valid token, so let's use this shortcut
+					Response<LoginResponse> response = new Response<LoginResponse>();
+					LoginResponse data = new LoginResponse();
+					data.setToken(token);
+					response.setData(data);
+					return response;
+				}
+			}
+			
 			Response<LoginResponse> loginResult = null;
 			log.debug("Starting login background task");
 			String user = getUser();
@@ -383,8 +392,6 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 			log.debug("service.login() - finished()");
 			fButtonLogin.setDisable(false);
 			return loginResult;
-		}
-
 	}
 
 	class MainFormLoaderTask extends Task<Void> {
@@ -400,18 +407,16 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 			log.debug("Starting LoaderTask");
 			log.debug("LoginController: handlefLogginButton - service is loggedIn " + loginResult.getMessage());
 			if (fStoreLoginData.isSelected()) {
-				storeCredentialsInVpnProperties(username, password);
-				log.debug("LoginController: Login Data stored, username is " + username + " and passwd has a lenght > 3 characters? " + ((password != null && password.length() > 3) ? "yes" : "no"));
+				storeAutoLoginOnInVpnProperties();
+				log.debug("LoginController: persisted AutoLogin=On in VpnProperties");
 			} else {
 				removeCredentialsFromRegistry();
 			}
-			
+
 			ServerImageBackgroundManager.init();
-			
+
 			return null;
 		}
-		
-		
 
 	}
 
@@ -436,7 +441,8 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 	}
 
 	public void afterShellfireServiceEnvironmentEnsured() {
-		log.debug("Ensured that ShellfireVPNService is running. Trying to connect to the Shellfire webservice backend...");
+		log.debug(
+				"Ensured that ShellfireVPNService is running. Trying to connect to the Shellfire webservice backend...");
 
 		EndpointManager.getInstance().ensureShellfireBackendAvailableFx(this);
 	}
@@ -515,8 +521,8 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 	}
 
 	private void askForAutoStart() {
-		Alert alert = new Alert(AlertType.CONFIRMATION, i18n.tr("Start Shellfire VPN on boot and connect automatically?"), ButtonType.YES,
-				ButtonType.NO);
+		Alert alert = new Alert(AlertType.CONFIRMATION,
+				i18n.tr("Start Shellfire VPN on boot and connect automatically?"), ButtonType.YES, ButtonType.NO);
 		alert.setTitle(i18n.tr("Startup"));
 
 		Optional<ButtonType> result = alert.showAndWait();
@@ -524,7 +530,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 		if ((result.isPresent()) && (result.get() == ButtonType.YES)) {
 			Client.addVpnToAutoStart();
 			fStoreLoginData.setSelected(true);
-			
+
 			VpnProperties props = VpnProperties.getInstance();
 			props.setBoolean(Util.REG_AUTOCONNECT, true);
 		}
@@ -532,8 +538,8 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 
 	private void askForNewAccount() {
 		Alert alert = new Alert(AlertType.CONFIRMATION,
-				i18n.tr("This is the first time you start Shellfire VPN. Create a new Shellfire VPN account?"), ButtonType.YES,
-				ButtonType.NO);
+				i18n.tr("This is the first time you start Shellfire VPN. Create a new Shellfire VPN account?"),
+				ButtonType.YES, ButtonType.NO);
 		alert.setTitle(i18n.tr("Welcome: First Start"));
 		Optional<ButtonType> result = alert.showAndWait();
 
@@ -547,12 +553,10 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 		props.setBoolean(Util.REG_FIRST_START, b);
 	}
 
-	private void storeCredentialsInVpnProperties(String user, String password) {
+	private void storeAutoLoginOnInVpnProperties() {
 		VpnProperties props = VpnProperties.getInstance();
-		props.setProperty(Util.REG_USER, CryptFactory.encrypt(user));
-		props.setProperty(Util.REG_PASS, CryptFactory.encrypt(password));
+		// props.setProperty(Util.REG_PASS, CryptFactory.encrypt(password));
 		props.setBoolean(Util.REG_AUTOlOGIN, true);
-
 	}
 
 	private void setAutoConnectInRegistry(boolean autoConnect) {
@@ -591,7 +595,7 @@ public class LoginController extends AnchorPane implements Initializable, CanCon
 				}
 
 			}
-		} 
+		}
 	}
 
 }
