@@ -3,6 +3,7 @@ package de.shellfire.vpn.webservice;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.security.KeyStore;
 import java.security.KeyStoreException;
@@ -214,8 +215,12 @@ class JsonHttpRequest<RequestType, ResponseType> {
 			log.debug("request sent without x-authorization-token header");
 		}
 		
-		StringEntity body = null;
-		body = new StringEntity(params);
+		StringEntity body = new StringEntity(params, StandardCharsets.UTF_8); // Specify UTF-8 encoding here
+		body.setContentType("application/json; charset=UTF-8"); // Set content type header
+
+		// Set the content encoding header
+		request.setHeader("Content-Encoding", "UTF-8");
+		
 		request.setEntity(body);
 
 		log.debug("executing http request");
