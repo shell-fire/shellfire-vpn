@@ -70,8 +70,9 @@ public class Service {
 		ServiceMessageHandler serviceMessageHandler = null;
 		try {
 			log.debug("initializting ServiceMessageHandler");
+			
 			serviceMessageHandler = new ServiceMessageHandler();
-
+			
 			log.debug("Service started, waiting for stop");
 			while (!stop) {
 				// 50 ms is enough to not use ANY cpu during sleep.
@@ -81,7 +82,7 @@ public class Service {
 
 			log.debug("Stop received, exiting");
 
-		} catch (IOException e) {
+		} catch (Exception e) {
 			Service.handleException(e);
 		} finally {
 			if (serviceMessageHandler == null) {

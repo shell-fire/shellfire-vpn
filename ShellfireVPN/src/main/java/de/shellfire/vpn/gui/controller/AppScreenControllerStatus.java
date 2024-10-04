@@ -168,9 +168,17 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
 		webEngine.getLoadWorker().stateProperty().addListener((observable, oldValue, newValue) -> {
 			JSObject window = (JSObject) webEngine.executeScript("window");
 			window.setMember("java", webEngineConsole);
-			webEngine
-					.executeScript("console.log = function(message)\n" + "{\n" + "    java.log(message);\n" + "};");
+			webEngine.executeScript("console.log = function(message)\n" + "{\n" + "    java.log(message);\n" + "};");
 		});
+		locationMap.setContextMenuEnabled(false);
+		webEngine.setOnAlert(event -> log.debug(event.getData()));
+		webEngine.setOnError(event -> log.error(event.getMessage()));
+		webEngine.getLoadWorker().exceptionProperty().addListener((obs, oldExc, newExc) -> {
+		    if (newExc != null) {
+		        log.error(newExc.getMessage(), newExc);
+		    }
+		});
+
 
 		webEngine.getLoadWorker().stateProperty().addListener(new ChangeListener<Worker.State>() {
 			@Override
