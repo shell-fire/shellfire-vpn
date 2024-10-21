@@ -22,26 +22,21 @@
 	</plugins>
 
 	<dependencies>
-		<!-- https://mvnrepository.com/artifact/net.openhft/chronicle-queue -->
-		<dependency>
-			<groupId>net.openhft</groupId>
-			<artifactId>chronicle-queue</artifactId>
-			<version>5.23ea21</version>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/net.openhft/chronicle-wire -->
-		<dependency>
-			<groupId>net.openhft</groupId>
-			<artifactId>chronicle-wire</artifactId>
-			<version>2.23ea22</version>
-		</dependency>
-
 
 		<dependency>
 			<groupId>org.apache.httpcomponents</groupId>
 			<artifactId>httpclient</artifactId>
 		</dependency>
-
+		<dependency>
+		    <groupId>net.java.dev.jna</groupId>
+		    <artifactId>jna</artifactId>
+		    <version>5.8.0</version>
+		</dependency>
+		<dependency>
+		    <groupId>net.java.dev.jna</groupId>
+		    <artifactId>jna-platform</artifactId>
+		    <version>5.8.0</version>
+		</dependency>
 		<dependency>
 			<groupId>com.google.code.findbugs</groupId>
 			<artifactId>jsr305</artifactId>

@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.slf4j.Logger;
 
 import de.shellfire.vpn.Util;
+import de.shellfire.vpn.messaging.EmptyPayload;
 import de.shellfire.vpn.messaging.Message;
 import de.shellfire.vpn.messaging.MessageBroker;
 import de.shellfire.vpn.messaging.MessageType;
@@ -44,7 +45,7 @@ public class Service {
 
 	public static void startconsole(String[] args) {
 		log.info("Service starting up in console mode");
-		
+
 		new Thread(() -> {
 			log.info("press enter to exit");
 			try {
@@ -55,10 +56,9 @@ public class Service {
 			}
 			stop(args);
 		}).start();
-		
+
 		start(args);
-		
-		
+
 	}
 
 	public static void stop(String[] args) {
@@ -70,9 +70,9 @@ public class Service {
 		ServiceMessageHandler serviceMessageHandler = null;
 		try {
 			log.debug("initializting ServiceMessageHandler");
-			
+
 			serviceMessageHandler = new ServiceMessageHandler();
-			
+
 			log.debug("Service started, waiting for stop");
 			while (!stop) {
 				// 50 ms is enough to not use ANY cpu during sleep.
@@ -99,7 +99,7 @@ public class Service {
 
 	public static void handleException(Exception e) {
 		log.error("Exception occured. Sending to client: {}", e.getMessage(), e);
-		Message<Exception, Void> errorMessage = new Message<Exception, Void>(MessageType.Error, e);
+		Message<Exception, EmptyPayload> errorMessage = new Message<Exception, EmptyPayload>(MessageType.Error, e);
 		try {
 			if (messageBroker != null) {
 				messageBroker.sendMessage(errorMessage);

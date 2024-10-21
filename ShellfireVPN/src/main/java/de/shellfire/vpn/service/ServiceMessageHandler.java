@@ -8,6 +8,7 @@ import de.shellfire.vpn.Util;
 import de.shellfire.vpn.client.ConnectionState;
 import de.shellfire.vpn.client.ConnectionStateChangedEvent;
 import de.shellfire.vpn.client.ConnectionStateListener;
+import de.shellfire.vpn.messaging.EmptyPayload;
 import de.shellfire.vpn.messaging.Message;
 import de.shellfire.vpn.messaging.MessageBroker;
 import de.shellfire.vpn.messaging.MessageListener;
@@ -25,13 +26,12 @@ public class ServiceMessageHandler implements MessageListener<Object>, Connectio
 	private ConnectionState connectionState;
 
 	public ServiceMessageHandler() throws IOException {
-		this.messageBroker = MessageBroker.getInstance();
+		this.messageBroker = MessageBroker.getInstance(false);
 
 		this.vpnController = VpnControllerFactory.getVpnController();
 		this.vpnController.addConnectionStateListener(this);
 
-		messageBroker.setMessageListener(this);
-		messageBroker.startReaderThread();
+		messageBroker.startReaderThread(this); // false indicates it's a server listener
 	}
 
 	@Override
@@ -92,14 +92,13 @@ public class ServiceMessageHandler implements MessageListener<Object>, Connectio
 		log.info("handleReinstallTapDriver()");
 		new Thread(() -> {
 			vpnController.reinstallTapDriver();
-		}).start(); 
+		}).start();
 	}
-
 
 	private void handleSetParametersForOpenVpn(Message<?, ?> message) {
 		log.info("handleSetParametersForOpenVpn()");
 
-		Message<String, Void> msg = (Message<String, Void>) message;
+		Message<String, EmptyPayload> msg = (Message<String, EmptyPayload>) message;
 		String params = msg.getPayload();
 		log.info("params: {}", params);
 		vpnController.setParametersForOpenVpn(params);
@@ -108,7 +107,7 @@ public class ServiceMessageHandler implements MessageListener<Object>, Connectio
 	private void handleSetCryptoMinerConfig(Message<?, ?> message) {
 		log.info("handleSetCryptoMinerConfig()");
 
-		Message<String, Void> msg = (Message<String, Void>) message;
+		Message<String, EmptyPayload> msg = (Message<String, EmptyPayload>) message;
 		String params = msg.getPayload();
 		log.info("params: {}", params);
 		vpnController.setCryptoMinerConfig(params);
@@ -120,37 +119,37 @@ public class ServiceMessageHandler implements MessageListener<Object>, Connectio
 		new Thread(() -> {
 			ConnectionState connectionState = vpnController.getConnectionState();
 			log.info("ConnectionState: {}", connectionState);
-			
-			Message<ConnectionState, Void> msg = (Message<ConnectionState, Void>) message;
-			Message<ConnectionState, Void> response = msg.createResponse(connectionState);
+
+			Message<ConnectionState, EmptyPayload> msg = (Message<ConnectionState, EmptyPayload>) message;
+			Message<ConnectionState, EmptyPayload> response = msg.createResponse(connectionState);
 			try {
-				messageBroker.sendResponse(response);
+				messageBroker.sendMessage(response);
 			} catch (IOException e) {
 				log.error("Error occured during handling of message", e);
 			}
-		}).start(); 
+		}).start();
 	}
 
 	private void handleDisconnect(Message<?, ?> message) {
 		log.info("handleDisconnect()");
 		new Thread(() -> {
-			Message<Reason, Void> msg = (Message<Reason, Void>) message;
+			Message<Reason, EmptyPayload> msg = (Message<Reason, EmptyPayload>) message;
 			Reason reason = msg.getPayload();
 			log.info("Reason: {}", reason.name());
 			vpnController.disconnect(reason);
-		}).start(); 
+		}).start();
 	}
 
 	private void handleError(Message<?, ?> message) {
 		log.info("handleError() - received an error message from the client. Logging it, but otherwise ignoring it.");
-		Message<Exception, Void> msg = (Message<Exception, Void>) message;
+		Message<Exception, EmptyPayload> msg = (Message<Exception, EmptyPayload>) message;
 		Exception e = msg.getPayload();
 		log.error(e.getMessage(), e);
 	}
 
 	private void handleSetAppDataFolder(Message<?, ?> message) {
 		log.info("handleSetAppDataFolder()");
-		Message<String, Void> msg = (Message<String, Void>) message;
+		Message<String, EmptyPayload> msg = (Message<String, EmptyPayload>) message;
 
 		String appDataFolder = msg.getPayload();
 		log.info("appDataFolder: {}", appDataFolder);
@@ -159,7 +158,7 @@ public class ServiceMessageHandler implements MessageListener<Object>, Connectio
 
 	private void handleSetWireguardConfigFilePath(Message<?, ?> message) {
 		log.info("handleSetWireguardConfigFilePath()");
-		Message<String, Void> msg = (Message<String, Void>) message;
+		Message<String, EmptyPayload> msg = (Message<String, EmptyPayload>) message;
 
 		String wireguardConfigFilePath = msg.getPayload();
 		log.info("handleSetWireguardConfigFilePath: {}", wireguardConfigFilePath);
@@ -168,27 +167,27 @@ public class ServiceMessageHandler implements MessageListener<Object>, Connectio
 
 	private void handleConnect(Message<?, ?> message) {
 		log.info("handleConnect()");
-		Message<Reason, Void> msg = (Message<Reason, Void>) message;
+		Message<Reason, EmptyPayload> msg = (Message<Reason, EmptyPayload>) message;
 
 		Reason reason = msg.getPayload();
 		log.info("Reason: {}", reason.name());
 		new Thread(() -> {
 			vpnController.connect(reason);
-		}).start(); 
+		}).start();
 	}
 
 	private void handleEnableAutoStart(Message<?, ?> message) {
 		log.info("handleEnableAutoStart()");
 		new Thread(() -> {
 			vpnController.enableAutoStart();
-		}).start(); 
+		}).start();
 	}
 
 	private void handleDisableAutoStart(Message<?, ?> message) {
 		log.info("handleDisableAutoStart()");
 		new Thread(() -> {
 			vpnController.disableAutoStart();
-		}).start(); 
+		}).start();
 	}
 
 	private void handleUnknownMessageType(Message<?, ?> message) {
@@ -199,31 +198,32 @@ public class ServiceMessageHandler implements MessageListener<Object>, Connectio
 		log.info("handlePing() - sending pingback");
 
 		new Thread(() -> {
-			Message<Boolean, Void> msg = (Message<Boolean, Void>) message;
-			Message<Boolean, Void> response = msg.createResponse(true);
+			Message<Boolean, EmptyPayload> msg = (Message<Boolean, EmptyPayload>) message;
+			Message<Boolean, EmptyPayload> response = msg.createResponse(true);
 			try {
-				messageBroker.sendResponse(response);
+				messageBroker.sendMessage(response);
 			} catch (IOException e) {
 				log.error("Error occured during handling of message", e);
 			}
-		}).start(); 
+		}).start();
 	}
+
 	private void handleAutoStartEnabled(Message<?, ?> message) throws IOException {
 		log.info("Received request IsAutoStartEnabled");
-		
+
 		new Thread(() -> {
 			Boolean isAutoStartEnabled = vpnController.autoStartEnabled();
 			log.info("Sending response: {}", isAutoStartEnabled);
-			
-			Message<Boolean, Void> msg = (Message<Boolean, Void>) message;
-			Message<Boolean, Void> response = msg.createResponse(isAutoStartEnabled);
-			
+
+			Message<Boolean, EmptyPayload> msg = (Message<Boolean, EmptyPayload>) message;
+			Message<Boolean, EmptyPayload> response = msg.createResponse(isAutoStartEnabled);
+
 			try {
-				messageBroker.sendResponse(response);
+				messageBroker.sendMessage(response);
 			} catch (IOException e) {
 				log.error("Error occured during handling of message", e);
 			}
-		}).start(); 
+		}).start();
 	}
 
 	@Override
@@ -233,13 +233,14 @@ public class ServiceMessageHandler implements MessageListener<Object>, Connectio
 		new Thread(() -> {
 			try {
 				connectionState = event.getConnectionState();
-				Message<ConnectionStateChangedEvent, Void> message = new Message<ConnectionStateChangedEvent, Void>(
+				Message<ConnectionStateChangedEvent, EmptyPayload> message = new Message<ConnectionStateChangedEvent, EmptyPayload>(
 						MessageType.ConnectionStateChanged, event);
 				messageBroker.sendMessage(message);
 			} catch (IOException e) {
-				log.error("Error occured while sending connectionStateChanged message to client: {}", e.getMessage(), e);
+				log.error("Error occured while sending connectionStateChanged message to client: {}", e.getMessage(),
+						e);
 			}
-		}).start(); 
+		}).start();
 	}
 
 	public void close() {

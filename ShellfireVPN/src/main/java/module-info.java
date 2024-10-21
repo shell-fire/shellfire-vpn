@@ -49,6 +49,8 @@ module ShellfireVPN {
 	requires chronicle.wire;
 	requires jsr305;
 	requires com.sun.jna.platform;
+	requires com.sun.jna;
+	requires org.jnrproject.ffi;
 	
 	
 	opens de.shellfire.vpn.gui.controller to javafx.fxml;
@@ -56,4 +58,6 @@ module ShellfireVPN {
 	opens de.shellfire.vpn.webservice.model to com.google.gson; 
 	opens de.shellfire.vpn.gui.helper to javafx.fxml;
 	opens de.shellfire.vpn.updater to javafx.swing;
+	
+	
 }

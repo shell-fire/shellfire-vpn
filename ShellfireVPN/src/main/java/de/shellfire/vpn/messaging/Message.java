@@ -1,35 +1,33 @@
 package de.shellfire.vpn.messaging;
 
+import java.io.Serializable;
 import java.util.UUID;
 
-import net.openhft.chronicle.wire.SelfDescribingMarshallable;
+public class Message<T extends Serializable, E extends Serializable> implements Serializable {
 
-public class Message<T, E> extends SelfDescribingMarshallable {
+    private static final long serialVersionUID = -1627288370966014287L;
+    
+    private MessageType messageType;
+    private T payload;
+    private UUID messageId;
+    private UserType sender;
+    private boolean isResponse;
+    private long creationTime;
 
-	private static final long serialVersionUID = -1627288370966014287L;
-	private static Integer currentMessageId = 0;
+    public Message() {
+        // Default constructor required for deserialization
+    }
 
-	private final MessageType messageType;
-	private final T payload;
-	private UUID messageId;
+    public Message(MessageType messageType, T payload) {
+        this.messageType = messageType;
+        this.payload = payload;
+        this.messageId = UUID.randomUUID();
+        this.creationTime = System.currentTimeMillis();
+    }
 
-	private UserType sender;
-	private boolean isResponse;
-	private final long creationTime;
-
-	public Message(MessageType messageType, T payload) {
-		this.messageType = messageType;
-		this.payload = payload;
-		synchronized (Message.currentMessageId) {
-			this.messageId = UUID.randomUUID();
-		}
-		this.creationTime = System.currentTimeMillis();
-	}
-
-	public Message(MessageType messageType) {
-		this(messageType, null);
-	}
-
+    public Message(MessageType messageType) {
+        this(messageType, null);
+    }
 	public final MessageType getMessageType() {
 		return messageType;
 	}
@@ -61,7 +59,7 @@ public class Message<T, E> extends SelfDescribingMarshallable {
 
 	public String toString() {
 		return "messageType=" + messageType.name() + ", payload=" + payload + ", isResponse=" + isResponse + ", messageId=" + messageId
-				+ ",sender=" + sender.name();
+				+ ",sender=" + (sender == null ? "null" : sender.name());
 	}
 
 	public Message<T, E> createResponse(T payload) {
