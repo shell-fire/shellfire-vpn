@@ -1,5 +1,7 @@
 package de.shellfire.vpn.messaging;
 
-public enum UserType {
+import java.io.Serializable;
+
+public enum UserType implements Serializable {
 	Client, Service, Updater
 }

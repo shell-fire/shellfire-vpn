@@ -280,6 +280,10 @@ public class AppScreenControllerSettings implements Initializable, AppScreenCont
 			VpnProperties props = VpnProperties.getInstance();
 			props.remove(Util.REG_USER);
 			props.remove(Util.REG_PASS);
+			props.remove(Util.REG_AUTH_TOKEN);
+			props.remove(LoginForms.REG_REMEMBERSELECTION);
+			Util.clearAllWireGuardPublicKeys();
+			
 			props.setBoolean(Util.REG_AUTOlOGIN, false);
 			
 			if ((result.isPresent()) && (result.get() == ButtonType.YES)) {

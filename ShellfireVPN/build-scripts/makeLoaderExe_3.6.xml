@@ -47,12 +47,12 @@
 		<opt>--add-opens=java.base/java.util=ALL-UNNAMED</opt>
   </jre>
   <versionInfo>
-    <fileVersion>3.4.0.0</fileVersion>
-    <txtFileVersion>ShellfireVPN 3.4</txtFileVersion>
+    <fileVersion>3.6.0.0</fileVersion>
+    <txtFileVersion>ShellfireVPN 3.6</txtFileVersion>
     <fileDescription>ShellfireVPN Executable </fileDescription>
     <copyright>(c) 2010-2024 by Shellfire GmbH</copyright>
-    <productVersion>3.4.0.0</productVersion>
-    <txtProductVersion>ShellfireVPN 3.4</txtProductVersion>
+    <productVersion>3.6.0.0</productVersion>
+    <txtProductVersion>ShellfireVPN 3.6</txtProductVersion>
     <productName>ShellfireVPN</productName>
     <companyName>Shellfire GmbH</companyName>
     <internalName>ShellfireVPN</internalName>

@@ -109,60 +109,66 @@ public class WindowsVpnController implements IVpnController {
 			log.debug("connectWireGuard() - start");
 			// TODO check wireguard log file...
 			// TODO: add logging
-			log.debug("wireguardConfigFilePath={}",wireguardConfigFilePath);
-			String vpnName = FilenameUtils.removeExtension(new File(wireguardConfigFilePath).getName());
-
-			log.debug("extracted vpnName={}", vpnName);
-			// according to https://github.com/WireGuard/wireguard-windows/blob/master/docs/enterprise.md
-			// This creates a service called WireGuardTunnel$myconfname
-			String serviceName = "WireGuardTunnel$" + vpnName;
-			
-			log.debug("serviceName={}", serviceName);
-			boolean serviceExists = checkServiceExists(serviceName);
-			boolean serviceInstallRequired = !serviceExists;
-			
-			log.debug("serviceExists={}, serviceInstallRequired={}", Boolean.toString(serviceExists), Boolean.toString(serviceInstallRequired));
-			
-			if (serviceExists) {
-				log.debug("serviceExists is true, checking config path of this service");
-				// check if correct config file is used with this service
-				String actualServiceConfigFilePath = getServiceConfigFile(serviceName);
-				
-				log.debug("actualServiceConfigFilePath={}", actualServiceConfigFilePath);
-				
-				if (!this.wireguardConfigFilePath.equals(actualServiceConfigFilePath)) {
-					log.debug("wireguardConfigFilePath and actualServiceConfigFilePath are different, uninstaling service and setting serviceInstallRequired = true");
-					uninstallWireGuardService(serviceName);
-					log.debug("service uninstalled");
-					serviceInstallRequired = true;
-				} else {
-					log.debug("wireguardConfigFilePath and actualServiceConfigFilePath are the same - no re-install required");
-				}
-			}
-			
-			if (serviceInstallRequired) {
-				log.debug("serviceInstallRequired is true, installing service");
-				installWireGuardService(wireguardConfigFilePath, serviceName);
-				log.debug("service installed");
-			}
-			
-			log.debug("starting service...");
-			boolean serviceStarted = startWireGuardService(serviceName);
-			
-			if (serviceStarted) {
-				log.debug("... service started, waiting until internet is available again");
-				Util.waitUntilInternetAvailable(5);
-				
-				log.debug("... setting connectionState to Connected ...");
-				this.setConnectionState(ConnectionState.Connected, Reason.WireGuardServiceStarted);
-			} else {
-				log.debug("... service STOPPED, setting connectionState to Disconnected ...");
+			if (wireguardConfigFilePath == null) {
+				log.debug("connectWireGuard() - cannot connect, wireguardConfigFilePath is null");
 				this.setConnectionState(ConnectionState.Disconnected, Reason.WireGuardError);
-				// TODO: add parsing of this Reason Code in client to show error message...
-				// Get log like this and parse its content, maybe...?
-				// String wireGuardLog = Util.getWireGuardLog();
+			} else {
+				log.debug("wireguardConfigFilePath={}",wireguardConfigFilePath);
+				String vpnName = FilenameUtils.removeExtension(new File(wireguardConfigFilePath).getName());
+
+				log.debug("extracted vpnName={}", vpnName);
+				// according to https://github.com/WireGuard/wireguard-windows/blob/master/docs/enterprise.md
+				// This creates a service called WireGuardTunnel$myconfname
+				String serviceName = "WireGuardTunnel$" + vpnName;
 				
+				log.debug("serviceName={}", serviceName);
+				boolean serviceExists = checkServiceExists(serviceName);
+				boolean serviceInstallRequired = !serviceExists;
+				
+				log.debug("serviceExists={}, serviceInstallRequired={}", Boolean.toString(serviceExists), Boolean.toString(serviceInstallRequired));
+				
+				if (serviceExists) {
+					log.debug("serviceExists is true, checking config path of this service");
+					// check if correct config file is used with this service
+					String actualServiceConfigFilePath = getServiceConfigFile(serviceName);
+					
+					log.debug("actualServiceConfigFilePath={}", actualServiceConfigFilePath);
+					
+					if (!this.wireguardConfigFilePath.equals(actualServiceConfigFilePath)) {
+						log.debug("wireguardConfigFilePath and actualServiceConfigFilePath are different, uninstaling service and setting serviceInstallRequired = true");
+						uninstallWireGuardService(serviceName);
+						log.debug("service uninstalled");
+						serviceInstallRequired = true;
+					} else {
+						log.debug("wireguardConfigFilePath and actualServiceConfigFilePath are the same - no re-install required");
+					}
+				}
+				
+				if (serviceInstallRequired) {
+					log.debug("serviceInstallRequired is true, installing service");
+					installWireGuardService(wireguardConfigFilePath, serviceName);
+					log.debug("service installed");
+				}
+				
+				log.debug("starting service...");
+				boolean serviceStarted = startWireGuardService(serviceName);
+				
+				if (serviceStarted) {
+					log.debug("... service started, waiting until internet is available again");
+					Util.waitUntilInternetAvailable(5);
+					
+					log.debug("... setting connectionState to Connected ...");
+					this.setConnectionState(ConnectionState.Connected, Reason.WireGuardServiceStarted);
+				} else {
+					log.debug("... service STOPPED, setting connectionState to Disconnected ...");
+					this.setConnectionState(ConnectionState.Disconnected, Reason.WireGuardError);
+					// TODO: add parsing of this Reason Code in client to show error message...
+					// Get log like this and parse its content, maybe...?
+					// String wireGuardLog = Util.getWireGuardLog();
+					
+				}				
 			}
+
 			
 			log.debug("reached end of try{...} block");
 			

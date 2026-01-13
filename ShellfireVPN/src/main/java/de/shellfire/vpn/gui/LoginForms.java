@@ -157,7 +157,7 @@ public class LoginForms extends Application {
 			log.debug("LoginForms.start() - afterDialogDisplay");
 			afterDialogDisplay();
 		} catch (Exception ex) {
-			log.error("could not load message after login in start \n" + ex.getMessage());
+			log.error("could not load message after login in start \n" + ex.getMessage(), ex);
 		}
 		
 		log.debug("LoginForms.start() - return");

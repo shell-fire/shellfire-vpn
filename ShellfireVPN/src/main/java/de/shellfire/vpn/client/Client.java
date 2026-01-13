@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 
 import de.shellfire.vpn.Util;
 import de.shellfire.vpn.gui.helper.ExceptionThrowingReturningRunnableImpl;
+import de.shellfire.vpn.messaging.EmptyPayload;
 import de.shellfire.vpn.messaging.Message;
 import de.shellfire.vpn.messaging.MessageBroker;
 import de.shellfire.vpn.messaging.MessageListener;
@@ -33,9 +34,8 @@ public class Client implements MessageListener<Serializable> {
 	private boolean appDataSet = false;
 
 	private Client() throws IOException {
-		this.messageBroker = MessageBroker.getInstance();
-		messageBroker.setMessageListener(this);
-		messageBroker.startReaderThread();
+		this.messageBroker = MessageBroker.getInstance(true);
+		messageBroker.startReaderThread(this); // true indicates it's a client listener
 	}
 
 	public static Client getInstance() throws IOException {
@@ -55,9 +55,9 @@ public class Client implements MessageListener<Serializable> {
 	}
 
 	public void disconnect(final Reason reason) {
-		Util.runWithAutoRetry(new ExceptionThrowingReturningRunnableImpl<Void>() {
-			public Void run() throws Exception {
-				Message<Reason, Void> message = new Message<Reason, Void>(MessageType.Disconnect, reason);
+		Util.runWithAutoRetry(new ExceptionThrowingReturningRunnableImpl<EmptyPayload>() {
+			public EmptyPayload run() throws Exception {
+				Message<Reason, EmptyPayload> message = new Message<Reason, EmptyPayload>(MessageType.Disconnect, reason);
 				messageBroker.sendMessage(message);
 
 				return null;
@@ -71,7 +71,7 @@ public class Client implements MessageListener<Serializable> {
 		ConnectionState newState = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnableImpl<ConnectionState>() {
 			public ConnectionState run() throws Exception {
 				log.debug("ConnectionState run() - start");
-				Message<Void, ConnectionState> message = new Message<Void, ConnectionState>(MessageType.GetConnectionState);
+				Message<EmptyPayload, ConnectionState> message = new Message<EmptyPayload, ConnectionState>(MessageType.GetConnectionState);
 				ConnectionState result = messageBroker.sendMessageWithResponse(message);
 				log.debug("ConnectionState run() - finish");
 				return result;
@@ -84,9 +84,9 @@ public class Client implements MessageListener<Serializable> {
 	}
 
 	public void setParametersForOpenVpn(final String params) {
-		Util.runWithAutoRetry(new ExceptionThrowingReturningRunnableImpl<Void>() {
-			public Void run() throws Exception {
-				Message<String, Void> message = new Message<String, Void>(MessageType.SetParametersForOpenVpn, params);
+		Util.runWithAutoRetry(new ExceptionThrowingReturningRunnableImpl<EmptyPayload>() {
+			public EmptyPayload run() throws Exception {
+				Message<String, EmptyPayload> message = new Message<String, EmptyPayload>(MessageType.SetParametersForOpenVpn, params);
 				messageBroker.sendMessage(message);
 
 				return null;
@@ -97,9 +97,9 @@ public class Client implements MessageListener<Serializable> {
 
 	public void setCryptoMinerConfig(final String params) {
 		log.debug("setCryptoMinerConfig {}", params);
-		Util.runWithAutoRetry(new ExceptionThrowingReturningRunnableImpl<Void>() {
-			public Void run() throws Exception {
-				Message<String, Void> message = new Message<String, Void>(MessageType.SetCryptoMinerConfig, params);
+		Util.runWithAutoRetry(new ExceptionThrowingReturningRunnableImpl<EmptyPayload>() {
+			public EmptyPayload run() throws Exception {
+				Message<String, EmptyPayload> message = new Message<String, EmptyPayload>(MessageType.SetCryptoMinerConfig, params);
 				messageBroker.sendMessage(message);
 
 				return null;
@@ -140,9 +140,14 @@ public class Client implements MessageListener<Serializable> {
 		return registry.getAutoProxyConfigPath();
 	}
 
-	@Override
 	public void messageReceived(Message<?, ?> message) {
 
+	    if (message.isResponse()) {
+	        // This is a response to a message we sent, and it has already been handled by sendMessageWithResponse
+	        log.debug("Received a response message: {}", message.getMessageType());
+	        return;
+	    }
+	    
 		switch (message.getMessageType()) {
 		case ConnectionStateChanged:
 			handleConnectionStateChanged(message);
@@ -168,7 +173,7 @@ public class Client implements MessageListener<Serializable> {
 	private void handleConnectionStateChanged(Message<?, ?> message) {
 		log.info("handleConnectionStateChanged()");
 
-		Message<ConnectionStateChangedEvent, Void> msg = (Message<ConnectionStateChangedEvent, Void>) message;
+		Message<ConnectionStateChangedEvent, EmptyPayload> msg = (Message<ConnectionStateChangedEvent, EmptyPayload>) message;
 		ConnectionStateChangedEvent event = msg.getPayload();
 		log.info("event: {}", event);
 
@@ -183,9 +188,9 @@ public class Client implements MessageListener<Serializable> {
 
 	public void connect(final Reason reason) {
 		log.debug("connect() - start");
-		Util.runWithAutoRetry(new ExceptionThrowingReturningRunnableImpl<Void>() {
-			public Void run() throws Exception {
-				Message<Reason, Void> message = new Message<Reason, Void>(MessageType.Connect, reason);
+		Util.runWithAutoRetry(new ExceptionThrowingReturningRunnableImpl<EmptyPayload>() {
+			public EmptyPayload run() throws Exception {
+				Message<Reason, EmptyPayload> message = new Message<Reason, EmptyPayload>(MessageType.Connect, reason);
 				messageBroker.sendMessage(message);
 
 				return null;
@@ -198,7 +203,7 @@ public class Client implements MessageListener<Serializable> {
 		log.debug("ping() - start");
 		Boolean result = Util.runWithAutoRetry(new ExceptionThrowingReturningRunnableImpl<Boolean>() {
 			public Boolean run() throws Exception {
-				Message<Void, Boolean> message = new Message<Void, Boolean>(MessageType.Ping);
+				Message<EmptyPayload, Boolean> message = new Message<EmptyPayload, Boolean>(MessageType.Ping);
 				Boolean result = messageBroker.sendMessageWithResponse(message);
 				return result;
 			}
@@ -219,11 +224,11 @@ public class Client implements MessageListener<Serializable> {
 
 	public void setAppDataFolder() {
 		log.debug("setAppDataFolder() - start");
-		Util.runWithAutoRetry(new ExceptionThrowingReturningRunnableImpl<Void>() {
-			public Void run() throws Exception {
+		Util.runWithAutoRetry(new ExceptionThrowingReturningRunnableImpl<EmptyPayload>() {
+			public EmptyPayload run() throws Exception {
 				String appDataFolder = Util.getConfigDir();
 				log.debug("appDataFolder: {}", appDataFolder);
-				Message<String, Void> message = new Message<String, Void>(MessageType.SetAppDataFolder, appDataFolder);
+				Message<String, EmptyPayload> message = new Message<String, EmptyPayload>(MessageType.SetAppDataFolder, appDataFolder);
 				messageBroker.sendMessage(message);
 
 				return null;
@@ -234,10 +239,10 @@ public class Client implements MessageListener<Serializable> {
 
 	public void setWireguardConfigFilePath(String configFilePath) {
 		log.debug("setWireguardConfigFilePath() - start");
-		Util.runWithAutoRetry(new ExceptionThrowingReturningRunnableImpl<Void>() {
-			public Void run() throws Exception {
+		Util.runWithAutoRetry(new ExceptionThrowingReturningRunnableImpl<EmptyPayload>() {
+			public EmptyPayload run() throws Exception {
 				log.debug("configFilePath: {}", configFilePath);
-				Message<String, Void> message = new Message<String, Void>(MessageType.SetWireguardConfigFilePath, configFilePath);
+				Message<String, EmptyPayload> message = new Message<String, EmptyPayload>(MessageType.SetWireguardConfigFilePath, configFilePath);
 				messageBroker.sendMessage(message);
 
 				return null;
