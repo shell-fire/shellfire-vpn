@@ -1,4 +1,5 @@
 eclipse.preferences.version=1
+encoding//src/main/java/de/shellfire/vpn/service/win/IPV6Manager.java=UTF-8
 encoding//src/main/java/de/shellfire/vpn/webservice/WebServiceBroker.java=UTF-8
 encoding//src/main/java/de/shellfire/vpn/webservice/model/BlankRequest.java=UTF-8
 encoding//src/main/java/de/shellfire/vpn/webservice/model/LoginResponse.java=UTF-8

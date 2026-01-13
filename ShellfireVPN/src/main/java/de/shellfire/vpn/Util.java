@@ -572,6 +572,7 @@ public class Util {
 				return result;
 			} catch (Exception e2) {
 				e = e2;
+				
 				try {
 					Thread.sleep(delayMs);
 					delayMs *= 1.6;
@@ -580,7 +581,7 @@ public class Util {
 			}
 		}
 
-		if (e != null && clazzToIgnore != null && !clazzToIgnore.isInstance(e)) {
+		if (e != null) {
 			Util.handleException(e);
 		}
 
@@ -994,6 +995,31 @@ public class Util {
 		privKey = CryptFactory.decrypt(privKey);
 		return privKey;
 	}
+	
+	public static void clearAllWireGuardPublicKeys() {
+	    log.debug("clearAllWireGuardPublicKeys - start");
+	    
+	    VpnProperties props = VpnProperties.getInstance();
+	    List<String> keysToRemove = new ArrayList<>();
+	    
+	    // Collect all keys to remove
+	    for (String key : props.stringPropertyNames()) {
+	        if (key.startsWith("wg-pubkey-")) {
+	            keysToRemove.add(key);
+	        } else if (key.startsWith("wg-privkey-")) {
+	            keysToRemove.add(key);
+	        }
+	    }
+	    
+	    // Remove collected keys
+	    for (String key : keysToRemove) {
+	        props.remove(key);
+	        log.debug("Removed public key: {}", key);
+	    }
+	    
+	    log.debug("clearAllWireGuardPublicKeys - finished");
+	}
+
 
 	private static void generateWireGuardKeyPair(String vpnName) throws Exception {
 		log.debug("generateWireGuardKeyPair vpnName={} - start", vpnName);

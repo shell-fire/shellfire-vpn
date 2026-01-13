@@ -44,13 +44,9 @@ module ShellfireVPN {
 	requires org.mozilla.javascript;
 	requires registry;
 	requires org.slf4j;
-	requires chronicle.queue;
-	requires chronicle.bytes;
-	requires chronicle.wire;
 	requires jsr305;
 	requires com.sun.jna.platform;
 	requires com.sun.jna;
-	requires org.jnrproject.ffi;
 	
 	
 	opens de.shellfire.vpn.gui.controller to javafx.fxml;

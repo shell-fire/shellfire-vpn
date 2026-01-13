@@ -173,42 +173,54 @@ public class WebService {
 	}
 	
 	public void autoSelectBestVpn() {
-		int vpnId = 0;
-		if (this.selectedVpn != null) {
-			vpnId = this.selectedVpn.getVpnId();
-		} else if (this.vpns.size() == 1) {
-			vpnId = this.vpns.get(0).getVpnId();
-		} else {
-			boolean vpnFound = false;
-			
-			// try to find a PremiumPlus one
-			for (Vpn vpn : this.vpns) {
-				if (vpn.getAccountType().equals(ServerType.PremiumPlus)) {
-					vpnId = vpn.getVpnId();
-					vpnFound = true;
-					break;
-				}
-			}
-			
-			if (!vpnFound) {
-				// try to find a Premium one
-				for (Vpn vpn : this.vpns) {
-					if (vpn.getAccountType().equals(ServerType.Premium)) {
-						vpnId = vpn.getVpnId();
-						vpnFound = true;
-						break;
-					}
-				}
-			}
-			
-			if (!vpnFound) {
-				// all free vpns - simply pick the first one
-				vpnId = this.vpns.get(0).getVpnId();
-			}
-		}
-		
-		this.selectVpn(vpnId);
+	    log.debug("autoSelectBestVpn - start");
+
+	    int vpnId = 0;
+
+	    if (this.selectedVpn != null) {
+	        vpnId = this.selectedVpn.getVpnId();
+	        log.debug("Currently selected VPN found: vpnId={}", vpnId);
+	    } else if (this.vpns.size() == 1) {
+	        vpnId = this.vpns.get(0).getVpnId();
+	        log.debug("Only one VPN available. Auto-selecting VPN with vpnId={}", vpnId);
+	    } else {
+	        boolean vpnFound = false;
+
+	        log.debug("Multiple VPNs found. Attempting to select the best one...");
+
+	        // Try to find a PremiumPlus one
+	        for (Vpn vpn : this.vpns) {
+	            if (vpn.getAccountType().equals(ServerType.PremiumPlus)) {
+	                vpnId = vpn.getVpnId();
+	                vpnFound = true;
+	                log.debug("PremiumPlus VPN found and selected: vpnId={}", vpnId);
+	                break;
+	            }
+	        }
+
+	        if (!vpnFound) {
+	            // Try to find a Premium one
+	            for (Vpn vpn : this.vpns) {
+	                if (vpn.getAccountType().equals(ServerType.Premium)) {
+	                    vpnId = vpn.getVpnId();
+	                    vpnFound = true;
+	                    log.debug("Premium VPN found and selected: vpnId={}", vpnId);
+	                    break;
+	                }
+	            }
+	        }
+
+	        if (!vpnFound) {
+	            // All free VPNs - simply pick the first one
+	            vpnId = this.vpns.get(0).getVpnId();
+	            log.debug("No PremiumPlus or Premium VPN found. Selecting the first available VPN: vpnId={}", vpnId);
+	        }
+	    }
+
+	    this.selectVpn(vpnId);
+	    log.debug("autoSelectBestVpn - finished with vpnId={}", vpnId);
 	}
+
 
 	public ServerList getServerList() {
 		init();
@@ -639,7 +651,7 @@ public class WebService {
 				Image image = new Image(url);
 				if (image == null || image.getException() != null) {
 					if (image.getException() != null) {
-						log.error("error during loading of image from website", image.getException());
+						log.error("error during loading of image from website, url=" + url, image.getException());
 					}
 					throw new Exception("could not load image");
 				}
