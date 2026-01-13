@@ -7,13 +7,9 @@
   #map_canvas { height: 100%; background-color: #666970; }
 </style>
 <script type="text/javascript">
-  var mapUrlBase = "https://maps.googleapis.com/maps/api/staticmap?key=AIzaSyCsD5XMR93yD1QspE0wDoXYUY_ENjXTyLo&size=800x600&zoom=3";
-
-  var myStyleDisconnected = "&style=feature:landscape|element:geometry|color:0xf1667f&style=feature:road|visibility:off&style=feature:water|element:geometry|color:0x354b5b&style=feature:administrative|visibility:off";
-  var myStyleConnected = "&style=feature:landscape|element:geometry|color:0x39e88d&style=feature:road|visibility:off&style=feature:water|element:geometry|color:0x354b5b&style=feature:administrative|visibility:off";
-  
   var currentLat = 51;
   var currentLng = 0;
+  var currentMode = "disconnected";
   
   function initialize() {
   
@@ -22,42 +18,22 @@
 	  }, false);
 
     document.getMode = function() {
-        var bgImage = document.getElementById("map_canvas").style.backgroundImage;
-		console.log(document.getElementById("map_canvas").style.backgroundImage);
-        return bgImage.includes("0xf1667f") ? "disconnected" : "connected";
+        return currentMode;
     };
-	
-	
-	document.setDisconnected = function() {
-	    var timestamp = new Date().getTime();
-	    document.getElementById("map_canvas").style.backgroundImage = "url('" + mapUrlBase + "&center=" + currentLat + "," + currentLng + myStyleDisconnected + "&_=" + timestamp + "')";
-		console.log(document.getElementById("map_canvas").style.backgroundImage);
+		
+	document.setMapImage = function(imageUrl, mode, lat, lng) {
+	    if (mode) {
+	    	currentMode = mode;
+	    }
+	    if (lat !== undefined && lng !== undefined) {
+	    	currentLat = lat;
+	    	currentLng = lng;
+	    }
+	    if (imageUrl) {
+	    	document.getElementById("map_canvas").style.backgroundImage = "url('" + imageUrl + "')";
+	    }
 	    return document.getMode();
 	};
-	
-	document.setConnected = function() {
-	    var timestamp = new Date().getTime();
-	    document.getElementById("map_canvas").style.backgroundImage = "url('" + mapUrlBase + "&center=" + currentLat + "," + currentLng + myStyleConnected + "&_=" + timestamp + "')";
-	    console.log(document.getElementById("map_canvas").style.backgroundImage);
-		return document.getMode();
-	};
-	
-	document.setPosition = function(lat, lng) {
-	    currentLat = lat;
-	    currentLng = lng;
-	    var timestamp = new Date().getTime();
-		if (document.getMode() == "connected") {
-			document.getElementById("map_canvas").style.backgroundImage = "url('" + mapUrlBase + "&center=" + lat + "," + lng + myStyleConnected + "&_=" + timestamp + "')";
-		} else {
-			document.getElementById("map_canvas").style.backgroundImage = "url('" + mapUrlBase + "&center=" + lat + "," + lng + myStyleDisconnected + "&_=" + timestamp + "')";
-		}
-		console.log(document.getElementById("map_canvas").style.backgroundImage);
-	    
-  	};
-
-
-    document.setPosition(currentLat, currentLng);
-    document.setDisconnected();
   }
 
   window.onload = initialize;
