@@ -21,6 +21,7 @@ import de.shellfire.vpn.client.ConnectionState;
 import de.shellfire.vpn.client.Controller;
 import de.shellfire.vpn.gui.LoginForms;
 import de.shellfire.vpn.gui.ServerImageBackgroundManager;
+import de.shellfire.vpn.gui.StaticMapImageCacheManager;
 import de.shellfire.vpn.gui.helper.CurrentConnectionState;
 import de.shellfire.vpn.gui.model.CountryMap;
 import de.shellfire.vpn.i18n.VpnI18N;
@@ -116,6 +117,8 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
 	protected boolean mapLoaded = false;
 	private double mapLat;
 	private double mapLng;
+	private double currentMapLat = 51;
+	private double currentMapLng = 0;
 
 	public class WebEngineConsole
 	{
@@ -127,6 +130,9 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
 	
 	private final WebEngineConsole webEngineConsole = new WebEngineConsole();
 	private boolean setMapStatus;
+	private static final String MAP_URL_BASE = "https://maps.googleapis.com/maps/api/staticmap?key=AIzaSyCsD5XMR93yD1QspE0wDoXYUY_ENjXTyLo&size=800x600&zoom=3";
+	private static final String MAP_STYLE_DISCONNECTED = "&style=feature:landscape|element:geometry|color:0xf1667f&style=feature:road|visibility:off&style=feature:water|element:geometry|color:0x354b5b&style=feature:administrative|visibility:off";
+	private static final String MAP_STYLE_CONNECTED = "&style=feature:landscape|element:geometry|color:0x39e88d&style=feature:road|visibility:off&style=feature:water|element:geometry|color:0x354b5b&style=feature:administrative|visibility:off";
 	
 
 	public void connectButtonDisable(boolean disable) {
@@ -199,13 +205,9 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
 	
 
 	private void setMap() {
-		if (setMapStatus) {
-			if (CurrentConnectionState.getConnectionState() == ConnectionState.Connected) {
-				this.setMapConnected();
-			} else {
-				this.setMapDisconnected();
-			}
-		}
+		ConnectionState connectionState = CurrentConnectionState.getConnectionState();
+		updateMapImage(connectionState, currentMapLat, currentMapLng);
+		setMapStatus = false;
 		
 	}
 	
@@ -216,21 +218,7 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
 	public void setMapConnected() {
 		log.debug("setMapConnected() - start");
 		if (mapLoaded) {
-			
-            new Thread( 
-                    () -> {
-                    	log.debug("waiting until internet connection is available again");
-                    	Util.waitUntilInternetAvailable(5);
-
-         				log.debug("calling Platform.runLater()");
-         				Platform.runLater(() -> {
-         					log.debug("setMapconnected() - in thread - calling webEngine.executeScript");
-
-         					Object result = webEngine.executeScript("document.setConnected();");
-         					log.debug("Result of webEngine.executeScript() = {}", result);
-         				});
-                         
-                    }).start(); 
+			updateMapImage(ConnectionState.Connected, currentMapLat, currentMapLng);
 		} else {
 			log.debug("setMapConnected - mapLoaded == false -> cant access webEngine - will do as soon as map is ready");
 			this.setMapStatus = true;
@@ -241,19 +229,7 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
 	public void setMapDisconnected() {
 		log.debug("setMapDisconnected() - start");
 		if (mapLoaded) {
-            new Thread( 
-                    () -> {
-                    	log.debug("waiting until internet connection is available again");
-                    	Util.waitUntilInternetAvailable(5);
-
-         				log.debug("calling Platform.runLater()");
-         				Platform.runLater(() -> {
-         					log.debug("setMapDisconnected() - in thread - calling webEngine.executeScript");
-         					Object result = webEngine.executeScript("document.setDisconnected();");
-         					log.debug("Result of webEngine.executeScript() = {}", result);
-         				});
-                         
-                    }).start(); 
+			updateMapImage(ConnectionState.Disconnected, currentMapLat, currentMapLng);
 		} else {
 			log.debug("setMapDisconnected - mapLoaded == false -> cant access webEngine");
 			this.setMapStatus = true;
@@ -277,18 +253,51 @@ public class AppScreenControllerStatus implements Initializable, AppScreenContro
 	
 	public void setLocation(double lng, double lat) {
 		log.debug("setLocation({}, {})", lng, lat);
+		currentMapLat = lat;
+		currentMapLng = lng;
 		if (mapLoaded) {
-			Platform.runLater(() -> {
-				log.debug("executing: setLocation({}, {})", lng, lat);
-				Object result = webEngine.executeScript("document.setPosition("+lng+", " + lat + ");");
-				log.debug("Result of webEngine.executeScript() = {}", result);
-			});
+			log.debug("executing: updateMapImage({}, {})", lng, lat);
+			ConnectionState connectionState = CurrentConnectionState.getConnectionState();
+			updateMapImage(connectionState, lat, lng);
 
 		} else {
 			log.debug("setLocation - map not yet loaded - remembering coordinates for later setting");
 			this.mapLng = lng;
 			this.mapLat = lat;
 		}
+	}
+
+	private void updateMapImage(ConnectionState connectionState, double lat, double lng) {
+		if (!mapLoaded) {
+			this.setMapStatus = true;
+			return;
+		}
+
+		new Thread(() -> {
+			String mapUrl = buildMapUrl(lat, lng, connectionState);
+			String cachedUrl = StaticMapImageCacheManager.getCachedMapImageUrl(mapUrl);
+			String safeUrl = escapeForJavaScript(cachedUrl);
+			String mode = connectionState == ConnectionState.Connected ? "connected" : "disconnected";
+
+			log.debug("calling Platform.runLater()");
+			Platform.runLater(() -> {
+				log.debug("updateMapImage() - in thread - calling webEngine.executeScript");
+				Object result = webEngine.executeScript("document.setMapImage('" + safeUrl + "', '" + mode + "', " + lat + ", " + lng + ");");
+				log.debug("Result of webEngine.executeScript() = {}", result);
+			});
+		}).start();
+	}
+
+	private String buildMapUrl(double lat, double lng, ConnectionState connectionState) {
+		String style = connectionState == ConnectionState.Connected ? MAP_STYLE_CONNECTED : MAP_STYLE_DISCONNECTED;
+		return MAP_URL_BASE + "&center=" + lat + "," + lng + style;
+	}
+
+	private String escapeForJavaScript(String value) {
+		if (value == null) {
+			return "";
+		}
+		return value.replace("\\", "\\\\").replace("'", "\\'");
 	}
 	
 	public void notifyThatNowVisible(boolean connected) {
